@@ -1,0 +1,5 @@
+[November 11, 2013]
+[CHANGE] - The "keywords" field in the submission form is no longer mandatory
+
+[January 14, 2014]
+[CHANGE] - Changed the system's email from admin@scienceatlantic.ca to afred@scienceatlantic.ca

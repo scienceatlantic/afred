@@ -1,0 +1,86 @@
+article {border-radius: 5px;}
+table {width: 100%; border-collapse: collapse;}
+td {vertical-align: top; padding: 5px 5px;}
+input, select, textarea {box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;}
+button {font-size: 1.15em;}
+
+/*override Science Atlantic WordPress css*/
+#inside-content {position: static; min-height: 0px;}
+#main {float: none; width: 100%;}
+#container {min-height: 0px;}
+footer {border-top: none; min-height: 0px;}
+
+/*use anywhere classes*/
+.color_0000ff {color: #0000ff;}
+.color_4bacc6 {color: #4bacc6;}
+.color_ff3333 {color: #ff3333;}
+.bold {font-weight: bold;}
+.center {text-align: center;}
+.left {text-align: left;}
+.right {text-align: right;}
+.italic {font-style: italic;}
+.nowrap {white-space: nowrap;}
+
+/*general classes*/
+.hint {font-size: 0.9em;}
+.note {font-size: 0.8em;}
+.center {text-align: center;}
+.highlight:hover {font-style: italic;}
+.highlight:hover input[type="text"], .highlight:hover select, .highlight:hover textarea {border: 1px solid #000;}
+.errorMsg {font-size: 0.85em; color: #ff0000;}
+
+/*equipment navigation*/
+#equipmentNav {margin: -30px 0px 20px 0px; font-size: 1.3em;}
+#equipmentNav a {display: inline-block; padding: 3px 10px 3px 10px; margin: 0px;}
+#equipmentNav a:first-child {padding: 3px 10px 0px 3px;} /*home button*/
+#equipmentNav a:last-child {padding: 3px 0px 0px 3px;} /*login/logout button*/
+#authenticationButton {float: right;} /*login/logout button*/
+
+/*about page*/
+article#homePage {min-height: 380px;}
+div#homePageSlideshowContainer {float: right; width: 320px;}
+div#homePageContentContainer {width: 610px;}
+#homePageSlideshowCaption {text-align: right; font-size: 0.88em;}
+
+/*equipment submission form*/
+.formTable input[type="text"] {width: 55%;}
+.formTable textarea {width: 55%;}
+.formTable select {width: 55%;}
+.formTable td:nth-child(1) {width: 35%; text-align: right; padding-right: 15px;}
+.formTable td:nth-child(2) {width: 65%;}
+.formTable td[colspan="2"] {text-align: left;}
+.nowrap input[type="text"] {width: 85%;}
+.checkboxes select {width: 25%; display: inline-block; margin: 1px 0px;}
+
+/*listing*/
+.listingTable td:nth-child(1) {width: 30%;}
+.listingTable td:nth-child(2) {width: 70%;}
+
+/*control panel*/
+.controlTable input {width: 20%;}
+.controlTable td:nth-child(1) {width: 20%;}
+.controlTable td:nth-child(2) {width: 80%;}
+
+/*login*/
+.loginTable input {width: 20%;} 
+.loginTable td:nth-child(1) {width: 10%;}
+.loginTable td:nth-child(2) {width: 90%;}
+
+/*search*/
+.search input {width: 90%;}
+.search button {font-size: 1.3em;}
+#searchBar {font-size: 1.5em;}
+#searchBar span {color: #4bacc6;}
+#searchTable th {padding: 3px; border-top: 1px solid #000000; border-bottom: 1px solid #000000; text-align: left;}
+#searchTable th.header {background: url('../js/tablesorter/themes/blue/bg.gif') no-repeat center right; cursor: pointer;} 
+#searchTable th.header {font-weight: normal; padding-right: 20px; border-right: 1px solid #dad9c7; margin-left: -1px;}
+#searchTable th.headerSortUp {background: url('../js/tablesorter/themes/blue/asc.gif') no-repeat center right;}
+#searchTable th.headerSortDown {background: url('../js/tablesorter/themes/blue/desc.gif') no-repeat center right;} 
+#searchTable td:nth-child(1) {width: 5%;}
+#searchTable td:nth-child(2) {width: 5%;}
+#searchTable td:nth-child(3) {width: 30%;}
+#searchTable td:nth-child(4) {width: 30%;}
+#searchTable td:nth-child(5) {width: 10%;}
+#searchTable td:nth-child(6) {width: 8%;}
+#searchTable td:nth-child(7) {width: 12%;}
+#progressBar {font-size: 1.5em; color: #1e5204;}
