@@ -1,40 +1,52 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head>
+    <!-- Meta details -->
     <meta charset="utf-8">
-    <title></title>
-    <meta name="description" content="">
+    <meta name="author" content="Science Atlantic">
+    <meta name="description" content="Atlantic Facilities and Research Equipment Database">
     <meta name="viewport" content="width=device-width">
-    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    
+    <!-- CSS -->
+    <!-- Place third-party CSS files here -->
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
-    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
     <!-- endbower -->
     <!-- endbuild -->
+    
+    <!-- Place your own CSS files here -->
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
+    
+    <!-- Title -->
+    <title>AFRED | Science Atlantic</title>
   </head>
-  <body ng-app="afredApp">
+  <body data-ng-app="afredApp">
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
-    <!-- Add your site or application content here -->
-    <div class="container">
+    <!-- App content -->
+    <div class="container-fluid">
+      <!-- Header -->
       <div class="header">
         <ul class="nav nav-pills pull-right">
-          <li class="active"><a ng-href="#">Home</a></li>
-          <li><a ng-href="#">About</a></li>
-          <li><a ng-href="#">Contact</a></li>
+          <li data-ui-sref-active="active"><a data-ui-sref="search">Search</a></li>
+          <li data-ui-sref-active="active"><a data-ui-sref="submission">Submission</a></li>
+          <li data-ui-sref-active="active"><a data-ui-sref="about">About</a></li>
         </ul>
+        
         <h3 class="text-muted">afred</h3>
       </div>
 
-      <div ng-include="'views/main.html'" ng-controller="MainCtrl"></div>
+      <!-- View -->
+      <div data-ui-view></div>
 
+      <!-- Footer -->
       <div class="footer">
-        <p><span class="glyphicon glyphicon-heart"></span> from the Yeoman team</p>
+        <p>Science Atlantic</p>
       </div>
     </div>
 
@@ -50,6 +62,8 @@
        ga('send', 'pageview');
     </script>
 
+    <!-- JavaScript -->
+    <!-- Third-party JavaScript files -->
     <!-- build:js(.) scripts/oldieshim.js -->
     <!--[if lt IE 9]>
     <script src="bower_components/es5-shim/es5-shim.js"></script>
@@ -67,12 +81,16 @@
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script src="bower_components/angular-animate/angular-animate.js"></script>
     <script src="bower_components/angular-touch/angular-touch.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
+        <!-- App JavaScript files -->
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="scripts/app.js"></script>
         <script src="scripts/controllers/main.js"></script>
+        <script src="scripts/controllers/search.js"></script>
+        <script src="scripts/controllers/submission.js"></script>
         <!-- endbuild -->
 </body>
 </html>

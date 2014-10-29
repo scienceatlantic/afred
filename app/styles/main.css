@@ -1,3 +1,8 @@
+/* Show vertical scroll bar on all pages for consistency */
+html {
+  overflow-y: scroll;
+}
+
 /* Space out content a bit */
 body {
   padding-top: 20px;
