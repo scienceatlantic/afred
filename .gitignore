@@ -1,12 +1,10 @@
-# Include all dependencies because we are deploying this app
-# node_modules  
-# bower_components
-
-
-# Ignore these
+# Global
 *.komodoproject
-.tmp
-.sass-cache
-
-# Operating system files
 .*~
+
+# "app" folder
+# Include all dependencies because we are deploying this app
+# app/node_modules  
+# app/bower_components
+app/.tmp
+app/.sass-cache
