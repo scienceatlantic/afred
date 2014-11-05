@@ -1,10 +1,14 @@
 # Global
 *.komodoproject
 .*~
+.DS_Store
+Thumbs.db
 
 # "app" folder
 # Include all dependencies because we are deploying this app
-# app/node_modules  
-# app/bower_components
 app/.tmp
 app/.sass-cache
+
+# "api" folder
+api/.env.*.php
+api/.env.php
