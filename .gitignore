@@ -5,6 +5,7 @@
 .DS_Store
 Thumbs.db
 desktop.ini
+.cache
 
 # "app" folder
 # Include all dependencies because we are deploying this app
