@@ -1,13 +1,16 @@
 # Global
 *.komodoproject
 .*~
+*~
 .DS_Store
 Thumbs.db
+desktop.ini
 
 # "app" folder
 # Include all dependencies because we are deploying this app
 app/.tmp
 app/.sass-cache
+app/dist/
 
 # "api" folder
 api/.env.*.php
