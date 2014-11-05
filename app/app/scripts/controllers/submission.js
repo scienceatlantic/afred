@@ -1,4 +1,3 @@
-
 'use strict';
 
 /**
@@ -8,9 +7,9 @@
  * # submissionController
  * Controller of the afredApp
  */
-afredApp.controller('submissionController', ['$scope',
+angular.module('afredApp').controller('submissionController', ['$scope',
   function($scope) {
-    
+    $scope.dummy = '';
   }
 ]);
 

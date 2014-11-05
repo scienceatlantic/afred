@@ -8,7 +8,7 @@
  *
  * Main module of the application.
  */
-var afredApp = angular.module('afredApp', [
+angular.module('afredApp', [
   'ngAnimate',
   'ngCookies',
   'ngResource',
@@ -17,7 +17,7 @@ var afredApp = angular.module('afredApp', [
   'ui.router'
 ]);
   
-afredApp.config(['$stateProvider', '$urlRouterProvider',
+angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
   function($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/search');
     
