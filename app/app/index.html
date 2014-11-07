@@ -1,5 +1,5 @@
-<!doctype html>
-<html class="no-js" lang="en">
+<!DOCTYPE html>
+<html lang="en">
   <head>
     <!-- Meta details -->
     <meta charset="utf-8">
@@ -24,35 +24,60 @@
     <title>AFRED | Science Atlantic</title>
   </head>
   <body data-ng-app="afredApp">
-    <!--[if lt IE 7]>
+    <!--[if lt IE 10]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
     <!-- App content -->
-    <div class="container-fluid">
+    <div>
       <!-- Header -->
-      <div class="header">
-        <ul class="nav nav-pills pull-right">
-          <li data-ui-sref-active="active"><a data-ui-sref="search">Search</a></li>
-          <li data-ui-sref-active="active"><a data-ui-sref="submission">Submission</a></li>
-          <li data-ui-sref-active="active"><a data-ui-sref="about">About</a></li>
-        </ul>
-        
-        <h3 class="text-muted">afred</h3>
-      </div>
+      <header class="jumbotron">
+        <div class="container">
+          <div class="page-header">
+            <h1>AFRED</h1>
+            <h2><small>Atlantic Facilities and Research Equipment Database</small></h2>
+          </div>
+        </div>
+      </header>
+      
+      <!-- Main Navigation -->
+      <nav class="navbar navbar-default" role="navigation">
+        <div class="container">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-navbar">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div><!-- End of .navbar-header -->
+            
+          <div class="collapse navbar-collapse" id="main-navbar">
+            <ul class="nav navbar-nav">
+              <li data-ui-sref-active="active"><a data-ui-sref="search">Search</a></li>
+              <li data-ui-sref-active="active"><a data-ui-sref="submission">Submit a Record</a></li>
+              <li data-ui-sref-active="active"><a data-ui-sref="about">About</a></li>
+            </ul>
+          </div><!-- End of .collapse -->
+        </div><!-- End of .container -->
+      </nav>
 
       <!-- View -->
-      <div data-ui-view></div>
-
-      <!-- Footer -->
-      <div class="footer">
-        <p>Science Atlantic</p>
+      <div class="container">
+        <div data-ui-view></div>
       </div>
-    </div>
-
+      
+      <!-- Footer -->
+      <footer class="footer">
+        <div class="container">
+          <p>Science Atlantic</p>
+        </div>
+      </footer>
+    </div><!-- End of content container -->
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
-     <script>
+    <script>
        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -86,11 +111,11 @@
     <!-- endbower -->
     <!-- endbuild -->
 
-        <!-- App JavaScript files -->
-        <!-- build:js({.tmp,app}) scripts/scripts.js -->
-        <script src="scripts/app.js"></script>
-        <script src="scripts/controllers/search.js"></script>
-        <script src="scripts/controllers/submission.js"></script>
-        <!-- endbuild -->
+    <!-- App JavaScript files -->
+    <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    <script src="scripts/app.js"></script>
+    <script src="scripts/controllers/search.js"></script>
+    <script src="scripts/controllers/submission.js"></script>
+    <!-- endbuild -->
   </body>
 </html>
