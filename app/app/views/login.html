@@ -1,0 +1,29 @@
+<div class="row">
+  <div class="col-lg-12">
+    <h2>Login</h2>
+    
+    <div class="row">
+      <div class="col-sm-3">
+        <form name="loginForm" data-ng-submit="submit()" novalidate>
+          <div class="form-group" data-ng-class="{'has-success': loginForm.username.$valid && loginForm.username.$dirty,
+            'has-error': loginForm.username.$invalid && loginForm.username.$dirty}">
+            <label>Username*</label>
+            <input type="text" class="form-control" name="username" data-ng-model="loginCredentials.username" required>
+          
+            <p class="text-danger" data-ng-show="loginForm.username.$invalid && loginForm.username.$dirty">This field is required</p>
+          </div>
+          
+          <div class="form-group" data-ng-class="{'has-success': loginForm.username.$valid && loginForm.password.$dirty,
+            'has-error': loginForm.password.$invalid && loginForm.password.$dirty}">
+            <label>Password*</label>
+            <input type="password" class="form-control" name="password" data-ng-model="loginCredentials.password" required>
+            
+            <p class="text-danger" data-ng-show="loginForm.password.$invalid && loginForm.password.$dirty">This field is required</p>
+          </div>
+          
+          <button type="submit" class="btn btn-default" data-ng-disabled="loginForm.$invalid">Login</button>
+        </form>
+      </div><!-- End of col-x-x -->
+    </div><!-- End of .row -->
+  </div><!-- End of .col-x-x -->
+</div><!-- End of .row -->
