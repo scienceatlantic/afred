@@ -23,7 +23,9 @@ angular.module('afredApp').controller('SearchController', ['$scope', '$state', '
         templateUrl: 'views/modals/contact-springboard.html',
         controller: 'ContactSpringboardModalController'
       });
-    }
+      
+      modalInstance.results.then();
+    };
     
     //Initialise
     $scope.searchBar = {

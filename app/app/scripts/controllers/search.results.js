@@ -3,6 +3,7 @@
 angular.module('afredApp').controller('SearchResultsController', ['$scope', '$stateParams', 'mode',
   function($scope, $stateParams, mode) {
     $scope.getSearchResults = function(query) {
+      query = 'dummmy';
       $scope.equipment = [
         {
           name: 'Microscope',
