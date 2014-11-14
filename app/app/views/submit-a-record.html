@@ -1,0 +1,427 @@
+<div class="row">
+  <div class="col-lg-9">
+    <h2>Submit a Record</h2>
+    
+    <form name="confirmationForm">
+      <p>
+        The purpose of this database is to identify the availability of specialized equipment
+        and facilities in the Atlantic region, and to increase opportunities for use of these
+        facilities. Please list only facilities and equipment that have the capacity to support
+        additional research projects.
+      </p>
+      
+      <p>
+        Do you have research equipment that is available for use by a guest researcher and/or
+        through local operational support?
+      </p>
+      
+      <div class="radio">
+        <label>
+          <input type="radio" name="confirmation" data-ng-model="confirmation" data-ng-value="true">
+          Yes
+        </label>
+      </div>
+      
+      <div class="radio">
+        <label>
+          <input type="radio" name="confirmation" data-ng-model="confirmation" data-ng-value="false">
+          No
+        </label>
+      </div>
+      
+      <p class="text-warning" data-ng-hide="confirmation || confirmationForm.$pristine">
+        The purpose of this database is to connect owners of specialist research equipment with surplus
+        capacity in Atlantic Canada with scientists requiring access to these resources.
+      </p>
+    </form>
+    
+    <form class="form-horizontal" name="submitARecordForm" data-ng-submit="submit()" role="form" novalidate data-ng-show="confirmation">
+      <!-- ============================================ [START] Facility -->
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Facility Information</h3>
+        </div>
+        
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="form-group form-group-sm" data-ng-class="{'has-success': submitARecordForm.facilityName.$valid && submitARecordForm.facilityName.$dirty,
+                'has-error': submitARecordForm.facilityName.$invalid && submitARecordForm.facilityName.$dirty}">
+                <label class="col-sm-4 control-label" for="facility-name">Name of research lab/facility*</label>
+                
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" id="facility-name" name="facilityName" data-ng-model="record.facility.name" required>
+                </div>
+              </div>
+              
+              <div class="form-group form-group-sm">
+                <label class="col-sm-4 control-label" for="facility-institution">Institution*</label>
+                
+                <div class="col-sm-8">
+                  <select class="form-control" id="facility-institution" data-ng-model="record.facility.institution" data-ng-change="fillIloForm()" required>
+                    <option>Acadia University</option>
+                    <option>Cape Breton University</option>
+                    <option>Crandall University</option>
+                    <option>Dalhousie University</option>
+                    <option>Dalhousie University, Faculty of Agriculture</option>
+                    <option>Memorial University</option>
+                    <option>Memorial University, Grenfell Campus</option>
+                    <option>Mount Allison University</option>
+                    <option>Mount Saint Vincent University</option>
+                    <option>Saint Mary's University</option>
+                    <option>St. Francis Xavier University</option>
+                    <option>St. Thomas University</option>
+                    <option>Université de Moncton</option>
+                    <option>University of New Brunswick, Fredericton</option>
+                    <option>University of New Brunswick, Saint John</option>
+                    <option>University of Prince Edward Island</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="form-group form-group-sm" data-ng-show="record.facility.institution === 'other'">
+                <label class="col-sm-4 control-label" for="facility-other-institution">Institution Name*</label>
+                
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" id="facility-other-institution" data-ng-model="record.facility.otherInstitution" required>
+                </div>
+              </div>
+            </div><!-- End of .col-x-x -->
+        
+            <div class="col-lg-6">
+              <div class="form-group form-group-sm">
+                <label class="col-sm-4 control-label" for="facility-city">City*</label>
+                
+                <div class="col-sm-8">
+                  <input type="url" class="form-control" id="facility-city" data-ng-model="record.facility.city" required>
+                </div>
+              </div>
+              
+              <div class="form-group form-group-sm">
+                <label class="col-sm-4 control-label" for="facility-province">Province*</label>
+                
+                <div class="col-sm-8">
+                  <select class="form-control" id="facility-province" required>
+                    <option>New Brunswick</option>
+                    <option>Newfoundland and Labrador</option>
+                    <option>Nova Scotia</option>
+                    <option>Prince Edward Island</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="form-group form-group-sm">
+                <label class="col-sm-4 control-label" for="facility-website">Facility website</label>
+                
+                <div class="col-sm-8">
+                  <input type="url" class="form-control" id="facility-website" data-ng-model="record.facility.website">
+                </div>
+              </div>
+            </div><!-- End of .col-x-x -->
+          </div><!-- End of .row -->
+          
+          <div class="form-group">
+            <label class="col-sm-4 control-label" for="facility-description">What the lab/facility does*</label>
+            
+            <div class="col-sm-8">
+              <textarea class="form-control input-sm" id="facility-description" data-ng-model="record.facility.description" rows="4" required></textarea>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="col-sm-4 control-label" for="facility-additional-info">Addtional information</label>
+            
+            <div class="col-sm-8">
+              <textarea class="form-control input-sm" id="facility-additional-info" data-ng-model="record.facility.additionalInfo" rows="4"></textarea>
+            </div>
+          </div>
+        </div><!-- End of .panel-body -->
+      </div><!-- End of .panel -->
+      <!-- ============================================ [END] Facility -->
+      
+      <!-- ============================================ [START] Contact Information -->
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Contact Information</h3>
+        </div>
+        
+        <div class="panel-body">
+          <div data-ng-repeat="c in record.contacts">
+            <p>
+              <span class="label label-primary">
+                <span data-ng-show="$index === 0">Primary Contact</span>
+                <span data-ng-show="$index !== 0">Contact #{{$index + 1}}</span>
+              </span>
+              <a href="" class="pull-right" data-ng-click="removeContact($index)" data-ng-show="$index !== 0">
+                <span class="text-danger">
+                  <span class="glyphicon glyphicon-remove"></span>
+                </span>
+              </a>
+            </p>
+            
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="form-group form-group-sm">
+                  <label class="col-sm-4 control-label" for="contact-first-name{{$index}}">First name*</label>
+                  
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control" id="contact-first-name{{$index}}" data-ng-model="c[$index].firstName" required>
+                  </div>
+                </div>
+                
+                <div class="form-group form-group-sm">
+                  <label class="col-sm-4 control-label" for="contact-last-name{{$index}}">Last name*</label>
+                  
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control" id="contact-last-name{{$index}}" data-ng-model="c[$index].lastName" required>
+                  </div>
+                </div>
+                
+                <div class="form-group form-group-sm">
+                  <label class="col-sm-4 control-label" for="contact-email{{$index}}">Email*</label>
+                  
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control" id="contact-email{{$index}}" data-ng-model="c[$index].email" required>
+                  </div>
+                </div>
+                
+                <div class="form-group form-group-sm">
+                  <label class="col-sm-4 control-label" for="contact-telephone{{$index}}">Telephone*</label>
+                  
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control" id="contact-telephone{{$index}}" data-ng-model="c[$index].telephone" required>
+                  </div>
+                </div>
+              </div><!-- End of .col-x-x -->
+              
+              <div class="col-lg-6">
+                <div class="form-group form-group-sm">
+                  <label class="col-sm-4 control-label" for="contact-position{{$index}}">Position</label>
+                  
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control" id="contact-position{{$index}}" data-ng-model="c[$index].position" required>
+                  </div>
+                </div>
+                
+                <div class="form-group form-group-sm">
+                  <label class="col-sm-4 control-label" for="contact-department{{$index}}">Department/office</label>
+                  
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control" id="contact-department{{$index}}" data-ng-model="c[$index].department">
+                  </div>
+                </div>
+                
+                <div class="form-group form-group-sm">
+                  <label class="col-sm-4 control-label" for="contact-website{{$index}}">Website (if different from facility website)</label>
+                  
+                  <div class="col-sm-8">
+                    <input type="url" class="form-control" id="contact-website{{$index}}" data-ng-model="c[$index].website">
+                  </div>
+                </div>
+                
+                <div class="checkbox">
+                  <label for="editor{{$index}}">
+                    <input type="checkbox" id="editor{{$index}}" value="1" data-ng-checked="$index === 0" data-ng-disabled="$index === 0">
+                    Editor <span data-ng-show="$index === 0">(The primary contact must be an editor)</span>
+                  </label>
+                </div>                  
+              </div><!-- End of .col-x-x -->
+            </div><!-- End of .row -->
+            
+            <hr data-ng-show="record.contacts.length > 1 && $index !== (record.contacts.length - 1)">
+          </div><!-- End of ng-repeat -->
+          
+          <button type="button" class="btn btn-default btn-sm" data-ng-click="addContact()">Add additional contacts</button>
+        </div><!-- End of .panel-body -->
+      </div><!-- End of .panel -->
+      <!-- ============================================ [END] Contact Information -->
+      
+      <!-- ============================================ [START] ILO Contact -->
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Industry Liaison Contact Information</h3>
+        </div>
+        
+        <div class="panel-body">
+          <p data-ng-hide="record.facility.institution === 'other' || !record.facility.institution">
+            <span class="label label-primary">Institution selected: {{record.facility.institution}}</span>
+          </p>
+          
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="form-group form-group-sm">
+                <label class="col-sm-4 control-label" for="ilo-first-name{{$index}}">First name*</label>
+                
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" id="ilo-first-name{{$index}}" data-ng-model="record.ilo.firstName"
+                    data-ng-disabled="record.facility.institution !== 'other'" required>
+                </div>
+              </div>
+              
+              <div class="form-group form-group-sm">
+                <label class="col-sm-4 control-label" for="ilo-last-name{{$index}}">Last name*</label>
+                
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" id="ilo-last-name{{$index}}" data-ng-model="record.ilo.lastName"
+                    data-ng-disabled="record.facility.institution !== 'other'" required>
+                </div>
+              </div>
+              
+              <div class="form-group form-group-sm">
+                <label class="col-sm-4 control-label" for="ilo-email{{$index}}">Email*</label>
+                
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" id="ilo-email{{$index}}" data-ng-model="record.ilo.email"
+                    data-ng-disabled="record.facility.institution !== 'other'" required>
+                </div>
+              </div>
+            </div><!-- End of .col-x-x -->
+            
+            <div class="col-lg-6">
+              <div class="form-group form-group-sm">
+                <label class="col-sm-4 control-label" for="ilo-telephone{{$index}}">Telephone*</label>
+                
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" id="ilo-telephone{{$index}}" data-ng-model="record.ilo.telephone"
+                    data-ng-disabled="record.facility.institution !== 'other'" required>
+                </div>
+              </div>
+              
+              <div class="form-group form-group-sm">
+                <label class="col-sm-4 control-label" for="ilo-position{{$index}}">Position</label>
+                
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" id="ilo-position{{$index}}" data-ng-model="record.ilo.position"
+                    data-ng-disabled="record.facility.institution !== 'other'" required>
+                </div>
+              </div>
+            </div><!-- End of .col-x-x -->
+          </div><!-- End of .row -->
+        </div><!-- End of .panel-body -->
+      </div><!-- End of .panel -->     
+      <!-- ============================================ [END] ILO Contact -->
+      
+      <!-- ============================================ [START] Equipment -->
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Equipment</h3>
+        </div>
+        
+        <div class="panel-body">
+          <div data-ng-repeat="e in record.equipment">
+            <p>
+              <span class="label label-primary">Equipment #{{$index + 1}}</span>
+              <a href="" class="pull-right" data-ng-click="removeEquipment($index)" data-ng-show="$index !== 0">
+                <span class="text-danger">
+                  <span class="glyphicon glyphicon-remove"></span>
+                </span>
+              </a>
+            </p>
+            
+            <div class="row">
+              <div class="col-lg-12">      
+                <div class="form-group form-group-sm">
+                  <label class="col-sm-4 control-label" for="equipment-name{{$index}}">Name*</label>
+                  
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control" id="equipment-name{{$index}}" required>
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label class="col-sm-4 control-label" for="equipment-specifications{{$index}}">Specifications</label>
+                  
+                  <div class="col-sm-8">
+                    <textarea class="form-control input-sm" id="equipment-specifications{{$index}}" rows="4"></textarea>
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label class="col-sm-4 control-label" for="equipment-purpose{{$index}}">Purpose</label>
+                  
+                  <div class="col-sm-8">
+                    <textarea class="form-control input-sm" id="equipment-purpose{{$index}}" rows="4"></textarea>
+                  </div>
+                </div>
+                
+                <div class="form-group form-group-sm">
+                  <label class="col-sm-4 control-label" for="equipment-charges-fee{{$index}}">Charges a fee for use*</label>
+                  
+                  <div class="col-sm-8">
+                    <select class="form-control" id="equipment-charges-fee{{$index}}">
+                      <option value="yes">Yes</option>
+                      <option value="no">No</option>
+                      <option value="varies">Varies</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div class="form-group form-group-sm">
+                  <label class="col-sm-4 control-label" for="equipment-guest-researcher{{$index}}">Access by guest researcher allowed*</label>
+                  
+                  <div class="col-sm-8">
+                    <select class="form-control" id="equipment-guest-researcher{{$index}}">
+                      <option value="yes">Yes</option>
+                      <option value="no">No</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group form-group-sm">
+                  <label class="col-sm-4 control-label" for="equipment-host-technicians{{$index}}">Host technician(s) available*</label>
+                  
+                  <div class="col-sm-8">
+                    <select class="form-control" id="equipment-host-technicians{{$index}}">
+                      <option value="yes">Yes</option>
+                      <option value="no">No</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div>
+                  <label>Additional equipment information</label>
+                  
+                  <div data-ng-repeat="l in record.equipment[$index].links">
+
+                    
+                    <div class="form-group">
+                      <div class="col-sm-5">
+                        <input type="text" class="form-control" id="equipment-link-name-{{$parent.$index}}-{{$index}}" placeholder="Link #{{$index + 1}} name">
+                      </div>
+                      
+                      <div class="col-sm-5">
+                        <input type="url" class="form-control" id="equipment-link-url-{{$parent.$index}}-{{$index}}" placeholder="Link #{{$index + 1}} URL">
+                      </div>
+                      
+                      <div class="col-sm-2">
+                        <span class="text-danger">
+                          <a class="pull-right" href="" data-ng-click="removeEquipmentLink($parent.$index, $index)">
+                            <span class="text-danger">
+                              <span class="glyphicon glyphicon-remove"></span>
+                            </span>
+                          </a>
+                        </span>                     
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <p>
+                    <button type="button" class="btn btn-default btn-xs" data-ng-click="addEquipmentLink($index)">Add additional links</button>
+                  </p>
+                </div>
+              </div><!-- End of .col-x-x -->
+            </div><!-- End of .row -->
+            
+            <hr data-ng-show="record.equipment.length > 1 && $index !== (record.equipment.length - 1)">
+          </div><!-- End of ng-repeat -->
+          <!-- ============================================ [END] Equipment -->
+          
+          <button class="btn btn-default btn-sm" data-ng-click="addEquipment()">Add additional equipment</button>
+        </div><!-- End of .panel-body -->
+      </div><!-- End of .panel -->
+      
+      <button type="submit" class="btn btn-primary">Preview</button>
+    </form>
+  </div><!-- End of .col-x-x -->
+</div><!-- End of .row -->
