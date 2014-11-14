@@ -7,8 +7,27 @@
  * # MainCtrl
  * Controller of the afredApp
  */
-angular.module('afredApp').controller('searchController', ['$scope',
-  function($scope) {
-    $scope.dummy = '';
+angular.module('afredApp').controller('SearchController', ['$scope', '$state', '$modal',
+  function($scope, $state, $modal) {
+    $scope.search = function() {
+      if ($scope.searchBar.query) {
+        $state.go('search.query', {query: $scope.searchBar.query});
+      }
+      else {
+        $state.go('search');
+      }
+    };
+    
+    $scope.contactSpringboard = function () {
+      var modalInstance = $modal.open({
+        templateUrl: 'views/modals/contact-springboard.html',
+        controller: 'ContactSpringboardModalController'
+      });
+    }
+    
+    //Initialise
+    $scope.searchBar = {
+      query: null
+    };
   }
 ]);
