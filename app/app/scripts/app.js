@@ -14,7 +14,8 @@ angular.module('afredApp', [
   'ngResource',
   'ngSanitize',
   'ngTouch',
-  'ui.router'
+  'ui.router',
+  'ui.bootstrap'
 ]);
   
 angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
@@ -25,16 +26,42 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
       .state('search', {
         url: '/search',
         templateUrl: 'views/search.html',
-        controller: 'searchController'
+        controller: 'SearchController'
       }).
-      state('submission', {
-        url: '/submission',
-        templateUrl: 'views/submission.html',
-        controller: 'submissionController'
+      state('search.all', {
+        url: '/all',
+        templateUrl: 'views/search.results.html',
+        controller: 'SearchResultsController',
+        resolve: {
+          mode: function() { return 'all'; }
+        }
+      }).
+      state('search.query', {
+        url: '/query/:query',
+        templateUrl: 'views/search.results.html',
+        controller: 'SearchResultsController',
+        resolve: {
+          mode: function() { return 'query'; }
+        }
+      }).
+      state('submit-a-record', {
+        url: '/submit-a-record',
+        templateUrl: 'views/submit-a-record.html',
+        controller: 'SubmitARecordController'
       }).
       state('about', {
         url: '/about',
         templateUrl: 'views/about.html'
+      }).
+      state('control-panel', {
+        url: '/control-panel',
+        templateUrl: 'views/control-panel.html',
+        controller: 'ControlPanelController'
+      }).
+      state('login', {
+        url: '/login',
+        templateUrl: 'views/login.html',
+        controller: 'LoginController'
       });
   }
 ]);
