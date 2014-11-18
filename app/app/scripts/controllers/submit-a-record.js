@@ -24,7 +24,16 @@ angular.module('afredApp').controller('SubmitARecordController', ['$scope',
     $scope.removeContact = function(index) {
       if (index !== 0) {
         $scope.record.contacts.splice(index, 1);
+        
+        if ($scope.contactIndex === index ||
+            $scope.contactIndex > $scope.record.contacts.length - 1) {
+          $scope.contactIndex--;
+        }
       }
+    };
+    
+    $scope.setContactIndex = function(index) {
+      $scope.contactIndex = index;
     };
     
     $scope.addEquipment = function() {
@@ -80,8 +89,9 @@ angular.module('afredApp').controller('SubmitARecordController', ['$scope',
       console.log($scope.record);
     };
     
-    //Init
+    //Initialise
     $scope.confirmation = null;
+    $scope.contactIndex = 0;
     
     $scope.record = {
       facility: {
@@ -107,4 +117,3 @@ angular.module('afredApp').controller('SubmitARecordController', ['$scope',
     $scope.addEquipment();
   }
 ]);
-

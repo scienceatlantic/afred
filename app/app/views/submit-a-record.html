@@ -147,90 +147,102 @@
         </div>
         
         <div class="panel-body">
-          <div data-ng-repeat="c in record.contacts">
-            <p>
-              <span class="label label-primary">
-                <span data-ng-show="$index === 0">Primary Contact</span>
-                <span data-ng-show="$index !== 0">Contact #{{$index + 1}}</span>
-              </span>
-              <a href="" class="pull-right" data-ng-click="removeContact($index)" data-ng-show="$index !== 0">
-                <span class="text-danger">
-                  <span class="glyphicon glyphicon-remove"></span>
-                </span>
-              </a>
-            </p>
+          <div class="row">
+            <div class="col-lg-2">
+              <table class="table table-condensed" style="table-layout: fixed; font-size: 0.9em;">
+                <tbody>
+                  <tr data-ng-repeat="c in record.contacts" data-ng-class="{active: contactIndex === $index}" data-ng-click="setContactIndex($index)">
+                    <td style="width: 80%; white-space: nowrap; overflow: hidden;">
+                      <a href="">
+                        <span data-ng-hide="c.firstName || c.lastName">Contact #{{$index + 1}}</span>
+                        <span data-ng-show="c.firstName || c.lastName">{{c.firstName}} {{c.lastName}}</span>
+                      </a>
+                    </td>
+                    <td style="width: 20%; text-align: right;">
+                      <a href="" data-ng-show="$index !== 0" data-ng-click="removeContact($index)">
+                        <span class="text-danger">
+                          <span class="glyphicon glyphicon-remove"></span>
+                        </span>
+                      </a>                         
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
             
-            <div class="row">
-              <div class="col-lg-6">
-                <div class="form-group form-group-sm">
-                  <label class="col-sm-4 control-label" for="contact-first-name{{$index}}">First name*</label>
+            <div class="col-lg-10">
+              <div data-ng-repeat="c in record.contacts">
+                <div class="row" data-ng-show="contactIndex === $index">
+                  <div class="col-lg-6">
+                    <div class="form-group form-group-sm">
+                      <label class="col-sm-5 control-label" for="contact-first-name{{$index}}">First name*</label>
+                      
+                      <div class="col-sm-7">
+                        <input type="text" class="form-control" id="contact-first-name{{$index}}" data-ng-model="record.contacts[contactIndex].firstName" required>
+                      </div>
+                    </div>
+                    
+                    <div class="form-group form-group-sm">
+                      <label class="col-sm-5 control-label" for="contact-last-name{{$index}}">Last name*</label>
+                      
+                      <div class="col-sm-7">
+                        <input type="text" class="form-control" id="contact-last-name{{$index}}" data-ng-model="record.contacts[contactIndex].lastName" required>
+                      </div>
+                    </div>
+                    
+                    <div class="form-group form-group-sm">
+                      <label class="col-sm-5 control-label" for="contact-email{{$index}}">Email*</label>
+                      
+                      <div class="col-sm-7">
+                        <input type="text" class="form-control" id="contact-email{{$index}}" data-ng-model="record.contacts[contactIndex].email" required>
+                      </div>
+                    </div>
+                    
+                    <div class="form-group form-group-sm">
+                      <label class="col-sm-5 control-label" for="contact-telephone{{$index}}">Telephone*</label>
+                      
+                      <div class="col-sm-7">
+                        <input type="text" class="form-control" id="contact-telephone{{$index}}" data-ng-model="record.contacts[contactIndex].telephone" required>
+                      </div>
+                    </div>
+                  </div><!-- End of .col-x-x -->
                   
-                  <div class="col-sm-8">
-                    <input type="text" class="form-control" id="contact-first-name{{$index}}" data-ng-model="c[$index].firstName" required>
-                  </div>
-                </div>
-                
-                <div class="form-group form-group-sm">
-                  <label class="col-sm-4 control-label" for="contact-last-name{{$index}}">Last name*</label>
-                  
-                  <div class="col-sm-8">
-                    <input type="text" class="form-control" id="contact-last-name{{$index}}" data-ng-model="c[$index].lastName" required>
-                  </div>
-                </div>
-                
-                <div class="form-group form-group-sm">
-                  <label class="col-sm-4 control-label" for="contact-email{{$index}}">Email*</label>
-                  
-                  <div class="col-sm-8">
-                    <input type="text" class="form-control" id="contact-email{{$index}}" data-ng-model="c[$index].email" required>
-                  </div>
-                </div>
-                
-                <div class="form-group form-group-sm">
-                  <label class="col-sm-4 control-label" for="contact-telephone{{$index}}">Telephone*</label>
-                  
-                  <div class="col-sm-8">
-                    <input type="text" class="form-control" id="contact-telephone{{$index}}" data-ng-model="c[$index].telephone" required>
-                  </div>
-                </div>
-              </div><!-- End of .col-x-x -->
-              
-              <div class="col-lg-6">
-                <div class="form-group form-group-sm">
-                  <label class="col-sm-4 control-label" for="contact-position{{$index}}">Position</label>
-                  
-                  <div class="col-sm-8">
-                    <input type="text" class="form-control" id="contact-position{{$index}}" data-ng-model="c[$index].position" required>
-                  </div>
-                </div>
-                
-                <div class="form-group form-group-sm">
-                  <label class="col-sm-4 control-label" for="contact-department{{$index}}">Department/office</label>
-                  
-                  <div class="col-sm-8">
-                    <input type="text" class="form-control" id="contact-department{{$index}}" data-ng-model="c[$index].department">
-                  </div>
-                </div>
-                
-                <div class="form-group form-group-sm">
-                  <label class="col-sm-4 control-label" for="contact-website{{$index}}">Website (if different from facility website)</label>
-                  
-                  <div class="col-sm-8">
-                    <input type="url" class="form-control" id="contact-website{{$index}}" data-ng-model="c[$index].website">
-                  </div>
-                </div>
-                
-                <div class="checkbox">
-                  <label for="editor{{$index}}">
-                    <input type="checkbox" id="editor{{$index}}" value="1" data-ng-checked="$index === 0" data-ng-disabled="$index === 0">
-                    Editor <span data-ng-show="$index === 0">(The primary contact must be an editor)</span>
-                  </label>
-                </div>                  
-              </div><!-- End of .col-x-x -->
-            </div><!-- End of .row -->
-            
-            <hr data-ng-show="record.contacts.length > 1 && $index !== (record.contacts.length - 1)">
-          </div><!-- End of ng-repeat -->
+                  <div class="col-lg-6">
+                    <div class="form-group form-group-sm">
+                      <label class="col-sm-5 control-label" for="contact-position{{$index}}">Position</label>
+                      
+                      <div class="col-sm-7">
+                        <input type="text" class="form-control" id="contact-position{{$index}}" data-ng-model="record.contacts[contactIndex].position" required>
+                      </div>
+                    </div>
+                    
+                    <div class="form-group form-group-sm">
+                      <label class="col-sm-5 control-label" for="contact-department{{$index}}">Department/office</label>
+                      
+                      <div class="col-sm-7">
+                        <input type="text" class="form-control" id="contact-department{{$index}}" data-ng-model="record.contacts[contactIndex].department">
+                      </div>
+                    </div>
+                    
+                    <div class="form-group form-group-sm">
+                      <label class="col-sm-5 control-label" for="contact-website{{$index}}">Website (if different from facility website)</label>
+                      
+                      <div class="col-sm-7">
+                        <input type="url" class="form-control" id="contact-website{{$index}}" data-ng-model="record.contacts[contactIndex].website">
+                      </div>
+                    </div>
+                    
+                    <div class="checkbox">
+                      <label for="editor{{$index}}">
+                        <input type="checkbox" id="editor{{$index}}" value="1" data-ng-checked="$index === 0" data-ng-disabled="$index === 0">
+                        Editor <span data-ng-show="$index === 0">(The primary contact must be an editor)</span>
+                      </label>
+                    </div>                  
+                  </div><!-- End of .col-x-x -->
+                </div><!-- End of .row -->
+              </div><!-- End of ng-repeat -->
+            </div>
+          </div><!--End of .row -->
           
           <button type="button" class="btn btn-default btn-sm" data-ng-click="addContact()">Add additional contacts</button>
         </div><!-- End of .panel-body -->
