@@ -149,16 +149,16 @@
         <div class="panel-body">
           <div class="row">
             <div class="col-lg-2">
-              <table class="table table-condensed" style="table-layout: fixed; font-size: 0.9em;">
+              <table class="table table-condensed table-list">
                 <tbody>
                   <tr data-ng-repeat="c in record.contacts" data-ng-class="{active: contactIndex === $index}" data-ng-click="setContactIndex($index)">
-                    <td style="width: 80%; white-space: nowrap; overflow: hidden;">
+                    <td>
                       <a href="">
                         <span data-ng-hide="c.firstName || c.lastName">Contact #{{$index + 1}}</span>
                         <span data-ng-show="c.firstName || c.lastName">{{c.firstName}} {{c.lastName}}</span>
                       </a>
                     </td>
-                    <td style="width: 20%; text-align: right;">
+                    <td>
                       <a href="" data-ng-show="$index !== 0" data-ng-click="removeContact($index)">
                         <span class="text-danger">
                           <span class="glyphicon glyphicon-remove"></span>
@@ -168,7 +168,7 @@
                   </tr>
                 </tbody>
               </table>
-            </div>
+            </div><!-- End of .col-x-x -->
             
             <div class="col-lg-10">
               <div data-ng-repeat="c in record.contacts">
@@ -241,7 +241,7 @@
                   </div><!-- End of .col-x-x -->
                 </div><!-- End of .row -->
               </div><!-- End of ng-repeat -->
-            </div>
+            </div><!-- End of .col-x-x -->
           </div><!--End of .row -->
           
           <button type="button" class="btn btn-default btn-sm" data-ng-click="addContact()">Add additional contacts</button>
@@ -321,112 +321,127 @@
         </div>
         
         <div class="panel-body">
-          <div data-ng-repeat="e in record.equipment">
-            <p>
-              <span class="label label-primary">Equipment #{{$index + 1}}</span>
-              <a href="" class="pull-right" data-ng-click="removeEquipment($index)" data-ng-show="$index !== 0">
-                <span class="text-danger">
-                  <span class="glyphicon glyphicon-remove"></span>
-                </span>
-              </a>
-            </p>
-            
-            <div class="row">
-              <div class="col-lg-12">      
-                <div class="form-group form-group-sm">
-                  <label class="col-sm-4 control-label" for="equipment-name{{$index}}">Name*</label>
-                  
-                  <div class="col-sm-8">
-                    <input type="text" class="form-control" id="equipment-name{{$index}}" required>
-                  </div>
-                </div>
-                
-                <div class="form-group">
-                  <label class="col-sm-4 control-label" for="equipment-specifications{{$index}}">Specifications</label>
-                  
-                  <div class="col-sm-8">
-                    <textarea class="form-control input-sm" id="equipment-specifications{{$index}}" rows="4"></textarea>
-                  </div>
-                </div>
-                
-                <div class="form-group">
-                  <label class="col-sm-4 control-label" for="equipment-purpose{{$index}}">Purpose</label>
-                  
-                  <div class="col-sm-8">
-                    <textarea class="form-control input-sm" id="equipment-purpose{{$index}}" rows="4"></textarea>
-                  </div>
-                </div>
-                
-                <div class="form-group form-group-sm">
-                  <label class="col-sm-4 control-label" for="equipment-charges-fee{{$index}}">Charges a fee for use*</label>
-                  
-                  <div class="col-sm-8">
-                    <select class="form-control" id="equipment-charges-fee{{$index}}">
-                      <option value="yes">Yes</option>
-                      <option value="no">No</option>
-                      <option value="varies">Varies</option>
-                    </select>
-                  </div>
-                </div>
-                
-                <div class="form-group form-group-sm">
-                  <label class="col-sm-4 control-label" for="equipment-guest-researcher{{$index}}">Access by guest researcher allowed*</label>
-                  
-                  <div class="col-sm-8">
-                    <select class="form-control" id="equipment-guest-researcher{{$index}}">
-                      <option value="yes">Yes</option>
-                      <option value="no">No</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="form-group form-group-sm">
-                  <label class="col-sm-4 control-label" for="equipment-host-technicians{{$index}}">Host technician(s) available*</label>
-                  
-                  <div class="col-sm-8">
-                    <select class="form-control" id="equipment-host-technicians{{$index}}">
-                      <option value="yes">Yes</option>
-                      <option value="no">No</option>
-                    </select>
-                  </div>
-                </div>
-                
-                <div>
-                  <label>Additional equipment information</label>
-                  
-                  <div data-ng-repeat="l in record.equipment[$index].links">
-
-                    
-                    <div class="form-group">
-                      <div class="col-sm-5">
-                        <input type="text" class="form-control" id="equipment-link-name-{{$parent.$index}}-{{$index}}" placeholder="Link #{{$index + 1}} name">
-                      </div>
-                      
-                      <div class="col-sm-5">
-                        <input type="url" class="form-control" id="equipment-link-url-{{$parent.$index}}-{{$index}}" placeholder="Link #{{$index + 1}} URL">
-                      </div>
-                      
-                      <div class="col-sm-2">
+          <div class="row">
+            <div class="col-lg-2">
+              <table class="table table-condensed table-list">
+                <tbody>
+                  <tr data-ng-repeat="e in record.equipment" data-ng-class="{active: equipmentIndex === $index}" data-ng-click="setEquipmentIndex($index)">
+                    <td>
+                      <a href="">
+                        <span data-ng-hide="e.name">Equipment #{{$index + 1}}</span>
+                        <span data-ng-show="e.name">{{e.name}}</span>
+                      </a>
+                    </td>
+                    <td>
+                      <a href="" data-ng-show="$index !== 0" data-ng-click="removeEquipment($index)">
                         <span class="text-danger">
-                          <a class="pull-right" href="" data-ng-click="removeEquipmentLink($parent.$index, $index)">
-                            <span class="text-danger">
-                              <span class="glyphicon glyphicon-remove"></span>
-                            </span>
-                          </a>
-                        </span>                     
+                          <span class="glyphicon glyphicon-remove"></span>
+                        </span>
+                      </a>                         
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div><!-- End of .col-x-x -->
+            
+            <div class="col-lg-10">
+              <div data-ng-repeat="e in record.equipment">
+                <div class="row" data-ng-show="equipmentIndex === $index">
+                  <div class="col-lg-12">      
+                    <div class="form-group form-group-sm">
+                      <label class="col-sm-4 control-label" for="equipment-name{{$index}}">Name*</label>
+                      
+                      <div class="col-sm-8">
+                        <input type="text" class="form-control" id="equipment-name{{$index}}" data-ng-model="record.equipment[equipmentIndex].name" required>
                       </div>
                     </div>
-                  </div>
-                  
-                  <p>
-                    <button type="button" class="btn btn-default btn-xs" data-ng-click="addEquipmentLink($index)">Add additional links</button>
-                  </p>
-                </div>
-              </div><!-- End of .col-x-x -->
-            </div><!-- End of .row -->
-            
-            <hr data-ng-show="record.equipment.length > 1 && $index !== (record.equipment.length - 1)">
-          </div><!-- End of ng-repeat -->
+                    
+                    <div class="form-group">
+                      <label class="col-sm-4 control-label" for="equipment-specifications{{$index}}">Specifications</label>
+                      
+                      <div class="col-sm-8">
+                        <textarea class="form-control input-sm" id="equipment-specifications{{$index}}" data-ng-model="record.equipment[equipmentIndex].specifications" rows="4"></textarea>
+                      </div>
+                    </div>
+                    
+                    <div class="form-group">
+                      <label class="col-sm-4 control-label" for="equipment-purpose{{$index}}">Purpose</label>
+                      
+                      <div class="col-sm-8">
+                        <textarea class="form-control input-sm" id="equipment-purpose{{$index}}" data-ng-model="record.equipment[equipmentIndex].purpose" rows="4"></textarea>
+                      </div>
+                    </div>
+                    
+                    <div class="form-group form-group-sm">
+                      <label class="col-sm-4 control-label" for="equipment-charges-fee{{$index}}">Charges a fee for use*</label>
+                      
+                      <div class="col-sm-8">
+                        <select class="form-control" id="equipment-charges-fee{{$index}}" data-ng-model="record.equipment[equipmentIndex].fee">
+                          <option value="yes">Yes</option>
+                          <option value="no">No</option>
+                          <option value="varies">Varies</option>
+                        </select>
+                      </div>
+                    </div>
+                    
+                    <div class="form-group form-group-sm">
+                      <label class="col-sm-4 control-label" for="equipment-guest-researcher{{$index}}">Access by guest researcher allowed*</label>
+                      
+                      <div class="col-sm-8">
+                        <select class="form-control" id="equipment-guest-researcher{{$index}}" data-ng-model="record.equipment[equipmentIndex].guestResearcher">
+                          <option value="yes">Yes</option>
+                          <option value="no">No</option>
+                        </select>
+                      </div>
+                    </div>
+    
+                    <div class="form-group form-group-sm">
+                      <label class="col-sm-4 control-label" for="equipment-host-technicians{{$index}}">Host technician(s) available*</label>
+                      
+                      <div class="col-sm-8">
+                        <select class="form-control" id="equipment-host-technicians{{$index}}" data-ng-model="record.equipment[equipmentIndex].hostTechnician">
+                          <option value="yes">Yes</option>
+                          <option value="no">No</option>
+                        </select>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <label>Additional equipment information</label>
+                      
+                      <div data-ng-repeat="l in record.equipment[$index].links">
+    
+                        
+                        <div class="form-group">
+                          <div class="col-sm-5">
+                            <input type="text" class="form-control" id="equipment-link-name-{{$parent.$index}}-{{$index}}" placeholder="Link #{{$index + 1}} name">
+                          </div>
+                          
+                          <div class="col-sm-5">
+                            <input type="url" class="form-control" id="equipment-link-url-{{$parent.$index}}-{{$index}}" placeholder="Link #{{$index + 1}} URL">
+                          </div>
+                          
+                          <div class="col-sm-2">
+                            <span class="text-danger">
+                              <a class="pull-right" href="" data-ng-click="removeEquipmentLink($parent.$index, $index)">
+                                <span class="text-danger">
+                                  <span class="glyphicon glyphicon-remove"></span>
+                                </span>
+                              </a>
+                            </span>                     
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <p>
+                        <button type="button" class="btn btn-default btn-xs" data-ng-click="addEquipmentLink($index)">Add additional links</button>
+                      </p>
+                    </div>
+                  </div><!-- End of .col-x-x -->
+                </div><!-- End of .row -->
+              </div><!-- End of ng-repeat -->
+            </div><!-- End of col-x-x -->
+          </div><!-- End of .row -->
           <!-- ============================================ [END] Equipment -->
           
           <button class="btn btn-default btn-sm" data-ng-click="addEquipment()">Add additional equipment</button>

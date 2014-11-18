@@ -40,3 +40,21 @@ header.jumbotron {
 nav.navbar {
   border: 0;
 }
+
+/* Side list for the forms (contacts, equipment)
+-------------------------------------------------- */
+table.table-list {
+  table-layout: fixed;
+  font-size: 0.9em;
+}
+
+table.table-list td:first-child {
+  width: 80%;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+table.table-list td:last-child {
+  width: 20%;
+  text-align: left;
+}

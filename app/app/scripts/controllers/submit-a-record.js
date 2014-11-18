@@ -51,6 +51,15 @@ angular.module('afredApp').controller('SubmitARecordController', ['$scope',
       if (index !== 0) {
         $scope.record.equipment.splice(index, 1);
       }
+      
+      if ($scope.equipmentIndex === index ||
+          $scope.equipmentIndex > $scope.record.equipment.length - 1) {
+        $scope.equipmentIndex--;
+      }
+    };
+    
+    $scope.setEquipmentIndex = function(index) {
+      $scope.equipmentIndex = index;
     };
     
     $scope.addEquipmentLink = function(index) {
@@ -92,6 +101,7 @@ angular.module('afredApp').controller('SubmitARecordController', ['$scope',
     //Initialise
     $scope.confirmation = null;
     $scope.contactIndex = 0;
+    $scope.equipmentIndex = 0;
     
     $scope.record = {
       facility: {
