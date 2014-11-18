@@ -1,11 +1,17 @@
-DIR_DOCUMENT_ROOT 	= /var/www/html/afred
-DIR_APP_APP			= ~/ws/afred/app/app
-DIR_APP_DIST		= ~/ws/afred/app/dist
-DIR_API				= ~/ws/afred/api
+DIR_AFRED_ROOT 		= /var/www/html/afred
+DIR_APP			= ~/ws/afred/app
+DIR_API			= ~/ws/afred/api
 
-deploy:
-	sudo rm -rf $(DIR_DOCUMENT_ROOT)
+deploy: clear-root
 	cd app && grunt && cd ..
-	sudo cp -r $(DIR_APP_DIST) $(DIR_DOCUMENT_ROOT)
-	sudo cp -r $(DIR_API) $(DIR_DOCUMENT_ROOT)
-	sudo chmod -R 757 $(DIR_DOCUMENT_ROOT)/app/storage
+	sudo cp -r $(DIR_APP)/dist $(DIR_AFRED_ROOT)
+	sudo cp -r $(DIR_API) $(DIR_AFRED_ROOT)/api
+	sudo chmod -R 757 $(DIR_AFRED_ROOT)/api/app/storage
+	
+deploy-api: clear-root
+	sudo cp -r $(DIR_API) $(DIR_AFRED_ROOT)/api
+	sudo chmod -R 757 $(DIR_AFRED_ROOT)/api/app/storage
+
+clear-root:
+	sudo rm -rf $(DIR_AFRED_ROOT)
+	sudo mkdir $(DIR_AFRED_ROOT)
