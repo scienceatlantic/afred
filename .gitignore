@@ -14,5 +14,5 @@ app/.sass-cache
 app/dist/
 
 # "api" folder
-api/.env.*.php
+# api/.env.local.php <-- include local enviroment config file to serve as a guide
 api/.env.php
