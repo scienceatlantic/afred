@@ -2,7 +2,8 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFacultiesTable extends Migration {
+class CreateFacultiesTable extends Migration
+{
     public function up()
     {
         Schema::create('facilities', function($table) {
