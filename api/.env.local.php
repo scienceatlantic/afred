@@ -3,10 +3,15 @@ return array(
     'APP_DEBUG'             => true,
     'APP_KEY'               => 'KAmQyv8o2AKPhvlrgpxGhfq5cwtHZr01',
   
+    'DATABASE_DEFAULT'      => 'mysql',
     'DATABASE_HOST'         => 'localhost',
     'DATABASE_NAME'         => 'afred',
     'DATABASE_USERNAME'     => 'root',
     'DATABASE_PASSWORD'     => 'root',
+    'DATABASE_CHARSET'      => 'utf8',
+    'DATABASE_COLLATION'    => 'utf8_unicode_ci',
+    'DATABASE_PREFIX'       => '',
+    'DATABASE_SCHEMA'       => 'public',
     
     'MAIL_DRIVER'           => 'smtp',
     'MAIL_HOST'             => 'smtp.mailgun.org',

@@ -26,7 +26,7 @@ return array(
 	|
 	*/
 
-	'default' => 'mysql',
+	'default' => $_ENV['DATABASE_DEFAULT'],
 
 	/*
 	|--------------------------------------------------------------------------
@@ -54,33 +54,33 @@ return array(
 
 		'mysql' => array(
 			'driver'    => 'mysql',
-			'host'      => 'localhost',
-			'database'  => 'afred',
-			'username'  => 'root',
-			'password'  => 'root',
-			'charset'   => 'utf8',
-			'collation' => 'utf8_unicode_ci',
-			'prefix'    => '',
+			'host'      => $_ENV['DATABASE_HOST'],
+			'database'  => $_ENV['DATABASE_NAME'],
+			'username'  => $_ENV['DATABASE_USERNAME'],
+			'password'  => $_ENV['DATABASE_PASSWORD'],
+			'charset'   => $_ENV['DATABASE_CHARSET'],
+			'collation' => $_ENV['DATABASE_COLLATION'],
+			'prefix'    => $_ENV['DATABASE_PREFIX'],
 		),
 
 		'pgsql' => array(
 			'driver'   => 'pgsql',
-			'host'     => 'localhost',
-			'database' => 'forge',
-			'username' => 'forge',
-			'password' => '',
-			'charset'  => 'utf8',
-			'prefix'   => '',
-			'schema'   => 'public',
+			'host'     => $_ENV['DATABASE_HOST'],
+			'database' => $_ENV['DATABASE_NAME'],
+			'username' => $_ENV['DATABASE_USERNAME'],
+			'password' => $_ENV['DATABASE_PASSWORD'],
+			'charset'  => $_ENV['DATABASE_CHARSET'],
+			'prefix'   => $_ENV['DATABASE_PREFIX'],
+			'schema'   => $_ENV['DATABASE_SCHEMA'],
 		),
 
 		'sqlsrv' => array(
 			'driver'   => 'sqlsrv',
-			'host'     => 'localhost',
-			'database' => 'database',
-			'username' => 'root',
-			'password' => '',
-			'prefix'   => '',
+			'host'     => $_ENV['DATABASE_HOST'],
+			'database' => $_ENV['DATABASE_NAME'],
+			'username' => $_ENV['DATABASE_USERNAME'],
+			'password' => $_ENV['DATABASE_PASSWORD'],
+			'prefix'   => $_ENV['DATABASE_PREFIX'],
 		),
 
 	),
