@@ -7,7 +7,7 @@
  * # submissionController
  * Controller of the afredApp
  */
-angular.module('afredApp').controller('SubmitARecordController', ['$scope',
+angular.module('afredApp').controller('FacilityFormController', ['$scope',
   function($scope) {
     $scope.addContact = function() {
       $scope.record.contacts.push({
