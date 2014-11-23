@@ -33,7 +33,7 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         templateUrl: 'views/search.results.html',
         controller: 'SearchResultsController',
         resolve: {
-          mode: function() { return 'all'; }
+          templateMode: function() { return { all: true, query: false }; }
         }
       }).
       state('search.query', {
@@ -41,13 +41,40 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         templateUrl: 'views/search.results.html',
         controller: 'SearchResultsController',
         resolve: {
-          mode: function() { return 'query'; }
+          templateMode: function() { return {all: false, query: true}; }
         }
       }).
-      state('submit-a-record', {
-        url: '/submit-a-record',
-        templateUrl: 'views/submit-a-record.html',
-        controller: 'SubmitARecordController'
+      state('facility-create', {
+        url: '/facility/create',
+        templateUrl: 'views/facility-form.html',
+        controller: 'FacilityFormController',
+        resolve: {
+          templateMode: function() { return { create: true, edit: false }; }
+        }
+      }).
+      state('facility-edit', {
+        url: 'facility/:facilityId/edit',
+        templateUrl: 'views/facility-form.html',
+        controller: 'FacilityFormController',
+        resolve: {
+          templateMode: function() { return { create: false, edit: true }; }
+        }
+      }).
+      state('facility', {
+        url: '/facility/:facilityId',
+        templateUrl: 'views/facility.html',
+        controller: 'FacilityController',
+        resolve: {
+          templateMode: function() { return { facility: true, equipment: false }; }
+        }
+      }).          
+      state('facility-equipment', {
+        url: '/facility/:facilityId/equipment/:equipmentId',
+        templateUrl: 'views/facility.html',
+        controller: 'FacilityController',
+        resolve: {
+          templateMode: function() { return { facility: false, equipment: true }; }
+        }
       }).
       state('about', {
         url: '/about',
