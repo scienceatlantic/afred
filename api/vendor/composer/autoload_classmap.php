@@ -6,7 +6,6 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Administrator' => $baseDir . '/app/models/Administrator.php',
     'BaseController' => $baseDir . '/app/controllers/BaseController.php',
     'Boris\\Boris' => $vendorDir . '/d11wtq/boris/lib/Boris/Boris.php',
     'Boris\\CLIOptionsHandler' => $vendorDir . '/d11wtq/boris/lib/Boris/CLIOptionsHandler.php',
@@ -29,6 +28,9 @@ return array(
     'ClassPreloader\\Parser\\DirVisitor' => $vendorDir . '/classpreloader/classpreloader/src/ClassPreloader/Parser/DirVisitor.php',
     'ClassPreloader\\Parser\\FileVisitor' => $vendorDir . '/classpreloader/classpreloader/src/ClassPreloader/Parser/FileVisitor.php',
     'ClassPreloader\\Parser\\NodeTraverser' => $vendorDir . '/classpreloader/classpreloader/src/ClassPreloader/Parser/NodeTraverser.php',
+    'CreateContactsTable' => $baseDir . '/app/database/migrations/2014_11_21_084345_create_contacts_table.php',
+    'CreateEquipmentTable' => $baseDir . '/app/database/migrations/2014_11_21_083401_create_equipment_table.php',
+    'CreateFacultiesTable' => $baseDir . '/app/database/migrations/2014_11_21_072113_create_faculties_table.php',
     'Crypt_AES' => $vendorDir . '/phpseclib/phpseclib/phpseclib/Crypt/AES.php',
     'Crypt_Base' => $vendorDir . '/phpseclib/phpseclib/phpseclib/Crypt/Base.php',
     'Crypt_Blowfish' => $vendorDir . '/phpseclib/phpseclib/phpseclib/Crypt/Blowfish.php',
@@ -45,6 +47,7 @@ return array(
     'Eloquence\\Database\\Traits\\CamelCaseModel' => $vendorDir . '/kirkbushell/eloquence/Eloquence/Database/Traits/CamelCaseModel.php',
     'Eloquence\\Database\\Traits\\UUIDModel' => $vendorDir . '/kirkbushell/eloquence/Eloquence/Database/Traits/UUIDModel.php',
     'Eloquence\\EloquenceServiceProvider' => $vendorDir . '/kirkbushell/eloquence/Eloquence/EloquenceServiceProvider.php',
+    'Facility' => $baseDir . '/app/models/Facility.php',
     'File_ANSI' => $vendorDir . '/phpseclib/phpseclib/phpseclib/File/ANSI.php',
     'File_ASN1' => $vendorDir . '/phpseclib/phpseclib/phpseclib/File/ASN1.php',
     'File_ASN1_Element' => $vendorDir . '/phpseclib/phpseclib/phpseclib/File/ASN1.php',
