@@ -1,20 +1,14 @@
 'use strict';
 
-angular.module('afredApp').controller('SearchResultsController', ['$scope', '$stateParams', 'mode',
-  function($scope, $stateParams, mode) {
+angular.module('afredApp').controller('SearchResultsController', ['$scope', '$stateParams', 'equipmentResource', 'templateMode',
+  function($scope, $stateParams, equipmentResource, templateMode) {
     $scope.getSearchResults = function(query) {
-      query = 'dummmy';
-      $scope.equipment = [
-        {
-          name: 'Microscope',
-          created: new Date(),
-          updated: new Date()
-        }
-      ];   
+      $scope.equipment = equipmentResource.query({query: query});
     };
     
     //Initialise
-    $scope.searchBar.query = (mode === 'query' ? $stateParams.query : null); 
+    $scope.equipment = [];
+    $scope.searchBar.query = (templateMode.query ? $stateParams.query : null); 
     $scope.getSearchResults($scope.searchBar.query);
   }
 ]);
