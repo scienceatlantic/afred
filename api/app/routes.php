@@ -11,7 +11,11 @@
 |
 */
 
-Route::get('/', function()
-{
-	return View::make('hello');
-});
+Route::resource('facility', 'FacilityController',
+		array('only' => array('index', 'store', 'show', 'update', 'destroy')));
+Route::resource('facility.contacts', 'FacilityContactController',
+		array('only' => 'index'));
+Route::resource('facility.equipment', 'FacilityEquipmentController',
+		array('only' => array('index', 'show')));
+Route::resource('equipment', 'EquipmentController',
+		array('only' => array('index', 'show')));
