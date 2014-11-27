@@ -1,28 +1,10 @@
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title">Search Results</h3>
-  </div>
-  
+<h3 data-ng-show="results.equipment.length">Results</h3>
+
+<h3 data-ng-hide="results.equipment.length">No Results</h3>
+
+<div class="panel panel-default" data-ng-repeat="e in results.equipment" data-ng-show="results.equipment.length">
   <div class="panel-body">
-    <div>
-      
-    </div>
-    
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Equipment</th>
-          <th>Date Created</th>
-          <th>Date Updated</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr data-ng-repeat="e in equipment">
-          <td>{{e.name}}</td>
-          <td>{{e.created | date}}</td>
-          <td>{{e.updated | date}}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div><!-- End of .panel-body -->
-</div><!-- End of .panel -->
+    <label>{{e.name}}</label> <span class="label label-info">{{e.facility}}, {{e.province}}</span>
+    <p class="text-muted truncate">{{e.purpose}}</p>
+  </div>
+</div>

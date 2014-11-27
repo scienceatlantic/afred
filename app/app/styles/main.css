@@ -58,3 +58,12 @@ table.table-list td:last-child {
   width: 20%;
   text-align: left;
 }
+
+/* 
+-------------------------------------------------- */
+.truncate {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
