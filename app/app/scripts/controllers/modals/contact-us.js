@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('afredApp').controller('ContactSpringboardModalController', ['$scope', '$modalInstance',
+angular.module('afredApp').controller('ContactUsModalController', ['$scope', '$modalInstance',
   function($scope, $modalInstance) {
     $scope.submit = function() {
       $modalInstance.close();
