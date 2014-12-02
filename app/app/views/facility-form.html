@@ -12,11 +12,11 @@
         <div class="panel-body">
           <div class="row">
             <div class="col-lg-6">
-              <div data-field data-label="Facility">
+              <div data-field data-label="Facility*">
                 <input class="form-control" id="facility-name" name="facilityName" data-ng-model="record.facility.name" required>
               </div>
               
-              <div data-field data-label="Institution">
+              <div data-field data-label="Institution*">
                 <select class="form-control" id="facility-institution" name="facilityInstitution" data-ng-model="record.facility.institution" data-ng-change="fillIloForm()" required>
                   <option>Acadia University</option>
                   <option>Cape Breton University</option>
@@ -38,7 +38,7 @@
                 </select>
               </div>
               
-              <div data-field data-label="Institution name*">
+              <div data-field data-label="Institution name*" data-ng-show="record.facility.institution === 'other'">
                 <input type="text" class="form-control" name="facilityOtherInstitution" id="facility-other-institution" data-ng-model="record.facility.otherInstitution" required>
               </div>
             </div><!-- End of .col-x-x -->
