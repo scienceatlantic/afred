@@ -3,7 +3,7 @@
 <h3 data-ng-hide="results.equipment.length">No Results</h3>
 
 <div class="panel panel-default" data-ng-repeat="e in results.equipment" data-ng-show="results.equipment.length">
-  <div class="panel-body">
+  <div class="panel-body" data-ng-click="showEquipmentPage(e.facilityId, e.id)">
     <label>{{e.name}}</label> <span class="label label-info">{{e.facility}}, {{e.province}}</span>
     <p class="text-muted truncate">{{e.purpose}}</p>
   </div>
