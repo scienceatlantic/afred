@@ -59,11 +59,22 @@ table.table-list td:last-child {
   text-align: left;
 }
 
-/* 
+/* General styles
 -------------------------------------------------- */
 .truncate {
   width: 100%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* textAngular styles
+-------------------------------------------------- */
+.ta-editor {
+    min-height: 300px;
+    height: auto;
+    overflow: auto;
+    font-family: inherit;
+    font-size: 100%;
+    margin:20px 0;
 }

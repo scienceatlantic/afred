@@ -15,7 +15,8 @@ angular.module('afredApp', [
   'ngSanitize',
   'ngTouch',
   'ui.router',
-  'ui.bootstrap'
+  'ui.bootstrap',
+  'textAngular'
 ]);
   
 angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
