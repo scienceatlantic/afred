@@ -6,7 +6,7 @@
       <!-- ============================================ [START] Facility -->
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">Facility Information</h3>
+          <h3 class="panel-title">Facility/Research Lab Information</h3>
         </div>
         
         <div class="panel-body">
@@ -101,12 +101,12 @@
             </div><!-- End of .col-x-x -->
             
             <div class="col-lg-10">
+              <p data-ng-show="contactIndex === 0">
+                <span class="label label-info">Primary point of contact</span>
+              </p>
+                  
               <div data-ng-repeat="c in record.contacts">
                 <div data-ng-form name="contactForm">
-                  <p>
-                    <span class="label label-info">The first contact is the primary point of contact</span>
-                  </p>
-                  
                   <div class="row" data-ng-show="contactIndex === $index">
                     <div class="col-lg-6">
                       <div data-field data-label="First name*">
@@ -133,10 +133,6 @@
                     <div class="col-lg-6">
                       <div data-field data-label="Position">
                         <input type="text" class="form-control" name="contactPosition" id="contact-position{{$index}}" data-ng-model="record.contacts[contactIndex].position" required>
-                      </div>
-                      
-                      <div data-field data-label="Department/office">
-                        <input type="text" class="form-control" name="contactDepartment" id="contact-department{{$index}}" data-ng-model="record.contacts[contactIndex].department">
                       </div>
                       
                       <div data-field data-label="Website (if different from facility website)">
