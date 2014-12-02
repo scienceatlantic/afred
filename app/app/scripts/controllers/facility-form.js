@@ -7,8 +7,8 @@
  * # submissionController
  * Controller of the afredApp
  */
-angular.module('afredApp').controller('FacilityFormController', ['$scope',
-  function($scope) {
+angular.module('afredApp').controller('FacilityFormController', ['$scope', '$timeout', 'facilityResource', 'templateMode',
+  function($scope, $timeout, facilityResource, templateMode) {
     $scope.addContact = function() {
       $scope.record.contacts.push({
         firstName: null,
@@ -19,6 +19,8 @@ angular.module('afredApp').controller('FacilityFormController', ['$scope',
         department: null,
         website: null
       });
+      
+      $scope.contactIndex = $scope.record.contacts.length - 1;
     };
     
     $scope.removeContact = function(index) {
@@ -41,10 +43,11 @@ angular.module('afredApp').controller('FacilityFormController', ['$scope',
         name: null,
         specifications: null,
         purpose: null,
-        links: []
+        excessCapacity: null,
+        keywords: null
       });
       
-      $scope.addEquipmentLink($scope.record.equipment.length - 1);
+      $scope.equipmentIndex = $scope.record.equipment.length - 1;
     };
     
     $scope.removeEquipment = function(index) {
@@ -60,18 +63,6 @@ angular.module('afredApp').controller('FacilityFormController', ['$scope',
     
     $scope.setEquipmentIndex = function(index) {
       $scope.equipmentIndex = index;
-    };
-    
-    $scope.addEquipmentLink = function(index) {
-      $scope.record.equipment[index].links.push({
-        url: null
-      });
-    };
-    
-    $scope.removeEquipmentLink = function(equipmentIndex, linkIndex) {
-      if (linkIndex !== 0) {
-        $scope.record.equipment[equipmentIndex].links.splice(linkIndex, 1);
-      }
     };
     
     $scope.fillIloForm = function() {
@@ -99,16 +90,20 @@ angular.module('afredApp').controller('FacilityFormController', ['$scope',
     };
     
     //Initialise
-    $scope.confirmation = null;
+    $scope.templateMode = templateMode;
     $scope.contactIndex = 0;
     $scope.equipmentIndex = 0;
+    $scope.textAngularConfig = '[["p"],["bold","italics"],["ul","ol","indent","outdent"],["undo","redo"],["insertLink"]]';
+    $scope.loading = {
+      facilityForm: true
+    };
     
     $scope.record = {
       facility: {
         name: null,
         institution: null,
         description: null,
-        additionalInfo: null,
+        additionalInformation: null,
         city: null,
         province: null,
         website: null
@@ -125,5 +120,9 @@ angular.module('afredApp').controller('FacilityFormController', ['$scope',
     };
     $scope.addContact();
     $scope.addEquipment();
+    
+    $timeout(function() {
+      $scope.loading.facilityForm = false;
+    }, 1500);
   }
 ]);

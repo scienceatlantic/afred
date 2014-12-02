@@ -18,13 +18,13 @@ angular.module('afredApp').controller('SearchController', ['$scope', '$state', '
       }
     };
     
-    $scope.contactSpringboard = function () {
+    $scope.contactUs = function () {
       var modalInstance = $modal.open({
-        templateUrl: 'views/modals/contact-springboard.html',
-        controller: 'ContactSpringboardModalController'
+        templateUrl: 'views/modals/contact-us.html',
+        controller: 'ContactUsModalController'
       });
       
-      modalInstance.results.then();
+      modalInstance.dummy = 'dummy';
     };
     
     //Initialise
