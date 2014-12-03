@@ -9,6 +9,9 @@
  */
 angular.module('afredApp').controller('FacilityFormController', ['$scope', '$timeout', 'facilityResource', 'templateMode',
   function($scope, $timeout, facilityResource, templateMode) {
+    /**
+     * Adds an additional contact to the form
+     */
     $scope.addContact = function() {
       $scope.record.contacts.push({
         firstName: null,
@@ -20,13 +23,22 @@ angular.module('afredApp').controller('FacilityFormController', ['$scope', '$tim
         website: null
       });
       
+      //Show the form of the newly created contact
       $scope.contactIndex = $scope.record.contacts.length - 1;
     };
     
+    /**
+     * Removes a contact
+     * @param {number} index Array index of contact
+     */
     $scope.removeContact = function(index) {
+      //The first contact cannot be removed
       if (index !== 0) {
         $scope.record.contacts.splice(index, 1);
         
+        //If the user is currently viewing the contact that is being removed or
+        //if contactIndex is less than the total number of contacts, decrease
+        //contactIndex
         if ($scope.contactIndex === index ||
             $scope.contactIndex > $scope.record.contacts.length - 1) {
           $scope.contactIndex--;
@@ -34,10 +46,17 @@ angular.module('afredApp').controller('FacilityFormController', ['$scope', '$tim
       }
     };
     
+    /**
+     * Show the specified contact
+     * @param {number} index Array index of contact
+     */
     $scope.setContactIndex = function(index) {
       $scope.contactIndex = index;
     };
     
+    /**
+     * Adds additional equipment to the form
+     */
     $scope.addEquipment = function() {
       $scope.record.equipment.push({
         name: null,
@@ -47,20 +66,33 @@ angular.module('afredApp').controller('FacilityFormController', ['$scope', '$tim
         keywords: null
       });
       
+      //Show the form of the newly created equipment
       $scope.equipmentIndex = $scope.record.equipment.length - 1;
     };
     
+    /**
+     * Removes an equipment
+     * @param {number} index Array index of equipment
+     */
     $scope.removeEquipment = function(index) {
+      //The first equipment cannot be removed
       if (index !== 0) {
         $scope.record.equipment.splice(index, 1);
-      }
       
-      if ($scope.equipmentIndex === index ||
-          $scope.equipmentIndex > $scope.record.equipment.length - 1) {
-        $scope.equipmentIndex--;
+        //If the user is currently viewing the equipment that is being removed or
+        //if equipmentIndex is less than the total number of equipment, decrease
+        //equipmentIndex    
+        if ($scope.equipmentIndex === index ||
+            $scope.equipmentIndex > $scope.record.equipment.length - 1) {
+          $scope.equipmentIndex--;
+        }      
       }
     };
     
+    /**
+     * Show the specified equipment
+     * @param {number} index Array index of equipment
+     */
     $scope.setEquipmentIndex = function(index) {
       $scope.equipmentIndex = index;
     };
@@ -85,6 +117,9 @@ angular.module('afredApp').controller('FacilityFormController', ['$scope', '$tim
       }
     };
     
+    /**
+     * Submits the form to the API
+     */
     $scope.submit = function() {
       console.log($scope.record);
     };
