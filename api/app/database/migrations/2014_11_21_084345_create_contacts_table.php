@@ -14,7 +14,7 @@ class CreateContactsTable extends Migration {
             $table->string('email', 254);
             $table->char('telephone', 10);
             $table->string('position', 50)->nullable();
-            $table->string('department', 100)->nullable();
+            $table->string('website', 2083)->nullable(); //Internet Explorer's limit
             $table->boolean('editor');
             $table->timestamps();
         });

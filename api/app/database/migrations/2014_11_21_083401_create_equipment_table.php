@@ -11,8 +11,8 @@ class CreateEquipmentTable extends Migration
             $table->integer('facility_id')->unsigned();
             $table->foreign('facility_id')->references('id')->on('facilities')->onDelete('cascade');
             $table->string('name');
-            $table->text('purpose')->nullable();
-            $table->text('specifications')->nulltable();
+            $table->text('purpose');
+            $table->text('specifications')->nullable();
             $table->timestamps();
         });
     }

@@ -12,7 +12,7 @@ class CreateFacultiesTable extends Migration
             $table->string('institution', 50);
             $table->string('city', 50);
             $table->string('province', 50);
-            $table->string('website', 2083)->nullable(); //IE's maximum
+            $table->string('website', 2083)->nullable(); //Internet Explorer's limit
             $table->text('description');
             $table->text('additional_information')->nullable();
             $table->timestamps();
