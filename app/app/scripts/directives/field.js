@@ -7,7 +7,7 @@ angular.module('afredApp').directive('field',
       replace: true,
       require: '^form',
       transclude: true,
-      templateUrl: 'views/directives/form-field.html',
+      templateUrl: 'views/directives/field.html',
       scope: {
         label: '@'
       },
@@ -16,20 +16,16 @@ angular.module('afredApp').directive('field',
         $scope.name = field.attr('name');
         $scope.id = field.attr('id');
         $scope.form = form;
-      }
-    };
-  }
-);
-
-angular.module('afredApp').directive('loading',
-  function() {
-    return {
-      restrict: 'A',
-      replace: true,
-      transclude: true,
-      templateUrl: 'views/directives/loading.html',
-      scope: {
-        loading: '='
+        
+        console.log(attrs.label + ' ' + field.attr('required'));
+        
+        $scope.template = {
+          isInput: field.prop('tagName') === 'INPUT',
+          isSelect: field.prop('tagName') === 'SELECT',
+          isTextarea: field.prop('tagName') === 'TEXTAREA',
+          isRadio: field.attr('type') === 'radio',
+          requiredField: field.attr('required')
+        };
       }
     };
   }
