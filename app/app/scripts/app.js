@@ -16,7 +16,7 @@ angular.module('afredApp', [
   'ngTouch',
   'ui.router',
   'ui.bootstrap',
-  'textAngular'
+  'ngCkeditor'
 ]);
   
 angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
@@ -32,56 +32,38 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
       state('search.all', {
         url: '/all',
         templateUrl: 'views/search.results.html',
-        controller: 'SearchResultsController',
-        resolve: {
-          templateMode: function() { return { all: true, query: false }; }
-        }
+        controller: 'SearchResultsController'
       }).
       state('search.query', {
         url: '/query/:query',
         templateUrl: 'views/search.results.html',
-        controller: 'SearchResultsController',
-        resolve: {
-          templateMode: function() { return {all: false, query: true}; }
-        }
+        controller: 'SearchResultsController'
       }).
-      state('facility-create', {
+      state('createFacility', {
         url: '/facility/create',
         templateUrl: 'views/facility-form.html',
-        controller: 'FacilityFormController',
-        resolve: {
-          templateMode: function() { return { create: true, edit: false }; }
-        }
+        controller: 'FacilityFormController'
       }).
-      state('facility-edit', {
-        url: 'facility/:facilityId/edit',
+      state('editFacility', {
+        url: '/facility/:facilityId/edit',
         templateUrl: 'views/facility-form.html',
-        controller: 'FacilityFormController',
-        resolve: {
-          templateMode: function() { return { create: false, edit: true }; }
-        }
+        controller: 'FacilityFormController'
       }).
       state('facility', {
         url: '/facility/:facilityId',
         templateUrl: 'views/facility.html',
-        controller: 'FacilityController',
-        resolve: {
-          templateMode: function() { return { facility: true, equipment: false }; }
-        }
+        controller: 'FacilityController'
       }).          
-      state('facility-equipment', {
+      state('equipment', {
         url: '/facility/:facilityId/equipment/:equipmentId',
         templateUrl: 'views/facility.html',
-        controller: 'FacilityController',
-        resolve: {
-          templateMode: function() { return { facility: false, equipment: true }; }
-        }
+        controller: 'FacilityController'
       }).
       state('about', {
         url: '/about',
         templateUrl: 'views/about.html'
       }).
-      state('control-panel', {
+      state('controlPanel', {
         url: '/control-panel',
         templateUrl: 'views/control-panel.html',
         controller: 'ControlPanelController'
