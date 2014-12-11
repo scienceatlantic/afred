@@ -7,8 +7,8 @@
  * # submissionController
  * Controller of the afredApp
  */
-angular.module('afredApp').controller('FacilityFormController', ['$scope', '$timeout', 'facilityResource', 'templateMode',
-  function($scope, $timeout, facilityResource, templateMode) {
+angular.module('afredApp').controller('FacilityFormController', ['$scope', '$state', '$stateParams', '$timeout', '$modal', 'facilityResource',
+  function($scope, $state, $stateParams, $timeout, $modal, facilityResource) {
     /**
      * Adds an additional contact to the form
      */
@@ -118,46 +118,99 @@ angular.module('afredApp').controller('FacilityFormController', ['$scope', '$tim
     };
     
     /**
-     * Submits the form to the API
+     * Shows a preview of the record
      */
-    $scope.submit = function() {
-      console.log($scope.record);
+    $scope.preview = function() {
+      var modalInstance = $modal.open({
+        size: 'lg',
+        backdrop: 'static',
+        keyboard: false,
+        templateUrl: 'views/modals/facility-preview.html',
+        controller: 'FacilityPreviewModalController',
+        resolve: {
+          record: function() { return $scope.record; },
+          templateMode: function() {
+            return {create: $state.is('createFacility'), edit: $state.is('editFacility')};
+          }
+        }
+      });
+      
+      modalInstance.result.then(
+        function() {
+          $state.go('search');
+        },
+        function() {
+          
+        }
+      );
     };
     
     //Initialise
-    $scope.templateMode = templateMode;
+    $scope.templateMode = {
+      createFacility: $state.is('createFacility'),
+      editFacility: $state.is('editFacility')
+    };
     $scope.contactIndex = 0;
     $scope.equipmentIndex = 0;
-    $scope.textAngularConfig = '[["p"],["bold","italics"],["ul","ol","indent","outdent"],["undo","redo"],["insertLink"]]';
+    $scope.ckEditorConfig = {
+      height: 80,
+      toolbar: [
+        ['Bold', 'Italic', 'Subscript','Superscript', 'NumberedList', 'BulletedList', 'Indent', 'Outdent', 'Link']
+      ]
+    };
     $scope.loading = {
-      facilityForm: true
+      facility: true,
+      contacts: true,
+      equipment: true
     };
     
-    $scope.record = {
-      facility: {
-        name: null,
-        institution: null,
-        description: null,
-        additionalInformation: null,
-        city: null,
-        province: null,
-        website: null
-      },
-      contacts: [],
-      ilo: {
-        firstName: null,
-        lastName: null,
-        email: null,
-        telephone: null,
-        position: null
-      },
-      equipment: []
-    };
-    $scope.addContact();
-    $scope.addEquipment();
-    
-    $timeout(function() {
-      $scope.loading.facilityForm = false;
-    }, 1500);
+    if ($state.is('createFacility')) {
+      $scope.record = {
+        facility: {
+          name: null,
+          institution: null,
+          description: null,
+          additionalInformation: null,
+          city: null,
+          province: null,
+          website: null
+        },
+        contacts: [],
+        ilo: {
+          firstName: null,
+          lastName: null,
+          email: null,
+          telephone: null,
+          position: null
+        },
+        equipment: []
+      };
+      $scope.addContact();
+      $scope.addEquipment();
+      
+      $timeout(function() {
+        $scope.loading.facility = false;
+        $scope.loading.contacts = false;
+        $scope.loading.equipment = false;
+      }, 1500);
+    }
+    else if ($state.is('editFacility')) {
+      $scope.record = {};
+      
+      facilityResource.get({facilityId: $stateParams.facilityId}, function(data) {
+        $scope.record.facility = data;
+        $scope.loading.facility = false;
+      });
+      
+      facilityResource.queryContacts({facilityId: $stateParams.facilityId}, function(data) {
+        $scope.record.contacts = data;
+        $scope.loading.contacts = false;
+      });
+      
+      facilityResource.queryEquipment({facilityId: $stateParams.facilityId}, function(data) {
+        $scope.record.equipment = data;
+        $scope.loading.equipment = false;
+      });
+    }
   }
 ]);
