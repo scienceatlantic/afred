@@ -1,286 +1,281 @@
 <div class="row">
   <div class="col-lg-10">
-    <h3>Submit a Record</h3>
+    <h3 data-ng-show="templateMode.createFacility">Submit a Record</h3>
+    <h3 data-ng-show="templateMode.editFacility">Edit a Record</h3>
     
-    <form class="form-horizontal" name="facilityForm" data-ng-submit="submit()" role="form" data-loading="loading.facilityForm" novalidate>
-      <!-- ============================================ [START] Facility -->
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Facility/Research Lab Information</h3>
-        </div>
-        
-        <div class="panel-body">
-          <div class="row">
-            <div class="col-lg-6">
-              <div data-field data-label="Facility*">
-                <input class="form-control" id="facility-name" name="facilityName" data-ng-model="record.facility.name" required>
-              </div>
-              
-              <div data-field data-label="Institution*">
-                <select class="form-control" id="facility-institution" name="facilityInstitution" data-ng-model="record.facility.institution" data-ng-change="fillIloForm()" required>
-                  <option>Acadia University</option>
-                  <option>Cape Breton University</option>
-                  <option>Crandall University</option>
-                  <option>Dalhousie University</option>
-                  <option>Dalhousie University, Faculty of Agriculture</option>
-                  <option>Memorial University</option>
-                  <option>Memorial University, Grenfell Campus</option>
-                  <option>Mount Allison University</option>
-                  <option>Mount Saint Vincent University</option>
-                  <option>Saint Mary's University</option>
-                  <option>St. Francis Xavier University</option>
-                  <option>St. Thomas University</option>
-                  <option>Université de Moncton</option>
-                  <option>University of New Brunswick, Fredericton</option>
-                  <option>University of New Brunswick, Saint John</option>
-                  <option>University of Prince Edward Island</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
-              
-              <div data-field data-label="Institution name*" data-ng-show="record.facility.institution === 'other'">
-                <input type="text" class="form-control" name="facilityOtherInstitution" id="facility-other-institution" data-ng-model="record.facility.otherInstitution" required>
-              </div>
-            </div><!-- End of .col-x-x -->
-
-            <div class="col-lg-6">
-              <div data-field data-label="City*">
-                <input type="text" class="form-control" name="facilityCity" id="facility-city" data-ng-model="record.facility.city" required>
-              </div>
-              
-              <div data-field data-label="Province*">
-                <select class="form-control" name="facilityProvince" id="facility-province" data-ng-model="record.facility.province" required>
-                  <option>New Brunswick</option>
-                  <option>Newfoundland and Labrador</option>
-                  <option>Nova Scotia</option>
-                  <option>Prince Edward Island</option>
-                </select>
-              </div>
-              
-              <div data-field data-label="Facility website">
-                <input type="url" class="form-control" name="facilityWebsite" id="facility-website" data-ng-model="record.facility.website" placeholder="http://example.com">
-              </div>
-            </div><!-- End of .col-x-x -->
-          </div><!-- End of .row -->
-          
-          <div data-field data-label="What the lab/facility does*">
-            <div name="facilityDescription" id="facility-description" data-text-angular data-ta-toolbar="{{textAngularConfig}}" data-ng-model="record.facility.description" required></div>
+    <div data-loading="loading.facility || loading.contacts || loading.equipment">
+      <form class="form-horizontal" name="facilityForm" data-ng-submit="preview()" role="form" novalidate>
+        <!-- ============================================ [START] Facility -->
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Facility/Research Lab Information</h3>
           </div>
-        </div><!-- End of .panel-body -->
-      </div><!-- End of .panel -->
-      <!-- ============================================ [END] Facility -->
-      
-      <!-- ============================================ [START] Contact Information -->
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Contact Information</h3>
-        </div>
-        
-        <div class="panel-body">
-          <div class="row">
-            <div class="col-lg-2">
-              <table class="table table-condensed table-list">
-                <tbody>
-                  <tr data-ng-repeat="c in record.contacts" data-ng-class="{active: contactIndex === $index}" data-ng-click="setContactIndex($index)">
-                    <td>
-                      <a href="">
-                        <span data-ng-hide="c.firstName || c.lastName">Contact #{{$index + 1}}</span>
-                        <span data-ng-show="c.firstName || c.lastName">{{c.firstName}} {{c.lastName}}</span>
-                      </a>
-                    </td>
-                    <td>
-                      <a href="" data-ng-show="$index !== 0" data-ng-click="removeContact($index)">
-                        <span class="text-danger">
-                          <span class="glyphicon glyphicon-remove"></span>
-                        </span>
-                      </a>                         
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div><!-- End of .col-x-x -->
+          
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-lg-6">
+                <div data-field data-label="Facility*">
+                  <input class="form-control" id="facility-name" name="facilityName" data-ng-model="record.facility.name" required>
+                </div>
+                
+                <div data-field data-label="Institution*">
+                  <select class="form-control" id="facility-institution" name="facilityInstitution" data-ng-model="record.facility.institution" data-ng-change="fillIloForm()" required>
+                    <option>Acadia University</option>
+                    <option>Cape Breton University</option>
+                    <option>Crandall University</option>
+                    <option>Dalhousie University</option>
+                    <option>Dalhousie University, Faculty of Agriculture</option>
+                    <option>Memorial University</option>
+                    <option>Memorial University, Grenfell Campus</option>
+                    <option>Mount Allison University</option>
+                    <option>Mount Saint Vincent University</option>
+                    <option>Saint Mary's University</option>
+                    <option>St. Francis Xavier University</option>
+                    <option>St. Thomas University</option>
+                    <option>Université de Moncton</option>
+                    <option>University of New Brunswick, Fredericton</option>
+                    <option>University of New Brunswick, Saint John</option>
+                    <option>University of Prince Edward Island</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+                
+                <div data-field data-label="Institution name*" data-ng-if="record.facility.institution === 'other'">
+                  <input type="text" class="form-control" name="facilityOtherInstitution" id="facility-other-institution" data-ng-model="record.facility.otherInstitution" required>
+                </div>
+              </div><!-- End of .col-x-x -->
+  
+              <div class="col-lg-6">
+                <div data-field data-label="City*">
+                  <input type="text" class="form-control" name="facilityCity" id="facility-city" data-ng-model="record.facility.city" required>
+                </div>
+                
+                <div data-field data-label="Province*">
+                  <select class="form-control" name="facilityProvince" id="facility-province" data-ng-model="record.facility.province" required>
+                    <option>New Brunswick</option>
+                    <option>Newfoundland and Labrador</option>
+                    <option>Nova Scotia</option>
+                    <option>Prince Edward Island</option>
+                  </select>
+                </div>
+                
+                <div data-field data-label="Facility website">
+                  <input type="url" class="form-control" name="facilityWebsite" id="facility-website" data-ng-model="record.facility.website" placeholder="http://example.com">
+                </div>
+              </div><!-- End of .col-x-x -->
+            </div><!-- End of .row -->
             
-            <div class="col-lg-10">
-              <p data-ng-show="contactIndex === 0">
-                <span class="label label-info">Primary point of contact</span>
-              </p>
-                  
-              <div data-ng-repeat="c in record.contacts">
-                <div data-ng-form name="contactForm">
-                  <div class="row" data-ng-show="contactIndex === $index">
-                    <div class="col-lg-6">
-                      <div data-field data-label="First name*">
-                        <input type="text" class="form-control" name="contactFirstName" id="contact-first-name{{$index}}" data-ng-model="record.contacts[contactIndex].firstName" required>
-                      </div>
-                      
-                      <div data-field data-label="Last name*">
-                        <input type="text" class="form-control" name="contactLastName" id="contact-last-name{{$index}}" data-ng-model="record.contacts[contactIndex].lastName" required>
-                      </div>
-                      
-                      <div data-field data-label="Email*">
-                        <input type="email" class="form-control" name="contactEmail" id="contact-email{{$index}}" data-ng-model="record.contacts[contactIndex].email" placeholder="me@example.com" required>
-                      </div>
-                      
-                      <div data-field data-label="Telephone*" data-ng-if="$index === 0">
-                        <input type="text" class="form-control" name="contactTelephone" id="contact-telephone" data-ng-model="record.contacts[contactIndex].telephone" data-ng-pattern="/^\d{10}$/" placeholder="Example: 5555555555" required>
-                      </div>
-                      
-                      <div data-field data-label="Telephone" data-ng-if="$index !== 0">
-                        <input type="text" class="form-control" name="contactTelephone" id="contact-telephone" data-ng-model="record.contacts[contactIndex].telephone" data-ng-pattern="/^\d{10}$/" placeholder="Example: 5555555555">
-                      </div>
-                    </div><!-- End of .col-x-x -->
+            <div data-field data-label="What the lab/facility does*">
+              <textarea name="facilityDescription" id="facility-description" data-ckeditor="ckEditorConfig" data-ng-model="record.facility.description" required></textarea>
+            </div>
+          </div><!-- End of .panel-body -->
+        </div><!-- End of .panel -->
+        <!-- ============================================ [END] Facility -->
+        
+        <!-- ============================================ [START] Contact Information -->
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Contact Information</h3>
+          </div>
+          
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-lg-2">
+                <table class="table table-condensed table-list">
+                  <tbody>
+                    <tr data-ng-repeat="c in record.contacts" data-ng-class="{active: contactIndex === $index}" data-ng-click="setContactIndex($index)">
+                      <td>
+                        <a href="">
+                          <span data-ng-hide="c.firstName || c.lastName">Contact #{{$index + 1}}</span>
+                          <span data-ng-show="c.firstName || c.lastName">{{c.firstName}} {{c.lastName}}</span>
+                        </a>
+                      </td>
+                      <td>
+                        <a href="" data-ng-show="$index !== 0" data-ng-click="removeContact($index)">
+                          <span class="text-danger">
+                            <span class="glyphicon glyphicon-remove"></span>
+                          </span>
+                        </a>                         
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div><!-- End of .col-x-x -->
+              
+              <div class="col-lg-10">
+                <p data-ng-show="contactIndex === 0">
+                  <span class="label label-info">Primary point of contact</span>
+                </p>
                     
-                    <div class="col-lg-6">
-                      <div data-field data-label="Position">
-                        <input type="text" class="form-control" name="contactPosition" id="contact-position{{$index}}" data-ng-model="record.contacts[contactIndex].position" required>
-                      </div>
-                      
-                      <div data-field data-label="Website (if different from facility website)">
-                        <input type="url" class="form-control" name="contactWebsite" id="contact-website{{$index}}" data-ng-model="record.contacts[contactIndex].website" placeholder="http://example.com">
-                      </div>
-                      
-                      <div class="checkbox">
-                        <label for="editor{{$index}}">
-                          <input type="checkbox" id="editor{{$index}}" value="1" data-ng-checked="$index === 0" data-ng-disabled="$index === 0"> Editor 
-                          <span data-ng-show="$index === 0">(The primary contact will be an editor for this record)</span>
-                          <span data-ng-show="$index !== 0">(Optional)</span>
-                        </label>
-                      </div>                  
-                    </div><!-- End of .col-x-x -->
-                  </div><!-- End of .row -->
-                </div><!-- End of ng-form -->
-              </div><!-- End of ng-repeat -->
-            </div><!-- End of .col-x-x -->
-          </div><!--End of .row -->
-          
-          <button type="button" class="btn btn-default btn-sm" data-ng-click="addContact()">Add additional contacts</button>
-        </div><!-- End of .panel-body -->
-      </div><!-- End of .panel -->
-      <!-- ============================================ [END] Contact Information -->
-      
-      <!-- ============================================ [START] ILO Contact -->
-      <div class="panel panel-default" data-ng-show="record.facility.institution !== 'other' && facilityForm.facilityInstitution.$dirty">
-        <div class="panel-heading">
-          <h3 class="panel-title">Industry Liaison Contact Information</h3>
-        </div>
-        
-        <div class="panel-body">
-          <p data-ng-hide="record.facility.institution === 'other' || !record.facility.institution">
-            <span class="label label-primary">Institution selected: {{record.facility.institution}}</span>
-          </p>
-          
-          <div class="row">
-            <div class="col-lg-6">
-              <div data-field data-label="First name*">
-                <input type="text" class="form-control" name="iloFirstName" id="ilo-first-name" data-ng-model="record.ilo.firstName" disabled>
-              </div>
-              
-              <div data-field data-label="Last name*">
-                <input type="text" class="form-control" name="iloLastName" id="ilo-last-name" data-ng-model="record.ilo.lastName" disabled>
-              </div>
-              
-              <div data-field data-label="Email*">
-                <input type="text" class="form-control" id="ilo-email" data-ng-model="record.ilo.email" placeholder="me@example.com" disabled>
-              </div>
-            </div><!-- End of .col-x-x -->
-            
-            <div class="col-lg-6">
-              <div data-field data-label="Telephone">
-                <input type="text" class="form-control" name="iloTelephone" id="ilo-telephone" data-ng-model="record.ilo.telephone" placeholder="Example: 5555555555" disabled>
-              </div>
-              
-              <div data-field data-label="Position">
-                <input type="text" class="form-control" name="iloPosition" id="ilo-position" data-ng-model="record.ilo.position" disabled>
-              </div>
-            </div><!-- End of .col-x-x -->
-          </div><!-- End of .row -->
-        </div><!-- End of .panel-body -->
-      </div><!-- End of .panel -->     
-      <!-- ============================================ [END] ILO Contact -->
-      
-      <!-- ============================================ [START] Equipment -->
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Equipment</h3>
-        </div>
-        
-        <div class="panel-body">
-          <div class="row">
-            <div class="col-lg-2">
-              <table class="table table-condensed table-list">
-                <tbody>
-                  <tr data-ng-repeat="e in record.equipment" data-ng-class="{active: equipmentIndex === $index}" data-ng-click="setEquipmentIndex($index)">
-                    <td>
-                      <a href="">
-                        <span data-ng-hide="e.name">Equipment #{{$index + 1}}</span>
-                        <span data-ng-show="e.name">{{e.name}}</span>
-                      </a>
-                    </td>
-                    <td>
-                      <a href="" data-ng-show="$index !== 0" data-ng-click="removeEquipment($index)">
-                        <span class="text-danger">
-                          <span class="glyphicon glyphicon-remove"></span>
-                        </span>
-                      </a>                         
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div><!-- End of .col-x-x -->
-            
-            <div class="col-lg-10">
-              <div data-ng-repeat="e in record.equipment">
-                <div data-ng-form name="equipmentForm">
-                  <div class="row" data-ng-show="equipmentIndex === $index">
-                    <div class="col-lg-12">
-                      <div data-field data-label="Name*">
-                        <input type="text" class="form-control" name="equipmentName" id="equipment-name{{$index}}" data-ng-model="record.equipment[equipmentIndex].name" required>
-                      </div>
-                      
-                      <div data-field data-label="Equipment purpose*">
-                        <div id="equipment-purpose{{$index}}" data-text-angular data-ta-toolbar="{{textAngularConfig}}" data-ng-model="record.equipment[equipmentIndex].purpose" required></div>
-                      </div>
-                      
-                      <div data-field data-label="Equipment specifications">
-                        <div id="equipment-specifications{{$index}}" data-text-angular data-ta-toolbar="{{textAngularConfig}}" data-ng-model="record.equipment[equipmentIndex].specifications"></div>
-                      </div>
-                      
-                      <div data-field data-label="Excess capacity*">
-                        <div class="radio">
-                          <label>
-                            <input type="radio" name="equipmentExcessCapacity" id="equipment-excess-capacity-yes{{$index}}" data-ng-model="record.equipment[equipmentIndex].excessCapacity" value="true"> Yes 
-                          </label>
-                          <label>
-                            <input type="radio" name="equipmentExcessCapacity" id="equipment-excess-capacity-no{{$index}}" data-ng-model="record.equipment[equipmentIndex].excessCapacity" value="false"> No
-                          </label>
+                <div data-ng-repeat="c in record.contacts">
+                  <div data-ng-form name="contactForm">
+                    <div class="row" data-ng-show="contactIndex === $index">
+                      <div class="col-lg-6">
+                        <div data-field data-label="First name*">
+                          <input type="text" class="form-control" name="contactFirstName" id="contact-first-name{{$index}}" data-ng-model="record.contacts[$index].firstName" required>
                         </div>
-                      </div>
+                        
+                        <div data-field data-label="Last name*">
+                          <input type="text" class="form-control" name="contactLastName" id="contact-last-name{{$index}}" data-ng-model="record.contacts[$index].lastName" required>
+                        </div>
+                        
+                        <div data-field data-label="Email*">
+                          <input type="email" class="form-control" name="contactEmail" id="contact-email{{$index}}" data-ng-model="record.contacts[$index].email" placeholder="me@example.com" required>
+                        </div>
+                        
+                        <div data-field data-label="Telephone*" data-ng-if="$index === 0">
+                          <input type="text" class="form-control" name="contactTelephone" id="contact-telephone" data-ng-model="record.contacts[$index].telephone" data-ng-pattern="/^\d{10}$/" placeholder="Example: 5555555555" required>
+                        </div>
+                        
+                        <div data-field data-label="Telephone" data-ng-if="$index !== 0">
+                          <input type="text" class="form-control" name="contactTelephone" id="contact-telephone" data-ng-model="record.contacts[$index].telephone" data-ng-pattern="/^\d{10}$/" placeholder="Example: 5555555555">
+                        </div>
+                      </div><!-- End of .col-x-x -->
                       
-                      <div data-field data-label="Keywords">
-                        <input type="text" class="form-control" name="equipmentKeywords" id="equipment-keywords" data-ng-model="record.equipment[equipmentIndex].keywords" placeholder="keyword1, keyword2, ... (improves search results)">
-                      </div>
-                    </div><!-- End of .col-x-x -->
-                  </div><!-- End of .row -->
-                </div><!-- End of ng-form -->
-              </div><!-- End of ng-repeat -->
-            </div><!-- End of col-x-x -->
-          </div><!-- End of .row -->
-          <!-- ============================================ [END] Equipment -->
+                      <div class="col-lg-6">
+                        <div data-field data-label="Position">
+                          <input type="text" class="form-control" name="contactPosition" id="contact-position{{$index}}" data-ng-model="record.contacts[$index].position">
+                        </div>
+                        
+                        <div data-field data-label="Website (if different from facility website)">
+                          <input type="url" class="form-control" name="contactWebsite" id="contact-website{{$index}}" data-ng-model="record.contacts[$index].website" placeholder="http://example.com">
+                        </div>
+                        
+                        <div class="checkbox">
+                          <label for="editor{{$index}}">
+                            <input type="checkbox" id="editor{{$index}}" value="1" data-ng-checked="$index === 0" data-ng-disabled="$index === 0"> Editor 
+                            <span data-ng-show="$index === 0">(The primary contact will be an editor for this record)</span>
+                            <span data-ng-show="$index !== 0">(Optional)</span>
+                          </label>
+                        </div>                  
+                      </div><!-- End of .col-x-x -->
+                    </div><!-- End of .row -->
+                  </div><!-- End of ng-form -->
+                </div><!-- End of ng-repeat -->
+              </div><!-- End of .col-x-x -->
+            </div><!--End of .row -->
+            
+            <button type="button" class="btn btn-default btn-sm" data-ng-click="addContact()">Add additional contacts</button>
+          </div><!-- End of .panel-body -->
+        </div><!-- End of .panel -->
+        <!-- ============================================ [END] Contact Information -->
+        
+        <!-- ============================================ [START] ILO Contact -->
+        <div class="panel panel-default" data-ng-if="record.facility.institution !== 'other' && facilityForm.facilityInstitution.$dirty">
+          <div class="panel-heading">
+            <h3 class="panel-title">Industry Liaison Contact Information</h3>
+          </div>
           
-          <button class="btn btn-default btn-sm" data-ng-click="addEquipment()">Add additional equipment</button>
-        </div><!-- End of .panel-body -->
-      </div><!-- End of .panel -->
-      
-      <button type="submit" class="btn btn-primary">Preview</button>
-    </form>
+          <div class="panel-body">
+            <p data-ng-hide="record.facility.institution === 'other' || !record.facility.institution">
+              <span class="label label-primary">Institution selected: {{record.facility.institution}}</span>
+            </p>
+            
+            <div class="row">
+              <div class="col-lg-6">
+                <div data-field data-label="First name*">
+                  <input type="text" class="form-control" name="iloFirstName" id="ilo-first-name" data-ng-model="record.ilo.firstName" disabled>
+                </div>
+                
+                <div data-field data-label="Last name*">
+                  <input type="text" class="form-control" name="iloLastName" id="ilo-last-name" data-ng-model="record.ilo.lastName" disabled>
+                </div>
+                
+                <div data-field data-label="Email*">
+                  <input type="text" class="form-control" id="ilo-email" data-ng-model="record.ilo.email" placeholder="me@example.com" disabled>
+                </div>
+              </div><!-- End of .col-x-x -->
+              
+              <div class="col-lg-6">
+                <div data-field data-label="Telephone">
+                  <input type="text" class="form-control" name="iloTelephone" id="ilo-telephone" data-ng-model="record.ilo.telephone" placeholder="Example: 5555555555" disabled>
+                </div>
+                
+                <div data-field data-label="Position">
+                  <input type="text" class="form-control" name="iloPosition" id="ilo-position" data-ng-model="record.ilo.position" disabled>
+                </div>
+              </div><!-- End of .col-x-x -->
+            </div><!-- End of .row -->
+          </div><!-- End of .panel-body -->
+        </div><!-- End of .panel -->     
+        <!-- ============================================ [END] ILO Contact -->
+        
+        <!-- ============================================ [START] Equipment -->
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Equipment</h3>
+          </div>
+          
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-lg-2">
+                <table class="table table-condensed table-list">
+                  <tbody>
+                    <tr data-ng-repeat="e in record.equipment" data-ng-class="{active: equipmentIndex === $index}" data-ng-click="setEquipmentIndex($index)">
+                      <td>
+                        <a href="">
+                          <span data-ng-hide="e.name">Equipment #{{$index + 1}}</span>
+                          <span data-ng-show="e.name">{{e.name}}</span>
+                        </a>
+                      </td>
+                      <td>
+                        <a href="" data-ng-show="$index !== 0" data-ng-click="removeEquipment($index)">
+                          <span class="text-danger">
+                            <span class="glyphicon glyphicon-remove"></span>
+                          </span>
+                        </a>                         
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div><!-- End of .col-x-x -->
+              
+              <div class="col-lg-10">
+                <div data-ng-repeat="e in record.equipment">
+                  <div data-ng-form name="equipmentForm">
+                    <div class="row" data-ng-show="equipmentIndex === $index">
+                      <div class="col-lg-12">
+                        <div data-field data-label="Name*">
+                          <input type="text" class="form-control" name="equipmentName" id="equipment-name{{$index}}" data-ng-model="record.equipment[$index].name" required>
+                        </div>
+                        
+                        <div data-field data-label="Equipment purpose*">
+                          <textarea name="equipmentPurpose" id="equipment-purpose{{$index}}" data-ckeditor="ckEditorConfig" data-ng-model="record.equipment[$index].purpose" required></textarea>
+                        </div>
+                        
+                        <div data-field data-label="Equipment specifications">
+                          <textarea name="equipmentSpecifications" id="equipment-specifications{{$index}}" data-ckeditor="ckEditorConfig" data-ng-model="record.equipment[$index].specifications"></textarea>
+                        </div>
+                        
+                        <div data-field data-label="Excess capacity*">
+                          <div class="radio">
+                            <label>
+                              <input type="radio" name="equipmentExcessCapacity" id="equipment-excess-capacity-yes{{$index}}" data-ng-model="record.equipment[$index].excessCapacity" value="true" selected> Yes 
+                            </label>
+                            <label>
+                              <input type="radio" name="equipmentExcessCapacity" id="equipment-excess-capacity-no{{$index}}" data-ng-model="record.equipment[$index].excessCapacity" value="false"> No
+                            </label>
+                          </div>
+                        </div>
+                        
+                        <div data-field data-label="Keywords">
+                          <input type="text" class="form-control" name="equipmentKeywords" id="equipment-keywords" data-ng-model="record.equipment[$index].keywords" placeholder="keyword1, keyword2, ... (improves search results)">
+                        </div>
+                      </div><!-- End of .col-x-x -->
+                    </div><!-- End of .row -->
+                  </div><!-- End of ng-form -->
+                </div><!-- End of ng-repeat -->
+              </div><!-- End of col-x-x -->
+            </div><!-- End of .row -->
+            <!-- ============================================ [END] Equipment -->
+            
+            <button type="button" class="btn btn-default btn-sm" data-ng-click="addEquipment()">Add additional equipment</button>
+          </div><!-- End of .panel-body -->
+        </div><!-- End of .panel -->
+        
+        <button type="submit" class="btn btn-primary" data-ng-disabled="facilityForm.$invalid">Preview</button>
+        <p class="text-warning" data-ng-show="facilityForm.$invalid && !facilityForm.$pristine">Please complete all mandatory fields first</p>
+      </form>
+    </div><!-- End of loading -->
   </div><!-- End of .col-x-x -->
 </div><!-- End of .row -->
-
-<!--
-<script>
-  setTimeout(function() {
-    $('div.ta-scroll-window').css('max-width', '200px');
-    $('div.ta-editor').css('min-height', '500px');
-  }, 3000);
-</script>
--->

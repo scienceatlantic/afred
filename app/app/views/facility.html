@@ -1,54 +1,58 @@
 <div class="row">
   <div class="col-lg-9">
-    <h2>Facility</h2>
-    <div data-ng-include="panels.first"></div>
-    <div data-ng-include="panels.second"></div>
-    <div data-ng-include="panels.third"></div>
-    
-    <p>
-      <button class="btn btn-default">Edit</button>
-    </p>
+    <div data-loading="loading.facility || loading.contacts || loading.equipment">
+      <div data-ng-include="panels.first"></div>
+      
+      <div data-ng-include="panels.second"></div>
+      
+      <div data-ng-include="panels.third"></div>
+      
+      <p>
+        <button type="button" class="btn btn-warning" data-ng-click="edit()" data-ng-show="templateMode.facility">Edit</button>
+        <button type="button" class="btn btn-default" data-ng-click="viewFacility()" data-ng-show="templateMode.equipment">View Facility</button>
+      </p>
+    </div>
   </div><!-- End of .col-x-x -->
 </div><!-- End of .row -->
 
 <script type="text/ng-template" id="facility-panel.html">
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h1 class="panel-title">Facility</h1>
+      <h1 class="panel-title">Facility Information</h1>
     </div>
     
     <div class="panel-body">
       <div class="row">
-        <div class="col-md-3"><label>Institution</label></div>
-        <div class="col-md-9">{{data.facility.institution}}</div>
+        <div class="col-md-3 text-right"><label>Facility</label></div>
+        <div class="col-md-9">{{record.facility.name}}</div>
       </div>
       
       <div class="row">
-        <div class="col-md-3"><label>City</label></div>
-        <div class="col-md-9">{{data.facility.city}}</div>
+        <div class="col-md-3 text-right"><label>Institution</label></div>
+        <div class="col-md-9">{{record.facility.institution}}</div>
       </div>
       
       <div class="row">
-        <div class="col-md-3"><label>Province</label></div>
-        <div class="col-md-9">{{data.facility.province}}</div>
-      </div>
-      
-      <div class="row" data-ng-show="data.facility.website">
-        <div class="col-md-3"><label>Website</label></div>
-        <div class="col-md-9"><a data-ng-href="{{data.facility.website}}" target="_blank">{{data.facility.website}}</a></div>
+        <div class="col-md-3 text-right"><label>City</label></div>
+        <div class="col-md-9">{{record.facility.city}}</div>
       </div>
       
       <div class="row">
-        <div class="col-md-3"><label>Description</label></div>
-        <div class="col-md-9">{{data.facility.description}}</div>
+        <div class="col-md-3 text-right"><label>Province</label></div>
+        <div class="col-md-9">{{record.facility.province}}</div>
       </div>
       
-      <div class="row" data-ng-show="data.facility.additionalInformation">
-        <div class="col-md-3"><label>Additional Information</label></div>
-        <div class="col-md-9">{{data.facility.additionalInformation}}</div>
+      <div class="row" data-ng-show="record.facility.website">
+        <div class="col-md-3 text-right"><label>Website</label></div>
+        <div class="col-md-9"><a data-ng-href="{{record.facility.website}}" target="_blank">{{record.facility.website}}</a></div>
       </div>
-    </div><!-- End  of .panel-body -->
-  </div><!-- End of .panel --> 
+      
+      <div class="row">
+        <div class="col-md-3 text-right"><label>Description</label></div>
+        <div class="col-md-9" data-ng-bind-html="record.facility.description"></div>
+      </div>
+    </div><!-- End of .panel-body -->
+  </div><!-- End of .panel -->
 </script>
 
 <script type="text/ng-template" id="contact-panel.html">
@@ -58,31 +62,33 @@
     </div>
     
     <div class="panel-body">
-      <div data-ng-repeat="c in data.contacts">
+      <div data-ng-repeat="c in record.contacts">
         <div class="row">
-          <div class="col-md-3"><label>Name</label></div>
+          <div class="col-md-3 text-right"><label>Name</label></div>
           <div class="col-md-9">{{c.firstName}} {{c.lastName}}</div>
         </div>
         
         <div class="row">
-          <div class="col-md-3"><label>Email</label></div>
+          <div class="col-md-3 text-right"><label>Email</label></div>
           <div class="col-md-9"><a data-ng-href="mailto:{{c.email}}">{{c.email}}</a></div>
         </div>
         
         <div class="row">
-          <div class="col-md-3"><label>Telephone</label></div>
+          <div class="col-md-3 text-right"><label>Telephone</label></div>
           <div class="col-md-9">{{c.telephone}}</div>
         </div>
         
         <div class="row" data-ng-show="c.position">
-          <div class="col-md-3"><label>Position</label></div>
+          <div class="col-md-3 text-right"><label>Position</label></div>
           <div class="col-md-9">{{c.position}}</div>
         </div>
         
-        <div class="row" data-ng-show="c.department">
-          <div class="col-md-3"><label>Department/office</label></div>
-          <div class="col-md-9">{{c.department}}</div>
+        <div class="row" data-ng-show="c.website">
+          <div class="col-md-3 text-right"><label>Website</label></div>
+          <div class="col-md-9"><a href="{{c.website}}" target="_blank">{{c.website}}</a></div>
         </div>
+        
+        <hr data-ng-show="$index !== (record.contacts.length - 1)">
       </div><!-- End of ng-repeat -->
     </div><!-- End of .panel-body -->
   </div><!-- End of .panel -->
@@ -91,26 +97,28 @@
 <script type="text/ng-template" id="equipment-panel.html">
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h1 class="panel-title">Equipment</h1>
+      <h1 class="panel-title">Equipment Information</h1>
     </div>
     
     <div class="panel-body">
-      <div data-ng-repeat="e in data.equipment">
+      <div data-ng-repeat="e in record.equipment">
         <div class="row">
-          <div class="col-md-3"><label>Name</label></div>
-          <div class="col-mg-9">{{e.name}}</div>
+          <div class="col-md-3 text-right"><label>Equipment</label></div>
+          <div class="col-md-9">{{e.name}}</div>
         </div>
         
-        <div class="row" data-ng-show="e.purpose">
-          <div class="col-md-3"><label>Purpose</label></div>
-          <div class="col-mg-9">{{e.purpose}}</div>
+        <div class="row">
+          <div class="col-md-3 text-right"><label>Purpose</label></div>
+          <div class="col-md-9" data-ng-bind-html="e.purpose"></div>
         </div>
-        
+    
         <div class="row" data-ng-show="e.specifications">
-          <div class="col-md-3"><label>Specifications</label></div>
-          <div class="col-mg-9">{{e.specifications}}</div>
+          <div class="col-md-3 text-right"><label>Specifications</label></div>
+          <div class="col-md-9" data-ng-bind-html="e.specifications"></div>
         </div>
+        
+        <hr data-ng-show="$index !== (record.equipment.length - 1)">
       </div><!-- End of ng-repeat -->
     </div><!-- End of .panel-body -->
-  </div><!-- End of .panel --> 
+  </div><!-- End of .panel -->
 </script>
