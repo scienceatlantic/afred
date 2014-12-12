@@ -1,15 +1,15 @@
 'use strict';
 
-angular.module('afredApp').directive('field',
+angular.module('afredApp').directive('afField',
   function() {
     return {
       restrict: 'A',
       replace: true,
       require: '^form',
       transclude: true,
-      templateUrl: 'views/directives/field.html',
+      templateUrl: 'views/directives/af-field.html',
       scope: {
-        label: '@'
+        label: '@afFieldLabel'
       },
       link: function($scope, element, attrs, form) {      
         var field = element.find('input, select, textarea, div[data-text-angular]');
