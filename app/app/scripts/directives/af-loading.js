@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('afredApp').directive('af-loading',
+angular.module('afredApp').directive('afLoading',
   function() {
     return {
       restrict: 'A',
@@ -8,7 +8,7 @@ angular.module('afredApp').directive('af-loading',
       transclude: true,
       templateUrl: 'views/directives/af-loading.html',
       scope: {
-        loading: '='
+        loading: '=afLoading'
       }
     };
   }
