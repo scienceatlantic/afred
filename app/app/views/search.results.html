@@ -1,10 +1,22 @@
-<h3 data-ng-show="results.equipment.length">Results</h3>
-
-<h3 data-ng-hide="results.equipment.length">No Results</h3>
-
-<div class="panel panel-default" data-ng-repeat="e in results.equipment" data-ng-show="results.equipment.length">
-  <div class="panel-body" data-ng-click="showEquipmentPage(e.facilityId, e.id)">
-    <label>{{e.name}}</label> <span class="label label-info">{{e.facility}}, {{e.province}}</span>
-    <p class="text-muted" data-ng-bind-html="e.purpose"></p>
-  </div>
+<div data-af-loading="loading.searchResults">
+  <h3 data-ng-show="results.equipment.length">Results</h3>
+  
+  <h3 data-ng-hide="results.equipment.length">No Results</h3>
+  
+  <table class="table table-bordered table-hover" data-ng-show="results.equipment.length">
+    <thead>
+      <tr>
+        <th>Equipment</th>
+        <th>Facility</th>
+        <th>Province</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr data-ng-repeat="e in results.equipment" data-ng-click="showEquipmentPage(e.facilityId, e.id)">
+        <td style="width: 60%;">{{e.name}}</td>
+        <td style="width: 20%;">{{e.facility}}</td>
+        <td style="width: 20%;">{{e.province}}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
