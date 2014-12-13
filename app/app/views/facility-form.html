@@ -15,11 +15,11 @@
             <div class="row">
               <div class="col-lg-6">
                 <div data-af-field data-af-field-label="Facility*">
-                  <input class="form-control" id="facility-name" name="facilityName" data-ng-model="record.facility.name" required>
+                  <input class="form-control" id="facility-name" name="facilityName" data-ng-model="facility.name" required>
                 </div>
                 
                 <div data-af-field data-af-field-label="Institution*">
-                  <select class="form-control" id="facility-institution" name="facilityInstitution" data-ng-model="record.facility.institution" data-ng-change="fillIloForm()" required>
+                  <select class="form-control" id="facility-institution" name="facilityInstitution" data-ng-model="facility.institution" data-ng-change="fillIloForm()" required>
                     <option>Acadia University</option>
                     <option>Cape Breton University</option>
                     <option>Crandall University</option>
@@ -40,18 +40,18 @@
                   </select>
                 </div>
                 
-                <div data-af-field data-af-field-label="Institution name*" data-ng-if="record.facility.institution === 'other'">
-                  <input type="text" class="form-control" name="facilityOtherInstitution" id="facility-other-institution" data-ng-model="record.facility.otherInstitution" required>
+                <div data-af-field data-af-field-label="Institution name*" data-ng-if="facility.institution === 'other'">
+                  <input type="text" class="form-control" name="facilityOtherInstitution" id="facility-other-institution" data-ng-model="facility.otherInstitution" required>
                 </div>
               </div><!-- End of .col-x-x -->
   
               <div class="col-lg-6">
                 <div data-af-field data-af-field-label="City*">
-                  <input type="text" class="form-control" name="facilityCity" id="facility-city" data-ng-model="record.facility.city" required>
+                  <input type="text" class="form-control" name="facilityCity" id="facility-city" data-ng-model="facility.city" required>
                 </div>
                 
                 <div data-af-field data-af-field-label="Province*">
-                  <select class="form-control" name="facilityProvince" id="facility-province" data-ng-model="record.facility.province" required>
+                  <select class="form-control" name="facilityProvince" id="facility-province" data-ng-model="facility.province" required>
                     <option>New Brunswick</option>
                     <option>Newfoundland and Labrador</option>
                     <option>Nova Scotia</option>
@@ -60,13 +60,13 @@
                 </div>
                 
                 <div data-af-field data-af-field-label="Facility website">
-                  <input type="url" class="form-control" name="facilityWebsite" id="facility-website" data-ng-model="record.facility.website" placeholder="http://example.com">
+                  <input type="url" class="form-control" name="facilityWebsite" id="facility-website" data-ng-model="facility.website" placeholder="http://example.com">
                 </div>
               </div><!-- End of .col-x-x -->
             </div><!-- End of .row -->
             
             <div data-af-field data-af-field-label="What the lab/facility does*">
-              <textarea name="facilityDescription" id="facility-description" data-ckeditor="ckEditorConfig" data-ng-model="record.facility.description" required></textarea>
+              <textarea name="facilityDescription" id="facility-description" data-ckeditor="ckEditorConfig" data-ng-model="facility.description" required></textarea>
             </div>
           </div><!-- End of .panel-body -->
         </div><!-- End of .panel -->
@@ -83,7 +83,7 @@
               <div class="col-lg-2">
                 <table class="table table-condensed table-list">
                   <tbody>
-                    <tr data-ng-repeat="c in record.contacts" data-ng-class="{active: contactIndex === $index}" data-ng-click="setContactIndex($index)">
+                    <tr data-ng-repeat="c in facility.contacts" data-ng-class="{active: contactIndex === $index}" data-ng-click="setContactIndex($index)">
                       <td>
                         <a href="">
                           <span data-ng-hide="c.firstName || c.lastName">Contact #{{$index + 1}}</span>
@@ -107,38 +107,38 @@
                   <span class="label label-info">Primary point of contact</span>
                 </p>
                     
-                <div data-ng-repeat="c in record.contacts">
+                <div data-ng-repeat="c in facility.contacts">
                   <div data-ng-form name="contactForm">
                     <div class="row" data-ng-show="contactIndex === $index">
                       <div class="col-lg-6">
                         <div data-af-field data-af-field-label="First name*">
-                          <input type="text" class="form-control" name="contactFirstName" id="contact-first-name{{$index}}" data-ng-model="record.contacts[$index].firstName" required>
+                          <input type="text" class="form-control" name="contactFirstName" id="contact-first-name{{$index}}" data-ng-model="c.firstName" required>
                         </div>
                         
                         <div data-af-field data-af-field-label="Last name*">
-                          <input type="text" class="form-control" name="contactLastName" id="contact-last-name{{$index}}" data-ng-model="record.contacts[$index].lastName" required>
+                          <input type="text" class="form-control" name="contactLastName" id="contact-last-name{{$index}}" data-ng-model="c.lastName" required>
                         </div>
                         
                         <div data-af-field data-af-field-label="Email*">
-                          <input type="email" class="form-control" name="contactEmail" id="contact-email{{$index}}" data-ng-model="record.contacts[$index].email" placeholder="me@example.com" required>
+                          <input type="email" class="form-control" name="contactEmail" id="contact-email{{$index}}" data-ng-model="c.email" placeholder="me@example.com" required>
                         </div>
                         
                         <div data-af-field data-af-field-label="Telephone*" data-ng-if="$index === 0">
-                          <input type="text" class="form-control" name="contactTelephone" id="contact-telephone" data-ng-model="record.contacts[$index].telephone" data-ng-pattern="/^\d{10}$/" placeholder="Example: 5555555555" required>
+                          <input type="text" class="form-control" name="contactTelephone" id="contact-telephone" data-ng-model="c.telephone" data-ng-pattern="/^\d{10}$/" placeholder="Example: 5555555555" required>
                         </div>
                         
                         <div data-af-field data-af-field-label="Telephone" data-ng-if="$index !== 0">
-                          <input type="text" class="form-control" name="contactTelephone" id="contact-telephone" data-ng-model="record.contacts[$index].telephone" data-ng-pattern="/^\d{10}$/" placeholder="Example: 5555555555">
+                          <input type="text" class="form-control" name="contactTelephone" id="contact-telephone" data-ng-model="c.telephone" data-ng-pattern="/^\d{10}$/" placeholder="Example: 5555555555">
                         </div>
                       </div><!-- End of .col-x-x -->
                       
                       <div class="col-lg-6">
                         <div data-af-field data-af-field-label="Position">
-                          <input type="text" class="form-control" name="contactPosition" id="contact-position{{$index}}" data-ng-model="record.contacts[$index].position">
+                          <input type="text" class="form-control" name="contactPosition" id="contact-position{{$index}}" data-ng-model="c.position">
                         </div>
                         
                         <div data-af-field data-af-field-label="Website (if different from facility website)">
-                          <input type="url" class="form-control" name="contactWebsite" id="contact-website{{$index}}" data-ng-model="record.contacts[$index].website" placeholder="http://example.com">
+                          <input type="url" class="form-control" name="contactWebsite" id="contact-website{{$index}}" data-ng-model="c.website" placeholder="http://example.com">
                         </div>
                         
                         <div class="checkbox">
@@ -161,38 +161,38 @@
         <!-- ============================================ [END] Contact Information -->
         
         <!-- ============================================ [START] ILO Contact -->
-        <div class="panel panel-default" data-ng-if="record.facility.institution !== 'other' && facilityForm.facilityInstitution.$dirty">
+        <div class="panel panel-default" data-ng-if="facility.institution !== 'other' && facilityForm.facilityInstitution.$dirty">
           <div class="panel-heading">
             <h3 class="panel-title">Industry Liaison Contact Information</h3>
           </div>
           
           <div class="panel-body">
-            <p data-ng-hide="record.facility.institution === 'other' || !record.facility.institution">
-              <span class="label label-primary">Institution selected: {{record.facility.institution}}</span>
+            <p data-ng-hide="facility.institution === 'other' || !facility.institution">
+              <span class="label label-primary">Institution selected: {{facility.institution}}</span>
             </p>
             
             <div class="row">
               <div class="col-lg-6">
                 <div data-af-field data-af-field-label="First name*">
-                  <input type="text" class="form-control" name="iloFirstName" id="ilo-first-name" data-ng-model="record.ilo.firstName" disabled>
+                  <input type="text" class="form-control" name="iloFirstName" id="ilo-first-name" data-ng-model="ilo.firstName" disabled>
                 </div>
                 
                 <div data-af-field data-af-field-label="Last name*">
-                  <input type="text" class="form-control" name="iloLastName" id="ilo-last-name" data-ng-model="record.ilo.lastName" disabled>
+                  <input type="text" class="form-control" name="iloLastName" id="ilo-last-name" data-ng-model="ilo.lastName" disabled>
                 </div>
                 
                 <div data-af-field data-af-field-label="Email*">
-                  <input type="text" class="form-control" id="ilo-email" data-ng-model="record.ilo.email" placeholder="me@example.com" disabled>
+                  <input type="text" class="form-control" id="ilo-email" data-ng-model="ilo.email" placeholder="me@example.com" disabled>
                 </div>
               </div><!-- End of .col-x-x -->
               
               <div class="col-lg-6">
                 <div data-af-field data-af-field-label="Telephone">
-                  <input type="text" class="form-control" name="iloTelephone" id="ilo-telephone" data-ng-model="record.ilo.telephone" placeholder="Example: 5555555555" disabled>
+                  <input type="text" class="form-control" name="iloTelephone" id="ilo-telephone" data-ng-model="ilo.telephone" placeholder="Example: 5555555555" disabled>
                 </div>
                 
                 <div data-af-field data-af-field-label="Position">
-                  <input type="text" class="form-control" name="iloPosition" id="ilo-position" data-ng-model="record.ilo.position" disabled>
+                  <input type="text" class="form-control" name="iloPosition" id="ilo-position" data-ng-model="ilo.position" disabled>
                 </div>
               </div><!-- End of .col-x-x -->
             </div><!-- End of .row -->
@@ -211,7 +211,7 @@
               <div class="col-lg-2">
                 <table class="table table-condensed table-list">
                   <tbody>
-                    <tr data-ng-repeat="e in record.equipment" data-ng-class="{active: equipmentIndex === $index}" data-ng-click="setEquipmentIndex($index)">
+                    <tr data-ng-repeat="e in facility.equipment" data-ng-class="{active: equipmentIndex === $index}" data-ng-click="setEquipmentIndex($index)">
                       <td>
                         <a href="">
                           <span data-ng-hide="e.name">Equipment #{{$index + 1}}</span>
@@ -231,35 +231,35 @@
               </div><!-- End of .col-x-x -->
               
               <div class="col-lg-10">
-                <div data-ng-repeat="e in record.equipment">
+                <div data-ng-repeat="e in facility.equipment">
                   <div data-ng-form name="equipmentForm">
                     <div class="row" data-ng-show="equipmentIndex === $index">
                       <div class="col-lg-12">
                         <div data-af-field data-af-field-label="Name*">
-                          <input type="text" class="form-control" name="equipmentName" id="equipment-name{{$index}}" data-ng-model="record.equipment[$index].name" required>
+                          <input type="text" class="form-control" name="equipmentName" id="equipment-name{{$index}}" data-ng-model="e.name" required>
                         </div>
                         
                         <div data-af-field data-af-field-label="Equipment purpose*">
-                          <textarea name="equipmentPurpose" id="equipment-purpose{{$index}}" data-ckeditor="ckEditorConfig" data-ng-model="record.equipment[$index].purpose" required></textarea>
+                          <textarea name="equipmentPurpose" id="equipment-purpose{{$index}}" data-ckeditor="ckEditorConfig" data-ng-model="e.purpose" required></textarea>
                         </div>
                         
                         <div data-af-field data-af-field-label="Equipment specifications">
-                          <textarea name="equipmentSpecifications" id="equipment-specifications{{$index}}" data-ckeditor="ckEditorConfig" data-ng-model="record.equipment[$index].specifications"></textarea>
+                          <textarea name="equipmentSpecifications" id="equipment-specifications{{$index}}" data-ckeditor="ckEditorConfig" data-ng-model="e.specifications"></textarea>
                         </div>
                         
                         <div data-af-field data-af-field-label="Excess capacity*">
                           <div class="radio">
                             <label>
-                              <input type="radio" name="equipmentExcessCapacity" id="equipment-excess-capacity-yes{{$index}}" data-ng-model="record.equipment[$index].excessCapacity" value="true" selected> Yes 
+                              <input type="radio" name="equipmentExcessCapacity" id="equipment-excess-capacity-yes{{$index}}" data-ng-model="e.excessCapacity" value="true" selected> Yes 
                             </label>
                             <label>
-                              <input type="radio" name="equipmentExcessCapacity" id="equipment-excess-capacity-no{{$index}}" data-ng-model="record.equipment[$index].excessCapacity" value="false"> No
+                              <input type="radio" name="equipmentExcessCapacity" id="equipment-excess-capacity-no{{$index}}" data-ng-model="e.excessCapacity" value="false"> No
                             </label>
                           </div>
                         </div>
                         
                         <div data-af-field data-af-field-label="Keywords">
-                          <input type="text" class="form-control" name="equipmentKeywords" id="equipment-keywords" data-ng-model="record.equipment[$index].keywords" placeholder="keyword1, keyword2, ... (improves search results)">
+                          <input type="text" class="form-control" name="equipmentKeywords" id="equipment-keywords" data-ng-model="e.keywords" placeholder="keyword1, keyword2, ... (improves search results)">
                         </div>
                       </div><!-- End of .col-x-x -->
                     </div><!-- End of .row -->
@@ -273,8 +273,10 @@
           </div><!-- End of .panel-body -->
         </div><!-- End of .panel -->
         
-        <button type="submit" class="btn btn-primary" data-ng-disabled="facilityForm.$invalid">Preview</button>
-        <p class="text-warning" data-ng-show="facilityForm.$invalid && !facilityForm.$pristine">Please complete all mandatory fields first</p>
+        <div>
+          <button type="submit" class="btn btn-primary" data-ng-disabled="facilityForm.$invalid">Preview</button>
+          <p class="text-warning" data-ng-show="facilityForm.$invalid && !facilityForm.$pristine">Please complete all mandatory fields first</p>
+        </div>    
       </form>
     </div><!-- End of loading -->
   </div><!-- End of .col-x-x -->

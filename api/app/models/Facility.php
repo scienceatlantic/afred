@@ -12,4 +12,9 @@ class Facility extends Eloquent
     {
         return $this->hasMany('Equipment');
     }
+    
+    public function getIsActiveAttribute($value)
+    {
+        return (boolean) $value;    
+    }
 }

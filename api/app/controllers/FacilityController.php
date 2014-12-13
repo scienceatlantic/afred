@@ -18,20 +18,16 @@ class FacilityController extends \BaseController {
      */
     public function store()
     {
-        $facilityData = Input::get('facility');
-        $contactData = Input::get('contacts');
-        $equipmentData = Input::get('equipment');
-        
         $facility = new Facility();
-        $facility->name = $facilityData['name'];
-        $facility->institution = $facilityData['institution'];
-        $facility->city = $facilityData['city'];
-        $facility->province = $facilityData['province'];
-        $facility->website = $facilityData['website'];
-        $facility->description = $facilityData['description'];
+        $facility->name = Input::get('name');
+        $facility->institution = Input::get('institution');
+        $facility->city = Input::get('city');
+        $facility->province = Input::get('province');
+        $facility->website = Input::get('website');
+        $facility->description = Input::get('description');
         $facility->save();
         
-        foreach($contactData as $c) {
+        foreach(Input::get('contacts') as $c) {
             $contact = new Contact();
             $contact->facilityId = $facility->id;
             $contact->firstName = $c['firstName'];
@@ -43,7 +39,7 @@ class FacilityController extends \BaseController {
             $contact->save();
         }
         
-        foreach($equipmentData as $e) {
+        foreach(Input::get('equipment') as $e) {
             $equipment = new Equipment();
             $equipment->facilityId = $facility->id;
             $equipment->name = $e['name'];
@@ -72,23 +68,18 @@ class FacilityController extends \BaseController {
      */
     public function update($id)
     {
-        $facilityData = Input::get('facility');
-        $contactData = Input::get('contacts');
-        $equipmentData = Input::get('equipment');
-        
         $facility = Facility::find($id);
-        $facility->name = $facilityData['name'];
-        $facility->institution = $facilityData['institution'];
-        $facility->city = $facilityData['city'];
-        $facility->province = $facilityData['province'];
-        $facility->website = $facilityData['website'];
-        $facility->description = $facilityData['description'];
+        $facility->name = Input::get('name');
+        $facility->institution = Input::get('institution');
+        $facility->city = Input::get('city');
+        $facility->province = Input::get('province');
+        $facility->website = Input::get('website');
+        $facility->description = Input::get('description');
+        $facility->isActive = Input::has('isActive') ? Input::get('isActive') : $facility->isActive;
         $facility->save();
         
         $contacts = Contact::where('facility_id', '=', $id)->get();
-        $equipment = Equipment::where('facility_id', '=', $id)->get();
-        
-        foreach($contactData as $c) {
+        foreach(Input::get('contacts') as $c) {
             $contact = $contacts->find($c['id']);
             $contact->firstName = $c['firstName'];
             $contact->lastName = $c['lastName'];
@@ -99,13 +90,14 @@ class FacilityController extends \BaseController {
             $contact->save();
         }
         
-        foreach($equipmentData as $e) {
+        $equipment = Equipment::where('facility_id', '=', $id)->get();
+        foreach(Input::get('equipment') as $e) {
             $equipment = $equipment->find($e['id']);
             $equipment->name = $e['name'];
             $equipment->purpose = $e['purpose'];
             $equipment->specifications = $e['specifications'];
             $equipment->save();
-        }  
+        }    
     }
 
     /**
@@ -116,6 +108,6 @@ class FacilityController extends \BaseController {
      */
     public function destroy($id)
     {
-        
+        Facility::find($id)->delete();
     }
 }

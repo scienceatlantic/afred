@@ -1,17 +1,17 @@
 'use strict';
 
-angular.module('afredApp').controller('FacilityPreviewModalController', ['$scope', '$modalInstance', 'facilityResource', 'record', 'templateMode',
-  function($scope, $modalInstance, facilityResource, record, templateMode) {
+angular.module('afredApp').controller('FacilityPreviewModalController', ['$scope', '$modalInstance', 'facilityResource', 'facility', 'templateMode',
+  function($scope, $modalInstance, facilityResource, facility, templateMode) {
     $scope.submit = function() {
       $scope.templateMode.preview = false;
       
       if ($scope.templateMode.create) {
-        facilityResource.save($scope.record, function() {
+        facilityResource.save($scope.facility, function() {
           $scope.templateMode.confirmation = true;
         });
       }
-      else if ($scope.templateMode.edit){
-        facilityResource.update({facilityId: $scope.record.facility.id}, $scope.record, function() {
+      else if ($scope.templateMode.edit) {
+        $scope.facility.$update(function() {
           $scope.templateMode.confirmation = true;
         });
       }
@@ -26,7 +26,7 @@ angular.module('afredApp').controller('FacilityPreviewModalController', ['$scope
     };
     
     //Initialise
-    $scope.record = record;
+    $scope.facility = facility;
     $scope.templateMode = {
       preview: true,
       create: templateMode.create,
