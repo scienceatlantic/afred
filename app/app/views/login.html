@@ -4,21 +4,13 @@
     
     <div class="row">
       <div class="col-sm-3">
-        <form name="loginForm" data-ng-submit="submit()" novalidate>
-          <div class="form-group" data-ng-class="{'has-success': loginForm.username.$valid && loginForm.username.$dirty,
-            'has-error': loginForm.username.$invalid && loginForm.username.$dirty}">
-            <label>Username*</label>
+        <form class="form-horizontal" name="loginForm" data-ng-submit="submit()" role="form" novalidate>
+          <div data-af-field data-af-field-label="Username*">
             <input type="text" class="form-control" name="username" data-ng-model="loginCredentials.username" required>
-          
-            <p class="text-danger" data-ng-show="loginForm.username.$invalid && loginForm.username.$dirty">This field is required</p>
           </div>
           
-          <div class="form-group" data-ng-class="{'has-success': loginForm.username.$valid && loginForm.password.$dirty,
-            'has-error': loginForm.password.$invalid && loginForm.password.$dirty}">
-            <label>Password*</label>
+          <div data-af-field data-af-field-label="Password*">
             <input type="password" class="form-control" name="password" data-ng-model="loginCredentials.password" required>
-            
-            <p class="text-danger" data-ng-show="loginForm.password.$invalid && loginForm.password.$dirty">This field is required</p>
           </div>
           
           <button type="submit" class="btn btn-default" data-ng-disabled="loginForm.$invalid">Login</button>

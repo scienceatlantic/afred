@@ -3,10 +3,10 @@
 angular.module('afredApp').controller('LoginController', ['$scope', '$state',
   function($scope, $state) {
     $scope.submit = function() {
-      $state.go('control-panel');
+      $state.go('controlPanel');
     };
     
-    //Init
+    //Initialise
     $scope.loginCredentials = {
       username: null,
       password: null
