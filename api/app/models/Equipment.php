@@ -3,7 +3,7 @@ class Equipment extends Eloquent
 {
     use Eloquence\Database\Traits\CamelCaseModel;
     
-    public function facilities()
+    public function facility()
     {
         return $this->belongsTo('Facility');
     }

@@ -11,11 +11,13 @@
 |
 */
 
-Route::resource('facility', 'FacilityController',
+Route::resource('institutions', 'InstitutionController',
 		array('only' => array('index', 'store', 'show', 'update', 'destroy')));
-Route::resource('facility.contacts', 'FacilityContactController',
+Route::resource('facilities', 'FacilityController',
+		array('only' => array('index', 'store', 'show', 'update', 'destroy')));
+Route::resource('facilities.contacts', 'FacilityContactController',
 		array('only' => 'index'));
-Route::resource('facility.equipment', 'FacilityEquipmentController',
+Route::resource('facilities.equipment', 'FacilityEquipmentController',
 		array('only' => array('index', 'show')));
 Route::resource('equipment', 'EquipmentController',
 		array('only' => array('index', 'show')));

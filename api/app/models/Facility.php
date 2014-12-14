@@ -13,6 +13,11 @@ class Facility extends Eloquent
         return $this->hasMany('Equipment');
     }
     
+    public function institution()
+    {
+        return $this->belongsTo('Institution');
+    }
+    
     public function getIsActiveAttribute($value)
     {
         return (boolean) $value;    
