@@ -7,8 +7,8 @@
  * # submissionController
  * Controller of the afredApp
  */
-angular.module('afredApp').controller('FacilityFormController', ['$scope', '$state', '$stateParams', '$timeout', '$modal', 'facilityResource',
-  function($scope, $state, $stateParams, $timeout, $modal, facilityResource) {
+angular.module('afredApp').controller('FacilityFormController', ['$scope', '$state', '$stateParams', '$timeout', '$modal', 'facilityResource', 'institutionResource',
+  function($scope, $state, $stateParams, $timeout, $modal, facilityResource, institutionResource) {
     /**
      * Adds an additional contact to the form
      */
@@ -97,21 +97,15 @@ angular.module('afredApp').controller('FacilityFormController', ['$scope', '$sta
       $scope.equipmentIndex = index;
     };
     
-    $scope.fillIloForm = function() {
-      if ($scope.facility.institution !== 'other') {
-        $scope.facility.ilo.firstName = 'John';
-        $scope.facility.ilo.lastName = 'Doe';
-        $scope.facility.ilo.email = 'john.doe@dal.ca';
-        $scope.facility.ilo.telephone = '9024001235';
-        $scope.facility.ilo.position = 'Director';
-      }
-      else {
-        $scope.facility.ilo.firstName = null;
-        $scope.facility.ilo.lastName = null;
-        $scope.facility.ilo.email = null;
-        $scope.facility.ilo.telephone = null;
-        $scope.facility.ilo.position = null;        
-      }
+    /**
+     * Gets a list of all institutions
+     */
+    $scope.getInstitutions = function() {
+      $scope.loading.institutions = true;
+      $scope.institutions = institutionResource.query(function() {
+        $scope.institutions.push({id: '-1', name: 'other'});
+        $scope.loading.institutions = false;
+      });
     };
     
     /**
@@ -157,9 +151,12 @@ angular.module('afredApp').controller('FacilityFormController', ['$scope', '$sta
     };
     $scope.loading = {
       facility: true,
+      institutions: true,
+      institution: $state.is('editFacility'),
       contacts: true,
       equipment: true
     };
+    $scope.getInstitutions();
     
     if ($state.is('createFacility')) {
       $scope.facility = {
@@ -190,12 +187,18 @@ angular.module('afredApp').controller('FacilityFormController', ['$scope', '$sta
     }
     else if ($state.is('editFacility')) {
       $scope.loading.facility = true;
+      $scope.loading.institution = true;
       $scope.loading.contacts = true;
       $scope.loading.equipment = true;
       
       $scope.facility = facilityResource.get({facilityId: $stateParams.facilityId}, function() {
         $scope.loading.facility = false;
         $scope.facility.ilo = {};
+        
+        $scope.facility.institution = institutionResource.get({institutionId: $scope.facility.institutionId}, function() {
+          $scope.loading.institution = false;
+          console.log($scope.facility.institution);
+        });
         
         $scope.facility.contacts = facilityResource.queryContacts({facilityId: $stateParams.facilityId}, function() {
           $scope.loading.contacts = false;

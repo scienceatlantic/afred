@@ -1,5 +1,8 @@
 'use strict';
 
+/**
+ * Directive for form fields
+ */
 angular.module('afredApp').directive('afField',
   function() {
     return {
@@ -12,12 +15,10 @@ angular.module('afredApp').directive('afField',
         label: '@afFieldLabel'
       },
       link: function($scope, element, attrs, form) {      
-        var field = element.find('input, select, textarea, div[data-text-angular]');
+        var field = element.find('input, select, textarea');
         $scope.name = field.attr('name');
         $scope.id = field.attr('id');
         $scope.form = form;
-        
-        console.log(attrs.label + ' ' + field.attr('required'));
         
         $scope.template = {
           isInput: field.prop('tagName') === 'INPUT',

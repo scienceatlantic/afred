@@ -3,7 +3,7 @@
     <h3 data-ng-show="templateMode.createFacility">Submit a Record</h3>
     <h3 data-ng-show="templateMode.editFacility">Edit a Record</h3>
     
-    <div data-af-loading="loading.facility || loading.contacts || loading.equipment">
+    <div data-af-loading="loading.facility || loading.institutions || loading.institution || loading.contacts || loading.equipment">
       <form class="form-horizontal" name="facilityForm" data-ng-submit="preview()" role="form" novalidate>
         <!-- ============================================ [START] Facility -->
         <div class="panel panel-default">
@@ -19,29 +19,12 @@
                 </div>
                 
                 <div data-af-field data-af-field-label="Institution*">
-                  <select class="form-control" id="facility-institution" name="facilityInstitution" data-ng-model="facility.institution" data-ng-change="fillIloForm()" required>
-                    <option>Acadia University</option>
-                    <option>Cape Breton University</option>
-                    <option>Crandall University</option>
-                    <option>Dalhousie University</option>
-                    <option>Dalhousie University, Faculty of Agriculture</option>
-                    <option>Memorial University</option>
-                    <option>Memorial University, Grenfell Campus</option>
-                    <option>Mount Allison University</option>
-                    <option>Mount Saint Vincent University</option>
-                    <option>Saint Mary's University</option>
-                    <option>St. Francis Xavier University</option>
-                    <option>St. Thomas University</option>
-                    <option>Université de Moncton</option>
-                    <option>University of New Brunswick, Fredericton</option>
-                    <option>University of New Brunswick, Saint John</option>
-                    <option>University of Prince Edward Island</option>
-                    <option value="other">Other</option>
+                  <select class="form-control" id="facility-institution" name="facilityInstitution" data-ng-model="facility.institution" data-ng-options="i.name for i in institutions" required>
                   </select>
                 </div>
                 
-                <div data-af-field data-af-field-label="Institution name*" data-ng-if="facility.institution === 'other'">
-                  <input type="text" class="form-control" name="facilityOtherInstitution" id="facility-other-institution" data-ng-model="facility.otherInstitution" required>
+                <div data-af-field data-af-field-label="Institution name*" data-ng-if="facility.institution.id == -1">
+                  <input type="text" class="form-control" name="facilityInstitutionName" id="facility-institution-name" data-ng-model="facility.institutionName" required>
                 </div>
               </div><!-- End of .col-x-x -->
   
@@ -161,15 +144,13 @@
         <!-- ============================================ [END] Contact Information -->
         
         <!-- ============================================ [START] ILO Contact -->
-        <div class="panel panel-default" data-ng-if="facility.institution !== 'other' && facilityForm.facilityInstitution.$dirty">
+        <div class="panel panel-default" data-ng-if="facility.institution.id != -1 && facilityForm.facilityInstitution.$dirty">
           <div class="panel-heading">
             <h3 class="panel-title">Industry Liaison Contact Information</h3>
           </div>
           
           <div class="panel-body">
-            <p data-ng-hide="facility.institution === 'other' || !facility.institution">
-              <span class="label label-primary">Institution selected: {{facility.institution}}</span>
-            </p>
+            <span class="label label-primary">Institution selected: {{facility.institution.name}}</span>
             
             <div class="row">
               <div class="col-lg-6">

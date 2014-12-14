@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-lg-9">
-    <div data-loading="loading.facility || loading.contacts || loading.equipment">
+    <div data-loading="loading.facility || loading.institution || loading.contacts || loading.equipment">
       <div class="panel panel-warning" data-ng-show="templateMode.facility && !facility.isActive">
         <div class="panel-body">
           <p>This facility has been deactivated</p>
@@ -38,7 +38,7 @@
       
       <div class="row">
         <div class="col-md-3 text-right"><label>Institution</label></div>
-        <div class="col-md-9">{{facility.institution}}</div>
+        <div class="col-md-9">{{facility.institution.name}}</div>
       </div>
       
       <div class="row">

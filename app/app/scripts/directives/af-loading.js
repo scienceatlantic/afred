@@ -1,5 +1,8 @@
 'use strict';
 
+/**
+ * Directive for AJAX loading
+ */
 angular.module('afredApp').directive('afLoading',
   function() {
     return {

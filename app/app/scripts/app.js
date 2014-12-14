@@ -40,22 +40,22 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         controller: 'SearchResultsController'
       }).
       state('createFacility', {
-        url: '/facility/create',
+        url: '/facilities/create',
         templateUrl: 'views/facility-form.html',
         controller: 'FacilityFormController'
       }).
       state('editFacility', {
-        url: '/facility/:facilityId/edit',
+        url: '/facilities/:facilityId/edit',
         templateUrl: 'views/facility-form.html',
         controller: 'FacilityFormController'
       }).
       state('facility', {
-        url: '/facility/:facilityId',
+        url: '/facilities/:facilityId',
         templateUrl: 'views/facility.html',
         controller: 'FacilityController'
       }).          
       state('equipment', {
-        url: '/facility/:facilityId/equipment/:equipmentId',
+        url: '/facilities/:facilityId/equipment/:equipmentId',
         templateUrl: 'views/facility.html',
         controller: 'FacilityController'
       }).
