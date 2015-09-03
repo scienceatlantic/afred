@@ -35,6 +35,9 @@ app/dist/
 # --------------------------------------------------------------------------- #
 # "api" folder                                                                #
 # --------------------------------------------------------------------------- #
+# Include all dependencies.
+# api/vendor/
+
 # Include local environment config file to serve as a guide (so it's
 # commented out).
 # api/.env.local.php
