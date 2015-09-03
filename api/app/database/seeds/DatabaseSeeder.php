@@ -11,6 +11,5 @@ class DatabaseSeeder extends Seeder
 	//Eloquent::unguard();
 
 	$this->call('InstitutionTableSeeder');
-        $this->command->info('Institution table seeded!');
     }
 }
