@@ -20,10 +20,9 @@ desktop.ini
 # --------------------------------------------------------------------------- #
 # "app" folder                                                                #
 # --------------------------------------------------------------------------- #
-# Include all dependencies because we are deploying this app. So these
-# folders are commented out.
-# app/bower_components
-# app/node_modules
+# Dependencies
+app/bower_components
+app/node_modules
 
 # Ignore misc temporary files/folders
 app/.tmp
@@ -35,12 +34,12 @@ app/dist/
 # --------------------------------------------------------------------------- #
 # "api" folder                                                                #
 # --------------------------------------------------------------------------- #
-# Include all dependencies.
-# api/vendor/
+# Dependencies.
+api/vendor/
+api/node_modules
+api/Homestead.yaml
+api/Homestead.json
 
-# Include local environment config file to serve as a guide (so it's
-# commented out).
-# api/.env.local.php
-
-# Ignore the actual environment config file
-api/.env.php
+# This is actual environment configuration file. We do not want this in 
+# GitHub.
+api/.env
