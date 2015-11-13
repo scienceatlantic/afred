@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "5c6026b96e6fa11a641b51a6ba976f5e",
-    "content-hash": "5bd58fd976f1ee3e9611bc37c006ec46",
+    "hash": "03a0d38d5ef8dcc14ea56616b00afbdd",
+    "content-hash": "f186e1c7b057ec6acdacacb555b09dd0",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -218,6 +218,63 @@
             "time": "2015-11-06 14:35:42"
         },
         {
+            "name": "hashids/hashids",
+            "version": "1.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ivanakimov/hashids.php.git",
+                "reference": "991a88b01b01b053fbd39a56780a66e572f1dc1a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ivanakimov/hashids.php/zipball/991a88b01b01b053fbd39a56780a66e572f1dc1a",
+                "reference": "991a88b01b01b053fbd39a56780a66e572f1dc1a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Hashids": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ivan Akimov",
+                    "email": "ivan@barreleye.com",
+                    "homepage": "https://twitter.com/IvanAkimov"
+                }
+            ],
+            "description": "Generate hashids like YouTube or Bitly from numbers to obfuscate your database primary ids, or navigate to the right shard.",
+            "homepage": "http://hashids.org/php",
+            "keywords": [
+                "bitly",
+                "decrypt",
+                "encrypt",
+                "hash",
+                "hashid",
+                "hashids",
+                "ids",
+                "obfuscate",
+                "youtube"
+            ],
+            "time": "2015-01-21 00:49:41"
+        },
+        {
             "name": "jakub-onderka/php-console-color",
             "version": "0.1",
             "source": {
@@ -361,6 +418,58 @@
                 "tokenizer"
             ],
             "time": "2015-03-11 20:06:43"
+        },
+        {
+            "name": "kirkbushell/eloquence",
+            "version": "1.4.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kirkbushell/eloquence.git",
+                "reference": "ad48c3085f267d4b2a3b615b30e0b149d52c514b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kirkbushell/eloquence/zipball/ad48c3085f267d4b2a3b615b30e0b149d52c514b",
+                "reference": "ad48c3085f267d4b2a3b615b30e0b149d52c514b",
+                "shasum": ""
+            },
+            "require": {
+                "hashids/hashids": "1.0.5",
+                "illuminate/database": "~5.0",
+                "php": ">=5.4.0",
+                "ramsey/uuid": "~2.8"
+            },
+            "require-dev": {
+                "illuminate/events": "~5.0",
+                "mockery/mockery": "0.9.*@dev",
+                "orchestra/testbench": "3.1.*",
+                "phpunit/phpunit": "4.3.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Eloquence\\": "src/",
+                    "Tests\\": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Kirk Bushell",
+                    "email": "torm3nt@gmail.com"
+                }
+            ],
+            "description": "A set of extensions adding additional functionality and consistency to Laravel's awesome Eloquent library.",
+            "keywords": [
+                "camel",
+                "camelcase",
+                "case",
+                "eloquent",
+                "laravel",
+                "snake",
+                "snake_case"
+            ],
+            "time": "2015-11-11 19:12:39"
         },
         {
             "name": "laravel/framework",
@@ -942,6 +1051,72 @@
                 "shell"
             ],
             "time": "2015-07-16 15:26:57"
+        },
+        {
+            "name": "ramsey/uuid",
+            "version": "2.8.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ramsey/uuid.git",
+                "reference": "767a5b5f70cd990c04ef21d8374794d1a02fa9e8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ramsey/uuid/zipball/767a5b5f70cd990c04ef21d8374794d1a02fa9e8",
+                "reference": "767a5b5f70cd990c04ef21d8374794d1a02fa9e8",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "replace": {
+                "rhumsaa/uuid": "self.version"
+            },
+            "require-dev": {
+                "doctrine/dbal": ">=2.3",
+                "jakub-onderka/php-parallel-lint": "^0.9.0",
+                "moontoast/math": "~1.1",
+                "phpunit/phpunit": "~4.1",
+                "satooshi/php-coveralls": "~0.6",
+                "squizlabs/php_codesniffer": "^2.3",
+                "symfony/console": "~2.3"
+            },
+            "suggest": {
+                "doctrine/dbal": "Allow the use of a UUID as doctrine field type.",
+                "moontoast/math": "Support for converting UUID to 128-bit integer (in string form).",
+                "symfony/console": "Support for use of the bin/uuid command line tool."
+            },
+            "bin": [
+                "bin/uuid"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Rhumsaa\\Uuid\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marijn Huizendveld",
+                    "email": "marijn.huizendveld@gmail.com"
+                },
+                {
+                    "name": "Ben Ramsey",
+                    "homepage": "http://benramsey.com"
+                }
+            ],
+            "description": "A PHP 5.3+ library for generating RFC 4122 version 1, 3, 4, and 5 universally unique identifiers (UUID).",
+            "homepage": "https://github.com/ramsey/uuid",
+            "keywords": [
+                "guid",
+                "identifier",
+                "uuid"
+            ],
+            "time": "2015-08-31 13:34:50"
         },
         {
             "name": "swiftmailer/swiftmailer",
