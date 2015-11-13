@@ -8,7 +8,8 @@ class Cors
 {
     /**
      * Handle an incoming request.
-     * Credit: http://en.vedovelli.com.br/2015/web-development/Laravel-5-1-enable-CORS/
+     * Credit: http://en.vedovelli.com.br/2015/web-development/
+     *     Laravel-5-1-enable-CORS/
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
