@@ -13,9 +13,17 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         Model::unguard();
-
-        // $this->call(UserTableSeeder::class);
-
+        
+        // Contains real data.
+        $this->call(RealProvincesTableSeeder::class);
+        $this->call(RealInstitutionsTableSeeder::class);
+        $this->call(RealIlosTableSeeder::class);
+        
+        // Contains dummy data.
+        $this->call(DummyFacilitiesTableSeeder::class);
+        $this->call(DummyEquipmentTableSeeder::class);
+        $this->call(DummyContactsTableSeeder::class);
+        
         Model::reguard();
     }
 }
