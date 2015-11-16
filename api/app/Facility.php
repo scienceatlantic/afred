@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Facility extends Model
 {
+    use \Eloquence\Database\Traits\CamelCaseModel;
+    
     public function institution()
     {
         return $this->belongsTo('App\Institution');
@@ -16,9 +18,9 @@ class Facility extends Model
         return $this->belongsTo('App\Province');
     }
     
-    public function people()
+    public function contacts()
     {
-        return $this->belongsToMany('App\People');
+        return $this->hasMany('App\Contact');
     }
     
     public function equipment()

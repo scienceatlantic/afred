@@ -11,13 +11,20 @@
 |
 */
 
-Route::resource('institutions', 'InstitutionController',
-	array('only' => array('index', 'store', 'show', 'update', 'destroy')));
-Route::resource('facilities', 'FacilityController',
-	array('only' => array('index', 'store', 'show', 'update', 'destroy')));
-Route::resource('facilities.contacts', 'FacilityContactController',
-	array('only' => 'index'));
-Route::resource('facilities.equipment', 'FacilityEquipmentController',
-	array('only' => array('index', 'show')));
-Route::resource('equipment', 'EquipmentController',
-	array('only' => array('index', 'show')));
+Route::resource('institutions', 'InstitutionController', [
+	'only' => ['index', 'store', 'show', 'update', 'destroy']]);
+
+Route::resource('provinces', 'ProvinceController', [
+	'only' => ['index']]);
+		  
+Route::resource('facilities', 'FacilityController', [
+	'only' => ['index', 'store', 'show', 'update', 'destroy']]);
+
+Route::resource('facilities.contacts', 'FacilityContactController', [
+	'only' => ['index']]);
+
+Route::resource('facilities.equipment', 'FacilityEquipmentController', [
+	'only' => ['index', 'show']]);
+
+Route::resource('equipment', 'EquipmentController', [
+	'only' => ['index', 'show']]);
