@@ -1,10 +1,12 @@
 <h2>Search</h2>
 
-<form role="form" data-ng-submit="search()">
+<form role="form" data-ng-submit="searchFn()">
   <div class="form-group">
     <div class="input-group">
-      <input type="text" class="form-control input-lg" data-ng-model="searchBar.query" placeholder="...">
-      <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+      <input type="text" class="form-control input-lg" data-ng-model="search.q" placeholder="...">
+      <span class="input-group-addon">
+        <span class="glyphicon glyphicon-search"></span>
+      </span>
     </div>
   </div>
   
@@ -12,6 +14,21 @@
     <button type="submit" class="btn btn-primary">Search</button>
     <button class="btn btn-default" data-ui-sref-active="active" data-ui-sref="search.all">Show all</button>
     <button class="btn btn-default" data-ng-click="contactUs()">Can't find what you're looking for?</button>
+  </div>
+  
+  <div>
+    <div class="radio">
+      <label>
+        <input type="radio" name="listBy" id="list-by" data-ng-model="search.listBy" value="equipment" selected> Equipment
+      </label>
+      <label>
+        <input type="radio" name="listBy" id="list-by" data-ng-model="search.listBy" value="facility"> Facility
+      </label>
+    </div>
+    
+    <div>
+      
+    </div>
   </div>
   
   <div data-ui-view></div>

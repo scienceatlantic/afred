@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Directive for form fields
+ * Directive for form fields.
  */
 angular.module('afredApp').directive('afField',
   function() {

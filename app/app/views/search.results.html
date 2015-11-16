@@ -1,21 +1,30 @@
 <div data-af-loading="loading.searchResults">
-  <h3 data-ng-show="results.equipment.length">Results</h3>
+  <h3 data-ng-show="results.data.length">Results</h3>
   
-  <h3 data-ng-hide="results.equipment.length">No Results</h3>
+  <h3 data-ng-hide="results.data.length">No Results</h3>
   
-  <table class="table table-bordered table-hover" data-ng-show="results.equipment.length">
+  <table class="table table-bordered table-hover" data-ng-show="results.data.length">
     <thead>
       <tr>
         <th>Equipment</th>
         <th>Facility</th>
+        <th>City</th>
         <th>Province</th>
       </tr>
     </thead>
     <tbody>
-      <tr data-ng-repeat="e in results.equipment" data-ng-click="showEquipmentPage(e.facilityId, e.id)">
-        <td style="width: 60%;">{{e.name}}</td>
-        <td style="width: 20%;">{{e.facility}}</td>
-        <td style="width: 20%;">{{e.province}}</td>
+      <tr data-ng-repeat="e in results.data" data-ng-click="showEquipmentPage(e.facilityId, e.id)">
+        <td style="width: 60%;">
+          <span><span class="label label-info">Type:</span> {{e.type}}</span><br>
+          <span><span class="label label-info">Manufacturer:</span> {{e.manufacturer}}</span><br>
+          <span><span class="label label-info">Model:</span> {{e.model}}</span><br>
+          <hr>
+          <span class="label label-info">Purpose:</span><br>
+          <span>{{e.purpose}}</span>
+        </td>
+        <td style="width: 10%;">{{e.facility}}</td>
+        <td style="width: 10%">{{e.city}}</td>
+        <td style="width: 10%">{{e.province}}</td>
       </tr>
     </tbody>
   </table>

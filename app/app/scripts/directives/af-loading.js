@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Directive for AJAX loading
+ * Directive for AJAX loading GIFs.
  */
 angular.module('afredApp').directive('afLoading',
   function() {

@@ -1,31 +1,26 @@
 'use strict';
 
-/**
- * @ngdoc function
- * @name afredApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of the afredApp
- */
-angular.module('afredApp').controller('SearchController', ['$scope', '$state', '$modal',
-  function($scope, $state, $modal) {
+angular.module('afredApp').controller('SearchController', ['$scope', '$state',
+  '$modal', function($scope, $state, $modal) {
+    /* ---------------------------------------------------------------------
+     * Functions.
+     * --------------------------------------------------------------------- */
+    
     /**
-     * Performs a search request
+     * Performs a search request.
      */
-    $scope.search = function() {
-      //Search only if the query is not empty
-      if ($scope.searchBar.query) {
-        $state.go('search.query', {query: $scope.searchBar.query});
-      }
-      //Otherwise return to the main search page
-      else {
+    $scope.searchFn = function() {
+      // Search only if the query is not empty
+      if ($scope.search.q) {
+        $state.go('search.q', {q: $scope.search.q});
+      } else { // Otherwise return to the main search page
         $state.go('search');
       }
     };
     
     /**
      * Instantiates a modal that allows the user to send
-     * a message
+     * a message to Springboard Atlantic.
      */
     $scope.contactUs = function () {
       var modalInstance = $modal.open({
@@ -36,9 +31,15 @@ angular.module('afredApp').controller('SearchController', ['$scope', '$state', '
       modalInstance.dummy = 'dummy';
     };
     
-    //Initialise
-    $scope.searchBar = {
-      query: null
+    /* ---------------------------------------------------------------------
+     * Initialisation code.
+     * --------------------------------------------------------------------- */
+    
+    // This will store the search queries.
+    $scope.search = {
+      q: null,
+      listBy: 'equipment',
+      
     };
   }
 ]);

@@ -1,14 +1,16 @@
 <div class="row">
-  <div class="col-lg-10">
+  <div class="col-lg-12">
     <h3 data-ng-show="templateMode.createFacility">Submit a Record</h3>
     <h3 data-ng-show="templateMode.editFacility">Edit a Record</h3>
     
-    <div data-af-loading="loading.facility || loading.institutions || loading.institution || loading.contacts || loading.equipment">
+    <div data-af-loading="(templateMode.createFacility && (!provinces.$resolved || !institutions.$resolved)) || (templateMode.editFacility && (!facility.$resolved))">
       <form class="form-horizontal" name="facilityForm" data-ng-submit="preview()" role="form" novalidate>
-        <!-- ============================================ [START] Facility -->
+        <!-- ======================================================
+          -- [START] Facility section
+          -- ====================================================== !-->
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">Facility/Research Lab Information</h3>
+            <h4 class="panel-title">Facility/Research Lab Information</h4>
           </div>
           
           <div class="panel-body">
@@ -34,11 +36,7 @@
                 </div>
                 
                 <div data-af-field data-af-field-label="Province*">
-                  <select class="form-control" name="facilityProvince" id="facility-province" data-ng-model="facility.province" required>
-                    <option>New Brunswick</option>
-                    <option>Newfoundland and Labrador</option>
-                    <option>Nova Scotia</option>
-                    <option>Prince Edward Island</option>
+                  <select class="form-control" name="facilityProvince" id="facility-province" data-ng-model="facility.province" data-ng-options="p.name for p in provinces" required>
                   </select>
                 </div>
                 
@@ -53,12 +51,17 @@
             </div>
           </div><!-- End of .panel-body -->
         </div><!-- End of .panel -->
-        <!-- ============================================ [END] Facility -->
+        <!-- ======================================================
+          -- [END] Facility section
+          -- ====================================================== !-->
         
-        <!-- ============================================ [START] Contact Information -->
+        <!-- ======================================================
+          -- [START] Contact information
+          -- ====================================================== !-->
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">Contact Information</h3>
+            <h4 class="panel-title">Contact Information</h4>
+            <span data-ng-show="contactIndex === 0" class="label label-info">Primary point of contact</span>         
           </div>
           
           <div class="panel-body">
@@ -85,11 +88,7 @@
                 </table>
               </div><!-- End of .col-x-x -->
               
-              <div class="col-lg-10">
-                <p data-ng-show="contactIndex === 0">
-                  <span class="label label-info">Primary point of contact</span>
-                </p>
-                    
+              <div class="col-lg-10">                    
                 <div data-ng-repeat="c in facility.contacts">
                   <div data-ng-form name="contactForm">
                     <div class="row" data-ng-show="contactIndex === $index">
@@ -107,11 +106,11 @@
                         </div>
                         
                         <div data-af-field data-af-field-label="Telephone*" data-ng-if="$index === 0">
-                          <input type="text" class="form-control" name="contactTelephone" id="contact-telephone" data-ng-model="c.telephone" data-ng-pattern="/^\d{10}$/" placeholder="Example: 5555555555" required>
+                          <input type="text" class="form-control" name="contactTelephone" id="contact-telephone" data-ng-model="c.telephone" data-ng-pattern="/^\d{10}$/" placeholder="5555555555" required>
                         </div>
                         
                         <div data-af-field data-af-field-label="Telephone" data-ng-if="$index !== 0">
-                          <input type="text" class="form-control" name="contactTelephone" id="contact-telephone" data-ng-model="c.telephone" data-ng-pattern="/^\d{10}$/" placeholder="Example: 5555555555">
+                          <input type="text" class="form-control" name="contactTelephone" id="contact-telephone" data-ng-model="c.telephone" data-ng-pattern="/^\d{10}$/" placeholder="5555555555">
                         </div>
                       </div><!-- End of .col-x-x -->
                       
@@ -120,17 +119,13 @@
                           <input type="text" class="form-control" name="contactPosition" id="contact-position{{$index}}" data-ng-model="c.position">
                         </div>
                         
-                        <div data-af-field data-af-field-label="Website (if different from facility website)">
+                        <div data-af-field data-af-field-label="Website">
                           <input type="url" class="form-control" name="contactWebsite" id="contact-website{{$index}}" data-ng-model="c.website" placeholder="http://example.com">
                         </div>
                         
-                        <div class="checkbox">
-                          <label for="editor{{$index}}">
-                            <input type="checkbox" id="editor{{$index}}" value="1" data-ng-checked="$index === 0" data-ng-disabled="$index === 0"> Editor 
-                            <span data-ng-show="$index === 0">(The primary contact will be an editor for this record)</span>
-                            <span data-ng-show="$index !== 0">(Optional)</span>
-                          </label>
-                        </div>                  
+                        <div data-af-field data-af-field-label="Extension">
+                          <input type="text" class="form-control" name="contactExtension" id="contact-extension{{$index}}" data-ng-model="c.extension">
+                        </div>
                       </div><!-- End of .col-x-x -->
                     </div><!-- End of .row -->
                   </div><!-- End of ng-form -->
@@ -141,50 +136,34 @@
             <button type="button" class="btn btn-default btn-sm" data-ng-click="addContact()">Add additional contacts</button>
           </div><!-- End of .panel-body -->
         </div><!-- End of .panel -->
-        <!-- ============================================ [END] Contact Information -->
+        <!-- ======================================================
+          -- [END] Contact information
+          -- ====================================================== !-->
         
-        <!-- ============================================ [START] ILO Contact -->
+        <!-- ======================================================
+          -- [START] ILO Contact information
+          -- ====================================================== !-->
         <div class="panel panel-default" data-ng-if="facility.institution.id != -1 && facilityForm.facilityInstitution.$dirty">
           <div class="panel-heading">
-            <h3 class="panel-title">Industry Liaison Contact Information</h3>
+            <h4 class="panel-title">Industry Liaison Contact Information</h4>
           </div>
           
           <div class="panel-body">
             <span class="label label-primary">Institution selected: {{facility.institution.name}}</span>
             
-            <div class="row">
-              <div class="col-lg-6">
-                <div data-af-field data-af-field-label="First name*">
-                  <input type="text" class="form-control" name="iloFirstName" id="ilo-first-name" data-ng-model="ilo.firstName" disabled>
-                </div>
-                
-                <div data-af-field data-af-field-label="Last name*">
-                  <input type="text" class="form-control" name="iloLastName" id="ilo-last-name" data-ng-model="ilo.lastName" disabled>
-                </div>
-                
-                <div data-af-field data-af-field-label="Email*">
-                  <input type="text" class="form-control" id="ilo-email" data-ng-model="ilo.email" placeholder="me@example.com" disabled>
-                </div>
-              </div><!-- End of .col-x-x -->
-              
-              <div class="col-lg-6">
-                <div data-af-field data-af-field-label="Telephone">
-                  <input type="text" class="form-control" name="iloTelephone" id="ilo-telephone" data-ng-model="ilo.telephone" placeholder="Example: 5555555555" disabled>
-                </div>
-                
-                <div data-af-field data-af-field-label="Position">
-                  <input type="text" class="form-control" name="iloPosition" id="ilo-position" data-ng-model="ilo.position" disabled>
-                </div>
-              </div><!-- End of .col-x-x -->
-            </div><!-- End of .row -->
+            
           </div><!-- End of .panel-body -->
         </div><!-- End of .panel -->     
-        <!-- ============================================ [END] ILO Contact -->
+        <!-- ======================================================
+          -- [END] ILO Contact information
+          -- ====================================================== !-->
         
-        <!-- ============================================ [START] Equipment -->
+        <!-- ======================================================
+          -- [START] Equipment information
+          -- ====================================================== !-->
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">Equipment</h3>
+            <h4 class="panel-title">Equipment</h4>
           </div>
           
           <div class="panel-body">
@@ -216,8 +195,16 @@
                   <div data-ng-form name="equipmentForm">
                     <div class="row" data-ng-show="equipmentIndex === $index">
                       <div class="col-lg-12">
-                        <div data-af-field data-af-field-label="Name*">
-                          <input type="text" class="form-control" name="equipmentName" id="equipment-name{{$index}}" data-ng-model="e.name" required>
+                        <div data-af-field data-af-field-label="Type*">
+                          <input type="text" class="form-control" name="equipmentType" id="equipment-type{{$index}}" data-ng-model="e.type" required>
+                        </div>
+                        
+                        <div data-af-field data-af-field-label="Manufacturer">
+                          <input type="text" class="form-control" name="equipmentManufacturer" id="equipment-manufacturer{{$index}}" data-ng-model="e.manufacturer">
+                        </div>
+
+                        <div data-af-field data-af-field-label="Model">
+                          <input type="text" class="form-control" name="equipmentModel" id="equipment-model{{$index}}" data-ng-model="e.model">
                         </div>
                         
                         <div data-af-field data-af-field-label="Equipment purpose*">
@@ -239,6 +226,17 @@
                           </div>
                         </div>
                         
+                        <div data-af-field data-af-field-label="Public*">
+                          <div class="radio">
+                            <label>
+                              <input type="radio" name="equipmentIsPublic" id="equipment-is-public-yes{{$index}}" data-ng-model="e.isPublic" value="true" selected> Yes 
+                            </label>
+                            <label>
+                              <input type="radio" name="equipmentIsPublic" id="equipment-is-public-no{{$index}}" data-ng-model="e.isPublic" value="false"> No
+                            </label>
+                          </div>
+                        </div>
+                        
                         <div data-af-field data-af-field-label="Keywords">
                           <input type="text" class="form-control" name="equipmentKeywords" id="equipment-keywords" data-ng-model="e.keywords" placeholder="keyword1, keyword2, ... (improves search results)">
                         </div>
@@ -248,7 +246,9 @@
                 </div><!-- End of ng-repeat -->
               </div><!-- End of col-x-x -->
             </div><!-- End of .row -->
-            <!-- ============================================ [END] Equipment -->
+            <!-- ======================================================
+              -- [END] Equipment information
+              -- ====================================================== !-->
             
             <button type="button" class="btn btn-default btn-sm" data-ng-click="addEquipment()">Add additional equipment</button>
           </div><!-- End of .panel-body -->
