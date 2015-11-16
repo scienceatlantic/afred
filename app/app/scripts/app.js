@@ -15,6 +15,5 @@ angular.module('afredApp', [
   'ngSanitize',
   'ngTouch',
   'ui.router',
-  'ui.bootstrap',
-  'ngCkeditor'
+  'ui.bootstrap'
 ]);
