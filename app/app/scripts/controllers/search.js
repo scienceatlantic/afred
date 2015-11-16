@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('afredApp').controller('SearchController', ['$scope', '$state',
-  '$modal', function($scope, $state, $modal) {
+  '$uibModal', function($scope, $state, $uibModal) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
@@ -23,7 +23,7 @@ angular.module('afredApp').controller('SearchController', ['$scope', '$state',
      * a message to Springboard Atlantic.
      */
     $scope.contactUs = function () {
-      var modalInstance = $modal.open({
+      var modalInstance = $uibModal.open({
         templateUrl: 'views/modals/contact-us.html',
         controller: 'ContactUsModalController'
       });

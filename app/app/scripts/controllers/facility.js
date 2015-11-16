@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('afredApp').controller('FacilityController', ['$scope',
-  '$state', '$stateParams', '$modal', 'facilityResource', function($scope,
-  $state, $stateParams, $modal, facilityResource) {
+  '$state', '$stateParams', '$uibModal', 'facilityResource', function($scope,
+  $state, $stateParams, $uibModal, facilityResource) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */

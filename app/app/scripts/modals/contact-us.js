@@ -1,19 +1,19 @@
 'use strict';
 
-angular.module('afredApp').controller('ContactUsModalController', ['$scope', '$modalInstance',
-  function($scope, $modalInstance) {
+angular.module('afredApp').controller('ContactUsModalController', ['$scope', '$uibModalInstance',
+  function($scope, $uibModalInstance) {
     /**
      * Submits the message
      */
     $scope.submit = function() {
-      $modalInstance.close();
+      $uibModalInstance.close();
     };
     
     /**
      * Dismisses the modal
      */
     $scope.cancel = function () {
-      $modalInstance.dismiss();
+      $uibModalInstance.dismiss();
     };
   }
 ]);

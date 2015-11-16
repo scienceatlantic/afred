@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('afredApp').controller('FacilityPreviewModalController', ['$scope', '$modalInstance', 'facilityResource', 'facility', 'templateMode',
-  function($scope, $modalInstance, facilityResource, facility, templateMode) {
+angular.module('afredApp').controller('FacilityPreviewModalController', ['$scope', '$uibModalInstance', 'facilityResource', 'facility', 'templateMode',
+  function($scope, $uibModalInstance, facilityResource, facility, templateMode) {
     /**
      * Submits the form
      */
@@ -26,14 +26,14 @@ angular.module('afredApp').controller('FacilityPreviewModalController', ['$scope
      * Closes the modal
      */
     $scope.close = function() {
-      $modalInstance.close();
+      $uibModalInstance.close();
     };
     
     /**
      * Dismisses the modal
      */
     $scope.cancel = function () {
-      $modalInstance.dismiss();
+      $uibModalInstance.dismiss();
     };
     
     //Initialise

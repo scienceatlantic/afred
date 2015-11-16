@@ -8,9 +8,9 @@
  * Controller of the afredApp
  */
 angular.module('afredApp').controller('FacilityFormController', ['$scope',
-  '$state', '$stateParams', '$timeout', '$modal','facilityResource',
+  '$state', '$stateParams', '$timeout', '$uibModal','facilityResource',
   'institutionResource', 'provinceResource', function($scope, $state,
-  $stateParams, $timeout, $modal, facilityResource, institutionResource,
+  $stateParams, $timeout, $uibModal, facilityResource, institutionResource,
   provinceResource) {
     /* ---------------------------------------------------------------------
      * Functions.
@@ -135,7 +135,7 @@ angular.module('afredApp').controller('FacilityFormController', ['$scope',
      * Shows a preview of the form.
      */
     $scope.preview = function() {
-      var modalInstance = $modal.open({
+      var modalInstance = $uibModal.open({
         size: 'lg',
         backdrop: 'static',
         keyboard: false,
@@ -193,6 +193,14 @@ angular.module('afredApp').controller('FacilityFormController', ['$scope',
          'BulletedList', 'Indent', 'Outdent', 'Link']
       ]
     };
+    
+    $scope.textAngular = {};
+    $scope.textAngular.toolbar = [
+      ['h2', 'h3', 'h4', 'h5', 'h6', 'p', 'pre', 'quote'],
+      ['bold', 'italics', 'underline', 'strikeThrough', 'ul', 'ol', 'redo', 'undo', 'clear'],
+      ['justifyLeft', 'justifyCenter', 'justifyRight', 'indent', 'outdent'],
+      ['html', 'insertImage','insertLink', 'insertVideo', 'wordcount', 'charcount']
+    ];
     
     // Get a list of all institutions.
     $scope.getInstitutions();
