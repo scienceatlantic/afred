@@ -1,11 +1,34 @@
 <div class="row">
   <div class="col-lg-9">
-    <div data-af-loading="!facility.$resolved">
-      <div class="panel panel-warning" data-ng-show="!facility.isPublic">
-        <div class="panel-body">
-          <p>This facility is private.</p>
+    <div data-af-loading="!equipment.$resolved">
+      <!-- ======================================================
+        -- [START] Equipment section.
+        -- ====================================================== !-->
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h1 class="panel-title">Equipment Information</h1>
         </div>
-      </div>
+        
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-md-3 text-right"><label>Equipment</label></div>
+            <div class="col-md-9">{{equipment.type}} {{equipment.manufacturer}} {{equipment.model}}</div>
+          </div>
+          
+          <div class="row">
+            <div class="col-md-3 text-right"><label>Purpose</label></div>
+            <div class="col-md-9" data-ng-bind-html="equipment.purpose"></div>
+          </div>
+      
+          <div class="row" data-ng-show="equipment.specifications">
+            <div class="col-md-3 text-right"><label>Specifications</label></div>
+            <div class="col-md-9" data-ng-bind-html="equipment.specifications"></div>
+          </div>
+        </div><!-- End of .panel-body -->
+      </div><!-- End of .panel -->
+      <!-- ======================================================
+        -- [END] Equipment section.
+        -- ====================================================== !-->
       
       <!-- ======================================================
         -- [START] Facility section.
@@ -18,32 +41,32 @@
         <div class="panel-body">
           <div class="row">
             <div class="col-md-3 text-right"><label>Facility</label></div>
-            <div class="col-md-9">{{facility.name}}</div>
+            <div class="col-md-9">{{equipment.facility.name}}</div>
           </div>
           
           <div class="row">
             <div class="col-md-3 text-right"><label>Institution</label></div>
-            <div class="col-md-9">{{facility.institution.name}}</div>
+            <div class="col-md-9">{{equipment.facility.institution.name}}</div>
           </div>
           
           <div class="row">
             <div class="col-md-3 text-right"><label>City</label></div>
-            <div class="col-md-9">{{facility.city}}</div>
+            <div class="col-md-9">{{equipment.facility.city}}</div>
           </div>
           
           <div class="row">
             <div class="col-md-3 text-right"><label>Province</label></div>
-            <div class="col-md-9">{{facility.province.name}}</div>
+            <div class="col-md-9">{{equipment.facility.province.name}}</div>
           </div>
           
-          <div class="row" data-ng-show="facility.website">
+          <div class="row" data-ng-show="equipment.facility.website">
             <div class="col-md-3 text-right"><label>Website</label></div>
-            <div class="col-md-9"><a data-ng-href="{{facility.website}}" target="_blank">{{facility.website}}</a></div>
+            <div class="col-md-9"><a data-ng-href="{{equipment.facility.website}}" target="_blank">{{equipment.facility.website}}</a></div>
           </div>
           
           <div class="row">
             <div class="col-md-3 text-right"><label>Description</label></div>
-            <div class="col-md-9" data-ng-bind-html="facility.description"></div>
+            <div class="col-md-9" data-ng-bind-html="equipment.facility.description"></div>
           </div>
         </div><!-- End of .panel-body -->
       </div><!-- End of .panel -->       
@@ -60,7 +83,7 @@
         </div>
         
         <div class="panel-body">
-          <div data-ng-repeat="c in facility.contacts">
+          <div data-ng-repeat="c in equipment.facility.contacts">
             <div class="row">
               <div class="col-md-3 text-right"><label>Name</label></div>
               <div class="col-md-9">{{c.firstName}} {{c.lastName}}</div>
@@ -86,7 +109,7 @@
               <div class="col-md-9"><a href="{{c.website}}" target="_blank">{{c.website}}</a></div>
             </div>
             
-            <hr data-ng-show="$index !== (facility.contacts.length - 1)">
+            <hr data-ng-show="$index !== (equipment.facility.contacts.length - 1)">
           </div><!-- End of ng-repeat -->
         </div><!-- End of .panel-body -->
       </div><!-- End of .panel -->
@@ -94,44 +117,8 @@
         -- [END] Contact section.
         -- ====================================================== !-->
       
-      <!-- ======================================================
-        -- [START] Equipment section.
-        -- ====================================================== !-->
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h1 class="panel-title">Equipment Information</h1>
-        </div>
-        
-        <div class="panel-body">
-          <div data-ng-repeat="e in facility.equipment">
-            <div class="row">
-              <div class="col-md-3 text-right"><label>Equipment</label></div>
-              <div class="col-md-9">{{e.type}} {{e.manufacturer}} {{e.model}}</div>
-            </div>
-            
-            <div class="row">
-              <div class="col-md-3 text-right"><label>Purpose</label></div>
-              <div class="col-md-9" data-ng-bind-html="e.purpose"></div>
-            </div>
-        
-            <div class="row" data-ng-show="e.specifications">
-              <div class="col-md-3 text-right"><label>Specifications</label></div>
-              <div class="col-md-9" data-ng-bind-html="e.specifications"></div>
-            </div>
-            
-            <hr data-ng-show="$index !== (facility.equipment.length - 1)">
-          </div><!-- End of ng-repeat -->
-        </div><!-- End of .panel-body -->
-      </div><!-- End of .panel -->
-      <!-- ======================================================
-        -- [END] Equipment section.
-        -- ====================================================== !-->
-      
       <p>
-        <button type="button" class="btn btn-warning" data-ng-click="edit()">Edit</button>
-        <button type="button" class="btn btn-warning" data-ng-click="makePrivate()">Private</button>
-        <button type="button" class="btn btn-default" data-ng-click="makePublic()">Public</button>
-        <button type="button" class="btn btn-danger" data-ng-click="remove()">Delete</button>
+        <button type="button" class="btn btn-default" data-ng-click="viewCompleteFacility()">View Complete Facility</button>
       </p>
     </div>
   </div><!-- End of .col-x-x -->
