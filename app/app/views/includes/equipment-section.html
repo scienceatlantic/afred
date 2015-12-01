@@ -1,0 +1,26 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h1 class="panel-title">Equipment Information</h1>
+  </div>
+  
+  <div class="panel-body">
+    <div data-ng-repeat="e in facility.equipment">
+      <div class="row">
+        <div class="col-md-3 text-right"><label>Equipment</label></div>
+        <div class="col-md-9">{{e.type}} {{e.manufacturer}} {{e.model}}</div>
+      </div>
+      
+      <div class="row">
+        <div class="col-md-3 text-right"><label>Purpose</label></div>
+        <div class="col-md-9" data-ng-bind-html="e.purpose"></div>
+      </div>
+  
+      <div class="row" data-ng-show="e.specifications">
+        <div class="col-md-3 text-right"><label>Specifications</label></div>
+        <div class="col-md-9" data-ng-bind-html="e.specifications"></div>
+      </div>
+      
+      <hr data-ng-show="$index !== (facility.equipment.length - 1)">
+    </div><!-- End of ng-repeat -->
+  </div><!-- End of .panel-body -->
+</div><!-- End of .panel -->

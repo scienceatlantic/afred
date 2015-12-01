@@ -1,0 +1,15 @@
+<div class="row">
+  <div class="col-lg-9">
+    <div data-af-loading="!facilityRevisionHistory.$resolved">
+      
+      <div data-ng-include="'views/includes/facility-section.html'"></div>
+      <div data-ng-include="'views/includes/contacts-section.html'"></div>
+      <div data-ng-include="'views/includes/equipment-section.html'"></div>
+      
+      <p>
+        <button type="button" class="btn btn-default" data-ng-click="approve()" data-ng-show="facilityRevisionHistory.state == 'PENDING_APPROVAL'">Approve</button>
+        <button type="button" class="btn btn-default" data-ng-click="reject()" data-ng-show="facilityRevisionHistory.state == 'PENDING_APPROVAL'">Reject</button>
+      </p>
+    </div>
+  </div><!-- End of .col-x-x -->
+</div><!-- End of .row -->

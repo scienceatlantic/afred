@@ -1,0 +1,22 @@
+<div class="row">
+  <div class="col-lg-9">
+    <div data-af-loading="!facility.$resolved">
+      <div class="panel panel-warning" data-ng-show="!facility.isPublic">
+        <div class="panel-body">
+          <p>This facility is private.</p>
+        </div>
+      </div>
+      
+      <div data-ng-include="'views/includes/facility-section.html'"></div>
+      <div data-ng-include="'views/includes/contacts-section.html'"></div>
+      <div data-ng-include="'views/includes/equipment-section.html'"></div>
+      
+      <p>
+        <button type="button" class="btn btn-warning" data-ng-click="admin.edit()" data-ng-show="_auth.user.isAdmin && state.facilities">Edit</button>
+        <button type="button" class="btn btn-warning" data-ng-click="admin.makePrivate()" data-ng-show="_auth.user.isAdmin && state.facilities">Private</button>
+        <button type="button" class="btn btn-default" data-ng-click="admin.makePublic()" data-ng-show="_auth.user.isAdmin && state.facilities">Public</button>
+        <button type="button" class="btn btn-danger" data-ng-click="admin.remove()" data-ng-show="_auth.user.isAdmin && state.facilities">Delete</button>
+      </p>
+    </div>
+  </div><!-- End of .col-x-x -->
+</div><!-- End of .row -->
