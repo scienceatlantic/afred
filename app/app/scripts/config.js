@@ -2,10 +2,12 @@
 
 angular.module('afredApp').run(['$rootScope',
                                 '$state',
+                                '$stateParams',
                                 '$http',
                                 '$resource',
   function($rootScope,
            $state,
+           $stateParams,
            $http,
            $resource) {
     $rootScope._config = {
@@ -15,6 +17,9 @@ angular.module('afredApp').run(['$rootScope',
     $http.get($rootScope._config.api + '/csrf').then(function(response) {
       $http.defaults.headers.common['X-CSRF-TOKEN'] = response.data;
     });
+    
+    $rootScope._state = $state;
+    $rootScope._stateParams = $stateParams;
     
     $rootScope._auth = {
       user: {},
