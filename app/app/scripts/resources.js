@@ -1,32 +1,53 @@
 'use strict';
 
-angular.module('afredApp').factory('facilityResource', ['$resource',
-  function($resource) {
-    return $resource('//localhost/afred/api/public/facilities/:facilityId',
+angular.module('afredApp').factory('facilityResource', ['$rootScope',
+  '$resource', function($rootScope, $resource) {
+    return $resource($rootScope._config.api + '/facilities/:facilityId',
       {
         facilityId: '@id'
       },
       {
+        query: {isArray: false},
         update: {method: 'PUT'}
       }
     );
   }
 ]);
 
-angular.module('afredApp').factory('equipmentResource', ['$resource',
-  function($resource) {
-    return $resource('//localhost/afred/api/public/equipment/:equipmentId');
+angular.module('afredApp').factory('facilityRevisionHistoryResource',
+  ['$rootScope', '$resource', function($rootScope, $resource) {
+    return $resource($rootScope._config.api +
+      '/facilityRevisionHistory/:facilityRevisionHistoryId',
+        {
+          facilityRevisionHistoryId: '@id'
+        },
+        {
+          query: {isArray: false},
+          approve: {method: 'PUT', params: {state: 'PUBLISHED'}},
+          reject: {method: 'PUT', params: {state: 'REJECTED'}},
+          saveEditDraft: {method: 'PUT', params: {state: 'EDIT_DRAFT'}},
+          approveEdit: {method: 'PUT', params: {state: 'PUBLISHED'}},
+          rejectEdit: {method: 'PUT', params: {state: 'REJECTED_EDIT'}}    
+        }
+    );
   }
 ]);
 
-angular.module('afredApp').factory('institutionResource', ['$resource',
-  function($resource) {
-    return $resource('//localhost/afred/api/public/institutions/:institutionId');
+angular.module('afredApp').factory('equipmentResource', ['$rootScope',
+  '$resource', function($rootScope, $resource) {
+    return $resource($rootScope._config.api + '/equipment/:equipmentId');
   }
 ]);
 
-angular.module('afredApp').factory('provinceResource', ['$resource',
-  function($resource) {
-    return $resource('//localhost/afred/api/public/provinces/:provinceId');
+angular.module('afredApp').factory('institutionResource', ['$rootScope',
+  '$resource', function($rootScope, $resource) {
+    return $resource($rootScope._config.api + '/institutions/:institutionId');
   }
 ]);
+
+angular.module('afredApp').factory('provinceResource', ['$rootScope',
+  '$resource', function($rootScope, $resource) {
+    return $resource($rootScope._config.api + '/provinces/:provinceId');
+  }
+]);
+

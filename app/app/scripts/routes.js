@@ -20,23 +20,39 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         templateUrl: 'views/search.results.html',
         controller: 'SearchResultsController'
       }).
-      state('createFacility', {
-        url: '/facilities/create',
-        templateUrl: 'views/facility-form.html',
-        controller: 'FacilityFormController'
+      state('facilities', {
+        abstract: true,
+        url: '/facilities',
+        templateUrl: 'views/facilities.html'
       }).
-      state('editFacility', {
-        url: '/facilities/:facilityId/edit',
-        templateUrl: 'views/facility-form.html',
-        controller: 'FacilityFormController'
+      state('facilities.form', {
+        abstract: true,
+        url: '/form',
+        template: '<div data-ui-view></div>',
+        controller: 'FacilitiesFormController'
       }).
-      state('facility', {
-        url: '/facilities/:facilityId',
-        templateUrl: 'views/facility.html',
-        controller: 'FacilityController'
-      }).          
+      state('facilities.form.create', {
+        url: '/create',
+        templateUrl: 'views/facilities.form.create.html',
+        controller: 'FacilitiesFormCreateController'
+      }).
+      state('facilities.form.edit', {
+        url: '/:facilityId/edit',
+        templateUrl: 'views/facilities.form.edit.html',
+        controller: 'FacilitiesFormEditController'
+      }).
+      state('facilities.show', {
+        url: '/:facilityId',
+        templateUrl: 'views/facilities.show.html',
+        controller: 'FacilitiesShowController'
+      }).
       state('equipment', {
-        url: '/facilities/:facilityId/equipment/:equipmentId',
+        abstract: true,
+        'url': '/equipment',
+        template: '<div data-ui-view></div>'
+      }).
+      state('equipment.show', {
+        url: '/:facilityId/equipment/:equipmentId',
         templateUrl: 'views/equipment.html',
         controller: 'EquipmentController'
       }).
@@ -45,14 +61,48 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         templateUrl: 'views/about.html'
       }).
       state('admin', {
+        abstract: true,
         url: '/admin',
-        templateUrl: 'views/admin.html',
-        controller: 'AdminController'
+        template: '<div data-ui-view><div>',
+        resolve: {
+          ping: ['$rootScope', '$state', function($rootScope, $state) {
+            return $rootScope._auth.ping().then(function(response) {
+              $rootScope._auth.user = response.data;
+            }, function() {
+              $state.go('login');
+            });
+          }]
+        }
+      }).
+      state('admin.dashboard', {
+        url: '/dashboard',
+        templateUrl: 'views/admin.dashboard.html',
+        controller: 'AdminDashboardController'
+      }).
+      state('admin.facilityRevisionHistory', {
+        abstract: true,
+        url: '/facility-revision-history',
+        template: '<div data-ui-view></div>'
+      }).
+      state('admin.facilityRevisionHistory.show', {
+        url: '/:facilityRevisionHistoryId',
+        templateUrl: 'views/admin.facility-revision-history.show.html',
+        controller: 'AdminFacilityRevisionHistoryShowController'
       }).
       state('login', {
         url: '/login',
         templateUrl: 'views/login.html',
-        controller: 'LoginController'
+        controller: 'LoginController',
+        resolve: {
+          ping: ['$rootScope', '$state', function($rootScope, $state) {
+            return $rootScope._auth.ping().then(function(response) {
+              $state.go('admin.dashboard');
+            }, function() {
+              // Error function has to be defined in order for the login
+              // page to render.
+            });
+          }]
+        }
       });
   }
 ]);

@@ -1,8 +1,14 @@
 'use strict';
 
-angular.module('afredApp').controller('EquipmentController', ['$scope',
-  '$state', '$stateParams', 'equipmentResource',
-  function($scope, $state, $stateParams, equipmentResource) {
+angular.module('afredApp').controller('EquipmentController',
+  ['$scope',
+   '$state',
+   '$stateParams',
+   'equipmentResource',
+  function($scope,
+           $state,
+           $stateParams,
+           equipmentResource) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */

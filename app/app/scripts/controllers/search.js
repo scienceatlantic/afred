@@ -1,7 +1,12 @@
 'use strict';
 
-angular.module('afredApp').controller('SearchController', ['$scope', '$state',
-  '$uibModal', function($scope, $state, $uibModal) {
+angular.module('afredApp').controller('SearchController',
+  ['$scope',
+   '$state',
+   '$uibModal',
+   function($scope,
+            $state,
+            $uibModal) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */

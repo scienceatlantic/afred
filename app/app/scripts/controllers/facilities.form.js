@@ -1,20 +1,82 @@
 'use strict';
 
-/**
- * @ngdoc function
- * @name afredApp.controller:submissionController
- * @description
- * # submissionController
- * Controller of the afredApp
- */
-angular.module('afredApp').controller('FacilityFormController', ['$scope',
-  '$state', '$stateParams', '$timeout', '$uibModal','facilityResource',
-  'institutionResource', 'provinceResource', function($scope, $state,
-  $stateParams, $timeout, $uibModal, facilityResource, institutionResource,
-  provinceResource) {
+angular.module('afredApp').controller('FacilitiesFormController',
+  ['$scope',
+   'institutionResource',
+   'provinceResource',
+  function($scope,
+           institutionResource,
+           provinceResource) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
+    
+    $scope.saveForm = function() {
+      console.log('saveForm()');
+      try {
+        localStorage.setItem('facility', JSON.stringify($scope.facility));
+        localStorage.setItem('dropdowns', JSON.stringify($scope.dropdowns));
+      } catch(e) {
+        // Do nothing if local storage is not supported.
+      }
+    };
+    
+    $scope.autosave = function() {
+      try {
+        setInterval(function() {
+          $scope.saveForm();
+        }, 1000);       
+      } catch(e) {
+        // Do nothing if local storage is not supported.
+      } 
+    };
+    
+    $scope.getAutosave = function() {
+      try {
+        if (localStorage.getItem('facility')) {
+          $scope.facility = JSON.parse(localStorage.getItem('facility'));
+        }
+      } catch(e) {
+        // Do nothing if local storage is not supported.
+      }
+      
+      try {
+        if (localStorage.getItem('dropdowns')) {
+          $scope.dropdowns = JSON.parse(localStorage.getItem('dropdowns'));
+          $scope.attachInstitution();
+          $scope.attachProvince();
+        }        
+      } catch(e) {
+        // Do nothing if local storage is not supported.
+      }
+    };
+    
+    $scope.initialiseForm = function() {
+      $scope.facility = {
+        name: null,
+        institution: { id: null, name: null },
+        institutionId: null,
+        description: null,
+        city: null,
+        province: { id: null, name: null },
+        provinceId: null,
+        website: null,
+        primaryContact: {},
+        contacts: [],
+        equipment: []
+      };
+      
+      $scope.dropdowns = {
+        institutions: { index: null, name: null },
+        provinces: { index: null }
+      };
+      
+      // Push the first contact object to the '$scope.facility.contacts' array.
+      $scope.addContact();
+      
+      // Push the first equipment object to '$scope.facility.equipment' array.
+      $scope.addEquipment();
+    };
     
     /**
      * Adds an additional contact object to the '$scope.facility.contacts'
@@ -29,8 +91,7 @@ angular.module('afredApp').controller('FacilityFormController', ['$scope',
         extension: null,
         position: null,
         department: null,
-        website: null,
-        isPrimary: false
+        website: null
       });
       
       // Point 'contactIndex' to the object that was just added.
@@ -120,8 +181,31 @@ angular.module('afredApp').controller('FacilityFormController', ['$scope',
      */
     $scope.getInstitutions = function() {
       $scope.institutions = institutionResource.query(function() {
+        // Move 'N/A' to the bottom of the list.
+        $scope.institutions.push(($scope.institutions.splice(0, 1))[0]);
+        
+        // Finally, add an option for 'Other'.
         $scope.institutions.push({id: '-1', name: 'Other'});
       });
+    };
+    
+    $scope.attachInstitution = function() {
+      console.log($scope.dropdowns);      
+      // If it's an existing institutions.
+      if ($scope.dropdowns.institutions.index
+          < $scope.institutions.length - 1) {
+        $scope.facility.institution.id =
+          $scope.institutions[$scope.dropdowns.institutions.index].id;
+        $scope.facility.institutionId =
+            $scope.institutions[$scope.dropdowns.institutions.index].id;         
+        $scope.facility.institution.name =
+          $scope.institutions[$scope.dropdowns.institutions.index].name;
+      // If it's a new institution.
+      } else {
+        $scope.facility.institution.id = null;
+        $scope.facility.institutionId = null;
+        $scope.facility.institution.name = $scope.dropdowns.institutions.name;
+      }
     };
     
     /**
@@ -131,47 +215,23 @@ angular.module('afredApp').controller('FacilityFormController', ['$scope',
       $scope.provinces = provinceResource.query();
     };
     
-    /**
-     * Shows a preview of the form.
-     */
-    $scope.preview = function() {
-      var modalInstance = $uibModal.open({
-        size: 'lg',
-        backdrop: 'static',
-        keyboard: false,
-        templateUrl: 'views/modals/facility-preview.html',
-        controller: 'FacilityPreviewModalController',
-        resolve: {
-          facility: function() { return $scope.facility; },
-          templateMode: function() {
-            return { create: $state.is('createFacility'),
-              edit: $state.is('editFacility') };
-          }
-        }
-      });
-      
-      modalInstance.result.then(
-        function() {
-          $state.go('search');
-        },
-        function() {
-          
-        }
-      );
+    $scope.attachProvince = function() {
+      $scope.facility.province.id =
+        $scope.provinces[$scope.dropdowns.provinces.index].id;
+      $scope.facility.provinceId = 5;
+      $scope.facility.province.name =
+        $scope.provinces[$scope.dropdowns.provinces.index].name;
+    };
+    
+    $scope.prepareForDb = function() {
+      var facility = angular.copy($scope.facility);
+      facility.primaryContact = (facility.contacts.splice(0, 1))[0];
+      return facility;
     };
     
     /* ---------------------------------------------------------------------
      * Initialisation code.
      * --------------------------------------------------------------------- */
-    
-    /** 
-     * Determines what mode the template is functioning in. So it's either
-     * in 'create' mode or 'edit' mode.
-     */
-    $scope.templateMode = {
-      createFacility: $state.is('createFacility'),
-      editFacility: $state.is('editFacility')
-    };
     
     /**
      * An index variable for '$scope.facility.contacts' array.
@@ -194,47 +254,10 @@ angular.module('afredApp').controller('FacilityFormController', ['$scope',
       ]
     };
     
-    $scope.textAngular = {};
-    $scope.textAngular.toolbar = [
-      ['h2', 'h3', 'h4', 'h5', 'h6', 'p', 'pre', 'quote'],
-      ['bold', 'italics', 'underline', 'strikeThrough', 'ul', 'ol', 'redo', 'undo', 'clear'],
-      ['justifyLeft', 'justifyCenter', 'justifyRight', 'indent', 'outdent'],
-      ['html', 'insertImage','insertLink', 'insertVideo', 'wordcount', 'charcount']
-    ];
-    
     // Get a list of all institutions.
     $scope.getInstitutions();
     
     // Get a list of all provinces.
     $scope.getProvinces();
-    
-    // If the form is in 'create' mode, initialise the '$scope.facility'
-    // object with all the necessary fields.
-    if ($state.is('createFacility')) {
-      $scope.facility = {
-        name: null,
-        institution: null,
-        description: null,
-        city: null,
-        province: null,
-        website: null,
-        contacts: [],
-        ilo: null,
-        equipment: []
-      };
-      
-      // Push the first contact object to the '$scope.facility.contacts' array.
-      $scope.addContact();
-      
-      // Push the first equipment object to '$scope.facility.equipment' array.
-      $scope.addEquipment();
-      
-    // Else if the form is in 'edit' mode, get the existing facility data from
-    // the database.
-    } else if ($state.is('editFacility')) {
-      $scope.facility = facilityResource.get({facilityId:
-        $stateParams.facilityId,
-        expand: 'institution,province,equipment,contacts'});
-    }
   }
 ]);

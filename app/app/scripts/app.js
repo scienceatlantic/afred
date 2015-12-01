@@ -17,3 +17,8 @@ angular.module('afredApp', [
   'ui.router',
   'ui.bootstrap'
 ]);
+
+angular.module('afredApp').config(['$httpProvider', function($httpProvider) {
+    $httpProvider.defaults.withCredentials = true;
+  }
+]);

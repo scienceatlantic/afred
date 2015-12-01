@@ -1,15 +1,31 @@
 'use strict';
 
-angular.module('afredApp').controller('LoginController', ['$scope', '$state',
-  function($scope, $state) {
+angular.module('afredApp').controller('LoginController',
+  ['$scope',
+   '$state',
+  function($scope,
+           $state) {
+    /* ---------------------------------------------------------------------
+     * Functions.
+     * --------------------------------------------------------------------- */
+  
     $scope.submit = function() {
-      $state.go('controlPanel');
+      $scope._auth.login($scope.credentials).then(function(response) {
+        $scope._auth.user = response.data;
+        $state.go('admin.dashboard');
+      }, function() {
+        $scope.credentials.invalid = true;
+      });
     };
     
-    //Initialise
-    $scope.loginCredentials = {
+    /* ---------------------------------------------------------------------
+     * Initialisation code.
+     * --------------------------------------------------------------------- */
+    
+    $scope.credentials = {
       username: null,
-      password: null
+      password: null,
+      invalid: false
     };
   }
 ]);
