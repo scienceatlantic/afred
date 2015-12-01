@@ -4,10 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Equipment extends Model
+class PrimaryContact extends Model
 {
-    use \Eloquence\Database\Traits\CamelCaseModel;
-    
     /**
      * The attributes that are mass assignable.
      *
@@ -15,13 +13,13 @@ class Equipment extends Model
      */
     protected $fillable = [
         'facility_id',
-        'type',
-        'manufacturer',
-        'model',
-        'purpose',
-        'specifications',
-        'is_public',
-        'has_excess_capacity'
+        'first_name',
+        'last_name',
+        'email',
+        'telephone',
+        'extension',
+        'position',
+        'website'
     ];
     
     public function facility()

@@ -11,20 +11,44 @@
 |
 */
 
+Route:get('csrf', 'CsrfController@show');
+
+Route::post('auth/login', 'AuthController@login');
+Route::get('auth/ping', 'AuthController@ping');
+Route::get('auth/logout', 'AuthController@logout');
+
 Route::resource('institutions', 'InstitutionController', [
-	'only' => ['index', 'store', 'show', 'update', 'destroy']]);
+	'only' => ['index',
+			   'store',
+			   'show',
+			   'update',
+			   'destroy']]);
 
 Route::resource('provinces', 'ProvinceController', [
 	'only' => ['index']]);
 		  
 Route::resource('facilities', 'FacilityController', [
-	'only' => ['index', 'store', 'show', 'update', 'destroy']]);
+	'only' => ['index',
+			   'store',
+			   'show',
+			   'update',
+			   'destroy']]);
+
+Route::resource('facilityRevisionHistory',
+	'FacilityRevisionHistoryController', [
+	'only' => ['index',
+			   'store',
+			   'show',
+			   'update',
+			   'destroy']]);
 
 Route::resource('facilities.contacts', 'FacilityContactController', [
 	'only' => ['index']]);
 
 Route::resource('facilities.equipment', 'FacilityEquipmentController', [
-	'only' => ['index', 'show']]);
+	'only' => ['index',
+			   'show']]);
 
 Route::resource('equipment', 'EquipmentController', [
-	'only' => ['index', 'show']]);
+	'only' => ['index',
+			   'show']]);
