@@ -22,7 +22,9 @@ class DatabaseSeeder extends Seeder
         // Contains dummy data.
         $this->call(DummyFacilitiesTableSeeder::class);
         $this->call(DummyEquipmentTableSeeder::class);
+        $this->call(DummyPrimaryContactsTableSeeder::class);
         $this->call(DummyContactsTableSeeder::class);
+        $this->call(DummySystemUsersTableSeeder::class);
         
         Model::reguard();
     }

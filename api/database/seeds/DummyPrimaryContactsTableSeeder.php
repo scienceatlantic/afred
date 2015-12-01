@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class DummyContactsTableSeeder extends Seeder
+class DummyPrimaryContactsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,15 +15,15 @@ class DummyContactsTableSeeder extends Seeder
         // point.
         $startingFacilityId = DB::table('facilities')->select('id')->first();
         
-        DB::table('contacts')->insert([
+        DB::table('primary_contacts')->insert([
             [
                 'facility_id' => $startingFacilityId->id,
-                'first_name' => 'John',
+                'first_name' => 'Michael',
                 'last_name' => 'Doe',
-                'email' => 'johndoe@gmail.com',
+                'email' => 'michaeldoe@gmail.com',
                 'telephone' => '9999999999',
-                'extension' => '543',
-                'position' => 'Lord Commander',
+                'extension' => '0928',
+                'position' => 'Doubly Lord Commander',
                 'website' => 'http://example.com'
             ],
         ]);
