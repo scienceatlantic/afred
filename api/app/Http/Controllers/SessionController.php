@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Province;
+use Session;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-class ProvinceController extends Controller
+class SessionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +17,7 @@ class ProvinceController extends Controller
      */
     public function index()
     {
-        return Province::where('is_hidden', false)->get();
+        return Session::token();
     }
 
     /**
@@ -49,7 +49,7 @@ class ProvinceController extends Controller
      */
     public function show($id)
     {
-        return Province::find($id);
+        //
     }
 
     /**
