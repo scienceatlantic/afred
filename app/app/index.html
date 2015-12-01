@@ -56,12 +56,14 @@
           <div class="collapse navbar-collapse" id="main-navbar">
             <ul class="nav navbar-nav">
               <li data-ui-sref-active="active"><a data-ui-sref="search">Search</a></li>
-              <li data-ui-sref-active="active"><a data-ui-sref="createFacility">Submit a Record</a></li>
+              <li data-ui-sref-active="active"><a data-ui-sref="facilities.form.create">Submit a Record</a></li>
               <li data-ui-sref-active="active"><a data-ui-sref="about">About</a></li>
             </ul>
             
             <ul class="nav navbar-nav navbar-right">
-              <li data-ui-sref-active="active"><a data-ui-sref="login">Administrator Login</a></li>
+              <li data-ui-sref-active="active" data-ng-show="_auth.user.isAuth"><a data-ui-sref="admin.dashboard">Admin</a></li>
+              <li data-ui-sref-active="active" data-ng-show="!_auth.user.isAuth"><a data-ui-sref="login">Administrator Login</a></li>
+              <li><a data-ui-sref="login" data-ng-show="_auth.user.isAuth" data-ng-click="_auth.logout()">Logout</a></li>
             </ul>
           </div><!-- End of .collapse -->
         </div><!-- End of .container -->
@@ -69,6 +71,9 @@
 
       <!-- View -->
       <div class="container">
+        <div data-ng-show="_auth.user.isAuth">
+          <p>Logged in as: {{_auth.user.firstName}} {{_auth.user.lastName}} ({{_auth.user.username}})</p>
+        </div>
         <div data-ui-view></div>
       </div>
       
@@ -121,16 +126,20 @@
     <!-- App JavaScript files -->
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
     <script src="scripts/app.js"></script>
+    <script src="scripts/config.js"></script>
     <script src="scripts/routes.js"></script>
     <script src="scripts/resources.js"></script>
     <script src="scripts/directives/af-field.js"></script>
     <script src="scripts/directives/af-loading.js"></script>
     <script src="scripts/controllers/search.js"></script>
     <script src="scripts/controllers/search.results.js"></script>
-    <script src="scripts/controllers/facility.js"></script>
+    <script src="scripts/controllers/facilities.form.js"></script>
+    <script src="scripts/controllers/facilities.form.create.js"></script>
+    <script src="scripts/controllers/facilities.form.edit.js"></script>
+    <script src="scripts/controllers/facilities.show.js"></script>
     <script src="scripts/controllers/equipment.js"></script>
-    <script src="scripts/controllers/facility-form.js"></script>
-    <script src="scripts/controllers/admin.js"></script>
+    <script src="scripts/controllers/admin.dashboard.js"></script>
+    <script src="scripts/controllers/admin.facilityRevisionHistory.show.js"></script>
     <script src="scripts/controllers/login.js"></script>
     <script src="scripts/modals/contact-us.js"></script>
     <script src="scripts/modals/facility-preview.js"></script>
