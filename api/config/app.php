@@ -145,6 +145,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Eloquence\EloquenceServiceProvider::class,
+        Barryvdh\Cors\ServiceProvider::class,
     ],
 
     /*
