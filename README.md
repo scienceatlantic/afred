@@ -7,6 +7,7 @@ The API was written using Laravel
 * [Laravel] (laravel.com/) (uses the [Composer] (https://getcomposer.org/) package manager)
   * Third-party plugins used:
     * [Eloquence] (https://github.com/kirkbushell/eloquence)
+    * [Laravel-Cors] (https://github.com/barryvdh/laravel-cors)
 
 ### App (app/)
 The app was written using AngularJS
