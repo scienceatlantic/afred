@@ -2,246 +2,339 @@
 
 angular.module('afredApp').controller('FacilitiesFormController',
   ['$scope',
+   '$interval',
    'institutionResource',
    'provinceResource',
   function($scope,
+           $interval,
            institutionResource,
            provinceResource) {
     /* ---------------------------------------------------------------------
-     * Functions.
+     * Functions/Objects.
      * --------------------------------------------------------------------- */
-    
-    $scope.saveForm = function() {
-      console.log('saveForm()');
-      try {
-        localStorage.setItem('facility', JSON.stringify($scope.facility));
-        localStorage.setItem('dropdowns', JSON.stringify($scope.dropdowns));
-      } catch(e) {
-        // Do nothing if local storage is not supported.
-      }
-    };
-    
-    $scope.autosave = function() {
-      try {
-        setInterval(function() {
-          $scope.saveForm();
-        }, 1000);       
-      } catch(e) {
-        // Do nothing if local storage is not supported.
-      } 
-    };
-    
-    $scope.getAutosave = function() {
-      try {
-        if (localStorage.getItem('facility')) {
-          $scope.facility = JSON.parse(localStorage.getItem('facility'));
-        }
-      } catch(e) {
-        // Do nothing if local storage is not supported.
-      }
+
+    /**
+     * All properties/functions related to the form.
+     */
+    $scope.form = {
+      /**
+       * Used to keep track of the current 'contact' being viewed.
+       *
+       * @type {integer}
+       */
+      contactIndex: null,
       
-      try {
-        if (localStorage.getItem('dropdowns')) {
-          $scope.dropdowns = JSON.parse(localStorage.getItem('dropdowns'));
-          $scope.attachInstitution();
-          $scope.attachProvince();
-        }        
-      } catch(e) {
-        // Do nothing if local storage is not supported.
-      }
-    };
-    
-    $scope.initialiseForm = function() {
-      $scope.facility = {
-        name: null,
+      /**
+       * Used to keep track of the current 'equipment' being viewed.
+       *
+       * @type {integer}
+       */
+      equipmentIndex: null,
+      
+      /**
+       * Holds a list of available institutions for the 'Institutions'
+       * dropdown.
+       *
+       * @type {array}
+       */
+      institutions: [],
+      
+      /**
+       * Holds a list of available provinces for the 'Provinces' dropdown.
+       *
+       * @type {array}
+       */
+      provinces: [],
+      
+      /**
+       * Holds the unique ID returned by '$scope.form.startAutosave()'s
+       * setInterval function. Used to either stop or prevent
+       * '$scope.form.startAutosave()' from running more than one interval.
+       *
+       * @type {integer}
+       */
+      isAutosaving: 0,
+      
+      /**
+       * Holds the names that will used for storing and retrieving
+       * form data via the '$scope.form.save()', and '$scope.form.getSave()'
+       * functions.
+       *
+       * @type {object}
+       *
+       */
+      storage: {
+        facility: $scope._state.current.name + '-facility',
+        dropdowns: $scope._state.current.name + '-dropdowns'
+      },
+      
+      /**
+       * Intermediary variable to keep track of the institution and province
+       * that was selected. The 'institution.name' holds the name of a new
+       * institution if 'Other' was selected in the dropdown.
+       *
+       * @type {object}
+       */
+      dropdowns: {
         institution: { id: null, name: null },
-        institutionId: null,
-        description: null,
-        city: null,
-        province: { id: null, name: null },
-        provinceId: null,
-        website: null,
-        primaryContact: {},
-        contacts: [],
-        equipment: []
-      };
+        province: { id: null }
+      },
       
-      $scope.dropdowns = {
-        institutions: { index: null, name: null },
-        provinces: { index: null }
-      };
-      
-      // Push the first contact object to the '$scope.facility.contacts' array.
-      $scope.addContact();
-      
-      // Push the first equipment object to '$scope.facility.equipment' array.
-      $scope.addEquipment();
-    };
-    
-    /**
-     * Adds an additional contact object to the '$scope.facility.contacts'
-     * array and advances the index to point to it.
-     */
-    $scope.addContact = function() {
-      $scope.facility.contacts.push({
-        firstName: null,
-        lastName: null,
-        email: null,
-        telephone: null,
-        extension: null,
-        position: null,
-        department: null,
-        website: null
-      });
-      
-      // Point 'contactIndex' to the object that was just added.
-      $scope.contactIndex = $scope.facility.contacts.length - 1;
-    };
-    
-    /**
-     * Removes a contact object from the '$scope.facility.contacts' array.
-     * @param {number} index Array index of '$scope.facility.contacts'.
-     */
-    $scope.removeContact = function(index) {
-      // The first contact cannot be removed.
-      if (index !== 0) {
-        $scope.facility.contacts.splice(index, 1);
+      /**
+       * Initialises the form. All form data is attached to '$scope.facility'.
+       */
+      initialise: function() {
+        // Holds all facility data that will be passed to the API.
+        $scope.facility = {
+          name: null,
+          institution: { id: null, name: null }, // This is for the preview.
+          institutionId: null,
+          province: { id: null, name: null }, // This is for the preview too.
+          provinceId: null,
+          description: null,
+          city: null,
+          website: null,
+          primaryContact: {},
+          contacts: [],
+          equipment: []
+        };
         
-        // If the user is currently viewing the contact that is being removed
-        // or if 'contactIndex' is more than the total number of contacts
-        // in the array itself, decrease 'contactIndex'.
-        if ($scope.contactIndex === index ||
-            $scope.contactIndex > $scope.facility.contacts.length - 1) {
-          $scope.contactIndex--;
+        // Get a list of all available institutions.
+        $scope.form.getInstitutions();
+        
+        // Get a list of all available provinces.
+        $scope.form.getProvinces();
+        
+        // Add the first contact.
+        $scope.form.addContact();
+        
+        // Add the first equipment.
+        $scope.form.addEquipment();
+      },
+      
+      /**
+       * Adds an additional contact object to the '$scope.facility.contacts'
+       * array and advances '$scope.form.contactIndex' to point to it.
+       */      
+      addContact: function() {
+        $scope.facility.contacts.push({
+          firstName: null,
+          lastName: null,
+          email: null,
+          telephone: null,
+          extension: null,
+          position: null,
+          department: null,
+          website: null
+        });
+        
+        // Point the index to the object that was just added.
+        $scope.form.contactIndex = $scope.facility.contacts.length - 1;
+      },
+      
+      /**
+       * Removes a contact object from the '$scope.facility.contacts' array.
+       * @param {integer} index Array index of '$scope.facility.contacts'.
+       */
+      removeContact: function(index) {
+        // The first contact cannot be removed.
+        if (index !== 0) {
+          $scope.facility.contacts.splice(index, 1);
+          
+          // If the user is currently viewing the contact that is being removed
+          // or if '$scope.form.contactIndex' is more than the total number
+          // of contacts in the array itself, decrease
+          // '$scope.form.contactIndex' (ie. point to the previous contact).
+          if ($scope.form.contactIndex === index ||
+              $scope.form.contactIndex > $scope.facility.contacts.length - 1) {
+            $scope.form.contactIndex--;
+          }
+        }       
+      },
+
+      /**
+       * Adds additional equipment object to the '$scope.facility.equipment'
+       * array and advances '$scope.form.equipmentIndex' to point to it.
+       */      
+      addEquipment: function() {
+        $scope.facility.equipment.push({
+          type: null,
+          manufacturer: null,
+          model: null,
+          specifications: null,
+          purpose: null,
+          isPublic: null,
+          hasExcessCapacity: null,
+          keywords: null
+        });
+
+        // Point to the index to the object that was just added.
+        $scope.form.equipmentIndex = $scope.facility.equipment.length - 1;       
+      },
+     
+      /**
+       * Removes an equipment object from '$scope.facility.equipment'.
+       * @param {number} index Array index of equipment.
+       */
+      removeEquipment: function(index) {
+        // The first equipment cannot be removed.
+        if (index !== 0) {
+          $scope.facility.equipment.splice(index, 1);
+        
+          // If the user is currently viewing the equipment that is being
+          // removed or if '$scope.form.equipmentIndex' is more than the total
+          // number of equipment, decrease '$scope.form.equipmentIndex'.    
+          if ($scope.form.equipmentIndex === index ||
+              $scope.form.quipmentIndex >
+              $scope.facility.equipment.length - 1) {
+            $scope.form.equipmentIndex--;
+          }      
+        }          
+      },
+      
+      /**
+       * Gets a list of all institutions and attaches it to
+       * '$scope.form.institutions'. 'N/A' is moved to the second last
+       * position. 'Other' is added as the last option.
+       */
+      getInstitutions: function() {
+        $scope.form.institutions = institutionResource.query(function() {
+          // 'N/A' should be the first entry in the database. We want it
+          // to appear just before 'Other'.          
+          $scope.form.institutions.push(
+            ($scope.form.institutions.splice(0, 1))[0]);
+          
+          // Finally, add an option for 'Other'.
+          $scope.form.institutions.push({id: -1, name: 'Other'});
+        });
+      },
+      
+      /**
+       * Gets a list of all institutions and attaches it to
+       * '$scope.form.provinces'.
+       */
+      getProvinces: function() {
+        $scope.form.provinces = provinceResource.query();
+      },
+      
+      /**
+       * Saves the form to localStorage.
+       */
+      save: function() {        
+        try {
+          localStorage.setItem($scope.form.storage.facility,
+            JSON.stringify($scope.facility));
+          localStorage.setItem($scope.form.storage.dropdowns,
+            JSON.stringify($scope.form.dropdowns));
+        } catch(e) {
+          // Do nothing if local storage is not supported.
         }
-      }
-    };
-    
-    /**
-     * Point to a specific contact object in the '$scope.facility.contacts'
-     * array.
-     * @param {number} index Array index of contact
-     */
-    $scope.setContactIndex = function(index) {
-      $scope.contactIndex = index;
-    };
-    
-    /**
-     * Adds additional equipment object to the '$scope.facility.equipment'
-     * array and advances '$scope.equipmentIndex' to point to it.
-     */
-    $scope.addEquipment = function() {
-      $scope.facility.equipment.push({
-        type: null,
-        manufacturer: null,
-        model: null,
-        specifications: null,
-        purpose: null,
-        isPublic: null,
-        hasExcessCapacity: null,
-        keywords: null
-      });
+      },
       
-      // Point the equipment object that was just added to the array.
-      $scope.equipmentIndex = $scope.facility.equipment.length - 1;
-    };
-    
-    /**
-     * Removes an equipment object from '$scope.facility.equipment'.
-     * @param {number} index Array index of equipment
-     */
-    $scope.removeEquipment = function(index) {
-      //The first equipment cannot be removed
-      if (index !== 0) {
-        $scope.facility.equipment.splice(index, 1);
-      
-        // If the user is currently viewing the equipment that is being removed
-        // or if 'equipmentIndex' is more than the total number of equipment,
-        // decrease 'equipmentIndex'    
-        if ($scope.equipmentIndex === index ||
-            $scope.equipmentIndex > $scope.facility.equipment.length - 1) {
-          $scope.equipmentIndex--;
-        }      
-      }
-    };
-    
-    /**
-     * Point to a specific equipment object in the '$scope.facility.equipment'
-     * array.
-     * @param {number} index Array index of equipment
-     */
-    $scope.setEquipmentIndex = function(index) {
-      $scope.equipmentIndex = index;
-    };
-    
-    /**
-     * Gets a list of all institutions and attaches it to
-     * '$scope.institutions'. The function also adds an institutions called
-     * 'Other' with an ID of -1.
-     */
-    $scope.getInstitutions = function() {
-      $scope.institutions = institutionResource.query(function() {
-        // Move 'N/A' to the bottom of the list.
-        $scope.institutions.push(($scope.institutions.splice(0, 1))[0]);
+      /**
+       * Retrieves any saved data from local storage.
+       */
+      getSave: function() {        
+        try {
+          if (localStorage.getItem($scope.form.storage.facility)) {
+            $scope.facility =
+              JSON.parse(localStorage.getItem($scope.form.storage.facility));
+          }
+        } catch(e) {
+          // Do nothing if local storage is not supported.
+        }
         
-        // Finally, add an option for 'Other'.
-        $scope.institutions.push({id: '-1', name: 'Other'});
-      });
-    };
-    
-    $scope.attachInstitution = function() {
-      console.log($scope.dropdowns);      
-      // If it's an existing institutions.
-      if ($scope.dropdowns.institutions.index
-          < $scope.institutions.length - 1) {
-        $scope.facility.institution.id =
-          $scope.institutions[$scope.dropdowns.institutions.index].id;
-        $scope.facility.institutionId =
-            $scope.institutions[$scope.dropdowns.institutions.index].id;         
-        $scope.facility.institution.name =
-          $scope.institutions[$scope.dropdowns.institutions.index].name;
-      // If it's a new institution.
-      } else {
-        $scope.facility.institution.id = null;
-        $scope.facility.institutionId = null;
-        $scope.facility.institution.name = $scope.dropdowns.institutions.name;
+        try {
+          if (localStorage.getItem($scope.form.storage.dropdowns)) {
+            $scope.form.dropdowns =
+              JSON.parse(localStorage.getItem($scope.form.storage.dropdowns));
+              $scope.form.attachInstitution();
+              $scope.form.attachProvince();
+          }        
+        } catch(e) {
+          // Do nothing if local storage is not supported.
+        }
+      },
+      
+      /**
+       * Continuously save the form every 'interval' milliseconds.
+       *
+       * @param {integer} interval Number of milliseconds between each
+       *     interval. If not provided, a default of 750 milliseconds is used.
+       */
+      startAutosave: function(interval) {
+        if (!$scope.form.isAutosaving) {
+          try {
+            $scope.form.isAutosaving = $interval(function() {
+              $scope.form.save();
+            }, interval ? interval : 750);       
+          } catch(e) {
+            // Do nothing if local storage is not supported.
+          }          
+        }
+      },
+
+      /**
+       * Since we're using an intermediary variable to keep track of the
+       * dropdowns, every time the value is changed, we need to attach
+       * to the '$scope.facility' variable.
+       */
+      attachInstitution: function() {        
+        // If it's an existing institution.
+        if ($scope.form.dropdowns.institution.id != -1) {
+          $scope.facility.institution.id
+            = $scope.form.dropdowns.institution.id;
+          $scope.facility.institutionId =
+            $scope.form.dropdowns.institution.id;
+          
+          // Use the selected 'option's index to grab the institution's name.
+          var e = document.getElementById('facility-institution');
+          $scope.facility.institution.name =
+            $scope.form.institutions[e.selectedIndex].name;
+        // If it's a new institution.
+        } else {
+          $scope.facility.institution.id = null;
+          $scope.facility.institutionId = null;
+          $scope.facility.institution.name =
+            $scope.form.dropdowns.institution.name;
+        }
+      },
+      
+      /**
+       * Same logic as '$scope.form.attachInstitutions()'
+       */
+      attachProvince: function() {
+        $scope.facility.province.id = $scope.form.dropdowns.province.id;
+        $scope.facility.provinceId = $scope.form.dropdowns.province.id;
+        
+        // Use the selected 'option's index to grab the province's name.
+        var e = document.getElementById('facility-province');
+        $scope.facility.province.name =
+          $scope.form.provinces[e.selectedIndex].name;
+      },
+      
+      /**
+       * The API expects a single primary contact and (optionally) regular
+       * contacts. In the form, the first contact is the primary contact.
+       * This functions copies and returns '$scope.facility' to match
+       * what the API expects.
+       *
+       * @return {object} Facility object.
+       */
+      formatForApi: function() {
+        var facility = angular.copy($scope.facility);
+        facility.primaryContact = (facility.contacts.splice(0, 1))[0];
+        return facility;
       }
-    };
-    
-    /**
-     * Gets a list of all institutions and attaches it to '$scope.provinces'.
-     */
-    $scope.getProvinces = function() {
-      $scope.provinces = provinceResource.query();
-    };
-    
-    $scope.attachProvince = function() {
-      $scope.facility.province.id =
-        $scope.provinces[$scope.dropdowns.provinces.index].id;
-      $scope.facility.provinceId = 5;
-      $scope.facility.province.name =
-        $scope.provinces[$scope.dropdowns.provinces.index].name;
-    };
-    
-    $scope.prepareForDb = function() {
-      var facility = angular.copy($scope.facility);
-      facility.primaryContact = (facility.contacts.splice(0, 1))[0];
-      return facility;
     };
     
     /* ---------------------------------------------------------------------
      * Initialisation code.
      * --------------------------------------------------------------------- */
-    
     /**
-     * An index variable for '$scope.facility.contacts' array.
-     */
-    $scope.contactIndex = 0;
-    
-    /**
-     * An index variable for '$scope.facility.equipment' array.
-     */
-    $scope.equipmentIndex = 0;
+     * Stores form data that will be sent to the API.
+     */ 
+    $scope.facility = {};
     
     /**
      * Settings for 'CKEditor'.
@@ -253,11 +346,5 @@ angular.module('afredApp').controller('FacilitiesFormController',
          'BulletedList', 'Indent', 'Outdent', 'Link']
       ]
     };
-    
-    // Get a list of all institutions.
-    $scope.getInstitutions();
-    
-    // Get a list of all provinces.
-    $scope.getProvinces();
   }
 ]);
