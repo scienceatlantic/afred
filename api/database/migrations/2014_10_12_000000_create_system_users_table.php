@@ -14,8 +14,8 @@ class CreateSystemUsersTable extends Migration
     {
         Schema::create('system_users', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('first_name', 50);
-            $table->string('last_name', 50);
+            $table->string('firstName', 50);
+            $table->string('lastName', 50);
             $table->enum('role', ['ADMIN']);
             $table->string('username', 254)->unique();
             $table->string('password', 60);

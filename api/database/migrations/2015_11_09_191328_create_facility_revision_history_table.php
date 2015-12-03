@@ -15,14 +15,14 @@ class CreateFacilityRevisionHistoryTable extends Migration
         Schema::create('facility_revision_history', function (Blueprint
             $table) {
                 $table->increments('id');
-                $table->integer('facility_id')->unsigned()->nullable();
-                $table->foreign('facility_id')->references('id')->
+                $table->integer('facilityId')->unsigned()->nullable();
+                $table->foreign('facilityId')->references('id')->
                     on('facilities')->onDelete('no action');
-                $table->integer('institution_id')->unsigned()->nullable();
-                $table->foreign('institution_id')->references('id')->
+                $table->integer('institutionId')->unsigned()->nullable();
+                $table->foreign('institutionId')->references('id')->
                     on('institutions')->onDelete('restrict');
-                $table->integer('province_id')->unsigned();
-                $table->foreign('province_id')->references('id')->
+                $table->integer('provinceId')->unsigned();
+                $table->foreign('provinceId')->references('id')->
                     on('provinces')->onDelete('restrict');
                 $table->enum('state', ['PENDING_APPROVAL',
                                        'PUBLISHED',
@@ -30,8 +30,8 @@ class CreateFacilityRevisionHistoryTable extends Migration
                                        'EDIT_DRAFT',
                                        'PENDING_EDIT_APPROVAL'.
                                        'REJECTED_EDIT']);
-                $table->string('access_key', 60)->nullable();
-                $table->longText('facility_in_json');
+                $table->string('accessKey', 60)->nullable();
+                $table->longText('facilityInJson');
                 $table->timestamps();
         });
     }

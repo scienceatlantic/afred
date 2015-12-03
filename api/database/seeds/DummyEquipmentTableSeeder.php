@@ -17,14 +17,14 @@ class DummyEquipmentTableSeeder extends Seeder
         
         DB::table('equipment')->insert([
             [
-                'facility_id' => $startingFacilityId->id,
+                'facilityId' => $startingFacilityId->id,
                 'type' => 'Fruit',
                 'manufacturer' => 'Mother nature',
                 'model' => 'Tomatoes',
                 'purpose' => 'Human consumption',
                 'specifications' => '18 calories per 100 grams.',
-                'is_public' => true,
-                'has_excess_capacity' => true
+                'isPublic' => true,
+                'hasExcessCapacity' => true
             ],
         ]);
     }

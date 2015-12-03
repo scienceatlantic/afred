@@ -14,16 +14,16 @@ class CreateEquipmentTable extends Migration
     {
         Schema::create('equipment', function($table) {
             $table->increments('id');
-            $table->integer('facility_id')->unsigned();
-            $table->foreign('facility_id')->references('id')->
+            $table->integer('facilityId')->unsigned();
+            $table->foreign('facilityId')->references('id')->
                 on('facilities')->onDelete('cascade');
             $table->string('type', 200);
             $table->string('manufacturer', 100)->nullable();
             $table->string('model', 100)->nullable();
             $table->text('purpose');
             $table->text('specifications')->nullable();
-            $table->boolean('is_public')->default(true);
-            $table->boolean('has_excess_capacity');
+            $table->boolean('isPublic')->default(true);
+            $table->boolean('hasExcessCapacity');
             $table->timestamps();
         });
     }

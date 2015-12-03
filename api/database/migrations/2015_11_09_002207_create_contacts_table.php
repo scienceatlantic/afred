@@ -14,11 +14,11 @@ class CreateContactsTable extends Migration
     {
         Schema::create('contacts', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('facility_id')->unsigned();
-            $table->foreign('facility_id')->references('id')->
+            $table->integer('facilityId')->unsigned();
+            $table->foreign('facilityId')->references('id')->
                 on('facilities')->onDelete('cascade');
-            $table->string('first_name', 50);
-            $table->string('last_name', 50);
+            $table->string('firstName', 50);
+            $table->string('lastName', 50);
             $table->string('email', 254);
             $table->char('telephone', 10)->nullable();
             $table->string('extension', 10)->nullable();

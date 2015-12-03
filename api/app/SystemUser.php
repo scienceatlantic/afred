@@ -13,5 +13,5 @@ class SystemUser extends Model
      *
      * @var array
      */
-    protected $hidden = ['password', 'remember_token'];
+    protected $hidden = ['password', 'rememberToken'];
 }

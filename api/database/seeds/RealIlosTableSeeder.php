@@ -16,113 +16,113 @@ class RealIlosTableSeeder extends Seeder
         
         $ilos = [
             'Acadia University' => [
-                'first_name'    => 'Peggy',
-                'last_name'     => 'Crawford',
+                'firstName'    => 'Peggy',
+                'lastName'     => 'Crawford',
                 'email'         => 'peggy.crawford',
                 'telephone'     => '9025851762',
                 'position'      => 'Research and Innovation Coordinator'
             ],
             'Cape Breton University' => [
-                'first_name'    => 'Sarah',
-                'last_name'     => 'Conrod',
+                'firstName'    => 'Sarah',
+                'lastName'     => 'Conrod',
                 'email'         => 'sarah_conrod@cbu.ca',
                 'telephone'     => '9025631842',
                 'position'      => 'Industry Liaison Officer'
             ],
             'Crandall Universtiy' => [
-                'first_name'    => '',
-                'last_name'     => '',
+                'firstName'    => '',
+                'lastName'     => '',
                 'email'         => '',
                 'telephone'     => '',
                 'position'      => ''
             ],
             'Dalhousie University' => [
-                'first_name'    => 'Kevin',
-                'last_name'     => 'Dunn',
+                'firstName'    => 'Kevin',
+                'lastName'     => 'Dunn',
                 'email'         => 'kevin.dunn@dal.ca',
                 'telephone'     => '9024941648',
                 'position'      => 'Director'
             ],
             'Dalhouse University, Faculty of Agriculture' => [
-                'first_name'    => '',
-                'last_name'     => '',
+                'firstName'    => '',
+                'lastName'     => '',
                 'email'         => '',
                 'telephone'     => '',
                 'position'      => ''
             ],
             'Memorial University' => [
-                'first_name'    => 'Marc',
-                'last_name'     => 'Kielley',
+                'firstName'    => 'Marc',
+                'lastName'     => 'Kielley',
                 'email'         => 'mkielley@mun.ca',
                 'telephone'     => '7098642095',
                 'position'      => 'Manager of Industry Engagement'
             ],
             'Memorial University, Grenfell Campus' => [
-                'first_name'    => '',
-                'last_name'     => '',
+                'firstName'    => '',
+                'lastName'     => '',
                 'email'         => '',
                 'telephone'     => '',
                 'position'      => ''
             ],
             'Mount Allison University' => [
-                'first_name'    => 'Cassidy',
-                'last_name'     => 'Weisbord',
+                'firstName'    => 'Cassidy',
+                'lastName'     => 'Weisbord',
                 'email'         => 'cweisbord@mta.ca',
                 'telephone'     => '5068663469',
                 'position'      => 'Industry Liaison Officer'
             ],
             'Mount Saint Vincent University' => [
-                'first_name'    => '',
-                'last_name'     => '',
+                'firstName'    => '',
+                'lastName'     => '',
                 'email'         => '',
                 'telephone'     => '',
                 'position'      => ''
             ],
             'Saint Mary\'s University' => [
-                'first_name'    => 'Kevin',
-                'last_name'     => 'Buchan',
+                'firstName'    => 'Kevin',
+                'lastName'     => 'Buchan',
                 'email'         => 'kevin.buchan@smu.ca',
                 'telephone'     => '9024916297',
                 'position'      => 'Director'
             ],
             'St. Francis Xavier University' => [
-                'first_name'    => '',
-                'last_name'     => '',
+                'firstName'    => '',
+                'lastName'     => '',
                 'email'         => '',
                 'telephone'     => '',
                 'position'      => ''
             ],
             'St. Thomas University' => [
-                'first_name'    => '',
-                'last_name'     => '',
+                'firstName'    => '',
+                'lastName'     => '',
                 'email'         => '',
                 'telephone'     => '',
                 'position'      => ''
             ],
             'Université de Moncton' => [
-                'first_name'    => 'Cassidy',
-                'last_name'     => 'Weisbord',
+                'firstName'    => 'Cassidy',
+                'lastName'     => 'Weisbord',
                 'email'         => 'cassidy.weisbord@umonton.ca',
                 'telephone'     => '5068584307',
                 'position'      => 'Innovation Officer'
             ],
             'University of New Brunswick, Fredericton' => [
-                'first_name'    => '',
-                'last_name'     => '',
+                'firstName'    => '',
+                'lastName'     => '',
                 'email'         => '',
                 'telephone'     => '',
                 'position'      => ''
             ],
             'University of New Brunswick, Saint John' => [
-                'first_name'    => '',
-                'last_name'     => '',
+                'firstName'    => '',
+                'lastName'     => '',
                 'email'         => '',
                 'telephone'     => '',
                 'position'      => ''
             ],
             'University of Prince Edward Island1' => [
-                'first_name'    => 'Shelley',
-                'last_name'     => 'King',
+                'firstName'    => 'Shelley',
+                'lastName'     => 'King',
                 'email'         => 'srking@upei.ca',
                 'telephone'     => '9025666095',
                 'position'      => 'Chief Executive Officer'
@@ -130,9 +130,9 @@ class RealIlosTableSeeder extends Seeder
         ];
         
         foreach ($ilos as $institutionName => $ilo) {
-            // Ignore ILO if it's empty. We're only checking the 'first_name'
+            // Ignore ILO if it's empty. We're only checking the 'firstName'
             // field.
-            if ($ilo['first_name']) {
+            if ($ilo['firstName']) {
                 // Get the institution's primary key.
                 $institution = DB::table('institutions')->
                     select('id')->
@@ -140,7 +140,7 @@ class RealIlosTableSeeder extends Seeder
                 
                 // Insert the ILO's data only if the institution was found.
                 if ($institution && property_exists($institution, 'id')) {
-                    $ilo['institution_id'] = $institution->id;
+                    $ilo['institutionId'] = $institution->id;
                     DB::table('ilos')->insert($ilo);  
                 }
             }

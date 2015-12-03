@@ -17,9 +17,9 @@ class DummyContactsTableSeeder extends Seeder
         
         DB::table('contacts')->insert([
             [
-                'facility_id' => $startingFacilityId->id,
-                'first_name' => 'John',
-                'last_name' => 'Doe',
+                'facilityId' => $startingFacilityId->id,
+                'firstName' => 'John',
+                'lastName' => 'Doe',
                 'email' => 'johndoe@gmail.com',
                 'telephone' => '9999999999',
                 'extension' => '543',

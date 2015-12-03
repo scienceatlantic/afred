@@ -19,23 +19,23 @@ class DummyFacilitiesTableSeeder extends Seeder
         
         DB::table('facilities')->insert([
             [
-                'institution_id' => $startingInstitutionId->id,
-                'province_id' => $startingProvinceId->id,
+                'institutionId' => $startingInstitutionId->id,
+                'provinceId' => $startingProvinceId->id,
                 'name' => 'IONIC Laboratories',
                 'city' => 'Wolfville',
                 'website' => 'http://example.com',
                 'description' => 'This facility does everything humanly' +
                     'possible',
-                'is_public' => true
+                'isPublic' => true
             ],
             [
-                'institution_id' => $startingInstitutionId->id,
-                'province_id' => $startingProvinceId->id + 1,
+                'institutionId' => $startingInstitutionId->id,
+                'provinceId' => $startingProvinceId->id + 1,
                 'name' => 'Tomatojuice Lab',
                 'city' => 'Halifax',
                 'website' => 'http://example.com',
                 'description' => 'We make a lot of tomato juice',
-                'is_public' => true
+                'isPublic' => true
             ],
         ]);
     }

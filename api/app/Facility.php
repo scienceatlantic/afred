@@ -14,13 +14,13 @@ class Facility extends Model
      * @var array
      */
     protected $fillable = [
-        'institution_id',
-        'province_id',
+        'institutionId',
+        'provinceId',
         'name',
         'city',
         'website',
         'description',
-        'is_public'
+        'isPublic'
     ];
     
     public function institution()

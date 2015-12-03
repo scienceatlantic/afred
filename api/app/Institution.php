@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Institution extends Model
 {
-    use \Eloquence\Database\Traits\CamelCaseModel;
-    
     /**
      * The attributes that are mass assignable.
      *

@@ -5,18 +5,16 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 class Contact extends Model
-{
-    use \Eloquence\Database\Traits\CamelCaseModel;
-    
+{    
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'facility_id',
-        'first_name',
-        'last_name',
+        'facilityId',
+        'firstName',
+        'lastName',
         'email',
         'telephone',
         'extension',

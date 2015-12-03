@@ -15,8 +15,8 @@ class DummySystemUsersTableSeeder extends Seeder
         DB::table('system_users')->delete();
         
         DB::table('system_users')->insert([
-            'first_name' => 'John',
-            'last_name' => 'Doe',
+            'firstName' => 'John',
+            'lastName' => 'Doe',
             'username' => 'john.doe@gmail.com',
             'password' => Hash::make('password')
         ]);

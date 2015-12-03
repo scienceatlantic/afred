@@ -15,30 +15,30 @@ class RealInstitutionsTableSeeder extends Seeder
         DB::table('institutions')->delete();
         
         DB::table('institutions')->insert([
-            ['name' => 'N/A', 'is_hidden' => 'false'],
-            ['name' => 'Acadia University', 'is_hidden' => 'false'],
-            ['name' => 'Cape Breton University', 'is_hidden' => 'false'],
-            ['name' => 'Crandall University', 'is_hidden' => 'false'],
-            ['name' => 'Dalhousie University', 'is_hidden' => 'false'],
+            ['name' => 'N/A', 'isHidden' => 'false'],
+            ['name' => 'Acadia University', 'isHidden' => 'false'],
+            ['name' => 'Cape Breton University', 'isHidden' => 'false'],
+            ['name' => 'Crandall University', 'isHidden' => 'false'],
+            ['name' => 'Dalhousie University', 'isHidden' => 'false'],
             ['name' => 'Dalhousie University, Faculty of Agriculture',
-                'is_hidden' => 'false'],
-            ['name' => 'Memorial University', 'is_hidden' => 'false'],
+                'isHidden' => 'false'],
+            ['name' => 'Memorial University', 'isHidden' => 'false'],
             ['name' => 'Memorial University, Grenfell Campus',
-                'is_hidden' => 'false'],
-            ['name' => 'Mount Allison University', 'is_hidden' => 'false'],
+                'isHidden' => 'false'],
+            ['name' => 'Mount Allison University', 'isHidden' => 'false'],
             ['name' => 'Mount Saint Vincent University',
-                'is_hidden' => 'false'],
-            ['name' => 'Saint Mary\'s University', 'is_hidden' => 'false'],
+                'isHidden' => 'false'],
+            ['name' => 'Saint Mary\'s University', 'isHidden' => 'false'],
             ['name' => 'St. Francis Xavier University',
-                'is_hidden' => 'false'],
-            ['name' => 'St. Thomas University', 'is_hidden' => 'false'],
-            ['name' => 'Université de Moncton', 'is_hidden' => 'false'], //FIX THE ACCENTED E!
+                'isHidden' => 'false'],
+            ['name' => 'St. Thomas University', 'isHidden' => 'false'],
+            ['name' => 'Université de Moncton', 'isHidden' => 'false'], //FIX THE ACCENTED E!
             ['name' => 'University of New Brunswick, Fredericton',
-                'is_hidden' => 'false'],
+                'isHidden' => 'false'],
             ['name' => 'University of New Brunswick, Saint John',
-                'is_hidden' => 'false'],
+                'isHidden' => 'false'],
             ['name' => 'University of Prince Edward Island',
-                'is_hidden' => 'false'],
+                'isHidden' => 'false'],
         ]);
     }
 }

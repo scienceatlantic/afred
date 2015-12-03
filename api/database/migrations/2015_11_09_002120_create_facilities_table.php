@@ -14,17 +14,17 @@ class CreateFacilitiesTable extends Migration
     {
         Schema::create('facilities', function($table) {
             $table->increments('id');
-            $table->integer('institution_id')->unsigned();
-            $table->foreign('institution_id')->references('id')->
+            $table->integer('institutionId')->unsigned();
+            $table->foreign('institutionId')->references('id')->
                 on('institutions')->onDelete('restrict');
-            $table->integer('province_id')->unsigned();
-            $table->foreign('province_id')->references('id')->
+            $table->integer('provinceId')->unsigned();
+            $table->foreign('provinceId')->references('id')->
                 on('provinces')->onDelete('restrict');
             $table->string('name', 200);
             $table->string('city', 150);
             $table->string('website', 2083)->nullable();
             $table->text('description');
-            $table->boolean('is_public')->default(true);
+            $table->boolean('isPublic')->default(true);
             $table->timestamps();
         });
     }
