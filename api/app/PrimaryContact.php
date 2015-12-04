@@ -24,6 +24,6 @@ class PrimaryContact extends Model
     
     public function facility()
     {
-        return $this->belongsTo('App\Facility');
+        return $this->belongsTo('App\Facility', 'facilityId');
     }
 }

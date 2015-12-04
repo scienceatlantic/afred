@@ -26,8 +26,17 @@ class FacilityRevisionHistory extends Model
         'facilityInJson'
     ];
     
+/**
+     * The attributes that should be casted to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'facilityInJson' => 'array',
+    ];
+    
     public function facility()
     {
-        $this->hasOne('App\Facility');
+        $this->belongsTo('App\Facility', 'facilityId');
     }
 }

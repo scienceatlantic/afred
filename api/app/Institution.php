@@ -17,15 +17,10 @@ class Institution extends Model
     
     public function ilo()
     {
-        return $this->hasOne('App\Institution');
+        return $this->hasOne('App\Ilo', 'institutionId');
     }
     
     public function facilities() {
-        return $this->hasMany('App\Facility');
-    }
-    
-    public function facilityRevisionHistory()
-    {
-        return $this->hasMany('App\Facility');
+        return $this->hasMany('App\Facility', 'institutionId');
     }
 }

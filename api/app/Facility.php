@@ -5,9 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 class Facility extends Model
-{
-    use \Eloquence\Database\Traits\CamelCaseModel;
-    
+{    
     /**
      * The attributes that are mass assignable.
      *
@@ -23,28 +21,33 @@ class Facility extends Model
         'isPublic'
     ];
     
+    public function facilityRevisionHistory()
+    {
+        return $this->hasMany('App\FacilityRevisionHistory', 'facilityId');
+    }
+    
     public function institution()
     {
-        return $this->belongsTo('App\Institution');
+        return $this->belongsTo('App\Institution', 'institutionId');
     }
     
     public function province()
     {
-        return $this->belongsTo('App\Province');
+        return $this->belongsTo('App\Province', 'provinceId');
     }
     
     public function primaryContact()
     {
-        return $this->hasOne('App\PrimaryContact');
+        return $this->hasOne('App\PrimaryContact', 'facilityId');
     }
     
     public function contacts()
     {
-        return $this->hasMany('App\Contact');
+        return $this->hasMany('App\Contact', 'facilityId');
     }
     
     public function equipment()
     {
-        return $this->hasMany('App\Equipment');
+        return $this->hasMany('App\Equipment', 'facilityId');
     }
 }
