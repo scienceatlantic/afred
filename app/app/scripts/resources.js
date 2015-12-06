@@ -7,8 +7,8 @@ angular.module('afredApp').factory('facilityResource', ['$rootScope',
         facilityId: '@id'
       },
       {
-        query: {isArray: false},
-        update: {method: 'PUT'}
+        query: { isArray: false },
+        update: { method: 'PUT' }
       }
     );
   }
@@ -22,12 +22,12 @@ angular.module('afredApp').factory('facilityRevisionHistoryResource',
           facilityRevisionHistoryId: '@id'
         },
         {
-          query: {isArray: false},
-          approve: {method: 'PUT', params: {state: 'PUBLISHED'}},
-          reject: {method: 'PUT', params: {state: 'REJECTED'}},
-          saveEditDraft: {method: 'PUT', params: {state: 'EDIT_DRAFT'}},
-          approveEdit: {method: 'PUT', params: {state: 'PUBLISHED'}},
-          rejectEdit: {method: 'PUT', params: {state: 'REJECTED_EDIT'}}    
+          query: { isArray: false },
+          approve: { method: 'PUT', params: { state: 'PUBLISHED' }},
+          reject: { method: 'PUT', params: { state: 'REJECTED' }},
+          saveEditDraft: { method: 'PUT', params: { state: 'EDIT_DRAFT' }},
+          approveEdit: { method: 'PUT', params: { state: 'PUBLISHED' }},
+          rejectEdit: { method: 'PUT', params: { state: 'REJECTED_EDIT' }}    
         }
     );
   }
@@ -41,13 +41,24 @@ angular.module('afredApp').factory('equipmentResource', ['$rootScope',
 
 angular.module('afredApp').factory('institutionResource', ['$rootScope',
   '$resource', function($rootScope, $resource) {
-    return $resource($rootScope._config.api + '/institutions/:institutionId');
+    return $resource($rootScope._config.api + '/institutions/:institutionId',
+      {},
+      {
+        query: { isArray: false },
+        queryNoPaginate: { isArray: true, params: { paginate: 0 }}
+      }
+    );
   }
 ]);
 
 angular.module('afredApp').factory('provinceResource', ['$rootScope',
   '$resource', function($rootScope, $resource) {
-    return $resource($rootScope._config.api + '/provinces/:provinceId');
+    return $resource($rootScope._config.api + '/provinces/:provinceId',
+      {},
+      {
+        query: { isArray: false },
+        queryNoPaginate: { isArray: true, params: { paginate: 0 }}
+      }
+    );
   }
 ]);
-
