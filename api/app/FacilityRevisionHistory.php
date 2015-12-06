@@ -23,7 +23,7 @@ class FacilityRevisionHistory extends Model
         'provinceId',
         'institutionId',
         'state',
-        'facilityInJson'
+        'data'
     ];
     
 /**
@@ -32,7 +32,7 @@ class FacilityRevisionHistory extends Model
      * @var array
      */
     protected $casts = [
-        'facilityInJson' => 'array',
+        'data' => 'array',
     ];
     
     public function facility()
