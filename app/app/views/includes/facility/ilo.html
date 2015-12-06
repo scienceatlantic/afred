@@ -1,0 +1,24 @@
+<div class="row">
+  <div class="col-md-3 text-right"><label>Name</label></div>
+  <div class="col-md-9">{{facility.institution.ilo.firstName}} {{facility.institution.ilo.lastName}}</div>
+</div>
+
+<div class="row">
+  <div class="col-md-3 text-right"><label>Email</label></div>
+  <div class="col-md-9"><a data-ng-href="mailto:{{facility.institution.ilo.email}}">{{facility.institution.ilo.email}}</a></div>
+</div>
+
+<div class="row">
+  <div class="col-md-3 text-right"><label>Telephone</label></div>
+  <div class="col-md-9">{{facility.institution.ilo.telephone}}</div>
+</div>
+
+<div class="row">
+  <div class="col-md-3 text-right"><label>Position</label></div>
+  <div class="col-md-9">{{facility.institution.ilo.position}}</div>
+</div>
+
+<div class="row" data-ng-show="facility.institution.ilo.website">
+  <div class="col-md-3 text-right"><label>Website</label></div>
+  <div class="col-md-9"><a href="{{facility.institution.ilo.website}}" target="_blank">{{facility.institution.ilo.website}}</a></div>
+</div>

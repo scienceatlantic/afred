@@ -1,0 +1,38 @@
+<div data-ng-repeat="e in facility.equipment">
+  <div class="row">
+    <div class="col-md-3 text-right"><label>Type</label></div>
+    <div class="col-md-9">{{e.type}}</div>
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 text-right"><label>Manufacturer</label></div>
+    <div class="col-md-9">{{e.manufacturer}}</div>
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 text-right"><label>Model</label></div>
+    <div class="col-md-9">{{e.model}}</div>
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 text-right"><label>Purpose</label></div>
+    <div class="col-md-9" data-ng-bind-html="e.purpose"></div>
+  </div>
+
+  <div class="row" data-ng-show="e.specifications">
+    <div class="col-md-3 text-right"><label>Specifications</label></div>
+    <div class="col-md-9" data-ng-bind-html="e.specifications"></div>
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 text-right"><label>Public</label></div>
+    <div class="col-md-9"><span data-ng-show="e.isPublic">Yes</span><span data-ng-hide="e.isPublic">No</span></div>
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 text-right"><label>Excess capacity</label></div>
+    <div class="col-md-9"><span data-ng-show="e.hasExcessCapacity">Yes</span><span data-ng-hide="e.hasExcessCapacity">No</span></div>
+  </div>
+  
+  <hr data-ng-show="$index !== (facility.equipment.length - 1)">
+</div><!-- End of ng-repeat -->

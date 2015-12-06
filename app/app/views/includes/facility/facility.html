@@ -1,0 +1,29 @@
+<div class="row">
+  <div class="col-md-3 text-right"><label>Facility</label></div>
+  <div class="col-md-9">{{facility.name}}</div>
+</div>
+
+<div class="row">
+  <div class="col-md-3 text-right"><label>Institution</label></div>
+  <div class="col-md-9">{{facility.institution.name}}</div>
+</div>
+
+<div class="row">
+  <div class="col-md-3 text-right"><label>City</label></div>
+  <div class="col-md-9">{{facility.city}}</div>
+</div>
+
+<div class="row">
+  <div class="col-md-3 text-right"><label>Province</label></div>
+  <div class="col-md-9">{{facility.province.name}}</div>
+</div>
+
+<div class="row" data-ng-show="facility.website">
+  <div class="col-md-3 text-right"><label>Website</label></div>
+  <div class="col-md-9"><a data-ng-href="{{facility.website}}" target="_blank">{{facility.website}}</a></div>
+</div>
+
+<div class="row">
+  <div class="col-md-3 text-right"><label>Description</label></div>
+  <div class="col-md-9" data-ng-bind-html="facility.description"></div>
+</div>
