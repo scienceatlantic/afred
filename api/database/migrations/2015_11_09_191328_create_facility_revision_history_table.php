@@ -25,7 +25,7 @@ class CreateFacilityRevisionHistoryTable extends Migration
                                        'PENDING_EDIT_APPROVAL'.
                                        'REJECTED_EDIT']);
                 $table->string('accessKey', 60)->nullable();
-                $table->longText('facilityInJson');
+                $table->longText('data'); // Data stored in JSON
                 $table->timestamps();
         });
     }
