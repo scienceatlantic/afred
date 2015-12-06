@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use Log;
 use App\Facility;
 use App\Institution;
@@ -19,9 +18,10 @@ class FacilityController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Facility::paginate(15);
+        $itemsPerPage = $request->input('itemsPerPage', 15);
+        return Facility::paginate($itemsPerPage);
     }
 
     /**
@@ -32,14 +32,8 @@ class FacilityController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $facility = Facility::find($id);
-        
-        if ($request->has('expand')) {
-            foreach (explode(',', $request->input('expand')) as
-                $relationship) {
-                    $facility->$relationship;
-            }
-        } 
+        $facility = Facility::find($id);        
+        $this->_expandRelationships($request, $facility);
         return $facility;      
     }
 

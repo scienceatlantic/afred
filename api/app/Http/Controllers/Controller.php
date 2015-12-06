@@ -10,4 +10,20 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 abstract class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    
+    protected function _expandRelationships($request, $models, $isArray = false)
+    {
+        if ($request->has('expand')) {
+            foreach (explode(',',
+                $request->input('expand')) as $relationship) {
+                    if ($isArray) {
+                        foreach($models as $model) {
+                            $model->$relationship;
+                        }                       
+                    } else {
+                        $models->$relationship;
+                    }
+            }
+        }         
+    }
 }

@@ -15,19 +15,17 @@ class ProvinceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Province::where('is_hidden', false)->get();
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $paginate = $request->input('paginate', true);
+        $itemsPerPage = $request->input('itemsPerPage', 15);
+        $province = Province::where('isHidden', false);
+        
+        if ($paginate) {
+            return $province->paginate($itemsPerPage);
+        } else {
+            return $province->get();
+        }
     }
 
     /**
@@ -49,18 +47,7 @@ class ProvinceController extends Controller
      */
     public function show($id)
     {
-        return Province::find($id);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        return Province::findOrFail($id);
     }
 
     /**
@@ -83,6 +70,6 @@ class ProvinceController extends Controller
      */
     public function destroy($id)
     {
-        //
+        
     }
 }

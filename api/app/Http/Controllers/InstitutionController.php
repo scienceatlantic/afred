@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Institution;
 use App\Http\Requests;
+use App\Http\Requests\IndexInstitutionRequest;
 use App\Http\Controllers\Controller;
 
 class InstitutionController extends Controller
@@ -15,19 +16,15 @@ class InstitutionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(IndexInstitutionRequest $request)
     {
-        return Institution::where('is_hidden', false)->get();
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $paginate = $request->input('paginate', true);
+        $itemsPerPage = $request->input('itemsPerPage', 15);
+        $institution = Institution::where('isHidden', false);
+        $institution = $paginate ?
+            $institution->paginate($itemsPerPage) : $institution->get();
+        $this->_expandRelationships($request, $institution, true);
+        return $institution;
     }
 
     /**
@@ -47,20 +44,11 @@ class InstitutionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        return Institution::find($id);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        $institution = Institution::findOrFail($id);
+        $this->_expandRelationships($request, $institution);
+        return $institution;
     }
 
     /**

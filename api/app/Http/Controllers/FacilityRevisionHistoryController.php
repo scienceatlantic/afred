@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use Carbon\Carbon;
-
 use Log;
 
+use Illuminate\Http\Request;
+use Event;
 use App;
 use App\FacilityRevisionHistory;
 use App\Institution;
@@ -15,8 +13,7 @@ use App\Facility;
 use App\Equipment;
 use App\Contact;
 use App\PrimaryContact;
-
-use App\Http\Requests;
+use App\Events\FacilityRevisionHistory\FacilitySubmittedEvent;
 use App\Http\Requests\StoreFacilityRevisionHistoryRequest;
 use App\Http\Requests\UpdateFacilityRevisionHistoryRequest;
 use App\Http\Controllers\Controller;
@@ -31,18 +28,11 @@ class FacilityRevisionHistoryController extends Controller
      */
     public function index(Request $request)
     {
-        // Check if requesting for only a specific state.
-        if ($request->has('state')) {
-            $frhs = FacilityRevisionHistory::where('state',
-                $request->input('state'))->paginate(15);
-        }
-        else {
-            $frhs = FacilityRevisionHistory::paginate(15);
-        }
-        
-        $this->_formatFij($frhs, true);
-        
-        return $frhs;
+        $itemsPerPage = $request->input('itemsPerPage', 15);
+        $state = $request->input('state', '%');
+        $stateOp = $state  == '%' ? 'like' : '=';
+        return FacilityRevisionHistory::where('state', $stateOp, $state)
+            ->paginate($itemsPerPage);
     }
 
     /**
@@ -53,14 +43,13 @@ class FacilityRevisionHistoryController extends Controller
      */
     public function store(StoreFacilityRevisionHistoryRequest $request)
     {        
-        return FacilityRevisionHistory::create([
-            'state'            => 'PENDING_APPROVAL',
-            'institution_id'   => $request->input('institutionId'),
-            'province_id'      => $request->input('provinceId'),
-            'facility_in_json' => json_encode($this->_createFij($request))
-        ]);
-    
-        // If the user is auth-ed, then 'PUBLISHED immediatly??'
+        $frh = new FacilityRevisionHistory(); 
+        $frh->state = 'PENDING_APPROVAL';
+        $frh->data = $this->_createFrhData($request);
+        $frh->save();
+        Event::fire(new FacilitySubmittedEvent($frh));
+        return $frh;
+        // If the user is auth-ed, then 'PUBLISHED immediately??'
     }
 
     /**
@@ -71,13 +60,7 @@ class FacilityRevisionHistoryController extends Controller
      */
     public function show($id)
     {
-        if (!$frh = FacilityRevisionHistory::find($id)) {
-            App::abort(404);
-        }
-
-        $this->_formatFij($frh, false);
-        
-        return $frh;            
+        return FacilityRevisionHistory::findOrFail($id);            
     }
 
     /**
@@ -88,42 +71,51 @@ class FacilityRevisionHistoryController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateFacilityRevisionHistoryRequest $request, $id)
-    {        
+    {
+        $frh = FacilityRevisionHistory::findOrFail($id);
+        $data = $frh->data;
+        
         switch ($request->input('state')) {
-            case 'PUBLISHED':                
-                $fij = json_decode($frh->facilityInJson);
-                    
-                if (!$frh->institutionId) {
-                    $frh->institutionId = Institution::create(
-                        (array) $fij->institution)->getKey();
-                }                
+            case 'PUBLISHED':                    
+                if (!$data['facility']['institutionId']) {
+                    $data['facility']['institutionId'] =
+                        Institution::create($data['institution'])
+                            ->getKey();
+                }          
                 
-                $fij->facility->id = Facility::create((array) $fij->facility)
+                $data['facility']['id'] =
+                    Facility::create($data['facility'])->getKey();
+                
+                $data['facility']['primaryContact']['facilityId'] =
+                    $data['facility']['id'];
+                $data['facility']['primaryContact']['id'] =
+                    PrimaryContact::create($data['facility']['primaryContact'])
                     ->getKey();
                 
-                $fij->primaryContact->facility_id = $fij->facility->id;
-                PrimaryContact::create((array) $fij->primaryContact); 
+                if (array_key_exists('contacts', $data['facility'])) {
+                    foreach($data['facility']['contacts'] as $i => $contact) {
+                        $contact['facilityId'] = $data['facility']['id'];
+                        $data['facility']['contacts'][$i]['id'] =
+                            Contact::create($contact)->getKey();           
+                    }                       
+                }
                 
-                foreach($fij->contacts as $contact) {
-                    $contact->facility_id = $fij->facility->id;
-                    Contact::create((array) $contact);           
-                }                      
+                if (array_key_exists('equipment', $data['facility'])) {
+                    foreach($data['facility']['equipment'] as $i => $equipment) {
+                        $equipment['facilityId'] = $data['facility']['id'];
+                        $data['facility']['equipment'][$i]['id'] =
+                            Equipment::create($equipment)->getKey();           
+                    }
+                }
                 
-                foreach($fij->equipment as $equipment) {
-                    $equipment->facility_id = $fij->facility->id;
-                    Equipment::create((array) $equipment);           
-                }     
-                
-                // Update the state of facility revision history.
-                $frh->facilityId = $fij->facility->id;
-                $frh->institutionId = $fij->facility->institutionId;
+                $frh->facilityId = $data['facility']['id'];
                 $frh->state = 'PUBLISHED';
+                $frh->data = $data;
                 $frh->update();
+                return $frh;
                 break;
             
             case 'REJECTED':
-                
-                // Validate states..?
                 $frh->state = 'REJECTED';
                 $frh->update();
                 break;
@@ -146,90 +138,63 @@ class FacilityRevisionHistoryController extends Controller
         
     }
     
-    private function _createFij($request)
-    {        
-        $fij = [
-            'institution' => [
-                'name' => $request->input('institution.name')
-            ],
-            'facility' => [
-                'institution_id' => $request->input('institutionId'),
-                'province_id'    => $request->input('provinceId'),
-                'name'           => $request->input('name'),
-                'city'           => $request->input('city'),
-                'website'        => $request->input('website'),
-                'description'    => $request->input('description'),
-                'is_public'      => true
-            ],
-            'primaryContact' => [
-                'facility_id' => null,
-                'first_name'  => $request->input('primaryContact.firstName'),
-                'last_name'   => $request->input('primaryContact.lastName'),
-                'email'       => $request->input('primaryContact.email'),
-                'telephone'   => $request->input('primaryContact.telephone'),
-                'extension'   => $request->input('primaryContact.extension'),
-                'position'    => $request->input('primaryContact.position'),
-                'website'     => $request->input('primaryContact.website')
-            ],
-            'contacts' => [],
-            'equipment' => []
-        ];
+    private function _createFrhData($request)
+    {
+        $data = [];
         
-        foreach($request->input('contacts') as $i => $contact) {
-            $p = "contact.$i."; // Prefix.
-            
-            array_push($fij['contacts'], [
-                'facility_id' => null,
-                'first_name'  => $request->input("$p.firstName"),
-                'last_name'   => $request->input("$p.lastName"),
-                'email'       => $request->input("$p.email"),
-                'telephone'   => $request->input("$p.telephone"),
-                'extension'   => $request->input("$p.extension"),
-                'position'    => $request->input("$p.position"),
-                'website'     => $request->input("$p.website")
-            ]);
+        // Institution.
+        if (!$request->institutionId) {
+            $data['institution'] =
+                (new Institution((array) $request->institution))->toArray();            
+        }
+
+        // Facility.
+        $data['facility'] =
+            (new Facility((array) $request->all()))->toArray();
+        
+        // Primary contact.
+        $data['facility']['primaryContact'] =
+            (new PrimaryContact((array) $request->primaryContact))->toArray();
+        $data['facility']['primaryContact']['facilityId'] = null;
+        
+        // Contacts.
+        $data['facility']['contacts'] = [];
+        foreach($request->contacts as $i => $contact) {
+            $data['facility']['contacts'][$i] =
+                (new Contact($contact))->toArray();
+            $data['facility']['contacts'][$i]['facilityId'] = null;
         }
         
-        foreach($request->input('equipment') as $i => $equipment) {
-            $p = "equipment.$i."; // Prefix.
-            
-            array_push($fij['equipment'], [
-                'facility_id'         => null,
-                'type'                => $request->input("$p.type"),
-                'manufacturer'        => $request->input("$p.manufacturer"),
-                'purpose'             => $request->input("$p.purpose"),
-                'specifications'      => $request->input("$p.specifications"),
-                'is_public'           => $request->input("$p.isPublic"),
-                'has_excess_capacity' => $request->input("$p.hasExcessCapacity")
-            ]);           
+        // Equipment.
+        $data['facility']['equipment'] = [];
+        foreach($request->equipment as $i => $equipment) {
+            $data['facility']['equipment'][$i] =
+                (new Equipment($equipment))->toArray();
+            $data['facility']['equipment'][$i]['facilityId'] = null;
         }
         
-        return $fij;
+        return $data;
     }
     
     private function _formatFij($frhs, $isArray = false)
     {
-        function format($frh)
+        function _format($frh)
         {
-            //$frh->province();
-            
-            
-            
-            $fij = json_decode($frh->facilityInJson);
-            $frh->facilityInJson = $fij->facility;
-            $frh->facilityInJson->institution = (object) ['name' => 'sds'];
-            $frh->facilityInJson->primaryContact = $fij->primaryContact;
-            $frh->facilityInJson->contacts = $fij->contacts;
-            $frh->facilityInJson->equipment = $fij->equipment;           
+            $fij = $frh->facilityInJson;
+            $frh->facilityInJson = $fij['facility'];
+            $frh->facilityInJson['institution'] = (object) ['name' => 'sds'];
+            $frh->facilityInJson['primaryContact'] = $fij->primaryContact;
+            $frh->facilityInJson['contacts'] = $fij->contacts;
+            $frh->facilityInJson['equipment'] = $fij->equipment;           
         }
         
         if ($isArray) {
             foreach($frhs as $frh) {
-                format($frh);
+                _format($frh);
             }
         }
         else {
-            format($frhs);
+            _format($frhs);
         }
     }
 }
