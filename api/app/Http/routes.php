@@ -25,7 +25,8 @@ Route::resource('institutions', 'InstitutionController', [
 			   'destroy']]);
 
 Route::resource('provinces', 'ProvinceController', [
-	'only' => ['index']]);
+	'only' => ['index',
+			   'show']]);
 		  
 Route::resource('facilities', 'FacilityController', [
 	'only' => ['index',
