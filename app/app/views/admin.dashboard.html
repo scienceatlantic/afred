@@ -1,67 +1,26 @@
+<h2>Admin / Dashboard</h2>
+
 <div class="row">
-  <div class="col-lg-12">
-    <h2>Admin - Dashboard</h2>
-    
+  <div class="col-md-4">
     <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Facilities</h3>
-      </div>
-      
-      <div class="panel-body">
-        <div class="form-group">
-          <label for="state">State:</label>
-          <select class="form-control" name="state" id="state" data-ng-model="view.state" data-ng-change="getFacilities()">
-            <option value="PUBLISHED">Published</option>
-            <option value="PENDING_APPROVAL">Pending Approval</option>
-            <option value="EDIT_DRAFT">Edit Draft</option>
-            <option value="PENDING_EDIT_APPROVAL">Pending Edit Approval</option>
-            <option value="REJECTED">Rejected</option>
-            <option value="REJECTED_EDIT">Rejected Edit</option>
-          </select>
-        </div>
-        
-        <div class="form-group" data-ng-show="view.state == 'PUBLISHED'">
-          <label for="state">Visibility:</label>
-          <select class="form-control" name="visibility" id="visibility" data-ng-model="view.isPublic" data-ng-change="getFacilities()">
-            <option value=1>Public</option>
-            <option value=0>Private</option>
-          </select>
-        </div>
-        
-        <div data-af-loading="!facilities.$resolved && view.state">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Facility</th>
-              </tr>
-            </thead>
-            
-            <tbody>
-              <tr data-ng-repeat="f in facilities.data" data-ng-if="view.state == 'PUBLISHED'">
-                <td>
-                  <a data-ui-sref="facilities.show({facilityId: f.id})" target="_blank">{{f.name}}</a>
-                </td>
-              </tr>
-              
-              <tr data-ng-repeat="f in facilities.data" data-ng-if="view.state != 'PUBLISHED'">
-                <td>
-                  <a data-ui-sref="admin.facilityRevisionHistory.show({facilityRevisionHistoryId: f.id})" target="_blank">{{f.facilityInJson.name}}</a>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <div class="panel-body" style="min-height: 119px;">
+          <p class="label label-default">Published</p>
+          
+          <div data-af-loading="!facilityStats.published.$resolved">
+            <p class="h1">{{facilityStats.published.total}}</p>
+          </div>
       </div>
     </div>
-    
-    
+  </div>
+  
+  <div class="col-md-4">
     <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Request for Update</h3>
-      </div>
-      
-      <div class="panel-body">
-        Send an email to the primary contact..
+      <div class="panel-body" style="min-height: 119px;">
+        <p class="label label-warning">Pending Approval</p>
+        
+        <div data-af-loading="!facilityStats.pendingApproval.$resolved">
+          <p class="h1">{{facilityStats.pendingApproval.total}}</p>
+        </div>
       </div>
     </div>
   </div>

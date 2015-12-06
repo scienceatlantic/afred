@@ -7,11 +7,42 @@
     </div>
     
     <div data-ng-show="view.show == 'preview'">
-      <div data-ng-include="'views/includes/facility-section.html'"></div>
-      <div data-ng-include="'views/includes/contacts-section.html'"></div>
-      <div data-ng-include="'views/includes/equipment-section.html'"></div>
-      <button class="btn btn-default" data-ng-click="submit()">Submit</button>
-      <button class="btn btn-default" data-ng-click="view.show = 'form'">Go Back</button>
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <p class="label label-default">Facility/Research Lab</p>
+          
+          <div data-ng-include="'views/includes/facility/facility.html'"></div>
+        </div>
+      </div>
+      
+      <div class="panel panel-default" data-ng-show="facility.institution.ilo.firstName">
+        <div class="panel-body">
+          <p class="label label-default">Industry Liaison Office Contact</p>
+          
+          <div data-ng-include="'views/includes/facility/ilo.html'"></div>
+        </div>
+      </div>
+      
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <p class="label label-default">Contact(s)</p>
+          
+          <div data-ng-include="'views/includes/facility/contacts.html'"></div>
+        </div>
+      </div>
+          
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <p class="label label-default">Equipment</p>
+          
+          <div data-ng-include="'views/includes/facility/equipment.html'"></div>
+        </div>
+      </div>
+      
+      <p>
+        <button class="btn btn-default" data-ng-click="submit()">Submit</button>
+        <button class="btn btn-default" data-ng-click="view.show = 'form'">Go Back</button>
+      </p>
     </div>
     
     <div data-ng-show="view.show == 'successMessage'">
@@ -20,7 +51,6 @@
     
     <div data-ng-show="view.show =='failureMessage'">
       <p>Oh no... something went wrong!</p>
-      {{r}}
     </div>
     
   </div><!-- End of .col-x-x -->

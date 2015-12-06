@@ -1,0 +1,74 @@
+<h2>Admin / Facilities</h2>
+
+<div> 
+  <div style="min-height: 400px;">
+    <div class="form-group">
+      <label for="state">State:</label>
+      <select class="form-control" name="state" id="state" data-ng-model="view.state" data-ng-change="getFacilities(1)">
+        <option value="PUBLISHED">Published</option>
+        <option value="PENDING_APPROVAL">Pending Approval</option>
+        <option value="EDIT_DRAFT">Edit Draft</option>
+        <option value="PENDING_EDIT_APPROVAL">Pending Edit Approval</option>
+        <option value="REJECTED">Rejected</option>
+        <option value="REJECTED_EDIT">Rejected Edit</option>
+      </select>
+    </div>
+    
+    <div class="form-group" data-ng-show="view.state == 'PUBLISHED'">
+      <label for="state">Visibility:</label>
+      <select class="form-control" name="visibility" id="visibility" data-ng-model="view.isPublic" data-ng-change="getFacilities(1)">
+        <option value=1>Public</option>
+        <option value=0>Private</option>
+      </select>
+    </div>
+    
+    <div data-ng-show="view.state">      
+      <div data-af-loading="!facilities.$resolved">
+        <div data-ng-hide="facilities.data.length">
+          <p>No results</p>
+        </div>
+        
+        <div data-ng-show="facilities.data.length">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Facility</th>
+              </tr>
+            </thead>
+            
+            <tbody data-ng-show="view.state == 'PUBLISHED'">
+              <tr data-dir-paginate="f in facilities.data | itemsPerPage: facilities.per_page" data-total-items="facilities.total" data-pagination-id="facilities">
+                <td>
+                  <a data-ui-sref="facilities.show({facilityId: f.id})" target="_blank">{{f.name}}</a>
+                </td>
+              </tr>
+            </tbody>
+            
+            <tbody data-ng-show="view.state != 'PUBLISHED'">
+              <tr data-dir-paginate="f in facilities.data | itemsPerPage: facilities.per_page" data-total-items="facilities.total" data-pagination-id="facilityRevisionHistories">
+                <td>
+                  <a data-ui-sref="admin.facilityRevisionHistory.show({facilityRevisionHistoryId: f.id})" target="_blank">{{f.data.facility.name}}</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          
+          <div dir-pagination-controls data-on-page-change="getFacilities(newPageNumber)" data-pagination-id="facilities" data-ng-show="view.state == 'PUBLISHED'"></div>
+          <div dir-pagination-controls data-on-page-change="getFacilities(newPageNumber)" data-pagination-id="facilityRevisionHistories" data-ng-show="view.state != 'PUBLISHED'"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Request for Update</h3>
+  </div>
+  
+  <div class="panel-body">
+    Send an email to the primary contact..
+  </div>
+</div>
+-->

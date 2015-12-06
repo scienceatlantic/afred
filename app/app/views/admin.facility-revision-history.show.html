@@ -1,15 +1,33 @@
-<div class="row">
-  <div class="col-lg-9">
-    <div data-af-loading="!facilityRevisionHistory.$resolved">
-      
-      <div data-ng-include="'views/includes/facility-section.html'"></div>
-      <div data-ng-include="'views/includes/contacts-section.html'"></div>
-      <div data-ng-include="'views/includes/equipment-section.html'"></div>
-      
-      <p>
-        <button type="button" class="btn btn-default" data-ng-click="approve()" data-ng-show="facilityRevisionHistory.state == 'PENDING_APPROVAL'">Approve</button>
-        <button type="button" class="btn btn-default" data-ng-click="reject()" data-ng-show="facilityRevisionHistory.state == 'PENDING_APPROVAL'">Reject</button>
-      </p>
-    </div>
-  </div><!-- End of .col-x-x -->
-</div><!-- End of .row -->
+<div data-af-loading="!facilityRevisionHistory.$resolved || (!facility.institution.$resolved && !facility.institution.name) || !facility.province.$resolved">
+  
+  <div class="well" data-ng-show="facilityRevisionHistory.state == 'PENDING_APPROVAL'">
+    <p>You are currently viewing a facility that is pending approval.</p>
+  </div>
+  
+  <div class="well" data-ng-show="facilityRevisionHistory.state == 'PUBLISHED'">
+    <p>You are currently viewing a published facility.</p>
+  </div>
+  
+  <p class="label label-default">Facility</p>
+  <div data-ng-include="'views/includes/facility/facility.html'"></div>
+  <hr>
+  
+  <div data-ng-show="facility.institution.ilo.firstName">
+    <p class="label label-default">ILO</p>
+    <div data-ng-include="'views/includes/facility/ilo.html'"></div>
+    <hr>
+  </div>
+  
+  <p class="label label-default">Contacts</p>
+  <div data-ng-include="'views/includes/facility/contacts.html'"></div>
+  <hr>
+  
+  <p class="label label-default">Equipment</p>
+  <div data-ng-include="'views/includes/facility/equipment.html'"></div>
+  <br>
+  
+  <p>
+    <button type="button" class="btn btn-default" data-ng-click="approve()" data-ng-show="facilityRevisionHistory.state == 'PENDING_APPROVAL'">Approve</button>
+    <button type="button" class="btn btn-default" data-ng-click="reject()" data-ng-show="facilityRevisionHistory.state == 'PENDING_APPROVAL'">Reject</button>
+  </p>
+</div>

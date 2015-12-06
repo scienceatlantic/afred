@@ -15,12 +15,12 @@
           </div>
           
           <div data-af-field data-af-field-label="Institution*">
-            <select class="form-control" id="facility-institution" data-ng-model="form.dropdowns.institution.id" data-ng-options="i.id as i.name for i in form.institutions" data-ng-change="form.attachInstitution()" required>
+            <select class="form-control" id="facility-institution" data-ng-model="facility.institutionId" data-ng-options="i.id as i.name for i in form.institutions" data-ng-change="form.attachInstitutionForPreview()" required>
             </select>
           </div>
           
-          <div data-af-field data-af-field-label="Institution name*" data-ng-if="form.dropdowns.institution.id == -1">
-            <input type="text" class="form-control" name="facilityInstitutionName" id="facility-institution-name" data-ng-model="form.dropdowns.institution.name" data-ng-change="form.attachInstitution()" required>
+          <div data-af-field data-af-field-label="Institution name*" data-ng-if="facility.institutionId == -1">
+            <input type="text" class="form-control" name="facilityInstitutionName" id="facility-institution-name" data-ng-model="facility.institution.name" required>
           </div>
         </div><!-- End of .col-x-x -->
 
@@ -30,7 +30,7 @@
           </div>
           
           <div data-af-field data-af-field-label="Province*">          
-            <select class="form-control" name="facilityProvince" id="facility-province" data-ng-model="form.dropdowns.province.id" data-ng-options="p.id as p.name for p in form.provinces" data-ng-change="form.attachProvince()" required>
+            <select class="form-control" name="facilityProvince" id="facility-province" data-ng-model="facility.provinceId" data-ng-options="p.id as p.name for p in form.provinces" data-ng-change="form.attachProvinceForPreview()" required>
             </select>
           </div>
           
@@ -50,11 +50,27 @@
     -- ====================================================== !-->
   
   <!-- ======================================================
+    -- [START] ILO Contact information
+    -- ====================================================== !-->
+  <div class="panel panel-default" data-ng-show="facility.institutionId != -1 && facility.institution.ilo.firstName">
+    <div class="panel-heading">
+      <h4 class="panel-title">Industry Liaison Contact Information for {{facility.institution.name}}</h4>
+    </div>
+    
+    <div class="panel-body">
+      <div data-ng-include="'views/includes/facility/ilo.html'"></div>
+    </div><!-- End of .panel-body -->
+  </div><!-- End of .panel -->     
+  <!-- ======================================================
+    -- [END] ILO Contact information
+    -- ====================================================== !-->
+  
+  <!-- ======================================================
     -- [START] Contact information
     -- ====================================================== !-->
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h4 class="panel-title">Contact Information</h4>
+      <span class="h4 panel-title">Contact Information</span>
       <span data-ng-show="form.contactIndex === 0" class="label label-info">Primary point of contact</span>         
     </div>
     
@@ -139,24 +155,6 @@
     -- ====================================================== !-->
   
   <!-- ======================================================
-    -- [START] ILO Contact information
-    -- ====================================================== !-->
-  <div class="panel panel-default" data-ng-if="facility.institution.id != -1 && facilityForm.facilityInstitution.$dirty">
-    <div class="panel-heading">
-      <h4 class="panel-title">Industry Liaison Contact Information</h4>
-    </div>
-    
-    <div class="panel-body">
-      <span class="label label-primary">Institution selected: {{facility.institution.name}}</span>
-      
-      
-    </div><!-- End of .panel-body -->
-  </div><!-- End of .panel -->     
-  <!-- ======================================================
-    -- [END] ILO Contact information
-    -- ====================================================== !-->
-  
-  <!-- ======================================================
     -- [START] Equipment information
     -- ====================================================== !-->
   <div class="panel panel-default">
@@ -216,7 +214,7 @@
                   <div data-af-field data-af-field-label="Excess capacity*">
                     <div class="radio">
                       <label>
-                        <input type="radio" name="equipmentExcessCapacity" id="equipment-excess-capacity-yes{{$index}}" data-ng-model="e.hasExcessCapacity" data-ng-value="true" selected required> Yes 
+                        <input type="radio" name="equipmentExcessCapacity" id="equipment-excess-capacity-yes{{$index}}" data-ng-model="e.hasExcessCapacity" data-ng-value="true" required> Yes 
                       </label>
                       <label>
                         <input type="radio" name="equipmentExcessCapacity" id="equipment-excess-capacity-no{{$index}}" data-ng-model="e.hasExcessCapacity" data-ng-value="false" required> No
