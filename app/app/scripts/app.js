@@ -15,7 +15,8 @@ angular.module('afredApp', [
   'ngSanitize',
   'ngTouch',
   'ui.router',
-  'ui.bootstrap'
+  'ui.bootstrap',
+  'angularUtils.directives.dirPagination'
 ]);
 
 angular.module('afredApp').config(['$httpProvider', function($httpProvider) {
