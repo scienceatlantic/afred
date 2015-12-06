@@ -28,9 +28,9 @@ angular.module('afredApp').controller('FacilitiesFormCreateController',
           // Reset form
           //$scope.form.initialiseForm();
           //$scope.form.save();
-          //$scope.view.show = 'successMessage';
+          $scope.view.show = 'successMessage';
         }, function() {
-          //$scope.view.show = 'failureMessage';
+          $scope.view.show = 'failureMessage';
         }
       );
     };
@@ -54,14 +54,15 @@ angular.module('afredApp').controller('FacilitiesFormCreateController',
       form: true
     };
     
+    // Initialise the form, retrieve any saved data, and start autosaving.
+    $scope.form.initialise();
+    $scope.form.getSave(); // BUG! Radio buttons are not highlighted
+                           // after data is retrieved.
+    $scope.form.startAutosave();
+    
     // Insert an artificial delay before showing the form.
     $timeout(function() {
       $scope.loading.form = false;
-    }, 1000);
-    
-    // Initialise the form, retrieve any saved data, and start autosaving.
-    $scope.form.initialise();
-    $scope.form.getSave();
-    $scope.form.startAutosave();
+    }, 1500);
   }
 ]);

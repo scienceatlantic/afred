@@ -4,31 +4,32 @@ angular.module('afredApp').controller('AdminDashboardController',
   ['$scope',
    'facilityRevisionHistoryResource',
    'facilityResource',
-
   function($scope,
            facilityRevisionHistoryResource,
            facilityResource) {
     /* ---------------------------------------------------------------------
      * Functions.
-     * --------------------------------------------------------------------- */ 
+     * --------------------------------------------------------------------- */
     
-    $scope.getFacilities = function() {
-      switch ($scope.view.state) {
-        case 'PENDING_APPROVAL':
-        case 'PENDING_EDIT_APPROVAL':
-          $scope.facilities = facilityRevisionHistoryResource.query({state: $scope.view.state});
-          break;
-        
-        case 'PUBLISHED':
-          $scope.facilities = facilityResource.query({isPublic: $scope.view.isPublic});
-          break;
+    $scope.getFacilityTotals = function(state) {
+      if (state == 'PUBLISHED') {
+        return facilityResource.query({
+            itemsPerPage: 1,
+            page: 1
+        });        
+      } else {
+        return facilityRevisionHistoryResource.query({
+            itemsPerPage: 1,
+            page: 1,
+            state: state
+        });         
       }
     };
     
-    
-    $scope.view = {
-      state: null,
-      isPublic: 1
+    $scope.facilityStats = {
+      published: $scope.getFacilityTotals('PUBLISHED'),
+      pendingApproval: $scope.getFacilityTotals('PENDING_APPROVAL'),
+      rejected: $scope.getFacilityTotals('REJECTED'),
     };
   }
 ]);

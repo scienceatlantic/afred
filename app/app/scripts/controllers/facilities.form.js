@@ -56,28 +56,21 @@ angular.module('afredApp').controller('FacilitiesFormController',
       isAutosaving: 0,
       
       /**
+       * If the '$scope.form.getSave()' method fails, this property will be set
+       * to false. This prevents '$scope.form.autosave()' from executing
+       * even though local storage is not supported.
+       */
+      isStorageSupported: true,
+      
+      /**
        * Holds the names that will used for storing and retrieving
        * form data via the '$scope.form.save()', and '$scope.form.getSave()'
        * functions.
        *
        * @type {object}
-       *
        */
       storage: {
-        facility: $scope._state.current.name + '-facility',
-        dropdowns: $scope._state.current.name + '-dropdowns'
-      },
-      
-      /**
-       * Intermediary variable to keep track of the institution and province
-       * that was selected. The 'institution.name' holds the name of a new
-       * institution if 'Other' was selected in the dropdown.
-       *
-       * @type {object}
-       */
-      dropdowns: {
-        institution: { id: null, name: null },
-        province: { id: null }
+        facility: $scope._state.current.name + '-facility'
       },
       
       /**
@@ -87,9 +80,9 @@ angular.module('afredApp').controller('FacilitiesFormController',
         // Holds all facility data that will be passed to the API.
         $scope.facility = {
           name: null,
-          institution: { id: null, name: null }, // This is for the preview.
+          institution: { name: null }, // This is for the preview.
           institutionId: null,
-          province: { id: null, name: null }, // This is for the preview too.
+          province: { name: null }, // This is for the preview too.
           provinceId: null,
           description: null,
           city: null,
@@ -185,7 +178,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
           // removed or if '$scope.form.equipmentIndex' is more than the total
           // number of equipment, decrease '$scope.form.equipmentIndex'.    
           if ($scope.form.equipmentIndex === index ||
-              $scope.form.quipmentIndex >
+              $scope.form.equipmentIndex >
               $scope.facility.equipment.length - 1) {
             $scope.form.equipmentIndex--;
           }      
@@ -193,19 +186,26 @@ angular.module('afredApp').controller('FacilitiesFormController',
       },
       
       /**
-       * Gets a list of all institutions and attaches it to
-       * '$scope.form.institutions'. 'N/A' is moved to the second last
+       * Gets a list of all institutions (and corresponding ILOs) and attaches
+       * it to '$scope.form.institutions'. 'N/A' is moved to the second last
        * position. 'Other' is added as the last option.
+       *
+       * Note: this assumes that 'N/A' is the first institution listed in the
+       * database.
        */
       getInstitutions: function() {
-        $scope.form.institutions = institutionResource.query(function() {
-          // 'N/A' should be the first entry in the database. We want it
-          // to appear just before 'Other'.          
-          $scope.form.institutions.push(
-            ($scope.form.institutions.splice(0, 1))[0]);
-          
-          // Finally, add an option for 'Other'.
-          $scope.form.institutions.push({id: -1, name: 'Other'});
+        $scope.form.institutions = institutionResource.queryNoPaginate(
+          {
+            expand: 'ilo'
+          },
+          function() {
+            // 'N/A' should be the first entry in the database. We want it
+            // to appear just before 'Other'.          
+            $scope.form.institutions.push(
+              ($scope.form.institutions.splice(0, 1))[0]);
+            
+            // Finally, add an option for 'Other'.
+            $scope.form.institutions.push({id: -1, name: 'Other'});
         });
       },
       
@@ -214,18 +214,16 @@ angular.module('afredApp').controller('FacilitiesFormController',
        * '$scope.form.provinces'.
        */
       getProvinces: function() {
-        $scope.form.provinces = provinceResource.query();
+        $scope.form.provinces = provinceResource.queryNoPaginate();
       },
       
       /**
        * Saves the form to localStorage.
        */
-      save: function() {        
+      save: function() {
         try {
           localStorage.setItem($scope.form.storage.facility,
             JSON.stringify($scope.facility));
-          localStorage.setItem($scope.form.storage.dropdowns,
-            JSON.stringify($scope.form.dropdowns));
         } catch(e) {
           // Do nothing if local storage is not supported.
         }
@@ -233,26 +231,28 @@ angular.module('afredApp').controller('FacilitiesFormController',
       
       /**
        * Retrieves any saved data from local storage.
+       *
+       * Bugs: Radio buttons are not highlighted after data is retrieved.
        */
       getSave: function() {        
         try {
           if (localStorage.getItem($scope.form.storage.facility)) {
             $scope.facility =
               JSON.parse(localStorage.getItem($scope.form.storage.facility));
+              
+              // Institution and province IDs will not change but in the
+              // unlikely event that their names have changed since the
+              // last time the end user was filling out the form, re-retrieve
+              // it. For institutions, if the user selected 'Other', don't
+              // retrieve the name because that will reset it to null.
+              if ($scope.facility.institutionId != -1) {
+                $scope.form.attachInstitutionForPreview();
+              }
+              $scope.form.attachProvinceForPreview();
           }
         } catch(e) {
-          // Do nothing if local storage is not supported.
-        }
-        
-        try {
-          if (localStorage.getItem($scope.form.storage.dropdowns)) {
-            $scope.form.dropdowns =
-              JSON.parse(localStorage.getItem($scope.form.storage.dropdowns));
-              $scope.form.attachInstitution();
-              $scope.form.attachProvince();
-          }        
-        } catch(e) {
-          // Do nothing if local storage is not supported.
+          // Local storage is not supported.
+          $scope.form.isStorageSupported = false;
         }
       },
       
@@ -263,7 +263,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
        *     interval. If not provided, a default of 750 milliseconds is used.
        */
       startAutosave: function(interval) {
-        if (!$scope.form.isAutosaving) {
+        if (!$scope.form.isAutosaving || $scope.form.isStorageSupported) {
           try {
             $scope.form.isAutosaving = $interval(function() {
               $scope.form.save();
@@ -275,55 +275,47 @@ angular.module('afredApp').controller('FacilitiesFormController',
       },
 
       /**
-       * Since we're using an intermediary variable to keep track of the
-       * dropdowns, every time the value is changed, we need to attach
-       * to the '$scope.facility' variable.
+       * Attaches the institution's name to '$scope.facility.institution'
+       * if an institution other than 'Other' was selected. This is for
+       * the preview.
        */
-      attachInstitution: function() {        
-        // If it's an existing institution.
-        if ($scope.form.dropdowns.institution.id != -1) {
-          $scope.facility.institution.id
-            = $scope.form.dropdowns.institution.id;
-          $scope.facility.institutionId =
-            $scope.form.dropdowns.institution.id;
-          
-          // Use the selected 'option's index to grab the institution's name.
+      attachInstitutionForPreview: function() {        
+        if ($scope.facility.institutionId != -1) {
           var e = document.getElementById('facility-institution');
-          $scope.facility.institution.name =
-            $scope.form.institutions[e.selectedIndex].name;
-        // If it's a new institution.
+          $scope.facility.institution =
+            $scope.form.institutions[e.selectedIndex];
         } else {
-          $scope.facility.institution.id = null;
-          $scope.facility.institutionId = null;
-          $scope.facility.institution.name =
-            $scope.form.dropdowns.institution.name;
+          $scope.facility.institution = { name: null };
         }
       },
       
       /**
-       * Same logic as '$scope.form.attachInstitutions()'
+       * Attaches the name of the province to '$scope.facility.province'.
+       * This is for the preview.
        */
-      attachProvince: function() {
-        $scope.facility.province.id = $scope.form.dropdowns.province.id;
-        $scope.facility.provinceId = $scope.form.dropdowns.province.id;
-        
-        // Use the selected 'option's index to grab the province's name.
+      attachProvinceForPreview: function() {
         var e = document.getElementById('facility-province');
-        $scope.facility.province.name =
-          $scope.form.provinces[e.selectedIndex].name;
+        $scope.facility.province = $scope.form.provinces[e.selectedIndex];
       },
       
       /**
-       * The API expects a single primary contact and (optionally) regular
-       * contacts. In the form, the first contact is the primary contact.
-       * This functions copies and returns '$scope.facility' to match
-       * what the API expects.
+       * Formats the data to match what the API requires. The API expects a
+       * single primary contact and (optionally) regular contacts. In the form,
+       * the first contact is the primary contact, so splice it out and attach
+       * it to a property called 'primaryContact'. The 'institutionId' field
+       * must either be empty or contain a valid institution id, so if it's
+       * set to '-1' (ie. 'Other'), change it to null.
        *
        * @return {object} Facility object.
        */
       formatForApi: function() {
         var facility = angular.copy($scope.facility);
+        
         facility.primaryContact = (facility.contacts.splice(0, 1))[0];
+        if (facility.institutionId == -1) {
+          facility.institutionId = null;
+        }
+        
         return facility;
       }
     };
