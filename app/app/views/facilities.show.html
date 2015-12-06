@@ -7,9 +7,10 @@
         </div>
       </div>
       
-      <div data-ng-include="'views/includes/facility-section.html'"></div>
-      <div data-ng-include="'views/includes/contacts-section.html'"></div>
-      <div data-ng-include="'views/includes/equipment-section.html'"></div>
+      <div data-ng-include="'views/includes/facility.html'"></div>
+      <div data-ng-include="'views/includes/ilo.html'"></div>
+      <div data-ng-include="'views/includes/contacts.html'"></div>
+      <div data-ng-include="'views/includes/equipment.html'"></div>
       
       <p>
         <button type="button" class="btn btn-warning" data-ng-click="admin.edit()" data-ng-show="_auth.user.isAdmin && state.facilities">Edit</button>
