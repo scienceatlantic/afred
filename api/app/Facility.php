@@ -11,7 +11,7 @@ class Facility extends Model
      *
      * @var array
      */
-    protected $dates = ['datePublished',
+    protected $dates = ['dateSubmitted',
                         'dateUpdated',
                         'created_at',
                         'updated_at'];
@@ -29,7 +29,8 @@ class Facility extends Model
         'website',
         'description',
         'isPublic',
-        'dateAdded'
+        'dateSubmitted',
+        'dateUpdated'
     ];
     
     public function facilityRevisionHistory()

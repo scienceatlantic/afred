@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Institution;
 use Carbon\Carbon;
 
 class RealInstitutionsTableSeeder extends Seeder
@@ -15,7 +16,7 @@ class RealInstitutionsTableSeeder extends Seeder
         // Delete existing entries.
         DB::table('institutions')->delete();
         
-        DB::table('institutions')->insert([
+        $institutions = [
             [
                 'name'      => 'N/A',
                 'isHidden'  => false,
@@ -101,6 +102,10 @@ class RealInstitutionsTableSeeder extends Seeder
                 'isHidden'  => false,
                 'dateAdded' => Carbon::now()
             ],
-        ]);
+        ];
+        
+        foreach($institutions as $institution) {
+            Institution::create($institution);
+        }
     }
 }

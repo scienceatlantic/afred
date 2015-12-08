@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\SystemUser;
 
 class DummySystemUsersTableSeeder extends Seeder
 {
@@ -14,11 +15,17 @@ class DummySystemUsersTableSeeder extends Seeder
         // Delete existing entries.
         DB::table('system_users')->delete();
         
-        DB::table('system_users')->insert([
-            'firstName' => 'Prasad',
-            'lastName'  => 'Rajandran',
-            'username'  => 'prasad@scienceatlantic.ca',
-            'password'  => Hash::make('password')
-        ]);
+        $systemUsers = [
+            [
+                'firstName' => 'Prasad',
+                'lastName'  => 'Rajandran',
+                'username'  => 'prasad@scienceatlantic.ca',
+                'password'  => Hash::make('password')
+            ]
+        ];
+        
+        foreach($systemUsers as $systemUser) {
+            SystemUser::create($systemUser);
+        }
     }
 }

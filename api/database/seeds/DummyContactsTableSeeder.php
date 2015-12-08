@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Contact;
 
 class DummyContactsTableSeeder extends Seeder
 {
@@ -15,7 +16,7 @@ class DummyContactsTableSeeder extends Seeder
         // point.
         $startingFacilityId = DB::table('facilities')->select('id')->first();
         
-        DB::table('contacts')->insert([
+        $contacts = [
             [
                 'facilityId' => $startingFacilityId->id,
                 'firstName'  => 'John',
@@ -26,6 +27,10 @@ class DummyContactsTableSeeder extends Seeder
                 'position'   => 'Lord Commander',
                 'website'    => 'http://example.com'
             ],
-        ]);
+        ];
+        
+        foreach($contacts as $contact) {
+            Contact::create($contact);
+        }
     }
 }

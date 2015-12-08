@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Institution;
+use App\Ilo;
 use Carbon\Carbon;
 
 class RealIlosTableSeeder extends Seeder
@@ -151,14 +153,15 @@ class RealIlosTableSeeder extends Seeder
             // field.
             if ($ilo['firstName']) {
                 // Get the institution's primary key.
-                $institution = DB::table('institutions')->
-                    select('id')->
-                    where('name', $institutionName)->first();
+                $institution = Institution
+                               ::select('id')
+                               ->where('name', $institutionName)
+                               ->first();
                 
                 // Insert the ILO's data only if the institution was found.
                 if ($institution && property_exists($institution, 'id')) {
                     $ilo['institutionId'] = $institution->id;
-                    DB::table('ilos')->insert($ilo);  
+                    Ilo::create($ilo);  
                 }
             }
         }

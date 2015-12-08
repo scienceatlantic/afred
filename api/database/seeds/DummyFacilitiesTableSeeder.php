@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Facility;
 use Carbon\Carbon;
 
 class DummyFacilitiesTableSeeder extends Seeder
@@ -21,7 +22,7 @@ class DummyFacilitiesTableSeeder extends Seeder
                                 ->select('id')
                                 ->first();
         
-        DB::table('facilities')->insert([
+        $facilities = [
             [
                 'institutionId' => $startingInstitutionId->id,
                 'provinceId'    => $startingProvinceId->id,
@@ -31,7 +32,7 @@ class DummyFacilitiesTableSeeder extends Seeder
                 'description'   => 'This facility does everything humanly'
                                  . 'possible',
                 'isPublic'      => true,
-                'datePublished' => Carbon::now(),
+                'dateSubmitted' => Carbon::now(),
                 'dateUpdated'   => Carbon::now()
             ],
             [
@@ -42,9 +43,13 @@ class DummyFacilitiesTableSeeder extends Seeder
                 'website'       => 'http://example.com',
                 'description'   => 'We make a lot of tomato juice',
                 'isPublic'      => true,
-                'datePublished' => Carbon::now(),
+                'dateSubmitted' => Carbon::now(),
                 'dateUpdated'   => Carbon::now()
             ],
-        ]);
+        ];
+        
+        foreach($facilities as $facility) {
+            Facility::create($facility);
+        }
     }
 }

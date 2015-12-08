@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Equipment;
 
 class DummyEquipmentTableSeeder extends Seeder
 {
@@ -15,7 +16,7 @@ class DummyEquipmentTableSeeder extends Seeder
         // point.
         $startingFacilityId = DB::table('facilities')->select('id')->first();
         
-        DB::table('equipment')->insert([
+        $equipment = [
             [
                 'facilityId'        => $startingFacilityId->id,
                 'type'              => 'Magnetic resonance imaging (MRI)',
@@ -41,6 +42,10 @@ class DummyEquipmentTableSeeder extends Seeder
                 'isPublic'          => true,
                 'hasExcessCapacity' => true
             ],
-        ]);
+        ];
+        
+        foreach($equipment as $e) {
+            Equipment::create($e);
+        }
     }
 }

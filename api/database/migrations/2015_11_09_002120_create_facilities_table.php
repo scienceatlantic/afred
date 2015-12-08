@@ -33,7 +33,7 @@ class CreateFacilitiesTable extends Migration
             $table->text('description');
             $table->boolean('isPublic')
                 ->default(true);
-            $table->datetime('datePublished');
+            $table->datetime('dateSubmitted');
             $table->datetime('dateUpdated');
             $table->timestamps();
         });

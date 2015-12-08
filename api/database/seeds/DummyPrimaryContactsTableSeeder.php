@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\PrimaryContact;
 
 class DummyPrimaryContactsTableSeeder extends Seeder
 {
@@ -15,7 +16,7 @@ class DummyPrimaryContactsTableSeeder extends Seeder
         // point.
         $startingFacilityId = DB::table('facilities')->select('id')->first();
         
-        DB::table('primary_contacts')->insert([
+        $primaryContacts = [
             [
                 'facilityId' => $startingFacilityId->id,
                 'firstName'  => 'Michael',
@@ -26,6 +27,10 @@ class DummyPrimaryContactsTableSeeder extends Seeder
                 'position'   => 'Doubly Lord Commander',
                 'website'    => 'http://example.com'
             ],
-        ]);
+        ];
+        
+        foreach($primaryContacts as $primaryContact) {
+            PrimaryContact::create($primaryContact);
+        }
     }
 }
