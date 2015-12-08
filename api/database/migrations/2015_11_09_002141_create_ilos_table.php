@@ -30,6 +30,7 @@ class CreateIlosTable extends Migration
             $table->string('position', 200);
             $table->string('website', 2083)
                 ->nullable();
+            $table->datetime('dateAdded');
             $table->timestamps();
         });
     }

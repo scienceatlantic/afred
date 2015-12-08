@@ -15,7 +15,8 @@ class CreateInstitutionsTable extends Migration
         Schema::create('institutions', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 150);
-            $table->boolean('isHidden')->default(false);
+            $table->boolean('isHidden')
+                ->default(false);
             $table->datetime('dateAdded');
             $table->timestamps();
         });

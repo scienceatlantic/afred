@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Carbon\Carbon;
 
 class DummyFacilitiesTableSeeder extends Seeder
 {
@@ -29,7 +30,9 @@ class DummyFacilitiesTableSeeder extends Seeder
                 'website'       => 'http://example.com',
                 'description'   => 'This facility does everything humanly'
                                  . 'possible',
-                'isPublic'      => true
+                'isPublic'      => true,
+                'datePublished' => Carbon::now(),
+                'dateUpdated'   => Carbon::now()
             ],
             [
                 'institutionId' => $startingInstitutionId->id,
@@ -38,7 +41,9 @@ class DummyFacilitiesTableSeeder extends Seeder
                 'city'          => 'Halifax',
                 'website'       => 'http://example.com',
                 'description'   => 'We make a lot of tomato juice',
-                'isPublic'      => true
+                'isPublic'      => true,
+                'datePublished' => Carbon::now(),
+                'dateUpdated'   => Carbon::now()
             ],
         ]);
     }
