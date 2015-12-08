@@ -16,6 +16,7 @@ class CreateInstitutionsTable extends Migration
             $table->increments('id');
             $table->string('name', 150);
             $table->boolean('isHidden')->default(false);
+            $table->datetime('dateAdded');
             $table->timestamps();
         });
     }

@@ -17,13 +17,28 @@ class DummyEquipmentTableSeeder extends Seeder
         
         DB::table('equipment')->insert([
             [
-                'facilityId' => $startingFacilityId->id,
-                'type' => 'Fruit',
-                'manufacturer' => 'Mother nature',
-                'model' => 'Tomatoes',
-                'purpose' => 'Human consumption',
-                'specifications' => '18 calories per 100 grams.',
-                'isPublic' => true,
+                'facilityId'        => $startingFacilityId->id,
+                'type'              => 'Magnetic resonance imaging (MRI)',
+                'manufacturer'      => 'Hitachi Medical',
+                'model'             => 'Echelon Oval 1.5T Ultra-Wide MRI '
+                                     . 'system',
+                'purpose'           => 'Medical imaging technique used in '
+                                     . 'radiology to image the anatomy and the '
+                                     . 'physiological processes of the body in '
+                                     . 'both health and disease.',
+                'specifications'    => '<ul>'
+                                     . '<li>1.5 Tesla high-field MRI with 74cm '
+                                     . 'oval bore</li>'
+                                     . '<li>Short-bore, super-conductive '
+                                     . 'magnet</li>'
+                                     . '<li>High homogeneity</li>'
+                                     . '<li>Zero Cryogen Boil-Off Technology'
+                                     . '</li>'
+                                     . '<li>34mT/m 150T/m/s gradients</li>'
+                                     . '<li>Optical RF system technology</li>'
+                                     . '<li>WIT mobile table</li>'
+                                     . '</ul>',
+                'isPublic'          => true,
                 'hasExcessCapacity' => true
             ],
         ]);

@@ -15,17 +15,21 @@ class CreateFacilityRevisionHistoryTable extends Migration
         Schema::create('facility_revision_history', function (Blueprint
             $table) {
                 $table->increments('id');
-                $table->integer('facilityId')->unsigned()->nullable();
-                $table->foreign('facilityId')->references('id')->
-                    on('facilities')->onDelete('no action');
+                $table->integer('facilityId')
+                    ->unsigned()
+                    ->nullable();
+                $table->foreign('facilityId')
+                    ->references('id')
+                    ->on('facilities')
+                    ->onDelete('no action');
                 $table->enum('state', ['PENDING_APPROVAL',
                                        'PUBLISHED',
                                        'REJECTED',
                                        'EDIT_DRAFT',
                                        'PENDING_EDIT_APPROVAL'.
                                        'REJECTED_EDIT']);
-                $table->string('accessKey', 60)->nullable();
                 $table->longText('data'); // Data stored in JSON
+                $table->datetime('dateSubmitted');
                 $table->timestamps();
         });
     }

@@ -15,10 +15,10 @@ class DummySystemUsersTableSeeder extends Seeder
         DB::table('system_users')->delete();
         
         DB::table('system_users')->insert([
-            'firstName' => 'John',
-            'lastName' => 'Doe',
-            'username' => 'john.doe@gmail.com',
-            'password' => Hash::make('password')
+            'firstName' => 'Prasad',
+            'lastName'  => 'Rajandran',
+            'username'  => 'prasad@scienceatlantic.ca',
+            'password'  => Hash::make('password')
         ]);
     }
 }

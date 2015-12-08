@@ -7,12 +7,22 @@ use Illuminate\Database\Eloquent\Model;
 class Institution extends Model
 {
     /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['dateAdded',
+                        'created_at',
+                        'updated_at'];
+    
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name'
+        'name',
+        'dateAdded'
     ];
     
     public function ilo()

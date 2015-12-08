@@ -14,15 +14,22 @@ class CreateIlosTable extends Migration
     {
         Schema::create('ilos', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('institutionId')->unsigned();
-            $table->foreign('institutionId')->references('id')->
-                on('institutions')->onDelete('cascade');
+            $table->integer('institutionId')
+                ->unsigned()
+                ->unique();
+            $table->foreign('institutionId')
+                ->references('id')
+                ->on('institutions')
+                ->onDelete('cascade');
             $table->string('firstName', 50);
             $table->string('lastName', 50);
             $table->string('email', 254);
             $table->char('telephone', 10);
-            $table->string('extension', 10)->nullable();
+            $table->string('extension', 10)
+                ->nullable();
             $table->string('position', 200);
+            $table->string('website', 2083)
+                ->nullable();
             $table->timestamps();
         });
     }

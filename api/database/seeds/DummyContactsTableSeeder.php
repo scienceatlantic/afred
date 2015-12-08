@@ -18,13 +18,13 @@ class DummyContactsTableSeeder extends Seeder
         DB::table('contacts')->insert([
             [
                 'facilityId' => $startingFacilityId->id,
-                'firstName' => 'John',
-                'lastName' => 'Doe',
-                'email' => 'johndoe@gmail.com',
-                'telephone' => '9999999999',
-                'extension' => '543',
-                'position' => 'Lord Commander',
-                'website' => 'http://example.com'
+                'firstName'  => 'John',
+                'lastName'   => 'Doe',
+                'email'      => 'johndoe@gmail.com',
+                'telephone'  => '9999999999',
+                'extension'  => '543',
+                'position'   => 'Lord Commander',
+                'website'    => 'http://example.com'
             ],
         ]);
     }

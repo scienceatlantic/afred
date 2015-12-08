@@ -14,8 +14,11 @@ class CreateProvincesTable extends Migration
     {
         Schema::create('provinces', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 50)->unique();
-            $table->boolean('isHidden')->default(false);
+            $table->string('name', 50)
+                ->unique();
+            $table->boolean('isHidden')
+                ->default(false);
+            $table->datetime('dateAdded');
             $table->timestamps();
         });
     }

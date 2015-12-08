@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Carbon\Carbon;
 
 class RealIlosTableSeeder extends Seeder
 {
@@ -16,116 +17,132 @@ class RealIlosTableSeeder extends Seeder
         
         $ilos = [
             'Acadia University' => [
-                'firstName'    => 'Peggy',
-                'lastName'     => 'Crawford',
-                'email'         => 'peggy.crawford',
-                'telephone'     => '9025851762',
-                'position'      => 'Research and Innovation Coordinator'
+                'firstName' => 'Peggy',
+                'lastName'  => 'Crawford',
+                'email' => 'peggy.crawford@acadiau.ca',
+                'telephone' => '9025851762',
+                'position'  => 'Research and Innovation Coordinator',
+                'dateAdded' => Carbon::now()
             ],
             'Cape Breton University' => [
-                'firstName'    => 'Sarah',
-                'lastName'     => 'Conrod',
-                'email'         => 'sarah_conrod@cbu.ca',
-                'telephone'     => '9025631842',
-                'position'      => 'Industry Liaison Officer'
+                'firstName' => 'Sarah',
+                'lastName'  => 'Conrod',
+                'email'     => 'sarah_conrod@cbu.ca',
+                'telephone' => '9025631842',
+                'position'  => 'Industry Liaison Officer',
+                'dateAdded' => Carbon::now()
             ],
             'Crandall Universtiy' => [
-                'firstName'    => '',
-                'lastName'     => '',
-                'email'         => '',
-                'telephone'     => '',
-                'position'      => ''
+                'firstName' => '',
+                'lastName'  => '',
+                'email'     => '',
+                'telephone' => '',
+                'position'  => '',
+                'dateAdded' => Carbon::now()
             ],
             'Dalhousie University' => [
-                'firstName'    => 'Kevin',
-                'lastName'     => 'Dunn',
-                'email'         => 'kevin.dunn@dal.ca',
-                'telephone'     => '9024941648',
-                'position'      => 'Director'
+                'firstName' => 'Kevin',
+                'lastName'  => 'Dunn',
+                'email'     => 'kevin.dunn@dal.ca',
+                'telephone' => '9024941648',
+                'position'  => 'Director',
+                'dateAdded' => Carbon::now()
             ],
             'Dalhouse University, Faculty of Agriculture' => [
-                'firstName'    => '',
-                'lastName'     => '',
-                'email'         => '',
-                'telephone'     => '',
-                'position'      => ''
+                'firstName' => '',
+                'lastName'  => '',
+                'email'     => '',
+                'telephone' => '',
+                'position'  => '',
+                'dateAdded' => Carbon::now()
             ],
             'Memorial University' => [
-                'firstName'    => 'Marc',
-                'lastName'     => 'Kielley',
-                'email'         => 'mkielley@mun.ca',
-                'telephone'     => '7098642095',
-                'position'      => 'Manager of Industry Engagement'
+                'firstName' => 'Marc',
+                'lastName'  => 'Kielley',
+                'email'     => 'mkielley@mun.ca',
+                'telephone' => '7098642095',
+                'position'  => 'Manager of Industry Engagement',
+                'dateAdded' => Carbon::now()
             ],
             'Memorial University, Grenfell Campus' => [
-                'firstName'    => '',
-                'lastName'     => '',
-                'email'         => '',
-                'telephone'     => '',
-                'position'      => ''
+                'firstName' => '',
+                'lastName'  => '',
+                'email'     => '',
+                'telephone' => '',
+                'position'  => '',
+                'dateAdded' => Carbon::now()
             ],
             'Mount Allison University' => [
-                'firstName'    => 'Cassidy',
-                'lastName'     => 'Weisbord',
-                'email'         => 'cweisbord@mta.ca',
-                'telephone'     => '5068663469',
-                'position'      => 'Industry Liaison Officer'
+                'firstName' => 'Cassidy',
+                'lastName'  => 'Weisbord',
+                'email'     => 'cweisbord@mta.ca',
+                'telephone' => '5068663469',
+                'position'  => 'Industry Liaison Officer',
+                'dateAdded' => Carbon::now()
             ],
             'Mount Saint Vincent University' => [
-                'firstName'    => '',
-                'lastName'     => '',
-                'email'         => '',
-                'telephone'     => '',
-                'position'      => ''
+                'firstName' => '',
+                'lastName'  => '',
+                'email'     => '',
+                'telephone' => '',
+                'position'  => '',
+                'dateAdded' => Carbon::now()
             ],
             'Saint Mary\'s University' => [
-                'firstName'    => 'Kevin',
-                'lastName'     => 'Buchan',
-                'email'         => 'kevin.buchan@smu.ca',
-                'telephone'     => '9024916297',
-                'position'      => 'Director'
+                'firstName' => 'Kevin',
+                'lastName'  => 'Buchan',
+                'email'     => 'kevin.buchan@smu.ca',
+                'telephone' => '9024916297',
+                'position'  => 'Director',
+                'dateAdded' => Carbon::now()
             ],
             'St. Francis Xavier University' => [
-                'firstName'    => '',
-                'lastName'     => '',
-                'email'         => '',
-                'telephone'     => '',
-                'position'      => ''
+                'firstName' => '',
+                'lastName'  => '',
+                'email'     => '',
+                'telephone' => '',
+                'position'  => '',
+                'dateAdded' => Carbon::now()
             ],
             'St. Thomas University' => [
-                'firstName'    => '',
-                'lastName'     => '',
-                'email'         => '',
-                'telephone'     => '',
-                'position'      => ''
+                'firstName' => '',
+                'lastName'  => '',
+                'email'     => '',
+                'telephone' => '',
+                'position'  => '',
+                'dateAdded' => Carbon::now()
             ],
             'Université de Moncton' => [
-                'firstName'    => 'Cassidy',
-                'lastName'     => 'Weisbord',
-                'email'         => 'cassidy.weisbord@umonton.ca',
-                'telephone'     => '5068584307',
-                'position'      => 'Innovation Officer'
+                'firstName' => 'Cassidy',
+                'lastName'  => 'Weisbord',
+                'email'     => 'cassidy.weisbord@umonton.ca',
+                'telephone' => '5068584307',
+                'position'  => 'Innovation Officer',
+                'dateAdded' => Carbon::now()
             ],
             'University of New Brunswick, Fredericton' => [
-                'firstName'    => '',
-                'lastName'     => '',
-                'email'         => '',
-                'telephone'     => '',
-                'position'      => ''
+                'firstName' => '',
+                'lastName'  => '',
+                'email'     => '',
+                'telephone' => '',
+                'position'  => '',
+                'dateAdded' => Carbon::now()
             ],
             'University of New Brunswick, Saint John' => [
-                'firstName'    => '',
-                'lastName'     => '',
-                'email'         => '',
-                'telephone'     => '',
-                'position'      => ''
+                'firstName' => '',
+                'lastName'  => '',
+                'email'     => '',
+                'telephone' => '',
+                'position'  => '',
+                'dateAdded' => Carbon::now()
             ],
             'University of Prince Edward Island1' => [
-                'firstName'    => 'Shelley',
-                'lastName'     => 'King',
-                'email'         => 'srking@upei.ca',
-                'telephone'     => '9025666095',
-                'position'      => 'Chief Executive Officer'
+                'firstName' => 'Shelley',
+                'lastName'  => 'King',
+                'email'     => 'srking@upei.ca',
+                'telephone' => '9025666095',
+                'position'  => 'Chief Executive Officer',
+                'dateAdded' => Carbon::now()
             ]
         ];
         
