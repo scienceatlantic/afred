@@ -14,11 +14,14 @@ class CreateFacilitiesTable extends Migration
     {
         Schema::create('facilities', function($table) {
             $table->increments('id');
-            $table->integer('institutionId')
+            $table->integer('facilityRevisionHistoryId')
                 ->unsigned();
-            $table->foreign('institutionId')
+            $table->integer('organizationId')
+                ->unsigned()
+                ->nullable();
+            $table->foreign('organizationId')
                 ->references('id')
-                ->on('institutions')
+                ->on('organizations')
                 ->onDelete('restrict');
             $table->integer('provinceId')
                 ->unsigned();

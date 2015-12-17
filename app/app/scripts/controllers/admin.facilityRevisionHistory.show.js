@@ -4,12 +4,12 @@ angular.module('afredApp').controller(
   'AdminFacilityRevisionHistoryShowController',
   ['$scope',
    '$stateParams',
-   'institutionResource',
+   'organizationResource',
    'provinceResource',
    'facilityRevisionHistoryResource',
   function($scope,
            $stateParams,
-           institutionResource,
+           organizationResource,
            provinceResource,
            facilityRevisionHistoryResource) {
     /* ---------------------------------------------------------------------
@@ -36,17 +36,25 @@ angular.module('afredApp').controller(
     $scope.reject = function() {
       facilityRevisionHistoryResource.reject({
         facilityRevisionHistoryId: $stateParams.facilityRevisionHistoryId
-      }, null, function() {
-        
+      }, null, function(data) {
+        $scope.facilityRevisionHistory = data;
       });   
     };
     
     $scope.approveEdit = function() {
-      
+      facilityRevisionHistoryResource.approveEdit({
+        facilityRevisionHistoryId: $stateParams.facilityRevisionHistoryId
+      }, null, function(data) {
+        $scope.facilityRevisionHistory = data;
+      });      
     };
     
     $scope.rejectEdit = function() {
-      
+      facilityRevisionHistoryResource.rejectEdit({
+        facilityRevisionHistoryId: $stateParams.facilityRevisionHistoryId
+      }, null, function(data) {
+        $scope.facilityRevisionHistory = data;
+      });         
     };
     
     $scope.formatForApp = function() {
@@ -57,13 +65,13 @@ angular.module('afredApp').controller(
         $scope.facility.contacts.unshift($scope.facility.primaryContact);
       }
       
-      if ($scope.facility.institutionId) {
-        $scope.facility.institution = institutionResource.get({
-          institutionId: $scope.facility.institutionId
+      if ($scope.facility.organizationId) {
+        $scope.facility.organization = organizationResource.get({
+          organizationId: $scope.facility.organizationId
         });
       } else {
-        $scope.facility.institution =
-          $scope.facilityRevisionHistory.data.institution;
+        $scope.facility.organization =
+          $scope.facilityRevisionHistory.data.organization;
       }
       
       $scope.facility.province = provinceResource.get({

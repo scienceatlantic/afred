@@ -7,23 +7,54 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
+use Carbon\Carbon;
+use Log;
+
 abstract class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
     
-    protected function _expandRelationships($request, $models, $isArray = false)
+    protected function _expandModelRelationships($request,
+                                                 $model,
+                                                 $isCollection = false)
     {
         if ($request->has('expand')) {
-            foreach (explode(',',
-                $request->input('expand')) as $relationship) {
-                    if ($isArray) {
-                        foreach($models as $model) {
-                            $model->$relationship;
-                        }                       
-                    } else {
-                        $models->$relationship;
-                    }
+            $relationships = explode(',', $request->input('expand'));
+                                     
+            foreach ($relationships as $relationship) {
+                if ($isCollection) {
+                    foreach($model as $m) {
+                        $m->$relationship;
+                    }                       
+                } else {
+                    $model->$relationship;
+                }
             }
         }         
+    }
+    
+    protected function _toCamelCase($array)
+    { 
+        function camelCaseArrayKeys($array)
+        {
+            $newArray = [];
+            
+            foreach($array as $key => $value) {
+                if (is_array($value)) {
+                    $newArray[camel_case($key)] = camelCaseArrayKeys($value);
+                } else {
+                    $newArray[camel_case($key)] = $value;
+                }
+            }
+            
+            return $newArray;
+        }
+
+        return camelCaseArrayKeys($array);
+    }
+    
+    public function _now()
+    {
+        return Carbon::now()->toDateTimeString();
     }
 }

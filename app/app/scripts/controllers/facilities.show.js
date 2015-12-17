@@ -22,9 +22,20 @@ angular.module('afredApp').controller('FacilitiesShowController',
      * attaches it to '$scope.facility'.
      */
     $scope.getFacility = function() {
-      $scope.facility = facilityResource.get({facilityId:
-        $stateParams.facilityId, expand:
-        'institution,province,equipment,contacts'});
+      $scope.facility = facilityResource.get(
+        {
+          facilityId: $stateParams.facilityId,
+          expand: 'institution,province,equipment,primaryContact,contacts'
+        },
+        function() {
+          if ($scope.facility.contacts) {
+            $scope.facility.contacts.unshift($scope.facility.primaryContact);
+          } else {
+            $scope.facility.contacts = [];
+            $scope.facility.contacts.push($scope.facility.primaryContact);
+          }
+        }
+      );
     };
     
     $scope.admin = {

@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Institution;
+use App\Organization;
 use App\Ilo;
 use Carbon\Carbon;
 
@@ -21,7 +21,7 @@ class RealIlosTableSeeder extends Seeder
             'Acadia University' => [
                 'firstName' => 'Peggy',
                 'lastName'  => 'Crawford',
-                'email' => 'peggy.crawford@acadiau.ca',
+                'email'     => 'peggy.crawford@acadiau.ca',
                 'telephone' => '9025851762',
                 'position'  => 'Research and Innovation Coordinator',
                 'dateAdded' => Carbon::now()
@@ -138,7 +138,7 @@ class RealIlosTableSeeder extends Seeder
                 'position'  => '',
                 'dateAdded' => Carbon::now()
             ],
-            'University of Prince Edward Island1' => [
+            'University of Prince Edward Island' => [
                 'firstName' => 'Shelley',
                 'lastName'  => 'King',
                 'email'     => 'srking@upei.ca',
@@ -148,19 +148,19 @@ class RealIlosTableSeeder extends Seeder
             ]
         ];
         
-        foreach ($ilos as $institutionName => $ilo) {
+        foreach ($ilos as $organizationName => $ilo) {
             // Ignore ILO if it's empty. We're only checking the 'firstName'
             // field.
             if ($ilo['firstName']) {
                 // Get the institution's primary key.
-                $institution = Institution
-                               ::select('id')
-                               ->where('name', $institutionName)
-                               ->first();
+                $organization = Organization
+                             ::select('id')
+                             ->where('name', $organizationName)
+                             ->first();
                 
                 // Insert the ILO's data only if the institution was found.
-                if ($institution && property_exists($institution, 'id')) {
-                    $ilo['institutionId'] = $institution->id;
+                if ($organization && property_exists($organization, 'id')) {
+                    $ilo['institutionId'] = $organization->id;
                     Ilo::create($ilo);  
                 }
             }

@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateInstitutionsTable extends Migration
+class CreateOrganizationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,7 @@ class CreateInstitutionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('institutions', function (Blueprint $table) {
+        Schema::create('organizations', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 150);
             $table->boolean('isHidden')
@@ -29,6 +29,6 @@ class CreateInstitutionsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('institutions');
+        Schema::drop('organizations');
     }
 }

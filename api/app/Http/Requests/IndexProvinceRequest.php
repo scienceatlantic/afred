@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
 
-class UpdateFacilityRevisionHistoryRequest extends Request
+class IndexProvinceRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class UpdateFacilityRevisionHistoryRequest extends Request
      */
     public function authorize()
     {
-        return true;
+        return false;
     }
 
     /**
@@ -24,13 +24,7 @@ class UpdateFacilityRevisionHistoryRequest extends Request
     public function rules()
     {
         return [
-            'id' => 'required|exists:facility_revision_history,id',
-            'state' => 'regex:/'
-                     . 'PUBLISHED|'
-                     . 'REJECTED|'
-                     . 'EDIT_DRAFT|'
-                     . 'PENDING_EDIT_APPROVAL|'
-                     . 'REJECTED_EDIT/'
+            //
         ];
     }
 }

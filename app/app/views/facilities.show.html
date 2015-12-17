@@ -7,10 +7,41 @@
         </div>
       </div>
       
-      <div data-ng-include="'views/includes/facility.html'"></div>
-      <div data-ng-include="'views/includes/ilo.html'"></div>
-      <div data-ng-include="'views/includes/contacts.html'"></div>
-      <div data-ng-include="'views/includes/equipment.html'"></div>
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <p class="label label-primary">Facility</p><br><br>
+          
+          <div data-ng-include="'views/includes/facility.html'"></div>
+        </div>
+      </div>
+      
+      <div data-ng-show="facility.institution.ilo.firstName">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <p class="label label-primary">Industry Liaison Officer Contact</p><br><br>
+            
+            <div data-ng-include="'views/includes/ilo.html'"></div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <p class="label label-primary">Contacts</p><br><br>
+          
+          <div data-ng-include="'views/includes/contacts.html'"></div>
+        </div>
+      </div>
+      
+      <div class="facility.equipment.length">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <p class="label label-primary">Equipment</p><br><br>
+            
+            <div data-ng-include="'views/includes/equipment.html'"></div>
+          </div>
+        </div>
+      </div>
       
       <p>
         <button type="button" class="btn btn-warning" data-ng-click="admin.edit()" data-ng-show="_auth.user.isAdmin && state.facilities">Edit</button>

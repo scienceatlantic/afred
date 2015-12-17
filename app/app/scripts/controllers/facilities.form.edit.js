@@ -10,27 +10,36 @@ angular.module('afredApp').controller('FacilitiesFormEditController',
      * --------------------------------------------------------------------- */    
     
     $scope.preview = function() {
-      $scope.showPreview = true;
-      $scope.showForm = false;
-    };
-    
-    $scope.form = function() {
-      $scope.showPreview = false;
-      $scope.showForm = true;
+      $scope.facility = $scope.form.formatForPreview();
+      $scope.view.show = 'preview';
     };
     
     $scope.submit = function() {
-      
+      facilityRevisionHistoryResource.submitEdit(
+        {
+          facilityRevisionHistoryId:
+            $scope._stateParams.facilityRevisionHistoryId
+        },
+        {
+          data: $scope.form.formatForApi()
+        },
+        function() {
+          console.log('yay!');
+        },
+        function() {
+          console.log('aww...');
+        }
+      );
     };
     
     /* ---------------------------------------------------------------------
      * Initialisation code.
      * --------------------------------------------------------------------- */
-    $scope.initialiseForm();
-    $scope.showForm = true;
-    $scope.showPreview = false;
-    $scope.getAutosave();
-    $scope.autosave();
+    $scope.form.initialise();
+    $scope.form.getFacility();
     
+    $scope.view = {
+      show: 'form'
+    };
   }
 ]);

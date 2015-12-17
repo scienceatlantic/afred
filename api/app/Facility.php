@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\FacilityRevisionHistory;
 
 class Facility extends Model
 {
@@ -22,7 +23,8 @@ class Facility extends Model
      * @var array
      */
     protected $fillable = [
-        'institutionId',
+        'facilityRevisionHistoryId',
+        'organizationId',
         'provinceId',
         'name',
         'city',
@@ -33,14 +35,20 @@ class Facility extends Model
         'dateUpdated'
     ];
     
+    public function currentRevision()
+    {
+        return $this->belongsTo('App\FacilityRevisionHistory',
+            'facilityRevisionHistoryId');
+    }
+    
     public function facilityRevisionHistory()
     {
         return $this->hasMany('App\FacilityRevisionHistory', 'facilityId');
     }
     
-    public function institution()
+    public function organization()
     {
-        return $this->belongsTo('App\Institution', 'institutionId');
+        return $this->belongsTo('App\Organization', 'organizationId');
     }
     
     public function province()

@@ -14,16 +14,18 @@ class CreateFacilityEditRequests extends Migration
     {
         Schema::create('facility_edit_requests', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('frhIdBeforeEdit')
-                ->unsigned();
-            $table->foreign('frhIdBeforeEdit')
-                ->references('id')
-                ->on('facility_revision_history')
-                ->onDelete('cascade');
-            $table->integer('frhIdAfterEdit')
+            $table->integer('frhBeforeUpdateId')
                 ->unsigned()
+                ->unique();
+            $table->foreign('frhBeforeUpdateId')
+                ->references('id')
+                ->on('facility_revision_history')   
+                ->onDelete('cascade');
+            $table->integer('frhAfterUpdateId')
+                ->unsigned()
+                ->unique()
                 ->nullable();
-            $table->foreign('frhIdAfterEdit')
+            $table->foreign('frhAfterUpdateId')
                 ->references('id')
                 ->on('facility_revision_history')
                 ->onDelete('cascade');

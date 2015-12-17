@@ -25,6 +25,11 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         url: '/facilities',
         templateUrl: 'views/facilities.html'
       }).
+      state('facilities.update', {
+        url: '/update',
+        templateUrl: 'views/facilities.update.html',
+        controller: 'FacilitiesUpdateController'
+      }).
       state('facilities.form', {
         abstract: true,
         url: '/form',
@@ -37,7 +42,7 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         controller: 'FacilitiesFormCreateController'
       }).
       state('facilities.form.edit', {
-        url: '/:facilityId/edit',
+        url: '/:facilityRevisionHistoryId/edit?token',
         templateUrl: 'views/facilities.form.edit.html',
         controller: 'FacilitiesFormEditController'
       }).
@@ -63,7 +68,7 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
       state('admin', {
         abstract: true,
         url: '/admin',
-        template: '<div data-ui-view><div>',
+        templateUrl: 'views/admin.html',
         resolve: {
           ping: ['$rootScope', '$state', function($rootScope, $state) {
             return $rootScope._auth.ping().then(function(response) {
@@ -78,6 +83,11 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         url: '/dashboard',
         templateUrl: 'views/admin.dashboard.html',
         controller: 'AdminDashboardController'
+      }).
+      state('admin.facilities', {
+        url: '/facilities?state',
+        templateUrl: 'views/admin.facilities.html',
+        controller: 'AdminFacilitiesController'
       }).
       state('admin.facilityRevisionHistory', {
         abstract: true,

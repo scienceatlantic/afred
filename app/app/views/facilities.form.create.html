@@ -9,23 +9,22 @@
     <div data-ng-show="view.show == 'preview'">
       <div class="panel panel-default">
         <div class="panel-body">
-          <p class="label label-default">Facility/Research Lab</p>
+          <p class="label label-default">Research Facility</p><br><br>
           
           <div data-ng-include="'views/includes/facility.html'"></div>
         </div>
       </div>
       
-      <div class="panel panel-default" data-ng-show="facility.institution.ilo.firstName">
+      <div class="panel panel-default" data-ng-show="facility.organization.ilo.firstName">
         <div class="panel-body">
-          <p class="label label-default">Industry Liaison Office Contact</p>
-          
+          <p class="label label-default">Industry Liaison Office Contact</p><br><br>
           <div data-ng-include="'views/includes/ilo.html'"></div>
         </div>
       </div>
       
       <div class="panel panel-default">
         <div class="panel-body">
-          <p class="label label-default">Contacts</p>
+          <p class="label label-default">Contacts</p><br><br>
           
           <div data-ng-include="'views/includes/contacts.html'"></div>
         </div>
@@ -33,7 +32,7 @@
           
       <div class="panel panel-default">
         <div class="panel-body">
-          <p class="label label-default">Equipment</p>
+          <p class="label label-default">Equipment</p><br><br>
           
           <div data-ng-include="'views/includes/equipment.html'"></div>
         </div>

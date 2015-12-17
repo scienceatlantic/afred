@@ -11,7 +11,7 @@
   
   <div class="row">
     <div class="col-md-3 text-right"><label>Telephone</label></div>
-    <div class="col-md-9">{{c.telephone}}</div>
+    <div class="col-md-9">{{c.telephone | afFormatTelephone}}</div>
   </div>
   
   <div class="row" data-ng-show="c.position">

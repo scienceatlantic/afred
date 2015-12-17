@@ -19,6 +19,7 @@ class DummySystemUsersTableSeeder extends Seeder
             [
                 'firstName' => 'Prasad',
                 'lastName'  => 'Rajandran',
+                'role'      => 'ADMINISTRATOR',
                 'username'  => 'prasad@scienceatlantic.ca',
                 'password'  => Hash::make('password')
             ]

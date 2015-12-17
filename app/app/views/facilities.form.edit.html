@@ -2,16 +2,46 @@
   <div class="col-lg-12">
     <h3>Edit a Facility</h3>
     
-    <div data-ng-show="showForm">
+    <div data-ng-show="view.show == 'form'">
       <div data-ng-include="'views/includes/facilities.form.html'"></div>
     </div>
     
-    <div data-ng-show="showPreview">
-      <div data-ng-include="'views/includes/facility-section.html'"></div>
-      <div data-ng-include="'views/includes/contacts-section.html'"></div>
-      <div data-ng-include="'views/includes/equipment-section.html'"></div>
-      <button class="btn btn-default" data-ng-click="submit()">Submit</button>
-      <button class="btn btn-default" data-ng-click="form()">Go Back</button>
+    <div data-ng-show="view.show == 'preview'">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <p class="label label-default">Research Facility</p><br><br>
+          
+          <div data-ng-include="'views/includes/facility.html'"></div>
+        </div>
+      </div>
+      
+      <div class="panel panel-default" data-ng-show="facility.organization.ilo.firstName">
+        <div class="panel-body">
+          <p class="label label-default">Industry Liaison Office Contact</p><br><br>
+          <div data-ng-include="'views/includes/ilo.html'"></div>
+        </div>
+      </div>
+      
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <p class="label label-default">Contacts</p><br><br>
+          
+          <div data-ng-include="'views/includes/contacts.html'"></div>
+        </div>
+      </div>
+          
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <p class="label label-default">Equipment</p><br><br>
+          
+          <div data-ng-include="'views/includes/equipment.html'"></div>
+        </div>
+      </div>
+      
+      <p>
+        <button class="btn btn-default" data-ng-click="submit()">Submit</button>
+        <button class="btn btn-default" data-ng-click="view.show = 'form'">Go Back</button>
+      </p>
     </div>
   </div><!-- End of .col-x-x -->
 </div><!-- End of .row -->

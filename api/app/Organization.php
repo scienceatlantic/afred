@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Institution extends Model
+class Organization extends Model
 {
     /**
      * The attributes that should be mutated to dates.
@@ -27,10 +27,10 @@ class Institution extends Model
     
     public function ilo()
     {
-        return $this->hasOne('App\Ilo', 'institutionId');
+        return $this->hasOne('App\Ilo', 'organizationId');
     }
     
     public function facilities() {
-        return $this->hasMany('App\Facility', 'institutionId');
+        return $this->hasMany('App\Facility', 'organizationId');
     }
 }

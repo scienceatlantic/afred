@@ -13,21 +13,58 @@
 
 Route:get('csrf', 'CsrfController@show');
 
+/******************************************************************************
+ * Authentication routes.
+ *****************************************************************************/
+// Log in.
 Route::post('auth/login', 'AuthController@login');
-Route::get('auth/ping', 'AuthController@ping');
-Route::get('auth/logout', 'AuthController@logout');
 
-Route::resource('institutions', 'InstitutionController', [
+// Check if user is logged in.
+Route::get('auth/ping', 'AuthController@ping');
+
+// Logout.
+Route::get('auth/logout', 'AuthController@logout'); 
+
+
+/******************************************************************************
+ * Facility edit request routes.
+ *****************************************************************************/
+// Returns a list of facilities that have contacts (primary or regular)
+// matching the email address provided.
+Route::get('facility-edit-requests',
+		   'FacilityEditRequestController@indexMatchingFacilities');
+
+// Generates an edit 'token' that will be emailed to the requesting user.
+Route::post('facility-edit-requests',
+			'FacilityEditRequestController@generateToken');
+
+// TODO
+Route::put('facility-edit-requests',
+		   'FacilityEditRequestController@verifyToken');
+
+			
+/******************************************************************************
+ * Institution routes.
+ *****************************************************************************/
+Route::resource('organizations', 'OrganizationController', [
 	'only' => ['index',
 			   'store',
 			   'show',
 			   'update',
 			   'destroy']]);
 
+			   
+/******************************************************************************
+ * Province routes.
+ *****************************************************************************/
 Route::resource('provinces', 'ProvinceController', [
 	'only' => ['index',
 			   'show']]);
-		  
+
+			   
+/******************************************************************************
+ * Facility routes.
+ *****************************************************************************/	  
 Route::resource('facilities', 'FacilityController', [
 	'only' => ['index',
 			   'store',
@@ -35,21 +72,15 @@ Route::resource('facilities', 'FacilityController', [
 			   'update',
 			   'destroy']]);
 
-Route::resource('facilityRevisionHistory',
+			   
+/******************************************************************************
+ * Facility revision history routes.
+ *****************************************************************************/
+Route::post('facility-revision-history',
+	'FacilityRevisionHistoryController@update');
+Route::resource('facility-revision-history',
 	'FacilityRevisionHistoryController', [
 	'only' => ['index',
-			   'store',
 			   'show',
 			   'update',
 			   'destroy']]);
-
-Route::resource('facilities.contacts', 'FacilityContactController', [
-	'only' => ['index']]);
-
-Route::resource('facilities.equipment', 'FacilityEquipmentController', [
-	'only' => ['index',
-			   'show']]);
-
-Route::resource('equipment', 'EquipmentController', [
-	'only' => ['index',
-			   'show']]);

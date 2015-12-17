@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Log;
 use App\Facility;
-use App\Institution;
+use App\Organization;
+use App\PrimaryContact;
 use App\Contact;
 use App\Equipment;
 use App\Http\Requests;
@@ -20,8 +21,18 @@ class FacilityController extends Controller
      */
     public function index(Request $request)
     {
+        $paginate = $request->input('paginate', true);
         $itemsPerPage = $request->input('itemsPerPage', 15);
-        return Facility::paginate($itemsPerPage);
+        $facility = new Facility();
+        
+        if ($paginate) {
+            $facility = $facility->paginate($itemsPerPage);
+        } else {
+            $facility = $facility->all();
+        }
+        
+        $this->_expandModelRelationships($request, $facility, true);
+        return $this->_toCamelCase($facility->toArray());
     }
 
     /**
@@ -33,8 +44,13 @@ class FacilityController extends Controller
     public function show(Request $request, $id)
     {
         $facility = Facility::find($id);        
-        $this->_expandRelationships($request, $facility);
-        return $facility;      
+        $this->_expandModelRelationships($request, $facility);
+        return $this->_toCamelCase($facility->toArray());   
+    }
+    
+    public function updateVisibility()
+    {
+        
     }
 
     /**

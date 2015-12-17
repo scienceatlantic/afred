@@ -4,27 +4,29 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Institution;
+use App\Organization;
 use App\Http\Requests;
-use App\Http\Requests\IndexInstitutionRequest;
+use App\Http\Requests\IndexOrganizationRequest;
 use App\Http\Controllers\Controller;
 
-class InstitutionController extends Controller
+class OrganizationController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(IndexInstitutionRequest $request)
+    public function index(IndexOrganizationRequest $request)
     {
         $paginate = $request->input('paginate', true);
         $itemsPerPage = $request->input('itemsPerPage', 15);
-        $institution = Institution::where('isHidden', false);
-        $institution = $paginate ?
-            $institution->paginate($itemsPerPage) : $institution->get();
-        $this->_expandRelationships($request, $institution, true);
-        return $institution;
+        $organization = Organization
+                     ::where('isHidden', false)
+                     ->orderBy('name', 'asc');
+        $organization = $paginate ?
+            $organization->paginate($itemsPerPage) : $organization->get();
+        $this->_expandModelRelationships($request, $organization, true);
+        return $organization;
     }
 
     /**
@@ -46,21 +48,9 @@ class InstitutionController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $institution = Institution::findOrFail($id);
-        $this->_expandRelationships($request, $institution);
-        return $institution;
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+        $organization = Organization::findOrFail($id);
+        $this->_expandModelRelationships($request, $organization);
+        return $organization;
     }
 
     /**
@@ -71,6 +61,6 @@ class InstitutionController extends Controller
      */
     public function destroy($id)
     {
-        return Institution::destroy($id);
+        return Organization::destroy($id);
     }
 }

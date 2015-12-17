@@ -29,7 +29,9 @@ angular.module('afredApp').controller('AdminDashboardController',
     $scope.facilityStats = {
       published: $scope.getFacilityTotals('PUBLISHED'),
       pendingApproval: $scope.getFacilityTotals('PENDING_APPROVAL'),
+      pendingEditApproval: $scope.getFacilityTotals('PENDING_EDIT_APPROVAL'),
       rejected: $scope.getFacilityTotals('REJECTED'),
+      rejectedEdit: $scope.getFacilityTotals('REJECTED_EDIT'),
     };
   }
 ]);

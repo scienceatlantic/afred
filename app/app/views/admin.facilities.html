@@ -1,7 +1,7 @@
 <h2>Admin / Facilities</h2>
 
 <div> 
-  <div style="min-height: 400px;">
+  <div>
     <div class="form-group">
       <label for="state">State:</label>
       <select class="form-control" name="state" id="state" data-ng-model="view.state" data-ng-change="getFacilities(1)">
@@ -37,7 +37,7 @@
             </thead>
             
             <tbody data-ng-show="view.state == 'PUBLISHED'">
-              <tr data-dir-paginate="f in facilities.data | itemsPerPage: facilities.per_page" data-total-items="facilities.total" data-pagination-id="facilities">
+              <tr data-dir-paginate="f in facilities.data | itemsPerPage: facilities.perPage" data-total-items="facilities.total" data-pagination-id="facilities">
                 <td>
                   <a data-ui-sref="facilities.show({facilityId: f.id})" target="_blank">{{f.name}}</a>
                 </td>
@@ -45,9 +45,9 @@
             </tbody>
             
             <tbody data-ng-show="view.state != 'PUBLISHED'">
-              <tr data-dir-paginate="f in facilities.data | itemsPerPage: facilities.per_page" data-total-items="facilities.total" data-pagination-id="facilityRevisionHistories">
+              <tr data-dir-paginate="f in facilities.data | itemsPerPage: facilities.perPage" data-total-items="facilities.total" data-pagination-id="facilityRevisionHistories">
                 <td>
-                  <a data-ui-sref="admin.facilityRevisionHistory.show({facilityRevisionHistoryId: f.id})" target="_blank">{{f.data.facility.name}}</a>
+                  <a data-ui-sref="admin.facilityRevisionHistory.show({facilityRevisionHistoryId: f.id})">{{f.data.facility.name}}</a>
                 </td>
               </tr>
             </tbody>

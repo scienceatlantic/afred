@@ -19,7 +19,8 @@ class ProvinceController extends Controller
     {
         $paginate = $request->input('paginate', true);
         $itemsPerPage = $request->input('itemsPerPage', 15);
-        $province = Province::where('isHidden', false);
+        $province = Province::where('isHidden', false)
+                            ->orderBy('name', 'asc');
         
         if ($paginate) {
             return $province->paginate($itemsPerPage);

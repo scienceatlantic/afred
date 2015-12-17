@@ -25,8 +25,8 @@ class CreateFacilityRevisionHistoryTable extends Migration
                 $table->enum('state', ['PENDING_APPROVAL',
                                        'PUBLISHED',
                                        'REJECTED',
-                                       'EDIT_DRAFT',
-                                       'PENDING_EDIT_APPROVAL'.
+                                       'PENDING_EDIT_APPROVAL',
+                                       'PUBLISHED_EDIT',
                                        'REJECTED_EDIT']);
                 $table->longText('data'); // Data stored in JSON
                 $table->datetime('dateSubmitted');

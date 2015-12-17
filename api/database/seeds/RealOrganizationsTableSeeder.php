@@ -1,10 +1,10 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Institution;
+use App\Organization;
 use Carbon\Carbon;
 
-class RealInstitutionsTableSeeder extends Seeder
+class RealOrganizationsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,14 +14,9 @@ class RealInstitutionsTableSeeder extends Seeder
     public function run()
     {
         // Delete existing entries.
-        DB::table('institutions')->delete();
+        DB::table('organizations')->delete();
         
-        $institutions = [
-            [
-                'name'      => 'N/A',
-                'isHidden'  => false,
-                'dateAdded' => Carbon::now()
-            ],
+        $organizations = [
             [
                 'name'      => 'Acadia University',
                 'isHidden'  => false,
@@ -104,8 +99,8 @@ class RealInstitutionsTableSeeder extends Seeder
             ],
         ];
         
-        foreach($institutions as $institution) {
-            Institution::create($institution);
+        foreach($organizations as $organization) {
+            Organization::create($organization);
         }
     }
 }

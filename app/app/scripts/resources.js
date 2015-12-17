@@ -17,17 +17,36 @@ angular.module('afredApp').factory('facilityResource', ['$rootScope',
 angular.module('afredApp').factory('facilityRevisionHistoryResource',
   ['$rootScope', '$resource', function($rootScope, $resource) {
     return $resource($rootScope._config.api +
-      '/facilityRevisionHistory/:facilityRevisionHistoryId',
+      '/facility-revision-history/:facilityRevisionHistoryId',
         {
           facilityRevisionHistoryId: '@id'
         },
         {
           query: { isArray: false },
+          submit: { method: 'POST', params: { state: 'PENDING_APPROVAL' }},
           approve: { method: 'PUT', params: { state: 'PUBLISHED' }},
           reject: { method: 'PUT', params: { state: 'REJECTED' }},
-          saveEditDraft: { method: 'PUT', params: { state: 'EDIT_DRAFT' }},
-          approveEdit: { method: 'PUT', params: { state: 'PUBLISHED' }},
+          submitEdit: { method: 'PUT', params: { state:
+            'PENDING_EDIT_APPROVAL' }},
+          approveEdit: { method: 'PUT', params: { state: 'PUBLISHED_EDIT' }},
           rejectEdit: { method: 'PUT', params: { state: 'REJECTED_EDIT' }}    
+        }
+    );
+  }
+]);
+
+angular.module('afredApp').factory('facilityEditRequestResource',
+  ['$rootScope', '$resource', function($rootScope, $resource) {
+    return $resource($rootScope._config.api +
+      '/facility-edit-requests/:facilityEditRequestId',
+        {
+          facilityEditRequestId: '@id'
+        },
+        {
+          find: { isArray: false },
+          findNoPaginate: { isArray: true, params: { paginate: 0 } },
+          generateToken: { method: 'POST' },
+          verifyToken: { method: 'PUT' }
         }
     );
   }
@@ -39,9 +58,9 @@ angular.module('afredApp').factory('equipmentResource', ['$rootScope',
   }
 ]);
 
-angular.module('afredApp').factory('institutionResource', ['$rootScope',
+angular.module('afredApp').factory('organizationResource', ['$rootScope',
   '$resource', function($rootScope, $resource) {
-    return $resource($rootScope._config.api + '/institutions/:institutionId',
+    return $resource($rootScope._config.api + '/organizations/:organizationId',
       {},
       {
         query: { isArray: false },

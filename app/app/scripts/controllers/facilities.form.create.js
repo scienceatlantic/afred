@@ -15,6 +15,7 @@ angular.module('afredApp').controller('FacilitiesFormCreateController',
      * Shows the preview.
      */
     $scope.preview = function() {
+      $scope.facility = $scope.form.formatForPreview();
       $scope.view.show = 'preview';
     };
     
@@ -23,7 +24,11 @@ angular.module('afredApp').controller('FacilitiesFormCreateController',
      * successful otherwise an error message is shown instead.
      */
     $scope.submit = function() {
-      facilityRevisionHistoryResource.save($scope.form.formatForApi(),
+      facilityRevisionHistoryResource.submit(
+        {
+          state: 'PENDING_APPROVAL',
+          data: $scope.form.formatForApi()
+        },
         function() {
           // Reset form
           //$scope.form.initialiseForm();

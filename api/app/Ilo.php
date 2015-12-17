@@ -15,8 +15,8 @@ class Ilo extends Model
                         'created_at',
                         'updated_at'];
     
-    public function institution()
+    public function organization()
     {
-        return $this->belongsTo('App\Institution', 'institutionId');
+        return $this->belongsTo('App\Organization', 'organizationId');
     }
 }

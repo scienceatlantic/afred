@@ -16,14 +16,11 @@ class DatabaseSeeder extends Seeder
         
         // Contains real data.
         $this->call(RealProvincesTableSeeder::class);
-        $this->call(RealInstitutionsTableSeeder::class);
+        $this->call(RealOrganizationsTableSeeder::class);
         $this->call(RealIlosTableSeeder::class);
         
         // Contains dummy data.
         $this->call(DummyFacilitiesTableSeeder::class);
-        $this->call(DummyEquipmentTableSeeder::class);
-        $this->call(DummyPrimaryContactsTableSeeder::class);
-        $this->call(DummyContactsTableSeeder::class);
         $this->call(DummySystemUsersTableSeeder::class);
         
         Model::reguard();

@@ -16,7 +16,7 @@ class CreateSystemUsersTable extends Migration
             $table->increments('id');
             $table->string('firstName', 50);
             $table->string('lastName', 50);
-            $table->enum('role', ['ADMIN']);
+            $table->enum('role', ['ADMINISTRATOR']);
             $table->string('username', 254)
                 ->unique();
             $table->string('password', 60);

@@ -4,7 +4,7 @@
   <div class="col-md-4">
     <div class="panel panel-default">
       <div class="panel-body" style="min-height: 119px;">
-          <p class="label label-default">Published</p>
+          <p class="label label-primary">Published</p>
           
           <div data-af-loading="!facilityStats.published.$resolved">
             <p class="h1">{{facilityStats.published.total}}</p>
@@ -20,6 +20,18 @@
         
         <div data-af-loading="!facilityStats.pendingApproval.$resolved">
           <p class="h1">{{facilityStats.pendingApproval.total}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-4">
+    <div class="panel panel-default">
+      <div class="panel-body" style="min-height: 119px;">
+        <p class="label label-warning">Pending Edit Approval</p>
+        
+        <div data-af-loading="!facilityStats.pendingEditApproval.$resolved">
+          <p class="h1">{{facilityStats.pendingEditApproval.total}}</p>
         </div>
       </div>
     </div>

@@ -3,12 +3,14 @@
 angular.module('afredApp').controller('FacilitiesFormController',
   ['$scope',
    '$interval',
-   'institutionResource',
+   'organizationResource',
    'provinceResource',
+   'facilityRevisionHistoryResource',
   function($scope,
            $interval,
-           institutionResource,
-           provinceResource) {
+           organizationResource,
+           provinceResource,
+           facilityRevisionHistoryResource) {
     /* ---------------------------------------------------------------------
      * Functions/Objects.
      * --------------------------------------------------------------------- */
@@ -17,6 +19,21 @@ angular.module('afredApp').controller('FacilitiesFormController',
      * All properties/functions related to the form.
      */
     $scope.form = {
+      /**
+       * Holds all form data.
+       *
+       * @type {object}
+       */
+      facility: {},
+      
+      /**
+       * Holds an instance of 'facilityRevisionHistoryResource'.
+       *
+       * @type {resource}
+       *
+       */
+      facilityRevisionHistory: {},
+      
       /**
        * Used to keep track of the current 'contact' being viewed.
        *
@@ -32,12 +49,12 @@ angular.module('afredApp').controller('FacilitiesFormController',
       equipmentIndex: null,
       
       /**
-       * Holds a list of available institutions for the 'Institutions'
+       * Holds a list of available organizations for the 'Organizations'
        * dropdown.
        *
        * @type {array}
        */
-      institutions: [],
+      organizations: [],
       
       /**
        * Holds a list of available provinces for the 'Provinces' dropdown.
@@ -63,25 +80,15 @@ angular.module('afredApp').controller('FacilitiesFormController',
       isStorageSupported: true,
       
       /**
-       * Holds the names that will used for storing and retrieving
-       * form data via the '$scope.form.save()', and '$scope.form.getSave()'
-       * functions.
-       *
-       * @type {object}
-       */
-      storage: {
-        facility: $scope._state.current.name + '-facility'
-      },
-      
-      /**
-       * Initialises the form. All form data is attached to '$scope.facility'.
+       * Initialises the form. All form data is attached to
+       * '$scope.form.facility'.
        */
       initialise: function() {
         // Holds all facility data that will be passed to the API.
-        $scope.facility = {
+        $scope.form.facility = {
           name: null,
-          institution: { name: null }, // This is for the preview.
-          institutionId: null,
+          organization: { name: null }, // This is for the preview.
+          organizationId: null,
           province: { name: null }, // This is for the preview too.
           provinceId: null,
           description: null,
@@ -92,8 +99,8 @@ angular.module('afredApp').controller('FacilitiesFormController',
           equipment: []
         };
         
-        // Get a list of all available institutions.
-        $scope.form.getInstitutions();
+        // Get a list of all available organizations.
+        $scope.form.getOrganizations();
         
         // Get a list of all available provinces.
         $scope.form.getProvinces();
@@ -106,11 +113,12 @@ angular.module('afredApp').controller('FacilitiesFormController',
       },
       
       /**
-       * Adds an additional contact object to the '$scope.facility.contacts'
-       * array and advances '$scope.form.contactIndex' to point to it.
+       * Adds an additional contact object to the
+       * '$scope.form.facility.contacts' array and advances
+       * '$scope.form.contactIndex' to point to it.
        */      
       addContact: function() {
-        $scope.facility.contacts.push({
+        $scope.form.facility.contacts.push({
           firstName: null,
           lastName: null,
           email: null,
@@ -122,35 +130,38 @@ angular.module('afredApp').controller('FacilitiesFormController',
         });
         
         // Point the index to the object that was just added.
-        $scope.form.contactIndex = $scope.facility.contacts.length - 1;
+        $scope.form.contactIndex = $scope.form.facility.contacts.length - 1;
       },
       
       /**
-       * Removes a contact object from the '$scope.facility.contacts' array.
-       * @param {integer} index Array index of '$scope.facility.contacts'.
+       * Removes a contact object from the '$scope.form.facility.contacts'
+       * array.
+       * @param {integer} index Array index of '$scope.form.facility.contacts'.
        */
       removeContact: function(index) {
         // The first contact cannot be removed.
         if (index !== 0) {
-          $scope.facility.contacts.splice(index, 1);
+          $scope.form.facility.contacts.splice(index, 1);
           
           // If the user is currently viewing the contact that is being removed
           // or if '$scope.form.contactIndex' is more than the total number
           // of contacts in the array itself, decrease
           // '$scope.form.contactIndex' (ie. point to the previous contact).
           if ($scope.form.contactIndex === index ||
-              $scope.form.contactIndex > $scope.facility.contacts.length - 1) {
+              $scope.form.contactIndex >
+              $scope.form.facility.contacts.length - 1) {
             $scope.form.contactIndex--;
           }
         }       
       },
 
       /**
-       * Adds additional equipment object to the '$scope.facility.equipment'
-       * array and advances '$scope.form.equipmentIndex' to point to it.
+       * Adds additional equipment object to the
+       * '$scope.form.facility.equipment' array and advances
+       * '$scope.form.equipmentIndex' to point to it.
        */      
       addEquipment: function() {
-        $scope.facility.equipment.push({
+        $scope.form.facility.equipment.push({
           type: null,
           manufacturer: null,
           model: null,
@@ -162,55 +173,49 @@ angular.module('afredApp').controller('FacilitiesFormController',
         });
 
         // Point to the index to the object that was just added.
-        $scope.form.equipmentIndex = $scope.facility.equipment.length - 1;       
+        $scope.form.equipmentIndex = $scope.form.facility.equipment.length - 1;       
       },
      
       /**
-       * Removes an equipment object from '$scope.facility.equipment'.
+       * Removes an equipment object from '$scope.form.facility.equipment'.
        * @param {number} index Array index of equipment.
        */
       removeEquipment: function(index) {
         // The first equipment cannot be removed.
         if (index !== 0) {
-          $scope.facility.equipment.splice(index, 1);
+          $scope.form.facility.equipment.splice(index, 1);
         
           // If the user is currently viewing the equipment that is being
           // removed or if '$scope.form.equipmentIndex' is more than the total
           // number of equipment, decrease '$scope.form.equipmentIndex'.    
           if ($scope.form.equipmentIndex === index ||
               $scope.form.equipmentIndex >
-              $scope.facility.equipment.length - 1) {
+              $scope.form.facility.equipment.length - 1) {
             $scope.form.equipmentIndex--;
           }      
         }          
       },
       
       /**
-       * Gets a list of all institutions (and corresponding ILOs) and attaches
-       * it to '$scope.form.institutions'. 'N/A' is moved to the second last
-       * position. 'Other' is added as the last option.
-       *
-       * Note: this assumes that 'N/A' is the first institution listed in the
-       * database.
+       * Gets a list of all organizatoins and attaches it to
+       * '$scope.form.organizations'.
        */
-      getInstitutions: function() {
-        $scope.form.institutions = institutionResource.queryNoPaginate(
+      getOrganizations: function() {
+        $scope.form.organizations = organizationResource.queryNoPaginate(
           {
             expand: 'ilo'
           },
           function() {
-            // 'N/A' should be the first entry in the database. We want it
-            // to appear just before 'Other'.          
-            $scope.form.institutions.push(
-              ($scope.form.institutions.splice(0, 1))[0]);
+            // Add an option for 'N/A'.
+            $scope.form.organizations.push({id: -1, name: 'N/A'});
             
-            // Finally, add an option for 'Other'.
-            $scope.form.institutions.push({id: -1, name: 'Other'});
+            // Add an option for 'Other'.
+            $scope.form.organizations.push({id: -2, name: 'Other'});
         });
       },
       
       /**
-       * Gets a list of all institutions and attaches it to
+       * Gets a list of all provinces and attaches it to
        * '$scope.form.provinces'.
        */
       getProvinces: function() {
@@ -218,12 +223,43 @@ angular.module('afredApp').controller('FacilitiesFormController',
       },
       
       /**
+       * Retrieves a facility for editing and attaches it
+       * '$scope.form.facility'.
+       *
+       * Note: ..
+       *
+       */
+      getFacility: function() {
+        $scope.form.facilityRevisionHistory =
+          facilityRevisionHistoryResource.get(
+            {
+              facilityRevisionHistoryId:
+                $scope._stateParams.facilityRevisionHistoryId
+            },
+            function() {
+              $scope.form.facility =
+                $scope.form.facilityRevisionHistory.data.facility;
+              
+              if (angular.isArray($scope.form.facility.contacts)) {
+                $scope.form.facility.contacts.unshift(
+                  $scope.form.facility.primaryContact);
+              } else {
+                $scope.form.facility.contacts = [];
+                $scope.form.facility.contacts.push(
+                  $scope.form.facility.primaryContact);
+              }
+            }
+          );        
+      },
+      
+      /**
        * Saves the form to localStorage.
        */
       save: function() {
+        var itemName = $scope._state.current.name + '-facility';
+        
         try {
-          localStorage.setItem($scope.form.storage.facility,
-            JSON.stringify($scope.facility));
+          localStorage.setItem(itemName, JSON.stringify($scope.form.facility));
         } catch(e) {
           // Do nothing if local storage is not supported.
         }
@@ -234,21 +270,12 @@ angular.module('afredApp').controller('FacilitiesFormController',
        *
        * Bugs: Radio buttons are not highlighted after data is retrieved.
        */
-      getSave: function() {        
+      getSave: function() {
+        var itemName = $scope._state.current.name + '-facility';
+        
         try {
-          if (localStorage.getItem($scope.form.storage.facility)) {
-            $scope.facility =
-              JSON.parse(localStorage.getItem($scope.form.storage.facility));
-              
-              // Institution and province IDs will not change but in the
-              // unlikely event that their names have changed since the
-              // last time the end user was filling out the form, re-retrieve
-              // it. For institutions, if the user selected 'Other', don't
-              // retrieve the name because that will reset it to null.
-              if ($scope.facility.institutionId != -1) {
-                $scope.form.attachInstitutionForPreview();
-              }
-              $scope.form.attachProvinceForPreview();
+          if (localStorage.getItem(itemName)) {
+            $scope.form.facility = JSON.parse(localStorage.getItem(itemName));
           }
         } catch(e) {
           // Local storage is not supported.
@@ -273,48 +300,50 @@ angular.module('afredApp').controller('FacilitiesFormController',
           }          
         }
       },
-
-      /**
-       * Attaches the institution's name to '$scope.facility.institution'
-       * if an institution other than 'Other' was selected. This is for
-       * the preview.
-       */
-      attachInstitutionForPreview: function() {        
-        if ($scope.facility.institutionId != -1) {
-          var e = document.getElementById('facility-institution');
-          $scope.facility.institution =
-            $scope.form.institutions[e.selectedIndex];
-        } else {
-          $scope.facility.institution = { name: null };
-        }
-      },
       
       /**
-       * Attaches the name of the province to '$scope.facility.province'.
-       * This is for the preview.
+       * Formats the data for the preview. It gets the names of the selected
+       * organization and province. If 'N/A' is selected for organization,
+       * clear the '$scope.form.facility.organization' object.
        */
-      attachProvinceForPreview: function() {
+      formatForPreview: function() {        
+        if ($scope.form.facility.organizationId > 0) {
+          var e = document.getElementById('facility-organization');
+          $scope.form.facility.organization =
+            $scope.form.organizations[e.selectedIndex];
+        } else if ($scope.form.facility.organizationId == -1) {
+          $scope.form.facility.organization = {};
+        }
+        
         var e = document.getElementById('facility-province');
-        $scope.facility.province = $scope.form.provinces[e.selectedIndex];
+        $scope.form.facility.province = $scope.form.provinces[e.selectedIndex];
+        
+        return angular.copy($scope.form.facility);
       },
       
       /**
        * Formats the data to match what the API requires. The API expects a
        * single primary contact and (optionally) regular contacts. In the form,
        * the first contact is the primary contact, so splice it out and attach
-       * it to a property called 'primaryContact'. The 'institutionId' field
-       * must either be empty or contain a valid institution id, so if it's
-       * set to '-1' (ie. 'Other'), change it to null.
+       * it to a property called 'primaryContact'. The 'organizationId' field
+       * must either be empty or contain a valid organization id, so if it's
+       * less than 1, set it to null.
        *
        * @return {object} Facility object.
        */
       formatForApi: function() {
-        var facility = angular.copy($scope.facility);
+        var facility = angular.copy($scope.form.facility);
+        
+        // If 'N/A' was selected, clear the 'organization' object.
+        if (facility.organizationId == -1) {
+          facility.organization = {};
+        }
+        
+        if (facility.organizationId < 1) {
+          facility.organizationId = null;
+        }
         
         facility.primaryContact = (facility.contacts.splice(0, 1))[0];
-        if (facility.institutionId == -1) {
-          facility.institutionId = null;
-        }
         
         return facility;
       }
@@ -323,10 +352,6 @@ angular.module('afredApp').controller('FacilitiesFormController',
     /* ---------------------------------------------------------------------
      * Initialisation code.
      * --------------------------------------------------------------------- */
-    /**
-     * Stores form data that will be sent to the API.
-     */ 
-    $scope.facility = {};
     
     /**
      * Settings for 'CKEditor'.

@@ -13,6 +13,8 @@ angular.module('afredApp').controller('AdminFacilitiesController',
      * --------------------------------------------------------------------- */ 
     
     $scope.getFacilities = function(page, itemsPerPage) {
+      $scope._stateParams.state = $scope.view.state;
+      
       page = page ? page : 1;
       itemsPerPage = itemsPerPage ? itemsPerPage : 5;
       
@@ -41,10 +43,12 @@ angular.module('afredApp').controller('AdminFacilitiesController',
     };
     
     $scope.view = {
-      state: null,
+      state: $scope._stateParams.state,
       facility: {
         isPublic: true
       }
     };
+    
+    $scope.getFacilities();
   }
 ]);

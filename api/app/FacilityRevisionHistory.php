@@ -45,6 +45,6 @@ class FacilityRevisionHistory extends Model
     
     public function facility()
     {
-        $this->belongsTo('App\Facility', 'facilityId');
+        return $this->belongsTo('App\Facility', 'facilityId');
     }
 }
