@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class FacilityRevisionHistory extends Model
+class FacilityRepository extends Model
 {
     /**
      * The attributes that should be mutated to dates.
@@ -17,10 +17,10 @@ class FacilityRevisionHistory extends Model
     
     /**
      * Name of the database table. An exception had to be made here since
-     * we're not calling it 'facility_revision_histories'. Otherwise, this
+     * we're not calling it 'facility_repositories'. Otherwise, this
      * property wouldn't be necessary.
      */
-    protected $table = 'facility_revision_history';
+    protected $table = 'facility_repository';
     
     /**
      * The attributes that are mass assignable.
