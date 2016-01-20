@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFacilityRevisionHistoryTable extends Migration
+class CreateFacilityRepositoryTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,25 +12,24 @@ class CreateFacilityRevisionHistoryTable extends Migration
      */
     public function up()
     {
-        Schema::create('facility_revision_history', function (Blueprint
-            $table) {
-                $table->increments('id');
-                $table->integer('facilityId')
-                    ->unsigned()
-                    ->nullable();
-                $table->foreign('facilityId')
-                    ->references('id')
-                    ->on('facilities')
-                    ->onDelete('no action');
-                $table->enum('state', ['PENDING_APPROVAL',
-                                       'PUBLISHED',
-                                       'REJECTED',
-                                       'PENDING_EDIT_APPROVAL',
-                                       'PUBLISHED_EDIT',
-                                       'REJECTED_EDIT']);
-                $table->longText('data'); // Data stored in JSON
-                $table->datetime('dateSubmitted');
-                $table->timestamps();
+        Schema::create('facility_repository', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('facilityId')
+                ->unsigned()
+                ->nullable();
+            $table->foreign('facilityId')
+                ->references('id')
+                ->on('facilities')
+                ->onDelete('no action');
+            $table->enum('state', ['PENDING_APPROVAL',
+                                   'PUBLISHED',
+                                   'REJECTED',
+                                   'PENDING_EDIT_APPROVAL',
+                                   'PUBLISHED_EDIT',
+                                   'REJECTED_EDIT']);
+            $table->longText('data'); // Data stored in JSON
+            $table->datetime('dateSubmitted');
+            $table->timestamps();
         });
     }
 
@@ -41,6 +40,6 @@ class CreateFacilityRevisionHistoryTable extends Migration
      */
     public function down()
     {
-        Schema::drop('facility_revision_history');
+        Schema::drop('facility_repository');
     }
 }
