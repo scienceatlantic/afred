@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFacilityEditRequests extends Migration
+class CreateFacilityUpdateLinks extends Migration
 {
     /**
      * Run the migrations.
@@ -12,22 +12,22 @@ class CreateFacilityEditRequests extends Migration
      */
     public function up()
     {
-        Schema::create('facility_edit_requests', function (Blueprint $table) {
+        Schema::create('facility_update_links', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('frhBeforeUpdateId')
+            $table->integer('fr_id_before')
                 ->unsigned()
                 ->unique();
-            $table->foreign('frhBeforeUpdateId')
+            $table->foreign('fr_id_before')
                 ->references('id')
-                ->on('facility_revision_history')   
+                ->on('facility_repository')   
                 ->onDelete('cascade');
-            $table->integer('frhAfterUpdateId')
+            $table->integer('fr_id_after')
                 ->unsigned()
                 ->unique()
                 ->nullable();
-            $table->foreign('frhAfterUpdateId')
+            $table->foreign('fr_id_after')
                 ->references('id')
-                ->on('facility_revision_history')
+                ->on('facility_repository')
                 ->onDelete('cascade');
             $table->string('firstName', 50);
             $table->string('lastName', 50);
@@ -45,6 +45,6 @@ class CreateFacilityEditRequests extends Migration
      */
     public function down()
     {
-        Schema::drop('facility_edit_requests');
+        Schema::drop('facility_update_links');
     }
 }

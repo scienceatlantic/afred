@@ -14,7 +14,7 @@ class CreateFacilitiesTable extends Migration
     {
         Schema::create('facilities', function($table) {
             $table->increments('id');
-            $table->integer('facilityRevisionHistoryId')
+            $table->integer('facilityRepositoryId')
                 ->unsigned();
             $table->integer('organizationId')
                 ->unsigned()

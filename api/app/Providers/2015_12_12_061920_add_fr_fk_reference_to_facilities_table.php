@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddFrhFkReferenceToFacilitiesTable extends Migration
+class AddFrFkReferenceToFacilitiesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class AddFrhFkReferenceToFacilitiesTable extends Migration
     public function up()
     {
         Schema::table('facilities', function (Blueprint $table) {
-            $table->foreign('facilityRevisionHistoryId')
+            $table->foreign('facilityRepositoryId')
                 ->references('id')
-                ->on('facility_revision_history')
+                ->on('facility_repository')
                 ->onDelete('restrict');
         });
     }
@@ -28,7 +28,7 @@ class AddFrhFkReferenceToFacilitiesTable extends Migration
     public function down()
     {
         Schema::table('facilities', function (Blueprint $table) {
-            $table->dropForeign('facilities_facilityrevisionhistoryid_foreign');
+            $table->dropForeign('facilities_facilityrepositoryid_foreign');
         });
     }
 }
