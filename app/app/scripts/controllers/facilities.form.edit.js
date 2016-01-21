@@ -2,9 +2,9 @@
 
 angular.module('afredApp').controller('FacilitiesFormEditController',
   ['$scope',
-   'facilityRevisionHistoryResource',
+   'facilityRepositoryResource',
   function($scope,
-           facilityRevisionHistoryResource) {
+           facilityRepositoryResource) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */    
@@ -15,10 +15,10 @@ angular.module('afredApp').controller('FacilitiesFormEditController',
     };
     
     $scope.submit = function() {
-      facilityRevisionHistoryResource.submitEdit(
+      facilityRepositoryResource.submitEdit(
         {
-          facilityRevisionHistoryId:
-            $scope._stateParams.facilityRevisionHistoryId
+          facilityRepositoryId:
+            $scope._stateParams.facilityRepositoryId
         },
         {
           data: $scope.form.formatForApi()

@@ -2,10 +2,10 @@
 
 angular.module('afredApp').controller('AdminDashboardController',
   ['$scope',
-   'facilityRevisionHistoryResource',
+   'facilityRepositoryResource',
    'facilityResource',
   function($scope,
-           facilityRevisionHistoryResource,
+           facilityRepositoryResource,
            facilityResource) {
     /* ---------------------------------------------------------------------
      * Functions.
@@ -18,7 +18,7 @@ angular.module('afredApp').controller('AdminDashboardController',
             page: 1
         });        
       } else {
-        return facilityRevisionHistoryResource.query({
+        return facilityRepositoryResource.query({
             itemsPerPage: 1,
             page: 1,
             state: state

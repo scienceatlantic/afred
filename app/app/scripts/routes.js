@@ -42,7 +42,7 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         controller: 'FacilitiesFormCreateController'
       }).
       state('facilities.form.edit', {
-        url: '/:facilityRevisionHistoryId/edit?token',
+        url: '/:facilityRepositoryId/edit?token',
         templateUrl: 'views/facilities.form.edit.html',
         controller: 'FacilitiesFormEditController'
       }).
@@ -89,15 +89,15 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         templateUrl: 'views/admin.facilities.html',
         controller: 'AdminFacilitiesController'
       }).
-      state('admin.facilityRevisionHistory', {
+      state('admin.facilityRepository', {
         abstract: true,
-        url: '/facility-revision-history',
+        url: '/facility-repository',
         template: '<div data-ui-view></div>'
       }).
-      state('admin.facilityRevisionHistory.show', {
-        url: '/:facilityRevisionHistoryId',
-        templateUrl: 'views/admin.facility-revision-history.show.html',
-        controller: 'AdminFacilityRevisionHistoryShowController'
+      state('admin.facilityRepository.show', {
+        url: '/:facilityRepositoryId',
+        templateUrl: 'views/admin.facility-repository.show.html',
+        controller: 'AdminfacilityRepositoryShowController'
       }).
       state('login', {
         url: '/login',

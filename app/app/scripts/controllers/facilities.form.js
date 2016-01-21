@@ -5,12 +5,12 @@ angular.module('afredApp').controller('FacilitiesFormController',
    '$interval',
    'organizationResource',
    'provinceResource',
-   'facilityRevisionHistoryResource',
+   'facilityRepositoryResource',
   function($scope,
            $interval,
            organizationResource,
            provinceResource,
-           facilityRevisionHistoryResource) {
+           facilityRepositoryResource) {
     /* ---------------------------------------------------------------------
      * Functions/Objects.
      * --------------------------------------------------------------------- */
@@ -27,12 +27,12 @@ angular.module('afredApp').controller('FacilitiesFormController',
       facility: {},
       
       /**
-       * Holds an instance of 'facilityRevisionHistoryResource'.
+       * Holds an instance of 'facilityRepositoryResource'.
        *
        * @type {resource}
        *
        */
-      facilityRevisionHistory: {},
+      facilityRepository: {},
       
       /**
        * Used to keep track of the current 'contact' being viewed.
@@ -230,15 +230,15 @@ angular.module('afredApp').controller('FacilitiesFormController',
        *
        */
       getFacility: function() {
-        $scope.form.facilityRevisionHistory =
-          facilityRevisionHistoryResource.get(
+        $scope.form.facilityRepository =
+          facilityRepositoryResource.get(
             {
-              facilityRevisionHistoryId:
-                $scope._stateParams.facilityRevisionHistoryId
+              facilityRepositoryId:
+                $scope._stateParams.facilityRepositoryId
             },
             function() {
               $scope.form.facility =
-                $scope.form.facilityRevisionHistory.data.facility;
+                $scope.form.facilityRepository.data.facility;
               
               if (angular.isArray($scope.form.facility.contacts)) {
                 $scope.form.facility.contacts.unshift(

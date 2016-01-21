@@ -1,0 +1,39 @@
+<div data-af-loading="!facilityRepository.$resolved || (!facility.organization.$resolved && !facility.organization.name) || !facility.province.$resolved">
+  
+  <div>
+    <div class="bg-warning">
+      <p style="padding: 10px;">
+        <span data-ng-show="facilityRepository.state == 'PENDING_APPROVAL'">You are currently viewing a facility that is pending approval.</span>
+        <span data-ng-show="facilityRepository.state == 'PENDING_EDIT_APPROVAL'">You are currently viewing a facility edit that is pending approval.</span>
+        <span data-ng-show="facilityRepository.state == 'PUBLISHED'">You are currently viewing a published facility.</span>
+        <span data-ng-show="facilityRepository.state == 'REJECTED'">You are currently viewing a rejected facility.</span>
+      </p>
+    </div>
+  </div>
+  <hr>
+  
+  <p class="label label-default">Facility</p>
+  <div data-ng-include="'views/includes/facility.html'"></div>
+  <hr>
+  
+  <div data-ng-show="facility.organization.ilo.firstName">
+    <p class="label label-default">ILO</p>
+    <div data-ng-include="'views/includes/ilo.html'"></div>
+    <hr>
+  </div>
+  
+  <p class="label label-default">Contacts</p>
+  <div data-ng-include="'views/includes/contacts.html'"></div>
+  <hr>
+  
+  <p class="label label-default">Equipment</p>
+  <div data-ng-include="'views/includes/equipment.html'"></div>
+  <br>
+  
+  <p>
+    <button type="button" class="btn btn-default" data-ng-click="approve()" data-ng-show="facilityRepository.state == 'PENDING_APPROVAL'">Approve</button>
+    <button type="button" class="btn btn-default" data-ng-click="reject()" data-ng-show="facilityRepository.state == 'PENDING_APPROVAL'">Reject</button>
+    <button type="button" class="btn btn-default" data-ng-click="approveEdit()" data-ng-show="facilityRepository.state == 'PENDING_EDIT_APPROVAL'">Approve</button>
+    <button type="button" class="btn btn-default" data-ng-click="rejectEdit()" data-ng-show="facilityRepository.state == 'PENDING_EDIT_APPROVAL'">Reject</button>
+  </p>
+</div>

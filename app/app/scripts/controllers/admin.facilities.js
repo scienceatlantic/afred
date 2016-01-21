@@ -2,11 +2,11 @@
 
 angular.module('afredApp').controller('AdminFacilitiesController',
   ['$scope',
-   'facilityRevisionHistoryResource',
+   'facilityRepositoryResource',
    'facilityResource',
 
   function($scope,
-           facilityRevisionHistoryResource,
+           facilityRepositoryResource,
            facilityResource) {
     /* ---------------------------------------------------------------------
      * Functions.
@@ -32,7 +32,7 @@ angular.module('afredApp').controller('AdminFacilitiesController',
         
         default:
           $scope.facilities =
-            facilityRevisionHistoryResource.query(
+            facilityRepositoryResource.query(
               {
                 itemsPerPage: itemsPerPage,
                 page: page,

@@ -3,10 +3,10 @@
 angular.module('afredApp').controller('FacilitiesFormCreateController',
   ['$scope',
    '$timeout',
-   'facilityRevisionHistoryResource',
+   'facilityRepositoryResource',
   function($scope,
            $timeout,
-           facilityRevisionHistoryResource) {
+           facilityRepositoryResource) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */    
@@ -24,7 +24,7 @@ angular.module('afredApp').controller('FacilitiesFormCreateController',
      * successful otherwise an error message is shown instead.
      */
     $scope.submit = function() {
-      facilityRevisionHistoryResource.submit(
+      facilityRepositoryResource.submit(
         {
           state: 'PENDING_APPROVAL',
           data: $scope.form.formatForApi()

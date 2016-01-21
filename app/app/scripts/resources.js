@@ -14,12 +14,12 @@ angular.module('afredApp').factory('facilityResource', ['$rootScope',
   }
 ]);
 
-angular.module('afredApp').factory('facilityRevisionHistoryResource',
+angular.module('afredApp').factory('facilityRepositoryResource',
   ['$rootScope', '$resource', function($rootScope, $resource) {
     return $resource($rootScope._config.api +
-      '/facility-revision-history/:facilityRevisionHistoryId',
+      '/facility-repository/:facilityRepositoryId',
         {
-          facilityRevisionHistoryId: '@id'
+          facilityRepositoryId: '@id'
         },
         {
           query: { isArray: false },
@@ -35,12 +35,12 @@ angular.module('afredApp').factory('facilityRevisionHistoryResource',
   }
 ]);
 
-angular.module('afredApp').factory('facilityEditRequestResource',
+angular.module('afredApp').factory('facilityUpdateLinkResource',
   ['$rootScope', '$resource', function($rootScope, $resource) {
     return $resource($rootScope._config.api +
-      '/facility-edit-requests/:facilityEditRequestId',
+      '/facility-update-links/:facilityUpdateLinkId',
         {
-          facilityEditRequestId: '@id'
+          facilityUpdateLinkId: '@id'
         },
         {
           find: { isArray: false },

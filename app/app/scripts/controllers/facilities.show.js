@@ -6,13 +6,13 @@ angular.module('afredApp').controller('FacilitiesShowController',
    '$stateParams',
    '$uibModal',
    'facilityResource',
-   'facilityRevisionHistoryResource',
+   'facilityRepositoryResource',
   function($scope,
            $state,
            $stateParams,
            $uibModal,
            facilityResource,
-           facilityRevisionHistoryResource) {
+           facilityRepositoryResource) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */

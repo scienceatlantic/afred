@@ -45,16 +45,16 @@
             </tbody>
             
             <tbody data-ng-show="view.state != 'PUBLISHED'">
-              <tr data-dir-paginate="f in facilities.data | itemsPerPage: facilities.perPage" data-total-items="facilities.total" data-pagination-id="facilityRevisionHistories">
+              <tr data-dir-paginate="f in facilities.data | itemsPerPage: facilities.perPage" data-total-items="facilities.total" data-pagination-id="facilityRepository">
                 <td>
-                  <a data-ui-sref="admin.facilityRevisionHistory.show({facilityRevisionHistoryId: f.id})">{{f.data.facility.name}}</a>
+                  <a data-ui-sref="admin.facilityRepository.show({facilityRepositoryId: f.id})">{{f.data.facility.name}}</a>
                 </td>
               </tr>
             </tbody>
           </table>
           
           <div dir-pagination-controls data-on-page-change="getFacilities(newPageNumber)" data-pagination-id="facilities" data-ng-show="view.state == 'PUBLISHED'"></div>
-          <div dir-pagination-controls data-on-page-change="getFacilities(newPageNumber)" data-pagination-id="facilityRevisionHistories" data-ng-show="view.state != 'PUBLISHED'"></div>
+          <div dir-pagination-controls data-on-page-change="getFacilities(newPageNumber)" data-pagination-id="facilityRepository" data-ng-show="view.state != 'PUBLISHED'"></div>
         </div>
       </div>
     </div>

@@ -1,59 +1,59 @@
 'use strict';
 
 angular.module('afredApp').controller(
-  'AdminFacilityRevisionHistoryShowController',
+  'AdminfacilityRepositoryShowController',
   ['$scope',
    '$stateParams',
    'organizationResource',
    'provinceResource',
-   'facilityRevisionHistoryResource',
+   'facilityRepositoryResource',
   function($scope,
            $stateParams,
            organizationResource,
            provinceResource,
-           facilityRevisionHistoryResource) {
+           facilityRepositoryResource) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
     
     $scope.getFacility = function() {
-      $scope.facilityRevisionHistory = facilityRevisionHistoryResource.get({
-        facilityRevisionHistoryId: $stateParams.facilityRevisionHistoryId
+      $scope.facilityRepository = facilityRepositoryResource.get({
+        facilityRepositoryId: $stateParams.facilityRepositoryId
       }, function() {
-        $scope.facility = $scope.facilityRevisionHistory.data.facility;
+        $scope.facility = $scope.facilityRepository.data.facility;
         $scope.formatForApp();
       });
     };
     
     $scope.approve = function() {
-      facilityRevisionHistoryResource.approve({
-        facilityRevisionHistoryId: $stateParams.facilityRevisionHistoryId
+      facilityRepositoryResource.approve({
+        facilityRepositoryId: $stateParams.facilityRepositoryId
       }, null, function(data) {
-        $scope.facilityRevisionHistory = data;
+        $scope.facilityRepository = data;
       });
     };
     
     $scope.reject = function() {
-      facilityRevisionHistoryResource.reject({
-        facilityRevisionHistoryId: $stateParams.facilityRevisionHistoryId
+      facilityRepositoryResource.reject({
+        facilityRepositoryId: $stateParams.facilityRepositoryId
       }, null, function(data) {
-        $scope.facilityRevisionHistory = data;
+        $scope.facilityRepository = data;
       });   
     };
     
     $scope.approveEdit = function() {
-      facilityRevisionHistoryResource.approveEdit({
-        facilityRevisionHistoryId: $stateParams.facilityRevisionHistoryId
+      facilityRepositoryResource.approveEdit({
+        facilityRepositoryId: $stateParams.facilityRepositoryId
       }, null, function(data) {
-        $scope.facilityRevisionHistory = data;
+        $scope.facilityRepository = data;
       });      
     };
     
     $scope.rejectEdit = function() {
-      facilityRevisionHistoryResource.rejectEdit({
-        facilityRevisionHistoryId: $stateParams.facilityRevisionHistoryId
+      facilityRepositoryResource.rejectEdit({
+        facilityRepositoryId: $stateParams.facilityRepositoryId
       }, null, function(data) {
-        $scope.facilityRevisionHistory = data;
+        $scope.facilityRepository = data;
       });         
     };
     
@@ -71,7 +71,7 @@ angular.module('afredApp').controller(
         });
       } else {
         $scope.facility.organization =
-          $scope.facilityRevisionHistory.data.organization;
+          $scope.facilityRepository.data.organization;
       }
       
       $scope.facility.province = provinceResource.get({
