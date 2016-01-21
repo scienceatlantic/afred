@@ -3,16 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App;
+
 use Log;
 
+use App;
 use App\Organization;
 use App\Facility;
 use App\Equipment;
 use App\Contact;
 use App\PrimaryContact;
 use App\FacilityRepository;
-use App\FacilityEditRequest;
+use App\FacilityUpdateLink;
 use App\Events\FacilityRepositoryEvent;
 use App\Http\Requests\FacilityRepositoryRequest;
 use App\Http\Controllers\Controller;
@@ -88,6 +89,7 @@ class FacilityRepositoryController extends Controller
                 break;
             
             case 'PENDING_EDIT_APPROVAL':
+                // Store the ...
                 $frIdBefore = $fr->id;
                 
                 // 
@@ -97,7 +99,7 @@ class FacilityRepositoryController extends Controller
                 $fr = new FacilityRepository($fr->toArray());
                 $fr->save();
                 
-                $ful = FacilityEditRequest
+                $ful = FacilityUpdateLink
                      ::where('frIdBefore', $frIdBefore)
                      ->first();
                 $ful->frIdAfter = $fr->id;
@@ -126,26 +128,35 @@ class FacilityRepositoryController extends Controller
     {
         $data = [];
         
-        // Organization.
-        if (!$request->data['organizationId']) {
-            if ($request->data['organization']['name']) {
-                $data['organization'] =
-                    (new Organization((array) $request->data['organization']))
-                        ->toArray();
-                $data['organization']['isHidden'] = false;
-                $data['organization']['dateAdded'] = $now;
-            }
+        // Organization section.
+        // If an organizationId was provided, skip this part (meaning an
+        // exising organization was selected). If an organizationId was not
+        // provided and an organization name was, store the details (ie. name)
+        // in $data.
+        if (!$request->data['organizationId']
+            && $request->data['organization']['name']) {
+            $data['organization'] =
+                (new Organization((array) $request->data['organization']))
+                    ->toArray();
+            $data['organization']['isHidden'] = false;
+            $data['organization']['dateAdded'] = $now;
         }
 
-        // Facility.
+        // Facility section.
+        // This part is for edits. 
         if ($isEdit) {
+            // Retrieve the existing facility.
             $facility = $fr->facility()->first();
+            
+            // Build the facility array. dateSubmitted and the facility's
+            // id are retained.
             $data['facility'] = (new Facility((array) $request->data))
                 ->toArray();
             $data['facility']['id'] = $facility->id;
             $data['facility']['dateSubmitted'] = $facility->dateSubmitted
                 ->toDateTimeString();
-            $data['facility']['dateUpdated'] = $now; 
+            $data['facility']['dateUpdated'] = $now;
+        // For new records.
         } else {
             $data['facility'] = (new Facility((array) $request->data))
                 ->toArray();
@@ -154,13 +165,13 @@ class FacilityRepositoryController extends Controller
         }
         $data['facility']['isPublic'] = true;
         
-        // Primary contact.
+        // Primary contact section.
         $data['facility']['primaryContact'] =
             (new PrimaryContact((array) $request->data['primaryContact']))
                 ->toArray();
         $data['facility']['primaryContact']['facilityId'] = null;
         
-        // Contacts.
+        // Contacts section.
         $data['facility']['contacts'] = [];
         foreach($request->data['contacts'] as $i => $contact) {
             $data['facility']['contacts'][$i] =
@@ -168,7 +179,7 @@ class FacilityRepositoryController extends Controller
             $data['facility']['contacts'][$i]['facilityId'] = null;
         }
         
-        // Equipment.
+        // Equipment section.
         $data['facility']['equipment'] = [];
         foreach($request->data['equipment'] as $i => $equipment) {
             $data['facility']['equipment'][$i] =
@@ -181,16 +192,20 @@ class FacilityRepositoryController extends Controller
     
     private function _publishFacility($fr, $data, $isEdit = false)
     {
-        // FIX THIS!
-        if (!$data['facility']['organizationId']) {
-            if ($data['organization']['name']) {
-                $data['facility']['organizationId'] =
-                    Organization::create($data['organization'])
-                    ->getKey();
-            }
+        // Organization section.
+        // If the organization key in $data exists, create the
+        // organization and store its key into $data['facility'].
+        if (array_key_exists('organization', $data)) {
+            $data['facility']['organizationId'] =
+                Organization::create($data['organization'])
+                ->getKey();
         }
         
-        if ($isEdit) {            
+        // Facility section.
+        // For edits.
+        if ($isEdit) {
+            // For edits, we're going to delete all existing
+            // contacts, primary contacts, and equipment data.
             Contact
                 ::where('facilityId', $data['facility']['id'])
                 ->delete();
@@ -203,23 +218,26 @@ class FacilityRepositoryController extends Controller
                 ::where('facilityId', $data['facility']['id'])
                 ->delete();
             
+            // Update the facility.
             Facility
                 ::where('id', $data['facility']['id'])
                 ->update($this->_unset($data['facility']));
+        // For new records.
         } else {
             $data['facility']['facilityRepositoryId'] = $fr->id;
             $data['facility']['id'] =
                 Facility::create($data['facility'])->getKey();
         }
         
-        // Primary contact.
+        // Primary contact section.
         $data['facility']['primaryContact']['facilityId'] =
             $data['facility']['id'];
         $data['facility']['primaryContact']['id'] =
             PrimaryContact::create($data['facility']['primaryContact'])
             ->getKey();
         
-        // Contacts.
+        // Contacts section.
+        // Contacts are optional, so we first have to check if it exists.
         if (array_key_exists('contacts', $data['facility'])) {
             foreach($data['facility']['contacts'] as $i => $contact) {
                 $contact['facilityId'] = $data['facility']['id'];
@@ -228,13 +246,11 @@ class FacilityRepositoryController extends Controller
             }                       
         }
         
-        // Equipment.
-        if (array_key_exists('equipment', $data['facility'])) {
-            foreach($data['facility']['equipment'] as $i => $e) {
-                $e['facilityId'] = $data['facility']['id'];
-                $data['facility']['equipment'][$i]['id'] =
-                    Equipment::create($e)->getKey();           
-            }
+        // Equipment section
+        foreach($data['facility']['equipment'] as $i => $e) {
+            $e['facilityId'] = $data['facility']['id'];
+            $data['facility']['equipment'][$i]['id'] =
+                Equipment::create($e)->getKey();           
         }
         
         return $data;
