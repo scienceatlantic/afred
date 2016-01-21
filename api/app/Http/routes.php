@@ -31,16 +31,16 @@ Route::get('auth/logout', 'AuthController@logout');
  *****************************************************************************/
 // Returns a list of facilities that have contacts (primary or regular)
 // matching the email address provided.
-Route::get('facility-edit-requests',
-		   'FacilityEditRequestController@indexMatchingFacilities');
+Route::get('facility-update-links',
+		   'FacilityUpdateLinkController@indexMatchingFacilities');
 
 // Generates an edit 'token' that will be emailed to the requesting user.
-Route::post('facility-edit-requests',
-			'FacilityEditRequestController@generateToken');
+Route::post('facility-update-links',
+			'FacilityUpdateLinkController@generateToken');
 
 // TODO
-Route::put('facility-edit-requests',
-		   'FacilityEditRequestController@verifyToken');
+Route::put('facility-update-links',
+		   'FacilityUpdateLinkController@verifyToken');
 
 			
 /******************************************************************************
@@ -76,8 +76,10 @@ Route::resource('facilities', 'FacilityController', [
 /******************************************************************************
  * Facility revision history routes.
  *****************************************************************************/
+// Merging the functions of 'store' and 'update' into 'update'.
 Route::post('facility-repository',
 	'FacilityRepositoryController@update');
+
 Route::resource('facility-repository',
 	'FacilityRepositoryController', [
 	'only' => ['index',

@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\FacilityRevisionHistory;
+use App\FacilityRepository;
 
 class Facility extends Model
 {
@@ -37,13 +37,13 @@ class Facility extends Model
     
     public function currentRevision()
     {
-        return $this->belongsTo('App\FacilityRevisionHistory',
-            'facilityRevisionHistoryId');
+        return $this->belongsTo('App\FacilityRepository',
+            'facilityRepositoryId');
     }
     
     public function facilityRevisionHistory()
     {
-        return $this->hasMany('App\FacilityRevisionHistory', 'facilityId');
+        return $this->hasMany('App\FacilityRepository', 'facilityId');
     }
     
     public function organization()

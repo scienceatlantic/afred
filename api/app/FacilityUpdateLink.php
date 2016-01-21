@@ -15,11 +15,11 @@ class FacilityUpdateLink extends Model
     
     public function facilityRepositoryBefore()
     {
-        $this->belongsTo('App\FacilityRepository', 'fr_id_before');
+        $this->belongsTo('App\FacilityRepository', 'frIdBefore');
     }
     
     public function facilityRepositoryAfter()
     {
-        $this->belongsTo('App\FacilityRepository', 'fr_id_after');
+        $this->belongsTo('App\FacilityRepository', 'frIdAfter');
     }
 }

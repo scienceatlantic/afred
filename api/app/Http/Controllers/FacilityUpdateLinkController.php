@@ -9,7 +9,7 @@ use App;
 use App\Facility;
 use App\Contact;
 use App\PrimaryContact;
-use App\FacilityEditRequest;
+use App\FacilityUpdateLink;
 use App\facilityRepository;
 use App\Events\FacilityEditTokenRequestedEvent;
 use App\Http\Requests;
@@ -39,17 +39,17 @@ class FacilityUpdateLinkController extends Controller
         $f = Facility::whereIn('facilities.id', $ids);
         
         // For each facility, grab its latest revision.
-        $f->join('facility_revision_history',
+        $f->join('facility_repository',
             'facilities.facilityRepositoryId',
-            '=', 'facility_revision_history.id');
+            '=', 'facility_repository.id');
             
         // Finally, check if each facility already has an edit 'token'
         // associated with it.
         $f->leftJoin('facility_update_links',
-                     'facility_revision_history.id',
-                     '=', 'facility_update_links.frhBeforeUpdateId')
+                     'facility_repository.id',
+                     '=', 'facility_update_links.frIdBefore')
           ->select('facilities.*',
-                   'facility_update_links.id as facilityEditRequestId');
+                   'facility_update_links.id as facilityUpdateLinkId');
         
         $paginate = $request->input('paginate', true);
         $itemsPerPage = $request->input('itemsPerPage', 15);
@@ -94,42 +94,42 @@ class FacilityUpdateLinkController extends Controller
         }
     
         // Grab the current revision.
-        $frh = $f->currentRevision()->first();
+        $fr = $f->currentRevision()->first();
                  
         // Generate the token only if an existing token doesn't already exist.
-        $fer = FacilityEditRequest
-            ::where('frhBeforeUpdateId', $frh->id)
+        $fal = FacilityUpdateLink
+            ::where('frIdBefore', $fr->id)
             ->get();
             
-        if (!count($fer)) {
-            $fer = new FacilityEditRequest();
-            $fer->frhBeforeUpdateId = $frh->id;
-            $fer->firstName = $editor->firstName;
-            $fer->lastName = $editor->lastName;
-            $fer->email = $editor->email;
-            $fer->token = strtolower(str_random(20));
-            $fer->dateRequested = $this->_now();
-            $fer->save();            
+        if (!count($fal)) {
+            $fal = new FacilityUpdateLink();
+            $fal->frIdBefore = $fr->id;
+            $fal->firstName = $editor->firstName;
+            $fal->lastName = $editor->lastName;
+            $fal->email = $editor->email;
+            $fal->token = strtolower(str_random(20));
+            $fal->dateRequested = $this->_now();
+            $fal->save();            
         } else {
             App::abort(400);
         }
 
-        event(new FacilityEditTokenRequestedEvent($fer));
-        return $fer;
+        //event(new FacilityEditTokenRequestedEvent($fal));
+        return $fal;
     }
     
     public function verifyToken(Request $request, $id)
     {
-        $frhBeforeUpdateId = $request->input('facilityRepositoryId');
+        $frIdBefore = $request->input('facilityRepositoryId');
         $token = $request->input('token');
         
-        $fer = FacilityEditRequest
-            ::where('frhBeforeUpdateId', $frhBeforeUpdateId)
+        $fal = FacilityUpdateLink
+            ::where('frIdBefore', $frIdBefore)
             ->where('token', $token)
             ->first();
             
-        if ($fer) {
-            return $fer;
+        if ($fal) {
+            return $fal;
         } else {
             App::abort(404);
         }
