@@ -14,18 +14,18 @@ class CreateFacilityUpdateLinks extends Migration
     {
         Schema::create('facility_update_links', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('fr_id_before')
+            $table->integer('frIdBefore')
                 ->unsigned()
                 ->unique();
-            $table->foreign('fr_id_before')
+            $table->foreign('frIdBefore')
                 ->references('id')
                 ->on('facility_repository')   
                 ->onDelete('cascade');
-            $table->integer('fr_id_after')
+            $table->integer('frIdAfter')
                 ->unsigned()
                 ->unique()
                 ->nullable();
-            $table->foreign('fr_id_after')
+            $table->foreign('frIdAfter')
                 ->references('id')
                 ->on('facility_repository')
                 ->onDelete('cascade');
