@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->call(RealIlosTableSeeder::class);
         
         // Contains dummy data.
-        $this->call(DummyFacilitiesTableSeeder::class);
+        //$this->call(DummyFacilitiesTableSeeder::class);
         $this->call(DummySystemUsersTableSeeder::class);
         
         Model::reguard();

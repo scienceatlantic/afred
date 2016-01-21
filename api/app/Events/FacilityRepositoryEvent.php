@@ -2,25 +2,25 @@
 
 namespace App\Events;
 
-use App\FacilityRevisionHistory;
+use App\FacilityRepository;
 use App\Events\Event;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class FacilityRevisionHistoryEvent extends Event
+class FacilityRepositoryEvent extends Event
 {
     use SerializesModels;
     
-    public $frh;
+    public $fr;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(FacilityRevisionHistory $frh)
+    public function __construct(FacilityRepository $fr)
     {
-        $this->frh = $frh;
+        $this->fr = $fr;
     }
 
     /**

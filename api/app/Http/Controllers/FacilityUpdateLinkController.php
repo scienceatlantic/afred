@@ -10,12 +10,12 @@ use App\Facility;
 use App\Contact;
 use App\PrimaryContact;
 use App\FacilityEditRequest;
-use App\FacilityRevisionHistory;
+use App\facilityRepository;
 use App\Events\FacilityEditTokenRequestedEvent;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-class FacilityEditRequestController extends Controller
+class FacilityUpdateLinkController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -40,16 +40,16 @@ class FacilityEditRequestController extends Controller
         
         // For each facility, grab its latest revision.
         $f->join('facility_revision_history',
-            'facilities.facilityRevisionHistoryId',
+            'facilities.facilityRepositoryId',
             '=', 'facility_revision_history.id');
             
         // Finally, check if each facility already has an edit 'token'
         // associated with it.
-        $f->leftJoin('facility_edit_requests',
+        $f->leftJoin('facility_update_links',
                      'facility_revision_history.id',
-                     '=', 'facility_edit_requests.frhBeforeUpdateId')
+                     '=', 'facility_update_links.frhBeforeUpdateId')
           ->select('facilities.*',
-                   'facility_edit_requests.id as facilityEditRequestId');
+                   'facility_update_links.id as facilityEditRequestId');
         
         $paginate = $request->input('paginate', true);
         $itemsPerPage = $request->input('itemsPerPage', 15);
@@ -120,7 +120,7 @@ class FacilityEditRequestController extends Controller
     
     public function verifyToken(Request $request, $id)
     {
-        $frhBeforeUpdateId = $request->input('facilityRevisionHistoryId');
+        $frhBeforeUpdateId = $request->input('facilityRepositoryId');
         $token = $request->input('token');
         
         $fer = FacilityEditRequest

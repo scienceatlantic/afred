@@ -2,22 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use Log;
-
 use Illuminate\Http\Request;
 use App;
+use Log;
+
 use App\Organization;
 use App\Facility;
 use App\Equipment;
 use App\Contact;
 use App\PrimaryContact;
-use App\FacilityRevisionHistory;
+use App\FacilityRepository;
 use App\FacilityEditRequest;
-use App\Events\FacilityRevisionHistoryEvent;
-use App\Http\Requests\FacilityRevisionHistoryRequest;
+use App\Events\FacilityRepositoryEvent;
+use App\Http\Requests\FacilityRepositoryRequest;
 use App\Http\Controllers\Controller;
 
-class FacilityRevisionHistoryController extends Controller
+class FacilityRepositoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -29,11 +29,11 @@ class FacilityRevisionHistoryController extends Controller
         $itemsPerPage = $request->input('itemsPerPage', 15);
         $state = $request->input('state', '%');
         $stateOp = $state  == '%' ? 'like' : '=';
-        $frh = FacilityRevisionHistory
+        $fr = FacilityRepository
             ::where('state', $stateOp, $state)
             ->paginate($itemsPerPage);
             
-        return $this->_toCamelCase($frh->toArray());
+        return $this->_toCamelCase($fr->toArray());
     }
 
     /**
@@ -44,7 +44,7 @@ class FacilityRevisionHistoryController extends Controller
      */
     public function show($id)
     {
-        return FacilityRevisionHistory::findOrFail($id);            
+        return FacilityRepository::findOrFail($id);            
     }
 
     /**
@@ -54,12 +54,12 @@ class FacilityRevisionHistoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(FacilityRevisionHistoryRequest $request, $id = null)
+    public function update(FacilityRepositoryRequest $request, $id = null)
     {
         // Unless we're dealing with a 'PENDING_APPROVAL' record, grab
-        // the FacilityRevisionHistory object.
+        // the FacilityRepository object.
         if ($request->input('state') != 'PENDING_APPROVAL') {
-           $frh = FacilityRevisionHistory::findOrFail($id); 
+           $fr = FacilityRepository::findOrFail($id); 
         }
         
         // Grab the current datetime.
@@ -67,65 +67,65 @@ class FacilityRevisionHistoryController extends Controller
         
         switch ($request->input('state')) {
             case 'PENDING_APPROVAL':
-                $frh = new FacilityRevisionHistory(); 
-                $frh->state = 'PENDING_APPROVAL';
-                $frh->data = $this->_createFrhData($request, $now);
-                $frh->dateSubmitted = $now;
-                $frh->save();
+                $fr = new FacilityRepository(); 
+                $fr->state = 'PENDING_APPROVAL';
+                $fr->data = $this->_createFrhData($request, $now);
+                $fr->dateSubmitted = $now;
+                $fr->save();
                 break;
             
             case 'PUBLISHED':                
-                $data = $this->_publishFacility($frh, $frh->data);
-                $frh->facilityId = $data['facility']['id'];
-                $frh->state = 'PUBLISHED';
-                $frh->data = $data;
-                $frh->update();
+                $data = $this->_publishFacility($fr, $fr->data);
+                $fr->facilityId = $data['facility']['id'];
+                $fr->state = 'PUBLISHED';
+                $fr->data = $data;
+                $fr->update();
                 break;
             
             case 'REJECTED':
-                $frh->state = 'REJECTED';
-                $frh->update();
+                $fr->state = 'REJECTED';
+                $fr->update();
                 break;
             
             case 'PENDING_EDIT_APPROVAL':
-                $frhBeforeUpdateId = $frh->id;
+                $frBeforeUpdateId = $fr->id;
                 
                 // 
-                $frh->state = 'PENDING_EDIT_APPROVAL';
-                $frh->data = $this->_createFrhData($request, $now, true, $frh);
-                $frh->dateSubmitted = $now;
-                $frh = new FacilityRevisionHistory($frh->toArray());
-                $frh->save();
+                $fr->state = 'PENDING_EDIT_APPROVAL';
+                $fr->data = $this->_createFrhData($request, $now, true, $fr);
+                $fr->dateSubmitted = $now;
+                $fr = new FacilityRepository($fr->toArray());
+                $fr->save();
                 
                 $fer = FacilityEditRequest
-                     ::where('frhBeforeUpdateId', $frhBeforeUpdateId)
+                     ::where('frhBeforeUpdateId', $frBeforeUpdateId)
                      ->first();
-                $fer->frhAfterUpdateId = $frh->id;
+                $fer->frhAfterUpdateId = $fr->id;
                 $fer->save();
                 break;
             
             case 'PUBLISHED_EDIT':
-                $data = $this->_publishFacility($frh, $frh->data, true);
-                $frh->facilityId = $data['facility']['id'];
-                $frh->state = 'PUBLISHED_EDIT';
-                $frh->data = $data;
-                $frh->update();                
+                $data = $this->_publishFacility($fr, $fr->data, true);
+                $fr->facilityId = $data['facility']['id'];
+                $fr->state = 'PUBLISHED_EDIT';
+                $fr->data = $data;
+                $fr->update();                
                 break;
             
             case 'REJECTED_EDIT':
-                $frh->state = 'REJECTED_EDIT';
-                $frh->update(); 
+                $fr->state = 'REJECTED_EDIT';
+                $fr->update(); 
                 break;
         }
         
-        event(new FacilityRevisionHistoryEvent($frh));
-        return $frh;
+        //event(new FacilityRepositoryEvent($fr));
+        return $fr;
     }
         
     private function _createFrhData($request,
                                     $now,
                                     $isEdit = false,
-                                    $frh = null)
+                                    $fr = null)
     {
         $data = [];
         
@@ -142,7 +142,7 @@ class FacilityRevisionHistoryController extends Controller
 
         // Facility.
         if ($isEdit) {
-            $facility = $frh->facility()->first();
+            $facility = $fr->facility()->first();
             $data['facility'] = (new Facility((array) $request->data))
                 ->toArray();
             $data['facility']['id'] = $facility->id;
@@ -182,7 +182,7 @@ class FacilityRevisionHistoryController extends Controller
         return $data;
     }
     
-    private function _publishFacility($frh, $data, $isEdit = false)
+    private function _publishFacility($fr, $data, $isEdit = false)
     {
         // FIX THIS!
         if (!$data['facility']['organizationId']) {
@@ -210,7 +210,7 @@ class FacilityRevisionHistoryController extends Controller
                 ::where('id', $data['facility']['id'])
                 ->update($this->_unset($data['facility']));
         } else {
-            $data['facility']['facilityRevisionHistoryId'] = $frh->id;
+            $data['facility']['FacilityRepositoryId'] = $fr->id;
             $data['facility']['id'] =
                 Facility::create($data['facility'])->getKey();            
         }

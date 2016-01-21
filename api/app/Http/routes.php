@@ -76,10 +76,10 @@ Route::resource('facilities', 'FacilityController', [
 /******************************************************************************
  * Facility revision history routes.
  *****************************************************************************/
-Route::post('facility-revision-history',
-	'FacilityRevisionHistoryController@update');
-Route::resource('facility-revision-history',
-	'FacilityRevisionHistoryController', [
+Route::post('facility-repository',
+	'FacilityRepositoryController@update');
+Route::resource('facility-repository',
+	'FacilityRepositoryController', [
 	'only' => ['index',
 			   'show',
 			   'update',

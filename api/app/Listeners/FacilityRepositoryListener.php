@@ -7,10 +7,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 use Log;
 use App\SystemUser;
-use App\Events\FacilityRevisionHistoryEvent;
+use App\Events\FacilityRepositoryEvent;
 use Mail;
 
-class FacilityRevisionHistoryListener
+class FacilityRepositoryListener
 {
     /**
      * Create the event listener.
@@ -25,14 +25,14 @@ class FacilityRevisionHistoryListener
     /**
      * Handle the event.
      *
-     * @param  FacilityRevisionHistoryEvent  $event
+     * @param  FacilityRepositoryEvent  $event
      * @return void
      */
-    public function handle(FacilityRevisionHistoryEvent $event)
+    public function handle(FacilityRepositoryEvent $event)
     {
-        $state = $event->frh->state;
+        $state = $event->fr->state;
         $subjectPrefix = 'AFRED 2.0 TEST - ';
-        $templatePrefix = 'emails.events.frh.';
+        $templatePrefix = 'emails.events.fr.';
         $emails = [];
         
         /*$emails = [
@@ -87,7 +87,7 @@ class FacilityRevisionHistoryListener
                 Mail::send(
                     ['text' => $params['template']],
                     
-                    [$event->frh->data],
+                    [$event->fr->data],
                     
                     function ($message) use ($params) {
                         foreach($params['to'] as $to) {

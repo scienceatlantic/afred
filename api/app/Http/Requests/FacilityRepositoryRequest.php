@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App;
 use App\Http\Requests\Request;
 
-class FacilityRevisionHistoryRequest extends Request
+class FacilityRepositoryRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
