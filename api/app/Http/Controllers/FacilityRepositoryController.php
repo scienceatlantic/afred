@@ -69,7 +69,7 @@ class FacilityRepositoryController extends Controller
             case 'PENDING_APPROVAL':
                 $fr = new FacilityRepository(); 
                 $fr->state = 'PENDING_APPROVAL';
-                $fr->data = $this->_createFrhData($request, $now);
+                $fr->data = $this->_formatFrData($request, $now);
                 $fr->dateSubmitted = $now;
                 $fr->save();
                 break;
@@ -88,20 +88,20 @@ class FacilityRepositoryController extends Controller
                 break;
             
             case 'PENDING_EDIT_APPROVAL':
-                $frBeforeUpdateId = $fr->id;
+                $frIdBefore = $fr->id;
                 
                 // 
                 $fr->state = 'PENDING_EDIT_APPROVAL';
-                $fr->data = $this->_createFrhData($request, $now, true, $fr);
+                $fr->data = $this->_formatFrData($request, $now, true, $fr);
                 $fr->dateSubmitted = $now;
                 $fr = new FacilityRepository($fr->toArray());
                 $fr->save();
                 
-                $fer = FacilityEditRequest
-                     ::where('frhBeforeUpdateId', $frBeforeUpdateId)
+                $ful = FacilityEditRequest
+                     ::where('frIdBefore', $frIdBefore)
                      ->first();
-                $fer->frhAfterUpdateId = $fr->id;
-                $fer->save();
+                $ful->frIdAfter = $fr->id;
+                $ful->save();
                 break;
             
             case 'PUBLISHED_EDIT':
@@ -122,10 +122,7 @@ class FacilityRepositoryController extends Controller
         return $fr;
     }
         
-    private function _createFrhData($request,
-                                    $now,
-                                    $isEdit = false,
-                                    $fr = null)
+    private function _formatFrData($request, $now, $isEdit = false, $fr = null)
     {
         $data = [];
         
@@ -210,9 +207,9 @@ class FacilityRepositoryController extends Controller
                 ::where('id', $data['facility']['id'])
                 ->update($this->_unset($data['facility']));
         } else {
-            $data['facility']['FacilityRepositoryId'] = $fr->id;
+            $data['facility']['facilityRepositoryId'] = $fr->id;
             $data['facility']['id'] =
-                Facility::create($data['facility'])->getKey();            
+                Facility::create($data['facility'])->getKey();
         }
         
         // Primary contact.
