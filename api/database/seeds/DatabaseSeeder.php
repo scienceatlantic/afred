@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
         $this->call(RealProvincesTableSeeder::class);
         $this->call(RealOrganizationsTableSeeder::class);
         $this->call(RealIlosTableSeeder::class);
+        $this->call(RealSettingsTableSeeder::class);
         
         // Contains dummy data.
         //$this->call(DummyFacilitiesTableSeeder::class);
