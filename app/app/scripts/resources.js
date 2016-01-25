@@ -29,24 +29,17 @@ angular.module('afredApp').factory('facilityRepositoryResource',
           submitEdit: { method: 'PUT', params: { state:
             'PENDING_EDIT_APPROVAL' }},
           approveEdit: { method: 'PUT', params: { state: 'PUBLISHED_EDIT' }},
-          rejectEdit: { method: 'PUT', params: { state: 'REJECTED_EDIT' }}    
-        }
-    );
-  }
-]);
-
-angular.module('afredApp').factory('facilityUpdateLinkResource',
-  ['$rootScope', '$resource', function($rootScope, $resource) {
-    return $resource($rootScope._config.api +
-      '/facility-update-links/:facilityUpdateLinkId',
-        {
-          facilityUpdateLinkId: '@id'
-        },
-        {
-          find: { isArray: false },
-          findNoPaginate: { isArray: true, params: { paginate: 0 } },
-          generateToken: { method: 'POST' },
-          verifyToken: { method: 'PUT' }
+          rejectEdit: { method: 'PUT', params: { state: 'REJECTED_EDIT' }},
+          
+          queryTokens: { url: $rootScope._config.api +
+            '/facility-update-links', method: 'GET', isArray: false },
+          queryTokensNoPaginate: { url: $rootScope._config.api +
+            '/facility-update-links', method: 'GET', isArray: true,
+            params: { paginate: 0 }},
+          generateToken: { url: $rootScope._config.api +
+            '/facility-update-links/generate-token', method: 'POST' },
+          verifyToken: { url: $rootScope._config.api +
+            '/facility-repository/verify-token', method: 'POST' }
         }
     );
   }

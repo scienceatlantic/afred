@@ -3,11 +3,9 @@
 angular.module('afredApp').controller('FacilitiesUpdateController',
   ['$scope',
    'facilityResource',
-   'facilityUpdateLinkResource',
    'facilityRepositoryResource',
   function($scope,
            facilityResource,
-           facilityUpdateLinkResource,
            facilityRepositoryResource) {
     /* ---------------------------------------------------------------------
      * Functions.
@@ -19,7 +17,7 @@ angular.module('afredApp').controller('FacilitiesUpdateController',
         $scope.loading.facilities = true;
         page = page ? page : 1;
   
-        $scope.facilities = facilityUpdateLinkResource.find(
+        $scope.facilities = facilityRepositoryResource.queryTokens(
           {
             email: $scope.form.email,
             page: page,
@@ -43,7 +41,7 @@ angular.module('afredApp').controller('FacilitiesUpdateController',
     };
     
     $scope.requestEditToken = function(id) {
-      facilityUpdateLinkResource.generateToken({
+      facilityRepositoryResource.generateToken({
         facilityId: id,
         email: $scope.form.email
       }, function() {
