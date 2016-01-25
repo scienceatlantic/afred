@@ -4,7 +4,7 @@ use Illuminate\Database\Seeder;
 use App\Province;
 use Carbon\Carbon;
 
-class RealProvincesTableSeeder extends Seeder
+class ProvincesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.

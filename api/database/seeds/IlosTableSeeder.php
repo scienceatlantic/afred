@@ -5,7 +5,7 @@ use App\Organization;
 use App\Ilo;
 use Carbon\Carbon;
 
-class RealIlosTableSeeder extends Seeder
+class IlosTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.

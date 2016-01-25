@@ -4,7 +4,7 @@ use Illuminate\Database\Seeder;
 use App\Organization;
 use Carbon\Carbon;
 
-class RealOrganizationsTableSeeder extends Seeder
+class OrganizationsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.

@@ -15,15 +15,17 @@ class DatabaseSeeder extends Seeder
         Model::unguard();
         
         // Contains real data.
-        $this->call(RealProvincesTableSeeder::class);
-        $this->call(RealOrganizationsTableSeeder::class);
-        $this->call(RealIlosTableSeeder::class);
-        $this->call(RealSettingsTableSeeder::class);
+        $this->call(ProvincesTableSeeder::class);
+        $this->call(OrganizationsTableSeeder::class);
+        $this->call(IlosTableSeeder::class);
+        $this->call(SettingsTableSeeder::class);
         
         // Contains dummy data.
-        //$this->call(DummyFacilitiesTableSeeder::class);
-        $this->call(DummySystemUsersTableSeeder::class);
-        
+        if (env('APP_ENV') == 'local') {
+            //$this->call(DummyFacilitiesTableSeeder::class);
+            $this->call(DummySystemUsersTableSeeder::class);            
+        }
+
         Model::reguard();
     }
 }
