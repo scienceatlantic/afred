@@ -2,11 +2,20 @@
 
 namespace App\Http\Controllers;
 
+// Controllers.
+use App\Http\Controllers\Controller;
+
+// Events.
+use App\Events\FacilityRepositoryEvent;
+
+// Laravel.
 use Illuminate\Http\Request;
 
+// Misc.
+use App;
 use Log;
 
-use App;
+// Models.
 use App\Organization;
 use App\Facility;
 use App\Equipment;
@@ -14,9 +23,9 @@ use App\Contact;
 use App\PrimaryContact;
 use App\FacilityRepository;
 use App\FacilityUpdateLink;
-use App\Events\FacilityRepositoryEvent;
+
+// Requests.
 use App\Http\Requests\FacilityRepositoryRequest;
-use App\Http\Controllers\Controller;
 
 class FacilityRepositoryController extends Controller
 {
