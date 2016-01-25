@@ -2,10 +2,15 @@
 
 namespace App\Events;
 
-use App\FacilityRepository;
+// Events.
 use App\Events\Event;
+
+// Laravel.
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+
+// Models.
+use App\FacilityRepository;
 
 class FacilityRepositoryEvent extends Event
 {

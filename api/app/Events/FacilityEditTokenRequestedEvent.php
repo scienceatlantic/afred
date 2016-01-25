@@ -2,25 +2,30 @@
 
 namespace App\Events;
 
-use App\FacilityEditRequest;
+// Events.
 use App\Events\Event;
+
+// Laravel.
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+
+// Models.
+use App\FacilityUpdateLink;
 
 class FacilityEditTokenRequestedEvent extends Event
 {
     use SerializesModels;
     
-    public $fer;
+    public $ful;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(FacilityEditRequest $fer)
+    public function __construct(FacilityUpdateLink $ful)
     {
-        $this->fer = $fer;
+        $this->ful = $ful;
     }
 
     /**

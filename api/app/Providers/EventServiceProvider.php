@@ -13,12 +13,12 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'App\Events\FacilityRevisionHistoryEvent' => [
-            'App\Listeners\FacilityRevisionHistoryListener',            
+        'App\Events\FacilityRepositoryEvent' => [
+            'App\Listeners\FacilityRepositoryListener',            
         ],
         
         'App\Events\FacilityEditTokenRequestedEvent' => [
-            'App\Listeners\FacilityEditTokenRequestedListener'
+            'App\Listeners\EmailFacilityEditTokenListener'
         ]
     ];
 

@@ -2,26 +2,21 @@
 
 namespace App\Listeners;
 
+// Laravel.
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
+// Misc.
 use Log;
-use App\SystemUser;
-use App\Events\FacilityRepositoryEvent;
 use Mail;
 
-class FacilityRepositoryListener
-{
-    /**
-     * Create the event listener.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
+// Models.
+use App\Setting;
+use App\SystemUser;
+use App\Events\FacilityRepositoryEvent;
 
+class FacilityRepositoryListener extends BaseListener
+{
     /**
      * Handle the event.
      *
@@ -30,88 +25,69 @@ class FacilityRepositoryListener
      */
     public function handle(FacilityRepositoryEvent $event)
     {
-        $state = $event->fr->state;
-        $subjectPrefix = 'AFRED 2.0 TEST - ';
+        // Variables for use in all cases.
+        $fr = $event->fr;
+        $facility = $fr->data['facility']['name'];
         $templatePrefix = 'emails.events.fr.';
-        $emails = [];
+        $subjectPrefix = Setting::find('mailSubjectPrefix')->value;
         
-        /*$emails = [
-            'administrators' => [
-                'to' => [
-                    [
-                        'name' => '',
-                        'email' => '',                        
-                    ],
-                ],
-                
-                'subject' => '',
-                'template' => ''                
-            ],
-            
-            /*'primaryContact' => [
-
-            ],
-            
-            'ilos'           => [
-                
-            ],
-        ];*/
+        // Data for the email templates.
+        $data = [
+            'name'        => '', // Recipient's name.
+            'facility'    => $facility,
+            'appName'     => Setting::find('appName')->value,
+            'appAcronym'  => Setting::find('appAcronym')->value,
+            'appAddress'  => Setting::find('appAddress')->value,
+            'mailAddress' => Setting::find('mailAddress')->value
+        ];
         
-        switch ($state) {
-            case 'PENDING_APPROVAL':
-                $emails['administrators']['to'] = [];
-                $administrators = SystemUser::all();
+        switch ($fr->state) {
+            // Emails are sent out to all admins and the primary contact.
+            case 'PENDING_APPROVAL':    
+                // Administrator section.
+                $template = $templatePrefix . 'admin-pending-approval';
+                $subject = $subjectPrefix
+                    . 'New Submission (' . $facility . ')';              
                 
-                foreach($administrators as $a) {                    
-                    array_push($emails['administrators']['to'], [
+                foreach(SystemUser::all() as $a) {
+                    $data['name'] = $name;
+                    $this->_mail($template, $subject, $data, [
                         'name'  => $a->firstName . ' ' . $a->lastName,
                         'email' => $a->username
                     ]);
-                    
-                    $emails['administrators']['subject'] =
-                        "{$subjectPrefix}New Record Submitted";
-                    $emails['administrators']['template'] =
-                        "{$templatePrefix}submitted";
                 }
                 
-                break;
-            
-            case 'sd':
-                break;
-        }
+                // Primary contact section.
+                $template = $templatePrefix
+                    . 'primary-contact-pending-approval';
+                $subject = $subjectPrefix . 'Submission Received';
+                $pc = $fr->data['facility']['primaryContact'];
                 
-        try {
-            Log::debug($emails);
+                $data['name'] = $name;
+                $this->_mail($template, $subject, $data, [
+                    'name'  => $pc['firstName'] . ' ' . $pc['lastName'],
+                    'email' => $pc['email']
+                ]);
+                break;
             
-            foreach($emails as $user => $params) {
-                Mail::send(
-                    ['text' => $params['template']],
-                    
-                    [$event->fr->data],
-                    
-                    function ($message) use ($params) {
-                        foreach($params['to'] as $to) {
-                            $message->to($to['email'], $to['name']);                       
-                        }
-                        
-                        if (array_key_exists('cc', $params)) {
-                            foreach($params['cc'] as $bcc) {
-                                $message->cc($cc['email'], $cc['name']); 
-                            }                            
-                        }
-                        
-                        if (array_key_exists('bcc', $params)) {
-                            foreach($params['bcc'] as $bcc) {
-                                $message->bcc($bcc['email'], $bcc['name']); 
-                            }                            
-                        }
-                        
-                        $message->subject($params['subject']);
-                    }
-                );                
-            }            
-        } catch (Exception $e) {
-            Log::error($e->getMessage());
+            // Emails are sent out to all admins, the primary contact, and
+            // the ILO (if applicable).
+            case 'PUBLISHED':
+                // Administrator section.
+                
+                break;
+            
+            case 'REJECTED':
+                break;
+            
+            case 'PENDING_EDIT_APPROVAL':
+                break;
+            
+            case 'PUBLISHED_EDIT':
+                break;
+                
+            case 'REJECTED_EDIT':
+                break;
         }
     }
 }
