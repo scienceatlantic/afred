@@ -50,7 +50,7 @@ class FacilityRepositoryListener extends BaseListener
                     . 'New Submission (' . $facility . ')';              
                 
                 foreach(SystemUser::all() as $a) {
-                    $data['name'] = $name;
+                    $data['name'] = $a->firstName . ' ' . $a->lastName;
                     $this->_mail($template, $subject, $data, [
                         'name'  => $a->firstName . ' ' . $a->lastName,
                         'email' => $a->username
@@ -63,7 +63,7 @@ class FacilityRepositoryListener extends BaseListener
                 $subject = $subjectPrefix . 'Submission Received';
                 $pc = $fr->data['facility']['primaryContact'];
                 
-                $data['name'] = $name;
+                $data['name'] = $pc['firstName'] . ' ' . $pc['lastName'];
                 $this->_mail($template, $subject, $data, [
                     'name'  => $pc['firstName'] . ' ' . $pc['lastName'],
                     'email' => $pc['email']
