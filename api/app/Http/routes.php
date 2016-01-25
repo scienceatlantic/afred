@@ -25,23 +25,6 @@ Route::get('auth/ping', 'AuthController@ping');
 // Logout.
 Route::get('auth/logout', 'AuthController@logout'); 
 
-
-/******************************************************************************
- * Facility edit request routes.
- *****************************************************************************/
-// Returns a list of facilities that have contacts (primary or regular)
-// matching the email address provided.
-Route::get('facility-update-links',
-		   'FacilityUpdateLinkController@indexMatchingFacilities');
-
-// Generates an edit 'token' that will be emailed to the requesting user.
-Route::post('facility-update-links',
-			'FacilityUpdateLinkController@generateToken');
-
-// TODO
-Route::put('facility-update-links',
-		   'FacilityUpdateLinkController@verifyToken');
-
 			
 /******************************************************************************
  * Institution routes.
@@ -74,8 +57,9 @@ Route::resource('facilities', 'FacilityController', [
 
 			   
 /******************************************************************************
- * Facility revision history routes.
+ * Facility repository routes.
  *****************************************************************************/
+ 
 // Merging the functions of 'store' and 'update' into 'update'.
 Route::post('facility-repository',
 	'FacilityRepositoryController@update');
@@ -86,3 +70,16 @@ Route::resource('facility-repository',
 			   'show',
 			   'update',
 			   'destroy']]);
+
+/******************************************************************************
+ * Facility update link routes.
+ *****************************************************************************/
+               
+Route::get('facility-update-links/',
+           'FacilityUpdateLinkController@index');
+
+Route::post('facility-update-links/generate-token',
+           'FacilityUpdateLinkController@generateToken');
+
+Route::post('facility-update-links/verify-token',
+           'FacilityUpdateLinkController@verifyToken');
