@@ -2,18 +2,28 @@
 
 namespace App\Http\Controllers;
 
+// Controllers.
+use App\Http\Controllers\Controller;
+
+// Events.
+use App\Events\FacilityEditTokenRequestedEvent;
+
+// Laravel.
 use Illuminate\Http\Request;
 
+// Misc.
 use Log;
 use App;
+
+// Models.
 use App\Facility;
 use App\Contact;
 use App\PrimaryContact;
 use App\FacilityUpdateLink;
-use App\facilityRepository;
-use App\Events\FacilityEditTokenRequestedEvent;
+use App\FacilityRepository;
+
+// Requests.
 use App\Http\Requests;
-use App\Http\Controllers\Controller;
 
 class FacilityUpdateLinkController extends Controller
 {
@@ -22,7 +32,7 @@ class FacilityUpdateLinkController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function indexMatchingFacilities(Request $request)
+    public function index(Request $request)
     {
         // Find all matching contacts and grab their facility IDs.
         $cF = Contact
@@ -109,12 +119,13 @@ class FacilityUpdateLinkController extends Controller
             $fal->email = $editor->email;
             $fal->token = strtolower(str_random(20));
             $fal->dateRequested = $this->_now();
-            $fal->save();            
+            $fal->save();
+            
+            event(new FacilityEditTokenRequestedEvent($fal));
         } else {
             App::abort(400);
         }
 
-        //event(new FacilityEditTokenRequestedEvent($fal));
         return $fal;
     }
     

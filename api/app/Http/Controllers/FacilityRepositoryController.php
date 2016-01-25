@@ -120,7 +120,7 @@ class FacilityRepositoryController extends Controller
                 break;
         }
         
-        //event(new FacilityRepositoryEvent($fr));
+        event(new FacilityRepositoryEvent($fr));
         return $fr;
     }
         
