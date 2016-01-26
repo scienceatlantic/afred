@@ -10,6 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 // Models.
+use App\Setting;
 use App\SystemUser;
 
 // Misc.
@@ -39,13 +40,17 @@ class EmailFacilityEditTokenListener extends BaseListener
         $email = $event->ful->email;
         $email = 'prasad@scienceatlantic.ca';
         $template = 'emails.events.ful.token-requested'; 
-        $subject = 'AFRED 2.0 TEST - Token';
+        $subject = Setting::find('mailSubjectPrefix')->value . 'Token';
         $name = $event->ful->firstName . ' ' . $event->ful->lastName;
         
         $data = [
-            'name' => $name,
-            'id' => $event->ful->id,
-            'token' => $event->ful->token
+            'name'        => $name,
+            'frIdBefore'  => $event->ful->frIdBefore,
+            'token'       => $event->ful->token,
+            'appName'     => Setting::find('appName')->value,
+            'appAcronym'  => Setting::find('appAcronym')->value,
+            'appAddress'  => Setting::find('appAddress')->value,
+            'mailAddress' => Setting::find('mailAddress')->value
         ];
         
         $to = [
@@ -56,7 +61,7 @@ class EmailFacilityEditTokenListener extends BaseListener
         $bcc = [];
         foreach(SystemUser::all() as $a) {
             array_push($bcc, [
-                'name' => $a->firstName . ' ' . $a->lastName,
+                'name'  => $a->firstName . ' ' . $a->lastName,
                 'email' => $a->username
             ]);
         }
