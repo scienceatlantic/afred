@@ -1,12 +1,12 @@
-<div data-af-loading="!facilityRepository.$resolved || (!facility.organization.$resolved && !facility.organization.name) || !facility.province.$resolved">
+<div data-af-loading="!fr.$resolved || (!facility.organization.$resolved && !facility.organization.name) || !facility.province.$resolved">
   
   <div>
     <div class="bg-warning">
       <p style="padding: 10px;">
-        <span data-ng-show="facilityRepository.state == 'PENDING_APPROVAL'">You are currently viewing a facility that is pending approval.</span>
-        <span data-ng-show="facilityRepository.state == 'PENDING_EDIT_APPROVAL'">You are currently viewing a facility edit that is pending approval.</span>
-        <span data-ng-show="facilityRepository.state == 'PUBLISHED'">You are currently viewing a published facility.</span>
-        <span data-ng-show="facilityRepository.state == 'REJECTED'">You are currently viewing a rejected facility.</span>
+        <span data-ng-show="fr.state == 'PENDING_APPROVAL'">You are currently viewing a facility that is pending approval.</span>
+        <span data-ng-show="fr.state == 'PENDING_EDIT_APPROVAL'">You are currently viewing a facility edit that is pending approval.</span>
+        <span data-ng-show="fr.state == 'PUBLISHED'">You are currently viewing a published facility.</span>
+        <span data-ng-show="fr.state == 'REJECTED'">You are currently viewing a rejected facility.</span>
       </p>
     </div>
   </div>
@@ -31,9 +31,9 @@
   <br>
   
   <p>
-    <button type="button" class="btn btn-default" data-ng-click="approve()" data-ng-show="facilityRepository.state == 'PENDING_APPROVAL'">Approve</button>
-    <button type="button" class="btn btn-default" data-ng-click="reject()" data-ng-show="facilityRepository.state == 'PENDING_APPROVAL'">Reject</button>
-    <button type="button" class="btn btn-default" data-ng-click="approveEdit()" data-ng-show="facilityRepository.state == 'PENDING_EDIT_APPROVAL'">Approve</button>
-    <button type="button" class="btn btn-default" data-ng-click="rejectEdit()" data-ng-show="facilityRepository.state == 'PENDING_EDIT_APPROVAL'">Reject</button>
+    <button type="button" class="btn btn-default" data-ng-click="approve()" data-ng-show="fr.state == 'PENDING_APPROVAL'">Approve</button>
+    <button type="button" class="btn btn-default" data-ng-click="reject()" data-ng-show="fr.state == 'PENDING_APPROVAL'">Reject</button>
+    <button type="button" class="btn btn-default" data-ng-click="approveEdit()" data-ng-show="fr.state == 'PENDING_EDIT_APPROVAL'">Approve</button>
+    <button type="button" class="btn btn-default" data-ng-click="rejectEdit()" data-ng-show="fr.state == 'PENDING_EDIT_APPROVAL'">Reject</button>
   </p>
 </div>

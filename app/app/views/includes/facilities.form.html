@@ -11,37 +11,37 @@
       <div class="row">
         <div class="col-lg-6">
           <div data-af-field data-af-field-label="Facility*">
-            <input class="form-control" id="facility-name" name="facilityName" data-ng-model="form.facility.name" required>
+            <input class="form-control" id="facility-name" name="facilityName" data-ng-model="form.data.facility.name" required>
           </div>
           
           <div data-af-field data-af-field-label="Organization*">
-            <select class="form-control" id="facility-organization" data-ng-model="form.facility.organizationId" data-ng-options="i.id as i.name for i in form.organizations" required>
+            <select class="form-control" id="facility-organization" data-ng-model="form.data.facility.organizationId" data-ng-options="i.id as i.name for i in form.organizations" required>
             </select>
           </div>
           
-          <div data-af-field data-af-field-label="Organization name*" data-ng-if="form.facility.organizationId == -2">
-            <input type="text" class="form-control" name="facilityOrganizationName" id="facility-organization-name" data-ng-model="form.facility.organization.name" required>
+          <div data-af-field data-af-field-label="Organization name*" data-ng-if="form.data.facility.organizationId == -2">
+            <input type="text" class="form-control" name="facilityOrganizationName" id="facility-organization-name" data-ng-model="form.data.organization.name" required>
           </div>
         </div><!-- End of .col-x-x -->
 
         <div class="col-lg-6">
           <div data-af-field data-af-field-label="City*">
-            <input type="text" class="form-control" name="facilityCity" id="facility-city" data-ng-model="form.facility.city" required>
+            <input type="text" class="form-control" name="facilityCity" id="facility-city" data-ng-model="form.data.facility.city" required>
           </div>
           
           <div data-af-field data-af-field-label="Province*">          
-            <select class="form-control" name="facilityProvince" id="facility-province" data-ng-model="form.facility.provinceId" data-ng-options="p.id as p.name for p in form.provinces" required>
+            <select class="form-control" name="facilityProvince" id="facility-province" data-ng-model="form.data.facility.provinceId" data-ng-options="p.id as p.name for p in form.provinces" required>
             </select>
           </div>
           
           <div data-af-field data-af-field-label="Facility website">
-            <input type="url" class="form-control" name="facilityWebsite" id="facility-website" data-ng-model="form.facility.website" placeholder="http://example.com">
+            <input type="url" class="form-control" name="facilityWebsite" id="facility-website" data-ng-model="form.data.facility.website" placeholder="http://example.com">
           </div>
         </div><!-- End of .col-x-x -->
       </div><!-- End of .row -->
       
       <div data-af-field data-af-field-label="What the facility does*">
-        <textarea class="form-control" name="facilityDescription" id="facility-description" data-ng-model="form.facility.description" required></textarea>
+        <textarea class="form-control" name="facilityDescription" id="facility-description" data-ng-model="form.data.facility.description" required></textarea>
       </div>
     </div><!-- End of .panel-body -->
   </div><!-- End of .panel -->
@@ -52,9 +52,9 @@
   <!-- ======================================================
     -- [START] ILO Contact information
     -- ====================================================== !-->
-  <div class="panel panel-default" data-ng-show="form.facility.organizationId != -1 && form.facility.organization.ilo.firstName">
+  <div class="panel panel-default" data-ng-show="form.data.facility.organizationId != -1 && form.data.facility.organization.ilo.firstName">
     <div class="panel-heading">
-      <h4 class="panel-title">Industry Liaison Contact Information for {{form.facility.organization.name}}</h4>
+      <h4 class="panel-title">Industry Liaison Contact Information for {{form.data.facility.organization.name}}</h4>
     </div>
     
     <div class="panel-body">
@@ -79,7 +79,7 @@
         <div class="col-lg-2">
           <table class="table table-condensed table-list">
             <tbody>
-              <tr data-ng-repeat="c in form.facility.contacts" data-ng-class="{active: form.contactIndex === $index}" data-ng-click="form.contactIndex = $index">
+              <tr data-ng-repeat="c in form.data.contacts" data-ng-class="{active: form.contactIndex === $index}" data-ng-click="form.contactIndex = $index">
                 <td>
                   <a href="">
                     <span data-ng-hide="c.firstName || c.lastName">Contact #{{$index + 1}}</span>
@@ -99,7 +99,7 @@
         </div><!-- End of .col-x-x -->
         
         <div class="col-lg-10">                    
-          <div data-ng-repeat="c in form.facility.contacts">
+          <div data-ng-repeat="c in form.data.contacts">
             <div data-ng-form name="contactForm">
               <div class="row" data-ng-show="form.contactIndex === $index">
                 <div class="col-lg-6">
@@ -167,7 +167,7 @@
         <div class="col-lg-2">
           <table class="table table-condensed table-list">
             <tbody>
-              <tr data-ng-repeat="e in form.facility.equipment" data-ng-class="{active: form.equipmentIndex === $index}" data-ng-click="form.equipmentIndex = $index">
+              <tr data-ng-repeat="e in form.data.equipment" data-ng-class="{active: form.equipmentIndex === $index}" data-ng-click="form.equipmentIndex = $index">
                 <td>
                   <a href="">
                     <span data-ng-hide="e.type">Equipment #{{$index + 1}}</span>
@@ -187,7 +187,7 @@
         </div><!-- End of .col-x-x -->
         
         <div class="col-lg-10">
-          <div data-ng-repeat="e in form.facility.equipment">
+          <div data-ng-repeat="e in form.data.equipment">
             <div data-ng-form name="equipmentForm">
               <div class="row" data-ng-show="form.equipmentIndex === $index">
                 <div class="col-lg-12">
@@ -252,7 +252,7 @@
   
   <div>
     <button type="submit" class="btn btn-default" data-ng-disabled="facilityForm.$invalid" data-ng-click="preview()">Preview</button>
-    <button type="button" class="btn btn-default" data-ng-click="form.initialise()">Reset form</button>
+    <button type="button" class="btn btn-default" data-ng-click="form.initialise(true)">Reset form</button>
     <p class="text-warning" data-ng-show="facilityForm.$invalid && !facilityForm.$pristine">Please complete all mandatory fields first</p>
   </div>
 </form>

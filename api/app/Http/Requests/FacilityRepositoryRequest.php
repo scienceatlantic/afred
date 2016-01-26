@@ -25,71 +25,73 @@ class FacilityRepositoryRequest extends Request
     public function rules()
     {        
         $state = $this->instance()->input('state');
-       
-        if ($state == 'PENDING_APPROVAL'
-            || $state == 'PENDING_EDIT_APPROVAL') {
-            $rules = [
-                'data.institutionId' => 'exists:institutions,id',
-                'data.institution.name' => 'required_if:institutionId,null',
-                'data.provinceId' => 'exists:provinces,id',
-                'data.name' => 'required',
-                'data.city' => 'required',
-                'data.website' => '',
-                'data.description' => 'required',
-                'data.isPublic' => '',
-                'data.primaryContact.firstName' => 'required',
-                'data.primaryContact.lastName' => 'required',
-                'data.primaryContact.email' => 'required',
-                'data.primaryContact.telephone' => 'required',
-                'data.primaryContact.position' => 'required',
-                'data.primaryContact.website' => '',
-                'data.contacts' => 'array',
-                'data.equipment' => 'array'
-            ];
-            
-            $contacts = $this->instance()->input('data.contacts');
-            if (is_array($contacts)) {
-                $length = count($contacts);
+        
+        switch ($state) {
+            case 'PENDING_APPROVAL':
+            case 'PENDING_EDIT_APPROVAL':
+                $r = [
+                    'data.facility.organizationId' => 'exists:organizations,id',
+                    'data.facility.provinceId' => 'exists:provinces,id',
+                    'data.facility.name' => 'required',
+                    'data.facility.city' => 'required',
+                    'data.facility.website' => '',
+                    'data.facility.description' => 'required',
+                    'data.facility.isPublic' => '',
+                    'data.primaryContact.firstName' => 'required',
+                    'data.primaryContact.lastName' => 'required',
+                    'data.primaryContact.email' => 'required',
+                    'data.primaryContact.telephone' => 'required',
+                    'data.primaryContact.position' => 'required',
+                    'data.primaryContact.website' => '',
+                    'data.contacts' => 'array',
+                    'data.equipment' => 'array'
+                ];
                 
-                for ($i = 0; $i < $length; $i++) {
-                    $rules["data.contacts.$i.firstName"] = 'required';
-                    $rules["data.contacts.$i.lastName"] = 'required';
-                    $rules["data.contacts.$i.email"] = 'required';
-                    $rules["data.contacts.$i.telephone"] = '';
-                    $rules["data.contacts.$i.position"] = '';
-                    $rules["data.contacts.$i.website"] = '';
+                $contacts = $this->instance()->input('data.contacts');
+                if (is_array($contacts)) {
+                    $length = count($contacts);
+                    
+                    for ($i = 0; $i < $length; $i++) {
+                        $r["data.contacts.$i.firstName"] = 'required';
+                        $r["data.contacts.$i.lastName"] = 'required';
+                        $r["data.contacts.$i.email"] = 'required';
+                        $r["data.contacts.$i.telephone"] = '';
+                        $r["data.contacts.$i.position"] = '';
+                        $r["data.contacts.$i.website"] = '';
+                    }
                 }
-            }
-            
-            $equipment = $this->instance()->input('data.equipment');
-            if (is_array($equipment)) {
-              $length = count($equipment);
                 
-                for ($i = 0; $i < $length; $i++) {
-                    $rules["data.equipment.$i.type"] = 'required';
-                    $rules["data.equipment.$i.model"] = '';
-                    $rules["data.equipment.$i.manufacturer"] = '';
-                    $rules["data.equipment.$i.purpose"] = 'required';
-                    $rules["data.equipment.$i.specifications"] = '';
-                    $rules["data.equipment.$i.isPublic"] = 'boolean';
-                    $rules["data.equipment.$i.hasExcessCapacity"] = 'boolean';
+                $equipment = $this->instance()->input('data.equipment');
+                if (is_array($equipment)) {
+                  $length = count($equipment);
+                    
+                    for ($i = 0; $i < $length; $i++) {
+                        $r["data.equipment.$i.type"] = 'required';
+                        $r["data.equipment.$i.model"] = '';
+                        $r["data.equipment.$i.manufacturer"] = '';
+                        $r["data.equipment.$i.purpose"] = 'required';
+                        $r["data.equipment.$i.specifications"] = '';
+                        $r["data.equipment.$i.isPublic"] = 'boolean';
+                        $r["data.equipment.$i.hasExcessCapacity"] = 'boolean';
+                    }
                 }
-            }
+                
+                if ($state == 'PENDING_EDIT_APPROVAL') {
+                    $r['data.facility.id'] = 'required|exists:facilities,id';
+                }               
+                break;
             
-            if ($state == 'PENDING_EDIT_APPROVAL') {
-                $rules['data.id'] = 'required|exists:facilities,id';
-            }
+            case 'PUBLISHED':
+            case 'REJECTED':
+            case 'PUBLISHED_EDIT':
+            case 'REJECTED_EDIT':
+                $r = [];
+                break;
             
-        } else if ($state == 'PUBLISHED'
-                   || $state == 'REJECTED'
-                   || $state == 'PUBLISHED_EDIT'
-                   || $state == 'REJECTED_EDIT') {
-            $rules = [];
-            
-        } else {
-            App::abort(400);
+            default:
+                App::abort(400);
         }
         
-        return $rules;
+        return $r;
     }
 }

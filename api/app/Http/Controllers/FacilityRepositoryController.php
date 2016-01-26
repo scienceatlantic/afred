@@ -39,8 +39,7 @@ class FacilityRepositoryController extends Controller
         $itemsPerPage = $request->input('itemsPerPage', 15);
         $state = $request->input('state', '%');
         $stateOp = $state  == '%' ? 'like' : '=';
-        $fr = FacilityRepository
-            ::where('state', $stateOp, $state)
+        $fr = FacilityRepository::where('state', $stateOp, $state)
             ->paginate($itemsPerPage);
             
         return $this->_toCamelCase($fr->toArray());
@@ -108,8 +107,7 @@ class FacilityRepositoryController extends Controller
                 $fr = new FacilityRepository($fr->toArray());
                 $fr->save();
                 
-                $ful = FacilityUpdateLink
-                     ::where('frIdBefore', $frIdBefore)
+                $ful = FacilityUpdateLink::where('frIdBefore', $frIdBefore)
                      ->first();
                 $ful->frIdAfter = $fr->id;
                 $ful->save();
@@ -142,7 +140,7 @@ class FacilityRepositoryController extends Controller
         // exising organization was selected). If an organizationId was not
         // provided and an organization name was, store the details (ie. name)
         // in $data.
-        if (!$request->data['organizationId']
+        if (!$request->data['facility']['organizationId']
             && $request->data['organization']['name']) {
             $data['organization'] =
                 (new Organization((array) $request->data['organization']))
@@ -159,41 +157,39 @@ class FacilityRepositoryController extends Controller
             
             // Build the facility array. dateSubmitted and the facility's
             // id are retained.
-            $data['facility'] = (new Facility((array) $request->data))
-                ->toArray();
+            $data['facility'] =
+                (new Facility((array) $request->data['facility']))->toArray();
             $data['facility']['id'] = $facility->id;
             $data['facility']['dateSubmitted'] = $facility->dateSubmitted
                 ->toDateTimeString();
             $data['facility']['dateUpdated'] = $now;
         // For new records.
         } else {
-            $data['facility'] = (new Facility((array) $request->data))
-                ->toArray();
+            $data['facility'] =
+                (new Facility((array) $request->data['facility']))->toArray();
             $data['facility']['dateSubmitted'] = $now;
             $data['facility']['dateUpdated'] = $now;            
         }
         $data['facility']['isPublic'] = true;
         
         // Primary contact section.
-        $data['facility']['primaryContact'] =
+        $data['primaryContact'] =
             (new PrimaryContact((array) $request->data['primaryContact']))
                 ->toArray();
-        $data['facility']['primaryContact']['facilityId'] = null;
+        $data['primaryContact']['facilityId'] = null;
         
         // Contacts section.
-        $data['facility']['contacts'] = [];
-        foreach($request->data['contacts'] as $i => $contact) {
-            $data['facility']['contacts'][$i] =
-                (new Contact($contact))->toArray();
-            $data['facility']['contacts'][$i]['facilityId'] = null;
+        $data['contacts'] = [];
+        foreach($request->data['contacts'] as $i => $c) {
+            $data['contacts'][$i] = (new Contact($c))->toArray();
+            $data['contacts'][$i]['facilityId'] = null;
         }
         
         // Equipment section.
-        $data['facility']['equipment'] = [];
-        foreach($request->data['equipment'] as $i => $equipment) {
-            $data['facility']['equipment'][$i] =
-                (new Equipment($equipment))->toArray();
-            $data['facility']['equipment'][$i]['facilityId'] = null;
+        $data['equipment'] = [];
+        foreach($request->data['equipment'] as $i => $e) {
+            $data['equipment'][$i] = (new Equipment($e))->toArray();
+            $data['equipment'][$i]['facilityId'] = null;
         }
         
         return $data;
@@ -215,64 +211,45 @@ class FacilityRepositoryController extends Controller
         if ($isEdit) {
             // For edits, we're going to delete all existing
             // contacts, primary contacts, and equipment data.
-            Contact
-                ::where('facilityId', $data['facility']['id'])
+            Contact::where('facilityId', $data['facility']['id'])
                 ->delete();
                 
-            PrimaryContact
-                ::where('facilityId', $data['facility']['id'])
+            PrimaryContact::where('facilityId', $data['facility']['id'])
                 ->delete();
                 
-            Equipment
-                ::where('facilityId', $data['facility']['id'])
+            Equipment::where('facilityId', $data['facility']['id'])
                 ->delete();
             
             // Update the facility.
-            Facility
-                ::where('id', $data['facility']['id'])
-                ->update($this->_unset($data['facility']));
+            Facility::where('id', $data['facility']['id'])
+                ->update($data['facility']);
         // For new records.
         } else {
             $data['facility']['facilityRepositoryId'] = $fr->id;
-            $data['facility']['id'] =
-                Facility::create($data['facility'])->getKey();
+            $data['facility']['id'] = Facility::create($data['facility'])
+                ->getKey();
         }
         
         // Primary contact section.
-        $data['facility']['primaryContact']['facilityId'] =
-            $data['facility']['id'];
-        $data['facility']['primaryContact']['id'] =
-            PrimaryContact::create($data['facility']['primaryContact'])
-            ->getKey();
+        $data['primaryContact']['facilityId'] = $data['facility']['id'];
+        $data['primaryContact']['id'] =
+            PrimaryContact::create($data['primaryContact'])->getKey();
         
         // Contacts section.
         // Contacts are optional, so we first have to check if it exists.
-        if (array_key_exists('contacts', $data['facility'])) {
-            foreach($data['facility']['contacts'] as $i => $contact) {
-                $contact['facilityId'] = $data['facility']['id'];
-                $data['facility']['contacts'][$i]['id'] =
-                    Contact::create($contact)->getKey();           
+        if (array_key_exists('contacts', $data)) {
+            foreach($data['contacts'] as $i => $c) {
+                $c['facilityId'] = $data['facility']['id'];
+                $data['contacts'][$i]['id'] = Contact::create($c)->getKey();           
             }                       
         }
         
         // Equipment section
-        foreach($data['facility']['equipment'] as $i => $e) {
+        foreach($data['equipment'] as $i => $e) {
             $e['facilityId'] = $data['facility']['id'];
-            $data['facility']['equipment'][$i]['id'] =
-                Equipment::create($e)->getKey();           
+            $data['equipment'][$i]['id'] = Equipment::create($e)->getKey();           
         }
         
         return $data;
-    }
-    
-    private function _unset($arr)
-    {
-        foreach($arr as $key => $value) {
-            if (is_array($value)) {
-                unset($arr[$key]);
-            }
-        }
-        
-        return $arr;
     }
 }

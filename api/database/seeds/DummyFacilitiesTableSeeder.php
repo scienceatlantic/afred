@@ -1,14 +1,18 @@
 <?php
 // !NOTE: Not abiding the 80 char column limit in this file.! 
 
+// Laravel.
 use Illuminate\Database\Seeder;
 
+// Misc.
+use Carbon\Carbon;
+
+// Models.
 use App\Facility;
 use App\Contact;
 use App\PrimaryContact;
 use App\Equipment;
-use App\FacilityRevisionHistory;
-use Carbon\Carbon;
+use App\FacilityRepository;
 
 class DummyFacilitiesTableSeeder extends Seeder
 {
@@ -21,56 +25,58 @@ class DummyFacilitiesTableSeeder extends Seeder
     {
         $organizations = DB::table('organizations')
                            ->select('id')
-                           ->get();
-                           
+                           ->get();              
         $provinces = DB::table('provinces')
                        ->select('id')
                        ->get();
-                                
         $now = Carbon::now()->toDateTimeString();                 
         
+        // Facilities section.
         $facilities = [
             [
-                'id'                        => null,
-                'facilityRevisionHistoryId' => null,
-                'organizationId'            => $organizations[0]->id,
-                'provinceId'                => $provinces[0]->id,
-                'name'                      => 'Biotech Lab',
-                'city'                      => 'Wolfville',
-                'website'                   => 'http://biotech.acadiau.ca',
-                'description'               => 'Science!',
-                'isPublic'                  => true,
-                'dateSubmitted'             => $now,
-                'dateUpdated'               => $now,
+                'id'                   => null,
+                'facilityRepositoryId' => null,
+                'organizationId'       => $organizations[0]->id,
+                'provinceId'           => $provinces[6]->id, // For NS.
+                'name'                 => 'Biotech Lab',
+                'city'                 => 'Wolfville',
+                'website'              => 'http://biotech.acadiau.ca',
+                'description'          => 'Science!',
+                'isPublic'             => true,
+                'dateSubmitted'        => $now,
+                'dateUpdated'          => $now,
             ],
         ];
         
+        // Primary contacts section.
         $primaryContacts = [
             [
                 'id'         => null,
                 'facilityId' => null,
                 'firstName'  => 'John',
                 'lastName'   => 'Doe',
-                'email'      => 'johndoe@example.com',
+                'email'      => 'prasad@scienceatlantic.ca',
                 'telephone'  => '9221332124',
                 'extension'  => '',
                 'position'   => 'Researcher'
             ]
         ];
                 
+        // Contacts section.
         $contacts = [
             [
                 'id'         => null,
                 'facilityId' => null,
                 'firstName'  => 'John',
                 'lastName'   => 'Lennox',
-                'email'      => 'johnl@example.com',
+                'email'      => 'prasad.rajandran@scienceatlantic.ca',
                 'telephone'  => '8976665435',
                 'extension'  => '3324',
                 'position'   => 'Lab Assistant'
             ]
         ];
-                
+        
+        // Equipment section.
         $equipment = [
             [
                 'id'                => null,
@@ -97,45 +103,49 @@ class DummyFacilitiesTableSeeder extends Seeder
             ]
         ];
         
+        // Facility repository section.
         $data = [];
-        $data[0]['facility'] = $facilities[0];
-        $data[0]['facility']['primaryContact'] = $primaryContacts[0];
-        $data[0]['facility']['contacts'] = [$contacts[0]];
-        $data[0]['facility']['equipment'] = [$equipment[0]];
+        $data['facility'] = $facilities[0];
+        $data['primaryContact'] = $primaryContacts[0];
+        $data['contacts'] = [$contacts[0]];
+        $data['equipment'] = [$equipment[0]];
         
-        $frhs = [
-            [
-                'id'            => null,
-                'facilityId'    => null,
-                'state'         => 'PUBLISHED',
-                'data'          => $data[0],
-                'dateSubmitted' => $now
-            ],
+        $fr = [
+            'id'            => null,
+            'facilityId'    => null,
+            'state'         => 'PUBLISHED',
+            'data'          => $data,
+            'dateSubmitted' => $now
         ];
         
-        foreach($frhs as $index => $frh) {
-            $frhId = FacilityRevisionHistory::create($frh)->getKey();
-            
-            $facilities[0]['facilityRevisionHistoryId'] = $frhId;
-            $facilityId = Facility::create($facilities[0])->getKey();
-            
-            $primaryContacts[0]['facilityId'] = $facilityId;
-            PrimaryContact::create($primaryContacts[0]);
-            
-            foreach($contacts as $contact) {
-                $contact['facilityId'] = $facilityId;
-                Contact::create($contact);
-            }
-            
-            foreach($equipment as $e) {
-                $e['facilityId'] = $facilityId;
-                Equipment::create($e);
-            }
-            
-            $frh = FacilityRevisionHistory::find($frhId);
-            $frh->facilityId = $facilityId;
-            $frh->save();
+        // Create facility repository record.
+        $fr = FacilityRepository::create($fr);
+        $data['facility']['facilityRepositoryId'] = $fr->id;
+        
+        // Create facility record.
+        $f = Facility::create($data['facility']);
+        $data['facility']['id'] = $f->id;
+        
+        // Create primary contact record.
+        $data['primaryContact']['facilityId'] = $f->id;
+        PrimaryContact::create($data['primaryContact']);
+        
+        
+        // Create contact record(s).
+        foreach($data['contacts'] as $i => $c) {
+            $c['facilityId'] = $f->id;
+            Contact::create($c);
         }
         
+        // Create equipment record(s).
+        foreach($data['equipment'] as $i => $e) {
+            $e['facilityId'] = $f->id;
+            Equipment::create($e);
+        }
+        
+        // Update facility repository record.
+        $fr->facilityId = $f->id;
+        $fr->data = $data;
+        $fr->save();
     }
 }

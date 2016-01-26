@@ -3,12 +3,10 @@
 angular.module('afredApp').controller(
   'AdminfacilityRepositoryShowController',
   ['$scope',
-   '$stateParams',
    'organizationResource',
    'provinceResource',
    'facilityRepositoryResource',
   function($scope,
-           $stateParams,
            organizationResource,
            provinceResource,
            facilityRepositoryResource) {
@@ -17,73 +15,78 @@ angular.module('afredApp').controller(
      * --------------------------------------------------------------------- */
     
     $scope.getFacility = function() {
-      $scope.facilityRepository = facilityRepositoryResource.get({
-        facilityRepositoryId: $stateParams.facilityRepositoryId
+      $scope.fr = facilityRepositoryResource.get({
+        facilityRepositoryId: $scope._stateParams.facilityRepositoryId
       }, function() {
-        $scope.facility = $scope.facilityRepository.data.facility;
         $scope.formatForApp();
       });
     };
     
     $scope.approve = function() {
       facilityRepositoryResource.approve({
-        facilityRepositoryId: $stateParams.facilityRepositoryId
+        facilityRepositoryId: $scope._stateParams.facilityRepositoryId
       }, null, function(data) {
-        $scope.facilityRepository = data;
+        $scope.fr = data;
       });
     };
     
     $scope.reject = function() {
       facilityRepositoryResource.reject({
-        facilityRepositoryId: $stateParams.facilityRepositoryId
+        facilityRepositoryId: $scope._stateParams.facilityRepositoryId
       }, null, function(data) {
-        $scope.facilityRepository = data;
+        $scope.fr = data;
       });   
     };
     
     $scope.approveEdit = function() {
       facilityRepositoryResource.approveEdit({
-        facilityRepositoryId: $stateParams.facilityRepositoryId
+        facilityRepositoryId: $scope._stateParams.facilityRepositoryId
       }, null, function(data) {
-        $scope.facilityRepository = data;
+        $scope.fr = data;
       });      
     };
     
     $scope.rejectEdit = function() {
       facilityRepositoryResource.rejectEdit({
-        facilityRepositoryId: $stateParams.facilityRepositoryId
+        facilityRepositoryId: $scope._stateParams.facilityRepositoryId
       }, null, function(data) {
-        $scope.facilityRepository = data;
+        $scope.fr = data;
       });         
     };
     
     $scope.formatForApp = function() {
-      if (!$scope.facility.contacts) {
+      $scope.facility = angular.copy($scope.fr.data.facility);
+      $scope.facility.contacts = angular.copy($scope.fr.data.contacts);
+      $scope.facility.equipment = angular.copy($scope.fr.data.equipment);
+      
+      // Primary contact & contacts section.
+      if (!$scope.fr.data.contacts) {
         $scope.facility.contacts = [];
-        $scope.facility.contacts.push($scope.facility.primaryContact);
+        $scope.facility.contacts.push($scope.fr.data.primaryContact);
       } else {
-        $scope.facility.contacts.unshift($scope.facility.primaryContact);
+        $scope.facility.contacts.unshift($scope.fr.data.primaryContact);
       }
       
-      if ($scope.facility.organizationId) {
+      // Organization section.
+      if ($scope.fr.data.facility.organizationId) {
         $scope.facility.organization = organizationResource.get({
-          organizationId: $scope.facility.organizationId
+          organizationId: $scope.fr.data.facility.organizationId
         });
       } else {
-        $scope.facility.organization =
-          $scope.facilityRepository.data.organization;
+        $scope.facility.organization = $scope.fr.data.organization;
       }
       
+      // Province section.
       $scope.facility.province = provinceResource.get({
-        provinceId: $scope.facility.provinceId
+        provinceId: $scope.fr.data.facility.provinceId
       });
     };
-    
     
     /* ---------------------------------------------------------------------
      * Initialisation code.
      * --------------------------------------------------------------------- */
-    
+    $scope.facility = {};
+    $scope.fr = {};
     $scope.getFacility();
     
     $scope.loading = {

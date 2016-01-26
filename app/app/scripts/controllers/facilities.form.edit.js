@@ -36,7 +36,7 @@ angular.module('afredApp').controller('FacilitiesFormEditController',
      * Initialisation code.
      * --------------------------------------------------------------------- */
     $scope.form.initialise();
-    $scope.form.getFacility();
+    $scope.form.getFacilityRepositoryData();
     
     $scope.view = {
       show: 'form'

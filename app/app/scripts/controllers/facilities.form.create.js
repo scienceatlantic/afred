@@ -26,12 +26,11 @@ angular.module('afredApp').controller('FacilitiesFormCreateController',
     $scope.submit = function() {
       facilityRepositoryResource.submit(
         {
-          state: 'PENDING_APPROVAL',
           data: $scope.form.formatForApi()
         },
         function() {
           // Reset form
-          //$scope.form.initialiseForm();
+          //$scope.form.initialiseForm(true);
           //$scope.form.save();
           $scope.view.show = 'successMessage';
         }, function() {

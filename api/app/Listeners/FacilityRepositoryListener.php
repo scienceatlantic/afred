@@ -61,7 +61,7 @@ class FacilityRepositoryListener extends BaseListener
                 $template = $templatePrefix
                     . 'primary-contact-pending-approval';
                 $subject = $subjectPrefix . 'Submission Received';
-                $pc = $fr->data['facility']['primaryContact'];
+                $pc = $fr->data['primaryContact'];
                 
                 $data['name'] = $pc['firstName'] . ' ' . $pc['lastName'];
                 $this->_mail($template, $subject, $data, [
