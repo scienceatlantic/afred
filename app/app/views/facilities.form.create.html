@@ -45,7 +45,9 @@
     </div>
     
     <div data-ng-show="view.show == 'successMessage'">
-      <p>Thanks! Click <a data-ui-sref="search">here</a> to get back to the homepage.</p>
+      <p>Thank you!</p>
+      
+      <p>Click <a data-ui-sref="search">here</a> to get back to the homepage or click <a href="" data-ng-click="_state.reload()">here</a> to submit another facility.</p>
     </div>
     
     <div data-ng-show="view.show =='failureMessage'">
