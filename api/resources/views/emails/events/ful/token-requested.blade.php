@@ -5,5 +5,5 @@ Hello {{ $name }},
 
 You have requested...:
 
-http://localhost:9000/#/facilities/form/{{ $id }}/edit?token={{ $token }}
+{{ $appAddress }}/#/facilities/form/{{ $frIdBefore }}/edit?token={{ $token }}
 @stop
