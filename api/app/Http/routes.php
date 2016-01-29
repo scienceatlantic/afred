@@ -27,7 +27,7 @@ Route::get('auth/logout', 'AuthController@logout');
 
 			
 /******************************************************************************
- * Institution routes.
+ * Organization routes.
  *****************************************************************************/
 Route::resource('organizations', 'OrganizationController', [
 	'only' => ['index',
@@ -43,6 +43,20 @@ Route::resource('organizations', 'OrganizationController', [
 Route::resource('provinces', 'ProvinceController', [
 	'only' => ['index',
 			   'show']]);
+
+               
+/******************************************************************************
+ * Discipline routes.
+ *****************************************************************************/
+Route::resource('disciplines', 'DisciplineController', [
+	'only' => ['index']]);
+
+    
+/******************************************************************************
+ * Sector routes.
+ *****************************************************************************/
+Route::resource('sectors', 'SectorController', [
+	'only' => ['index']]);
 
 			   
 /******************************************************************************
@@ -79,7 +93,12 @@ Route::get('facility-update-links/',
            'FacilityUpdateLinkController@index');
 
 Route::post('facility-update-links/generate-token',
-           'FacilityUpdateLinkController@generateToken');
+            'FacilityUpdateLinkController@generateToken');
 
 Route::post('facility-update-links/verify-token',
-           'FacilityUpdateLinkController@verifyToken');
+            'FacilityUpdateLinkController@verifyToken');
+
+/******************************************************************************
+ * Search routes
+ *****************************************************************************/
+Route::get('search/','SearchController@index');
