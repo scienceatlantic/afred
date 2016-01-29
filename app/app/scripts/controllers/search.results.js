@@ -2,13 +2,9 @@
 
 angular.module('afredApp').controller('SearchResultsController',
   ['$scope',
-   '$state',
-   '$stateParams',
-   'equipmentResource',
+   'searchResource',
   function($scope,
-           $state,
-           $stateParams,
-           equipmentResource) {
+           searchResource) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
@@ -17,7 +13,7 @@ angular.module('afredApp').controller('SearchResultsController',
      * Query the database.
      */
     $scope.getSearchResults = function(q) {
-      equipmentResource.query({q: q}, function(data) {
+      searchResource.query({q: q}, function(data) {
         $scope.results.data = data;
         $scope.loading.searchResults = false;
       });
@@ -27,8 +23,10 @@ angular.module('afredApp').controller('SearchResultsController',
      * Redirects the user to the equipment's page.
      */
     $scope.showEquipmentPage = function(facilityId, equipmentId) {
-      $state.go('equipment', {facilityId: facilityId, equipmentId:
-        equipmentId});
+      $scope._state.go('equipment.show', {
+        facilityId: facilityId,
+        equipmentId: equipmentId
+      });
     };
     
     /* ---------------------------------------------------------------------
@@ -48,8 +46,8 @@ angular.module('afredApp').controller('SearchResultsController',
     // Since the search query is appended to the URL, users might potentially
     // bypass the search bar altogether. If they do that, we'll just copy
     // the query from the URL into the search bar.
-    $scope.search.q = ($state.is('search.q') ?
-      $stateParams.q : null);
+    $scope.search.q = ($scope._state.is('search.q') ?
+      $scope._stateParams.q : null);
     
     // Run the search.
     $scope.getSearchResults($scope.search.q);

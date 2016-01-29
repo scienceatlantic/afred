@@ -5,11 +5,15 @@ angular.module('afredApp').controller('FacilitiesFormController',
    '$interval',
    'organizationResource',
    'provinceResource',
+   'disciplineResource',
+   'sectorResource',
    'facilityRepositoryResource',
   function($scope,
            $interval,
            organizationResource,
            provinceResource,
+           disciplineResource,
+           sectorResource,
            facilityRepositoryResource) {
     /* ---------------------------------------------------------------------
      * Functions/Objects.
@@ -19,12 +23,18 @@ angular.module('afredApp').controller('FacilitiesFormController',
      * All properties/functions related to the form.
      */
     $scope.form = {
+      // TODO
+      data: {},
+      
+      
       /**
-       * Holds all form data.
+       * Holds all form data.  !UPDATE
        *
        * @type {object}
        */
       facility: {},
+      
+      
       
       /**
        * Holds an instance of 'facilityRepositoryResource'.
@@ -57,11 +67,25 @@ angular.module('afredApp').controller('FacilitiesFormController',
       organizations: [],
       
       /**
-       * Holds a list of available provinces for the 'Provinces' dropdown.
+       * A list of available provinces for the 'Provinces' dropdown.
        *
        * @type {array}
        */
       provinces: [],
+      
+      /**
+       * A list of all disciplines.
+       *
+       * @type {array}
+       */
+      disciplines: [],
+      
+      /**
+       * A list of all sectors.
+       *
+       * @type {array}
+       */
+      sectors: [],
       
       /**
        * Holds the unique ID returned by '$scope.form.startAutosave()'s
@@ -96,6 +120,8 @@ angular.module('afredApp').controller('FacilitiesFormController',
           website: null
         };
         
+        $scope.form.data.disciplines = [];
+        
         $scope.form.data.organization = {};
         $scope.form.data.province = {};
         $scope.form.data.primaryContact = {};
@@ -107,6 +133,12 @@ angular.module('afredApp').controller('FacilitiesFormController',
         
         // Get a list of all available provinces.
         $scope.form.getProvinces();
+        
+        // Get a list of all disciplines.
+        $scope.form.getDisciplines();
+        
+        // Get a list of all sectors.
+        $scope.form.getSectors();
         
         // Add the first contact.
         $scope.form.addContact();
@@ -234,6 +266,43 @@ angular.module('afredApp').controller('FacilitiesFormController',
       },
       
       /**
+       * Gets a list of all disciplines and attaches it to
+       * '$scope.form.disciplines'
+       */
+      getDisciplines: function() {
+        $scope.form.disciplines = disciplineResource.queryNoPaginate(null,
+          function() {
+            angular.forEach($scope.form.disciplines, function (discipline) {
+              discipline.isSelected = false;
+            });
+            
+            if ($scope.form.disciplines.length) {
+              $scope.form.disciplines[0].isRequired = true;
+            }
+          }
+        );
+      },
+      
+      /**
+       * Gets a list of all sectors and attaches it to
+       * '$scope.form.sectors'
+       *
+       */
+      getSectors: function() {
+        $scope.form.sectors = sectorResource.queryNoPaginate(null,
+          function() {
+            angular.forEach($scope.form.sectors, function(sector) {
+              sector.isSelected = false;
+            });
+            
+            if ($scope.form.sectors.length) {
+              $scope.form.sectors[0].isRequired = true;
+            }
+          }
+        );
+      },
+      
+      /**
        * Retrieves a facility for editing and attaches it
        * '$scope.form.facility'.
        *
@@ -265,10 +334,28 @@ angular.module('afredApp').controller('FacilitiesFormController',
                   $scope.form.data.facility.organizationId = -1;
                 }
               }
-              
-              console.log($scope.form.data);
             }
           );        
+      },
+      
+      validateDisciplines: function() {
+        $scope.form.disciplines[0].isRequired = true;
+        
+        angular.forEach($scope.form.disciplines, function(discipline) {
+          if (discipline.isSelected) {
+            $scope.form.disciplines[0].isRequired = false;
+          }
+        });
+      },
+      
+      validateSectors: function() {
+        $scope.form.sectors[0].isRequired = true;
+        
+        angular.forEach($scope.form.sectors, function(sector) {
+          if (sector.isSelected) {
+            $scope.form.sectors[0].isRequired = false;
+          }
+        });
       },
       
       /**
@@ -400,6 +487,10 @@ angular.module('afredApp').controller('FacilitiesFormController',
         ['Bold', 'Italic', 'Subscript','Superscript', 'NumberedList',
          'BulletedList', 'Indent', 'Outdent', 'Link']
       ]
+    };
+    
+    $scope.temp =  function() {
+      console.log($scope.form.data.disciplines);
     };
   }
 ]);

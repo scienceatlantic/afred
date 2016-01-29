@@ -2,14 +2,10 @@
 
 angular.module('afredApp').controller('FacilitiesShowController',
   ['$scope',
-   '$state',
-   '$stateParams',
    '$uibModal',
    'facilityResource',
    'facilityRepositoryResource',
   function($scope,
-           $state,
-           $stateParams,
            $uibModal,
            facilityResource,
            facilityRepositoryResource) {
@@ -24,8 +20,8 @@ angular.module('afredApp').controller('FacilitiesShowController',
     $scope.getFacility = function() {
       $scope.facility = facilityResource.get(
         {
-          facilityId: $stateParams.facilityId,
-          expand: 'institution,province,equipment,primaryContact,contacts'
+          facilityId: $scope._stateParams.facilityId,
+          expand: 'organization,province,equipment,primaryContact,contacts'
         },
         function() {
           if ($scope.facility.contacts) {
@@ -40,12 +36,12 @@ angular.module('afredApp').controller('FacilitiesShowController',
     
     $scope.admin = {
       edit: function() {
-        $state.go('editFacility', {facilityId: $stateParams.facilityId});
+        $scope._state.go('editFacility', {facilityId: $scope._stateParams.facilityId});
       },
       
       remove: function() {
         $scope.facility.$remove(function() {
-          $state.go('search');
+          $scope._state.go('search');
         });        
       },
       
