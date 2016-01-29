@@ -1,8 +1,13 @@
 <?php
 
+// Laravel.
 use Illuminate\Database\Seeder;
-use App\Organization;
+
+// Misc.
 use Carbon\Carbon;
+
+// Models.
+use App\Organization;
 
 class OrganizationsTableSeeder extends Seeder
 {

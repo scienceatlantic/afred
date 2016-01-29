@@ -1,8 +1,13 @@
 <?php
 
+// Laravel.
 use Illuminate\Database\Seeder;
-use App\Province;
+
+// Misc.
 use Carbon\Carbon;
+
+// Models.
+use App\Province;
 
 class ProvincesTableSeeder extends Seeder
 {

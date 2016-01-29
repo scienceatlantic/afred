@@ -1,5 +1,6 @@
 <?php
 
+// Laravel.
 use Illuminate\Database\Seeder;
 
 class SettingsTableSeeder extends Seeder
@@ -31,6 +32,10 @@ class SettingsTableSeeder extends Seeder
                 'value' => 'http://localhost:9000'           
             ],
             [
+                'id'    => 'organizationName',
+                'value' => 'Science Atlantic'           
+            ],           
+            [
                 'id'    => 'mailName',
                 'value' => 'AFRED'           
             ],
@@ -40,7 +45,7 @@ class SettingsTableSeeder extends Seeder
             ],
             [
                 'id'    => 'mailSubjectPrefix',
-                'value' => 'AFRED 2.0 TEST - '           
+                'value' => 'AFRED 2.0 | Science Atlantic - (test) '           
             ],
             [
                 'id'    => 'generalContactName',

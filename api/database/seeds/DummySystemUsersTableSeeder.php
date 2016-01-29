@@ -1,6 +1,9 @@
 <?php
 
+// Laravel.
 use Illuminate\Database\Seeder;
+
+// Models.
 use App\SystemUser;
 
 class DummySystemUsersTableSeeder extends Seeder

@@ -1,9 +1,14 @@
 <?php
 
+// Laravel.
 use Illuminate\Database\Seeder;
+
+// Misc.
+use Carbon\Carbon;
+
+// Models.
 use App\Organization;
 use App\Ilo;
-use Carbon\Carbon;
 
 class IlosTableSeeder extends Seeder
 {

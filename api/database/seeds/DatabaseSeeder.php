@@ -1,5 +1,6 @@
 <?php
 
+// Laravel.
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,6 +19,8 @@ class DatabaseSeeder extends Seeder
         $this->call(ProvincesTableSeeder::class);
         $this->call(OrganizationsTableSeeder::class);
         $this->call(IlosTableSeeder::class);
+        $this->call(DisciplinesTableSeeder::class);
+        $this->call(SectorsTableSeeder::class);
         $this->call(SettingsTableSeeder::class);
         
         // Contains dummy data.
