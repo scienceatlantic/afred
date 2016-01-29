@@ -1,13 +1,19 @@
 <div data-ng-class="{'form-group': true,
-                     'form-group-sm': !template.isRadio && !template.isTextarea,
+                     'form-group-sm': !(template.isRadio || template.isTextarea || template.isCheckbox),
                      'has-error': form[name].$invalid && form[name].$dirty}">
-  <label class="col-sm-4 control-label" for="{{id}}">{{label}}</label>
-
+  
+  <label data-ng-if="nameOverride" class="col-sm-4 control-label">{{label}}</label>
+  
+  <label data-ng-if="!nameOverride" class="col-sm-4 control-label" for="{{id}}">{{label}}</label>
+  
   <div class="col-sm-8">
     <div data-ng-transclude></div>
-    <p class="text-danger" data-ng-show="form[name].$error.required && form[name].$dirty">This field is required</p>
-    <p class="text-danger" data-ng-show="form[name].$error.url && form[name].$dirty">That's not a valid URL</p>
-    <p class="text-danger" data-ng-show="form[name].$error.email && form[name].$dirty">That's not a valid email</p>
-    <p class="text-danger" data-ng-show="form[name].$error.pattern && form[name].$dirty">That's not quite right</p>
+    
+    <p>
+      <p class="text-danger" data-ng-show="form[name].$error.required && form[name].$dirty">This is required</p>
+      <p class="text-danger" data-ng-show="form[name].$error.url && form[name].$dirty">That's not a valid URL</p>
+      <p class="text-danger" data-ng-show="form[name].$error.email && form[name].$dirty">That's not a valid email</p>
+      <p class="text-danger" data-ng-show="form[name].$error.pattern && form[name].$dirty">That's not quite right</p>
+    </p>
   </div>
 </div>
