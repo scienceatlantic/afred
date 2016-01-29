@@ -2,12 +2,12 @@
   <!-- ======================================================
     -- [START] Facility section
     -- ====================================================== !-->
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">Research Facility Information</h4>
-    </div>
-    
+  <div class="panel panel-default">    
     <div class="panel-body">
+      <p>
+        <span class="label label-default">Research Facility Information</span>
+      </p>
+      
       <div class="row">
         <div class="col-lg-6">
           <div data-af-field data-af-field-label="Facility*">
@@ -15,7 +15,7 @@
           </div>
           
           <div data-af-field data-af-field-label="Organization*">
-            <select class="form-control" id="facility-organization" data-ng-model="form.data.facility.organizationId" data-ng-options="i.id as i.name for i in form.organizations" required>
+            <select class="form-control" id="facility-organization" name="facilityOrganization" data-ng-model="form.data.facility.organizationId" data-ng-options="i.id as i.name for i in form.organizations" required>
             </select>
           </div>
           
@@ -43,6 +43,68 @@
       <div data-af-field data-af-field-label="What the facility does*">
         <textarea class="form-control" name="facilityDescription" id="facility-description" data-ng-model="form.data.facility.description" required></textarea>
       </div>
+      
+      <hr>
+      
+      <div data-ng-form name="disciplinesForm">
+        <div data-af-field data-af-field-label="Disciplines*" data-af-field-name="facilityDisciplinesC1" data-field-type="checkbox">
+          <div class="row">
+            <div class="col-md-6">
+              <div data-ng-repeat="d in form.disciplines | limitTo: 5">
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" id="facility-disciplines-c1{{$index}}" name="facilityDisciplinesC1{{$index}}" data-ng-model="d.isSelected" data-ng-change="form.validateDisciplines()" data-ng-required="form.disciplines[0].isRequired"> {{d.name}}
+                  </label>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-md-6">
+              <div data-ng-repeat="d in form.disciplines | limitTo: 4:5">
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" id="facility-disciplines-c2{{$index}}" name="facilityDisciplinesC2{{$index}}" data-ng-model="d.isSelected" data-ng-change="form.validateDisciplines()" data-ng-required="form.disciplines[0].isRequired"> {{d.name}}
+                  </label>
+                </div>
+              </div>
+            </div>    
+          </div><!-- End of .row -->
+        </div>
+      </div><!-- End of ng-form -->
+          
+      <div class="row">
+        <div class="col-md-6">      
+
+        </div><!-- End of .col-*-* -->
+      </div>
+  
+      <hr>
+    
+      <div data-ng-form name="sectorsForm">
+        <div data-af-field data-af-field-label="Sectors*" data-af-field-name="facilitySectorsC10" data-af-field-type="checkbox">
+          <div class="row">
+            <div class="col-md-6">
+              <div data-ng-repeat="s in form.sectors | limitTo: 15">
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" id="facility-sectors-c1{{$index}}" name="facilitySectorsC1{{$index}}" data-ng-model="s.isSelected" data-ng-change="form.validateSectors()" data-ng-required="form.sectors[0].isRequired"> {{s.name}}
+                  </label>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-md-6">
+              <div data-ng-repeat="s in form.sectors | limitTo: 14:15">
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" id="facility-sectors-c2{{$index}}" name="facilitySectorsC2{{$index}}" data-ng-model="s.isSelected" data-ng-change="form.validateSectors()" data-ng-required="form.sectors[0].isRequired"> {{s.name}}
+                  </label>
+                </div>
+              </div> 
+            </div>
+          </div><!-- End of .row -->
+        </div>
+      </div><!-- End of .ng-form -->
     </div><!-- End of .panel-body -->
   </div><!-- End of .panel -->
   <!-- ======================================================
@@ -52,11 +114,7 @@
   <!-- ======================================================
     -- [START] ILO Contact information
     -- ====================================================== !-->
-  <div class="panel panel-default" data-ng-show="form.data.facility.organizationId != -1 && form.data.facility.organization.ilo.firstName">
-    <div class="panel-heading">
-      <h4 class="panel-title">Industry Liaison Contact Information for {{form.data.facility.organization.name}}</h4>
-    </div>
-    
+  <div class="panel panel-default" data-ng-show="form.data.facility.organizationId != -1 && form.data.facility.organization.ilo.firstName">    
     <div class="panel-body">
       <div data-ng-include="'views/includes/ilo.html'"></div>
     </div><!-- End of .panel-body -->
@@ -68,13 +126,13 @@
   <!-- ======================================================
     -- [START] Contact information
     -- ====================================================== !-->
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <span class="h4 panel-title">Contact Information</span>
-      <span data-ng-show="form.contactIndex === 0" class="label label-info">Primary point of contact</span>         
-    </div>
-    
+  <div class="panel panel-default">    
     <div class="panel-body">
+      <p>
+        <span class="label label-default">Contact Information</span>
+        <span data-ng-show="form.contactIndex === 0" class="label label-info">Primary point of contact</span> 
+      </p>
+  
       <div class="row">
         <div class="col-lg-2">
           <table class="table table-condensed table-list">
@@ -156,13 +214,13 @@
   
   <!-- ======================================================
     -- [START] Equipment information
-    -- ====================================================== !-->
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">Equipment</h4>
-    </div>
-    
+    -- ====================================================== !-->  
+  <div class="panel panel-default">    
     <div class="panel-body">
+      <p>
+        <span class="label label-default">Equipment</span>
+      </p>
+      
       <div class="row">
         <div class="col-lg-2">
           <table class="table table-condensed table-list">
@@ -209,6 +267,10 @@
                   
                   <div data-af-field data-af-field-label="Equipment specifications">
                     <textarea class="form-control" name="equipmentSpecifications" id="equipment-specifications{{$index}}" data-ckeditor="ckEditorConfig" data-ng-model="e.specifications" placeholder="Eg. - 50 x 50 x 50 cm FOV..."></textarea>
+                  </div>
+                  
+                  <div data-af-field data-af-field-label="Year purchased">
+                    <input type="text" class="form-control" name="equipmentYearPurchased" id="equipment-year-purchased{{$index}}" data-ng-model="dummy" pattern="(?:19|20)[0-9]{2}" placeholder="Eg. 1995">
                   </div>
                   
                   <div data-af-field data-af-field-label="Excess capacity*">

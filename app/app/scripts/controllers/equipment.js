@@ -2,25 +2,24 @@
 
 angular.module('afredApp').controller('EquipmentController',
   ['$scope',
-   '$state',
-   '$stateParams',
    'equipmentResource',
   function($scope,
-           $state,
-           $stateParams,
            equipmentResource) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
     
     $scope.getEquipment = function() {
-      $scope.equipment = equipmentResource.get({equipmentId:
-        $stateParams.equipmentId,
-        expand: 'facility.province,facility.institution,facility.contacts'});
+      $scope.equipment = equipmentResource.get({
+        equipmentId: $scope._stateParams.equipmentId,
+        expand: 'facility.province,facility.organization,facility.contacts'
+      });
     };
     
     $scope.viewCompleteFacility = function() {
-      $state.go('facility', {facilityId: $stateParams.facilityId});
+      $scope._state.go('facility', {
+        facilityId: $scope._stateParams.facilityId
+      });
     };
     
     /* ---------------------------------------------------------------------

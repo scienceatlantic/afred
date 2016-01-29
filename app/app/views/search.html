@@ -1,36 +1,62 @@
 <h2>Search</h2>
 
-<form role="form" data-ng-submit="searchFn()">
-  <div class="form-group">
-    <div class="input-group">
-      <input type="text" class="form-control input-lg" data-ng-model="search.q" placeholder="...">
-      <span class="input-group-addon">
-        <span class="glyphicon glyphicon-search"></span>
-      </span>
-    </div>
-  </div>
-  
-  <div class="form-group">
-    <button type="submit" class="btn btn-primary">Search</button>
-    <button class="btn btn-default" data-ui-sref-active="active" data-ui-sref="search.all">Show all</button>
-    <button class="btn btn-default" data-ng-click="contactUs()">Can't find what you're looking for?</button>
-  </div>
-  
-  <div>
-    <div class="radio">
-      <label>
-        <input type="radio" name="listBy" id="list-by" data-ng-model="search.listBy" value="equipment" selected> Equipment
-      </label>
-      <label>
-        <input type="radio" name="listBy" id="list-by" data-ng-model="search.listBy" value="facility"> Facility
-      </label>
-    </div>
-    
-    <div>
+<div class="panel panel-default">
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-7">
+        <form role="form" data-ng-submit="searchFn()">
+          <div class="form-group">
+            <div class="input-group">
+              <input type="text" class="form-control input-lg" data-ng-model="search.q" placeholder="...">
+              <span class="input-group-addon">
+                <span class="glyphicon glyphicon-search"></span>
+              </span>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary">Search</button>
+            <button class="btn btn-default" data-ui-sref-active="active" data-ui-sref="search.all">Show all</button>
+            <button class="btn btn-default" data-ng-click="contactUs()">Can't find what you're looking for?</button>
+          </div>
+        </form>
+      </div>
       
+      <div class="col-md-4 col-md-offset-1">
+        <div class="">
+          <div class="">
+            
+            <form>
+              <div class="form-group">
+                <label class="radio-inline">
+                  <input type="radio" name="" value="1"> Equipment
+                </label>
+                <label class="radio-inline">
+                  <input type="radio" name="" value="2"> Facility
+                </label>
+              </div>
+            </form>
+            
+            <form class="form-horizontal" role="form">          
+              <div class="form-group">
+                <label for="province" class="col-sm-4 control-label">Province</label>
+                <div class="col-sm-8">
+                  <select class="form-control input-sm" data-ng-model="search.province" data-ng-options="p.id as p.name for p in provinces"></select>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label for="organization" class="col-sm-4 control-label">Organization</label>
+                <div class="col-sm-8">
+                  <select class="form-control input-sm" data-ng-model="search.organization" data-ng-options="o.id as o.name for o in organizations"></select>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div><!-- End of .panel -->
+      </div>
     </div>
   </div>
-  
-  <div data-ui-view></div>
-</form>
+</div>
+<div data-ui-view></div>
 

@@ -45,9 +45,9 @@ angular.module('afredApp').factory('facilityRepositoryResource',
   }
 ]);
 
-angular.module('afredApp').factory('equipmentResource', ['$rootScope',
+angular.module('afredApp').factory('searchResource', ['$rootScope',
   '$resource', function($rootScope, $resource) {
-    return $resource($rootScope._config.api + '/equipment/:equipmentId');
+    return $resource($rootScope._config.api + '/search');
   }
 ]);
 
@@ -66,6 +66,30 @@ angular.module('afredApp').factory('organizationResource', ['$rootScope',
 angular.module('afredApp').factory('provinceResource', ['$rootScope',
   '$resource', function($rootScope, $resource) {
     return $resource($rootScope._config.api + '/provinces/:provinceId',
+      {},
+      {
+        query: { isArray: false },
+        queryNoPaginate: { isArray: true, params: { paginate: 0 }}
+      }
+    );
+  }
+]);
+
+angular.module('afredApp').factory('disciplineResource', ['$rootScope',
+  '$resource', function($rootScope, $resource) {
+    return $resource($rootScope._config.api + '/disciplines/:disciplineId',
+      {},
+      {
+        query: { isArray: false },
+        queryNoPaginate: { isArray: true, params: { paginate: 0 }}
+      }
+    );
+  }
+]);
+
+angular.module('afredApp').factory('sectorResource', ['$rootScope',
+  '$resource', function($rootScope, $resource) {
+    return $resource($rootScope._config.api + '/sectors/:sectorId',
       {},
       {
         query: { isArray: false },
