@@ -477,20 +477,6 @@ angular.module('afredApp').controller('FacilitiesFormController',
     /* ---------------------------------------------------------------------
      * Initialisation code.
      * --------------------------------------------------------------------- */
-    
-    /**
-     * Settings for 'CKEditor'.
-     */
-    $scope.ckEditorConfig = {
-      height: 80,
-      toolbar: [
-        ['Bold', 'Italic', 'Subscript','Superscript', 'NumberedList',
-         'BulletedList', 'Indent', 'Outdent', 'Link']
-      ]
-    };
-    
-    $scope.temp =  function() {
-      console.log($scope.form.data.disciplines);
-    };
+  
   }
 ]);
