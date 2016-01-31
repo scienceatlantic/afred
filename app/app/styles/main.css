@@ -59,6 +59,17 @@ table.table-list td:last-child {
   text-align: left;
 }
 
+/* TextAngular styles
+-------------------------------------------------- */
+.ta-editor {
+    min-height: 300px;
+    height: auto;
+    overflow: auto;
+    font-family: inherit;
+    font-size: 100%;
+    margin:5px 0;
+}
+
 /* General styles
 -------------------------------------------------- */
 .truncate {
