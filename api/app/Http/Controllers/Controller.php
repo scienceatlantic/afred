@@ -33,15 +33,27 @@ abstract class Controller extends BaseController
             $relationships = explode(',', $request->input('expand'));
                                      
             foreach ($relationships as $relationship) {
-                if ($isCollection) {
-                    foreach($model as $m) {
-                        $m->$relationship;
-                    }                       
+                $nested = explode('.', $relationship);
+                
+                if (count($nested) > 1) {
+                    if ($isCollection) {
+                        foreach($model as $m) {
+                            $m->$nested[0]->$nested[1];
+                        }                       
+                    } else {
+                        $model->$nested[0]->$nested[1];
+                    }
                 } else {
-                    $model->$relationship;
+                    if ($isCollection) {
+                        foreach($model as $m) {
+                            $m->$relationship;
+                        }                       
+                    } else {
+                        $model->$relationship;
+                    }
                 }
             }
-        }         
+        }
     }
     
     protected function _toCamelCase($array)
