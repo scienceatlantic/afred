@@ -30,12 +30,10 @@ class FacilityController extends Controller
      */
     public function index(Request $request)
     {
-        $paginate = $request->input('paginate', true);
-        $itemsPerPage = $request->input('itemsPerPage', 15);
         $facility = new Facility();
         
-        if ($paginate) {
-            $facility = $facility->paginate($itemsPerPage);
+        if ($this->_paginate) {
+            $facility = $facility->paginate($this->_itemsPerPage);
         } else {
             $facility = $facility->all();
         }
