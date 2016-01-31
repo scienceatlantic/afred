@@ -40,14 +40,14 @@
         </div><!-- End of .col-x-x -->
       </div><!-- End of .row -->
       
-      <div data-af-field data-af-field-label="What the facility does*">
-        <textarea class="form-control" name="facilityDescription" id="facility-description" data-ng-model="form.data.facility.description" required></textarea>
+      <div data-af-field data-af-field-label="What the facility does*" data-af-field-name="facilityDescription">
+        <div data-text-angular data-ng-model="form.data.facility.description" name="facilityDescription" required></div>
       </div>
       
       <hr>
       
       <div data-ng-form name="disciplinesForm">
-        <div data-af-field data-af-field-label="Disciplines*" data-af-field-name="facilityDisciplinesC1" data-field-type="checkbox">
+        <div data-af-field data-af-field-label="Disciplines*" data-af-field-name="facilityDisciplinesC10" data-af-field-type="checkbox">
           <div class="row">
             <div class="col-md-6">
               <div data-ng-repeat="d in form.disciplines | limitTo: 5">
@@ -154,6 +154,8 @@
               </tr>
             </tbody>
           </table>
+          
+          <button type="button" class="btn btn-default btn-sm" data-ng-click="form.addContact()"><span class="glyphicon glyphicon-plus"></span> Contacts</button>
         </div><!-- End of .col-x-x -->
         
         <div class="col-lg-10">                    
@@ -204,8 +206,6 @@
           </div><!-- End of ng-repeat -->
         </div><!-- End of .col-x-x -->
       </div><!--End of .row -->
-      
-      <button type="button" class="btn btn-default btn-sm" data-ng-click="form.addContact()">Add additional contacts</button>
     </div><!-- End of .panel-body -->
   </div><!-- End of .panel -->
   <!-- ======================================================
@@ -242,6 +242,8 @@
               </tr>
             </tbody>
           </table>
+          
+          <button type="button" class="btn btn-default btn-sm" data-ng-click="form.addEquipment()"><span class="glyphicon glyphicon-plus"></span> Equipment</button>
         </div><!-- End of .col-x-x -->
         
         <div class="col-lg-10">
@@ -261,12 +263,12 @@
                     <input type="text" class="form-control" name="equipmentModel" id="equipment-model{{$index}}" placeholder="Eg. Echelon Oval 1.5T Ultra-Wide MRI system" data-ng-model="e.model">
                   </div>
                   
-                  <div data-af-field data-af-field-label="Equipment purpose*">
-                    <textarea class="form-control" name="equipmentPurpose" id="equipment-purpose{{$index}}" data-ckeditor="ckEditorConfig" data-ng-model="e.purpose" placeholder="Eg. Magnetic resonance imaging (MRI) is a medical imaging technique used in radiology..." required></textarea>
+                  <div data-af-field data-af-field-label="Equipment purpose*" data-af-field-name="equipmentPurpose">
+                    <div data-text-angular name="equipmentPurpose" id="equipment-purpose{{$index}}" data-ng-model="e.purpose" required></div>
                   </div>
                   
-                  <div data-af-field data-af-field-label="Equipment specifications">
-                    <textarea class="form-control" name="equipmentSpecifications" id="equipment-specifications{{$index}}" data-ckeditor="ckEditorConfig" data-ng-model="e.specifications" placeholder="Eg. - 50 x 50 x 50 cm FOV..."></textarea>
+                  <div data-af-field data-af-field-label="Equipment specifications" data-af-field-name="equipmentSpecifications">
+                    <div data-text-angular name="equipmentSpecifications" id="equipment-specifications{{$index}}" data-ng-model="e.specifications"></div>
                   </div>
                   
                   <div data-af-field data-af-field-label="Year purchased">
@@ -296,7 +298,7 @@
                   </div>
                   
                   <div data-af-field data-af-field-label="Keywords">
-                    <input type="text" class="form-control" name="equipmentKeywords" id="equipment-keywords" data-ng-model="e.keywords" placeholder="keyword, keyword, keyword, ...">
+                    <input type="text" class="form-control" name="equipmentKeywords" id="equipment-keywords" data-ng-model="e.keywords" placeholder="NMRI, MRT, etc">
                   </div>
                 </div><!-- End of .col-x-x -->
               </div><!-- End of .row -->
@@ -304,17 +306,17 @@
           </div><!-- End of ng-repeat -->
         </div><!-- End of col-x-x -->
       </div><!-- End of .row -->
-      <!-- ======================================================
-        -- [END] Equipment information
-        -- ====================================================== !-->
-      
-      <button type="button" class="btn btn-default btn-sm" data-ng-click="form.addEquipment()">Add additional equipment</button>
     </div><!-- End of .panel-body -->
   </div><!-- End of .panel -->
+  <!-- ======================================================
+    -- [END] Equipment information
+    -- ====================================================== !-->
   
   <div>
     <button type="submit" class="btn btn-default" data-ng-disabled="facilityForm.$invalid" data-ng-click="preview()">Preview</button>
     <button type="button" class="btn btn-default" data-ng-click="form.initialise(true)">Reset form</button>
-    <p class="text-warning" data-ng-show="facilityForm.$invalid && !facilityForm.$pristine">Please complete all mandatory fields first</p>
+    <p>
+      <p class="text-warning" data-ng-show="facilityForm.$invalid && !facilityForm.$pristine">Please complete all mandatory fields first</p>
+    </p>
   </div>
 </form>
