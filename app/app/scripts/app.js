@@ -16,10 +16,6 @@ angular.module('afredApp', [
   'ngTouch',
   'ui.router',
   'ui.bootstrap',
-  'angularUtils.directives.dirPagination'
-]);
-
-angular.module('afredApp').config(['$httpProvider', function($httpProvider) {
-    $httpProvider.defaults.withCredentials = true;
-  }
+  'angularUtils.directives.dirPagination',
+  'textAngular'
 ]);
