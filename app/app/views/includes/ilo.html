@@ -1,3 +1,5 @@
+<p class="label label-primary">Industry Liaison Office Contact</p><br><br>
+
 <div class="row">
   <div class="col-md-3 text-right"><label>Name</label></div>
   <div class="col-md-9">{{facility.organization.ilo.firstName}} {{facility.organization.ilo.lastName}}</div>
@@ -10,7 +12,7 @@
 
 <div class="row">
   <div class="col-md-3 text-right"><label>Telephone</label></div>
-  <div class="col-md-9">{{facility.organization.ilo.telephone}}</div>
+  <div class="col-md-9">{{facility.organization.ilo.telephone | afFormatTelephone}}</div>
 </div>
 
 <div class="row">
