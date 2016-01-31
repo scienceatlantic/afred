@@ -19,6 +19,8 @@ class IlosTableSeeder extends Seeder
      */
     public function run()
     {
+        $now = Carbon::now();
+        
         // Delete existing entries
         DB::table('ilos')->delete();
         
@@ -29,7 +31,7 @@ class IlosTableSeeder extends Seeder
                 'email'     => 'peggy.crawford@acadiau.ca',
                 'telephone' => '9025851762',
                 'position'  => 'Research and Innovation Coordinator',
-                'dateAdded' => Carbon::now()
+                'dateAdded' => $now
             ],
             'Cape Breton University' => [
                 'firstName' => 'Sarah',
@@ -37,7 +39,7 @@ class IlosTableSeeder extends Seeder
                 'email'     => 'sarah_conrod@cbu.ca',
                 'telephone' => '9025631842',
                 'position'  => 'Industry Liaison Officer',
-                'dateAdded' => Carbon::now()
+                'dateAdded' => $now
             ],
             'Crandall Universtiy' => [
                 'firstName' => '',
@@ -45,7 +47,7 @@ class IlosTableSeeder extends Seeder
                 'email'     => '',
                 'telephone' => '',
                 'position'  => '',
-                'dateAdded' => Carbon::now()
+                'dateAdded' => $now
             ],
             'Dalhousie University' => [
                 'firstName' => 'Kevin',
@@ -53,7 +55,7 @@ class IlosTableSeeder extends Seeder
                 'email'     => 'kevin.dunn@dal.ca',
                 'telephone' => '9024941648',
                 'position'  => 'Director',
-                'dateAdded' => Carbon::now()
+                'dateAdded' => $now
             ],
             'Dalhouse University, Faculty of Agriculture' => [
                 'firstName' => '',
@@ -61,7 +63,7 @@ class IlosTableSeeder extends Seeder
                 'email'     => '',
                 'telephone' => '',
                 'position'  => '',
-                'dateAdded' => Carbon::now()
+                'dateAdded' => $now
             ],
             'Memorial University' => [
                 'firstName' => 'Marc',
@@ -69,7 +71,7 @@ class IlosTableSeeder extends Seeder
                 'email'     => 'mkielley@mun.ca',
                 'telephone' => '7098642095',
                 'position'  => 'Manager of Industry Engagement',
-                'dateAdded' => Carbon::now()
+                'dateAdded' => $now
             ],
             'Memorial University, Grenfell Campus' => [
                 'firstName' => '',
@@ -77,7 +79,7 @@ class IlosTableSeeder extends Seeder
                 'email'     => '',
                 'telephone' => '',
                 'position'  => '',
-                'dateAdded' => Carbon::now()
+                'dateAdded' => $now
             ],
             'Mount Allison University' => [
                 'firstName' => 'Cassidy',
@@ -85,7 +87,7 @@ class IlosTableSeeder extends Seeder
                 'email'     => 'cweisbord@mta.ca',
                 'telephone' => '5068663469',
                 'position'  => 'Industry Liaison Officer',
-                'dateAdded' => Carbon::now()
+                'dateAdded' => $now
             ],
             'Mount Saint Vincent University' => [
                 'firstName' => '',
@@ -93,7 +95,7 @@ class IlosTableSeeder extends Seeder
                 'email'     => '',
                 'telephone' => '',
                 'position'  => '',
-                'dateAdded' => Carbon::now()
+                'dateAdded' => $now
             ],
             'Saint Mary\'s University' => [
                 'firstName' => 'Kevin',
@@ -101,7 +103,7 @@ class IlosTableSeeder extends Seeder
                 'email'     => 'kevin.buchan@smu.ca',
                 'telephone' => '9024916297',
                 'position'  => 'Director',
-                'dateAdded' => Carbon::now()
+                'dateAdded' => $now
             ],
             'St. Francis Xavier University' => [
                 'firstName' => '',
@@ -109,7 +111,7 @@ class IlosTableSeeder extends Seeder
                 'email'     => '',
                 'telephone' => '',
                 'position'  => '',
-                'dateAdded' => Carbon::now()
+                'dateAdded' => $now
             ],
             'St. Thomas University' => [
                 'firstName' => '',
@@ -117,7 +119,7 @@ class IlosTableSeeder extends Seeder
                 'email'     => '',
                 'telephone' => '',
                 'position'  => '',
-                'dateAdded' => Carbon::now()
+                'dateAdded' => $now
             ],
             'Université de Moncton' => [
                 'firstName' => 'Cassidy',
@@ -125,7 +127,7 @@ class IlosTableSeeder extends Seeder
                 'email'     => 'cassidy.weisbord@umonton.ca',
                 'telephone' => '5068584307',
                 'position'  => 'Innovation Officer',
-                'dateAdded' => Carbon::now()
+                'dateAdded' => $now
             ],
             'University of New Brunswick, Fredericton' => [
                 'firstName' => '',
@@ -133,7 +135,7 @@ class IlosTableSeeder extends Seeder
                 'email'     => '',
                 'telephone' => '',
                 'position'  => '',
-                'dateAdded' => Carbon::now()
+                'dateAdded' => $now
             ],
             'University of New Brunswick, Saint John' => [
                 'firstName' => '',
@@ -141,7 +143,7 @@ class IlosTableSeeder extends Seeder
                 'email'     => '',
                 'telephone' => '',
                 'position'  => '',
-                'dateAdded' => Carbon::now()
+                'dateAdded' => $now
             ],
             'University of Prince Edward Island' => [
                 'firstName' => 'Shelley',
@@ -149,23 +151,22 @@ class IlosTableSeeder extends Seeder
                 'email'     => 'srking@upei.ca',
                 'telephone' => '9025666095',
                 'position'  => 'Chief Executive Officer',
-                'dateAdded' => Carbon::now()
+                'dateAdded' => $now
             ]
         ];
         
-        foreach ($ilos as $organizationName => $ilo) {
+        foreach ($ilos as $orgName => $ilo) {
             // Ignore ILO if it's empty. We're only checking the 'firstName'
-            // field.
+            // field to verify this.
             if ($ilo['firstName']) {
-                // Get the institution's primary key.
-                $organization = Organization
-                             ::select('id')
-                             ->where('name', $organizationName)
-                             ->first();
+                // Get the organization's primary key.
+                $org = Organization::select('id')->where('name', $orgName)
+                    ->first();
                 
-                // Insert the ILO's data only if the institution was found.
-                if ($organization && property_exists($organization, 'id')) {
-                    $ilo['institutionId'] = $organization->id;
+                // Insert the ILO's data only if the organization was found.
+                if ($org) {
+                    Log::debug('called!');
+                    $ilo['organizationId'] = $org->id;
                     Ilo::create($ilo);  
                 }
             }
