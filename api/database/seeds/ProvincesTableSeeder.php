@@ -18,74 +18,81 @@ class ProvincesTableSeeder extends Seeder
      */
     public function run()
     {
+        $now = Carbon::now();
+        
         // Delete existing entries
         DB::table('provinces')->delete();
         
         $provinces = [
             [
+                'name'      => 'N/A',
+                'isHidden'  => false,
+                'dateAdded' => $now
+            ],
+            [
                 'name'      => 'Alberta',
                 'isHidden'  => true,
-                'dateAdded' => Carbon::now()
+                'dateAdded' => $now
             ],
             [
                 'name'      => 'British Columbia',
                 'isHidden'  => true,
-                'dateAdded' => Carbon::now()
+                'dateAdded' => $now
             ],
             [
                 'name'      => 'Manitoba',
                 'isHidden'  => true,
-                'dateAdded' => Carbon::now()
+                'dateAdded' => $now
             ],
             [
                 'name'      => 'New Brunswick',
                 'isHidden'  => false,
-                'dateAdded' => Carbon::now()
+                'dateAdded' => $now
             ],
             [
                 'name'      => 'Newfoundland and Labrador',
                 'isHidden'  => false,
-                'dateAdded' => Carbon::now()
+                'dateAdded' => $now
             ],
             [
                 'name'      => 'Northwest Territories',
                 'isHidden'  => true,
-                'dateAdded' => Carbon::now()
+                'dateAdded' => $now
             ],
             [
                 'name'      => 'Nova Scotia',
                 'isHidden'  => false,
-                'dateAdded' => Carbon::now()
+                'dateAdded' => $now
             ],
             [
                 'name'      => 'Nunavut',
                 'isHidden'  => true,
-                'dateAdded' => Carbon::now()
+                'dateAdded' => $now
             ],
             [
                 'name'      => 'Ontario',
                 'isHidden'  => true,
-                'dateAdded' => Carbon::now()
+                'dateAdded' => $now
             ],
             [
                 'name'      => 'Prince Edward Island',
                 'isHidden'  => false,
-                'dateAdded' => Carbon::now()
+                'dateAdded' => $now
             ],
             [
                 'name'      => 'Quebec',
                 'isHidden'  => true,
-                'dateAdded' => Carbon::now()
+                'dateAdded' => $now
             ],
             [
                 'name'      => 'Saskatchewan',
                 'isHidden'  => true,
-                'dateAdded' => Carbon::now()
+                'dateAdded' => $now
             ],
             [
                 'name'      => 'Yukon',
                 'isHidden'  => true,
-                'dateAdded' => Carbon::now()
+                'dateAdded' => $now
             ]
         ];
         
