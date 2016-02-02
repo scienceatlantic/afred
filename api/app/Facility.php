@@ -35,12 +35,14 @@ class Facility extends Model
         'dateUpdated'
     ];
     
+    // Fix name!
     public function currentRevision()
     {
         return $this->belongsTo('App\FacilityRepository',
             'facilityRepositoryId');
     }
     
+    // Fix name!
     public function facilityRevisionHistory()
     {
         return $this->hasMany('App\FacilityRepository', 'facilityId');
@@ -54,6 +56,18 @@ class Facility extends Model
     public function province()
     {
         return $this->belongsTo('App\Province', 'provinceId');
+    }
+    
+    public function disciplines()
+    {
+        return $this->belongsToMany('App\Discipline',
+            'discipline_facility', 'facilityId', 'disciplineId');
+    }
+    
+    public function sectors()
+    {
+        return $this->belongsToMany('App\Sector', 'facility_sector',
+            'facilityId', 'sectorId');
     }
     
     public function primaryContact()
