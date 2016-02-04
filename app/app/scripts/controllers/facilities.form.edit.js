@@ -11,7 +11,7 @@ angular.module('afredApp').controller('FacilitiesFormEditController',
     
     $scope.preview = function() {
       $scope.facility = $scope.form.formatForPreview();
-      $scope.view.show = 'preview';
+      $scope.view.show = 'PREVIEW';
     };
     
     $scope.submit = function() {
@@ -39,7 +39,7 @@ angular.module('afredApp').controller('FacilitiesFormEditController',
     $scope.form.getFacilityRepositoryData();
     
     $scope.view = {
-      show: 'form'
+      show: 'FORM'
     };
   }
 ]);

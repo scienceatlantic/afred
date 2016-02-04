@@ -16,7 +16,7 @@ angular.module('afredApp').controller('FacilitiesFormCreateController',
      */
     $scope.preview = function() {
       $scope.facility = $scope.form.formatForPreview();
-      $scope.view.show = 'preview';
+      $scope.view.show = 'PREVIEW';
     };
     
     /**
@@ -32,9 +32,9 @@ angular.module('afredApp').controller('FacilitiesFormCreateController',
           // Reset form
           //$scope.form.initialiseForm(true);
           //$scope.form.save();
-          $scope.view.show = 'successMessage';
+          $scope.view.show = 'SUCCESS_MESSAGE';
         }, function() {
-          $scope.view.show = 'failureMessage';
+          $scope.view.show = 'FAILURE_MESSAGE';
         }
       );
     };
@@ -45,10 +45,10 @@ angular.module('afredApp').controller('FacilitiesFormCreateController',
     
     /**
      * Controls what is shown to the user.
-     * @type {string} 'form', 'preview', 'successMessage', 'failureMessage'
+     * @type {string} 'FORM', 'PREVIEW', 'SUCCESS_MESSAGE', 'FAILURE_MESSAGE'
      */
     $scope.view = {
-      show: 'form'
+      show: 'FORM'
     };
     
     /**

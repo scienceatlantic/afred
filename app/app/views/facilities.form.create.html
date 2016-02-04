@@ -2,11 +2,11 @@
   <div class="col-lg-12">
     <h3>Submit a Facility</h3>
     
-    <div data-af-loading="!(form.organizations.$resolved || form.provinces.$resolved || form.disciplines.$resolved || form.sectors.$resolved)" data-ng-show="view.show == 'form'">
+    <div data-af-loading="!(form.organizations.$resolved || form.provinces.$resolved || form.disciplines.$resolved || form.sectors.$resolved)" data-ng-show="view.show == 'FORM'">
       <div data-ng-include="'views/includes/facilities.form.html'"></div>
     </div>
     
-    <div data-ng-show="view.show == 'preview'">
+    <div data-ng-show="view.show == 'PREVIEW'">
       <div class="panel panel-default">
         <div class="panel-body">
           <div data-ng-include="'views/includes/facility.html'"></div>
@@ -33,17 +33,17 @@
       
       <p>
         <button class="btn btn-default" data-ng-click="submit()">Submit</button>
-        <button class="btn btn-default" data-ng-click="view.show = 'form'">Go Back</button>
+        <button class="btn btn-default" data-ng-click="view.show = 'FORM'">Go Back</button>
       </p>
     </div>
     
-    <div data-ng-show="view.show == 'successMessage'">
+    <div data-ng-show="view.show == 'SUCCESS_MESSAGE'">
       <p>Thank you!</p>
       
       <p>Click <a data-ui-sref="search">here</a> to get back to the homepage or click <a href="" data-ng-click="_state.reload()">here</a> to submit another facility.</p>
     </div>
     
-    <div data-ng-show="view.show =='failureMessage'">
+    <div data-ng-show="view.show =='FAILURE_MESSAGE'">
       <p>Oh no... something went wrong!</p>
     </div>
   </div><!-- End of .col-x-x -->
