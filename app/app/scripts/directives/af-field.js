@@ -14,7 +14,8 @@ angular.module('afredApp').directive('afField',
       scope: {
         label: '@afFieldLabel',
         nameOverride: '@afFieldName',
-        typeOverride: '@afFieldType'
+        typeOverride: '@afFieldType',
+        isTextAngular: '@afFieldTextangular'
       },
       link: function($scope, element, attrs, form) { 
         if ($scope.nameOverride) {
@@ -26,16 +27,26 @@ angular.module('afredApp').directive('afField',
           };
         } else {
           var field = element.find('input, select, textarea');
-          $scope.name = field.attr('name');
-          $scope.id = field.attr('id');
-
-          $scope.template = {
-            isInput: field.prop('tagName') === 'INPUT',
-            isSelect: field.prop('tagName') === 'SELECT',
-            isTextarea: field.prop('tagName') === 'TEXTAREA',
-            isRadio: field.attr('type') === 'radio',
-            isCheckbox: field.attr('type') === 'checkbox'
-          };                   
+          
+          if ($scope.isTextAngular) {
+            $scope.name = field.get(1).name;
+            $scope.id = field.get(1).id;
+            
+            $scope.template = {
+              isTextArea: true
+            };
+          } else {
+            $scope.name = field.attr('name');
+            $scope.id = field.attr('id');
+  
+            $scope.template = {
+              isInput: field.prop('tagName') === 'INPUT',
+              isSelect: field.prop('tagName') === 'SELECT',
+              isTextarea: field.prop('tagName') === 'TEXTAREA',
+              isRadio: field.attr('type') === 'radio',
+              isCheckbox: field.attr('type') === 'checkbox'
+            };     
+          }               
         }
         
         $scope.form = form; 

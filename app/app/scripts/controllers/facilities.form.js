@@ -23,66 +23,52 @@ angular.module('afredApp').controller('FacilitiesFormController',
      * All properties/functions related to the form.
      */
     $scope.form = {
-      // TODO
-      data: {},
-      
-      
       /**
-       * Holds all form data.  !UPDATE
+       * Form data that will be submitted to the API.
        *
        * @type {object}
        */
-      facility: {},
-      
-      
-      
+      data: {},
+          
       /**
        * Holds an instance of 'facilityRepositoryResource'.
-       *
        * @type {resource}
-       *
        */
       facilityRepository: {},
       
       /**
-       * Used to keep track of the current 'contact' being viewed.
-       *
+       * Keeps track of the current 'contact' being viewed.
        * @type {integer}
        */
       contactIndex: null,
       
       /**
-       * Used to keep track of the current 'equipment' being viewed.
-       *
+       * Keeps track of the current 'equipment' being viewed.
        * @type {integer}
        */
       equipmentIndex: null,
       
       /**
-       * Holds a list of available organizations for the 'Organizations'
+       * A list of available organizations for the 'Organizations'
        * dropdown.
-       *
        * @type {array}
        */
       organizations: [],
       
       /**
        * A list of available provinces for the 'Provinces' dropdown.
-       *
        * @type {array}
        */
       provinces: [],
       
       /**
-       * A list of all disciplines.
-       *
+       * A list of all disciplines for the 'Disciplines' dropdown.
        * @type {array}
        */
       disciplines: [],
       
       /**
-       * A list of all sectors.
-       *
+       * A list of all sectors for the 'Sectors' dropdown.
        * @type {array}
        */
       sectors: [],
@@ -90,7 +76,8 @@ angular.module('afredApp').controller('FacilitiesFormController',
       /**
        * Holds the unique ID returned by '$scope.form.startAutosave()'s
        * setInterval function. Used to either stop or prevent
-       * '$scope.form.startAutosave()' from running more than one interval.
+       * '$scope.form.startAutosave()' from running more than one interval
+       * at a time.
        *
        * @type {integer}
        */
@@ -106,11 +93,14 @@ angular.module('afredApp').controller('FacilitiesFormController',
       /**
        * Initialises the form. All form data is attached to
        * '$scope.form.data'.
+       * @param {boolean} resetStorage If set to true, the form will also
+       *     delete any saved local storage data.
        */
       initialise: function(resetStorage) {
         // Holds all facility data that will be passed to the API.
         $scope.form.data = {};
         
+        // Facility information.
         $scope.form.data.facility = {
           name: null,
           organizationId: null,
@@ -120,12 +110,19 @@ angular.module('afredApp').controller('FacilitiesFormController',
           website: null
         };
         
+        // An array of selected discipline IDs.
         $scope.form.data.disciplines = [];
         
-        $scope.form.data.organization = {};
-        $scope.form.data.province = {};
+        // An array of selected sector IDs.
+        $scope.form.data.sectors = [];
+        
+        // Primary contact information.
         $scope.form.data.primaryContact = {};
+        
+        // Contact(s) information.
         $scope.form.data.contacts = [];
+        
+        // Equipment information
         $scope.form.data.equipment = [];
         
         // Get a list of all available organizations.
@@ -146,6 +143,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
         // Add the first equipment.
         $scope.form.addEquipment();
         
+        // Deletes any local storage data.
         if (resetStorage) {
           try {
             localStorage.removeItem($scope.form.getStorageItemName());
@@ -156,9 +154,8 @@ angular.module('afredApp').controller('FacilitiesFormController',
       },
       
       /**
-       * Adds an additional contact object to the
-       * '$scope.form.data.contacts' array and advances
-       * '$scope.form.contactIndex' to point to it.
+       * Adds an additional contact object to the '$scope.form.data.contacts'
+       *  array and advances '$scope.form.contactIndex' to point to it.
        */      
       addContact: function() {
         $scope.form.data.contacts.push({
@@ -177,8 +174,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
       },
       
       /**
-       * Removes a contact object from the '$scope.form.data.contacts'
-       * array.
+       * Removes a contact object from the '$scope.form.data.contacts' array.
        * @param {integer} index Array index of '$scope.form.data.contacts'.
        */
       removeContact: function(index) {
@@ -199,9 +195,8 @@ angular.module('afredApp').controller('FacilitiesFormController',
       },
 
       /**
-       * Adds additional equipment object to the
-       * '$scope.form.data.equipment' array and advances
-       * '$scope.form.equipmentIndex' to point to it.
+       * Adds additional equipment object to the '$scope.form.data.equipment'
+       * array and advances '$scope.form.equipmentIndex' to point to it.
        */      
       addEquipment: function() {
         $scope.form.data.equipment.push({
@@ -210,6 +205,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
           model: null,
           specifications: null,
           purpose: null,
+          yearPurchased: null,
           isPublic: null,
           hasExcessCapacity: null,
           keywords: null
@@ -249,11 +245,17 @@ angular.module('afredApp').controller('FacilitiesFormController',
             expand: 'ilo'
           },
           function() {
-            // Add an option for 'N/A'.
-            $scope.form.organizations.push({id: -1, name: 'N/A'});
+            // Find the 'N/A' option and push it to the end of the array.
+            for (var i = 0; i < $scope.form.organizations.length; i++) {
+              if ($scope.form.organizations[i].name == 'N/A') {
+                $scope.form.organizations.push(
+                  ($scope.form.organizations.splice(i, 1))[0]);
+                break;
+              }
+            }
             
             // Add an option for 'Other'.
-            $scope.form.organizations.push({id: -2, name: 'Other'});
+            $scope.form.organizations.push({id: -1, name: 'Other'});
         });
       },
       
@@ -262,7 +264,18 @@ angular.module('afredApp').controller('FacilitiesFormController',
        * '$scope.form.provinces'.
        */
       getProvinces: function() {
-        $scope.form.provinces = provinceResource.queryNoPaginate();
+        $scope.form.provinces = provinceResource.queryNoPaginate(null,
+          function() {
+            // Find the 'N/A' option and push it to the end of the array.
+            for (var i = 0; i < $scope.form.provinces.length; i++) {
+              if ($scope.form.provinces[i].name == 'N/A') {
+                $scope.form.provinces.push(
+                  ($scope.form.provinces.splice(i, 1))[0]);
+                break;
+              }
+            }
+          }
+        );
       },
       
       /**
@@ -272,10 +285,13 @@ angular.module('afredApp').controller('FacilitiesFormController',
       getDisciplines: function() {
         $scope.form.disciplines = disciplineResource.queryNoPaginate(null,
           function() {
+            // Adds an 'isSelected' property for the checkboxes.
             angular.forEach($scope.form.disciplines, function (discipline) {
               discipline.isSelected = false;
             });
             
+            // For the form validation. We're only attaching it to the first
+            // element in the array.
             if ($scope.form.disciplines.length) {
               $scope.form.disciplines[0].isRequired = true;
             }
@@ -284,13 +300,12 @@ angular.module('afredApp').controller('FacilitiesFormController',
       },
       
       /**
-       * Gets a list of all sectors and attaches it to
-       * '$scope.form.sectors'
-       *
+       * Gets a list of all sectors and attaches it to '$scope.form.sectors'
        */
       getSectors: function() {
         $scope.form.sectors = sectorResource.queryNoPaginate(null,
           function() {
+            // Same deal as '$scope.form.getDisciplines()'.
             angular.forEach($scope.form.sectors, function(sector) {
               sector.isSelected = false;
             });
@@ -338,7 +353,21 @@ angular.module('afredApp').controller('FacilitiesFormController',
           );        
       },
       
-      validateDisciplines: function() {
+      /**
+       * Makes sure that the user has selected at least one discipline.
+       * Makes use of '$scope.form.discipline[0].isRequired'.
+       * @var {object} disciplinesForm Instance of the 'disciplinesForm'
+       */
+      validateDisciplines: function(disciplinesForm) {
+        // Have a look at the comments in the HTML template for more context.
+        // If any of the checkboxes are selected, we need to set the first
+        // checkboxes's $dirty property to true in order for the validation
+        // to work because the directive used in the template is only given
+        // the first checkboxes's name. If we don't set this property to true,
+        // then validation (visually speaking - the red text) for the checkboxes
+        // will only start working if the first checkbox is ticked.
+        disciplinesForm.facilityDisciplinesC10.$dirty = true;
+        
         $scope.form.disciplines[0].isRequired = true;
         
         angular.forEach($scope.form.disciplines, function(discipline) {
@@ -348,7 +377,12 @@ angular.module('afredApp').controller('FacilitiesFormController',
         });
       },
       
-      validateSectors: function() {
+      /**
+       * Same deal as '$scope.form.validateDisciplines()'.
+       */
+      validateSectors: function(sectorsForm) {
+        sectorsForm.facilitySectorsC10.$dirty = true;
+        
         $scope.form.sectors[0].isRequired = true;
         
         angular.forEach($scope.form.sectors, function(sector) {
@@ -359,7 +393,12 @@ angular.module('afredApp').controller('FacilitiesFormController',
       },
       
       /**
-       * Saves the form to localStorage.
+       * !Note: Saving, retrieving, autosaving functions are buggy, do not use
+       * until fixed. Also sectors and disciplines are not saved into storage,
+       * so if this function ends up being fixed, don't forget to include
+       * them!
+       * 
+       * Saves the form to local storage.
        */
       save: function() {
         var itemName = $scope.form.getStorageItemName();
@@ -407,13 +446,15 @@ angular.module('afredApp').controller('FacilitiesFormController',
         }
       },
       
+      /**
+       * Helper function. Retrieves the item name used for storing form data.
+       */
       getStorageItemName: function() {
         return $scope._state.current.name + '-facility';
       },
       
       /**
        *
-       * FIX THIS DESCRIPTION
        * Formats the data for the preview. It gets the names of the selected
        * organization and province. If 'N/A' is selected for organization,
        * clear the '$scope.form.data.organization' object.
@@ -423,25 +464,23 @@ angular.module('afredApp').controller('FacilitiesFormController',
        */
       formatForPreview: function() {
         var facility = angular.copy($scope.form.data.facility);
+        facility.disciplines = $scope.form.getSelectedDisciplines();
+        facility.sectors = $scope.form.getSelectedSectors();
         facility.primaryContact = angular.copy($scope.form.data.primaryContact);
         facility.contacts = angular.copy($scope.form.data.contacts);
         facility.equipment = angular.copy($scope.form.data.equipment);
         
+        // Organization section.
         if ($scope.form.data.facility.organizationId > 0) {
           var e = document.getElementById('facility-organization');
-          facility.organization = {
-            name: $scope.form.organizations[e.selectedIndex].name
-          };
-        } else if ($scope.form.data.facility.organizationId == -2) {
-          facility.organization = {
-            name: $scope.form.data.organization.name
-          }
+          facility.organization = $scope.form.organizations[e.selectedIndex];
+        } else if ($scope.form.data.facility.organizationId == -1) {
+          facility.organization = $scope.form.data.organization;
         }
         
+        // Province section.
         var e = document.getElementById('facility-province');
-        facility.province = {
-          name: $scope.form.provinces[e.selectedIndex].name
-        };
+        facility.province = $scope.form.provinces[e.selectedIndex];
         
         return facility;
       },
@@ -458,25 +497,50 @@ angular.module('afredApp').controller('FacilitiesFormController',
        */
       formatForApi: function() {
         var data = angular.copy($scope.form.data);
+        data.disciplines = $scope.form.getSelectedDisciplines();
+        data.sectors = $scope.form.getSelectedSectors();
         
-        // If 'N/A' was selected, clear the 'organization' object.
+        // If 'Other' was selected, clear the ID since it's not a valid
+        // ID and the API will reject that.
         if (data.facility.organizationId == -1) {
-          data.organization = {};
-        }
-        
-        if (data.facility.organizationId < 1) {
           data.facility.organizationId = null;
+        // Otherise (meaning an existing organization was selected), clear
+        // the organization object since we're not creating a new organization.
+        } else {
+          data.organization = null;
         }
         
+        // The first contact is the primary contact.
         data.primaryContact = (data.contacts.splice(0, 1))[0];
         
         return data;
+      },
+      
+      getSelectedDisciplines: function() {
+        var selectedDisciplines = [];
+        angular.forEach($scope.form.disciplines, function(discipline) {
+          if (discipline.isSelected) {  
+            selectedDisciplines.push(discipline);
+          }
+        });
+        return selectedDisciplines;
+      },
+      
+      getSelectedSectors: function() {
+        var selectedSectors = [];
+        angular.forEach($scope.form.sectors, function(sector) {
+          if (sector.isSelected) {
+            selectedSectors.push(sector);
+          }
+        });
+        return selectedSectors;
       }
     };
     
     /* ---------------------------------------------------------------------
      * Initialisation code.
      * --------------------------------------------------------------------- */
-  
+    
+    // Nothing here.
   }
 ]);
