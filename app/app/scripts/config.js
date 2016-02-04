@@ -25,18 +25,24 @@ angular.module('afredApp').config(['$provide', function($provide) {
 }]);
 
 angular.module('afredApp').run(['$rootScope',
+                                '$log',
                                 '$state',
                                 '$stateParams',
                                 '$http',
                                 '$resource',
   function($rootScope,
+           $log,
            $state,
            $stateParams,
            $http,
            $resource) {
     $rootScope._config = {
       api: '//localhost:8000',
-      log: true
+      log: true,
+      info: true,
+      warn: true,
+      error: true,
+      debug: true
     };
     
     $http.get($rootScope._config.api + '/csrf').then(function(response) {
@@ -45,18 +51,31 @@ angular.module('afredApp').run(['$rootScope',
     
     $rootScope._log = function(msg) {
       if ($rootScope._config.log) {
-        try {
-          console.log(msg);
-          /*if (typeof msg === 'object') {
-            console.log(msg);
-          } else {
-            var date = (new Date()).toString();
-            console.log(date + ': ' + msg);
-          }*/
-          
-        } catch(e) {
-          // Do nothing.
-        }
+        $log.log(msg);
+      }
+    };
+    
+    $rootScope._info = function(msg) {
+      if ($rootScope._config.info) {
+        $log.info(msg);
+      }
+    };
+    
+    $rootScope._warn = function(msg) {
+      if ($rootScope._config.warn) {
+        $log.warn(msg);
+      }
+    };
+    
+    $rootScope._error = function(msg) {
+      if ($rootScope._config.error) {
+        $log.error(msg);
+      }
+    };
+    
+    $rootScope._debug = function(msg) {
+      if ($rootScope._config.debug) {
+        $log.debug(msg);
       }
     };
     
