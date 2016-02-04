@@ -29,3 +29,25 @@
   <div class="col-md-3 text-right"><label>Description</label></div>
   <div class="col-md-9" data-ng-bind-html="facility.description"></div>
 </div>
+
+<hr>
+
+<div class="row">
+  <div class="col-md-3 text-right"><label>Disciplines</label></div>
+  <div class="col-md-9">
+    <ul>
+      <li data-ng-repeat="d in facility.disciplines">{{d.name}}</li> 
+    </ul>
+  </div>
+</div>
+
+<hr>
+
+<div class="row">
+  <div class="col-md-3 text-right"><label>Sectors</label></div>
+  <div class="col-md-9">
+    <ul>
+      <li data-ng-repeat="s in facility.sectors">{{s.name}}</li> 
+    </ul>
+  </div>
+</div>
