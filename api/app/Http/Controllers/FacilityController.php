@@ -30,16 +30,16 @@ class FacilityController extends Controller
      */
     public function index(Request $request)
     {
-        $facility = new Facility();
+        $facilities = new Facility();
         
         if ($this->_paginate) {
-            $facility = $facility->paginate($this->_itemsPerPage);
+            $facilities = $facilities->paginate($this->_itemsPerPage);
         } else {
-            $facility = $facility->all();
+            $facilities = $facilities->all();
         }
         
-        $this->_expandModelRelationships($request, $facility, true);
-        return $this->_toCamelCase($facility->toArray());
+        $this->_expandModelRelationships($request, $facilities, true);
+        return $this->_toCamelCase($facilities->toArray());
     }
 
     /**
@@ -50,7 +50,7 @@ class FacilityController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $facility = Facility::find($id);        
+        $facility = Facility::findOrFail($id);        
         $this->_expandModelRelationships($request, $facility);
         return $this->_toCamelCase($facility->toArray());   
     }
@@ -68,6 +68,6 @@ class FacilityController extends Controller
      */
     public function destroy($id)
     {
-        return Facility::where('id', $id)->delete();
+        return Facility::find($id)->delete();
     }
 }
