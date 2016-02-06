@@ -2,8 +2,13 @@
 
 namespace App\Http\Requests;
 
+// Misc.
 use App;
+use Log;
+
+// Requests.
 use App\Http\Requests\Request;
+
 
 class FacilityRepositoryRequest extends Request
 {
@@ -37,6 +42,10 @@ class FacilityRepositoryRequest extends Request
                     'data.facility.website' => '',
                     'data.facility.description' => 'required',
                     'data.facility.isPublic' => '',
+                    'data.organization.name' =>
+                        'required_if:data.facility.organizationId,null',
+                    'data.disciplines' => 'required|array',
+                    'data.sectors' => 'required|array',
                     'data.primaryContact.firstName' => 'required',
                     'data.primaryContact.lastName' => 'required',
                     'data.primaryContact.email' => 'required',
@@ -44,9 +53,24 @@ class FacilityRepositoryRequest extends Request
                     'data.primaryContact.position' => 'required',
                     'data.primaryContact.website' => '',
                     'data.contacts' => 'array',
-                    'data.equipment' => 'array'
+                    'data.equipment' => 'required|array'
                 ];
                 
+                // Disciplines section.
+                $disciplines = $this->instance()->input('data.disciplines');
+                $length = count($disciplines);
+                for ($i = 0; $i < $length; $i++) {
+                    $r["data.disciplines.$i"] = 'exists:disciplines,id';
+                }
+                
+                // Sectors section.
+                $sectors = $this->instance()->input('data.sectors');
+                $length = count($sectors);
+                for ($i = 0; $i < $length; $i++) {
+                    $r["data.sectors.$i"] = 'exists:sectors,id';
+                }
+                
+                // Contacts section. Contacts are optional.
                 $contacts = $this->instance()->input('data.contacts');
                 if (is_array($contacts)) {
                     $length = count($contacts);
@@ -61,19 +85,18 @@ class FacilityRepositoryRequest extends Request
                     }
                 }
                 
+                // Equipment section
                 $equipment = $this->instance()->input('data.equipment');
-                if (is_array($equipment)) {
-                  $length = count($equipment);
-                    
-                    for ($i = 0; $i < $length; $i++) {
-                        $r["data.equipment.$i.type"] = 'required';
-                        $r["data.equipment.$i.model"] = '';
-                        $r["data.equipment.$i.manufacturer"] = '';
-                        $r["data.equipment.$i.purpose"] = 'required';
-                        $r["data.equipment.$i.specifications"] = '';
-                        $r["data.equipment.$i.isPublic"] = 'boolean';
-                        $r["data.equipment.$i.hasExcessCapacity"] = 'boolean';
-                    }
+                $length = count($equipment);
+                for ($i = 0; $i < $length; $i++) {
+                    $r["data.equipment.$i.type"] = 'required';
+                    $r["data.equipment.$i.model"] = '';
+                    $r["data.equipment.$i.manufacturer"] = '';
+                    $r["data.equipment.$i.purpose"] = 'required';
+                    $r["data.equipment.$i.specifications"] = '';
+                    $r["data.equipment.$i.isPublic"] = 'boolean';
+                    $r["data.equipment.$i.hasExcessCapacity"] = 'boolean';
+                    $r["data.equipment.$i.yearPurchased"] = 'date_format:Y';
                 }
                 
                 if ($state == 'PENDING_EDIT_APPROVAL') {
