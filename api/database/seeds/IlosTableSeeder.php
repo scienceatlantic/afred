@@ -165,7 +165,6 @@ class IlosTableSeeder extends Seeder
                 
                 // Insert the ILO's data only if the organization was found.
                 if ($org) {
-                    Log::debug('called!');
                     $ilo['organizationId'] = $org->id;
                     Ilo::create($ilo);  
                 }
