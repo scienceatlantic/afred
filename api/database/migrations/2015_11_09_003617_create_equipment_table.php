@@ -31,6 +31,8 @@ class CreateEquipmentTable extends Migration
             $table->boolean('isPublic')
                 ->default(true);
             $table->boolean('hasExcessCapacity');
+            $table->smallInteger('yearPurchased')
+                ->unsigned();
             $table->timestamps();
         });
     }
