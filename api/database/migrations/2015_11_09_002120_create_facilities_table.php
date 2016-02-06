@@ -17,8 +17,7 @@ class CreateFacilitiesTable extends Migration
             $table->integer('facilityRepositoryId')
                 ->unsigned();
             $table->integer('organizationId')
-                ->unsigned()
-                ->nullable();
+                ->unsigned();
             $table->foreign('organizationId')
                 ->references('id')
                 ->on('organizations')
