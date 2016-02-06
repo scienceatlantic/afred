@@ -45,6 +45,16 @@ class FacilityRepository extends Model
     
     public function facility()
     {
-        return $this->belongsTo('App\Facility', 'facilityId');
+        return $this->hasOne('App\Facility', 'facilityRepositoryId');
+    }
+    
+    public function updateLinkBefore()
+    {
+        return $this->hasOne('App\FacilityUpdateLink', 'frIdBefore');
+    }
+    
+    public function updateLinkAfter()
+    {
+        return $this->hasOne('App\FacilityUpdateLink', 'frIdAfter');
     }
 }

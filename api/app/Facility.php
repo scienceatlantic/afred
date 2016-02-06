@@ -35,15 +35,13 @@ class Facility extends Model
         'dateUpdated'
     ];
     
-    // Fix name!
-    public function currentRevision()
+    public function revision()
     {
         return $this->belongsTo('App\FacilityRepository',
             'facilityRepositoryId');
     }
     
-    // Fix name!
-    public function facilityRevisionHistory()
+    public function revisions()
     {
         return $this->hasMany('App\FacilityRepository', 'facilityId');
     }
