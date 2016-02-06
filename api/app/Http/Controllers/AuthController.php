@@ -9,7 +9,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 // Misc.
-use App;
 use Hash;
 
 // Models.
@@ -22,30 +21,16 @@ class AuthController extends Controller
 {
     public function login(Request $request)
     {
-        $authUser = [
-            'firstName' => null,
-            'lastName' => null,
-            'username' => null,
-            'isAdmin' => null,
-            'isAuth' => null
-        ];
+        $uid = $request->input('username', null);
+        $pwd = $request->input('password', null);        
+        $systemUser = SystemUser::where('username', $uid)->first();
         
-        $systemUser = SystemUser::where('username', $request->
-            input('username'))->first();
-        
-        if (is_object($systemUser) && (Hash::check($request->input('password'),
-            $systemUser->password))) {
-                $authUser['firstName'] = $systemUser->first_name;
-                $authUser['lastName'] = $systemUser->last_name;
-                $authUser['username'] = $systemUser->username;
-                $authUser['isAdmin'] = $systemUser->role == 'ADMIN';
-                $authUser['isAuth'] = true;
-                $request->session()->put('authUser', $authUser);
-                
-                return $authUser;
+        if ($systemUser && (Hash::check($pwd, $systemUser->password))) {
+            $request->session()->put('authUser', $systemUser);
+            return $systemUser;
         }
         else {
-            return App::abort(401, 'Not authenticated');
+            return response('Not authenticated', 401);
         }
     }
     
@@ -55,7 +40,7 @@ class AuthController extends Controller
             return $request->session()->get('authUser');
         }
         else {
-            return App::abort(401, 'Not authenticated');
+            return response('Not authenticated', 401);
         }
     }
     
