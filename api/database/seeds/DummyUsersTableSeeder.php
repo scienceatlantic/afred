@@ -4,9 +4,9 @@
 use Illuminate\Database\Seeder;
 
 // Models.
-use App\SystemUser;
+use App\User;
 
-class DummySystemUsersTableSeeder extends Seeder
+class DummyUsersTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -16,20 +16,20 @@ class DummySystemUsersTableSeeder extends Seeder
     public function run()
     {
         // Delete existing entries.
-        DB::table('system_users')->delete();
+        DB::table('users')->delete();
         
-        $systemUsers = [
+        $users = [
             [
                 'firstName' => 'Prasad',
                 'lastName'  => 'Rajandran',
                 'role'      => 'ADMINISTRATOR',
-                'username'  => 'prasad@scienceatlantic.ca',
-                'password'  => Hash::make('password')
+                'email'     => 'prasad@scienceatlantic.ca',
+                'password'  => bcrypt('password')
             ]
         ];
         
-        foreach($systemUsers as $systemUser) {
-            SystemUser::create($systemUser);
+        foreach($users as $user) {
+            User::create($user);
         }
     }
 }

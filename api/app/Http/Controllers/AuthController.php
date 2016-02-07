@@ -9,10 +9,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 // Misc.
+use Auth;
 use Hash;
+use Log;
 
 // Models.
-use App\SystemUser;
+use App\User;
 
 // Requests.
 use App\Http\Requests;
@@ -21,31 +23,27 @@ class AuthController extends Controller
 {
     public function login(Request $request)
     {
-        $uid = $request->input('username', null);
-        $pwd = $request->input('password', null);        
-        $systemUser = SystemUser::where('username', $uid)->first();
+        $email = $request->input('email', null);
+        $password = $request->input('password', null);
         
-        if ($systemUser && (Hash::check($pwd, $systemUser->password))) {
-            $request->session()->put('authUser', $systemUser);
-            return $systemUser;
+        if (Auth::attempt(['email' => $email, 'password' => $password])) {
+            return Auth::user();
         }
-        else {
-            return response('Not authenticated', 401);
-        }
+        
+        return response('Not authorized', 401);
     }
     
-    public function ping(Request $request)
+    public function ping()
     {
-        if ($request->session()->get('authUser')) {
-            return $request->session()->get('authUser');
+        if (Auth::check()) {
+            return Auth::user();
         }
-        else {
-            return response('Not authenticated', 401);
-        }
+        
+        return response('Not authenticated', 401);
     }
     
-    public function logout(Request $request)
+    public function logout()
     {
-        $request->session()->forget('authUser');
+        Auth::logout();
     }
 }

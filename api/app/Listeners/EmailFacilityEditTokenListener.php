@@ -11,7 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 // Models.
 use App\Setting;
-use App\SystemUser;
+use App\User;
 
 // Misc.
 use Log;
@@ -59,10 +59,10 @@ class EmailFacilityEditTokenListener extends BaseListener
         ];
         
         $bcc = [];
-        foreach(SystemUser::all() as $a) {
+        foreach(User::isAdmin()->get() as $a) {
             array_push($bcc, [
                 'name'  => $a->firstName . ' ' . $a->lastName,
-                'email' => $a->username
+                'email' => $a->email
             ]);
         }
         

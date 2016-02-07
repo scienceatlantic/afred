@@ -2,9 +2,7 @@
 
 angular.module('afredApp').controller('LoginController',
   ['$scope',
-   '$state',
-  function($scope,
-           $state) {
+  function($scope) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
@@ -12,7 +10,7 @@ angular.module('afredApp').controller('LoginController',
     $scope.submit = function() {
       $scope._auth.login($scope.credentials).then(function(response) {
         $scope._auth.user = response.data;
-        $state.go('admin.dashboard');
+        $scope._state.go('admin.dashboard');
       }, function() {
         $scope.credentials.invalid = true;
       });
@@ -23,7 +21,7 @@ angular.module('afredApp').controller('LoginController',
      * --------------------------------------------------------------------- */
     
     $scope.credentials = {
-      username: null,
+      email: null,
       password: null,
       invalid: false
     };

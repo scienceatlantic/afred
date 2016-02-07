@@ -12,7 +12,7 @@ use Mail;
 
 // Models.
 use App\Setting;
-use App\SystemUser;
+use App\User;
 use App\Events\FacilityRepositoryEvent;
 
 class FacilityRepositoryListener extends BaseListener
@@ -49,11 +49,11 @@ class FacilityRepositoryListener extends BaseListener
                 $subject = $subjectPrefix
                     . 'New Submission (' . $facility . ')';              
                 
-                foreach(SystemUser::all() as $a) {
+                foreach(User::isAdmin()->get() as $a) {
                     $data['name'] = $a->firstName . ' ' . $a->lastName;
                     $this->_mail($template, $subject, $data, [
                         'name'  => $a->firstName . ' ' . $a->lastName,
-                        'email' => $a->username
+                        'email' => $a->email
                     ]);
                 }
                 
