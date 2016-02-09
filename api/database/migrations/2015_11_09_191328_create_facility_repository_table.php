@@ -17,10 +17,6 @@ class CreateFacilityRepositoryTable extends Migration
             $table->integer('facilityId')
                 ->unsigned()
                 ->nullable();
-            $table->foreign('facilityId')
-                ->references('id')
-                ->on('facilities')
-                ->onDelete('no action');
             $table->enum('state', ['PENDING_APPROVAL',
                                    'PUBLISHED',
                                    'REJECTED',

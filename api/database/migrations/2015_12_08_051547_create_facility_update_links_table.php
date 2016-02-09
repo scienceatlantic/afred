@@ -15,8 +15,7 @@ class CreateFacilityUpdateLinksTable extends Migration
         Schema::create('facility_update_links', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('frIdBefore')
-                ->unsigned()
-                ->unique();
+                ->unsigned();
             $table->foreign('frIdBefore')
                 ->references('id')
                 ->on('facility_repository')   
@@ -32,7 +31,10 @@ class CreateFacilityUpdateLinksTable extends Migration
             $table->string('firstName', 50);
             $table->string('lastName', 50);
             $table->string('email', 254);
-            $table->char('token', 20);
+            $table->char('token', 25)
+                ->unique();
+            $table->enum('status', ['OPEN', 'PENDING', 'CLOSED']);
+            $table->unique(['frIdBefore','frIdAfter']);
             $table->datetime('dateRequested');
             $table->timestamps();
         });
