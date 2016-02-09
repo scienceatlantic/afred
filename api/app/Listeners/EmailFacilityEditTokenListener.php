@@ -26,7 +26,7 @@ class EmailFacilityEditTokenListener extends BaseListener
      */
     public function __construct()
     {
-        //
+        parent::__construct();
     }
 
     /**
@@ -40,17 +40,14 @@ class EmailFacilityEditTokenListener extends BaseListener
         $email = $event->ful->email;
         $email = 'prasad@scienceatlantic.ca';
         $template = 'emails.events.ful.token-requested'; 
-        $subject = Setting::find('mailSubjectPrefix')->value . 'Token';
+        $subject = $this->_settings['EMAIL_SUBJECT_PREFIX'] . 'Token';
         $name = $event->ful->firstName . ' ' . $event->ful->lastName;
         
         $data = [
-            'name'        => $name,
-            'frIdBefore'  => $event->ful->frIdBefore,
-            'token'       => $event->ful->token,
-            'appName'     => Setting::find('appName')->value,
-            'appAcronym'  => Setting::find('appAcronym')->value,
-            'appAddress'  => Setting::find('appAddress')->value,
-            'mailAddress' => Setting::find('mailAddress')->value
+            'name'       => $name,
+            'frIdBefore' => $event->ful->frIdBefore,
+            'token'      => $event->ful->token,
+            'settings'   => $this->_settings  
         ];
         
         $to = [
@@ -59,7 +56,7 @@ class EmailFacilityEditTokenListener extends BaseListener
         ];
         
         $bcc = [];
-        foreach(User::isAdmin()->get() as $a) {
+        foreach(User::admins()->get() as $a) {
             array_push($bcc, [
                 'name'  => $a->firstName . ' ' . $a->lastName,
                 'email' => $a->email

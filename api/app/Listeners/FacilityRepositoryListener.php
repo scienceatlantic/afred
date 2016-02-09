@@ -18,6 +18,16 @@ use App\Events\FacilityRepositoryEvent;
 class FacilityRepositoryListener extends BaseListener
 {
     /**
+     * Create the event listener.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
+    
+    /**
      * Handle the event.
      *
      * @param  FacilityRepositoryEvent  $event
@@ -29,16 +39,13 @@ class FacilityRepositoryListener extends BaseListener
         $fr = $event->fr;
         $facility = $fr->data['facility']['name'];
         $templatePrefix = 'emails.events.fr.';
-        $subjectPrefix = Setting::find('mailSubjectPrefix')->value;
+        $subjectPrefix = $this->_settings['EMAIL_SUBJECT_PREFIX'];
         
         // Data for the email templates.
         $data = [
-            'name'        => '', // Recipient's name.
-            'facility'    => $facility,
-            'appName'     => Setting::find('appName')->value,
-            'appAcronym'  => Setting::find('appAcronym')->value,
-            'appAddress'  => Setting::find('appAddress')->value,
-            'mailAddress' => Setting::find('mailAddress')->value
+            'name'     => '', // Placeholder for the recipient's name.
+            'facility' => $facility,
+            'settings' => $this->_settings
         ];
         
         switch ($fr->state) {
@@ -49,7 +56,7 @@ class FacilityRepositoryListener extends BaseListener
                 $subject = $subjectPrefix
                     . 'New Submission (' . $facility . ')';              
                 
-                foreach(User::isAdmin()->get() as $a) {
+                foreach(User::admins()->get() as $a) {
                     $data['name'] = $a->firstName . ' ' . $a->lastName;
                     $this->_mail($template, $subject, $data, [
                         'name'  => $a->firstName . ' ' . $a->lastName,

@@ -2,12 +2,29 @@
 
 namespace App\Listeners;
 
+// Misc.
 use Log;
 use Mail;
+
+// Models.
 use App\Setting;
 
 abstract class BaseListener
-{    
+{
+    protected $_settings;
+    
+    public function __construct()
+    {
+        $this->_settings = [
+            'APP_NAME'             => Setting::find('APP_NAME')->value,
+            'APP_ACRONYM'          => Setting::find('APP_ACRONYM')->value,
+            'APP_ADDRESS'          => Setting::find('APP_ADDRESS')->value,
+            'EMAIL_ADDRESS'        => Setting::find('EMAIL_ADDRESS')->value,
+            'EMAIL_SUBJECT_PREFIX' => Setting::find('EMAIL_SUBJECT_PREFIX')
+                                          ->value
+        ];
+    }
+    
     protected function _mail($template,
                              $subject,
                              $data,
