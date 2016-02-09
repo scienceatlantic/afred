@@ -13,26 +13,24 @@ use App\Organization;
 
 // Requests.
 use App\Http\Requests;
-use App\Http\Requests\IndexOrganizationRequest;
 
 class OrganizationController extends Controller
 {
+    function __construct(Request $request) {
+        parent::__construct($request);
+    }
+    
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(IndexOrganizationRequest $request)
+    public function index(Request $request)
     {
-        $paginate = $request->input('paginate', true);
-        $itemsPerPage = $request->input('itemsPerPage', 15);
-        $organization = Organization
-                     ::where('isHidden', false)
-                     ->orderBy('name', 'asc');
-        $organization = $paginate ?
-            $organization->paginate($itemsPerPage) : $organization->get();
-        $this->_expandModelRelationships($request, $organization, true);
-        return $organization;
+        $o = Organization::notHidden()->orderBy('name', 'asc');
+        $o = $this->_paginate ? $o->paginate($this->_itemsPerPage) : $o->get();
+        $this->_expandModelRelationships($o, true);
+        return $this->_toCamelCase($o->toArray());
     }
 
     /**
@@ -54,9 +52,9 @@ class OrganizationController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $organization = Organization::findOrFail($id);
-        $this->_expandModelRelationships($request, $organization);
-        return $organization;
+        $o = Organization::findOrFail($id);
+        $this->_expandModelRelationships($o);
+        return $this->_toCamelCase($o->toArray());
     }
 
     /**
@@ -67,6 +65,6 @@ class OrganizationController extends Controller
      */
     public function destroy($id)
     {
-        return Organization::destroy($id);
+        Organization::destroy($id);
     }
 }

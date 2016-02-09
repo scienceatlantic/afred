@@ -23,11 +23,13 @@ class AuthController extends Controller
 {
     public function login(Request $request)
     {
-        $email = $request->input('email', null);
-        $password = $request->input('password', null);
+        $credentials = [
+            'email'    => $request->input('email', null),
+            'password' => $request->input('password', null)
+        ];
         
-        if (Auth::attempt(['email' => $email, 'password' => $password])) {
-            return Auth::user();
+        if (Auth::attempt($credentials)) {
+            return $this->_toCamelCase(Auth::user()->toArray());
         }
         
         return response('Not authorized', 401);
@@ -36,7 +38,7 @@ class AuthController extends Controller
     public function ping()
     {
         if (Auth::check()) {
-            return Auth::user();
+            return $this->_toCamelCase(Auth::user()->toArray());
         }
         
         return response('Not authenticated', 401);

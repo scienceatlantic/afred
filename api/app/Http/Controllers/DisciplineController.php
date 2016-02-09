@@ -27,14 +27,8 @@ class DisciplineController extends Controller
      */
     public function index(Request $request)
     {
-        $disciplines = Discipline::orderBy('name', 'asc');
-        
-        if ($this->_paginate) {
-            $disciplines = $disciplines->paginate($this->_itemsPerPage);
-        } else {
-            $disciplines = $disciplines->get();
-        }
-        
-        return $this->_toCamelCase($disciplines->toArray());
+        $d = Discipline::orderBy('name', 'asc');        
+        $d = $this->_paginate ? $d->paginate($this->_itemsPerPage) : $d->get();
+        return $this->_toCamelCase($d->toArray());
     }
 }

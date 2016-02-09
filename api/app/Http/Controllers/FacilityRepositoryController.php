@@ -12,35 +12,43 @@ use App\Events\FacilityRepositoryEvent;
 use Illuminate\Http\Request;
 
 // Misc.
-use App;
+use Auth;
 use Log;
 
 // Models.
-use App\Organization;
-use App\Facility;
-use App\Equipment;
 use App\Contact;
-use App\PrimaryContact;
+use App\Discipline;
+use App\Equipment;
+use App\Facility;
 use App\FacilityRepository;
 use App\FacilityUpdateLink;
+use App\Organization;
+use App\PrimaryContact;
+use App\Sector;
 
 // Requests.
-use App\Http\Requests\FacilityRepositoryRequest;
+use App\Http\Requests\IndexFacilityRepositoryRequest;
+use App\Http\Requests\ShowFacilityRepositoryRequest;
+use App\Http\Requests\UpdateFacilityRepositoryRequest;
 
 class FacilityRepositoryController extends Controller
 {
+    function __construct(Request $request) {
+        parent::__construct($request);
+    }
+    
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(IndexFacilityRepositoryRequest $request)
     {
-        $itemsPerPage = $request->input('itemsPerPage', 15);
         $state = $request->input('state', '%');
         $stateOp = $state  == '%' ? 'like' : '=';
+        
         $fr = FacilityRepository::where('state', $stateOp, $state)
-            ->paginate($itemsPerPage);
+            ->paginate($this->_itemsPerPage);
             
         return $this->_toCamelCase($fr->toArray());
     }
@@ -51,7 +59,7 @@ class FacilityRepositoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(ShowFacilityRepositoryRequest $request, $id)
     {
         return FacilityRepository::findOrFail($id);            
     }
@@ -63,67 +71,77 @@ class FacilityRepositoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(FacilityRepositoryRequest $request, $id = null)
-    {
-        // Unless we're dealing with a 'PENDING_APPROVAL' record, grab
-        // the FacilityRepository object.
-        if ($request->input('state') != 'PENDING_APPROVAL') {
-           $fr = FacilityRepository::findOrFail($id); 
-        }
-        
+    public function update(UpdateFacilityRepositoryRequest $request, $id = null)
+    { 
         // Grab the current datetime.
         $now = $this->_now();
         
-        switch ($request->input('state')) {
+        // Unless we're dealing with a 'PENDING_APPROVAL' record, grab
+        // the existing FacilityRepository object.
+        if ($request->input('state') != 'PENDING_APPROVAL') {
+           $fr = FacilityRepository::findOrFail($id); 
+        } else {
+            $fr = new FacilityRepository();
+        }
+        
+        // Update the FacilityRepository's state.
+        $fr->state = $request->input('state');
+        
+        switch ($fr->state) {
             case 'PENDING_APPROVAL':
-                $fr = new FacilityRepository(); 
-                $fr->state = 'PENDING_APPROVAL';
                 $fr->data = $this->_formatFrData($request, $now);
                 $fr->dateSubmitted = $now;
                 $fr->save();
                 break;
             
-            case 'PUBLISHED':                
-                $data = $this->_publishFacility($fr, $fr->data);
-                $fr->facilityId = $data['facility']['id'];
-                $fr->state = 'PUBLISHED';
-                $fr->data = $data;
+            case 'PUBLISHED':
+                $fr->data = $this->_publishFacility($fr, $fr->data);
+                $fr->facilityId = $fr->data['facility']['id'];
                 $fr->update();
                 break;
             
             case 'REJECTED':
-                $fr->state = 'REJECTED';
                 $fr->update();
                 break;
             
             case 'PENDING_EDIT_APPROVAL':
-                // Store the ...
-                $frIdBefore = $fr->id;
+                // Make sure the facility repository record has an open token.
+                $ful = $fr->tokens()->open()->firstOrFail();
                 
-                // 
-                $fr->state = 'PENDING_EDIT_APPROVAL';
+                // We're actually creating a new facility repository record
+                // here. We have to pass the old facility repository record
+                // into the _formatFrData function because we need its link
+                // to the facility before we can create a new one.
                 $fr->data = $this->_formatFrData($request, $now, true, $fr);
                 $fr->dateSubmitted = $now;
                 $fr = new FacilityRepository($fr->toArray());
                 $fr->save();
                 
-                $ful = FacilityUpdateLink::where('frIdBefore', $frIdBefore)
-                     ->first();
+                // Update the token and mark it as pending.
                 $ful->frIdAfter = $fr->id;
+                $ful->status = 'PENDING';
                 $ful->save();
                 break;
             
             case 'PUBLISHED_EDIT':
                 $data = $this->_publishFacility($fr, $fr->data, true);
                 $fr->facilityId = $data['facility']['id'];
-                $fr->state = 'PUBLISHED_EDIT';
                 $fr->data = $data;
-                $fr->update();                
+                $fr->update();
+                
+                // Close the token.
+                $ful = $fr->token()->pending()->first();
+                $ful->status = 'CLOSED';
+                $ful->update();
                 break;
             
             case 'REJECTED_EDIT':
-                $fr->state = 'REJECTED_EDIT';
-                $fr->update(); 
+                $fr->update();
+                
+                // Close the token.
+                $ful = $fr->token()->pending()->first();
+                $ful->status = 'CLOSED';
+                $ful->update();
                 break;
         }
         
@@ -131,123 +149,128 @@ class FacilityRepositoryController extends Controller
         return $fr;
     }
         
-    private function _formatFrData($request, $now, $isEdit = false, $fr = null)
+    private function _formatFrData($request,
+                                   $now,
+                                   $isUpdate = false,
+                                   $fr = null)
     {
         $data = [];
+        
+        // Storing all the request data into smaller more manageable variables.
+        $fac = $request->data['facility'];
+        $org = !$fac['organizationId'] ? $request->data['organization'] : null;
+        $disciplines = $request->data['disciplines'];
+        $sectors = $request->data['sectors'];
+        $pContacts = $request->data['primaryContact'];
+        $contacts = $request->data['contacts'];
+        $equipment = $request->data['equipment'];
         
         // Organization section.
         // If an organizationId was provided, skip this part (meaning an
         // exising organization was selected). If an organizationId was not
-        // provided and an organization name was, store the details (ie. name)
-        // in $data.
-        if (!$request->data['facility']['organizationId']
-            && $request->data['organization']['name']) {
-            $data['organization'] =
-                (new Organization((array) $request->data['organization']))
-                    ->toArray();
+        // provided, store the details (ie. name) in $data.
+        if (!$fac['organizationId']) {
+            $data['organization'] = (new Organization($org))->toArray();
             $data['organization']['isHidden'] = false;
             $data['organization']['dateAdded'] = $now;
         }
 
         // Facility section.
-        // This part is for edits. 
-        if ($isEdit) {
-            // Retrieve the existing facility.
-            $facility = $fr->facility()->first();
+        $data['facility'] = (new Facility($fac))->toArray();
+        $data['facility']['isPublic'] = true;
+        $data['facility']['dateUpdated'] = $now;
+        // This part is for updates.
+        if ($isUpdate) {
+            // Retrieve some data from the existing facility.
+            $id = $fr->facility->id;
+            $dateSubmitted = $fr->facility->dateSubmitted->toDateTimeString();
             
-            // Build the facility array. dateSubmitted and the facility's
-            // id are retained.
-            $data['facility'] =
-                (new Facility((array) $request->data['facility']))->toArray();
-            $data['facility']['id'] = $facility->id;
-            $data['facility']['dateSubmitted'] = $facility->dateSubmitted
-                ->toDateTimeString();
-            $data['facility']['dateUpdated'] = $now;
+            // ID and date submitted are maintained.
+            $data['facility']['id'] = $id;
+            $data['facility']['dateSubmitted'] = $dateSubmitted;
         // For new records.
         } else {
-            $data['facility'] =
-                (new Facility((array) $request->data['facility']))->toArray();
-            $data['facility']['dateSubmitted'] = $now;
-            $data['facility']['dateUpdated'] = $now;            
+            $data['facility']['dateSubmitted'] = $now;         
         }
-        $data['facility']['isPublic'] = true;
+        
+        // Disciplines section.
+        $data['disciplines'] = $disciplines;
+        
+        // Sectors section.
+        $data['sectors'] = $sectors;
         
         // Primary contact section.
-        $data['primaryContact'] =
-            (new PrimaryContact((array) $request->data['primaryContact']))
-                ->toArray();
-        $data['primaryContact']['facilityId'] = null;
+        $data['primaryContact'] = (new PrimaryContact($pContacts))->toArray();
         
         // Contacts section.
-        $data['contacts'] = [];
-        foreach($request->data['contacts'] as $i => $c) {
+        foreach($contacts as $i => $c) {
             $data['contacts'][$i] = (new Contact($c))->toArray();
-            $data['contacts'][$i]['facilityId'] = null;
         }
         
         // Equipment section.
-        $data['equipment'] = [];
-        foreach($request->data['equipment'] as $i => $e) {
+        foreach($equipment as $i => $e) {
             $data['equipment'][$i] = (new Equipment($e))->toArray();
-            $data['equipment'][$i]['facilityId'] = null;
         }
         
         return $data;
     }
     
-    private function _publishFacility($fr, $data, $isEdit = false)
-    {
+    private function _publishFacility($fr, $data, $isUpdate = false)
+    {        
         // Organization section.
-        // If the organization key in $data exists, create the
-        // organization and store its key into $data['facility'].
+        // If the organization key in $d exists, create the
+        // organization and store its key into $d['facility'].
         if (array_key_exists('organization', $data)) {
-            $data['facility']['organizationId'] =
-                Organization::create($data['organization'])
-                ->getKey();
+            $orgId = Organization::create($data['organization'])->getKey();
+            $data['facility']['organizationId'] = $orgId;
         }
         
         // Facility section.
-        // For edits.
-        if ($isEdit) {
-            // For edits, we're going to delete all existing
-            // contacts, primary contacts, and equipment data.
-            Contact::where('facilityId', $data['facility']['id'])
-                ->delete();
-                
-            PrimaryContact::where('facilityId', $data['facility']['id'])
-                ->delete();
-                
-            Equipment::where('facilityId', $data['facility']['id'])
-                ->delete();
+        // For updates.
+        if ($isUpdate) {
+            // Before updating the facility, insert the new facility
+            // repository id.
+            $data['facility']['facilityRepositoryId'] = $fr->id;
+            $f = Facility::find($data['facility']['id']);
+            $f->update($data['facility']);
+            $data['facility'] = $f->toArray();
             
-            // Update the facility.
-            Facility::where('id', $data['facility']['id'])
-                ->update($data['facility']);
+            // For updates, we're going to delete all existing disciplines,
+            // sectors, contacts, primary contact, and equipment data.
+            $f->disciplines()->detach();
+            $f->sectors()->detach();
+            $f->primaryContact()->delete();
+            $f->contacts()->delete();
+            $f->equipment()->delete();                
         // For new records.
         } else {
-            $data['facility']['facilityRepositoryId'] = $fr->id;
-            $data['facility']['id'] = Facility::create($data['facility'])
-                ->getKey();
+            // This line automatically inserts the facility repository's ID
+            // into the newly created record.
+            $f = $fr->facility()->create($data['facility']);
+            $data['facility'] = $f->toArray();
         }
         
+        // Disciplines section.
+        $f->disciplines()->attach($data['disciplines']);
+        
+        // Sectors section.
+        $f->sectors()->attach($data['sectors']);
+        
         // Primary contact section.
-        $data['primaryContact']['facilityId'] = $data['facility']['id'];
-        $data['primaryContact']['id'] =
-            PrimaryContact::create($data['primaryContact'])->getKey();
+        $data['primaryContact'] =
+            $f->primaryContact()->create($data['primaryContact']);
         
         // Contacts section.
         // Contacts are optional, so we first have to check if it exists.
         if (array_key_exists('contacts', $data)) {
             foreach($data['contacts'] as $i => $c) {
-                $c['facilityId'] = $data['facility']['id'];
-                $data['contacts'][$i]['id'] = Contact::create($c)->getKey();           
+                $data['contacts'][$i] = $f->contacts()->create($c)->toArray();          
             }                       
         }
         
         // Equipment section
         foreach($data['equipment'] as $i => $e) {
-            $e['facilityId'] = $data['facility']['id'];
-            $data['equipment'][$i]['id'] = Equipment::create($e)->getKey();           
+            $data['equipment'][$i] = $f->equipment()->create($e)->toArray();           
         }
         
         return $data;

@@ -16,6 +16,10 @@ use App\Http\Requests;
 
 class ProvinceController extends Controller
 {
+    function __construct(Request $request) {
+        parent::__construct($request);
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -23,16 +27,10 @@ class ProvinceController extends Controller
      */
     public function index(Request $request)
     {
-        $paginate = $request->input('paginate', true);
-        $itemsPerPage = $request->input('itemsPerPage', 15);
-        $province = Province::where('isHidden', false)
-                            ->orderBy('name', 'asc');
-        
-        if ($paginate) {
-            return $province->paginate($itemsPerPage);
-        } else {
-            return $province->get();
-        }
+        $p = Province::notHidden()->orderBy('name', 'asc');
+        $p = $this->_paginate ? $p->paginate($this->_itemsPerPage) : $p->get();
+        $this->_expandModelRelationships($p, true);
+        return $this->_toCamelCase($p->toArray());
     }
 
     /**
@@ -54,7 +52,9 @@ class ProvinceController extends Controller
      */
     public function show($id)
     {
-        return Province::findOrFail($id);
+        $p = Province::findOrFail($id);
+        $this->_expandModelRelationships($p);
+        return $this->_toCamelCase($p->toArray());
     }
 
     /**

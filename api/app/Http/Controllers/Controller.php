@@ -19,24 +19,24 @@ abstract class Controller extends BaseController
     
     protected $_paginate;
     protected $_itemsPerPage;
+    protected $_expand;
     
     function __construct(Request $request) {
         $this->_paginate = boolval($request->input('paginate', true));
-        $this->_itemsPerPage = intval($request->input('itemsPerPage', 15));       
+        $this->_itemsPerPage = intval($request->input('itemsPerPage', 15));
+        $this->_expand = $request->input('expand', null);
     }
     
-    protected function _expandModelRelationships($request,
-                                                 $model,
-                                                 $isCollection = false)
+    protected function _expandModelRelationships($model, $isArray = false)
     {
-        if ($request->has('expand')) {
-            $relationships = explode(',', $request->input('expand'));
+        if ($this->_expand) {
+            $relationships = explode(',', $this->_expand);
                                      
             foreach ($relationships as $relationship) {
                 $nested = explode('.', $relationship);
                 
                 if (count($nested) > 1) {
-                    if ($isCollection) {
+                    if ($isArray) {
                         foreach($model as $m) {
                             $m->$nested[0]->$nested[1];
                         }                       
@@ -44,7 +44,7 @@ abstract class Controller extends BaseController
                         $model->$nested[0]->$nested[1];
                     }
                 } else {
-                    if ($isCollection) {
+                    if ($isArray) {
                         foreach($model as $m) {
                             $m->$relationship;
                         }                       

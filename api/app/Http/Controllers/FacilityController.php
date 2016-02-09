@@ -23,6 +23,10 @@ use App\Http\Requests;
 
 class FacilityController extends Controller
 {
+    function __construct(Request $request) {
+        parent::__construct($request);
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -30,16 +34,10 @@ class FacilityController extends Controller
      */
     public function index(Request $request)
     {
-        $facilities = new Facility();
-        
-        if ($this->_paginate) {
-            $facilities = $facilities->paginate($this->_itemsPerPage);
-        } else {
-            $facilities = $facilities->all();
-        }
-        
-        $this->_expandModelRelationships($request, $facilities, true);
-        return $this->_toCamelCase($facilities->toArray());
+        $f = new Facility();
+        $f = $this->_paginate ? $f->paginate($this->_itemsPerPage) : $f->get();
+        $this->_expandModelRelationships($f, true);
+        return $this->_toCamelCase($f->toArray());
     }
 
     /**
@@ -50,9 +48,9 @@ class FacilityController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $facility = Facility::findOrFail($id);        
-        $this->_expandModelRelationships($request, $facility);
-        return $this->_toCamelCase($facility->toArray());   
+        $f = Facility::findOrFail($id);        
+        $this->_expandModelRelationships($f);
+        return $this->_toCamelCase($f->toArray());   
     }
     
     public function updateVisibility()
