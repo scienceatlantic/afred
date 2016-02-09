@@ -16,43 +16,43 @@ class SettingsTableSeeder extends Seeder
         
         DB::table('settings')->insert([
             [
-                'id'    => 'appName',
+                'name'  => 'APP_NAME',
                 'value' => 'Atlantic Facilities and Research Equipment Database'
             ],
             [
-                'id'    => 'appAcronym',
+                'name'  => 'APP_ACRONYM',
                 'value' => 'AFRED'           
             ],
             [
-                'id'    => 'apiAddress',
+                'name'  => 'API_ADDRESS',
                 'value' => 'http://localhost:8000'           
             ],
             [
-                'id'    => 'appAddress',
+                'name'  => 'APP_ADDRESS',
                 'value' => 'http://localhost:9000'           
             ],
             [
-                'id'    => 'organizationName',
+                'name'  => 'ORGANIZATION_NAME',
                 'value' => 'Science Atlantic'           
             ],           
             [
-                'id'    => 'mailName',
+                'name'  => 'EMAIL_NAME',
                 'value' => 'AFRED'           
             ],
             [
-                'id'    => 'mailAddress',
+                'name'  => 'EMAIL_ADDRESS',
                 'value' => 'afred@scienceatlantic.ca'           
             ],
             [
-                'id'    => 'mailSubjectPrefix',
+                'name'  => 'EMAIL_SUBJECT_PREFIX',
                 'value' => 'AFRED 2.0 | Science Atlantic - (test) '           
             ],
             [
-                'id'    => 'generalContactName',
+                'name'  => 'GENERAL_CONTACT_NAME',
                 'value' => 'Patty King'           
             ],
             [
-                'id'    => 'generalContactEmailAddress',
+                'name'  => 'GENERAL_CONTACT_EMAIL_ADDRESS',
                 'value' => 'patty@scienceatlantic.ca'           
             ],
         ]);

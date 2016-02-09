@@ -36,7 +36,7 @@ class DummyFacilitiesTableSeeder extends Seeder
             [
                 'id'                   => null,
                 'facilityRepositoryId' => null,
-                'organizationId'       => $organizations[0]->id,
+                'organizationId'       => $organizations[1]->id,
                 'provinceId'           => $provinces[6]->id, // For NS.
                 'name'                 => 'Biotech Lab',
                 'city'                 => 'Wolfville',
@@ -47,6 +47,12 @@ class DummyFacilitiesTableSeeder extends Seeder
                 'dateUpdated'          => $now,
             ],
         ];
+        
+        // Disciplines section.
+        $disciplines = [1, 2, 3, 4];
+        
+        // Sectors section.
+        $sectors = [5, 6, 2, 3, 8];
         
         // Primary contacts section.
         $primaryContacts = [
@@ -106,6 +112,8 @@ class DummyFacilitiesTableSeeder extends Seeder
         // Facility repository section.
         $data = [];
         $data['facility'] = $facilities[0];
+        $data['disciplines'] = $disciplines;
+        $data['sectors'] = $sectors;
         $data['primaryContact'] = $primaryContacts[0];
         $data['contacts'] = [$contacts[0]];
         $data['equipment'] = [$equipment[0]];
@@ -120,27 +128,28 @@ class DummyFacilitiesTableSeeder extends Seeder
         
         // Create facility repository record.
         $fr = FacilityRepository::create($fr);
-        $data['facility']['facilityRepositoryId'] = $fr->id;
         
-        // Create facility record.
-        $f = Facility::create($data['facility']);
-        $data['facility']['id'] = $f->id;
+        $f = $fr->facility()->create($data['facility']);
+        $data['facility'] = $f->toArray();
+        
+        // Create the discipline links.
+        $f->disciplines()->attach($data['disciplines']);
+        
+        // Create the sector links.
+        $f->sectors()->attach($data['sectors']);
         
         // Create primary contact record.
-        $data['primaryContact']['facilityId'] = $f->id;
-        PrimaryContact::create($data['primaryContact']);
+        $data['primaryContact'] = $f->primaryContact()
+            ->create($data['primaryContact'])->toArray();
         
-        
-        // Create contact record(s).
+        // Create contact records.
         foreach($data['contacts'] as $i => $c) {
-            $c['facilityId'] = $f->id;
-            Contact::create($c);
+            $data['contacts'][$i] = $f->contacts()->create($c)->toArray();
         }
         
         // Create equipment record(s).
         foreach($data['equipment'] as $i => $e) {
-            $e['facilityId'] = $f->id;
-            Equipment::create($e);
+            $data['equipment'] = $f->equipment()->create($e)->toArray();
         }
         
         // Update facility repository record.
