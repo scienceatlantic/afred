@@ -18,4 +18,9 @@ class Province extends Model
     public function facilities() {
         return $this->hasMany('App\Facility', 'provinceId');
     }
+    
+    public function scopeNotHidden($query)
+    {
+        return $query->where('isHidden', false);
+    }
 }

@@ -33,4 +33,9 @@ class Organization extends Model
     public function facilities() {
         return $this->hasMany('App\Facility', 'organizationId');
     }
+    
+    public function scopeNotHidden($query)
+    {
+        $query->where('isHidden', false);
+    }
 }

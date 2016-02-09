@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Log;
+
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -43,7 +45,7 @@ class User extends Model implements AuthenticatableContract,
      */
     protected $hidden = ['password', 'remember_token'];
     
-    public function scopeIsAdmin($query)
+    public function scopeAdmins($query)
     {
         return $query->where('role', 'ADMINISTRATOR');
     }

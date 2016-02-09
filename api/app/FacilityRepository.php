@@ -48,12 +48,25 @@ class FacilityRepository extends Model
         return $this->hasOne('App\Facility', 'facilityRepositoryId');
     }
     
-    public function updateLinkBefore()
+    /**
+     * Each facility repository record can have zero or more facility update
+     * link records in the 'before' field. This is because the update request
+     * could have been rejected by the admin or have expired. Meaning that
+     * the facility repository record (frIdBefore) is still the most recent
+     * version of the facility.
+     */
+    public function tokens()
     {
-        return $this->hasOne('App\FacilityUpdateLink', 'frIdBefore');
+        return $this->hasMany('App\FacilityUpdateLink', 'frIdBefore');
     }
     
-    public function updateLinkAfter()
+    /**
+     * Each facility repository record can only have one facility update link
+     * record in the 'after' field. The update is either approved or rejected.
+     * If it was rejected, the previous facility repository record (frIdBefore)
+     * is still the most recent version of the facility.
+     */
+    public function token()
     {
         return $this->hasOne('App\FacilityUpdateLink', 'frIdAfter');
     }
