@@ -2,9 +2,13 @@
 
 namespace App\Http\Requests;
 
+// Misc.
+use Log;
+
+// Requests.
 use App\Http\Requests\Request;
 
-class IndexProvinceRequest extends Request
+class IndexFacilityRepositoryRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +17,7 @@ class IndexProvinceRequest extends Request
      */
     public function authorize()
     {
-        return false;
+        return $this->_isAdmin();
     }
 
     /**
