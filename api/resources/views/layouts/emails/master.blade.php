@@ -1,6 +1,6 @@
 @yield('content')
 
 ---
-{{ $appName }} ({{ $appAcronym }})
-Website: {{ $appAddress }}
-Email: {{ $mailAddress }}
+{{ $settings['APP_NAME'] }} ({{ $settings['APP_ACRONYM'] }})
+Website: {{ $settings['APP_ADDRESS'] }}
+Email: {{ $settings['EMAIL_ADDRESS'] }}

@@ -5,6 +5,6 @@ Hello {{ $name }},
 
 '{{ $facility }}' has been approved.
 
-It is located at: {{ $appAddress }}/#/facilities/{{ $facilityId }}
+It is located at: {{ $settings['APP_ADDRESS'] }}/#/facilities/{{ $facilityId }}
 
 @stop

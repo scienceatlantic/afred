@@ -5,5 +5,5 @@ Hello {{ $name }},
 
 You have requested...:
 
-{{ $appAddress }}/#/facilities/form/{{ $frIdBefore }}/edit?token={{ $token }}
+{{ $settings['APP_ADDRESS'] }}/#/facilities/form/{{ $frIdBefore }}/edit?token={{ $token }}
 @stop
