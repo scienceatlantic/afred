@@ -15,19 +15,15 @@ angular.module('afredApp').controller('FacilitiesFormEditController',
     };
     
     $scope.submit = function() {
-      facilityRepositoryResource.submitEdit(
-        {
-          facilityRepositoryId:
-            $scope._stateParams.facilityRepositoryId
-        },
+      facilityRepositoryResource.submitEdit({ facilityRepositoryId: frId },
         {
           data: $scope.form.formatForApi()
         },
         function() {
-          console.log('yay!');
+          $scope.view.show = 'SUCCESS_MESSAGE';
         },
         function() {
-          console.log('aww...');
+          $scope.view.show = 'FAILURE_MESSAGE';
         }
       );
     };
@@ -35,9 +31,16 @@ angular.module('afredApp').controller('FacilitiesFormEditController',
     /* ---------------------------------------------------------------------
      * Initialisation code.
      * --------------------------------------------------------------------- */
-    $scope.form.initialise();
-    $scope.form.getFacilityRepositoryData();
+    var frId = $scope._stateParams.facilityRepositoryId;
+    var token = $scope._stateParams.token;
     
+    $scope.form.initialise(true);
+    $scope.form.getFacilityRepositoryData(frId, token);
+    
+    /**
+     * Controls what is shown to the user.
+     * @type {string} 'FORM', 'PREVIEW', 'SUCCESS_MESSAGE', 'FAILURE_MESSAGE'.
+     */
     $scope.view = {
       show: 'FORM'
     };

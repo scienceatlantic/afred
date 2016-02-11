@@ -2,10 +2,8 @@
 
 angular.module('afredApp').controller('FacilitiesFormCreateController',
   ['$scope',
-   '$timeout',
    'facilityRepositoryResource',
   function($scope,
-           $timeout,
            facilityRepositoryResource) {
     /* ---------------------------------------------------------------------
      * Functions.
@@ -29,9 +27,8 @@ angular.module('afredApp').controller('FacilitiesFormCreateController',
           data: $scope.form.formatForApi()
         },
         function() {
-          // Reset form
-          //$scope.form.initialiseForm(true);
-          //$scope.form.save();
+          // Clear any saved data.
+          //$scope.form.clearSave();
           $scope.view.show = 'SUCCESS_MESSAGE';
         }, function() {
           $scope.view.show = 'FAILURE_MESSAGE';
@@ -45,28 +42,15 @@ angular.module('afredApp').controller('FacilitiesFormCreateController',
     
     /**
      * Controls what is shown to the user.
-     * @type {string} 'FORM', 'PREVIEW', 'SUCCESS_MESSAGE', 'FAILURE_MESSAGE'
+     * @type {string} 'FORM', 'PREVIEW', 'SUCCESS_MESSAGE', 'FAILURE_MESSAGE'.
      */
     $scope.view = {
       show: 'FORM'
     };
     
-    /**
-     * Loading flags.
-     */
-    $scope.loading = {
-      form: true
-    };
-    
     // Initialise the form, retrieve any saved data, and start autosaving.
     $scope.form.initialise();
-    $scope.form.getSave(); // BUG! Radio buttons are not highlighted
-                           // after data is retrieved.
+    $scope.form.getSave();
     $scope.form.startAutosave();
-    
-    // Insert an artificial delay before showing the form.
-    $timeout(function() {
-      $scope.loading.form = false;
-    }, 1500);
   }
 ]);
