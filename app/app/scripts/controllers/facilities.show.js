@@ -21,7 +21,8 @@ angular.module('afredApp').controller('FacilitiesShowController',
       $scope.facility = facilityResource.get(
         {
           facilityId: $scope._stateParams.facilityId,
-          expand: 'organization.ilo,province,equipment,primaryContact,contacts'
+          expand: 'organization.ilo,province,disciplines,sectors,' +
+            'equipment,primaryContact,contacts'
         },
         function() {
           if ($scope.facility.contacts) {
