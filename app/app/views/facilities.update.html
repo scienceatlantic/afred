@@ -14,7 +14,7 @@
       </form>
       
       <div data-af-loading="loading.facilities">
-        <div data-ng-show="view.show == 'noResultsMessage'">
+        <div data-ng-show="view.show == 'NO_RESULTS_MESSAGE'">
           <hr>
           <p>No results.</p>
         </div>
@@ -33,8 +33,8 @@
               <tr data-dir-paginate="facility in facilities.data | itemsPerPage: facilities.perPage" data-total-items="facilities.total">
                 <td>{{facility.name}}</td>
                 <td>
-                  <button class="btn btn-default btn-xs" data-ng-click="requestEditToken(facility.id)" data-ng-hide="facility.facilityUpdateLinkId">Email Token</button>
-                  <span class="label label-warning" data-ng-show="facility.facilityUpdateLinkId">Edit token requested</span>
+                  <button class="btn btn-default btn-xs" data-ng-click="requestEditToken(facility.id)" data-ng-hide="facility.revision.tokens.length">Email Token</button>
+                  <span class="label label-warning" data-ng-show="facility.revision.tokens.length">Edit token requested by {{facility.revision.tokens[0].firstName}} {{facility.revision.tokens[0].lastName}}</span>
                 </td>
               </tr>
             </tbody>

@@ -26,7 +26,7 @@ angular.module('afredApp').controller('FacilitiesUpdateController',
             $scope.loading.facilities = false;
             
             if (!$scope.facilities.total) {
-              $scope.view.show = 'noResultsMessage';
+              $scope.view.show = 'NO_RESULTS_MESSAGE';
             } else {
               $scope.view.show = null;
             }
@@ -61,7 +61,7 @@ angular.module('afredApp').controller('FacilitiesUpdateController',
     };
     
     $scope.view = {
-      show: null // 'noResultsMessage'
+      show: null // 'NO_RESULTS_MESSAGE'
     };
   }
 ]);
