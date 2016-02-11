@@ -21,7 +21,7 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         controller: 'SearchResultsController'
       }).
       state('facilities', {
-        abstract: true,
+        'abstract': true,
         url: '/facilities',
         templateUrl: 'views/facilities.html'
       }).
@@ -31,7 +31,7 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         controller: 'FacilitiesUpdateController'
       }).
       state('facilities.form', {
-        abstract: true,
+        'abstract': true,
         url: '/form',
         template: '<div data-ui-view></div>',
         controller: 'FacilitiesFormController'
@@ -52,7 +52,7 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         controller: 'FacilitiesShowController'
       }).
       state('equipment', {
-        abstract: true,
+        'abstract': true,
         'url': '/equipment',
         template: '<div data-ui-view></div>'
       }).
@@ -66,7 +66,7 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         templateUrl: 'views/about.html'
       }).
       state('admin', {
-        abstract: true,
+        'abstract': true,
         url: '/admin',
         templateUrl: 'views/admin.html',
         resolve: {
@@ -90,7 +90,7 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         controller: 'AdminFacilitiesController'
       }).
       state('admin.facilityRepository', {
-        abstract: true,
+        'abstract': true,
         url: '/facility-repository',
         template: '<div data-ui-view></div>'
       }).
