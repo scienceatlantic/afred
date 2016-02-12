@@ -1,42 +1,52 @@
 <p class="label label-primary">Research Facility</p><br><br>
 
 <div class="row">
-  <div class="col-md-3 text-right"><label>Facility</label></div>
-  <div class="col-md-9">{{facility.name}}</div>
+  <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Facility</label></div>
+  <div class="col-sm-9">{{ facility.name }}</div>
 </div>
 
-<div class="row">
-  <div class="col-md-3 text-right"><label>Organization</label></div>
-  <div class="col-md-9">{{facility.organization.name}}</div>
-</div>
+<br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
 
 <div class="row">
-  <div class="col-md-3 text-right"><label>City</label></div>
-  <div class="col-md-9">{{facility.city}}</div>
+  <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Organization</label></div>
+  <div class="col-sm-9">{{ facility.organization.name }}</div>
 </div>
 
+<br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
+
 <div class="row">
-  <div class="col-md-3 text-right"><label>Province</label></div>
-  <div class="col-md-9">{{facility.province.name}}</div>
+  <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>City</label></div>
+  <div class="col-sm-9">{{ facility.city }}</div>
 </div>
+
+<br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
+
+<div class="row">
+  <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Province</label></div>
+  <div class="col-sm-9">{{ facility.province.name }}</div>
+</div>
+
+<br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
 
 <div class="row" data-ng-show="facility.website">
-  <div class="col-md-3 text-right"><label>Website</label></div>
-  <div class="col-md-9"><a data-ng-href="{{facility.website}}" target="_blank">{{facility.website}}</a></div>
+  <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Website</label></div>
+  <div class="col-sm-9"><a data-ng-href="{{ facility.website }}" target="_blank">{{ facility.website }}</a></div>
 </div>
 
+<br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
+
 <div class="row">
-  <div class="col-md-3 text-right"><label>Description</label></div>
-  <div class="col-md-9" data-ng-bind-html="facility.description"></div>
+  <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Description</label></div>
+  <div class="col-sm-9" data-ng-bind-html="facility.description"></div>
 </div>
 
 <hr>
 
 <div class="row">
-  <div class="col-md-3 text-right"><label>Disciplines</label></div>
-  <div class="col-md-9">
+  <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Disciplines</label></div>
+  <div class="col-sm-9">
     <ul>
-      <li data-ng-repeat="d in facility.disciplines">{{d.name}}</li> 
+      <li data-ng-repeat="d in facility.disciplines">{{ d.name }}</li> 
     </ul>
   </div>
 </div>
@@ -44,10 +54,10 @@
 <hr>
 
 <div class="row">
-  <div class="col-md-3 text-right"><label>Sectors</label></div>
-  <div class="col-md-9">
+  <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Sectors</label></div>
+  <div class="col-sm-9">
     <ul>
-      <li data-ng-repeat="s in facility.sectors">{{s.name}}</li> 
+      <li data-ng-repeat="s in facility.sectors">{{ s.name }}</li> 
     </ul>
   </div>
 </div>

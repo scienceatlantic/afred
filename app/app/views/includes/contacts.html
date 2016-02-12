@@ -2,28 +2,36 @@
 
 <div data-ng-repeat="c in facility.contacts">
   <div class="row">
-    <div class="col-md-3 text-right"><label>Name</label></div>
-    <div class="col-md-9">{{c.firstName}} {{c.lastName}}</div>
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Name</label></div>
+    <div class="col-sm-9">{{ c.firstName }} {{ c.lastName }} <span data-ng-show="$index == 0" class="label label-default">Primary Contact</span></div>
   </div>
   
-  <div class="row">
-    <div class="col-md-3 text-right"><label>Email</label></div>
-    <div class="col-md-9"><a data-ng-href="mailto:{{c.email}}">{{c.email}}</a></div>
-  </div>
+  <br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
   
   <div class="row">
-    <div class="col-md-3 text-right"><label>Telephone</label></div>
-    <div class="col-md-9">{{c.telephone | afFormatTelephone}}</div>
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Email</label></div>
+    <div class="col-sm-9"><a data-ng-href="mailto:{{c.email}}">{{ c.email }}</a></div>
   </div>
+  
+  <br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
+  
+  <div class="row" data-ng-show="c.telephone">
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Telephone</label></div>
+    <div class="col-sm-9">{{ c.telephone | afFormatTelephone }} <span data-ng-show="c.extension">Extension: {{ c.extension }}</span></div>
+  </div>
+  
+  <br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
   
   <div class="row" data-ng-show="c.position">
-    <div class="col-md-3 text-right"><label>Position</label></div>
-    <div class="col-md-9">{{c.position}}</div>
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Position</label></div>
+    <div class="col-sm-9">{{ c.position }}</div>
   </div>
   
+  <br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
+  
   <div class="row" data-ng-show="c.website">
-    <div class="col-md-3 text-right"><label>Website</label></div>
-    <div class="col-md-9"><a href="{{c.website}}" target="_blank">{{c.website}}</a></div>
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Website</label></div>
+    <div class="col-sm-9"><a href="{{c.website}}" target="_blank">{{ c.website }}</a></div>
   </div>
   
   <hr data-ng-show="$index !== (facility.contacts.length - 1)">

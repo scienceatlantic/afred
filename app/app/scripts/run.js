@@ -6,6 +6,7 @@ angular.module('afredApp').run(['$rootScope',
                                 '$stateParams',
                                 '$http',
                                 '$cookies',
+                                '$window',
                                 '$resource',
   function($rootScope,
            $log,
@@ -13,11 +14,15 @@ angular.module('afredApp').run(['$rootScope',
            $stateParams,
            $http,
            $cookies,
+           $window,
            $resource) {
     $http.get($rootScope._config.api + '/csrf').then(function(response) {
       $http.defaults.headers.common['X-CSRF-TOKEN'] = response.data;
     });
     
+    /* ---------------------------------------------------------------------
+     * Log functions.
+     * --------------------------------------------------------------------- */
     $rootScope._log = function(msg) {
       if ($rootScope._config.log.log) {
         $log.log(msg);
@@ -48,9 +53,17 @@ angular.module('afredApp').run(['$rootScope',
       }
     };
     
+    /* ---------------------------------------------------------------------
+     * State properties.
+     * --------------------------------------------------------------------- */
+
     $rootScope._state = $state;
     $rootScope._stateParams = $stateParams;
     
+    /* ---------------------------------------------------------------------
+     * Authentication functions
+     * --------------------------------------------------------------------- */
+
     $rootScope._auth = {
       user: {},
       resolved: false,
@@ -74,5 +87,61 @@ angular.module('afredApp').run(['$rootScope',
     }, function() {
       $rootScope._auth.resolved = true;
     });
+    
+    /* ---------------------------------------------------------------------
+     * Helper functions
+     * --------------------------------------------------------------------- */
+    $rootScope._helper = {
+      // See: http://stackoverflow.com/questions/1038727/how-to-get-browser-width-using-javascript-code
+      getWidth: function () {
+        if (self.innerHeight) {
+          return self.innerWidth;
+        }
+      
+        if (document.documentElement && document.documentElement.clientWidth) {
+          return document.documentElement.clientWidth;
+        }
+      
+        if (document.body) {
+          return document.body.clientWidth;
+        }
+      },
+      
+      getHeight: function() {
+        if (self.innerHeight) {
+          return self.innerHeight;
+        }
+      
+        if (document.documentElement && document.documentElement.clientHeight) {
+          return document.documentElement.clientHeight;
+        }
+      
+        if (document.body) {
+          return document.body.clientHeight;
+        }
+      }
+    };
+    
+    /* ---------------------------------------------------------------------
+     * Window properties
+     * --------------------------------------------------------------------- */
+    window.onresize = function() {
+      $rootScope.$apply();
+    };
+    
+    $rootScope._window = $window;
+    
+    /* ---------------------------------------------------------------------
+     * Boostrap contstants.
+     * --------------------------------------------------------------------- */
+    $rootScope._bootstrap = {
+      grid: {
+        breakpoints: {
+          sm: 768, // >=
+          md: 992, // >=
+          lg: 1200 // >=
+        }
+      }
+    };
   }
 ]);

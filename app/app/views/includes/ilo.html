@@ -1,26 +1,34 @@
 <p class="label label-primary">Industry Liaison Office Contact</p><br><br>
 
 <div class="row">
-  <div class="col-md-3 text-right"><label>Name</label></div>
-  <div class="col-md-9">{{facility.organization.ilo.firstName}} {{facility.organization.ilo.lastName}}</div>
+  <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Name</label></div>
+  <div class="col-sm-9">{{ facility.organization.ilo.firstName }} {{ facility.organization.ilo.lastName }}</div>
 </div>
 
-<div class="row">
-  <div class="col-md-3 text-right"><label>Email</label></div>
-  <div class="col-md-9"><a data-ng-href="mailto:{{facility.organization.ilo.email}}">{{facility.organization.ilo.email}}</a></div>
-</div>
+<br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
 
 <div class="row">
-  <div class="col-md-3 text-right"><label>Telephone</label></div>
-  <div class="col-md-9">{{facility.organization.ilo.telephone | afFormatTelephone}}</div>
+  <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Email</label></div>
+  <div class="col-sm-9"><a data-ng-href="mailto:{{ facility.organization.ilo.email }}">{{facility.organization.ilo.email}}</a></div>
 </div>
 
+<br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
+
 <div class="row">
-  <div class="col-md-3 text-right"><label>Position</label></div>
-  <div class="col-md-9">{{facility.organization.ilo.position}}</div>
+  <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Telephone</label></div>
+  <div class="col-sm-9">{{ facility.organization.ilo.telephone | afFormatTelephone }}</div>
 </div>
+
+<br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
+
+<div class="row">
+  <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Position</label></div>
+  <div class="col-sm-9">{{ facility.organization.ilo.position }}</div>
+</div>
+
+<br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
 
 <div class="row" data-ng-show="facility.organization.ilo.website">
-  <div class="col-md-3 text-right"><label>Website</label></div>
-  <div class="col-md-9"><a href="{{facility.organization.ilo.website}}" target="_blank">{{facility.organization.ilo.website}}</a></div>
+  <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Website</label></div>
+  <div class="col-sm-9"><a href="{{ facility.organization.ilo.website }}" target="_blank">{{ facility.organization.ilo.website }}</a></div>
 </div>
