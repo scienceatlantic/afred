@@ -19,3 +19,5 @@ angular.module('afredApp', [
   'angularUtils.directives.dirPagination',
   'textAngular'
 ]);
+
+
