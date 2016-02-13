@@ -32,18 +32,22 @@
       </div>
       
       <p>
-        <button class="btn btn-default" data-ng-click="submit()">Submit</button>
-        <button class="btn btn-default" data-ng-click="view.show = 'FORM'">Go Back</button>
+        <button class="btn btn-default" data-ng-click="submit()" data-af-loading-btn="fr.$resolved === false" data-ng-disabled="fr.$resolved === false">Submit</button>
+        <button class="btn btn-default" data-ng-click="view.show = 'FORM'" data-ng-disabled="fr.$resolved === false">Go Back</button>
       </p>
     </div>
     
     <div data-ng-show="view.show == 'SUCCESS_MESSAGE'">
-      <p>Thank you!</p>
+      <p>Thank you! Your edit has been successfully submitted into AFRED for review.</p>
       
     </div>
     
     <div data-ng-show="view.show =='FAILURE_MESSAGE'">
       <p>Oh no... something went wrong!</p>
+    </div>
+    
+    <div data-ng-show="view.show =='INVALID_TOKEN_MESSAGE'">
+      <p>Invalid URL!</p>
     </div>
   </div><!-- End of .col-x-x -->
 </div><!-- End of .row -->

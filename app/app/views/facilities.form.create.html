@@ -2,7 +2,7 @@
   <div class="col-lg-12">
     <h3>Submit a Facility</h3>
     
-    <div data-af-loading="!(form.organizations.$resolved || form.provinces.$resolved || form.disciplines.$resolved || form.sectors.$resolved) || (form.loading.disciplines || form.loading.sectors)" data-ng-show="view.show == 'FORM'">
+    <div data-af-loading="!(form.organizations.$resolved || form.provinces.$resolved || form.disciplines.$resolved || form.sectors.$resolved) || (form.loading.disciplines || form.loading.sectors || form.loading.save)" data-ng-show="view.show == 'FORM'">
       <div data-ng-include="'views/includes/facilities.form.html'"></div>
     </div>
     
@@ -32,19 +32,19 @@
       </div>
       
       <p>
-        <button class="btn btn-default" data-ng-click="submit()">Submit</button>
-        <button class="btn btn-default" data-ng-click="view.show = 'FORM'">Go Back</button>
+        <button class="btn btn-default" data-ng-click="submit()" data-af-loading-btn="fr.$resolved === false" data-ng-disabled="fr.$resolved === false">Submit</button>
+        <button class="btn btn-default" data-ng-click="view.show = 'FORM'" data-ng-disabled="fr.$resolved === false">Go Back</button>
       </p>
     </div>
     
     <div data-ng-show="view.show == 'SUCCESS_MESSAGE'">
-      <p>Thank you!</p>
+      <p>Thank you! You facility has been successfully submitted into AFRED for review.</p>
       
       <p>Click <a data-ui-sref="search">here</a> to get back to the homepage or click <a href="" data-ng-click="_state.reload()">here</a> to submit another facility.</p>
     </div>
     
     <div data-ng-show="view.show =='FAILURE_MESSAGE'">
-      <p>Oh no... something went wrong!</p>
+      <p>Oh no... it looks like something went wrong!</p>
     </div>
   </div><!-- End of .col-x-x -->
 </div><!-- End of .row -->

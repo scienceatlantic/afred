@@ -96,7 +96,15 @@ angular.module('afredApp').controller('FacilitiesFormController',
        */
       loading: {
         disciplines: true,
-        sectors: true
+        sectors: true,
+        save: true // Has the saved data been retrieved. 'Create' mode only.
+                   // Because the '$scope.form.getSave()' function calls
+                   // '$scope.form.getDisciplines()' and
+                   // '$scope.form.getSectors()' again
+                   // (the '$scope.form.initialise()' function calls them first)
+                   // we need this additional flag so that the loading GIF
+                   // doesn't stop in between calling '$scope.form.getSave()'
+                   // and '$scope.form.save()'.
       },
       
       /**
@@ -393,8 +401,10 @@ angular.module('afredApp').controller('FacilitiesFormController',
        *     retrieve.
        * @param {string} token A string that authorises the user to retrieve
        *     the facility repository record.
+       * @param {function} failureCallback A function to call if the request
+       *     fails.
        */
-      getFacilityRepositoryData: function(frId, token) {
+      getFacilityRepositoryData: function(frId, token, failureCallback) {
         $scope.form.fr =
           facilityRepositoryResource.get({
               facilityRepositoryId: frId,
@@ -424,6 +434,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
               $scope.form.getSectors($scope.form.fr.data.sectors);
               
             }, function() {
+              failureCallback();
               $scope._warn('Invalid token and/or id provided');
             }
           );        
@@ -470,59 +481,102 @@ angular.module('afredApp').controller('FacilitiesFormController',
       
       /**
        * Saves the form data to local storage.
+       * @return {integer} 1 if the operation was successful, 0 if local storage
+       *     is not supported, and -1 if form data has not been resolved (the
+       *     function will not attempt to save).
        */
       save: function() {
-        var f = $scope.form.getStorageItemName('facility');
-        var d = $scope.form.getStorageItemName('disciplines');
-        var s = $scope.form.getStorageItemName('sectors');
-        var dData = $scope.form.getSelectedDisciplines(true);
-        var sData = $scope.form.getSelectedSectors(true);
-        
-        try {
-          localStorage.setItem(f, JSON.stringify($scope.form.data));
-          localStorage.setItem(d, JSON.stringify(dData));
-          localStorage.setItem(s, JSON.stringify(sData));
-        } catch(e) {
-          // Do nothing if local storage is not supported.
+        // Because of async issues, we have to make sure that all data has been
+        // retrieved before attempting to save. Otherwise the form might end up
+        // overriding actual data with blank data.
+        if ($scope.form.organizations.$resolved
+            && $scope.form.provinces.$resolved
+            && $scope.form.disciplines.$resolved
+            && $scope.form.sectors.$resolved
+            && !$scope.form.loading.disciplines
+            && !$scope.form.loading.sectors) {
+          var f = $scope.form.getLsName('facility');
+          var d = $scope.form.getLsName('disciplines');
+          var s = $scope.form.getLsName('sectors');
+          var dData = $scope.form.getSelectedDisciplines(true);
+          var sData = $scope.form.getSelectedSectors(true);
+          
+          try {
+            localStorage.setItem(f, JSON.stringify($scope.form.data));
+            localStorage.setItem(d, JSON.stringify(dData));
+            localStorage.setItem(s, JSON.stringify(sData));
+            
+                        
+            // Set the loading flag to false.
+            $scope.form.loading.save = false;
+            
+            return 1;
+          } catch(e) {
+            // Local storage is not supported.
+            $scope.form.isStorageSupported = false;
+            
+            // We need to set this to false if local storage is not supported
+            // otherwise the form will never get displayed.
+            $scope.form.loading.save = false;
+            return 0;
+          }
         }
+        
+        return -1;
       },
       
       /**
        * Retrieves any saved data from local storage.
+       * @returns {integer} 1 if the operation was successful regardless if data
+       *     was actually retrieved. 0 if local storage is not supported. -1 if
+       *     the form data (organizations, provinces, disciplines, sectors) has
+       *     not been resolved. -1 also means that the function did not attempt
+       *     to retrieve the data.
        */
-      getSave: function(frId, token) {
-        var f = $scope.form.getStorageItemName('facility');
-        var d = $scope.form.getStorageItemName('disciplines');
-        var s = $scope.form.getStorageItemName('sectors');
-
-        try {
-          if (localStorage.getItem(f)
-              && localStorage.getItem(d)
-              && localStorage.getItem(s)) {
-            $scope.form.data = JSON.parse(localStorage.getItem(f));
-            $scope.form.getDisciplines(JSON.parse(localStorage.getItem(d)));
-            $scope.form.getSectors(JSON.parse(localStorage.getItem(s)));
+      getSave: function() {
+        // See '$scope.form.save()' for explanation.
+        if ($scope.form.organizations.$resolved
+            && $scope.form.provinces.$resolved
+            && $scope.form.disciplines.$resolved
+            && $scope.form.sectors.$resolved
+            && !$scope.form.loading.disciplines
+            && !$scope.form.loading.sectors) {
+          try {
+            var f = localStorage.getItem($scope.form.getLsName('facility'));
+            var d = localStorage.getItem($scope.form.getLsName('disciplines'));
+            var s = localStorage.getItem($scope.form.getLsName('sectors'));
+          
+            if (f && d && s) {
+              $scope.form.data = JSON.parse(f);
+              $scope.form.getDisciplines(JSON.parse(d));
+              $scope.form.getSectors(JSON.parse(s));
+            }
+            return 1;
+          } catch(e) {
+            // Local storage is not supported.
+            $scope.form.isStorageSupported = false;
+            
+            // See explanation in '$scope.form.save()'.
+            $scope.form.loading.save = false;
+            
+            return 0;
           }
-        } catch(e) {
-          // Local storage is not supported.
-          $scope.form.isStorageSupported = false;
         }
+        
+        return -1;
       },
       
       /**
        * Clears local storage of any saved form data.
        */
       clearSave: function() {
-        try {
-          var f = $scope.form.getStorageItemName('facility');
-          var d = $scope.form.getStorageItemName('disciplines');
-          var s = $scope.form.getStorageItemName('sectors');
-          
-          localStorage.removeItem(f);
-          localStorage.removeItem(d);
-          localStorage.removeItem(s);
+        try {          
+          localStorage.removeItem($scope.form.getLsName('facility'));
+          localStorage.removeItem($scope.form.getLsName('disciplines'));
+          localStorage.removeItem($scope.form.getLsName('sectors'));
         } catch(e) {
-          $scope._info('Local storage is not supported');
+          // Local storage is not supported.
+          $scope.form.isStorageSupported = false;
         }
       },
       
@@ -533,13 +587,15 @@ angular.module('afredApp').controller('FacilitiesFormController',
        *     interval. If not provided, a default of 500 milliseconds is used.
        */
       startAutosave: function(interval) {
-        if (!$scope.form.isAutosaving || $scope.form.isStorageSupported) {
+        if (!$scope.form.isAutosaving && $scope.form.isStorageSupported) {
           try {
             $scope.form.isAutosaving = $interval(function() {
               $scope.form.save();
             }, interval ? interval : 500);       
           } catch(e) {
-            // Do nothing if local storage is not supported.
+            // Local storage is not supported.
+            $scope.form.isStorageSupported = false;
+            $interval.cancel($scope.form.isAutosaving);
           }          
         }
       },
@@ -549,7 +605,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
        * @param {string} item The item to retrieve (facility, disciplines,
        *     sectors)
        */
-      getStorageItemName: function(item) {
+      getLsName: function(item) {
         return $scope._state.current.name + '-' + item;
       },
       

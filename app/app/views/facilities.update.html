@@ -1,46 +1,55 @@
 <div>
-  <h2>Update</h2>
+  <h3>Update</h3>
   
-  <div class="panel panel-default">
-    <div class="panel-body">
-      <form data-ng-submit="submit()" novalidate>
-        <div data-af-field data-af-field-label="Email">
-          <input class="form-control" id="email" name="email" data-ng-model="form.email" data-ng-change="reset()">
-        </div>
-        
-        <p>
-          <button type="button" class="btn btn-default" data-ng-click="submit()">Submit</button>
-        </p>
-      </form>
-      
-      <div data-af-loading="loading.facilities">
-        <div data-ng-show="view.show == 'NO_RESULTS_MESSAGE'">
-          <hr>
-          <p>No results.</p>
-        </div>
-        
-        <div data-ng-show="facilities.data.length && !loading.facilities">
-          <hr>
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Facility</th>
-                <th><!-- empty --></th>
-              </tr>
-            </thead>
+  <p>
+    Please use the form below to generate a special token that will be email to
+
+  </p>
+  
+  <div class="row">
+    <div class="col-sm-8">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <form data-ng-submit="submit()" novalidate>
+            <div data-af-field data-af-field-label="Email">
+              <input class="form-control" id="email" name="email" data-ng-model="form.email" data-ng-change="reset()">
+            </div>
             
-            <tbody>
-              <tr data-dir-paginate="facility in facilities.data | itemsPerPage: facilities.perPage" data-total-items="facilities.total">
-                <td>{{facility.name}}</td>
-                <td>
-                  <button class="btn btn-default btn-xs" data-ng-click="requestEditToken(facility.id)" data-ng-hide="facility.revision.tokens.length">Email Token</button>
-                  <span class="label label-warning" data-ng-show="facility.revision.tokens.length">Edit token requested by {{facility.revision.tokens[0].firstName}} {{facility.revision.tokens[0].lastName}}</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+            <p>
+              <button type="button" class="btn btn-default btn-sm" data-ng-click="submit()" data-af-loading-btn="facilities.$resolved === false" data-ng-disabled="facilities.$resolved === false">Submit</button>
+            </p>
+          </form>
           
-          <div data-dir-pagination-controls data-on-page-change="submit(newPageNumber)"></div>
+          <div>
+            <div data-ng-show="view.show == 'NO_RESULTS_MESSAGE'">
+              <hr>
+              <p>No results.</p>
+            </div>
+            
+            <div data-ng-show="facilities.data.length && !loading.facilities">
+              <hr>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Facility</th>
+                    <th><!-- empty --></th>
+                  </tr>
+                </thead>
+                
+                <tbody>
+                  <tr data-dir-paginate="facility in facilities.data | itemsPerPage: facilities.perPage" data-total-items="facilities.total">
+                    <td><a href="{{ _config.appAddress }}/#/facilities/{{ facility.id }}" target="_blank">{{ facility.name }}</a></td>
+                    <td>
+                      <button class="btn btn-default btn-xs" data-ng-click="requestToken(facility.id)" data-ng-hide="facility.revision.tokens.length" data-af-loading-btn="ful.$resolved === false" data-ng-disabled="ful.$resolved === false">Email token</button>
+                      <span class="label label-warning" data-ng-show="facility.revision.tokens.length">Token requested by {{ facility.revision.tokens[0].firstName }} {{ facility.revision.tokens[0].lastName }}</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              
+              <div data-dir-pagination-controls data-on-page-change="submit(newPageNumber)"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

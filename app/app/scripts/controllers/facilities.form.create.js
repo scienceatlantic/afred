@@ -2,8 +2,10 @@
 
 angular.module('afredApp').controller('FacilitiesFormCreateController',
   ['$scope',
+   '$interval',
    'facilityRepositoryResource',
   function($scope,
+           $interval,
            facilityRepositoryResource) {
     /* ---------------------------------------------------------------------
      * Functions.
@@ -22,7 +24,7 @@ angular.module('afredApp').controller('FacilitiesFormCreateController',
      * successful otherwise an error message is shown instead.
      */
     $scope.submit = function() {
-      facilityRepositoryResource.submit(
+      $scope.fr = facilityRepositoryResource.submit(
         {
           data: $scope.form.formatForApi()
         },
@@ -48,9 +50,23 @@ angular.module('afredApp').controller('FacilitiesFormCreateController',
       show: 'FORM'
     };
     
+    /**
+     * Will the data return by '$scope.submit()'.
+     * @type {object}
+     */
+    $scope.fr = {};
+    
     // Initialise the form, retrieve any saved data, and start autosaving.
     $scope.form.initialise();
-    $scope.form.getSave();
-    $scope.form.startAutosave();
+    
+    // Because of async issues, we're going to keep calling
+    // '$scope.form.getSave()' until it either retrieves the data successfully
+    // or fails because local storage is not supported.
+    var intervalId = $interval(function() {
+      if ($scope.form.getSave() === 1 || $scope.form.getSave() === 0) {
+        $interval.cancel(intervalId);
+        $scope.form.startAutosave();
+      }
+    }, 350);
   }
 ]);

@@ -40,8 +40,8 @@ angular.module('afredApp').controller('FacilitiesUpdateController',
       $scope.facilities = {};
     };
     
-    $scope.requestEditToken = function(id) {
-      facilityRepositoryResource.generateToken({
+    $scope.requestToken = function(id) {
+      $scope.ful = facilityRepositoryResource.generateToken({
         facilityId: id,
         email: $scope.form.email
       }, function() {
@@ -59,6 +59,10 @@ angular.module('afredApp').controller('FacilitiesUpdateController',
     $scope.loading = {
       facilities: false
     };
+    
+    $scope.ful = {};
+    
+    $scope.facilities = null;
     
     $scope.view = {
       show: null // 'NO_RESULTS_MESSAGE'

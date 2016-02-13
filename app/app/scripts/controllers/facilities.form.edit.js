@@ -15,7 +15,10 @@ angular.module('afredApp').controller('FacilitiesFormEditController',
     };
     
     $scope.submit = function() {
-      facilityRepositoryResource.submitEdit({ facilityRepositoryId: frId },
+      $scope.fr = facilityRepositoryResource.submitEdit(
+        {
+          facilityRepositoryId: frId
+        },
         {
           data: $scope.form.formatForApi()
         },
@@ -35,11 +38,16 @@ angular.module('afredApp').controller('FacilitiesFormEditController',
     var token = $scope._stateParams.token;
     
     $scope.form.initialise(true);
-    $scope.form.getFacilityRepositoryData(frId, token);
+    $scope.form.getFacilityRepositoryData(frId, token, function() {
+      $scope.view.show = 'INVALID_TOKEN_MESSAGE';
+    });
+    
+    $scope.fr = null;
     
     /**
      * Controls what is shown to the user.
-     * @type {string} 'FORM', 'PREVIEW', 'SUCCESS_MESSAGE', 'FAILURE_MESSAGE'.
+     * @type {string} 'FORM', 'PREVIEW', 'SUCCESS_MESSAGE', 'FAILURE_MESSAGE',
+     *     'INVALID_TOKEN_MESSAGE'.
      */
     $scope.view = {
       show: 'FORM'
