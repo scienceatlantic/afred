@@ -12,6 +12,6 @@ abstract class Request extends FormRequest
 {
     protected function _isAdmin()
     {
-        return Auth::check() && Auth::user()->admins()->first();
+        return Auth::check() && Auth::user()->roles()->admins()->first();
     }
 }

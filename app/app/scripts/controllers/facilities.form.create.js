@@ -63,7 +63,7 @@ angular.module('afredApp').controller('FacilitiesFormCreateController',
     // '$scope.form.getSave()' until it either retrieves the data successfully
     // or fails because local storage is not supported.
     var intervalId = $interval(function() {
-      if ($scope.form.getSave() === 1 || $scope.form.getSave() === 0) {
+      if ($scope.form.getSave() >= 0) {
         $interval.cancel(intervalId);
         $scope.form.startAutosave();
       }

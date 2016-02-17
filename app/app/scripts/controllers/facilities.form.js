@@ -502,9 +502,9 @@ angular.module('afredApp').controller('FacilitiesFormController',
           var sData = $scope.form.getSelectedSectors(true);
           
           try {
-            localStorage.setItem(f, JSON.stringify($scope.form.data));
-            localStorage.setItem(d, JSON.stringify(dData));
-            localStorage.setItem(s, JSON.stringify(sData));
+            localStorage.setItem(f, angular.toJson($scope.form.data));
+            localStorage.setItem(d, angular.toJson(dData));
+            localStorage.setItem(s, angular.toJson(sData));
             
                         
             // Set the loading flag to false.
@@ -570,7 +570,13 @@ angular.module('afredApp').controller('FacilitiesFormController',
        * Clears local storage of any saved form data.
        */
       clearSave: function() {
-        try {          
+        try {
+          // We have to stop autosaving otherwise clearing the data won't
+          // work if the page is reloaded after this function is called (the
+          // '$scope.forn.save()' function might have been called before
+          // the page was reloaded thereby saving the form data again).
+          $interval.cancel($scope.form.isAutosaving);
+          
           localStorage.removeItem($scope.form.getLsName('facility'));
           localStorage.removeItem($scope.form.getLsName('disciplines'));
           localStorage.removeItem($scope.form.getLsName('sectors'));
