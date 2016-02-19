@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call(IlosTableSeeder::class);
         $this->call(DisciplinesTableSeeder::class);
         $this->call(SectorsTableSeeder::class);
+        $this->call(RolesTableSeeder::class);
         $this->call(SettingsTableSeeder::class);
         
         // Contains dummy data.

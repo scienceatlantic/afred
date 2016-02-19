@@ -16,6 +16,10 @@ class CreateFacilitiesTable extends Migration
             $table->increments('id');
             $table->integer('facilityRepositoryId')
                 ->unsigned();
+            $table->foreign('facilityRepositoryId')
+                ->references('id')
+                ->on('facility_repository')
+                ->onDelete('restrict');
             $table->integer('organizationId')
                 ->unsigned();
             $table->foreign('organizationId')

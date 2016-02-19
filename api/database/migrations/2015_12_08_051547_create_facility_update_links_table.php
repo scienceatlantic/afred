@@ -28,9 +28,9 @@ class CreateFacilityUpdateLinksTable extends Migration
                 ->references('id')
                 ->on('facility_repository')
                 ->onDelete('cascade');
-            $table->string('firstName', 50);
-            $table->string('lastName', 50);
-            $table->string('email', 254);
+            $table->string('editorFirstName', 50);
+            $table->string('editorLastName', 50);
+            $table->string('editorEmail', 254);
             $table->char('token', 25)
                 ->unique();
             $table->enum('status', ['OPEN', 'PENDING', 'CLOSED']);

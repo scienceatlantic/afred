@@ -3,7 +3,10 @@
 // Laravel.
 use Illuminate\Database\Seeder;
 
+use \Log;
+
 // Models.
+use Carbon\Carbon;
 use App\User;
 
 class DummyUsersTableSeeder extends Seeder
@@ -15,21 +18,26 @@ class DummyUsersTableSeeder extends Seeder
      */
     public function run()
     {
+        $now = Carbon::now();
+        
         // Delete existing entries.
         DB::table('users')->delete();
         
         $users = [
             [
-                'firstName' => 'Prasad',
-                'lastName'  => 'Rajandran',
-                'role'      => 'ADMINISTRATOR',
-                'email'     => 'prasad@scienceatlantic.ca',
-                'password'  => bcrypt('password')
+                'firstName'   => 'Prasad',
+                'lastName'    => 'Rajandran',
+                'email'       => 'prasad@scienceatlantic.ca',
+                'password'    => bcrypt('password'),
+                'dateCreated' => $now
             ]
         ];
         
         foreach($users as $user) {
-            User::create($user);
+            $u = User::create($user);
+            
+            // Attach the admin role.
+            $u->roles()->attach(1);
         }
     }
 }

@@ -14,6 +14,13 @@ class CreateFacilityRepositoryTable extends Migration
     {
         Schema::create('facility_repository', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('userId')
+                ->unsigned()
+                ->nullable();
+            $table->foreign('userId')
+                ->references('id')
+                ->on('users')
+                ->onDelete('restrict');
             $table->integer('facilityId')
                 ->unsigned()
                 ->nullable();
@@ -23,6 +30,8 @@ class CreateFacilityRepositoryTable extends Migration
                                    'PENDING_EDIT_APPROVAL',
                                    'PUBLISHED_EDIT',
                                    'REJECTED_EDIT']);
+            $table->text('reviewMessage')
+                ->nullable();
             $table->longText('data'); // Data stored in JSON
             $table->datetime('dateSubmitted');
             $table->timestamps();
