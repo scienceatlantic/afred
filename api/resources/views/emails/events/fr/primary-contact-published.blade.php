@@ -6,5 +6,4 @@ Hello {{ $name }},
 Your facility, '{{ $facility }}', has been approved!
 
 It is located at: {{ $facility }}/#/facilities/{{ $facilityId }}
-
 @stop
