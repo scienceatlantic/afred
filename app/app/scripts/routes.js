@@ -97,7 +97,7 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
       state('admin.facilityRepository.show', {
         url: '/:facilityRepositoryId',
         templateUrl: 'views/admin.facility-repository.show.html',
-        controller: 'AdminfacilityRepositoryShowController'
+        controller: 'AdminFacilityRepositoryShowController'
       }).
       state('login', {
         url: '/login',
