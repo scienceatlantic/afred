@@ -21,7 +21,8 @@ abstract class Controller extends BaseController
     protected $_itemsPerPage;
     protected $_expand;
     
-    function __construct(Request $request) {
+    function __construct(Request $request)
+    {
         $this->_paginate = boolval($request->input('paginate', true));
         $this->_itemsPerPage = intval($request->input('itemsPerPage', 15));
         $this->_expand = $request->input('expand', null);

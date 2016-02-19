@@ -33,7 +33,8 @@ use App\Http\Requests\UpdateFacilityRepositoryRequest;
 
 class FacilityRepositoryController extends Controller
 {
-    function __construct(Request $request) {
+    function __construct(Request $request)
+    {
         parent::__construct($request);
     }
     

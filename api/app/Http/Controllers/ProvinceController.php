@@ -16,7 +16,8 @@ use App\Http\Requests;
 
 class ProvinceController extends Controller
 {
-    function __construct(Request $request) {
+    function __construct(Request $request)
+    {
         parent::__construct($request);
     }
     
