@@ -3,7 +3,7 @@
 namespace App\Listeners;
 
 // Events.
-use App\Events\FacilityEditTokenRequestedEvent;
+use App\Events\FacilityUpdateLinksEvent;
 
 // Laravel.
 use Illuminate\Queue\InteractsWithQueue;
@@ -11,13 +11,13 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 // Models.
 use App\Setting;
-use App\User;
+use App\Role;
 
 // Misc.
 use Log;
 use Mail;
 
-class EmailFacilityEditTokenListener extends BaseListener
+class FacilityUpdateLinksListener extends BaseListener
 {
     /**
      * Create the event listener.
@@ -32,16 +32,17 @@ class EmailFacilityEditTokenListener extends BaseListener
     /**
      * Handle the event.
      *
-     * @param  FacilityEditTokenRequestedEvent  $event
+     * @param  FacilityUpdateLinksEvent  $event
      * @return void
      */
-    public function handle(FacilityEditTokenRequestedEvent $event)
+    public function handle(FacilityUpdateLinksEvent $event)
     {
         $email = $event->ful->email;
         $email = 'prasad@scienceatlantic.ca';
         $template = 'emails.events.ful.token-requested'; 
         $subject = $this->_settings['EMAIL_SUBJECT_PREFIX'] . 'Token';
-        $name = $event->ful->firstName . ' ' . $event->ful->lastName;
+        $name = $event->ful->editorFirstName
+            . ' ' . $event->ful->editorLastName;
         
         $data = [
             'name'       => $name,
@@ -52,11 +53,11 @@ class EmailFacilityEditTokenListener extends BaseListener
         
         $to = [
             'name' => $name,
-            'email' => $event->ful->email
+            'email' => $event->ful->editorEmail
         ];
         
         $bcc = [];
-        foreach(User::admins()->get() as $a) {
+        foreach(Role::admin()->users()->get() as $a) {
             array_push($bcc, [
                 'name'  => $a->firstName . ' ' . $a->lastName,
                 'email' => $a->email

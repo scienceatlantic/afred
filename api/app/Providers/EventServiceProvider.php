@@ -17,8 +17,8 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\FacilityRepositoryListener',            
         ],
         
-        'App\Events\FacilityEditTokenRequestedEvent' => [
-            'App\Listeners\EmailFacilityEditTokenListener'
+        'App\Events\FacilityUpdateLinksEvent' => [
+            'App\Listeners\FacilityUpdateLinksListener'
         ]
     ];
 

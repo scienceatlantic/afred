@@ -12,7 +12,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 // Models.
 use App\FacilityUpdateLink;
 
-class FacilityEditTokenRequestedEvent extends Event
+class FacilityUpdateLinksEvent extends Event
 {
     use SerializesModels;
     
