@@ -14,9 +14,9 @@ class FacilityUpdateLink extends Model
     protected $fillable = [
         'frIdBefore',
         'frIdAfter',
-        'firstName',
-        'lastName',
-        'email',
+        'editorFirstName',
+        'editorLastName',
+        'editorEmail',
         'token',
         'status',
         'dateRequested'
@@ -41,7 +41,7 @@ class FacilityUpdateLink extends Model
     
     public function scopeClosed($query)
     {
-        return $query->where('status', 'OPEN');
+        return $query->where('status', 'CLOSED');
     }
     
     public function scopeNotClosed($query)

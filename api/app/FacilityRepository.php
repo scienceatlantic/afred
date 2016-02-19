@@ -29,8 +29,10 @@ class FacilityRepository extends Model
      */
     protected $fillable = [
         'facilityId',
+        'userId',
         'state',
         'data',
+        'reviewMessage',
         'dateSubmitted'
     ];
     
@@ -55,7 +57,7 @@ class FacilityRepository extends Model
      * the facility repository record (frIdBefore) is still the most recent
      * version of the facility.
      */
-    public function tokens()
+    public function fulsB()
     {
         return $this->hasMany('App\FacilityUpdateLink', 'frIdBefore');
     }
@@ -66,7 +68,7 @@ class FacilityRepository extends Model
      * If it was rejected, the previous facility repository record (frIdBefore)
      * is still the most recent version of the facility.
      */
-    public function token()
+    public function fulA()
     {
         return $this->hasOne('App\FacilityUpdateLink', 'frIdAfter');
     }

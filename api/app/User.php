@@ -47,6 +47,12 @@ class User extends Model implements AuthenticatableContract,
     
     public function scopeAdmins($query)
     {
-        return $query->where('role', 'ADMINISTRATOR');
+        return $query->roles()->admins;
+    }
+    
+    public function roles()
+    {
+        return $this->belongsToMany('App\Role', 'role_user', 'userId',
+            'roleId');
     }
 }
