@@ -7,7 +7,7 @@ use Log;
 use Route;
 
 // Models.
-use App\FacilityUpdateLink;
+use App\FacilityRepository;
 
 // Requests.
 use App\Http\Requests\Request;
@@ -21,24 +21,26 @@ class ShowFacilityRepositoryRequest extends Request
      */
     public function authorize()
     {
-        // An admin is allowed to view a facility repository record. However,
-        // given the right id and token, an unauthenticated user (or a user
-        // other than an admin) would also be allowed to view the facility
-        // record (ie. for edits).
-        if ($this->_isAdmin()) {
-            return true;
-        } else {
-            // Gets the ID from the route. The name 'facility_repository' to
-            // refer to the ID parameter was create by Laravel. You can view
-            // this by running 'php artisan route:list' in the terminal.
-            $frId = Route::input('facility_repository');
-            $token = $this->instance()->input('token', null);
+        // If both a facility repository ID and token (facility update link) was
+        // provided in the request, we're going to assume the user (could be a
+        // regular user or an admin) wants to update a particular facility.
+        // If a token wasn't provided, we're assuming the admin just wants to
+        // view a particular facility. Remember that an admin will also need to
+        // generate a token in order to be able to update a particular facility.
+        $id = Route::input('facility_repository');
+        $token = $this->instance()->input('token', null);
+        
+        if ($id && $token) {            
+            // Find a facility update link record with a matching 'frIdBefore'
+            // and 'token' value.
             
-            // Find a record with a matching token and frIdBefore value.
-            $ful = FacilityUpdateLink::where('frIdBefore', $frId)
-                ->where('token', $token)->first();
+            // find or fail?
+            $ful = FacilityRepository::find($id)->fulsB()->where('token',
+                $token)->first();
             
             return $ful && $ful->status == 'OPEN';
+        } else if ($this->_isAdmin()) {
+            return true;
         }
     }
 

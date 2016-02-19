@@ -23,14 +23,21 @@ class UpdateFacilityRepositoryRequest extends Request
     {
         $state = $this->instance()->input('state', null);
         
-        // The first two states can be performed but an unauthenticated
-        // user (ie. when submitting a new record or submitting an edit).
-        // The last four are protected functions that can only be performed
-        // by an admin.
+        // The first two states can be performed by an unauthenticated user
+        // (ie. when submitting a new record or submitting an edit). However,
+        // for the second, we still have to make sure that the right token
+        // is used. The last four are protected functions that can only be
+        // performed by an admin.
         switch ($state) {
             case 'PENDING_APPROVAL':
-            case 'PENDING_EDIT_APPROVAL':
                 return true;
+            
+            case 'PENDING_EDIT_APPROVAL':
+                $id = Route::input('facility_repository', null);
+                $token = $this->instance()->input('token', null);
+                $ful = FacilityRepository::findOrFail($id)->fulsB()
+                    ->where('token', $token)->first();
+                return $ful && $ful->status == 'OPEN';
             
             case 'PUBLISHED':
             case 'PUBLISHED_EDIT':
@@ -56,8 +63,9 @@ class UpdateFacilityRepositoryRequest extends Request
         // Search for the existing (if applicable) facility repository record
         // so we can make sure that its current state is valid for the update
         // that is about to take place.
-        $id = Route::input('facility_repository', null);
-        if (($fr = FacilityRepository::find($id))) {
+        if ($state != 'PENDING_APPROVAL') {
+            $id = Route::input('facility_repository', null);
+            $fr = FacilityRepository::findOrFail($id);
             $currentState = $fr->state;
         } else {
             $currentState = null;
