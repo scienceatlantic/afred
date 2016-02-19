@@ -26,8 +26,31 @@
   <hr>
   
   <div data-ng-include="'views/includes/equipment.html'"></div>
-  <br>
   
+  <div data-ng-show="fr.state == 'PENDING_APPROVAL' || fr.state == 'PENDING_EDIT_APPROVAL'">
+    <hr>
+    <br>
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="form-group">
+          <label for="reviewMessage">Message to primary contact (optional):</label>
+          <textarea class="form-control" id="reviewMessage" rows="5" data-ng-model="form.data.reviewMessage"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div data-ng-show="fr.state != 'PENDING_APPROVAL' && fr.state != 'PENDING_EDIT_APPROVAL'">
+    <hr>
+    <br>
+    <label>Review message:</label>
+    <span data-ng-show="fr.reviewMessage">{{fr.reviewMessage}}</span>
+    <span data-ng-hide="fr.reviewMessage">
+      <span class="label label-warning">No message was included.</span>
+    </span>
+  </div>
+  
+  <br>
   <p>
     <button type="button" class="btn btn-default" data-ng-click="loading.selectedButton = 'approve'; approve();" data-ng-show="fr.state == 'PENDING_APPROVAL'" data-af-loading-btn="frPromise.$resolved === false && loading.selectedButton == 'approve'" data-ng-disabled="frPromise.$resolved === false">Approve</button>
     <button type="button" class="btn btn-default" data-ng-click="loading.selectedButton = 'reject'; reject();" data-ng-show="fr.state == 'PENDING_APPROVAL'" data-af-loading-btn="frPromise.$resolved === false && loading.selectedButton == 'reject'" data-ng-disabled="frPromise.$resolved === false">Reject</button>

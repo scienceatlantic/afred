@@ -25,10 +25,22 @@ angular.module('afredApp').controller('AdminFacilityRepositoryShowController', [
       });
     };
     
+    /*
+     * Note: for the $scope.approve(), $scope.approveEdit(),
+     * $scope.reject(), $scope.rejectEdit() functions, we can't use the
+     * $scope.fr.$approve(), ... functions because we're updating its state
+     * (eg. PENDING_APPROVAL -> PUBLISHED) and using $scope.fr.$approve()
+     * for example will send the API both a GET state='PUBLISHED' and POST
+     * state='PENDING_APPROVAL'. The API will end up ignoring the GET variable.
+     * We also can't modify $scope.fr directly because that will end up
+     * updating the view immediately regardless of whether the operation was
+     * successful or not.
+     */
+    
     $scope.approve = function() {
       $scope.frPromise = facilityRepositoryResource.approve({
         facilityRepositoryId: $scope._stateParams.facilityRepositoryId
-      }, null, function(data) {
+      }, $scope.form.data, function(data) {
         $scope.fr = data;
       });
     };
@@ -36,7 +48,7 @@ angular.module('afredApp').controller('AdminFacilityRepositoryShowController', [
     $scope.reject = function() {
       $scope.frPromise = facilityRepositoryResource.reject({
         facilityRepositoryId: $scope._stateParams.facilityRepositoryId
-      }, null, function(data) {
+      }, $scope.form.data, function(data) {
         $scope.fr = data;
       });   
     };
@@ -44,7 +56,7 @@ angular.module('afredApp').controller('AdminFacilityRepositoryShowController', [
     $scope.approveEdit = function() {
       $scope.frPromise = facilityRepositoryResource.approveEdit({
         facilityRepositoryId: $scope._stateParams.facilityRepositoryId
-      }, null, function(data) {
+      }, $scope.form.data, function(data) {
         $scope.fr = data;
       });      
     };
@@ -52,7 +64,7 @@ angular.module('afredApp').controller('AdminFacilityRepositoryShowController', [
     $scope.rejectEdit = function() {
       $scope.frPromise = facilityRepositoryResource.rejectEdit({
         facilityRepositoryId: $scope._stateParams.facilityRepositoryId
-      }, null, function(data) {
+      }, $scope.form.data, function(data) {
         $scope.fr = data;
       });         
     };
@@ -123,6 +135,15 @@ angular.module('afredApp').controller('AdminFacilityRepositoryShowController', [
     $scope.disciplines = {};
     $scope.sectors = {};
     $scope.getFacilityRepository();
+    
+    /*
+     * All form data.
+     */
+    $scope.form ={
+      data: {
+        reviewMessage: null
+      }
+    };
     
     /*
      * Loading flags.
