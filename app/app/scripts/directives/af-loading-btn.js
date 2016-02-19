@@ -7,7 +7,7 @@ angular.module('afredApp').directive('afLoadingBtn',
   function() {
     return {
       restrict: 'A',
-      replace: true,
+      replace: false,
       transclude: true,
       templateUrl: 'views/directives/af-loading-btn.html',
       scope: {
