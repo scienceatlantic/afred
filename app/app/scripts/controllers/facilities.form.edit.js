@@ -17,7 +17,8 @@ angular.module('afredApp').controller('FacilitiesFormEditController',
     $scope.submit = function() {
       $scope.fr = facilityRepositoryResource.submitEdit(
         {
-          facilityRepositoryId: frId
+          facilityRepositoryId: frId,
+          token: $scope._stateParams.token
         },
         {
           data: $scope.form.formatForApi()
