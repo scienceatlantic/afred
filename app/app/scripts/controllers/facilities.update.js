@@ -14,7 +14,6 @@ angular.module('afredApp').controller('FacilitiesUpdateController',
     $scope.submit = function(page) {
       // Don't run if the email field is empty.
       if ($scope.form.email) {
-        $scope.loading.facilities = true;
         page = page ? page : 1;
   
         $scope.facilities = facilityRepositoryResource.queryTokens(
@@ -23,8 +22,6 @@ angular.module('afredApp').controller('FacilitiesUpdateController',
             page: page,
             itemsPerPage: 5
           }, function() {
-            $scope.loading.facilities = false;
-            
             if (!$scope.facilities.total) {
               $scope.view.show = 'NO_RESULTS_MESSAGE';
             } else {
@@ -40,12 +37,15 @@ angular.module('afredApp').controller('FacilitiesUpdateController',
       $scope.facilities = {};
     };
     
-    $scope.requestToken = function(id) {
+    $scope.requestToken = function(index, id) {
       $scope.ful = facilityRepositoryResource.generateToken({
         facilityId: id,
         email: $scope.form.email
-      }, function() {
-        $scope.submit();
+      }, function(data) {
+        $scope.facilities.data[index].editorFirstName = data.editorFirstName;
+        $scope.facilities.data[index].editorLastName = data.editorLastName;
+        $scope.facilities.data[index].editorEmail = data.editorEmail;
+        $scope.facilities.data[index].status = data.status;
       });
     };
     
@@ -53,11 +53,10 @@ angular.module('afredApp').controller('FacilitiesUpdateController',
      * Initialisation code.
      * --------------------------------------------------------------------- */ 
     $scope.form = {
-      email: null
-    };
-    
-    $scope.loading = {
-      facilities: false
+      email: null,
+      buttons: {
+        selectedIndex: null
+      }
     };
     
     $scope.ful = {};

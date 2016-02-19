@@ -26,7 +26,7 @@
               <p>No results.</p>
             </div>
             
-            <div data-ng-show="facilities.data.length && !loading.facilities">
+            <div data-ng-show="facilities.data.length && facilities.$resolved">
               <hr>
               <table class="table">
                 <thead>
@@ -40,8 +40,8 @@
                   <tr data-dir-paginate="facility in facilities.data | itemsPerPage: facilities.perPage" data-total-items="facilities.total">
                     <td><a href="{{ _config.appAddress }}/#/facilities/{{ facility.id }}" target="_blank">{{ facility.name }}</a></td>
                     <td>
-                      <button class="btn btn-default btn-xs" data-ng-click="requestToken(facility.id)" data-ng-hide="facility.revision.tokens.length" data-af-loading-btn="ful.$resolved === false" data-ng-disabled="ful.$resolved === false">Email token</button>
-                      <span class="label label-warning" data-ng-show="facility.revision.tokens.length">Token requested by {{ facility.revision.tokens[0].firstName }} {{ facility.revision.tokens[0].lastName }}</span>
+                      <button class="btn btn-default btn-xs" data-ng-click="form.buttons.selectedIndex = $index; requestToken($index, facility.id)" data-ng-hide="facility.status" data-af-loading-btn="ful.$resolved === false && form.buttons.selectedIndex === $index" data-ng-disabled="ful.$resolved === false">Email token</button>
+                      <span class="label label-warning" data-ng-show="facility.status == 'OPEN' || facility.status == 'PENDING  '">Token requested by {{ facility.editorFirstName }} {{ facility.editorLastName }}</span>
                     </td>
                   </tr>
                 </tbody>

@@ -32,7 +32,7 @@ angular.module('afredApp').factory('facilityRepositoryResource',
           rejectEdit: { method: 'PUT', params: { state: 'REJECTED_EDIT' }},
           
           queryTokens: { url: $rootScope._config.api +
-            '/facility-update-links', method: 'GET', isArray: false },
+            '/facilities', method: 'GET', isArray: false },
           queryTokensNoPaginate: { url: $rootScope._config.api +
             '/facility-update-links', method: 'GET', isArray: true,
             params: { paginate: 0 }},
