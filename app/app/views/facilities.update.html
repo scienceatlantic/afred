@@ -1,57 +1,60 @@
 <div>
-  <h3>Update</h3>
+  <h3>Keep your Facility Up-to-date</h3>
   
   <p>
-    Please use the form below to generate a special token that will be email to
-
+    If you are listed as a contact (primary or not) for a facility, you will be able to update it.
   </p>
   
-  <div class="row">
-    <div class="col-sm-8">
-      <div class="panel panel-default">
-        <div class="panel-body">
-          <form data-ng-submit="submit()" novalidate>
-            <div data-af-field data-af-field-label="Email">
-              <input class="form-control" id="email" name="email" data-ng-model="form.email" data-ng-change="reset()">
-            </div>
-            
-            <p>
-              <button type="button" class="btn btn-default btn-sm" data-ng-click="submit()" data-af-loading-btn="facilities.$resolved === false" data-ng-disabled="facilities.$resolved === false">Submit</button>
-            </p>
-          </form>
-          
-          <div>
-            <div data-ng-show="view.show == 'NO_RESULTS_MESSAGE'">
-              <hr>
-              <p>No results.</p>
-            </div>
-            
-            <div data-ng-show="facilities.data.length && facilities.$resolved">
-              <hr>
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>Facility</th>
-                    <th><!-- empty --></th>
-                  </tr>
-                </thead>
-                
-                <tbody>
-                  <tr data-dir-paginate="facility in facilities.data | itemsPerPage: facilities.perPage" data-total-items="facilities.total">
-                    <td><a href="{{ _config.appAddress }}/#/facilities/{{ facility.id }}" target="_blank">{{ facility.name }}</a></td>
-                    <td>
-                      <button class="btn btn-default btn-xs" data-ng-click="form.buttons.selectedIndex = $index; requestToken($index, facility.id)" data-ng-hide="facility.status" data-af-loading-btn="ful.$resolved === false && form.buttons.selectedIndex === $index" data-ng-disabled="ful.$resolved === false">Email token</button>
-                      <span class="label label-warning" data-ng-show="facility.status == 'OPEN' || facility.status == 'PENDING  '">Token requested by {{ facility.editorFirstName }} {{ facility.editorLastName }}</span>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              
-              <div data-dir-pagination-controls data-on-page-change="submit(newPageNumber)"></div>
-            </div>
-          </div>
-        </div>
+  <p>
+    <ul>
+      <li>To update your facility, please input the email address you used in the facility listing into the form below.</li>
+      <li>A list of facilities attached to your email will then be displayed.</li>
+      <li>
+        Click the 'Email token' button next to the facility you wish to update. If a button is not shown, that means that an update request
+        has already been made. You will not be allowed to generate more than one request at a time.  
+      </li>
+      <li>An email will be sent to you containing a unique URL allowing you to update your facility.</li>
+    </ul>
+  </p>
+    
+  <p>
+    If you are having trouble with this form, please contact {{_config.contacts.general.name}} at <a href="mailto:{{ _config.contacts.general.email }}">{{_config.contacts.general.email}}</a>
+  </p>
+  
+  <br>
+  <form class="form-inline" data-ng-submit="reset(); submit();" novalidate>
+    <div class="form-group">
+      <div class="input-group">
+        <div class="input-group-addon">Email</div>
+        <input type="text" class="form-control" id="Email" data-ng-model="form.data.email" data-ng-change="reset()" placeholder="me@example.com">
       </div>
+    </div>
+    
+    <button type="submit" class="btn btn-default" data-af-loading-btn="fr.$resolved === false && pagination.page == 1" data-ng-disabled="fr.$resolved === false">Submit</button>
+  </form>
+  
+  <div data-ng-show="view.show == 'NO_RESULTS_MESSAGE'">
+    <hr>
+    <p>No matching facilities found with the email address provided.</p>
+  </div>
+  
+  <br>
+  <div class="panel panel-default" data-ng-show="view.show == 'RESULTS'">
+    <div class="panel-body">
+      <div data-ng-repeat="facility in facilities">
+        <p>
+          <a href="{{ _config.appAddress }}/#/facilities/{{ facility.id }}" target="_blank">{{ facility.name }}</a>
+          
+          <span>
+            <button class="btn btn-default btn-xs" data-ng-click="form.buttons.selectedIndex = $index; requestToken($index, facility.id)" data-ng-hide="facility.status" data-af-loading-btn="ful.$resolved === false && form.buttons.selectedIndex === $index" data-ng-disabled="ful.$resolved === false">Email token</button>
+            <span class="label label-warning" data-ng-show="facility.status == 'OPEN' || facility.status == 'PENDING  '">Token requested by {{ facility.editorFirstName }} {{ facility.editorLastName }}</span>           
+          </span>
+        </p>
+      </div>
+    
+      <p>
+        <button type="button" class="btn btn-default" data-ng-click="pagination.page = pagination.page + 1; submit()" data-af-loading-btn="fr.$resolved === false" data-ng-disabled="fr.$resolved === false || fr.currentPage == fr.lastPage">Load more</button>
+      </p>
     </div>
   </div>
 </div>

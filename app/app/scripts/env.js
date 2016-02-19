@@ -10,6 +10,13 @@ angular.module('afredApp').run(['$rootScope', function($rootScope) {
       warn: true,
       error: true,
       debug: true
+    },
+    
+    contacts: {
+      general: {
+        name: 'Patty King',
+        email: 'patty.king@scienceatlantic.ca'
+      }
     }
   };
 }]);
