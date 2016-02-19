@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 
 // Events.
-use App\Events\FacilityEditTokenRequestedEvent;
+use App\Events\FacilityUpdateLinksEvent;
 
 // Laravel.
 use Illuminate\Http\Request;
@@ -16,10 +16,7 @@ use Log;
 
 // Models.
 use App\Facility;
-use App\Contact;
-use App\PrimaryContact;
 use App\FacilityUpdateLink;
-use App\FacilityRepository;
 
 // Requests.
 use App\Http\Requests;
@@ -37,24 +34,7 @@ class FacilityUpdateLinkController extends Controller
      */
     public function index(Request $request)
     {        
-        $email = $request->input('email', null);        
-        
-        // Find all matching contacts and grab their facility IDs.
-        $cF = Contact::where('email', $email)->select('facilityId');
-        
-        // Find all matching primary contacts and grab their facility IDs.
-        $pcF = PrimaryContact::where('email', $email)->select('facilityId');
-        
-        // Add the two results together and grab all the matching facilities.
-        $ids = $cF->union($pcF)->get()->toArray();
-        $f = Facility::whereIn('facilities.id', $ids)
-            ->with(['revision.tokens' => function($query) {
-                    $query->notClosed();
-                }
-            ]);
-        
-        $f = $this->_paginate ? $f->paginate($this->_itemsPerPage) : $f->get();        
-        return $this->_toCamelCase($f->toArray());  
+        return null;
     }    
     
     
@@ -71,7 +51,7 @@ class FacilityUpdateLinkController extends Controller
         
         // Grab the matching facility along with the required relationships.
         $f = Facility::with([
-            'revision.tokens' => function($query) {
+            'revision.fulsB' => function($query) {
               $query->open();  
             },
             'primaryContact' => function($query) use ($email) {
@@ -87,20 +67,20 @@ class FacilityUpdateLinkController extends Controller
             $c = $f->contacts->firstOrFail();
         }
           
-        if (!count($f->revision->tokens()->notClosed()->get())) {
+        if (!count($f->revision->fulsB()->notClosed()->get())) {
             $ful = FacilityUpdateLink::create([
-                'frIdBefore'    => $f->revision->id,
-                'firstName'     => $c->firstName,
-                'lastName'      => $c->lastName,
-                'email'         => $c->email,
-                'token'         => $this->_generateUniqueToken(),
-                'status'        => 'OPEN',
-                'dateRequested' => $this->_now()
+                'frIdBefore'      => $f->revision->id,
+                'editorFirstName' => $c->firstName,
+                'editorLastName'  => $c->lastName,
+                'editorEmail'     => $c->email,
+                'token'           => $this->_generateUniqueToken(),
+                'status'          => 'OPEN',
+                'dateRequested'   => $this->_now()
             ]);
             
-            event(new FacilityEditTokenRequestedEvent($ful));
+            event(new FacilityUpdateLinksEvent($ful));
         } else {
-            return response('Not found', 404);
+            abort(404, 'Not found');
         }
         
         return $ful;
@@ -121,10 +101,8 @@ class FacilityUpdateLinkController extends Controller
     {
         while (($token = strtolower(str_random(25)))) {
             if (!FacilityUpdateLink::where('token', $token)->first()) {
-                break;
+                return $token;
             }
         }
-        
-        return $token;
     }
 }

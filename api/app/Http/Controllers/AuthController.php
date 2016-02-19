@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 
 // Misc.
 use Auth;
-use Hash;
 use Log;
 
 // Models.
@@ -32,7 +31,7 @@ class AuthController extends Controller
             return $this->_toCamelCase(Auth::user()->toArray());
         }
         
-        return response('Not authorized', 401);
+        abort(401, 'Not authorized');
     }
     
     public function ping()
@@ -41,7 +40,7 @@ class AuthController extends Controller
             return $this->_toCamelCase(Auth::user()->toArray());
         }
         
-        return response('Not authenticated', 401);
+        abort(401, 'Not authenticated');
     }
     
     public function logout()

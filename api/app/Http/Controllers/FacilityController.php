@@ -34,10 +34,14 @@ class FacilityController extends Controller
      */
     public function index(Request $request)
     {
-        $f = new Facility();
-        $f = $this->_paginate ? $f->paginate($this->_itemsPerPage) : $f->get();
-        $this->_expandModelRelationships($f, true);
-        return $this->_toCamelCase($f->toArray());
+        if (!($email = $request->input('email', null))) {
+            $f = new Facility();
+            $f = $this->_paginate ? $f->paginate($this->_itemsPerPage) : $f->get();
+            $this->_expandModelRelationships($f, true);
+            return $this->_toCamelCase($f->toArray());            
+        } else {
+            return $this->_indexMatchingFacilities($email);
+        }
     }
 
     /**
@@ -67,5 +71,31 @@ class FacilityController extends Controller
     public function destroy($id)
     {
         return Facility::find($id)->delete();
+    }
+    
+    private function _indexMatchingFacilities($email)
+    {
+        // Find all matching contacts and grab their facility IDs.
+        $cF = Contact::where('email', $email)->select('facilityId');
+        
+        // Find all matching primary contacts and grab their facility IDs.
+        $pcF = PrimaryContact::where('email', $email)->select('facilityId');
+        
+        // Add the two results together and grab all the matching facilities.
+        $ids = $cF->union($pcF)->get()->toArray();
+        
+        $f = Facility::leftJoin('facility_update_links',
+                                'facility_update_links.frIdBefore', '=',
+                                'facilities.facilityRepositoryId')
+            ->whereIn('facilities.id', $ids)
+            ->select('facilities.id',
+                     'facilities.name',
+                     'facility_update_links.editorFirstName',
+                     'facility_update_links.editorLastName',
+                     'facility_update_links.editorEmail',
+                     'facility_update_links.status');
+                
+        $f = $this->_paginate ? $f->paginate($this->_itemsPerPage) : $f->get();
+        return $this->_toCamelCase($f->toArray());
     }
 }
