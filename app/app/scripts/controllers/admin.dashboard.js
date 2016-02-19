@@ -26,6 +26,10 @@ angular.module('afredApp').controller('AdminDashboardController',
       }
     };
     
+    /* ---------------------------------------------------------------------
+     * Initialisation code.
+     * --------------------------------------------------------------------- */
+    
     $scope.facilityStats = {
       published: $scope.getFacilityTotals('PUBLISHED'),
       pendingApproval: $scope.getFacilityTotals('PENDING_APPROVAL'),

@@ -1,10 +1,10 @@
 <h2>Admin / Dashboard</h2>
 
 <div class="row">
-  <div class="col-md-4">
+  <div class="col-sm-4">
     <div class="panel panel-default">
       <div class="panel-body" style="min-height: 119px;">
-          <p class="label label-primary">Published</p>
+          <p class="label label-default">Published</p>
           
           <div data-af-loading="!facilityStats.published.$resolved">
             <p class="h1">{{facilityStats.published.total}}</p>
@@ -13,10 +13,10 @@
     </div>
   </div>
   
-  <div class="col-md-4">
+  <div class="col-sm-4">
     <div class="panel panel-default">
       <div class="panel-body" style="min-height: 119px;">
-        <p class="label label-warning">Pending Approval</p>
+        <p class="label label-default">Pending Approval</p>
         
         <div data-af-loading="!facilityStats.pendingApproval.$resolved">
           <p class="h1">{{facilityStats.pendingApproval.total}}</p>
@@ -25,10 +25,10 @@
     </div>
   </div>
   
-  <div class="col-md-4">
+  <div class="col-sm-4">
     <div class="panel panel-default">
       <div class="panel-body" style="min-height: 119px;">
-        <p class="label label-warning">Pending Edit Approval</p>
+        <p class="label label-default">Pending Edit Approval</p>
         
         <div data-af-loading="!facilityStats.pendingEditApproval.$resolved">
           <p class="h1">{{facilityStats.pendingEditApproval.total}}</p>

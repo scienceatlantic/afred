@@ -4,7 +4,6 @@ angular.module('afredApp').controller('AdminFacilitiesController',
   ['$scope',
    'facilityRepositoryResource',
    'facilityResource',
-
   function($scope,
            facilityRepositoryResource,
            facilityResource) {
@@ -41,6 +40,10 @@ angular.module('afredApp').controller('AdminFacilitiesController',
             );
       }
     };
+    
+    /* ---------------------------------------------------------------------
+     * Initialisation code.
+     * --------------------------------------------------------------------- */ 
     
     $scope.view = {
       state: $scope._stateParams.state,

@@ -1,20 +1,23 @@
 'use strict';
 
-angular.module('afredApp').controller(
-  'AdminfacilityRepositoryShowController',
-  ['$scope',
-   'organizationResource',
-   'provinceResource',
-   'facilityRepositoryResource',
+angular.module('afredApp').controller('AdminFacilityRepositoryShowController', [
+  '$scope',
+  'organizationResource',
+  'provinceResource',
+  'disciplineResource',
+  'sectorResource',
+  'facilityRepositoryResource',
   function($scope,
            organizationResource,
            provinceResource,
+           disciplineResource,
+           sectorResource,
            facilityRepositoryResource) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
     
-    $scope.getFacility = function() {
+    $scope.getFacilityRepository = function() {
       $scope.fr = facilityRepositoryResource.get({
         facilityRepositoryId: $scope._stateParams.facilityRepositoryId
       }, function() {
@@ -23,7 +26,7 @@ angular.module('afredApp').controller(
     };
     
     $scope.approve = function() {
-      facilityRepositoryResource.approve({
+      $scope.frPromise = facilityRepositoryResource.approve({
         facilityRepositoryId: $scope._stateParams.facilityRepositoryId
       }, null, function(data) {
         $scope.fr = data;
@@ -31,7 +34,7 @@ angular.module('afredApp').controller(
     };
     
     $scope.reject = function() {
-      facilityRepositoryResource.reject({
+      $scope.frPromise = facilityRepositoryResource.reject({
         facilityRepositoryId: $scope._stateParams.facilityRepositoryId
       }, null, function(data) {
         $scope.fr = data;
@@ -39,7 +42,7 @@ angular.module('afredApp').controller(
     };
     
     $scope.approveEdit = function() {
-      facilityRepositoryResource.approveEdit({
+      $scope.frPromise = facilityRepositoryResource.approveEdit({
         facilityRepositoryId: $scope._stateParams.facilityRepositoryId
       }, null, function(data) {
         $scope.fr = data;
@@ -47,7 +50,7 @@ angular.module('afredApp').controller(
     };
     
     $scope.rejectEdit = function() {
-      facilityRepositoryResource.rejectEdit({
+      $scope.frPromise = facilityRepositoryResource.rejectEdit({
         facilityRepositoryId: $scope._stateParams.facilityRepositoryId
       }, null, function(data) {
         $scope.fr = data;
@@ -56,6 +59,7 @@ angular.module('afredApp').controller(
     
     $scope.formatForApp = function() {
       $scope.facility = angular.copy($scope.fr.data.facility);
+      $scope.facility.organization = angular.copy($scope.fr.data.organization);
       $scope.facility.contacts = angular.copy($scope.fr.data.contacts);
       $scope.facility.equipment = angular.copy($scope.fr.data.equipment);
       
@@ -72,25 +76,61 @@ angular.module('afredApp').controller(
         $scope.facility.organization = organizationResource.get({
           organizationId: $scope.fr.data.facility.organizationId
         });
-      } else {
-        $scope.facility.organization = $scope.fr.data.organization;
       }
       
       // Province section.
       $scope.facility.province = provinceResource.get({
         provinceId: $scope.fr.data.facility.provinceId
       });
+      
+      // Disciplines section.
+      $scope.facility.disciplines = [];
+      $scope.disciplines = disciplineResource.queryNoPaginate(null,
+        function() {
+          angular.forEach($scope.disciplines, function(d) {
+            if ($scope.fr.data.disciplines.indexOf(d.id) >= 0) {
+              $scope.facility.disciplines.push(d)
+            }
+          });
+          
+          // Set loading flag to false.
+          $scope.loading.disciplines = false;
+        }
+      );
+      
+      // Sectors section.
+      $scope.facility.sectors = [];
+      $scope.sectors = sectorResource.queryNoPaginate(null,
+        function() {
+          angular.forEach($scope.sectors, function(s) {
+            if ($scope.fr.data.sectors.indexOf(s.id) >= 0) {
+              $scope.facility.sectors.push(s)
+            }
+          });
+          
+          // Set loading flag to false.
+          $scope.loading.sectors = false;
+        }
+      );
     };
     
     /* ---------------------------------------------------------------------
      * Initialisation code.
      * --------------------------------------------------------------------- */
-    $scope.facility = {};
     $scope.fr = {};
-    $scope.getFacility();
+    $scope.frPromise = {};
+    $scope.facility = {};
+    $scope.disciplines = {};
+    $scope.sectors = {};
+    $scope.getFacilityRepository();
     
+    /*
+     * Loading flags.
+     */
     $scope.loading = {
-      
+      disciplines: true,
+      sectors: true,
+      selectedButton: null
     };
   }
 ]);

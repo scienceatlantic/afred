@@ -1,4 +1,4 @@
-<div data-af-loading="!fr.$resolved || (!facility.organization.$resolved && !facility.organization.name) || !facility.province.$resolved">
+<div data-af-loading="!fr.$resolved || (!facility.organization.$resolved && !facility.organization.name) || !facility.province.$resolved || loading.disciplines || loading.sectors">
   
   <div>
     <div class="bg-warning">
@@ -6,7 +6,9 @@
         <span data-ng-show="fr.state == 'PENDING_APPROVAL'">You are currently viewing a facility that is pending approval.</span>
         <span data-ng-show="fr.state == 'PENDING_EDIT_APPROVAL'">You are currently viewing a facility edit that is pending approval.</span>
         <span data-ng-show="fr.state == 'PUBLISHED'">You are currently viewing a published facility.</span>
+        <span data-ng-show="fr.state == 'PUBLISHED_EDIT'">You are currently viewing a published facility edit.</span>
         <span data-ng-show="fr.state == 'REJECTED'">You are currently viewing a rejected facility.</span>
+        <span data-ng-show="fr.state == 'REJECTED_EDIT'">You are currently viewing a rejected facility edit.</span>
       </p>
     </div>
   </div>
@@ -27,9 +29,9 @@
   <br>
   
   <p>
-    <button type="button" class="btn btn-default" data-ng-click="approve()" data-ng-show="fr.state == 'PENDING_APPROVAL'">Approve</button>
-    <button type="button" class="btn btn-default" data-ng-click="reject()" data-ng-show="fr.state == 'PENDING_APPROVAL'">Reject</button>
-    <button type="button" class="btn btn-default" data-ng-click="approveEdit()" data-ng-show="fr.state == 'PENDING_EDIT_APPROVAL'">Approve</button>
-    <button type="button" class="btn btn-default" data-ng-click="rejectEdit()" data-ng-show="fr.state == 'PENDING_EDIT_APPROVAL'">Reject</button>
+    <button type="button" class="btn btn-default" data-ng-click="loading.selectedButton = 'approve'; approve();" data-ng-show="fr.state == 'PENDING_APPROVAL'" data-af-loading-btn="frPromise.$resolved === false && loading.selectedButton == 'approve'" data-ng-disabled="frPromise.$resolved === false">Approve</button>
+    <button type="button" class="btn btn-default" data-ng-click="loading.selectedButton = 'reject'; reject();" data-ng-show="fr.state == 'PENDING_APPROVAL'" data-af-loading-btn="frPromise.$resolved === false && loading.selectedButton == 'reject'" data-ng-disabled="frPromise.$resolved === false">Reject</button>
+    <button type="button" class="btn btn-default" data-ng-click="loading.selectedButton = 'approveEdit'; approveEdit();" data-ng-show="fr.state == 'PENDING_EDIT_APPROVAL'" data-af-loading-btn="frPromise.$resolved === false && loading.selectedButton == 'approveEdit'" data-ng-disabled="frPromise.$resolved === false">Approve Edit</button>
+    <button type="button" class="btn btn-default" data-ng-click="loading.selectedButton = 'rejectEdit'; rejectEdit();" data-ng-show="fr.state == 'PENDING_EDIT_APPROVAL'" data-af-loading-btn="frPromise.$resolved === false && loading.selectedButton == 'rejectEdit'" data-ng-disabled="frPromise.$resolved === false">Reject Edit</button>
   </p>
 </div>
