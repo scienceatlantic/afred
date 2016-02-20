@@ -64,7 +64,15 @@
             </ul>
             
             <ul class="nav navbar-nav navbar-right">
-              <li data-ng-show="_auth.user.email"><a data-ui-sref="admin.dashboard">Admin</a></li>
+              <li role="presentation" class="dropdown" data-ng-show="_auth.user.email">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="" role="button" aria-haspopup="true" aria-expanded="false">
+                  Admin <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a data-ui-sref="admin.dashboard">Dashboard</a></li>
+                  <li><a data-ui-sref="admin.facilities">Facilities</a></li>
+                </ul>
+              </li>
               <li data-ui-sref-active="active" data-ng-show="!_auth.user.email"><a data-ui-sref="login">Administrator Login</a></li>
               <li><a data-ui-sref="login" data-ng-show="_auth.user.email" data-ng-click="_auth.logout()">Logout</a></li>
             </ul>
