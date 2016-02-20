@@ -43,7 +43,7 @@
     <div class="panel-body">
       <div data-ng-repeat="facility in facilities">
         <p>
-          <a href="{{ _config.appAddress }}/#/facilities/{{ facility.id }}" target="_blank">{{ facility.name }}</a>
+          <a href="{{ _config.app.address }}/facilities/{{ facility.id }}" target="_blank">{{ facility.name }}</a>
           
           <span>
             <button class="btn btn-default btn-xs" data-ng-click="form.buttons.selectedIndex = $index; requestToken($index, facility.id)" data-ng-hide="facility.status" data-af-loading-btn="ful.$resolved === false && form.buttons.selectedIndex === $index" data-ng-disabled="ful.$resolved === false">Email token</button>

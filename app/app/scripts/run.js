@@ -16,9 +16,11 @@ angular.module('afredApp').run(['$rootScope',
            $cookies,
            $window,
            $resource) {
-    $http.get($rootScope._config.api + '/csrf').then(function(response) {
-      $http.defaults.headers.common['X-CSRF-TOKEN'] = response.data;
-    });
+    $http.get($rootScope._config.api.address + '/csrf').then(
+      function(response) {
+        $http.defaults.headers.common['X-CSRF-TOKEN'] = response.data;
+      }
+    );
     
     /* ---------------------------------------------------------------------
      * Log functions.
@@ -68,16 +70,19 @@ angular.module('afredApp').run(['$rootScope',
       user: {},
       resolved: false,
       login: function(credentials) {
-        return $http.post($rootScope._config.api + '/auth/login', credentials);
+        return $http.post($rootScope._config.api.address + '/auth/login',
+          credentials);
       },
       logout: function() {
-        $http.get($rootScope._config.api + '/auth/logout').then(function() {
-          $rootScope._auth.user = {};
-          $state.go('login');
-        });
+        $http.get($rootScope._config.api.address + '/auth/logout').then(
+          function() {
+            $rootScope._auth.user = {};
+            $state.go('login');
+          }
+        );
       },
       ping: function() {
-        return $http.get($rootScope._config.api + '/auth/ping');
+        return $http.get($rootScope._config.api.address + '/auth/ping');
       }
     };
     
