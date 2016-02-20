@@ -2,8 +2,12 @@
 
 angular.module('afredApp').run(['$rootScope', function($rootScope) {
   $rootScope._config = {
-    api: '//localhost:8000',
-    appAddress: '//localhost:9000',
+    api: {
+      address: '//localhost:8000',
+    },
+    app: {
+      address: '//localhost:9000/#'
+    },
     log: {
       log: true,
       info: true,
