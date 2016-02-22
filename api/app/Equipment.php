@@ -2,10 +2,16 @@
 
 namespace App;
 
+// Laravel.
 use Illuminate\Database\Eloquent\Model;
 
+// Misc.
+use Sofa\Eloquence\Eloquence;
+
 class Equipment extends Model
-{    
+{
+    use Eloquence;
+    
     /**
      * The attributes that are mass assignable.
      *
