@@ -4,18 +4,27 @@ angular.module('afredApp').controller('FacilitiesShowController',
   ['$scope',
    '$uibModal',
    'facilityResource',
-   'facilityRepositoryResource',
   function($scope,
            $uibModal,
-           facilityResource,
-           facilityRepositoryResource) {
+           facilityResource) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
     
     /**
-     * Retrieves facility data (and all relationships) from the database and
-     * attaches it to '$scope.facility'.
+     * Retrieves facility data including organization, ILO, province,
+     * disciplines, sectors, equipment, primary contact, and contacts.
+     *
+     * Side effects:
+     * $scope.facility Data from the API is attached to this.
+     * $scope.view.show Updated to 'INVALID_FACILITY_ID_MESSAGE' if the
+     *     facility was not found or 'INVALID_EQUIPMENT_ID_MESSAGE' if we're
+     *     in the equipment state and the piece of equipment was not found.
+     *
+     * Uses/Requires:
+     * facilityResource
+     * $scope._stateParams
+     * $scope._state
      */
     $scope.getFacility = function() {
       $scope.facility = facilityResource.get(
@@ -25,48 +34,57 @@ angular.module('afredApp').controller('FacilitiesShowController',
             'equipment,primaryContact,contacts'
         },
         function() {
+          // Contact section.
           if ($scope.facility.contacts) {
             $scope.facility.contacts.unshift($scope.facility.primaryContact);
           } else {
             $scope.facility.contacts = [];
             $scope.facility.contacts.push($scope.facility.primaryContact);
           }
+          
+          // Equipment state.
+          // Splice the equipment array to retrieve the piece of equipment the
+          // user wants to view.
+          if ($scope._state.is('facilities.show.equipment.show')) {
+            var id = $scope._stateParams.equipmentId;
+            
+            for (var i = 0; i < $scope.facility.equipment.length; i++) {
+              if ($scope.facility.equipment[i].id == id) {
+                $scope.facility.equipment =
+                  $scope.facility.equipment.splice(i, 1);
+                return;
+              }
+            }
+            
+            // Equipment not found.
+            $scope.view.show = 'INVALID_EQUIPMENT_ID_MESSAGE';
+          }
+        }, function() {
+          // Facility not found.
+          $scope.view.show = 'INVALID_FACILITY_ID_MESSAGE';
         }
       );
-    };
-    
-    $scope.admin = {
-      edit: function() {
-        $scope._state.go('editFacility', {facilityId: $scope._stateParams.facilityId});
-      },
-      
-      remove: function() {
-        $scope.facility.$remove(function() {
-          $scope._state.go('search');
-        });        
-      },
-      
-      makePrivate: function() {
-        var facility = angular.copy($scope.facility);
-        facility.isPublic = false;
-        $scope.facility.$update();
-        location.reload();        
-      },
-      
-      makePublic: function() {
-        $scope.facility.isActive = true;
-        $scope.facility.$update();
-        location.reload();       
-      }
     };
     
     /* ---------------------------------------------------------------------
      * Initialisation code.
      * --------------------------------------------------------------------- */
     
-    // Will contain all facility data.
+    /**
+     * Facility data from the API.
+     * @type {object}
+     */
     $scope.facility = {};
     
+    /**
+     * Controls what is shown to the user.
+     * @type {object}
+     */
+    $scope.view = {
+      show: 'LISTING'
+    };
+    
+    // Get the facility.
     $scope.getFacility();
   }
 ]);
