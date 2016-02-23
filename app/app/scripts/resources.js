@@ -47,7 +47,9 @@ angular.module('afredApp').factory('facilityRepositoryResource',
 
 angular.module('afredApp').factory('searchResource', ['$rootScope',
   '$resource', function($rootScope, $resource) {
-    return $resource($rootScope._config.api.address + '/search');
+    return $resource($rootScope._config.api.address + '/search', null, {
+      query: { isArray: false }
+    });
   }
 ]);
 
