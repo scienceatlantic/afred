@@ -13,12 +13,18 @@ use Log;
 
 // Models.
 use App\Equipment;
+use App\Facility;
 
 // Requests.
 use App\Http\Requests;
 
-class EquipmentController extends Controller
+class SearchController extends Controller
 {
+    function __construct(Request $request)
+    {
+        parent::__construct($request);
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -26,101 +32,135 @@ class EquipmentController extends Controller
      */
     public function index(Request $request)
     {
-        $q = $request->input('q', '');
-        $q = implode('%', explode(' ', $q));
+        // Process the query.
+        $q = $this->_processQuery($request->input('q'));
         
-        return Equipment::join('facilities', 'equipment.facility_id', '=',
-            'facilities.id')->
-            join('provinces', 'facilities.province_id', '=',
-            'provinces.id')->
-            select('equipment.*', 'facilities.name as facility',
-            'facilities.city as city', 'provinces.name as province')->
-            where('equipment.type', 'LIKE', "%$q%")->
-            orWhere('equipment.manufacturer', 'LIKE', "%$q%")->
-            orWhere('equipment.model', 'LIKE', "%$q%")->
-            orWhere('equipment.specifications', 'LIKE', "%$q%")->
-            orWhere('equipment.purpose', 'LIKE', "%$q%")->get();
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id, Request $request)
-    {
-        $equipment = Equipment::find($id);
+        Log::debug($q);
         
-        if ($equipment) {
-            if ($request->has('expand')) {
-                foreach(explode(',', $request->input('expand')) as
-                    $relation) {
-                        $nestedRelation = explode('.', $relation);
-                        if (count($nestedRelation) > 1) {
-                            $equipment->$nestedRelation[0]->$nestedRelation[1];
-                        }
-                        else {
-                            $equipment->$relation;
-                        }
-                }
-            }
-            return $equipment;         
+        // Get the type of search (ie. 'facility' or 'equipment').
+        if (($type = strtolower($request->input('type'))) != 'facility') {
+            $type = 'equipment';
         }
-    }
+        
+        // Load required relationships.
+        if ($type == 'facility') {
+            $results = Facility::with('province');
+        } else {
+            $results = Equipment::with('facility.province');
+        }
+        
+        // Search.
+        if ($type == 'facility' && $q) {
+            $results->search($q, [
+                'name'                      => 30,
+                'city'                      => 11,
+                'description'               => 25,
+                'website'                   => 15,
+                
+                'primaryContact.firstName'  => 10,
+                'primaryContact.lastName'   => 10,
+                'primaryContact.email'      => 10,
+                
+                'contacts.firstName'        => 10,
+                'contacts.lastName'         => 10,
+                'contacts.email'            => 10,
+                
+                'equipment.type'            => 25,
+                'equipment.manufacturer'    => 20,
+                'equipment.model'           => 20,
+                'equipment.purpose'         => 20,
+                'equipment.specifications'  => 20
+            ]);
+        } else if ($type == 'equipment' && $q) {
+            $results->search($q, [
+                'type'                      => 30,
+                'manufacturer'              => 20,
+                'model'                     => 15,
+                'purpose'                   => 25,
+                'specifications'            => 20,
+                
+                'facility.name'             => 25,
+                'facility.city'             => 1,
+                'facility.description'      => 20,
+                'facility.website'          => 5,
+            ]);
+        }        
+        
+        // Advanced search.
+        if (is_array(($ids = $request->input('provinceId')))) {
+            if ($type == 'facility') {
+                $results->whereHas('province', function($query) use ($ids)
+                {
+                    $query->whereIn('provinceId', $ids);
+                });                   
+            } else if ($type == 'equipment') {
+                $results->whereHas('facility', function($query) use ($ids)
+                {
+                    $query->whereIn('facilities.provinceId', $ids);
+                });    
+            }
+        }
+        
+        if (is_array(($ids = $request->input('organizationId')))) {
+            if ($type == 'facility') {
+                $results->whereHas('organization', function($query) use ($ids)
+                {
+                    $query->whereIn('organizationId', $ids);
+                });               
+            } else if ($type == 'equipment') {
+                $results->whereHas('facility', function($query) use ($ids)
+                {
+                    $query->whereIn('facilities.organizationId', $ids);
+                });                 
+            }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        }    
+       
+        if (is_array(($ids = $request->input('disciplineId')))) {
+            if ($type == 'facility') {
+                $results->whereHas('disciplines', function($query) use ($ids)
+                {
+                    $query->whereIn('disciplines.id', $ids);
+                });               
+            } else if ($type == 'equipment') {
+                $results->whereHas('facility', function($query) use ($ids)
+                {
+                    $query->join('discipline_facility',
+                                 'facilities.id',
+                                 '=',
+                                 'discipline_facility.facilityId')
+                          ->whereIn('discipline_facility.disciplineId', $ids);
+                });                
+            }
+        }
+        
+        if (is_array(($ids = $request->input('sectorId')))) {
+            if ($type == 'facility') {
+                $results->whereHas('sectors', function($query) use ($ids)
+                {
+                    $query->whereIn('sectors.id', $ids);
+                });
+            } else if ($type == 'equipment') {
+                $results->whereHas('facility', function($query) use ($ids)
+                {
+                    $query->join('facility_sector',
+                                 'facilities.id',
+                                 '=',
+                                 'facility_sector.sectorId')
+                          ->whereIn('facility_sector.sectorId', $ids);
+                });          
+            }
+        }
+        
+        return $results->paginate(15); 
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    
+    private function _processQuery($q)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        if (!($q = trim($q))) {
+            return '';
+        }
+        
+        return '%' . implode("%", explode(' ', $q)) . '%';
     }
 }
