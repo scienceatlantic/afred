@@ -6,6 +6,8 @@ angular.module('afredApp').run(['$rootScope', function($rootScope) {
       address: '//localhost:8000',
     },
     app: {
+      name: 'Atlantic Facilities and Research Equipment Database',
+      acronym: 'AFRED',
       address: '//localhost:9000/#'
     },
     log: {
@@ -19,6 +21,7 @@ angular.module('afredApp').run(['$rootScope', function($rootScope) {
     contacts: {
       general: {
         name: 'Patty King',
+        title: 'AFRED Program Manager',
         email: 'patty.king@scienceatlantic.ca'
       }
     }
