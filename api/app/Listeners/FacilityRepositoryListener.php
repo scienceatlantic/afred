@@ -37,14 +37,14 @@ class FacilityRepositoryListener extends BaseListener
     {
         // Variables for use in all cases.
         $fr = $event->fr;
-        $facility = $fr->data['facility']['name'];
-        $templatePrefix = 'emails.events.fr.';
-        $subjectPrefix = $this->_settings['EMAIL_SUBJECT_PREFIX'];
+        $f = $fr->data['facility']['name'];
+        $tPfx = 'emails.events.fr.';
+        $sPfx = $this->_settings['EMAIL_SUBJECT_PREFIX'];
         
         // Data for the email templates.
         $data = [
             'name'     => '', // Placeholder for the recipient's name.
-            'facility' => $facility,
+            'facility' => $f,
             'settings' => $this->_settings
         ];
         
@@ -52,27 +52,29 @@ class FacilityRepositoryListener extends BaseListener
             // Emails are sent out to all admins and the primary contact.
             case 'PENDING_APPROVAL':    
                 // Administrator section.
-                $template = $templatePrefix . 'admin-pending-approval';
-                $subject = $subjectPrefix
-                    . 'New Submission (' . $facility . ')';              
+                $t = $tPfx . 'admin-pending-approval';
+                $s = $sPfx . 'New Submission (' . $f . ')';              
                 
                 foreach(Role::admin()->users()->get() as $a) {
-                    $data['name'] = $a->firstName . ' ' . $a->lastName;
-                    $this->_mail($template, $subject, $data, [
-                        'name'  => $a->firstName . ' ' . $a->lastName,
+                    $name = $a->firstName . ' ' . $a->lastName;
+                    $data['name'] = $name;
+                    
+                    $this->_mail($t, $s, $data, [
+                        'name'  => $name,
                         'email' => $a->email
                     ]);
                 }
                 
                 // Primary contact section.
-                $template = $templatePrefix
-                    . 'primary-contact-pending-approval';
-                $subject = $subjectPrefix . 'Submission Received';
-                $pc = $fr->data['primaryContact'];
+                $t = $tPfx . 'primary-contact-pending-approval';
+                $s = $sPfx . 'Submission Received';
                 
-                $data['name'] = $pc['firstName'] . ' ' . $pc['lastName'];
-                $this->_mail($template, $subject, $data, [
-                    'name'  => $pc['firstName'] . ' ' . $pc['lastName'],
+                $pc = $fr->data['primaryContact'];
+                $name = $pc['firstName'] . ' ' . $pc['lastName'];
+                $data['name'] = $name;
+                
+                $this->_mail($t, $s, $data, [
+                    'name'  => $name,
                     'email' => $pc['email']
                 ]);
                 break;
