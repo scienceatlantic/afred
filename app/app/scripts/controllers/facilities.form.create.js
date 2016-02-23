@@ -17,6 +17,12 @@ angular.module('afredApp').controller('FacilitiesFormCreateController',
     $scope.preview = function() {
       $scope.facility = $scope.form.formatForPreview();
       $scope.view.show = 'PREVIEW';
+      scrollTo(0, 300);
+    };
+    
+    $scope.goBack = function() {
+      $scope.view.show = 'FORM';
+      scrollTo(0, 0);
     };
     
     /**
