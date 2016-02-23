@@ -1,13 +1,13 @@
-<h2>Search</h2>
+<h3>Search</h3>
 
-<div class="panel panel-default">
-  <div class="panel-body">
+<div class="panel panel-default1">
+  <div class="panel-body1">
     <div class="row">
-      <div class="col-md-7">
-        <form role="form" data-ng-submit="searchFn()">
+      <div class="col-md-8">
+        <form role="form" data-ng-submit="search.goToResultsPage()">
           <div class="form-group">
             <div class="input-group">
-              <input type="text" class="form-control input-lg" data-ng-model="search.q" placeholder="...">
+              <input type="text" class="form-control input-lg" data-ng-model="search.query.q" placeholder="...">
               <span class="input-group-addon">
                 <span class="glyphicon glyphicon-search"></span>
               </span>
@@ -15,40 +15,107 @@
           </div>
           
           <div class="form-group">
-            <button type="submit" class="btn btn-primary">Search</button>
-            <button class="btn btn-default" data-ui-sref-active="active" data-ui-sref="search.all">Show all</button>
-            <button class="btn btn-default" data-ng-click="contactUs()">Can't find what you're looking for?</button>
+            <button type="submit" class="btn btn-primary" data-ng-disabled="!search.query.q">Search</button>
+            <button type="button" class="btn btn-default" data-ng-click="search.goToResultsPage(true)">Show all</button>
+            <button type="button" class="btn btn-default" data-ng-click="search.contactSpringboard()">Can't find what you're looking for?</button>
           </div>
         </form>
+        
+        <br>
+        <!-- Search results go here -->
+        <div data-ui-view></div>
       </div>
       
-      <div class="col-md-4 col-md-offset-1">
-        <div class="">
-          <div class="">
-            
-            <form>
+      <div class="col-md-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            Advanced Search Options
+          </div>
+          <div class="panel-body">            
+            <form class="form-horizontal" role="form" data-af-loading="!search.provinces.$resolved || !search.organizations.$resolved || !search.sectors.$resolved || !search.disciplines.$resolved">    
               <div class="form-group">
-                <label class="radio-inline">
-                  <input type="radio" name="" value="1"> Equipment
-                </label>
-                <label class="radio-inline">
-                  <input type="radio" name="" value="2"> Facility
-                </label>
-              </div>
-            </form>
-            
-            <form class="form-horizontal" role="form">          
-              <div class="form-group">
-                <label for="province" class="col-sm-4 control-label">Province</label>
+                <label for="type" class="col-sm-4 control-label">Results by</label>
                 <div class="col-sm-8">
-                  <select class="form-control input-sm" data-ng-model="search.province" data-ng-options="p.id as p.name for p in provinces"></select>
+                  <select class="form-control input-sm" data-ng-model="search.query.type">
+                    <option value="equipment">Equipment</option>
+                    <option value="facility">Facility</option>
+                  </select>
                 </div>
               </div>
               
               <div class="form-group">
-                <label for="organization" class="col-sm-4 control-label">Organization</label>
+                <label for="province" class="col-sm-4 control-label">Provinces</label>
                 <div class="col-sm-8">
-                  <select class="form-control input-sm" data-ng-model="search.organization" data-ng-options="o.id as o.name for o in organizations"></select>
+                  <div>
+                    <label class="radio-inline">
+                      <input type="radio" data-ng-model="search.advanced.radios.provinces" data-ng-change="search.advanced.radios.update()" data-ng-value="true"> All
+                    </label>
+                    <label class="radio-inline">
+                      <input type="radio" data-ng-model="search.advanced.radios.provinces" data-ng-change="search.advanced.radios.update()" data-ng-value="false"> Select
+                    </label>
+                  </div>
+                  
+                  <div data-ng-hide="search.advanced.radios.provinces">
+                    <br>
+                    <select class="form-control input-sm" data-ng-model="search.query['provinceId[]']" data-ng-options="p.id as p.name for p in search.provinces" multiple></select>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label for="organization" class="col-sm-4 control-label">Organizations</label>
+                <div class="col-sm-8">
+                  <div>
+                    <label class="radio-inline">
+                      <input type="radio" data-ng-model="search.advanced.radios.organizations" data-ng-change="search.advanced.radios.update()" data-ng-value="true"> All
+                    </label>
+                    <label class="radio-inline">
+                      <input type="radio" data-ng-model="search.advanced.radios.organizations" data-ng-change="search.advanced.radios.update()" data-ng-value="false"> Select
+                    </label>
+                  </div>
+                  
+                  <div data-ng-hide="search.advanced.radios.organizations">
+                    <br>
+                    <select class="form-control input-sm" data-ng-model="search.query['organizationId[]']" data-ng-options="o.id as o.name for o in search.organizations" multiple></select>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label for="disciplines" class="col-sm-4 control-label">Disciplines</label>
+                <div class="col-sm-8">
+                  <div>
+                    <label class="radio-inline">
+                      <input type="radio" data-ng-model="search.advanced.radios.disciplines" data-ng-change="search.advanced.radios.update()" data-ng-value="true"> All
+                    </label>
+                    <label class="radio-inline">
+                      <input type="radio" data-ng-model="search.advanced.radios.disciplines" data-ng-change="search.advanced.radios.update()" data-ng-value="false"> Select
+                    </label>
+                  </div>
+                  
+                  <div data-ng-hide="search.advanced.radios.disciplines">
+                    <br>
+                    <select class="form-control input-sm" data-ng-model="search.query['disciplineId[]']" data-ng-options="d.id as d.name for d in search.disciplines" multiple></select>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label for="sectors" class="col-sm-4 control-label">Sectors</label>
+                <div class="col-sm-8">
+                  <div>
+                    <label class="radio-inline">
+                      <input type="radio" data-ng-model="search.advanced.radios.sectors" data-ng-change="search.advanced.radios.update()" data-ng-value="true"> All
+                    </label>
+                    <label class="radio-inline">
+                      <input type="radio" data-ng-model="search.advanced.radios.sectors" data-ng-change="search.advanced.radios.update()" data-ng-value="false"> Select
+                    </label>
+                  </div>
+                  
+                  <div data-ng-hide="search.advanced.radios.sectors">
+                    <br>
+                    <select class="form-control input-sm" data-ng-model="search.query['sectorId[]']" data-ng-options="s.id as s.name for s in search.sectors" multiple></select>
+                  </div>
                 </div>
               </div>
             </form>
@@ -58,5 +125,3 @@
     </div>
   </div>
 </div>
-<div data-ui-view></div>
-

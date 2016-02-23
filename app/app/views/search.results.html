@@ -1,31 +1,37 @@
-<div data-af-loading="loading.searchResults">
-  <h3 data-ng-show="results.data.length">Results</h3>
+<div data-af-loading="!search.results.$resolved">
+  <h4 data-ng-show="search.results.data.length">Results ({{ search.results.data.length }})</h4>
   
-  <h3 data-ng-hide="results.data.length">No Results</h3>
+  <h4 data-ng-hide="search.results.data.length">No Results</h4>
   
-  <table class="table table-bordered table-hover" data-ng-show="results.data.length">
-    <thead>
-      <tr>
-        <th>Equipment</th>
-        <th>Facility</th>
-        <th>City</th>
-        <th>Province</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr data-ng-repeat="e in results.data" data-ng-click="showEquipmentPage(e.facilityId, e.id)">
-        <td style="width: 60%;">
-          <span><span class="label label-info">Type:</span> {{e.type}}</span><br>
-          <span><span class="label label-info">Manufacturer:</span> {{e.manufacturer}}</span><br>
-          <span><span class="label label-info">Model:</span> {{e.model}}</span><br>
-          <hr>
-          <span class="label label-info">Purpose:</span><br>
-          <span>{{e.purpose}}</span>
-        </td>
-        <td style="width: 10%;">{{e.facility}}</td>
-        <td style="width: 10%">{{e.city}}</td>
-        <td style="width: 10%">{{e.province}}</td>
-      </tr>
-    </tbody>
-  </table>
+  <div data-ng-show="search.results.data.length">  
+    <div data-ng-repeat="f in search.results.data" data-ng-show="f.name">
+      <p>
+        <a href="{{ _config.app.address }}/facilities/{{ f.id }}" style="text-decoration: none !important;" target="_blank">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <p class="h4">{{ f.name }} - {{ f.city }}, {{ f.province.name }}</span></p>
+              
+              <p data-ng-bind-html="f.description"></p>
+            </div>
+          </div>
+        </a>
+      </p>
+    </div>
+  
+    <div data-ng-repeat="e in search.results.data" data-ng-show="e.type">
+      <p>
+        <a href="{{ _config.app.address }}/facilities/{{ e.facility.id }}/equipment/{{ e.id }}" style="text-decoration: none !important;" target="_blank">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <p class="h4">{{ e.type }} <span class="label label-info">{{ e.facility.city }}, {{ e.facility.province.name }}</span></p>
+            
+            <p data-ng-show="e.model || e.type"><span data-ng-show="e.model">Model: {{ e.model }}</span> <span class="label label-default" data-ng-show="e.manufacturer">Manufacturer: {{ e.manufacturer }}</span></p>
+            
+            <p data-ng-bind-html=e.purpose></p>
+          </div>
+        </div>
+        </a>
+      </p>
+    </div>
+  </div>
 </div>
