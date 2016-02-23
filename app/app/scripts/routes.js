@@ -11,12 +11,13 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         controller: 'SearchController'
       }).
       state('search.all', {
-        url: '/all',
+        // This line is passed 80 chars, but I'm not breaking it up.
+        url: '/all?type&provinceId[]&organizationId[]&disciplineId[]&sectorId[]',
         templateUrl: 'views/search.results.html',
         controller: 'SearchResultsController'
       }).
       state('search.q', {
-        url: '/q/:q',
+        url: '/?q&type&provinceId[]&organizationId[]&disciplineId[]&sectorId[]',
         templateUrl: 'views/search.results.html',
         controller: 'SearchResultsController'
       }).
@@ -51,15 +52,13 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         templateUrl: 'views/facilities.show.html',
         controller: 'FacilitiesShowController'
       }).
-      state('equipment', {
+      state('facilities.show.equipment', {
         'abstract': true,
         'url': '/equipment',
         template: '<div data-ui-view></div>'
       }).
-      state('equipment.show', {
-        url: '/:facilityId/equipment/:equipmentId',
-        templateUrl: 'views/equipment.html',
-        controller: 'EquipmentController'
+      state('facilities.show.equipment.show', {
+        url: '/:equipmentId'
       }).
       state('about', {
         url: '/about',
