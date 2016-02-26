@@ -1,10 +1,10 @@
 <div data-ng-class="{'form-group': true,
-                     'form-group-sm': !(template.isRadio || template.isTextarea || template.isCheckbox),
+                     'form-group-sm': true,
                      'has-error': form[name].$invalid && form[name].$dirty}">
   
-  <label data-ng-if="nameOverride" class="col-sm-4 control-label">{{label}}</label>
+  <label data-ng-if="nameOverride" class="col-sm-4 control-label">{{ label }}</label>
   
-  <label data-ng-if="!nameOverride" class="col-sm-4 control-label" for="{{id}}">{{label}}</label>
+  <label data-ng-if="!nameOverride" class="col-sm-4 control-label" for="{{ id }}">{{ label }}</label>
   
   <div class="col-sm-8">
     <div data-ng-transclude></div>
