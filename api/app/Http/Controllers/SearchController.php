@@ -44,9 +44,10 @@ class SearchController extends Controller
         
         // Load required relationships.
         if ($type == 'facility') {
-            $results = Facility::with('province');
+            $results = Facility::with('organization', 'province');
         } else {
-            $results = Equipment::with('facility.province');
+            $results = Equipment::with('facility.organization',
+                'facility.province');
         }
         
         // Search.
@@ -152,7 +153,7 @@ class SearchController extends Controller
             }
         }
         
-        return $results->paginate(15); 
+        return $results->paginate($this->_itemsPerPage); 
     }
     
     private function _processQuery($q)
