@@ -1,37 +1,77 @@
-<div data-af-loading="!search.results.$resolved">
-  <h4 data-ng-show="search.results.data.length">Results ({{ search.results.data.length }})</h4>
+<div>
+  <div data-af-loading="!search.resource.$resolved && !search.results.length"></div>
   
-  <h4 data-ng-hide="search.results.data.length">No Results</h4>
+  <p class="h4" data-ng-show="search.results.length">
+      We found a total of {{ search.resource.total }}
+      <span data-ng-show="search.results.length == 1">
+        <span data-ng-show="_stateParams.type == 'facility'">facility<span data-ng-show="_state.current.name == 'search.all'">.</span></span>
+        <span data-ng-show="_stateParams.type != 'facility'">piece of equipment<span data-ng-show="_state.current.name == 'search.all'">.</span></span>
+      </span>
+      <span data-ng-show="search.results.length > 1">
+        <span data-ng-show="_stateParams.type == 'facility'">facilities<span data-ng-show="_state.current.name == 'search.all'">.</span></span>
+        <span data-ng-show="_stateParams.type != 'facility'">pieces of equipment<span data-ng-show="_state.current.name == 'search.all'">.</span></span>
+      </span>
+      <span data-ng-show="_state.current.name == 'search.q'">matching '{{ _stateParams.q }}'.</span>
+  </p>
   
-  <div data-ng-show="search.results.data.length">  
-    <div data-ng-repeat="f in search.results.data" data-ng-show="f.name">
+  <div data-ng-show="!search.results.length && search.resource.$resolved">
+    <span class="h1">:(</span>
+    <br>
+    
+    <p class="h4">
+      Sorry we couldn't find anything<span data-ng-show="_state.current.name == 'search.all'">.</span>
+      <span data-ng-show="_state.current.name == 'search.q'">matching '{{ _stateParams.q }}'.</span>
+    </p>
+  </div>
+  
+  <div data-ng-show="search.results.length">  
+    <div data-ng-repeat="f in search.results" data-ng-show="f.name">
       <p>
         <a href="{{ _config.app.address }}/facilities/{{ f.id }}" style="text-decoration: none !important;" target="_blank">
           <div class="panel panel-default">
             <div class="panel-body">
-              <p class="h4">{{ f.name }} - {{ f.city }}, {{ f.province.name }}</span></p>
+              <p class="h4">{{ f.name }} <span data-ng-show="f.organization.name">| {{ f.organization.name }}</span></p>
               
-              <p data-ng-bind-html="f.description"></p>
+              <div style="color: #333;">
+                <p class="text-muted"><small>{{ f.city }}, {{ f.province.name }}</small></p>
+                
+                <div data-ng-show="f.description">
+                  <hr>
+                  <div>
+                    <div data-ng-bind-html="f.description | limitTo: 150" style="display: inline-block;"></div><span data-ng-show="f.description.length > 150">...</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </a>
       </p>
-    </div>
+    </div><!-- End of ng-repeat -->
   
-    <div data-ng-repeat="e in search.results.data" data-ng-show="e.type">
+    <div data-ng-repeat="e in search.results" data-ng-show="e.type">
       <p>
         <a href="{{ _config.app.address }}/facilities/{{ e.facility.id }}/equipment/{{ e.id }}" style="text-decoration: none !important;" target="_blank">
         <div class="panel panel-default">
           <div class="panel-body">
-            <p class="h4">{{ e.type }} <span class="label label-info">{{ e.facility.city }}, {{ e.facility.province.name }}</span></p>
+            <p class="h4">{{ e.type }} | {{ e.facility.name }}</p>
             
-            <p data-ng-show="e.model || e.type"><span data-ng-show="e.model">Model: {{ e.model }}</span> <span class="label label-default" data-ng-show="e.manufacturer">Manufacturer: {{ e.manufacturer }}</span></p>
-            
-            <p data-ng-bind-html=e.purpose></p>
+            <div style="color: #333;">
+              <p class="text-muted"><span data-ng-show="e.facility.organization.name">{{ e.facility.organization.name }},</span> {{ e.facility.city }}, {{ e.facility.province.name }}</p>
+              
+              <div>
+                <hr>
+                <p data-ng-show="e.model"><span class="label label-default">Model:</span> {{ e.model }}</p>
+                <p data-ng-show="e.manufacturer"><span class="label label-default">Manufacturer:</span> {{ e.manufacturer }}</p>
+                
+                <div>
+                  <div data-ng-bind-html="e.purpose | limitTo: 150" style="display: inline-block;"></div><span data-ng-show="e.purpose.length > 150">...</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         </a>
       </p>
-    </div>
+    </div><!-- End of ng-repeat -->
   </div>
 </div>

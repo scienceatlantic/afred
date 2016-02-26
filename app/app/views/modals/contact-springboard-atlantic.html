@@ -1,0 +1,29 @@
+<div class="modal-header">
+  <h4 class="modal-title">Contact Springboard Atlantic</h4>
+</div>
+
+<form class="form-horizontal" name="contactSpringboardAtlanticForm" data-ng-submit="submit()" novalidate>
+  <div class="modal-body" data-af-loading="loading.form">
+    <p>
+      --- Explanation of what/who Springboard Atlantic is. ---
+    </p>
+    
+    
+    <div data-af-field data-af-field-label="Name*">
+      <input type="text" class="form-control" name="name" data-ng-model="message.name" required>
+    </div>
+    
+    <div data-af-field data-af-field-label="Email*">
+      <input type="email" class="form-control" name="email" data-ng-model="message.email" data-ng-model-options="{ debounce: 500 }" required>
+    </div>
+    
+    <div data-af-field data-af-field-label="Message*">
+      <textarea class="form-control" name="body" data-ng-model="message.body" rows="8" required></textarea>
+    </div>
+  </div>
+  
+  <div class="modal-footer">
+      <button type="submit" class="btn btn-default btn-sm" data-ng-disabled="contactSpringboardAtlanticForm.$invalid">Submit</button>
+      <button type="button" class="btn btn-default btn-sm" data-ng-click="cancel()">Cancel</button>
+  </div>
+</form>
