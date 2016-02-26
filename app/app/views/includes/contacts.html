@@ -1,4 +1,5 @@
-<p class="label label-primary">Contacts</p><br><br>
+<p class="text-muted">Contacts</p>
+<hr>
 
 <div data-ng-repeat="c in facility.contacts">
   <div class="row">
@@ -17,7 +18,7 @@
   
   <div class="row" data-ng-show="c.telephone">
     <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Telephone</label></div>
-    <div class="col-sm-9">{{ c.telephone | afFormatTelephone }} <span data-ng-show="c.extension">Extension: {{ c.extension }}</span></div>
+    <div class="col-sm-9">{{ c.telephone | afFormatTelephone }} <span data-ng-show="c.extension"><span class="label label-default">Extension:</span> {{ c.extension }}</span></div>
   </div>
   
   <br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
