@@ -49,6 +49,7 @@ class FacilityRepositoryController extends Controller
         $stateOp = $state  == '%' ? 'like' : '=';
         
         $fr = FacilityRepository::where('state', $stateOp, $state)
+            ->with('reviewer')
             ->paginate($this->_itemsPerPage);
             
         return $this->_toCamelCase($fr->toArray());
@@ -62,7 +63,7 @@ class FacilityRepositoryController extends Controller
      */
     public function show(ShowFacilityRepositoryRequest $request, $id)
     {
-        return FacilityRepository::findOrFail($id);            
+        return FacilityRepository::with('reviewer')->findOrFail($id);            
     }
 
     /**
@@ -94,14 +95,14 @@ class FacilityRepositoryController extends Controller
             case 'PUBLISHED':
                 $fr->data = $this->_publishFacility($fr, $fr->data);
                 $fr->facilityId = $fr->data['facility']['id'];
-                $fr->userId = Auth::user()->id;
-                $fr->reviewMessage = $request->input('reviewMessage', null);
+                $fr->reviewerId = Auth::user()->id;
+                $fr->reviewerMessage = $request->input('reviewerMessage', null);
                 $fr->update();
                 break;
             
             case 'REJECTED':
-                $fr->userId = Auth::user()->id;
-                $fr->reviewMessage = $request->input('reviewMessage', null);
+                $fr->reviewerId = Auth::user()->id;
+                $fr->reviewerMessage = $request->input('reviewerMessage', null);
                 $fr->update();
                 break;
             
@@ -130,8 +131,8 @@ class FacilityRepositoryController extends Controller
             case 'PUBLISHED_EDIT':
                 $data = $this->_publishFacility($fr, $fr->data, true);
                 $fr->facilityId = $data['facility']['id'];
-                $fr->userId = Auth::user()->id;
-                $fr->reviewMessage = $request->input('reviewMessage', null);
+                $fr->reviewerId = Auth::user()->id;
+                $fr->reviewerMessage = $request->input('reviewerMessage', null);
                 $fr->data = $data;
                 $fr->update();
                 
@@ -142,8 +143,8 @@ class FacilityRepositoryController extends Controller
                 break;
             
             case 'REJECTED_EDIT':
-                $fr->userId = Auth::user()->id;
-                $fr->reviewMessage = $request->input('reviewMessage', null);
+                $fr->reviewerId = Auth::user()->id;
+                $fr->reviewerMessage = $request->input('reviewerMessage', null);
                 $fr->update();
                 
                 // Like 'PUBLISHED_EDIT', the admin as reviewed the record,
@@ -157,7 +158,7 @@ class FacilityRepositoryController extends Controller
         // Generate an event (emails might need to be sent out).
         event(new FacilityRepositoryEvent($fr));
         
-        return $fr;
+        return FacilityRepository::with('reviewer')->find($fr->id);
     }
         
     private function _formatFrData($r, $now, $isUpdate = false, $fr = null)
