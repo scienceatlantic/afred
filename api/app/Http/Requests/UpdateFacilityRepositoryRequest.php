@@ -72,7 +72,7 @@ class UpdateFacilityRepositoryRequest extends Request
         }
         
         switch ($state) {
-            case 'PENDING__EDIT_APPROVAL':
+            case 'PENDING_EDIT_APPROVAL':
                 if ($currentState != 'PUBLISHED'
                     || $currentState != 'PUBLISHED_EDIT') {
                     abort(400);
@@ -88,6 +88,8 @@ class UpdateFacilityRepositoryRequest extends Request
                 $r['data.facility.website'] = '';
                 $r['data.facility.description'] = 'required';
                 $r['data.facility.isPublic'] = '';
+                $r['data.facility.dateSubmitted'] = 'date';
+                $r['data.facility.dateUpdated'] = 'date';
                 $r['data.organization.name'] =
                         'required_if:data.facility.organizationId,null';
                 $r['data.disciplines'] = 'required|array';
