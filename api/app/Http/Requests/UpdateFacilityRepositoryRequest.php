@@ -74,10 +74,9 @@ class UpdateFacilityRepositoryRequest extends Request
         switch ($state) {
             case 'PENDING_EDIT_APPROVAL':
                 if ($currentState != 'PUBLISHED'
-                    || $currentState != 'PUBLISHED_EDIT') {
+                    && $currentState != 'PUBLISHED_EDIT') {
                     abort(400);
                 }
-                
                 $r['data.facility.id'] = 'required|exists:facilities,id';
                 
             case 'PENDING_APPROVAL':
