@@ -77,13 +77,9 @@ class FacilityRepositoryController extends Controller
         // Grab the current datetime.
         $now = $this->_now();
         
-        // Unless we're dealing with a 'PENDING_APPROVAL' record, grab the
-        // existing FacilityRepository object.
-        if ($request->input('state') != 'PENDING_APPROVAL') {
-            $fr = FacilityRepository::find($id); 
-        } else {
-            $fr = new FacilityRepository();
-        }
+        // Grab the existing Facility Repository record (ie. state !=
+        // PENDING_APPROVAL) otherwise create a new one.
+        $fr = FacilityRepository::findOrNew($id);
         
         // Set/Update the Facility Repository's state.
         $fr->state = $request->input('state');
@@ -206,8 +202,11 @@ class FacilityRepositoryController extends Controller
             ->toArray();
         
         // Contacts section.
-        foreach($r->data['contacts'] as $i => $c) {
-            $d['contacts'][$i] = (new Contact($c))->toArray();
+        // Contacts are optional so check if it exists first.
+        if (array_key_exists('contacts', $r->data)) {
+            foreach($r->data['contacts'] as $i => $c) {
+                $d['contacts'][$i] = (new Contact($c))->toArray();
+            }            
         }
         
         // Equipment section.
@@ -253,6 +252,13 @@ class FacilityRepositoryController extends Controller
             $d['facility'] = $f->toArray();
         }
         
+        // Strip the HTML tags for the search function. We're not including it
+        // in '$d' because we don't need the stripped text stored in facility
+        // repository.
+        $f = $fr->facility()->first();
+        $f->descriptionNoHtml = strip_tags($f->description);
+        $f->update();
+        
         // Disciplines section.
         $f->disciplines()->attach($d['disciplines']);
         
@@ -273,7 +279,14 @@ class FacilityRepositoryController extends Controller
         
         // Equipment section
         foreach($d['equipment'] as $i => $e) {
-            $d['equipment'][$i] = $f->equipment()->create($e)->toArray();           
+            $d['equipment'][$i] = $f->equipment()->create($e)->toArray();
+            $e = $f->equipment()->find($d['equipment'][$i]['id']);
+            
+            // Strip HTML tags for the search function. Same thing as
+            // 'description' for facilities.
+            $e->purposeNoHtml = strip_tags($e->purpose);
+            $e->specificationsNoHtml = strip_tags($e->specifications);
+            $e->update();
         }
         
         return $d;
