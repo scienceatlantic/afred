@@ -359,7 +359,7 @@ class ImportAfredV1DataSeeder extends Seeder
         $url = $apiAddress->value . '/auth/login';
         $jsonData = json_encode([
             'email' => 'prasad@scienceatlantic.ca',
-            'password' => 'password'
+            'password' => 'acenet-usability-study'
         ]);            
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_HEADER, true);
