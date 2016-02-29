@@ -74,7 +74,7 @@ angular.module('afredApp').controller('AdminFacilityRepositoryShowController', [
       $scope.facility.organization = angular.copy($scope.fr.data.organization);
       $scope.facility.contacts = angular.copy($scope.fr.data.contacts);
       $scope.facility.equipment = angular.copy($scope.fr.data.equipment);
-      
+            
       // Primary contact & contacts section.
       if (!$scope.fr.data.contacts) {
         $scope.facility.contacts = [];
@@ -124,6 +124,10 @@ angular.module('afredApp').controller('AdminFacilityRepositoryShowController', [
           $scope.loading.sectors = false;
         }
       );
+      
+      $scope.facility.isPreview = true;
+      $scope.facility.isNewOrganization =
+        !$scope.fr.data.facility.organizationId;
     };
     
     /* ---------------------------------------------------------------------
@@ -141,7 +145,7 @@ angular.module('afredApp').controller('AdminFacilityRepositoryShowController', [
      */
     $scope.form ={
       data: {
-        reviewMessage: null
+        reviewerMessage: null
       }
     };
     

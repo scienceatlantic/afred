@@ -36,7 +36,7 @@ angular.module('afredApp').controller('FacilitiesFormCreateController',
         },
         function() {
           // Clear any saved data.
-          //$scope.form.clearSave();
+          $scope.form.clearSave(true);
           $scope.view.show = 'SUCCESS_MESSAGE';
         }, function() {
           $scope.view.show = 'FAILURE_MESSAGE';

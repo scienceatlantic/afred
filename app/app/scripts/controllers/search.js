@@ -264,7 +264,7 @@ angular.module('afredApp').controller('SearchController',
        * Uses/requires:
        * $uibModal
        */
-      contactSpringboardAtlantic: function() {
+      contactSpringboardAtlantic: function() {        
         var modalInstance = $uibModal.open({
           templateUrl: 'views/modals/contact-springboard-atlantic.html',
           controller: 'ContactSpringboardAtlanticModalController',
@@ -345,6 +345,12 @@ angular.module('afredApp').controller('SearchController',
       /**
        * Initialises the form by retrieving disciplines, sectors, organizations,
        * and provinces.
+       *
+       * Uses/calls/requires:
+       * $scope.search.getDisciplines()
+       * $scope.search.getSectors()
+       * $scope.search.getOrganizations()
+       * $scope.search.getProvinces()
        */
       initialise: function() {
         $scope.search.getDisciplines();

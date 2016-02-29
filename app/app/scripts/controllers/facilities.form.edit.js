@@ -47,8 +47,11 @@ angular.module('afredApp').controller('FacilitiesFormEditController',
     
     /**
      * Controls what is shown to the user.
-     * @type {string} 'FORM', 'PREVIEW', 'SUCCESS_MESSAGE', 'FAILURE_MESSAGE',
-     *     'INVALID_TOKEN_MESSAGE'.
+     * @type {string} 'FORM',
+     *                'PREVIEW',
+     *                'SUCCESS_MESSAGE',
+     *                'FAILURE_MESSAGE',
+     *                'INVALID_TOKEN_MESSAGE'.
      */
     $scope.view = {
       show: 'FORM'
