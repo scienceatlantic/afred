@@ -613,10 +613,19 @@ angular.module('afredApp').controller('FacilitiesFormController',
       /**
        * Clears local storage of any saved form data.
        */
-      clearSave: function(dontReload) {       
-        var modalInstance = confirmModal.open('reset-create-facility-form');
+      clearSave: function(dontConfirm) {
+        if (dontConfirm) {
+          remove();
+          $scope.form.initialise();
+        } else {
+          var modalInstance = confirmModal.open('reset-create-facility-form');
+          modalInstance.result.then(function() {
+            remove();
+            $scope._location.reload();
+          });
+        }
         
-        modalInstance.result.then(function() {
+        function remove() {
           try {
             // We have to stop autosaving otherwise clearing the data won't
             // work if the page is reloaded after this function is called (the
@@ -627,17 +636,11 @@ angular.module('afredApp').controller('FacilitiesFormController',
             localStorage.removeItem($scope.form.getLsName('facility'));
             localStorage.removeItem($scope.form.getLsName('disciplines'));
             localStorage.removeItem($scope.form.getLsName('sectors'));
-          
-            // Comment here that reload works better because textAngular
-            // doesn't complain...
-            if (!dontReload) {
-              $scope._location.reload();
-            }
           } catch(e) {
             // Local storage is not supported.
             $scope.form.isStorageSupported = false;
-          }          
-        });
+          }
+        }
       },
       
       /**
