@@ -2,6 +2,11 @@
   <div class="col-lg-12">
     <h3>Submit a Facility</h3>
     
+    <p data-ng-show="view.show == 'FORM'">
+      To submit equipment or facilities for inclusion in the AFRED database, please complete the form below.
+      For further information, hover over the &lt;symbol&gt; for each field.
+    </p>
+    
     <div data-af-loading="!(form.organizations.$resolved || form.provinces.$resolved || form.disciplines.$resolved || form.sectors.$resolved) || (form.loading.disciplines || form.loading.sectors || form.loading.save)" data-ng-show="view.show == 'FORM'">
       <div data-ng-include="'views/includes/facilities.form.html'"></div>
     </div>
@@ -38,9 +43,13 @@
     </div>
     
     <div data-ng-show="view.show == 'SUCCESS_MESSAGE'">
-      <p>Thank you! You facility has been successfully submitted into AFRED for review.</p>
+      <p>Thank you! Your information has been successfully submitted.</p>
       
-      <p>Click <a data-ui-sref="search">here</a> to get back to the homepage or click <a href="" data-ng-click="_state.reload()">here</a> to submit another facility.</p>
+      <p>The primary contact listed in your submission will receive an email with next steps once the record has been reviewed.</p>
+      
+      <p>Would you like to submit <a href="" data-ng-click="_location.reload()">another</a> facility?</p>
+      
+      <p>Go to <a data-ui-sref="search">homepage</a>.</p>
     </div>
     
     <div data-ng-show="view.show =='FAILURE_MESSAGE'">

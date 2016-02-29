@@ -4,9 +4,8 @@
     -- ====================================================== !-->
   <div class="panel panel-default">    
     <div class="panel-body">
-      <p>
-        <span class="label label-default">Research Facility Information</span>
-      </p>
+      <p class="text-muted">Research Facility Information</p>
+      <hr>
       
       <div class="row">
         <div class="col-lg-6">
@@ -130,10 +129,9 @@
     -- ====================================================== !-->
   <div class="panel panel-default">    
     <div class="panel-body">
-      <p>
-        <span class="label label-default">Contact Information</span>
-        <span data-ng-show="form.contactIndex === 0" class="label label-info">Primary point of contact</span> 
-      </p>
+      <p class="text-muted" style="display: inline-block;">Research Facility Information</p>
+      <span data-ng-show="form.contactIndex === 0" class="label label-info">Primary point of contact</span>
+      <hr>
   
       <div class="row">
         <div class="col-lg-2">
@@ -219,9 +217,8 @@
     -- ====================================================== !-->  
   <div class="panel panel-default">    
     <div class="panel-body">
-      <p>
-        <span class="label label-default">Equipment</span>
-      </p>
+      <p class="text-muted">Equipment Information</p>
+      <hr>
       
       <div class="row">
         <div class="col-lg-2">
@@ -320,7 +317,7 @@
   
   <div>
     <button type="submit" class="btn btn-default" data-ng-disabled="facilityForm.$invalid" data-ng-click="preview()">Preview</button>
-    <button type="button" class="btn btn-default" data-ng-show="_state.is('facilities.form.create')" data-ng-click="form.clearSave(); _state.reload();">Reset form</button>
+    <button type="button" class="btn btn-default" data-ng-show="_state.is('facilities.form.create')" data-ng-click="form.clearSave()">Reset form</button>
     <p>
       <p class="text-warning" data-ng-show="facilityForm.$invalid && !facilityForm.$pristine">Please complete all mandatory fields first</p>
     </p>
