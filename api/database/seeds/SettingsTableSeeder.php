@@ -29,7 +29,7 @@ class SettingsTableSeeder extends Seeder
             ],
             [
                 'name'  => 'APP_ADDRESS',
-                'value' => 'http://localhost:9000'           
+                'value' => 'http://localhost:9000/#'           
             ],
             [
                 'name'  => 'ORGANIZATION_NAME',
