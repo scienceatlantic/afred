@@ -135,6 +135,7 @@ angular.module('afredApp').run(['$rootScope',
     };
     
     $rootScope._window = $window;
+    $rootScope._location = location;
     
     /* ---------------------------------------------------------------------
      * Boostrap contstants.
