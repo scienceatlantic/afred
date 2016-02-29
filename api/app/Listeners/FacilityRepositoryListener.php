@@ -37,6 +37,7 @@ class FacilityRepositoryListener extends BaseListener
     {
         // Variables for use in all cases.
         $fr = $event->fr;
+        $frId = ' (fr #' . $fr->id . ')';
         $f = $fr->data['facility']['name'];
         $tPfx = 'emails.events.fr.';
         $sPfx = $this->_settings['EMAIL_SUBJECT_PREFIX'];
@@ -53,7 +54,7 @@ class FacilityRepositoryListener extends BaseListener
             case 'PENDING_APPROVAL':    
                 // Administrator section.
                 $t = $tPfx . 'admin-pending-approval';
-                $s = $sPfx . 'New Submission (' . $f . ')';              
+                $s = $sPfx . 'New research infrastructure information submitted to ' . $this->_settings['APP_ACRONYM'] . $frId;             
                 
                 foreach(Role::admin()->users()->get() as $a) {
                     $name = $a->firstName . ' ' . $a->lastName;
@@ -67,7 +68,7 @@ class FacilityRepositoryListener extends BaseListener
                 
                 // Primary contact section.
                 $t = $tPfx . 'primary-contact-pending-approval';
-                $s = $sPfx . 'Submission Received';
+                $s = $sPfx . 'Research infrastructure information submitted to ' . $this->_settings['APP_ACRONYM'] . $frId;
                 
                 $pc = $fr->data['primaryContact'];
                 $name = $pc['firstName'] . ' ' . $pc['lastName'];
@@ -82,8 +83,20 @@ class FacilityRepositoryListener extends BaseListener
             // Emails are sent out to all admins, the primary contact, and
             // the ILO (if applicable).
             case 'PUBLISHED':
-                // Administrator section.
+                /* Administrator section.
+                $t = $tPfx . 'admin-pending-approval';
+                $s = $sPfx . 'New research infrastructure information submitted to ' . $this->_settings['APP_ACRONYM'] . $frId;             
                 
+                foreach(Role::admin()->users()->get() as $a) {
+                    $name = $a->firstName . ' ' . $a->lastName;
+                    $data['name'] = $name;
+                    
+                    $this->_mail($t, $s, $data, [
+                        'name'  => $name,
+                        'email' => $a->email
+                    ]);
+                }
+                */
                 break;
             
             case 'REJECTED':
