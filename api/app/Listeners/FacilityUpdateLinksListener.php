@@ -40,7 +40,7 @@ class FacilityUpdateLinksListener extends BaseListener
         $email = $event->ful->email;
         $email = 'prasad@scienceatlantic.ca';
         $template = 'emails.events.ful.token-requested'; 
-        $subject = $this->_settings['EMAIL_SUBJECT_PREFIX'] . 'Facility update request (fr #' . $ful->frIdBefore . ')';
+        $subject = $this->_settings['EMAIL_SUBJECT_PREFIX'] . 'Facility update request (fr #' . $event->ful->frIdBefore . ')';
         $name = $event->ful->editorFirstName
             . ' ' . $event->ful->editorLastName;
         
