@@ -1,13 +1,14 @@
 <div class="modal-header">
-  <h4 class="modal-title">Contact Springboard Atlantic</h4>
+  <h4 class="modal-title">
+    <span data-ng-hide="title">Contact Springboard Atlantic</span>
+  </h4>
 </div>
-
-<form class="form-horizontal" name="contactSpringboardAtlanticForm" data-ng-submit="submit()" novalidate>
+  
+<form class="form-horizontal" name="form" data-ng-submit="submit()" novalidate>
   <div class="modal-body" data-af-loading="loading.form">
     <p>
       --- Explanation of what/who Springboard Atlantic is. ---
     </p>
-    
     
     <div data-af-field data-af-field-label="Name*">
       <input type="text" class="form-control" name="name" data-ng-model="message.name" required>
@@ -23,7 +24,7 @@
   </div>
   
   <div class="modal-footer">
-      <button type="submit" class="btn btn-default btn-sm" data-ng-disabled="contactSpringboardAtlanticForm.$invalid">Submit</button>
-      <button type="button" class="btn btn-default btn-sm" data-ng-click="cancel()">Cancel</button>
+    <button type="button" class="btn btn-default btn-sm" data-ng-click="modal.close()" data-ng-disabled="form.$invalid">Send <span class="glyphicon glyphicon-envelope"></span></button>
+    <button type="button" class="btn btn-default btn-sm" data-ng-click="modal.dismiss()">Cancel <span class="glyphicon glyphicon-remove"></span></button>
   </div>
 </form>

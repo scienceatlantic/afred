@@ -12,13 +12,6 @@ angular.module('afredApp').controller('ContactSpringboardAtlanticModalController
       $uibModalInstance.close();
     };
     
-    /**
-     * Dismisses the modal
-     */
-    $scope.cancel = function () {
-      $uibModalInstance.dismiss();
-    };
-    
     $scope.loading = {
       form: true
     };
@@ -26,5 +19,7 @@ angular.module('afredApp').controller('ContactSpringboardAtlanticModalController
     $timeout(function() {
       $scope.loading.form = false;
     }, 1000);
+    
+    $scope.modal = $uibModalInstance;
   }
 ]);
