@@ -630,7 +630,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
           
             // Comment here that reload works better because textAngular
             // doesn't complain...
-            if (dontReload) {
+            if (!dontReload) {
               $scope._location.reload();
             }
           } catch(e) {
