@@ -35,10 +35,10 @@
               <div style="color: #333;">
                 <p class="text-muted"><small>{{ f.city }}, {{ f.province.name }}</small></p>
                 
-                <div data-ng-show="f.description">
+                <div data-ng-show="f.descriptionNoHtml">
                   <hr>
                   <div>
-                    <div data-ng-bind-html="f.description | limitTo: 150" style="display: inline-block;"></div><span data-ng-show="f.description.length > 150">...</span>
+                    <span>{{ f.descriptionNoHtml | limitTo: 170 }}</span><span data-ng-show="f.descriptionNoHtml.length > 170">...</span>
                   </div>
                 </div>
               </div>
@@ -64,7 +64,7 @@
                 <p data-ng-show="e.manufacturer"><span class="label label-default">Manufacturer:</span> {{ e.manufacturer }}</p>
                 
                 <div>
-                  <div data-ng-bind-html="e.purpose | limitTo: 150" style="display: inline-block;"></div><span data-ng-show="e.purpose.length > 150">...</span>
+                  <span>{{ e.purposeNoHtml | limitTo: 170 }}</span><span data-ng-show="e.purposeNoHtml.length > 170">...</span>
                 </div>
               </div>
             </div>
