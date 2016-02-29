@@ -33,9 +33,7 @@ class SearchController extends Controller
     public function index(Request $request)
     {
         // Process the query.
-        $q = $this->_processQuery($request->input('q'));
-        
-        Log::debug($q);
+        $q = $request->input('q');
         
         // Get the type of search (ie. 'facility' or 'equipment').
         if (($type = strtolower($request->input('type'))) != 'facility') {
@@ -47,43 +45,43 @@ class SearchController extends Controller
             $results = Facility::with('organization', 'province');
         } else {
             $results = Equipment::with('facility.organization',
-                'facility.province');
+                                       'facility.province');
         }
         
         // Search.
         if ($type == 'facility' && $q) {
             $results->search($q, [
-                'name'                      => 30,
-                'city'                      => 11,
-                'description'               => 25,
-                'website'                   => 15,
+                'name'                            => 30,
+                'city'                            => 11,
+                'descriptionNoHtml'               => 25,
+                'website'                         => 15,
                 
-                'primaryContact.firstName'  => 10,
-                'primaryContact.lastName'   => 10,
-                'primaryContact.email'      => 10,
+                'primaryContact.firstName'        => 10,
+                'primaryContact.lastName'         => 10,
+                'primaryContact.email'            => 10,
                 
-                'contacts.firstName'        => 10,
-                'contacts.lastName'         => 10,
-                'contacts.email'            => 10,
+                'contacts.firstName'              => 10,
+                'contacts.lastName'               => 10,
+                'contacts.email'                  => 10,
                 
-                'equipment.type'            => 25,
-                'equipment.manufacturer'    => 20,
-                'equipment.model'           => 20,
-                'equipment.purpose'         => 20,
-                'equipment.specifications'  => 20
+                'equipment.type'                  => 25,
+                'equipment.manufacturer'          => 20,
+                'equipment.model'                 => 20,
+                'equipment.purposeNoHtml'         => 20,
+                'equipment.specificationsNoHtml'  => 20
             ]);
         } else if ($type == 'equipment' && $q) {
             $results->search($q, [
-                'type'                      => 30,
-                'manufacturer'              => 20,
-                'model'                     => 15,
-                'purpose'                   => 25,
-                'specifications'            => 20,
+                'type'                       => 30,
+                'manufacturer'               => 20,
+                'model'                      => 15,
+                'purposeNoHtml'              => 25,
+                'specificationsNoHtml'       => 20,
                 
-                'facility.name'             => 25,
-                'facility.city'             => 1,
-                'facility.description'      => 20,
-                'facility.website'          => 5,
+                'facility.name'              => 25,
+                'facility.city'              => 1,
+                'facility.descriptionNoHtml' => 20,
+                'facility.website'           => 5,
             ]);
         }        
         
