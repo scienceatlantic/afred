@@ -27,8 +27,11 @@ class DatabaseSeeder extends Seeder
         // Contains dummy data.
         if (env('APP_ENV') == 'local') {
             $this->call(DummyUsersTableSeeder::class);
-            $this->call(DummyFacilitiesTableSeeder::class);            
+            //$this->call(DummyFacilitiesTableSeeder::class);            
         }
+        
+        // Import!
+        $this->call(ImportAfredV1DataSeeder::class);
 
         Model::reguard();
     }

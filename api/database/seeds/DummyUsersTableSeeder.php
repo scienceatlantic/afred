@@ -28,9 +28,16 @@ class DummyUsersTableSeeder extends Seeder
                 'firstName'   => 'Prasad',
                 'lastName'    => 'Rajandran',
                 'email'       => 'prasad@scienceatlantic.ca',
-                'password'    => bcrypt('password'),
+                'password'    => bcrypt('acenet-usability-study'),
                 'dateCreated' => $now
-            ]
+            ],
+            [
+                'firstName'   => 'Patty',
+                'lastName'    => 'King',
+                'email'       => 'patty@scienceatlantic.ca',
+                'password'    => bcrypt('acenet-usability-study'),
+                'dateCreated' => $now
+            ]          
         ];
         
         foreach($users as $user) {
