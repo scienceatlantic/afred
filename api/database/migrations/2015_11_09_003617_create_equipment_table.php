@@ -26,7 +26,10 @@ class CreateEquipmentTable extends Migration
             $table->string('model', 100)
                 ->nullable();
             $table->text('purpose');
+            $table->text('purposeNoHtml');
             $table->text('specifications')
+                ->nullable();
+            $table->text('specificationsNoHtml')
                 ->nullable();
             $table->boolean('isPublic')
                 ->default(true);

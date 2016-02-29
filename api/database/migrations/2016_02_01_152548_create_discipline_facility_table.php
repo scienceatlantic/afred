@@ -25,6 +25,7 @@ class CreateDisciplineFacilityTable extends Migration
                 ->references('id')
                 ->on('facilities')
                 ->onDelete('cascade');
+            $table->primary(['disciplineId', 'facilityId']);
         });
     }
 
