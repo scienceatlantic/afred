@@ -50,6 +50,11 @@ class FacilityRepository extends Model
         return $this->hasOne('App\Facility', 'facilityRepositoryId');
     }
     
+    public function reviewer()
+    {
+        return $this->belongsTo('App\User', 'reviewerId');
+    }
+    
     /**
      * Each facility repository record can have zero or more facility update
      * link records in the 'before' field. This is because the update request
