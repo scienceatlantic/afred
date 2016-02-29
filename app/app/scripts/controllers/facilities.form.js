@@ -1,20 +1,24 @@
 'use strict';
 
 angular.module('afredApp').controller('FacilitiesFormController',
-  ['$scope',
+  ['$rootScope',
+   '$scope',
    '$interval',
    'organizationResource',
    'provinceResource',
    'disciplineResource',
    'sectorResource',
    'facilityRepositoryResource',
-  function($scope,
+   'confirmModal',
+  function($rootScope,
+           $scope,
            $interval,
            organizationResource,
            provinceResource,
            disciplineResource,
            sectorResource,
-           facilityRepositoryResource) {
+           facilityRepositoryResource,
+           confirmModal) {
     /* ---------------------------------------------------------------------
      * Functions/Objects.
      * --------------------------------------------------------------------- */
@@ -108,7 +112,19 @@ angular.module('afredApp').controller('FacilitiesFormController',
       },
       
       /**
-       * Initialises the form. All form data is attached to '$scope.form.data'.
+       * Initialises the form.
+       *
+       * Side effects:
+       * $scope.form.data All form data is attached to this object.
+       *
+       * Uses/calls/requires:
+       * $scope.form.getDisciplines()
+       * $scope.form.getOrganizations()
+       * $scope.form.getSectors()
+       * $scope.form.getProvinces()
+       * $scope.form.addContacts()
+       * $scope.form.addEquipment()
+       * 
        * @param {boolean} isEdit If in edit mode, this will prevent the function
        *     from calling '$scope.form.getDisciplines()' and
        *     '$scope.form.getSectors()' since
@@ -165,8 +181,11 @@ angular.module('afredApp').controller('FacilitiesFormController',
       },
       
       /**
-       * Adds an additional contact object to the '$scope.form.data.contacts'
-       * array and advances '$scope.form.contactIndex' to point to it.
+       * Adds an additional contact object.
+       *
+       * Side effects:
+       * $scope.form.data.contacts Contact object is pushed into this array.
+       * $scope.form.contactIndex Index is advanced.
        */      
       addContact: function() {
         $scope.form.data.contacts.push({
@@ -185,7 +204,13 @@ angular.module('afredApp').controller('FacilitiesFormController',
       },
       
       /**
-       * Removes a contact object from the '$scope.form.data.contacts' array.
+       * Removes a contact object.
+       *
+       * Side effects:
+       * $scope.form.data.contacts Contact object of index 'index' is removed
+       *     from this array.
+       * $scope.form.contactIndex Index is decreased.
+       * 
        * @param {integer} index Array index of '$scope.form.data.contacts' to
        *     delete.
        */
@@ -207,8 +232,11 @@ angular.module('afredApp').controller('FacilitiesFormController',
       },
 
       /**
-       * Adds additional equipment object to the '$scope.form.data.equipment'
-       * array and advances '$scope.form.equipmentIndex' to point to it.
+       * Adds additional equipment object.
+       *
+       * Side effects:
+       * $scope.form.data.equipment Equipment object is pushed into this array.
+       * $scope.form.equipmentIndex Index is advanced.
        */      
       addEquipment: function() {
         $scope.form.data.equipment.push({
@@ -228,7 +256,12 @@ angular.module('afredApp').controller('FacilitiesFormController',
       },
      
       /**
-       * Removes an equipment object from '$scope.form.data.equipment'.
+       * Removes an equipment object.
+       *
+       * Side effects:
+       * $scope.form.data.equipment Equipment object is added to this array.
+       * $scope.form.equipmentIndex Index is decreased.
+       * 
        * @param {number} index Array index of '$scope.form.data.equipment' to
        *     delete.
        */
@@ -249,8 +282,14 @@ angular.module('afredApp').controller('FacilitiesFormController',
       },
       
       /**
-       * Gets an array of all organizatoins and attaches it to
-       * '$scope.form.organizations'.
+       * Gets an array of all organizations.
+       *
+       * Side effects:
+       * $scope.form.organizations Data retrieved is attached to this array.
+       *     Also adds an option (object) with the name 'N/A' and an ID of -1.
+       *
+       * Uses/calls/requires:
+       * organizationResource
        */
       getOrganizations: function() {
         $scope.form.organizations = organizationResource.queryNoPaginate(
@@ -273,8 +312,14 @@ angular.module('afredApp').controller('FacilitiesFormController',
       },
       
       /**
-       * Gets an array of all provinces and attaches it to
-       * '$scope.form.provinces'.
+       * Gets an array of all provinces.
+       *
+       * Side effects:
+       * $scope.form.provinces Data retrieved is attached to this array.
+       *     Also adds an option (object) with the name 'N/A' and an ID of -1.
+       *
+       * Uses/calls/requires:
+       * provinceResource
        */
       getProvinces: function() {
         $scope.form.provinces = provinceResource.queryNoPaginate(null,
@@ -505,7 +550,6 @@ angular.module('afredApp').controller('FacilitiesFormController',
             localStorage.setItem(f, angular.toJson($scope.form.data));
             localStorage.setItem(d, angular.toJson(dData));
             localStorage.setItem(s, angular.toJson(sData));
-            
                         
             // Set the loading flag to false.
             $scope.form.loading.save = false;
@@ -547,9 +591,9 @@ angular.module('afredApp').controller('FacilitiesFormController',
             var s = localStorage.getItem($scope.form.getLsName('sectors'));
           
             if (f && d && s) {
-              $scope.form.data = JSON.parse(f);
-              $scope.form.getDisciplines(JSON.parse(d));
-              $scope.form.getSectors(JSON.parse(s));
+              $scope.form.data = angular.fromJson(f);
+              $scope.form.getDisciplines(angular.fromJson(d));
+              $scope.form.getSectors(angular.fromJson(s));
             }
             return 1;
           } catch(e) {
@@ -569,21 +613,31 @@ angular.module('afredApp').controller('FacilitiesFormController',
       /**
        * Clears local storage of any saved form data.
        */
-      clearSave: function() {
-        try {
-          // We have to stop autosaving otherwise clearing the data won't
-          // work if the page is reloaded after this function is called (the
-          // '$scope.forn.save()' function might have been called before
-          // the page was reloaded thereby saving the form data again).
-          $interval.cancel($scope.form.isAutosaving);
+      clearSave: function() {       
+        var modalInstance = confirmModal.open('Are you sure you want to clear' +
+          ' the form?');
+        
+        modalInstance.result.then(function() {
+          try {
+            // We have to stop autosaving otherwise clearing the data won't
+            // work if the page is reloaded after this function is called (the
+            // '$scope.forn.save()' function might have been called before
+            // the page was reloaded thereby saving the form data again).
+            $interval.cancel($scope.form.isAutosaving);
+            
+            localStorage.removeItem($scope.form.getLsName('facility'));
+            localStorage.removeItem($scope.form.getLsName('disciplines'));
+            localStorage.removeItem($scope.form.getLsName('sectors'));
           
-          localStorage.removeItem($scope.form.getLsName('facility'));
-          localStorage.removeItem($scope.form.getLsName('disciplines'));
-          localStorage.removeItem($scope.form.getLsName('sectors'));
-        } catch(e) {
-          // Local storage is not supported.
-          $scope.form.isStorageSupported = false;
-        }
+            // Comment here taht reload works better because textAngular
+            // doesn't complain...
+            location.reload();
+            
+          } catch(e) {
+            // Local storage is not supported.
+            $scope.form.isStorageSupported = false;
+          }          
+        });
       },
       
       /**
@@ -597,7 +651,8 @@ angular.module('afredApp').controller('FacilitiesFormController',
           try {
             $scope.form.isAutosaving = $interval(function() {
               $scope.form.save();
-            }, interval ? interval : 500);       
+            }, interval ? interval : 500);
+            $rootScope._formIsAutosaving = $scope.form.isAutosaving;
           } catch(e) {
             // Local storage is not supported.
             $scope.form.isStorageSupported = false;
@@ -612,6 +667,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
        *     sectors)
        */
       getLsName: function(item) {
+        console.log($scope._state.current.name);
         return $scope._state.current.name + '-' + item;
       },
       

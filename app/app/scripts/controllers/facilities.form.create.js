@@ -74,5 +74,10 @@ angular.module('afredApp').controller('FacilitiesFormCreateController',
         $scope.form.startAutosave();
       }
     }, 350);
+    
+    // 
+    $scope.$on('$stateChangeStart', function() {
+      $interval.cancel($scope.form.isAutosaving);
+    });
   }
 ]);
