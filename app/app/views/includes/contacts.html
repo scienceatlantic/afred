@@ -1,0 +1,42 @@
+<p class="text-muted">Contacts</p>
+<hr>
+
+<div data-ng-repeat="c in facility.contacts">
+  <div class="row">
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Name</label></div>
+    <div class="col-sm-9">{{ c.firstName }} {{ c.lastName }} <span data-ng-show="$index == 0" class="label label-default">Primary Contact</span></div>
+  </div>
+  
+  <br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
+  
+  <div class="row">
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Email</label></div>
+    <div class="col-sm-9"><a data-ng-href="mailto:{{c.email}}">{{ c.email }}</a></div>
+  </div>
+  
+  <br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
+  
+  <div class="row" data-ng-show="c.telephone || facility.isPreview">
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Telephone</label></div>
+    <div class="col-sm-9">{{ c.telephone | afFormatTelephone }} <span class="label label-default" data-ng-show="facility.isPreview && !c.telephone">Blank</span> <span data-ng-show="c.extension"><span class="label label-default">Extension:</span> {{ c.extension }}</span></div>
+  </div>
+  
+  <br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
+  
+  <div class="row" data-ng-show="c.position || facility.isPreview">
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Position</label></div>
+    <div class="col-sm-9">{{ c.position }} <span class="label label-default" data-ng-show="facility.isPreview && !c.position">Blank</span></div>
+  </div>
+  
+  <br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
+  
+  <div class="row" data-ng-show="c.website || facility.isPreview">
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Website</label></div>
+    <div class="col-sm-9">
+      <a href="{{c.website}}" target="_blank">{{ c.website }}</a>
+      <span class="label label-default" data-ng-show="facility.isPreview && !c.website">Blank</span>
+    </div>
+  </div>
+  
+  <hr data-ng-show="$index !== (facility.contacts.length - 1)">
+</div><!-- End of ng-repeat -->

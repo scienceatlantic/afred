@@ -309,7 +309,7 @@ module.exports = function (grunt) {
             'views/{,*/}*.html',
             'images/{,*/}*.{webp}',
             'fonts/*',
-            'scripts/vendor/ckeditor/**/*'
+            //'scripts/vendor/ckeditor/**/*'
           ]
         }, {
           expand: true,
@@ -319,6 +319,11 @@ module.exports = function (grunt) {
         }, {
           expand: true,
           cwd: 'bower_components/bootstrap/dist',
+          src: 'fonts/*',
+          dest: '<%= yeoman.dist %>'
+        }, {
+          expand: true,
+          cwd: 'bower_components/components-font-awesome',
           src: 'fonts/*',
           dest: '<%= yeoman.dist %>'
         }]

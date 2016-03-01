@@ -12,6 +12,8 @@
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="bower_components/textAngular/dist/textAngular.css" />
+    <link rel="stylesheet" href="bower_components/components-font-awesome/css/font-awesome.css" />
     <!-- endbower -->
     <!-- endbuild -->
     
@@ -56,12 +58,23 @@
           <div class="collapse navbar-collapse" id="main-navbar">
             <ul class="nav navbar-nav">
               <li data-ui-sref-active="active"><a data-ui-sref="search">Search</a></li>
-              <li data-ui-sref-active="active"><a data-ui-sref="createFacility">Submit a Record</a></li>
+              <li data-ui-sref-active="active"><a data-ui-sref="facilities.form.create">Submit a Facility</a></li>
+              <li data-ui-sref-active="active"><a data-ui-sref="facilities.update">Update</a></li>
               <li data-ui-sref-active="active"><a data-ui-sref="about">About</a></li>
             </ul>
             
             <ul class="nav navbar-nav navbar-right">
-              <li data-ui-sref-active="active"><a data-ui-sref="login">Administrator Login</a></li>
+              <li role="presentation" class="dropdown" data-ng-show="_auth.user.email">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="" role="button" aria-haspopup="true" aria-expanded="false">
+                  Admin <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a data-ui-sref="admin.dashboard">Dashboard</a></li>
+                  <li><a data-ui-sref="admin.facilities">Facilities</a></li>
+                </ul>
+              </li>
+              <li data-ui-sref-active="active" data-ng-show="!_auth.user.email"><a data-ui-sref="login">Administrator Login</a></li>
+              <li><a data-ui-sref="login" data-ng-show="_auth.user.email" data-ng-click="_auth.logout()">Logout</a></li>
             </ul>
           </div><!-- End of .collapse -->
         </div><!-- End of .container -->
@@ -112,27 +125,44 @@
     <script src="bower_components/angular-touch/angular-touch.js"></script>
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-    <script src="bower_components/ng-ckeditor/ng-ckeditor.js"></script>
+    <script src="bower_components/angularUtils-pagination/dirPagination.js"></script>
+    <script src="bower_components/rangy/rangy-core.js"></script>
+    <script src="bower_components/rangy/rangy-classapplier.js"></script>
+    <script src="bower_components/rangy/rangy-highlighter.js"></script>
+    <script src="bower_components/rangy/rangy-selectionsaverestore.js"></script>
+    <script src="bower_components/rangy/rangy-serializer.js"></script>
+    <script src="bower_components/rangy/rangy-textrange.js"></script>
+    <script src="bower_components/textAngular/dist/textAngular.js"></script>
+    <script src="bower_components/textAngular/dist/textAngular-sanitize.js"></script>
+    <script src="bower_components/textAngular/dist/textAngularSetup.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
-    
-    <!-- CKEditor Files -->
-    <script src="scripts/vendor/ckeditor/ckeditor.js"></script>
 
     <!-- App JavaScript files -->
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
     <script src="scripts/app.js"></script>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/env.js"></script>
+    <script src="scripts/run.js"></script>
+    <script src="scripts/routes.js"></script>
     <script src="scripts/resources.js"></script>
-    <script src="scripts/directives/field.js"></script>
-    <script src="scripts/directives/loading.js"></script>
+    <script src="scripts/services.js"></script>
+    <script src="scripts/directives/af-field.js"></script>
+    <script src="scripts/directives/af-loading.js"></script>
+    <script src="scripts/directives/af-loading-btn.js"></script>
+    <script src="scripts/filters/af-format-telephone.js"></script>
     <script src="scripts/controllers/search.js"></script>
     <script src="scripts/controllers/search.results.js"></script>
-    <script src="scripts/controllers/facility.js"></script>
-    <script src="scripts/controllers/facility-form.js"></script>
-    <script src="scripts/controllers/control-panel.js"></script>
+    <script src="scripts/controllers/facilities.update.js"></script>
+    <script src="scripts/controllers/facilities.form.js"></script>
+    <script src="scripts/controllers/facilities.form.create.js"></script>
+    <script src="scripts/controllers/facilities.form.edit.js"></script>
+    <script src="scripts/controllers/facilities.show.js"></script>
+    <script src="scripts/controllers/admin.dashboard.js"></script>
+    <script src="scripts/controllers/admin.facilities.js"></script>
+    <script src="scripts/controllers/admin.facility-repository.show.js"></script>
     <script src="scripts/controllers/login.js"></script>
-    <script src="scripts/modals/contact-us.js"></script>
-    <script src="scripts/modals/facility-preview.js"></script>
+    <script src="scripts/modals/contact-springboard-atlantic.js"></script>
     <!-- endbuild -->
   </body>
 </html>
