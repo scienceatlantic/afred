@@ -237,12 +237,13 @@ angular.module('afredApp').controller('SearchController',
        * Retrieves the search results.
        *
        * Side effects:
-       * $scope.search.query 'page' and 'itemsPerPage' are added/updated.
+       * $scope.search.query 'page' and 'itemsPerPage' are added.
        * $scope.search.results Stores search results.
        * $scope.search.resource Stores promise returned from 'searchResource'.
        *
        * Uses/requires:
        * $scope.search.resource
+       * searchResource
        *
        * @param {integer} page Page number of pagination.
        */
@@ -261,7 +262,7 @@ angular.module('afredApp').controller('SearchController',
        * Instantiates a modal that allows the user to contact Springboard
        * Atlantic.
        *
-       * Uses/requires:
+       * Uses/calls/requires:
        * $uibModal
        */
       contactSpringboardAtlantic: function() {        

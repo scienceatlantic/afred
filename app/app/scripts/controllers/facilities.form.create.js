@@ -13,6 +13,14 @@ angular.module('afredApp').controller('FacilitiesFormCreateController',
     
     /**
      * Shows the preview.
+     *
+     * Side effects:
+     * $scope.view.show Set to 'PREVIEW'.
+     * $scope.facility Data returned from '$scope.form.formatForPreview()'
+     *     is attached to this.
+     *
+     * Uses/calls/requires:
+     * $scope.form.formatForPreview();
      */
     $scope.preview = function() {
       $scope.facility = $scope.form.formatForPreview();
@@ -20,6 +28,13 @@ angular.module('afredApp').controller('FacilitiesFormCreateController',
       scrollTo(0, 300);
     };
     
+    
+    /**
+     * Returns view to the form.
+     *
+     * Side effects:
+     * $scope.view.show Set to 'FORM'.
+     */
     $scope.goBack = function() {
       $scope.view.show = 'FORM';
       scrollTo(0, 0);
@@ -28,6 +43,16 @@ angular.module('afredApp').controller('FacilitiesFormCreateController',
     /**
      * Submits the form. A success message is shown if the operation was
      * successful otherwise an error message is shown instead.
+     *
+     * Side effects:
+     * $scope.fr Promised returned is attached to this.
+     * $scope.view.show Set to 'SUCCESS_MESSAGE' if the operation was
+     *     successful, otherwise it is set to 'FAILURE_MESSAGE'.
+     *
+     * Uses/calls/requires:
+     * facilityRepositoryResource
+     * $scope.form.formatForApi()
+     * $scope.form.clearSave()
      */
     $scope.submit = function() {
       $scope.fr = facilityRepositoryResource.submit(
@@ -50,19 +75,22 @@ angular.module('afredApp').controller('FacilitiesFormCreateController',
     
     /**
      * Controls what is shown to the user.
-     * @type {string} 'FORM', 'PREVIEW', 'SUCCESS_MESSAGE', 'FAILURE_MESSAGE'.
+     * @type {string} 'FORM',
+     *                'PREVIEW',
+     *                'SUCCESS_MESSAGE',
+     *                'FAILURE_MESSAGE'.
      */
     $scope.view = {
       show: 'FORM'
     };
     
     /**
-     * Will the data return by '$scope.submit()'.
+     * Will hold the data return by '$scope.submit()'.
      * @type {object}
      */
     $scope.fr = {};
     
-    // Initialise the form, retrieve any saved data, and start autosaving.
+    // Initialise the form.
     $scope.form.initialise();
     
     // Because of async issues, we're going to keep calling
@@ -75,7 +103,7 @@ angular.module('afredApp').controller('FacilitiesFormCreateController',
       }
     }, 350);
     
-    // 
+    // Make sure to disable '$scope.form.autosave()' if the route is changed. 
     $scope.$on('$stateChangeStart', function() {
       $interval.cancel($scope.form.isAutosaving);
     });

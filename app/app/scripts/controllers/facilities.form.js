@@ -286,7 +286,9 @@ angular.module('afredApp').controller('FacilitiesFormController',
        *
        * Side effects:
        * $scope.form.organizations Data retrieved is attached to this array.
-       *     Also adds an option (object) with the name 'N/A' and an ID of -1.
+       *     'N/A' (if found) is moved to them bottom of the array and an
+       *     organization called 'Other' is added to the array (after 'N/A')
+       *     with an id of -1.
        *
        * Uses/calls/requires:
        * organizationResource
@@ -316,7 +318,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
        *
        * Side effects:
        * $scope.form.provinces Data retrieved is attached to this array.
-       *     Also adds an option (object) with the name 'N/A' and an ID of -1.
+       *     'N/A' (if found) is moved to them bottom of the array.
        *
        * Uses/calls/requires:
        * provinceResource
@@ -339,6 +341,17 @@ angular.module('afredApp').controller('FacilitiesFormController',
       /**
        * Gets an array of all disciplines and attaches it to
        * '$scope.form.disciplines'.
+       *
+       * Side effects:
+       * $scope.form.disciplines Array of disciplines is attached to this. Will
+       *    add a property called 'isSelected' to each array element.
+       * $scope.form.loading Set to true at the beginning of the function and
+       *     then set to false at the end. 'isRequired' is added to the first
+       *     element in the array.
+       *
+       * Uses/calls/requires:
+       * disciplineResource
+       * 
        * @param {array} disciplines If in edit mode, this will mark any already
        *     selected checkboxes.
        */
@@ -394,6 +407,16 @@ angular.module('afredApp').controller('FacilitiesFormController',
       
       /**
        * Gets an array of all sectors and attaches it to '$scope.form.sectors'.
+       *
+       * Side effects:
+       * $scope.form.sectors Array of sectors is attached to this. See
+       *     '$scope.form.getDisciplines()' for more details.
+       * $scope.form.loading Set to true at the beginning of the function
+       *     and then set to false once all processing is complete.
+       *
+       * Uses/calls/requires:
+       * sectorResource
+       * 
        * @param {array} sectors If in edit mode, this will mark any already
        *     selected checkboxes.
        */
@@ -441,7 +464,17 @@ angular.module('afredApp').controller('FacilitiesFormController',
       },
       
       /**
-       * Retrieves a facility for editing and attaches it '$scope.form.data'.
+       * Retrieves a facility for editing.
+       *
+       * Side effects:
+       * $scope.form.fr Promise is attached to this.
+       * $scope.form.data Facility data is attached to this.
+       *
+       * Calls/uses/requires:
+       * facilityRepositoryResource
+       * $scope.form.getDisciplines()
+       * $scope.form.getSectors()
+       * 
        * @param {integer} frId Id of the facility repository record to
        *     retrieve.
        * @param {string} token A string that authorises the user to retrieve
@@ -488,6 +521,11 @@ angular.module('afredApp').controller('FacilitiesFormController',
       /**
        * Makes sure that the user has selected at least one discipline. Makes
        * use of '$scope.form.discipline[0].isRequired'.
+       *
+       * Side effects:
+       * $scope.form.disciplines[0].isRequired Set to false if any of the
+       *     elements in the array is selected. Otherwise it is set to true.
+       * 
        * @var {object} disciplinesForm Instance of the 'disciplinesForm'.
        */
       validateDisciplines: function(disciplinesForm) {
@@ -526,6 +564,23 @@ angular.module('afredApp').controller('FacilitiesFormController',
       
       /**
        * Saves the form data to local storage.
+       *
+       * Side effects:
+       * localStorage 'facilities', 'disciplines', and 'sectors' are saved.
+       * $scope.form.loading.save Set to true at the beginning of the function
+       *     call and then set to false once all processing is complete.
+       * $scope.form.isStorageSupported Set to false if the operation fails.
+       *
+       * Uses/calls/requires:
+       * $scope.form.provinces.$resolved
+       * $scope.form.disciplines.$resolved
+       * $scope.form.sectors.$resolved
+       * $scope.form.loading.disciplines
+       * $scope.form.loading.sectors
+       * $scope.form.getLsName()
+       * $scope.form.getSelectedDisciplines()
+       * $scope.form.getSelectedSectors()
+       *  
        * @return {integer} 1 if the operation was successful, 0 if local storage
        *     is not supported, and -1 if form data has not been resolved (the
        *     function will not attempt to save).
@@ -571,6 +626,21 @@ angular.module('afredApp').controller('FacilitiesFormController',
       
       /**
        * Retrieves any saved data from local storage.
+       *
+       * Side effects:
+       * $scope.form.data Data retrieved from localstorage is attached to this.
+       * $scope.form.loading.save Set to false if the operation fails because
+       *     that means that local storage is not supported. We have to set
+       *     this to false because in case the '$scope.form.save()' function
+       *     doesn't get called, '$scope.form.loading' will always be true.
+       *
+       * Uses/calls/requires:
+       * $scope.form.provinces.$resolved
+       * $scope.form.disciplines.$resolved
+       * $scope.form.sectors.$resolved
+       * $scope.form.loading.disciplines
+       * $scope.form.loading.sectors
+       *  
        * @returns {integer} 1 if the operation was successful regardless if data
        *     was actually retrieved. 0 if local storage is not supported. -1 if
        *     the form data (organizations, provinces, disciplines, sectors) has
@@ -612,6 +682,21 @@ angular.module('afredApp').controller('FacilitiesFormController',
       
       /**
        * Clears local storage of any saved form data.
+       *
+       * Side effects:
+       * localStorage 'facilities', 'disciplines', 'sectors' data deleted.
+       * $scope.form.isAutosaving Interval stored here is stopped.
+       * $scope.form.isStorageSupported Set to false if operation fails.
+       * 
+       * Uses/calls/requires:
+       * $interval
+       * $scope.form.initialise()
+       *
+       * @param dontConfirm If set to true, confirmation modal will not be shown
+       *     and localStorage will be cleared immediately and the form will be
+       *     reinitialised. If set to false, the confirmation modal will be 
+       *     shown and if confirmed, the page will be reloaded (instead of
+       *     being reinitialised).
        */
       clearSave: function(dontConfirm) {
         if (dontConfirm) {
@@ -645,7 +730,12 @@ angular.module('afredApp').controller('FacilitiesFormController',
       
       /**
        * Continuously save the form data to local storage every 'interval'
-       * milliseconds. Calls '$scope.form.save()'.
+       * milliseconds.
+       *
+       * Side effects:
+       * $scope.form.isAutosaving ID returned from $interval is attached to this
+       *     if the operation is successful.
+       * 
        * @param {integer} interval Number of milliseconds between each
        *     interval. If not provided, a default of 500 milliseconds is used.
        */
@@ -666,17 +756,23 @@ angular.module('afredApp').controller('FacilitiesFormController',
       
       /**
        * Retrieves the item name used for storing form data.
+       *
+       * Uses/calls/requires:
+       * $scope._state.current.name
+       * 
        * @param {string} item The item to retrieve (facility, disciplines,
        *     sectors)
        */
       getLsName: function(item) {
-        console.log($scope._state.current.name);
         return $scope._state.current.name + '-' + item;
       },
       
       /**
        * Formats the data for the preview. It gets the names of the selected
        * organization and province.
+       *
+       * Uses/calls/requires:
+       * $scope.form.data
        */
       formatForPreview: function() {
         var facility = angular.copy($scope.form.data.facility);
@@ -708,10 +804,13 @@ angular.module('afredApp').controller('FacilitiesFormController',
       /**
        * Formats the data to match what the API requires. The API expects a
        * single primary contact and (optionally) regular contacts. In the form,
-       * the first contact is the primary contact, so splice it out and attach
-       * it to a property called 'primaryContact'. The 'organizationId' field
-       * must either be empty or contain a valid organization id, so if it's
-       * less than 1, set it to null.
+       * the first contact is assumed to be the primary contact.
+       *
+       * Calls/uses/requires:
+       * $scope.form.data
+       * $scope.form.getSelectedDisciplines()
+       * $scope.forn.getSelectedSectors()
+       * 
        * @return {object} Facility object.
        */
       formatForApi: function() {
@@ -737,6 +836,10 @@ angular.module('afredApp').controller('FacilitiesFormController',
       
       /**
        * Returns an array of selected disciplines.
+       *
+       * Uses/calls/requires:
+       * $scope.form.disciplines
+       * 
        * @param {boolean} idOnly If true, the function will only return an
        *     array of selected IDs instead of an array of selected discipline
        *     objects.
@@ -754,6 +857,10 @@ angular.module('afredApp').controller('FacilitiesFormController',
       
       /**
        * Returns an array of selected sectors.
+       *
+       * Uses/calls/requires:
+       * $scope.form.sectors
+       * 
        * @param {boolean} idOnly If true, the function will only return an
        *     array of selected IDs instead of an array of selected sector
        *     objects.
