@@ -84,9 +84,14 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         controller: 'AdminDashboardController'
       }).
       state('admin.facilities', {
-        url: '/facilities?state',
+        url: '/facilities',
         templateUrl: 'views/admin.facilities.html',
         controller: 'AdminFacilitiesController'
+      }).
+      state('admin.facilities.state', {
+        url: '/?state&page',
+        templateUrl: 'views/admin.facilities.state.html',
+        controller: 'AdminFacilitiesStateController'
       }).
       state('admin.facilityRepository', {
         'abstract': true,
