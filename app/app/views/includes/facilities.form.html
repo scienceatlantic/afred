@@ -14,7 +14,7 @@
           </div>
           
           <div data-af-field data-af-field-label="Organization*">
-            <select class="form-control" id="facility-organization" name="facilityOrganization" data-ng-model="form.data.facility.organizationId" data-ng-options="i.id as i.name for i in form.organizations" required>
+            <select class="form-control" name="facilityOrganization" id="facility-organization" data-ng-model="form.data.facility.organizationId" data-ng-options="i.id as i.name for i in form.organizations" required>
             </select>
           </div>
           
@@ -56,13 +56,13 @@
           -- providing the name of the first checkbox, validation is a problem.  Please have a look at the
           -- '$scope.form.validateDisciplines()' function for how this was dealt with.
           -->
-        <div data-af-field data-af-field-label="Disciplines*" data-af-field-name="facilityDisciplinesC10" data-af-field-type="checkbox">
+        <div data-af-field data-af-field-label="Disciplines*" data-af-field-name="facilityDisciplinesC10" data-af-field-popover="Please select at least one applicable discipline.">
           <div class="row">
             <div class="col-md-6">
               <div data-ng-repeat="d in form.disciplines | limitTo: 5">
                 <div class="checkbox">
                   <label>
-                    <input type="checkbox" name="facilityDisciplinesC1{{$index}}" data-ng-model="d.isSelected" data-ng-change="form.validateDisciplines(disciplinesForm)" data-ng-required="form.disciplines[0].isRequired"> {{d.name}}
+                    <input type="checkbox" name="facilityDisciplinesC1{{ $index }}" data-ng-model="d.isSelected" data-ng-change="form.validateDisciplines(disciplinesForm)" data-ng-required="form.disciplines[0].isRequired"> {{d.name}}
                   </label>
                 </div>
               </div>
@@ -72,7 +72,7 @@
               <div data-ng-repeat="d in form.disciplines | limitTo: 4:5">
                 <div class="checkbox">
                   <label>
-                    <input type="checkbox" name="facilityDisciplinesC2{{$index}}" data-ng-model="d.isSelected" data-ng-change="form.validateDisciplines(disciplinesForm)" data-ng-required="form.disciplines[0].isRequired"> {{d.name}}
+                    <input type="checkbox" name="facilityDisciplinesC2{{ $index }}" data-ng-model="d.isSelected" data-ng-change="form.validateDisciplines(disciplinesForm)" data-ng-required="form.disciplines[0].isRequired"> {{d.name}}
                   </label>
                 </div>
               </div>
@@ -94,13 +94,13 @@
           -- Please have a look at the comments for 'disciplinesForm' above for how we're using the 'af-field' directive.
           -- Exact same scenario here.
           -->
-        <div data-af-field data-af-field-label="Sectors*" data-af-field-name="facilitySectorsC10" data-af-field-type="checkbox">
+        <div data-af-field data-af-field-label="Sectors*" data-af-field-name="facilitySectorsC10" data-af-field-popover="Please select at least one applicable sector.">
           <div class="row">
             <div class="col-md-6">
               <div data-ng-repeat="s in form.sectors | limitTo: 15">
                 <div class="checkbox">
                   <label>
-                    <input type="checkbox" name="facilitySectorsC1{{$index}}" data-ng-model="s.isSelected" data-ng-change="form.validateSectors(sectorsForm)" data-ng-required="form.sectors[0].isRequired"> {{s.name}}
+                    <input type="checkbox" name="facilitySectorsC1{{ $index }}" data-ng-model="s.isSelected" data-ng-change="form.validateSectors(sectorsForm)" data-ng-required="form.sectors[0].isRequired"> {{s.name}}
                   </label>
                 </div>
               </div>
@@ -110,7 +110,7 @@
               <div data-ng-repeat="s in form.sectors | limitTo: 14:15">
                 <div class="checkbox">
                   <label>
-                    <input type="checkbox" name="facilitySectorsC2{{$index}}" data-ng-model="s.isSelected" data-ng-change="form.validateSectors(sectorsForm)" data-ng-required="form.sectors[0].isRequired"> {{s.name}}
+                    <input type="checkbox" name="facilitySectorsC2{{ $index }}" data-ng-model="s.isSelected" data-ng-change="form.validateSectors(sectorsForm)" data-ng-required="form.sectors[0].isRequired"> {{s.name}}
                   </label>
                 </div>
               </div> 
@@ -140,8 +140,10 @@
               <tr data-ng-repeat="c in form.data.contacts" data-ng-class="{active: form.contactIndex === $index}" data-ng-click="form.contactIndex = $index">
                 <td>
                   <a href="">
-                    <span data-ng-hide="c.firstName || c.lastName">Contact #{{$index + 1}}</span>
-                    <span data-ng-show="c.firstName || c.lastName">{{c.firstName}} {{c.lastName}}</span>
+                    <span data-ng-class="{ 'text-danger': facilityForm['contactForm' + $index].$invalid && facilityForm['contactForm' + $index].$dirty }">
+                      <span data-ng-hide="c.firstName || c.lastName">Contact #{{$index + 1}}</span>
+                      <span data-ng-show="c.firstName || c.lastName">{{c.firstName}} {{c.lastName}}</span>
+                    </span>
                   </a>
                 </td>
                 <td>
@@ -160,45 +162,45 @@
         
         <div class="col-lg-10">                    
           <div data-ng-repeat="c in form.data.contacts">
-            <div data-ng-form name="contactForm">
+            <div data-ng-form name="contactForm{{ $index }}">
               <div class="row" data-ng-show="form.contactIndex === $index">
                 <div class="col-lg-6">
                   <div data-af-field data-af-field-label="First name*">
-                    <input type="text" class="form-control" name="contactFirstName" data-ng-model="c.firstName" required>
+                    <input type="text" class="form-control" name="contactFirstName{{ $index }}" data-ng-model="c.firstName" required>
                   </div>
                   
                   <div data-af-field data-af-field-label="Last name*">
-                    <input type="text" class="form-control" name="contactLastName" data-ng-model="c.lastName" required>
+                    <input type="text" class="form-control" name="contactLastName{{ $index }}" data-ng-model="c.lastName" required>
                   </div>
                   
                   <div data-af-field data-af-field-label="Email*">
-                    <input type="email" class="form-control" name="contactEmail" data-ng-model="c.email" data-ng-model-options="{ debounce: 500 }" placeholder="me@example.com" required>
+                    <input type="email" class="form-control" name="contactEmail{{ $index }}" data-ng-model="c.email" data-ng-model-options="{ debounce: 500 }" placeholder="me@example.com" required>
                   </div>
                   
                   <div data-af-field data-af-field-label="Telephone*" data-ng-if="$index === 0">
-                    <input type="text" class="form-control" name="contactTelephone" data-ng-model="c.telephone" data-ng-model-options="{ debounce: 500 }" data-ng-pattern="/^\d{10}$/" placeholder="5555555555" required>
+                    <input type="text" class="form-control" name="contactTelephone{{ $index }}" data-ng-model="c.telephone" data-ng-model-options="{ debounce: 500 }" data-ng-pattern="/^\d{10}$/" placeholder="5555555555" required>
                   </div>
                   
                   <div data-af-field data-af-field-label="Telephone" data-ng-if="$index !== 0">
-                    <input type="text" class="form-control" name="contactTelephone" data-ng-model="c.telephone" data-ng-model-options="{ debounce: 500 }" data-ng-pattern="/^\d{10}$/" placeholder="5555555555">
+                    <input type="text" class="form-control" name="contactTelephone{{ $index }}" data-ng-model="c.telephone" data-ng-model-options="{ debounce: 500 }" data-ng-pattern="/^\d{10}$/" placeholder="5555555555">
                   </div>
                 </div><!-- End of .col-x-x -->
                 
                 <div class="col-lg-6">
                   <div data-af-field data-af-field-label="Position*" data-ng-if="$index === 0">
-                    <input type="text" class="form-control" name="contactPosition" data-ng-model="c.position" required>
+                    <input type="text" class="form-control" name="contactPosition{{ $index }}" data-ng-model="c.position" required>
                   </div>
                   
                   <div data-af-field data-af-field-label="Position" data-ng-if="$index !== 0">
-                    <input type="text" class="form-control" name="contactPosition" data-ng-model="c.position">
+                    <input type="text" class="form-control" name="contactPosition{{ $index }}" data-ng-model="c.position">
                   </div>
                   
                   <div data-af-field data-af-field-label="Website">
-                    <input type="url" class="form-control" name="contactWebsite" data-ng-model="c.website" data-ng-model-options="{ debounce: 500 }" placeholder="http://example.com">
+                    <input type="url" class="form-control" name="contactWebsite{{ $index }}" data-ng-model="c.website" data-ng-model-options="{ debounce: 500 }" placeholder="http://example.com">
                   </div>
                   
                   <div data-af-field data-af-field-label="Extension">
-                    <input type="text" class="form-control" name="contactExtension" data-ng-model="c.extension">
+                    <input type="text" class="form-control" name="contactExtension{{ $index }}" data-ng-model="c.extension">
                   </div>
                 </div><!-- End of .col-x-x -->
               </div><!-- End of .row -->
@@ -227,8 +229,10 @@
               <tr data-ng-repeat="e in form.data.equipment" data-ng-class="{active: form.equipmentIndex === $index}" data-ng-click="form.equipmentIndex = $index">
                 <td>
                   <a href="">
-                    <span data-ng-hide="e.type">Equipment #{{$index + 1}}</span>
-                    <span data-ng-show="e.type">{{e.type}} <span data-ng-show="e.manufacturer">({{e.manufacturer}})</span></span>
+                    <span data-ng-class="{ 'text-danger': facilityForm['equipmentForm' + $index].$invalid && facilityForm['equipmentForm' + $index].$dirty }">
+                      <span data-ng-hide="e.type">Equipment #{{$index + 1}}</span>
+                      <span data-ng-show="e.type">{{e.type}} <span data-ng-show="e.manufacturer">({{e.manufacturer}})</span></span>
+                    </span>
                   </a>
                 </td>
                 <td>
@@ -247,19 +251,19 @@
         
         <div class="col-lg-10">
           <div data-ng-repeat="e in form.data.equipment">
-            <div data-ng-form name="equipmentForm">
+            <div data-ng-form name="equipmentForm{{ $index }}">
               <div class="row" data-ng-show="form.equipmentIndex === $index">
                 <div class="col-lg-12">
                   <div data-af-field data-af-field-label="Type*">
-                    <input type="text" class="form-control" name="equipmentType" data-ng-model="e.type" placeholder="Eg. Magnetic resonance imaging (MRI)" required>
+                    <input type="text" class="form-control" name="equipmentType{{ $index }}" data-ng-model="e.type" placeholder="Eg. Magnetic resonance imaging (MRI)" required>
                   </div>
                   
                   <div data-af-field data-af-field-label="Manufacturer">
-                    <input type="text" class="form-control" name="equipmentManufacturer" placeholder="Eg. Hitachi Medical" data-ng-model="e.manufacturer">
+                    <input type="text" class="form-control" name="equipmentManufacturer{{ $index }}" placeholder="Eg. Hitachi Medical" data-ng-model="e.manufacturer">
                   </div>
 
                   <div data-af-field data-af-field-label="Model">
-                    <input type="text" class="form-control" name="equipmentModel" placeholder="Eg. Echelon Oval 1.5T Ultra-Wide MRI system" data-ng-model="e.model">
+                    <input type="text" class="form-control" name="equipmentModel{{ $index }}" placeholder="Eg. Echelon Oval 1.5T Ultra-Wide MRI system" data-ng-model="e.model">
                   </div>
                   
                   <!--
@@ -267,41 +271,41 @@
                     -- goes for equipment specifications.
                     -->
                   <div data-af-field data-af-field-label="Equipment purpose*" data-af-field-textangular="true">
-                    <div data-text-angular name="equipmentPurpose{{$index}}" data-ng-model="e.purpose" required></div>
+                    <div data-text-angular name="equipmentPurpose{{ $index }}" data-ng-model="e.purpose" required></div>
                   </div>
                   
                   <div data-af-field data-af-field-label="Equipment specifications" data-af-field-textangular="true">
-                    <div data-text-angular name="equipmentSpecifications{{$index}}" data-ng-model="e.specifications"></div>
+                    <div data-text-angular name="equipmentSpecifications{{ $index }}" data-ng-model="e.specifications"></div>
                   </div>
                   
                   <div data-af-field data-af-field-label="Year purchased">
-                    <input type="text" class="form-control" name="equipmentYearPurchased" data-ng-model="e.yearPurchased" data-ng-model-options="{ debounce: 500 }" pattern="(?:19|20)[0-9]{2}" placeholder="Eg. 1995">
+                    <input type="text" class="form-control" name="equipmentYearPurchased{{ $index }}" data-ng-model="e.yearPurchased" data-ng-model-options="{ debounce: 500 }" pattern="(?:19|20)[0-9]{2}" placeholder="Eg. 1995">
                   </div>
                   
-                  <div data-af-field data-af-field-label="Excess capacity*">
+                  <div data-af-field data-af-field-label="Excess capacity*" data-af-field-popover="Explanation here...">
                     <div class="radio">
                       <label>
-                        <input type="radio" name="equipmentExcessCapacity{{$index}}" data-ng-model="e.hasExcessCapacity" data-ng-value="true" required> Yes 
+                        <input type="radio" name="equipmentExcessCapacity{{ $index }}" data-ng-model="e.hasExcessCapacity" data-ng-value="true" required> Yes 
                       </label>
                       <label>
-                        <input type="radio" name="equipmentExcessCapacity{{$index}}" data-ng-model="e.hasExcessCapacity" data-ng-value="false" required> No
+                        <input type="radio" name="equipmentExcessCapacity{{ $index }}" data-ng-model="e.hasExcessCapacity" data-ng-value="false" required> No
                       </label>
                     </div>
                   </div>
                   
-                  <div data-af-field data-af-field-label="Search visibility*">
+                  <div data-af-field data-af-field-label="Search visibility*" data-af-field-popover="Explanation here...">
                     <div class="radio">
                       <label>
-                        <input type="radio" name="equipmentIsPublic{{$index}}" data-ng-model="e.isPublic" data-ng-value="true" selected required> Public 
+                        <input type="radio" name="equipmentIsPublic{{ $index }}" data-ng-model="e.isPublic" data-ng-value="true" selected required> Public 
                       </label>
                       <label>
-                        <input type="radio" name="equipmentIsPublic{{$index}}" data-ng-model="e.isPublic" data-ng-value="false" required> Hidden
+                        <input type="radio" name="equipmentIsPublic{{ $index }}" data-ng-model="e.isPublic" data-ng-value="false" required> Hidden
                       </label>
                     </div>
                   </div>
                   
-                  <div data-af-field data-af-field-label="Keywords">
-                    <input type="text" class="form-control" name="equipmentKeywords" data-ng-model="e.keywords" placeholder="NMRI, MRT, etc">
+                  <div data-af-field data-af-field-label="Keywords" data-af-field-popover="Explanation here...">
+                    <input type="text" class="form-control" name="equipmentKeywords{{ $index }}" data-ng-model="e.keywords" placeholder="NMRI, MRT, etc">
                   </div>
                 </div><!-- End of .col-x-x -->
               </div><!-- End of .row -->
@@ -316,8 +320,8 @@
     -- ====================================================== !-->
   
   <div>
-    <button type="submit" class="btn btn-default" data-ng-disabled="facilityForm.$invalid" data-ng-click="preview()">Preview</button>
-    <button type="button" class="btn btn-default" data-ng-show="_state.is('facilities.form.create')" data-ng-click="form.clearSave()">Reset form</button>
+    <button type="submit" class="btn btn-default" data-ng-disabled="facilityForm.$invalid" data-ng-click="preview()">Preview <span class="glyphicon glyphicon-ok"></span></button>
+    <button type="button" class="btn btn-default" data-ng-show="_state.is('facilities.form.create')" data-ng-click="form.clearSave()">Clear form <span class="glyphicon glyphicon-refresh"></span></button>
     <p>
       <p class="text-warning" data-ng-show="facilityForm.$invalid && !facilityForm.$pristine">Please complete all mandatory fields first</p>
     </p>
