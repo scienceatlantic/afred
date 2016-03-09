@@ -31,7 +31,7 @@
     <![endif]-->
 
     <!-- App content -->
-    <div>
+    <div>      
       <!-- Header -->
       <header class="jumbotron">
         <div class="container">
@@ -43,7 +43,7 @@
       </header>
       
       <!-- Main Navigation -->
-      <nav class="navbar navbar-default" role="navigation">
+      <nav class="navbar navbar-default" role="navigation" data-ng-cloak>
         <div class="container">
           <!-- Brand and toggle get grouped for better mobile display -->
           <div class="navbar-header">
@@ -73,10 +73,16 @@
                   <li><a data-ui-sref="admin.facilities">Facilities</a></li>
                 </ul>
               </li>
-              <li data-ui-sref-active="active" data-ng-show="!_auth.user.email"><a data-ui-sref="login">Administrator Login</a></li>
+              <li data-ui-sref-active="active" data-ng-hide="_auth.user.email"><a data-ui-sref="login">Administrator Login</a></li>
               <li><a data-ui-sref="login" data-ng-show="_auth.user.email" data-ng-click="_auth.logout()">Logout</a></li>
             </ul>
           </div><!-- End of .collapse -->
+          
+          <div style="padding-right: 13px;" data-ng-show="_auth.user.firstName">
+            <div class="pull-right">
+              <p>Logged in as <b>{{ _auth.user.firstName }} {{ _auth.user.lastName }}</b></p>
+            </div>
+          </div>
         </div><!-- End of .container -->
       </nav>
 

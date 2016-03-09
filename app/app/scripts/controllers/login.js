@@ -17,10 +17,14 @@ angular.module('afredApp').controller('LoginController',
       $scope.auth = $scope._auth.login($scope.credentials).then(function(response) {
         // If login was successful, save the authenticated user's details
         // and redirect the user to the dashboard.
-        $scope._auth.user = response.data;
-        $scope._state.go('admin.dashboard');
+        $scope._auth.save(response);
+        
+        if ($scope._stateParams.redirect) {
+          location = $scope._stateParams.redirect;
+        } else {
+          $scope._state.go('admin.dashboard');
+        }
       }, function() {
-        console.log($scope.auth);
         $scope.credentials.invalid = true;
         
         // Set loading flag to false.

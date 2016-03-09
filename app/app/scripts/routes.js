@@ -71,9 +71,9 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         resolve: {
           ping: ['$rootScope', '$state', function($rootScope, $state) {
             return $rootScope._auth.ping().then(function(response) {
-              $rootScope._auth.user = response.data;
+              $rootScope._auth.save(response.data);
             }, function() {
-              $state.go('login');
+              $state.go('login', { redirect: location.href });
             });
           }]
         }
@@ -104,7 +104,7 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         controller: 'AdminFacilityRepositoryShowController'
       }).
       state('login', {
-        url: '/login',
+        url: '/login?redirect',
         templateUrl: 'views/login.html',
         controller: 'LoginController',
         resolve: {

@@ -67,12 +67,27 @@ angular.module('afredApp').run(['$rootScope',
      * --------------------------------------------------------------------- */
 
     $rootScope._auth = {
+      /**
+       *
+       */
       user: {},
+      
+      /**
+       *
+       */
       resolved: false,
+      
+      /**
+       *
+       */
       login: function(credentials) {
         return $http.post($rootScope._config.api.address + '/auth/login',
           credentials);
       },
+      
+      /**
+       *
+       */
       logout: function() {
         $http.get($rootScope._config.api.address + '/auth/logout').then(
           function() {
@@ -81,13 +96,29 @@ angular.module('afredApp').run(['$rootScope',
           }
         );
       },
+      
+      /**
+       *
+       */
       ping: function() {
         return $http.get($rootScope._config.api.address + '/auth/ping');
-      }
+      },
+      
+      /**
+       *
+       */
+      save: function(data) {
+        $rootScope._auth.user = data;
+        angular.forEach(data.roles, function(role) {
+          if (role.name == 'Admin') {
+            $rootScope._auth.user.isAdmin = true;
+          }
+        });
+      },
     };
     
     $rootScope._auth.ping().then(function(response) {
-      $rootScope._auth.user = response.data;
+      $rootScope._auth.save(response.data);
       $rootScope._auth.resolved = true;
     }, function() {
       $rootScope._auth.resolved = true;
