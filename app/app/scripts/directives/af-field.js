@@ -3,8 +3,9 @@
 /**
  * Directive for form fields.
  */
-angular.module('afredApp').directive('afField',
-  function() {
+angular.module('afredApp').directive('afField', [
+  '$timeout',
+  function($timeout) {
     return {
       restrict: 'A',
       replace: true,
@@ -14,43 +15,36 @@ angular.module('afredApp').directive('afField',
       scope: {
         label: '@afFieldLabel',
         nameOverride: '@afFieldName',
-        typeOverride: '@afFieldType',
+        popover: '@afFieldPopover',
         isTextAngular: '@afFieldTextangular'
       },
       link: function($scope, element, attrs, form) { 
-        if ($scope.nameOverride) {
-          $scope.name = $scope.nameOverride;
-          
-          $scope.template = {
-            isRadio: $scope.typeOverride === 'radio',
-            isCheckbox: $scope.typeOverride === 'checkbox'
-          };
-        } else {
-          var field = element.find('input, select, textarea');
-          
-          if ($scope.isTextAngular) {
-            $scope.name = field.get(1).name;
-            $scope.id = field.get(1).id;
-            
-            $scope.template = {
-              isTextArea: true
-            };
+        var field = element.find('input, select, textarea');
+        
+        // Note: '$timeout' is used as a hack-ish fix to give Angular time
+        // to interpolate '$index' (if used).
+        if ($scope.isTextAngular) {
+          if ($scope.nameOverride) {
+            $scope.name = $scope.nameOverride;
           } else {
-            $scope.name = field.attr('name');
-            $scope.id = field.attr('id');
-  
-            $scope.template = {
-              isInput: field.prop('tagName') === 'INPUT',
-              isSelect: field.prop('tagName') === 'SELECT',
-              isTextarea: field.prop('tagName') === 'TEXTAREA',
-              isRadio: field.attr('type') === 'radio',
-              isCheckbox: field.attr('type') === 'checkbox'
-            };     
-          }               
+            $scope.name = field.get(1).name;
+          }
+          
+          $scope.id = field.get(0).id; // Not working, need fix!          
+        } else {
+          if ($scope.nameOverride) {
+            $scope.name = $scope.nameOverride;
+          } else {
+            $timeout(function() {
+              $scope.name = field.attr('name');
+            });
+          }
+          
+          $scope.id = field.attr('id');  
         }
         
         $scope.form = form; 
       }
     };
   }
-);
+]);
