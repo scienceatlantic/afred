@@ -4,12 +4,21 @@
     
     <p>
       <label>State:</label>
-        <span class="text-info" data-ng-show="fr.state == 'PENDING_APPROVAL'">PENDING APPROVAL</span>
-        <span class="text-info" data-ng-show="fr.state == 'PENDING_EDIT_APPROVAL'">PENDING EDIT APPROVAL</span>
-        <span class="text-success" data-ng-show="fr.state == 'PUBLISHED'">PUBLISHED</span>
-        <span class="text-success" data-ng-show="fr.state == 'PUBLISHED_EDIT'">PUBLISHED EDIT</span>
-        <span class="text-danger" data-ng-show="fr.state == 'REJECTED'">REJECTED</span>
-        <span class="text-danger" data-ng-show="fr.state == 'REJECTED_EDIT'">REJECTED EDIT</span>          
+        <b>
+          <span class="text-info" data-ng-show="fr.state == 'PENDING_APPROVAL'">PENDING APPROVAL</span>
+          <span class="text-info" data-ng-show="fr.state == 'PENDING_EDIT_APPROVAL'">PENDING EDIT APPROVAL</span>
+          <span class="text-success" data-ng-show="fr.state == 'PUBLISHED'">PUBLISHED</span>
+          <span class="text-success" data-ng-show="fr.state == 'PUBLISHED_EDIT'">PUBLISHED EDIT</span>
+          <span class="text-danger" data-ng-show="fr.state == 'REJECTED'">REJECTED</span>
+          <span class="text-danger" data-ng-show="fr.state == 'REJECTED_EDIT'">REJECTED EDIT</span>
+        </b>
+    </p>
+    
+    <p>
+      <label>Search visiblity: </label>
+      <span data-ng-show="fr.facility.isPublic">Public</span>
+      <span data-ng-show="!fr.facility.isPublic">Private</span>
+      <span class="label label-default" data-ng-show="fr.state != 'PUBLISHED' && fr.state != 'PUBLISHED_EDIT'">N/A</span>
     </p>
     
     <p>
@@ -28,15 +37,18 @@
   <br>
   
   <div data-ng-include="'views/includes/facility.html'"></div>
-  <hr>
+  <br>
+  <br>
   
   <div data-ng-show="facility.organization.ilo.firstName">
     <div data-ng-include="'views/includes/ilo.html'"></div>
-    <hr>
+    <br>
+    <br>
   </div>
   
   <div data-ng-include="'views/includes/contacts.html'"></div>
-  <hr>
+  <br>
+  <br>
   
   <div data-ng-include="'views/includes/equipment.html'"></div>
   

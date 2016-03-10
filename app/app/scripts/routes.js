@@ -89,7 +89,7 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         controller: 'AdminFacilitiesController'
       }).
       state('admin.facilities.state', {
-        url: '/?state&page',
+        url: '/?state&visibility&page',
         templateUrl: 'views/admin.facilities.state.html',
         controller: 'AdminFacilitiesStateController'
       }).

@@ -36,6 +36,9 @@ angular.module('afredApp').controller('AdminFacilitiesController',
        *
        * Side effects:
        * $scope.facilities.form.data.page See @param.
+       * $scope.facilities.form.data.visibility If 'resetPage' = true,
+       *     and '$scope.facilities.form.data.state' = PUBLISHED, it is set
+       *     to 1, otherwise null.
        *
        * Calls/uses/requires:
        * $scope._state.go()
@@ -46,7 +49,14 @@ angular.module('afredApp').controller('AdminFacilitiesController',
       goToResultsPage: function(resetPage) {
         if (resetPage) {
           $scope.facilities.form.data.page = 1;
+          
+          if ($scope.facilities.form.data.state == 'PUBLISHED') {
+            $scope.facilities.form.data.visibility = 1;
+          } else {
+            $scope.facilities.form.data.visibility = null;
+          }
         }
+        
         $scope._state.go('admin.facilities.state', $scope.facilities.form.data);
       },
       
@@ -58,28 +68,52 @@ angular.module('afredApp').controller('AdminFacilitiesController',
        *     retrieved from the URL if it is valid.
        * $scope.facilities.form.data.page Page number is updated to match value
        *     retrieved from the URL if it is valid.
+       * $scope.facilities.form.data.visibility If '$scope._stateParams.state'
+       *     = PUBLISHED, visibility is updated to match value retrieveed from
+       *     the URL if it is valid. If invalid, gets set to 1. If state is not
+       *     PUBLISHED, visibility is set to null.
        *
        * Calls/uses/requires:
        * $scope._state.go()
+       * $scope._stateParams
        */
       parseParams: function() {
         var state = null;
         var page = null;
+        var visibility = null;
+        
         try {
           state = $scope._stateParams.state.toUpperCase();
+        } catch(e) {
+          // Do nothing.
+        }
+        
+        try {
           page = parseInt($scope._stateParams.page);
         } catch(e) {
           page = 1;
         }
         
+        try {
+          visibility = parseInt($scope._stateParams.visibility) == 1 ? 1 : 0;
+        } catch(e) {
+          visibility = 1;
+        }
+        
         switch (state) {
+          case 'PUBLISHED':
+            $scope.facilities.form.data.visibility = visibility;
+            $scope.facilities.form.data.state = state;
+            $scope.facilities.form.data.page = page;
+            break;
+          
           case 'PENDING_APPROVAL':
           case 'PENDING_EDIT_APPROVAL':
           case 'REJECTED':
           case 'REJECTED_EDIT':
-          case 'PUBLISHED':
             $scope.facilities.form.data.state = state;
             $scope.facilities.form.data.page = page;
+            $scope.facilities.form.data.visibility = null;
             break;
           
           default:
@@ -103,7 +137,8 @@ angular.module('afredApp').controller('AdminFacilitiesController',
         $scope.facilities.fr = facilityRepositoryResource.query({
           page: $scope.facilities.form.data.page,
           itemsPerPage: 10,
-          state: $scope.facilities.form.data.state        
+          state: $scope.facilities.form.data.state,
+          visibility: $scope.facilities.form.data.visibility
         });
       }
     };    

@@ -13,12 +13,9 @@
       </select>
     </div>
     
-    <div class="form-group" data-ng-show="view.state == 'PUBLISHED'">
+    <div class="form-group" data-ng-show="facilities.form.data.state == 'PUBLISHED'">
       <label for="state">Visibility:</label>
-      <select class="form-control" name="visibility" id="visibility" data-ng-model="facilities.form.data.visibility" data-ng-change="facilities.goToResultsPage()">
-        <option value=1>Public</option>
-        <option value=0>Private</option>
-      </select>
+      <select class="form-control input-sm" name="visibility" id="visibility" data-ng-model="facilities.form.data.visibility" data-ng-options="v.value as v.label for v in [{ value: 1, label: 'Public' }, { value: 0, label: 'Private' }]" data-ng-change="facilities.goToResultsPage()"></select>
     </div>
   </div>
 </div>

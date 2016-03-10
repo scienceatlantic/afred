@@ -44,13 +44,22 @@ class FacilityRepositoryController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(IndexFacilityRepositoryRequest $request)
-    {
-        $state = $request->input('state', '%');
-        $stateOp = $state  == '%' ? 'like' : '=';
+    {        
+        $fr = new FacilityRepository();
         
-        $fr = FacilityRepository::where('state', $stateOp, $state)
-            ->with('reviewer')
-            ->paginate($this->_itemsPerPage);
+        if (($state = $request->input('state'))) {
+            $fr = $fr->where('state', $state);
+        }
+        
+        if ($state == 'PUBLISHED') {
+            $visibility = (bool) $request->input('visibility', true);
+            $f = Facility::where('isPublic', $visibility)
+                ->select('facilityRepositoryId');
+                
+            $fr = $fr->whereIn('id', $f->get());
+        }
+        
+        $fr = $fr->with('reviewer', 'facility')->paginate($this->_itemsPerPage);
             
         return $this->_toCamelCase($fr->toArray());
     }
@@ -63,7 +72,8 @@ class FacilityRepositoryController extends Controller
      */
     public function show(ShowFacilityRepositoryRequest $request, $id)
     {
-        return FacilityRepository::with('reviewer')->findOrFail($id);            
+        return FacilityRepository::with('reviewer', 'facility')
+            ->findOrFail($id);            
     }
 
     /**
