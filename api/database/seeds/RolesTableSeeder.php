@@ -23,8 +23,10 @@ class RolesTableSeeder extends Seeder
         $roles = [
             [
                 'name'        => 'Admin',
+                'permission'  => 10, // Arbitrary value, since we only have
+                                     // one role at the moment.
                 'dateCreated' => $now
-            ]
+            ],
         ];
         
         foreach($roles as $role) {

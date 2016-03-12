@@ -17,7 +17,7 @@ class IndexFacilityRepositoryRequest extends Request
      */
     public function authorize()
     {
-        return $this->_isAdmin();
+        return $this->_isAtLeastAdmin();
     }
 
     /**
