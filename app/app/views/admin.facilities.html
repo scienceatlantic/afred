@@ -1,6 +1,25 @@
-<h3>Admin / Facilities</h3>
+<h3>
+  Admin / Facilities
+  <span data-ng-show="_stateParams.state">
+    /
+    <span data-ng-show="_stateParams.state == 'PUBLISHED'">Published
+      <span>-
+        <span data-ng-show="_stateParams.visibility == 1">Public</span>
+        <span data-ng-show="_stateParams.visibility == 0">Private</span>
+      </span>
+    </span>
+    <span data-ng-show="_stateParams.state == 'PUBLISHED_EDIT'">Published Edit</span>
+    <span data-ng-show="_stateParams.state == 'PENDING_APPROVAL'">Pending Approval</span>
+    <span data-ng-show="_stateParams.state == 'PENDING_EDIT_APPROVAL'">Pending Edit Approval</span>
+    <span data-ng-show="_stateParams.state == 'REJECTED'">Rejected</span>
+    <span data-ng-show="_stateParams.state == 'REJECTED_EDIT'">Rejected Edit</span>
+  </span>
+  <span data-ng-show="_stateParams.facilityId">
+    / {{ _stateParams.facilityId }}
+  </span>
+</h3>
 
-<div class="row"> 
+<div class="row" data-ng-show="_state.current.name == 'admin.facilities' || _state.current.name == 'admin.facilities.state'"> 
   <div class="col-md-5">
     <div class="form-group">
       <label for="state">State:</label>

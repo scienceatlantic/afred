@@ -89,19 +89,14 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         controller: 'AdminFacilitiesController'
       }).
       state('admin.facilities.state', {
-        url: '/?state&visibility&page',
+        url: '/state/:state?visibility&page',
         templateUrl: 'views/admin.facilities.state.html',
         controller: 'AdminFacilitiesStateController'
       }).
-      state('admin.facilityRepository', {
-        'abstract': true,
-        url: '/facility-repository',
-        template: '<div data-ui-view></div>'
-      }).
-      state('admin.facilityRepository.show', {
-        url: '/:facilityRepositoryId',
-        templateUrl: 'views/admin.facility-repository.show.html',
-        controller: 'AdminFacilityRepositoryShowController'
+      state('admin.facilities.show', {
+        url: '/show?facilityId&facilityRepositoryId',
+        templateUrl: 'views/admin.facilities.show.html',
+        controller: 'AdminFacilitiesShowController'
       }).
       state('login', {
         url: '/login?redirect',
