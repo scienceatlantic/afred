@@ -6,7 +6,7 @@
       To submit equipment or facilities for inclusion in the AFRED database, please complete the form below.
     </p>
     
-    <div data-af-loading="!(form.organizations.$resolved || form.provinces.$resolved || form.disciplines.$resolved || form.sectors.$resolved) || (form.loading.disciplines || form.loading.sectors || form.loading.save)" data-ng-show="view.show == 'FORM'">
+    <div data-af-loading="!(form.organizations.$resolved || form.provinces.$resolved || form.disciplines.$resolved || form.sectors.$resolved) || (form.loading.disciplines || form.loading.sectors || form.loading.save)" data-af-loading-text="Preparing the form..." data-ng-show="view.show == 'FORM'">
       <div data-ng-include="'views/includes/facilities.form.html'"></div>
     </div>
     
