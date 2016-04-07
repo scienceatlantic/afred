@@ -1,3 +1,5 @@
+<p>For further information, hover over the <span class="fa fa-question-circle" data-uib-popover="Help text!" data-popover-trigger="mouseenter"></span> symbol for each field.</p>
+
 <form class="form-horizontal" name="facilityForm" role="form" novalidate>
   <!-- ======================================================
     -- [START] Facility section
@@ -325,8 +327,8 @@
   </div>
   
   <div>
-    <button type="submit" class="btn btn-default" data-ng-disabled="facilityForm.$invalid" data-ng-click="preview()">Preview <span class="glyphicon glyphicon-ok"></span></button>
-    <button type="button" class="btn btn-default" data-ng-show="_state.is('facilities.form.create')" data-ng-click="form.clearSave()">Clear form <span class="glyphicon glyphicon-refresh"></span></button>
+    <button type="submit" class="btn btn-default" data-ng-disabled="facilityForm.$invalid" data-ng-click="preview()">Preview <span class="fa fa-check"></span></button>
+    <button type="button" class="btn btn-default" data-ng-show="_state.is('facilities.form.create')" data-ng-click="form.clearSave()">Clear form <span class="fa fa-refresh"></span></button>
     <p>
       <p class="text-warning" data-ng-show="facilityForm.$invalid && !facilityForm.$pristine">Please complete all required fields first</p>
     </p>
