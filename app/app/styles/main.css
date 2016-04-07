@@ -41,6 +41,12 @@ nav.navbar {
   border: 0;
 }
 
+/* Reduce left margin of main navbar
+-------------------------------------------------- */
+#main-navbar {
+  margin-left: -18px;
+}
+
 /* Side list for the forms (contacts, equipment)
 -------------------------------------------------- */
 table.table-list {
