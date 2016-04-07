@@ -17,7 +17,8 @@ angular.module('afredApp', [
   'ui.router',
   'ui.bootstrap',
   'angularUtils.directives.dirPagination',
-  'textAngular'
+  'textAngular',
+  'ta-maxlength'
 ]);
 
 

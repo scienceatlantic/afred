@@ -9,8 +9,8 @@
       
       <div class="row">
         <div class="col-lg-6">
-          <div data-af-field data-af-field-label="Facility*">
-            <input class="form-control" name="facilityName" data-ng-model="form.data.facility.name" required>
+          <div data-af-field data-af-field-label="Facility*" data-af-field-model="form.data.facility.name">
+            <input class="form-control" name="facilityName" data-ng-model="form.data.facility.name" maxlength="50" required>
           </div>
           
           <div data-af-field data-af-field-label="Organization*">
@@ -18,14 +18,14 @@
             </select>
           </div>
           
-          <div data-af-field data-af-field-label="Organization name*" data-ng-if="form.data.facility.organizationId == -1">
-            <input type="text" class="form-control" name="facilityOrganizationName" data-ng-model="form.data.organization.name" required>
+          <div data-af-field data-af-field-label="Organization name*" data-ng-if="form.data.facility.organizationId == -1" data-af-field-model="form.data.organization.name">
+            <input type="text" class="form-control" name="facilityOrganizationName" data-ng-model="form.data.organization.name" maxlength="50" required>
           </div>
         </div><!-- End of .col-x-x -->
 
         <div class="col-lg-6">
-          <div data-af-field data-af-field-label="City*">
-            <input type="text" class="form-control" name="facilityCity" data-ng-model="form.data.facility.city" required>
+          <div data-af-field data-af-field-label="City*" data-af-field-model="form.data.facility.city">
+            <input type="text" class="form-control" name="facilityCity" data-ng-model="form.data.facility.city" maxlength="50" required>
           </div>
           
           <div data-af-field data-af-field-label="Province*">          
@@ -33,14 +33,15 @@
             </select>
           </div>
           
-          <div data-af-field data-af-field-label="Facility website">
-            <input type="url" class="form-control" name="facilityWebsite" data-ng-model="form.data.facility.website" data-ng-model-options="{ debounce: 500 }" placeholder="http://example.com">
+          <div data-af-field data-af-field-label="Facility website" data-af-field-model="form.data.facility.website">
+            <input type="url" class="form-control" name="facilityWebsite" data-ng-model="form.data.facility.website" data-ng-model-options="{ debounce: 500 }" placeholder="http://example.com" maxlength="2083">
           </div>
         </div><!-- End of .col-x-x -->
       </div><!-- End of .row -->
       
-      <div data-af-field data-af-field-label="What the facility does*" data-af-field-textangular="true">
-        <div data-text-angular data-ng-model="form.data.facility.description" name="facilityDescription" required></div>
+      
+      <div data-af-field data-af-field-label="What the facility does*" data-af-field-model="form.data.facility.description">
+        <div data-text-angular data-ng-model="form.data.facility.description" name="facilityDescription" data-ta-maxlength="2000" required></div>
       </div>
       
       <hr>
@@ -165,16 +166,16 @@
             <div data-ng-form name="contactForm{{ $index }}">
               <div class="row" data-ng-show="form.contactIndex === $index">
                 <div class="col-lg-6">
-                  <div data-af-field data-af-field-label="First name*">
-                    <input type="text" class="form-control" name="contactFirstName{{ $index }}" data-ng-model="c.firstName" required>
+                  <div data-af-field data-af-field-label="First name*" data-af-field-model="c.firstName">
+                    <input type="text" class="form-control" name="contactFirstName{{ $index }}" data-ng-model="c.firstName" maxlength="50" required>
                   </div>
                   
-                  <div data-af-field data-af-field-label="Last name*">
-                    <input type="text" class="form-control" name="contactLastName{{ $index }}" data-ng-model="c.lastName" required>
+                  <div data-af-field data-af-field-label="Last name*" data-af-field-model="c.lastName">
+                    <input type="text" class="form-control" name="contactLastName{{ $index }}" data-ng-model="c.lastName" maxlength="50" required>
                   </div>
                   
-                  <div data-af-field data-af-field-label="Email*">
-                    <input type="email" class="form-control" name="contactEmail{{ $index }}" data-ng-model="c.email" data-ng-model-options="{ debounce: 500 }" placeholder="me@example.com" required>
+                  <div data-af-field data-af-field-label="Email*" data-af-field-model="c.email">
+                    <input type="email" class="form-control" name="contactEmail{{ $index }}" data-ng-model="c.email" data-ng-model-options="{ debounce: 500 }" placeholder="me@example.com" maxlength="254" required>
                   </div>
                   
                   <div data-af-field data-af-field-label="Telephone*" data-ng-if="$index === 0">
@@ -187,20 +188,20 @@
                 </div><!-- End of .col-x-x -->
                 
                 <div class="col-lg-6">
-                  <div data-af-field data-af-field-label="Position*" data-ng-if="$index === 0">
-                    <input type="text" class="form-control" name="contactPosition{{ $index }}" data-ng-model="c.position" required>
+                  <div data-af-field data-af-field-label="Position*" data-ng-if="$index === 0" data-af-field-model="c.position">
+                    <input type="text" class="form-control" name="contactPosition{{ $index }}" data-ng-model="c.position" maxlength="100" required>
                   </div>
                   
-                  <div data-af-field data-af-field-label="Position" data-ng-if="$index !== 0">
-                    <input type="text" class="form-control" name="contactPosition{{ $index }}" data-ng-model="c.position">
+                  <div data-af-field data-af-field-label="Position" data-ng-if="$index !== 0" data-af-field-model="c.position">
+                    <input type="text" class="form-control" name="contactPosition{{ $index }}" data-ng-model="c.position" maxlength="100">
                   </div>
                   
-                  <div data-af-field data-af-field-label="Website">
-                    <input type="url" class="form-control" name="contactWebsite{{ $index }}" data-ng-model="c.website" data-ng-model-options="{ debounce: 500 }" placeholder="http://example.com">
+                  <div data-af-field data-af-field-label="Website" data-af-field-model="c.website">
+                    <input type="url" class="form-control" name="contactWebsite{{ $index }}" data-ng-model="c.website" data-ng-model-options="{ debounce: 500 }" maxlength="2083" placeholder="http://example.com">
                   </div>
                   
-                  <div data-af-field data-af-field-label="Extension">
-                    <input type="text" class="form-control" name="contactExtension{{ $index }}" data-ng-model="c.extension">
+                  <div data-af-field data-af-field-label="Extension" data-af-field-model="c.extension">
+                    <input type="text" class="form-control" name="contactExtension{{ $index }}" data-ng-model="c.extension" maxlength="10">
                   </div>
                 </div><!-- End of .col-x-x -->
               </div><!-- End of .row -->
@@ -254,32 +255,32 @@
             <div data-ng-form name="equipmentForm{{ $index }}">
               <div class="row" data-ng-show="form.equipmentIndex === $index">
                 <div class="col-lg-12">
-                  <div data-af-field data-af-field-label="Type*">
-                    <input type="text" class="form-control" name="equipmentType{{ $index }}" data-ng-model="e.type" placeholder="Eg. Magnetic resonance imaging (MRI)" required>
+                  <div data-af-field data-af-field-label="Type*" data-af-field-model="e.type">
+                    <input type="text" class="form-control" name="equipmentType{{ $index }}" data-ng-model="e.type" placeholder="E.g. Magnetic resonance imaging (MRI)" maxlength="200" required>
                   </div>
                   
-                  <div data-af-field data-af-field-label="Manufacturer">
-                    <input type="text" class="form-control" name="equipmentManufacturer{{ $index }}" placeholder="Eg. Hitachi Medical" data-ng-model="e.manufacturer">
+                  <div data-af-field data-af-field-label="Manufacturer" data-af-field-model="e.manufacturer">
+                    <input type="text" class="form-control" name="equipmentManufacturer{{ $index }}" placeholder="E.g. Hitachi Medical" data-ng-model="e.manufacturer" maxlength="100">
                   </div>
 
-                  <div data-af-field data-af-field-label="Model">
-                    <input type="text" class="form-control" name="equipmentModel{{ $index }}" placeholder="Eg. Echelon Oval 1.5T Ultra-Wide MRI system" data-ng-model="e.model">
+                  <div data-af-field data-af-field-label="Model" data-af-field-model="e.model">
+                    <input type="text" class="form-control" name="equipmentModel{{ $index }}" placeholder="E.g. Echelon Oval 1.5T Ultra-Wide MRI system" data-ng-model="e.model" maxlength="100">
                   </div>
                   
                   <!--
                     -- For this part, we have to use $index to make the names unique otherwise textAngular will complain. The same
                     -- goes for equipment specifications.
                     -->
-                  <div data-af-field data-af-field-label="Equipment purpose*" data-af-field-textangular="true">
-                    <div data-text-angular name="equipmentPurpose{{ $index }}" data-ng-model="e.purpose" required></div>
+                  <div data-af-field data-af-field-label="Equipment purpose*" data-af-field-model="e.purpose">
+                    <div data-text-angular name="equipmentPurpose{{ $index }}" data-ng-model="e.purpose" maxlength="2000" placeholder="E.g. Magnetic resonance imaging (MRI) is a medical imaging technique used in radiology..." required></div>
                   </div>
                   
-                  <div data-af-field data-af-field-label="Equipment specifications" data-af-field-textangular="true">
-                    <div data-text-angular name="equipmentSpecifications{{ $index }}" data-ng-model="e.specifications"></div>
+                  <div data-af-field data-af-field-label="Equipment specifications" data-af-field-model="e.specifications">
+                    <div data-text-angular name="equipmentSpecifications{{ $index }}" data-ng-model="e.specifications" placeholder="E.g. - 50 x 50 x 50 cm FOV..." maxlength="2000"></div>
                   </div>
                   
                   <div data-af-field data-af-field-label="Year purchased">
-                    <input type="text" class="form-control" name="equipmentYearPurchased{{ $index }}" data-ng-model="e.yearPurchased" data-ng-model-options="{ debounce: 500 }" pattern="(?:19|20)[0-9]{2}" placeholder="Eg. 1995">
+                    <input type="text" class="form-control" name="equipmentYearPurchased{{ $index }}" data-ng-model="e.yearPurchased" data-ng-model-options="{ debounce: 500 }" pattern="(?:19|20)[0-9]{2}" placeholder="E.g. 1995">
                   </div>
                   
                   <div data-af-field data-af-field-label="Excess capacity*" data-af-field-popover="Explanation here...">

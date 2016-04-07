@@ -5,7 +5,8 @@
  */
 angular.module('afredApp').directive('afField', [
   '$timeout',
-  function($timeout) {
+  'textAngularManager',
+  function($timeout, textAngularManager) {
     return {
       restrict: 'A',
       replace: true,
@@ -16,31 +17,46 @@ angular.module('afredApp').directive('afField', [
         label: '@afFieldLabel',
         nameOverride: '@afFieldName',
         popover: '@afFieldPopover',
-        isTextAngular: '@afFieldTextangular'
+        model: '=afFieldModel',
       },
       link: function($scope, element, attrs, form) { 
-        var field = element.find('input, select, textarea');
+        var field = element.find('input[type!="hidden"], select, ' +
+          'textarea:not([ta-bind]), div[data-text-angular], div[text-angular]');
         
         // Note: '$timeout' is used as a hack-ish fix to give Angular time
-        // to interpolate '$index' (if used).
-        if ($scope.isTextAngular) {
-          if ($scope.nameOverride) {
-            $scope.name = $scope.nameOverride;
-          } else {
-            $scope.name = field.get(1).name;
-          }
-          
-          $scope.id = field.get(0).id; // Not working, need fix!          
+        // to interpolate anything inside '{{}}' (if used in a name attribute).
+        if ($scope.nameOverride) {
+          $scope.name = $scope.nameOverride;
         } else {
-          if ($scope.nameOverride) {
-            $scope.name = $scope.nameOverride;
-          } else {
-            $timeout(function() {
-              $scope.name = field.attr('name');
-            });
+          $timeout(function() {
+            $scope.name = field.attr('name');
+          });
+        }
+        
+        try {
+          $scope.maxLength = parseInt(field.attr('maxlength'));
+          
+          if (!$scope.maxLength) {
+            $scope.maxLength = parseInt(field.attr('data-ta-maxlength'));
           }
           
-          $scope.id = field.attr('id');  
+          if (!$scope.maxLength) {
+            $scope.maxLength = parseInt(field.attr('ta-maxlength'));
+          }
+        } catch(e) {
+          // Do nothing.
+        }
+        
+        $scope.isTextAngular = field.hasClass('ta-root');
+        
+        if ($scope.isTextAngular) {
+          $timeout(function() {
+            $scope.getTextAngularContentLength = function() {
+              var ta = textAngularManager.retrieveEditor($scope.name);
+              return angular.element(ta.scope.displayElements.text[0])
+                .text().length;
+            };          
+          })
         }
         
         $scope.form = form; 
