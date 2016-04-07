@@ -6,7 +6,6 @@ angular.module('afredApp').run(['$rootScope',
                                 '$stateParams',
                                 '$http',
                                 '$cookies',
-                                '$window',
                                 '$resource',
   function($rootScope,
            $log,
@@ -14,7 +13,6 @@ angular.module('afredApp').run(['$rootScope',
            $stateParams,
            $http,
            $cookies,
-           $window,
            $resource) {
     $http.get($rootScope._config.api.address + '/csrf').then(
       function(response) {
@@ -165,7 +163,7 @@ angular.module('afredApp').run(['$rootScope',
       $rootScope.$apply();
     };
     
-    $rootScope._window = $window;
+    $rootScope._window = window;
     $rootScope._location = location;
     
     /* ---------------------------------------------------------------------
