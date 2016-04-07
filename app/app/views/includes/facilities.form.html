@@ -321,10 +321,14 @@
     -- ====================================================== !-->
   
   <div>
+    <p class="small">* Required field</p>
+  </div>
+  
+  <div>
     <button type="submit" class="btn btn-default" data-ng-disabled="facilityForm.$invalid" data-ng-click="preview()">Preview <span class="glyphicon glyphicon-ok"></span></button>
     <button type="button" class="btn btn-default" data-ng-show="_state.is('facilities.form.create')" data-ng-click="form.clearSave()">Clear form <span class="glyphicon glyphicon-refresh"></span></button>
     <p>
-      <p class="text-warning" data-ng-show="facilityForm.$invalid && !facilityForm.$pristine">Please complete all mandatory fields first</p>
+      <p class="text-warning" data-ng-show="facilityForm.$invalid && !facilityForm.$pristine">Please complete all required fields first</p>
     </p>
   </div>
 </form>
