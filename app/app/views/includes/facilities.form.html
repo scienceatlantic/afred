@@ -160,7 +160,7 @@
             </tbody>
           </table>
           
-          <button type="button" class="btn btn-default btn-sm" data-ng-click="form.addContact()"><span class="glyphicon glyphicon-plus"></span> Contacts</button>
+          <button type="button" class="btn btn-default btn-sm" data-ng-click="form.addContact()">Contacts <span class="fa fa-plus"></span></button>
         </div><!-- End of .col-x-x -->
         
         <div class="col-lg-10">                    
@@ -249,7 +249,7 @@
             </tbody>
           </table>
           
-          <button type="button" class="btn btn-default btn-sm" data-ng-click="form.addEquipment()"><span class="glyphicon glyphicon-plus"></span> Equipment</button>
+          <button type="button" class="btn btn-default btn-sm" data-ng-click="form.addEquipment()">Equipment <span class="fa fa-plus"></span></button>
         </div><!-- End of .col-x-x -->
         
         <div class="col-lg-10">
@@ -327,7 +327,7 @@
   </div>
   
   <div>
-    <button type="submit" class="btn btn-default" data-ng-disabled="facilityForm.$invalid" data-ng-click="preview()">Preview <span class="fa fa-check"></span></button>
+    <button type="submit" class="btn btn-default" data-ng-disabled="facilityForm.$invalid" data-ng-click="preview()">Preview <span class="fa fa-eye"></span></button>
     <button type="button" class="btn btn-default" data-ng-show="_state.is('facilities.form.create')" data-ng-click="form.clearSave()">Clear form <span class="fa fa-refresh"></span></button>
     <p>
       <p class="text-warning" data-ng-show="facilityForm.$invalid && !facilityForm.$pristine">Please complete all required fields first</p>
