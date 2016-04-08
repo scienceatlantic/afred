@@ -35,32 +35,29 @@ abstract class BaseListener
         try {
             Mail::send(['text' => $template], $data, function($message)
                 use ($subject, $to, $cc, $bcc) {
-                    if (array_key_exists('name', $to)) {
-                        $message->to($to['email'], $to['name']);
-                    } else {
-                        foreach($to as $rcpt) {
-                            $message->to($rcpt['email'], $rcpt['name']);
-                        }                       
-                    }
+                    $recipients = [
+                        'to'  => $to,
+                        'cc'  => $cc ?: [], // If null, return empty array.
+                        'bcc' => $bcc ?: [] // Ditto.
+                    ];
                     
-                    if ($cc) {
-                        if (array_key_exists('name', $cc)) {
-                            $message->cc($cc['email'], $cc['name']);
+                    $validRecipients = [];
+                    foreach($recipients as $type => $recipient) {
+                        if (!array_key_exists('name', $recipient)) {
+                            foreach($recipient as $r) {
+                                if ($this->_validateRecipient($r)) {
+                                    array_push($validRecipients, $r);
+                                }
+                            }
                         } else {
-                            foreach($cc as $rcpt) {
-                                $message->to($rcpt['email'], $rcpt['name']);
-                            }                       
+                            if ($this->_validateRecipient($recipient)) {
+                                array_push($validRecipients, $recipient);
+                            }
                         }
-                    }
-                    
-                    if ($bcc) {
-                        if (array_key_exists('name', $bcc)) {
-                            $message->bcc($bcc['email'], $bcc['name']);
-                        } else {
-                            foreach($bcc as $rcpt) {
-                                $message->to($rcpt['email'], $rcpt['name']);
-                            }                       
-                        }
+                        
+                        foreach($validRecipients as $r) {
+                            $message->$type($r['email'], $r['name']);
+                        }                            
                     }
                     
                     $message->subject($subject);
@@ -70,5 +67,13 @@ abstract class BaseListener
         } catch (Exception $e) {
             Log::error($e->getMessage());
         }
+    }
+    
+    private function _validateRecipient($r)
+    {
+        return array_key_exists('name', $r)
+            && array_key_exists('email', $r)
+            && $r['name']
+            && $r['email'];     
     }
 }

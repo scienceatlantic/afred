@@ -5,11 +5,9 @@ Hello {{ $recipientName }},
 
 Congratulations!
 
-Your submission has been approved for inclusion in {{ $settings['APP_NAME'] }}.
+Your edit has been approved.
 
 Please check your listing here {{ $settings['APP_ADDRESS'] }}/facilities/{{ $facilityId }}.
-
-You will receive an annual reminder to check your listing for accuracy.
 
 If you wish to make edits to your listing at any time, please follow the instructions on this page <URL>.
 

@@ -4,9 +4,9 @@
 Hello {{ $recipientName }},
 
 @if ($recipientName == $reviewerName)
-This is a confirmation email that you have approved '{{ $facilityName }}'.
+This is a confirmation email that you have approved an edit of '{{ $facilityName }}'.
 @else
-'{{ $facilityName }}' has been approved by {{ $reviewerName }}.
+An edit of '{{ $facilityName }}' has been approved by {{ $reviewerName }}.
 @endif
 
 The facility can be found here: {{ $settings['APP_ADDRESS'] }}/facilities/{{ $facilityId }}
