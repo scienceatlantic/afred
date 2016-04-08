@@ -19,4 +19,9 @@ class Ilo extends Model
     {
         return $this->belongsTo('App\Organization', 'organizationId');
     }
+    
+    public function getFullName()
+    {
+        return $this->firstName . ' ' . $this->lastName;
+    }
 }

@@ -69,4 +69,9 @@ class User extends Model implements AuthenticatableContract,
             
         return $userPermission >= $rolePermission;
     }
+    
+    public function getFullName()
+    {
+        return $this->firstName . ' ' . $this->lastName;
+    }
 }
