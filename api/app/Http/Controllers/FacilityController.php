@@ -91,6 +91,7 @@ class FacilityController extends Controller
             ->whereIn('facilities.id', $ids)
             ->select('facilities.id',
                      'facilities.name',
+                     'facilities.city',
                      'facility_update_links.editorFirstName',
                      'facility_update_links.editorLastName',
                      'facility_update_links.editorEmail',

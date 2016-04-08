@@ -7,13 +7,22 @@
   
   <p>
     <ul>
-      <li>To update your facility, please input the email address you used in the facility listing into the form below.</li>
-      <li>A list of facilities attached to your email will then be displayed.</li>
       <li>
-        Click the 'Email token' button next to the facility you wish to update. If a button is not shown, that means that an update request
-        has already been made. You will not be allowed to generate more than one request at a time.  
+        Input your email into the form below and click "Search".
+        A list of facilities attached to your email will then be retrieved.
       </li>
-      <li>An email will be sent to you containing a unique URL allowing you to update your facility.</li>
+      <li>
+        Click the 'Email token' button next to the facility you wish to update.
+        An email will be sent to the email address listed in the form.
+        Please follow the instructions in that email.
+        <span class="text-muted">
+          <i>
+            Note: If an "Email token" button is not shown below the name of the facility you wish to update,
+            that means that an update request has already been made.
+            Only a single update request is allowed at a time per facility.
+          </i>
+        </span>
+      </li>
     </ul>
   </p>
     
@@ -30,7 +39,7 @@
       </div>
     </div>
     
-    <button type="submit" class="btn btn-default" data-af-loading-btn="fr.$resolved === false && pagination.page == 1" data-ng-disabled="fr.$resolved === false" data-af-loading-btn-text="Searching...">Submit</button>
+    <button type="submit" class="btn btn-default" data-af-loading-btn="fr.$resolved === false && pagination.page == 1" data-ng-disabled="fr.$resolved === false" data-af-loading-btn-text="Searching...">Search <span class="fa fa-search"></span></button>
   </form>
   
   <div data-ng-show="view.show == 'NO_RESULTS_MESSAGE'">
@@ -39,22 +48,28 @@
   </div>
   
   <br>
-  <div class="panel panel-default" data-ng-show="view.show == 'RESULTS'">
-    <div class="panel-body">
-      <div data-ng-repeat="facility in facilities">
-        <p>
-          <a href="{{ _config.app.address }}/facilities/{{ facility.id }}" target="_blank">{{ facility.name }}</a>
+  <div data-ng-show="view.show == 'RESULTS'">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div data-ng-repeat="facility in facilities">
+          <p>
+            <a href="{{ _config.app.address }}/facilities/{{ facility.id }}" target="_blank">{{ facility.name }}</a> | {{ facility.city }}
+          </p>
           
-          <span>
-            <button class="btn btn-default btn-xs" data-ng-click="form.buttons.selectedIndex = $index; requestToken($index, facility.id)" data-ng-hide="facility.status" data-af-loading-btn="ful.$resolved === false && form.buttons.selectedIndex === $index" data-ng-disabled="ful.$resolved === false">Email token</button>
-            <span class="label label-warning" data-ng-show="facility.status == 'OPEN' || facility.status == 'PENDING  '">Token requested by {{ facility.editorFirstName }} {{ facility.editorLastName }}</span>           
-          </span>
-        </p>
+          <p data-ng-show="facility.status">
+              <span class="label label-default">Status:</span> An update request has already been made by {{ facility.editorFirstName }} {{ facility.editorLastName }}</span>.           
+          </p>
+          
+          <p data-ng-hide="facility.status">
+            <button class="btn btn-default btn-xs" data-ng-click="form.buttons.selectedIndex = $index; requestToken($index, facility.id)" data-af-loading-btn="ful.$resolved === false && form.buttons.selectedIndex === $index" data-af-loading-btn-text="Emailing..." data-ng-disabled="ful.$resolved === false">Email token <span class="fa fa-send"></span></button>
+          </p>
+          <hr data-ng-hide="$index == facilities.length - 1">
+        </div>
       </div>
-    
-      <p>
-        <button type="button" class="btn btn-default" data-ng-click="pagination.page = pagination.page + 1; submit()" data-af-loading-btn="fr.$resolved === false" data-ng-disabled="fr.$resolved === false || fr.currentPage == fr.lastPage">Load more</button>
-      </p>
     </div>
+    
+    <p>
+      <button type="button" class="btn btn-default" data-ng-click="pagination.page = pagination.page + 1; submit()" data-af-loading-btn="fr.$resolved === false" data-ng-disabled="fr.$resolved === false || fr.currentPage == fr.lastPage">Load more <span class="fa fa-plus"></span></button>
+    </p>
   </div>
 </div>
