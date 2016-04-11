@@ -78,6 +78,10 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
           }]
         }
       }).
+      state('admin.account', {
+        url: '/account',
+        templateUrl: 'views/admin.account.html'
+      }).
       state('admin.dashboard', {
         url: '/dashboard',
         templateUrl: 'views/admin.dashboard.html',
@@ -94,7 +98,7 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         controller: 'AdminFacilitiesStateController'
       }).
       state('admin.facilities.show', {
-        url: '/show?facilityId&facilityRepositoryId',
+        url: '/show?facilityRepositoryId',
         templateUrl: 'views/admin.facilities.show.html',
         controller: 'AdminFacilitiesShowController'
       }).

@@ -48,20 +48,36 @@ class FacilityRepositoryController extends Controller
         $fr = new FacilityRepository();
         
         if (($state = $request->input('state'))) {
-            $fr = $fr->where('state', $state);
+            if ($state == 'PENDING_APPROVAL'
+                || $state == 'PENDING_EDIT_APPROVAL') {
+                $fr = $fr->where('state', 'PENDING_APPROVAL')
+                    ->orWhere('state', 'PENDING_EDIT_APPROVAL');
+            }
+            else if ($state == 'PUBLISHED' || $state == 'PUBLISHED_EDIT') {
+                $visibility = (bool) $request->input('visibility', true);
+                $frId = Facility::where('isPublic', $visibility)
+                    ->select('facilityRepositoryId')->get();
+                    
+                $fr = $fr->whereIn('id', $frId);                       
+            }
+            else if ($state == 'REJECTED' || $state == 'REJECTED_EDIT') {
+                $fr = $fr->where('state', 'REJECTED')
+                    ->orWhere('state', 'REJECTED_EDIT');
+            }
+            // This part needs work!
+            else if ($state == 'DELETED') {
+                $frId = Facility::select('facilityRepositoryId')->get();
+                $fr = $fr->whereNotIn('id', $frId)
+                    ->whereNotNull('facilityId');
+            }
         }
         
-        if ($state == 'PUBLISHED') {
-            $visibility = (bool) $request->input('visibility', true);
-            $f = Facility::where('isPublic', $visibility)
-                ->select('facilityRepositoryId');
-                
-            $fr = $fr->whereIn('id', $f->get());
+        if ($facilityId = $request->input('facilityId', null)) {
+            $fr = $fr->where('facilityId', $facilityId);
         }
         
-        $fr = $fr->with('reviewer', 'facility')->paginate($this->_itemsPerPage);
-            
-        return $this->_toCamelCase($fr->toArray());
+        return $this->_toCamelCase($fr->with('reviewer', 'facility')
+            ->paginate($this->_itemsPerPage)->toArray());
     }
 
     /**

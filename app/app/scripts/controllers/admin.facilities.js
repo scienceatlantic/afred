@@ -108,9 +108,8 @@ angular.module('afredApp').controller('AdminFacilitiesController',
             break;
           
           case 'PENDING_APPROVAL':
-          case 'PENDING_EDIT_APPROVAL':
           case 'REJECTED':
-          case 'REJECTED_EDIT':
+          case 'DELETED':
             $scope.facilities.form.data.state = state;
             $scope.facilities.form.data.page = page;
             $scope.facilities.form.data.visibility = null;
