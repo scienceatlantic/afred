@@ -41,20 +41,27 @@ abstract class BaseListener
                         'bcc' => $bcc ?: [] // Ditto.
                     ];
                     
-                    $validRecipients = [];
                     foreach($recipients as $type => $recipient) {
+                        // Will hold all the recipients after their details
+                        // have been validated.
+                        $validRecipients = [];
+                        
+                        // Check if it's an array of recipients or just a
+                        // single recipient. This part is for arrays.
                         if (!array_key_exists('name', $recipient)) {
                             foreach($recipient as $r) {
                                 if ($this->_validateRecipient($r)) {
                                     array_push($validRecipients, $r);
                                 }
                             }
+                        // And this part is for a single recipient.
                         } else {
                             if ($this->_validateRecipient($recipient)) {
                                 array_push($validRecipients, $recipient);
                             }
                         }
                         
+                        // Attach recipients to email message.
                         foreach($validRecipients as $r) {
                             $message->$type($r['email'], $r['name']);
                         }                            
