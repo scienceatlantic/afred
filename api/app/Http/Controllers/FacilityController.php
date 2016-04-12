@@ -13,10 +13,6 @@ use Log;
 
 // Models.
 use App\Facility;
-use App\Organization;
-use App\PrimaryContact;
-use App\Contact;
-use App\Equipment;
 
 // Requests.
 use App\Http\Requests;
@@ -36,9 +32,12 @@ class FacilityController extends Controller
     public function index(Request $request)
     {
         if (!($email = $request->input('email', null))) {
-            $f = new Facility();
+            $f = Facility::with('province',
+                                'organization',
+                                'primaryContact',
+                                'contacts',
+                                'equipment');
             $f = $this->_paginate ? $f->paginate($this->_itemsPerPage) : $f->get();
-            $this->_expandModelRelationships($f, true);
             return $this->_toCamelCase($f->toArray());            
         } else {
             return $this->_indexMatchingFacilities($email);
@@ -53,8 +52,11 @@ class FacilityController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $f = Facility::findOrFail($id);        
-        $this->_expandModelRelationships($f);
+        $f = Facility::with('province',
+                            'organization',
+                            'primaryContact',
+                            'contacts',
+                            'equipment')->findOrFail($id);        
         return $this->_toCamelCase($f->toArray());   
     }
     
