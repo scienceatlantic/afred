@@ -45,37 +45,42 @@ class FacilityRepositoryController extends Controller
      */
     public function index(IndexFacilityRepositoryRequest $request)
     {        
-        $fr = new FacilityRepository();
+        $fr = FacilityRepository::query();
         
+        // Narrow down query by state.
         if (($state = $request->input('state'))) {
             if ($state == 'PENDING_APPROVAL'
                 || $state == 'PENDING_EDIT_APPROVAL') {
-                $fr = $fr->where('state', 'PENDING_APPROVAL')
+                $fr->where('state', 'PENDING_APPROVAL')
                     ->orWhere('state', 'PENDING_EDIT_APPROVAL');
             }
             else if ($state == 'PUBLISHED' || $state == 'PUBLISHED_EDIT') {
                 $visibility = (bool) $request->input('visibility', true);
                 $frId = Facility::where('isPublic', $visibility)
                     ->select('facilityRepositoryId')->get();
-                    
-                $fr = $fr->whereIn('id', $frId);                       
+                $fr->whereIn('id', $frId);                       
             }
             else if ($state == 'REJECTED' || $state == 'REJECTED_EDIT') {
-                $fr = $fr->where('state', 'REJECTED')
+                $fr->where('state', 'REJECTED')
                     ->orWhere('state', 'REJECTED_EDIT');
             }
             // This part needs work!
             else if ($state == 'DELETED') {
                 $frId = Facility::select('facilityRepositoryId')->get();
-                $fr = $fr->whereNotIn('id', $frId)
+                $fr->whereNotIn('id', $frId)
                     ->whereNotNull('facilityId');
             }
         }
         
+        // Narrow down query by facility ID.
         if ($facilityId = $request->input('facilityId', null)) {
-            $fr = $fr->where('facilityId', $facilityId);
+            $fr->where('facilityId', $facilityId);
         }
         
+        // Order by.
+        $this->_orderBy((new FacilityRepository())->getTable(), $fr); 
+        
+        // Lazy load other data, paginate, camel case, and return.
         return $this->_toCamelCase($fr->with('reviewer', 'facility')
             ->paginate($this->_itemsPerPage)->toArray());
     }
@@ -88,8 +93,15 @@ class FacilityRepositoryController extends Controller
      */
     public function show(ShowFacilityRepositoryRequest $request, $id)
     {
-        return FacilityRepository::with('reviewer', 'facility')
-            ->findOrFail($id);            
+        $fr = FacilityRepository::with([
+            'fulA' => function($query) {
+                $query->pending();
+            },
+            'reviewer',
+            'facility'
+        ])->findOrFail($id)->toArray();
+        
+        return $this->_toCamelCase($fr);
     }
 
     /**
@@ -155,11 +167,9 @@ class FacilityRepositoryController extends Controller
                 break;
             
             case 'PUBLISHED_EDIT':
-                $data = $this->_publishFacility($fr, $fr->data, true);
-                $fr->facilityId = $data['facility']['id'];
                 $fr->reviewerId = Auth::user()->id;
                 $fr->reviewerMessage = $request->input('reviewerMessage', null);
-                $fr->data = $data;
+                $fr->data = $this->_publishFacility($fr, $fr->data, true);;
                 $fr->update();
                 
                 // Admin has reviewed the record, close the token.
@@ -184,7 +194,8 @@ class FacilityRepositoryController extends Controller
         // Generate an event (emails might need to be sent out).
         event(new FacilityRepositoryEvent($fr));
         
-        return FacilityRepository::with('reviewer')->find($fr->id);
+        // Return the update record.
+        return FacilityRepository::with('reviewer', 'facility')->find($fr->id);
     }
         
     private function _formatFrData($r, $now, $isUpdate = false, $fr = null)

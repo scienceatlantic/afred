@@ -57,6 +57,15 @@
           <span class="label label-default" data-ng-show="(facility.state != 'PENDING_APPROVAL' && facility.state != 'PENDING_EDIT_APPROVAL') && !fr.reviewerMessage">No message was provided.</span>        
         </div>
       </div>
+      
+      <div class="row" data-ng-show="fr.state == 'PENDING_EDIT_APPROVAL'">
+        <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
+          <label>Current record:</label>
+        </div>
+        <div class="col-sm-9">
+          <a data-ui-sref="admin.facilities.show({ facilityRepositoryId: fr.fulA.frIdBefore })" target="_blank">Click here</a>
+        </div>
+      </div>
     </div> 
     <br>
     <br>
@@ -97,8 +106,8 @@
       <p>
         <button type="button" class="btn btn-default" data-ng-click="approve();" data-ng-show="facility.state == 'PENDING_APPROVAL'" data-af-loading-btn="loading.approve" data-ng-disabled="loading.approve || loading.reject || loading.approveEdit || loading.rejectEdit">Approve <span class="glyphicon glyphicon-ok"></span></button>
         <button type="button" class="btn btn-default" data-ng-click="reject();" data-ng-show="facility.state == 'PENDING_APPROVAL'" data-af-loading-btn="loading.reject" data-ng-disabled="loading.approve || loading.reject || loading.approveEdit || loading.rejectEdit">Reject <span class="glyphicon glyphicon-remove"></span></button>
-        <button type="button" class="btn btn-default" data-ng-click="approveEdit();" data-ng-show="facility.state == 'PENDING_EDIT_APPROVAL'" data-af-loading-btn="loading.approveEdit" data-ng-disabled="loading.approve || loading.reject || loading.approveEdit || loading.rejectEdit">Approve Edit <span class="glyphicon glyphicon-ok"></span></button>
-        <button type="button" class="btn btn-default" data-ng-click="rejectEdit();" data-ng-show="facility.state == 'PENDING_EDIT_APPROVAL'" data-af-loading-btn="loading.rejectEdit" data-ng-disabled="loading.approve || loading.reject || loading.approveEdit || loading.rejectEdit">Reject Edit <span class="glyphicon glyphicon-remove"></span></button>
+        <button type="button" class="btn btn-default" data-ng-click="approveEdit();" data-ng-show="facility.state == 'PENDING_EDIT_APPROVAL'" data-af-loading-btn="loading.approveEdit" data-ng-disabled="loading.approve || loading.reject || loading.approveEdit || loading.rejectEdit">Approve edit <span class="glyphicon glyphicon-ok"></span></button>
+        <button type="button" class="btn btn-default" data-ng-click="rejectEdit();" data-ng-show="facility.state == 'PENDING_EDIT_APPROVAL'" data-af-loading-btn="loading.rejectEdit" data-ng-disabled="loading.approve || loading.reject || loading.approveEdit || loading.rejectEdit">Reject edit <span class="glyphicon glyphicon-remove"></span></button>
       </p>
     </div>
   </div>
