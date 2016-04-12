@@ -56,11 +56,11 @@
             <a href="{{ _config.app.address }}/facilities/{{ facility.id }}" target="_blank">{{ facility.name }}</a> | {{ facility.city }}
           </p>
           
-          <p data-ng-show="facility.status">
-              <span class="label label-default">Status:</span> An update request has already been made by {{ facility.editorFirstName }} {{ facility.editorLastName }}</span>.           
+          <p data-ng-show="facility.status == 'OPEN' || facility.status == 'PENDING'">
+              <span class="label label-info">{{ facility.status }}</span> <span class="label label-info">{{ facility.editorFirstName }} {{ facility.editorLastName }}</span>           
           </p>
           
-          <p data-ng-hide="facility.status">
+          <p data-ng-hide="facility.status == 'OPEN' || facility.status == 'PENDING'">
             <button class="btn btn-default btn-xs" data-ng-click="form.buttons.selectedIndex = $index; requestToken($index, facility.id)" data-af-loading-btn="ful.$resolved === false && form.buttons.selectedIndex === $index" data-af-loading-btn-text="Emailing..." data-ng-disabled="ful.$resolved === false">Email token <span class="fa fa-send"></span></button>
           </p>
           <hr data-ng-hide="$index == facilities.length - 1">
