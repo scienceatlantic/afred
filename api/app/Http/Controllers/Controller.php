@@ -8,6 +8,7 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
+use Schema;
 
 // Misc.
 use Carbon\Carbon;
@@ -20,12 +21,31 @@ abstract class Controller extends BaseController
     protected $_paginate;
     protected $_itemsPerPage;
     protected $_expand;
+    protected $_orderByAsc;
+    protected $_orderByDesc;
     
     function __construct(Request $request)
     {
         $this->_paginate = boolval($request->input('paginate', true));
         $this->_itemsPerPage = intval($request->input('itemsPerPage', 15));
         $this->_expand = $request->input('expand', null);
+        $this->_orderByAsc = explode(',', $request->input('orderByAsc', ""));
+        $this->_orderByDesc = explode(',', $request->input('orderByDesc', ""));
+    }
+    
+    protected function _orderBy($table, $model)
+    {        
+        foreach($this->_orderByAsc as $column) {
+            if (Schema::hasColumn($table, $column)) {
+                $model->orderBy($column, 'asc');
+            }
+        }
+        
+        foreach($this->_orderByDesc as $column) {
+            if (Schema::hasColumn($table, $column)) {
+                $model->orderBy($column, 'desc');
+            }
+        }      
     }
     
     protected function _expandModelRelationships($model, $isArray = false)
@@ -61,17 +81,17 @@ abstract class Controller extends BaseController
     { 
         function camelCaseArrayKeys($array)
         {
-            $newArray = [];
+            $camelCaseArr = [];
             
             foreach($array as $key => $value) {
                 if (is_array($value)) {
-                    $newArray[camel_case($key)] = camelCaseArrayKeys($value);
+                    $camelCaseArr[camel_case($key)] = camelCaseArrayKeys($value);
                 } else {
-                    $newArray[camel_case($key)] = $value;
+                    $camelCaseArr[camel_case($key)] = $value;
                 }
             }
             
-            return $newArray;
+            return $camelCaseArr;
         }
 
         return camelCaseArrayKeys($array);
