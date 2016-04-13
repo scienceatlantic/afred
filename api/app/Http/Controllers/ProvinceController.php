@@ -29,8 +29,7 @@ class ProvinceController extends Controller
     public function index(Request $request)
     {
         $p = Province::notHidden()->orderBy('name', 'asc');
-        $p = $this->_paginate ? $p->paginate($this->_itemsPerPage) : $p->get();
-        $this->_expandModelRelationships($p, true);
+        $p = $this->_paginate ? $p->paginate($this->_ipp) : $p->get();
         return $this->_toCamelCase($p->toArray());
     }
 
@@ -53,9 +52,7 @@ class ProvinceController extends Controller
      */
     public function show($id)
     {
-        $p = Province::findOrFail($id);
-        $this->_expandModelRelationships($p);
-        return $this->_toCamelCase($p->toArray());
+        return $this->_toCamelCase(Province::findOrFail($id)->toArray());
     }
 
     /**
@@ -78,6 +75,6 @@ class ProvinceController extends Controller
      */
     public function destroy($id)
     {
-        
+        //
     }
 }

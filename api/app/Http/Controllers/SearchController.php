@@ -151,7 +151,7 @@ class SearchController extends Controller
             }
         }
         
-        return $results->paginate($this->_itemsPerPage); 
+        return $results->paginate($this->_ipp); 
     }
     
     private function _processQuery($q)

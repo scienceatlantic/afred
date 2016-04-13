@@ -28,9 +28,8 @@ class OrganizationController extends Controller
      */
     public function index(Request $request)
     {
-        $o = Organization::notHidden()->orderBy('name', 'asc');
-        $o = $this->_paginate ? $o->paginate($this->_itemsPerPage) : $o->get();
-        $this->_expandModelRelationships($o, true);
+        $o = Organization::with('ilo')->notHidden()->orderBy('name', 'asc');
+        $o = $this->_paginate ? $o->paginate($this->_ipp) : $o->get();
         return $this->_toCamelCase($o->toArray());
     }
 
@@ -53,8 +52,7 @@ class OrganizationController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $o = Organization::findOrFail($id);
-        $this->_expandModelRelationships($o);
+        $o = Organization::with('ilo')->findOrFail($id);
         return $this->_toCamelCase($o->toArray());
     }
 
@@ -66,6 +64,7 @@ class OrganizationController extends Controller
      */
     public function destroy($id)
     {
-        Organization::destroy($id);
+        // 
+        //Organization::destroy($id);
     }
 }

@@ -28,7 +28,7 @@ class AuthController extends Controller
         ];
         
         if (Auth::attempt($credentials)) {
-            // Include user roles.
+            // Lazy load user roles.
             Auth::user()->roles;
             
             return $this->_toCamelCase(Auth::user()->toArray());
@@ -40,7 +40,7 @@ class AuthController extends Controller
     public function ping()
     {
         if (Auth::check()) {
-            // Include user roles.
+            // Lazy load user roles.
             Auth::user()->roles;
             
             return $this->_toCamelCase(Auth::user()->toArray());

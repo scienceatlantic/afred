@@ -29,8 +29,7 @@ class SectorController extends Controller
     public function index(Request $request)
     {
         $s = Sector::orderBy('name', 'asc');
-        $s = $this->_paginate ? $s->paginate($this->_itemsPerPage) : $s->get();
-        $this->_expandModelRelationships($s, true);
+        $s = $this->_paginate ? $s->paginate($this->_ipp) : $s->get();
         return $this->_toCamelCase($s->toArray());
     }
 }

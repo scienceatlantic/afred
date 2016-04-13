@@ -82,7 +82,7 @@ class FacilityRepositoryController extends Controller
         
         // Lazy load other data, paginate, camel case, and return.
         return $this->_toCamelCase($fr->with('reviewer', 'facility')
-            ->paginate($this->_itemsPerPage)->toArray());
+            ->paginate($this->_ipp)->toArray());
     }
 
     /**
@@ -99,9 +99,9 @@ class FacilityRepositoryController extends Controller
             },
             'reviewer',
             'facility'
-        ])->findOrFail($id)->toArray();
+        ])->findOrFail($id);
         
-        return $this->_toCamelCase($fr);
+        return $this->_toCamelCase($fr->toArray());
     }
 
     /**
@@ -169,7 +169,7 @@ class FacilityRepositoryController extends Controller
             case 'PUBLISHED_EDIT':
                 $fr->reviewerId = Auth::user()->id;
                 $fr->reviewerMessage = $request->input('reviewerMessage', null);
-                $fr->data = $this->_publishFacility($fr, $fr->data, true);;
+                $fr->data = $this->_publishFacility($fr, $fr->data, true);
                 $fr->update();
                 
                 // Admin has reviewed the record, close the token.

@@ -39,7 +39,7 @@ class FacilityController extends Controller
                                 'primaryContact',
                                 'contacts',
                                 'equipment');
-            $f = $this->_paginate ? $f->paginate($this->_itemsPerPage) : $f->get();
+            $f = $this->_paginate ? $f->paginate($this->_ipp) : $f->get();
             return $this->_toCamelCase($f->toArray());            
         } else {
             return $this->_indexMatchingFacilities($email);
@@ -101,7 +101,7 @@ class FacilityController extends Controller
                      'facility_update_links.editorEmail',
                      'facility_update_links.status');
                 
-        $f = $this->_paginate ? $f->paginate($this->_itemsPerPage) : $f->get();
+        $f = $this->_paginate ? $f->paginate($this->_ipp) : $f->get();
         return $this->_toCamelCase($f->toArray());
     }
 }
