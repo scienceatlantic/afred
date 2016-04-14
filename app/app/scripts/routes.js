@@ -1,8 +1,13 @@
 'use strict';
 
 angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
-  function($stateProvider, $urlRouterProvider) {
-    $urlRouterProvider.otherwise('/search');
+  function($stateProvider, $urlRouterProvider, $rootScope) {
+    // Code: http://stackoverflow.com/questions/26181141/angularjs-ui-router-otherwise-to-state-instead-of-url
+    $urlRouterProvider.otherwise(function($injector, $location) {
+      $injector.invoke(['$state', function($state) {
+        $state.go('404');
+      }]);
+    }); 
     
     $stateProvider
       .state('search', {
@@ -116,6 +121,9 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
             });
           }]
         }
+      }).
+      state('404', {
+        templateUrl: 'views/errors/404.html'
       });
   }
 ]);
