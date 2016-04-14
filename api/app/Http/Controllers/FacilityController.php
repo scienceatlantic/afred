@@ -36,6 +36,8 @@ class FacilityController extends Controller
         if (!($email = $request->input('email', null))) {
             $f = Facility::with('province',
                                 'organization',
+                                'disciplines',
+                                'sectors',
                                 'primaryContact',
                                 'contacts',
                                 'equipment');
@@ -56,6 +58,8 @@ class FacilityController extends Controller
     {
         $f = Facility::with('province',
                             'organization',
+                            'disciplines',
+                            'sectors',
                             'primaryContact',
                             'contacts',
                             'equipment')->findOrFail($id);        
