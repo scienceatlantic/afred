@@ -29,9 +29,7 @@ angular.module('afredApp').controller('FacilitiesShowController',
     $scope.getFacility = function() {
       $scope.facility = facilityResource.get(
         {
-          facilityId: $scope._stateParams.facilityId,
-          expand: 'organization.ilo,province,disciplines,sectors,' +
-            'equipment,primaryContact,contacts'
+          facilityId: $scope._stateParams.facilityId
         },
         function() {
           // Contact section.
@@ -57,11 +55,11 @@ angular.module('afredApp').controller('FacilitiesShowController',
             }
             
             // Equipment not found.
-            $scope.view.show = 'INVALID_EQUIPMENT_ID_MESSAGE';
+            $scope._state.go('404');
           }
         }, function() {
           // Facility not found.
-          $scope.view.show = 'INVALID_FACILITY_ID_MESSAGE';
+          $scope._state.go('404');
         }
       );
     };
@@ -75,14 +73,6 @@ angular.module('afredApp').controller('FacilitiesShowController',
      * @type {object}
      */
     $scope.facility = {};
-    
-    /**
-     * Controls what is shown to the user.
-     * @type {object}
-     */
-    $scope.view = {
-      show: 'LISTING'
-    };
     
     // Get the facility.
     $scope.getFacility();
