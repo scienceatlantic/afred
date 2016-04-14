@@ -1,4 +1,9 @@
-<p class="text-muted">Equipment</p>
+<p class="text-muted">
+  Equipment
+  <span data-ng-hide="_state.is('facilities.show.equipment.show')">
+    <span class="pull-right">Total: <span class="badge">{{ facility.equipment.length }}</span></span>
+  </span>
+</p>
 <hr>
 
 <div data-ng-repeat="e in facility.equipment" onresize="_helper.getWidth()">
