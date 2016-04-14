@@ -70,7 +70,7 @@ angular.module('afredApp').controller('FacilitiesFormEditController',
       $scope._stateParams.token,
       // This is the failure callback.
       function() {
-        $scope.view.show = 'INVALID_TOKEN_MESSAGE';
+        $scope._state.go('404');
       }
     );
     
@@ -83,7 +83,6 @@ angular.module('afredApp').controller('FacilitiesFormEditController',
      *                'PREVIEW',
      *                'SUCCESS_MESSAGE',
      *                'FAILURE_MESSAGE',
-     *                'INVALID_TOKEN_MESSAGE'.
      */
     $scope.view = {
       show: 'FORM'
