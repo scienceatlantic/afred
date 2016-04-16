@@ -7,6 +7,11 @@ angular.module('afredApp').controller('FacilitiesFormCreateController',
   function($scope,
            $interval,
            facilityRepositoryResource) {
+    // See explanation at the bottom ($stateChangeStart) for why this is needed.
+    if ($scope._state.needToReload) {
+      $scope._location.reload();
+    }
+    
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */    
@@ -93,19 +98,25 @@ angular.module('afredApp').controller('FacilitiesFormCreateController',
     // Initialise the form.
     $scope.form.initialise();
     
-    // Because of async issues, we're going to keep calling
-    // '$scope.form.getSave()' until it either retrieves the data successfully
-    // or fails because local storage is not supported.
-    var intervalId = $interval(function() {
-      if ($scope.form.getSave() >= 0) {
-        $interval.cancel(intervalId);
-        $scope.form.startAutosave();
-      }
-    }, 350);
+    // Start autosaving to local storage.
+    $scope.form.startAutosave();
     
-    // Make sure to disable '$scope.form.autosave()' if the route is changed. 
-    $scope.$on('$stateChangeStart', function() {
-      $interval.cancel($scope.form.isAutosaving);
-    });
+    // Stops the '$scope.form.startAutosave()' from autosaving if we leave
+    // this state. We're also setting the 'needToReload' property of
+    // '$scope._state' to true if we're going to the 'facilities.form.edit'
+    // state. If we don't do a hard reload, textAngular will complain that
+    // ('Editor with name "..." already exists'). This is because the parent
+    // state is not reloaded if we're only switching between child states. Note
+    // that the 'needToReload' property is custom code. It is not part of
+    // angular ui router.
+    $scope.$on('$stateChangeStart',
+      function(event, toState, toParams, fromState, fromParams, options) {
+        $interval.cancel($scope.form.isAutosaving);
+        
+        if (toState.name == 'facilities.form.edit') {
+          $scope._state.needToReload = true;
+        }
+      }
+    );
   }
 ]);

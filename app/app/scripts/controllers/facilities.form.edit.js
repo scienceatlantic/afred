@@ -8,6 +8,10 @@ angular.module('afredApp').controller('FacilitiesFormEditController',
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */    
+    // See explanation in 'facilities.form.create.js'.
+    if ($scope._state.needToReload) {
+      $scope._location.reload();
+    }
     
     /**
      * Displays the preview.
@@ -59,19 +63,14 @@ angular.module('afredApp').controller('FacilitiesFormEditController',
     
     /* ---------------------------------------------------------------------
      * Initialisation code.
-     * --------------------------------------------------------------------- */
-    
+     * --------------------------------------------------------------------- */    
     // Initialise the form. True is passed because we're in edit mode.
     $scope.form.initialise(true);
     
     // Get the facility data. 
     $scope.form.getFacilityRepositoryData(
       $scope._stateParams.facilityRepositoryId,
-      $scope._stateParams.token,
-      // This is the failure callback.
-      function() {
-        $scope._state.go('404');
-      }
+      $scope._stateParams.token
     );
     
     // Holds the promised returned from '$scope.submit()'.
@@ -87,5 +86,14 @@ angular.module('afredApp').controller('FacilitiesFormEditController',
     $scope.view = {
       show: 'FORM'
     };
+    
+    // See explanation in 'facilities.form.create.js'.
+    $scope.$on('$stateChangeStart',
+      function(event, toState, toParams, fromState, fromParams, options) {       
+        if (toState.name == 'facilities.form.create') {
+          $scope._state.needToReload = true;
+        }
+      }
+    );
   }
 ]);

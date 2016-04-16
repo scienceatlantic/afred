@@ -84,14 +84,6 @@ angular.module('afredApp').controller('FacilitiesFormController',
       isAutosaving: 0,
       
       /**
-       * If the '$scope.form.getSave()' method fails, this property will be set
-       * to false. This prevents '$scope.form.autosave()' from executing if
-       * local storage is not supported.
-       * @type {boolean}
-       */
-      isStorageSupported: true,
-      
-      /**
        * Loading flags for GIFs. The '$resolved' property from the Angular
        * resource factories are insufficient because we're still doing some
        * processing after the data has been retrieved from the API. These flags
@@ -102,13 +94,6 @@ angular.module('afredApp').controller('FacilitiesFormController',
         disciplines: true,
         sectors: true,
         save: true // Has the saved data been retrieved. 'Create' mode only.
-                   // Because the '$scope.form.getSave()' function calls
-                   // '$scope.form.getDisciplines()' and
-                   // '$scope.form.getSectors()' again
-                   // (the '$scope.form.initialise()' function calls them first)
-                   // we need this additional flag so that the loading GIF
-                   // doesn't stop in between calling '$scope.form.getSave()'
-                   // and '$scope.form.save()'.
       },
       
       /**
@@ -352,8 +337,8 @@ angular.module('afredApp').controller('FacilitiesFormController',
        * Uses/calls/requires:
        * disciplineResource
        * 
-       * @param {array} disciplines If in edit mode, this will mark any already
-       *     selected checkboxes.
+       * @param {array} disciplines This will mark any already selected
+       *     checkboxes.
        */
       getDisciplines: function(disciplines) {
         // Set loading flag to true.
@@ -417,8 +402,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
        * Uses/calls/requires:
        * sectorResource
        * 
-       * @param {array} sectors If in edit mode, this will mark any already
-       *     selected checkboxes.
+       * @param {array} sectors This will mark any already selected checkboxes.
        */
       getSectors: function(sectors) {
         // Set loading flag to true.
@@ -474,15 +458,14 @@ angular.module('afredApp').controller('FacilitiesFormController',
        * facilityRepositoryResource
        * $scope.form.getDisciplines()
        * $scope.form.getSectors()
+       * $scope._state.go()
        * 
        * @param {integer} frId Id of the facility repository record to
        *     retrieve.
        * @param {string} token A string that authorises the user to retrieve
        *     the facility repository record.
-       * @param {function} failureCallback A function to call if the request
-       *     fails.
        */
-      getFacilityRepositoryData: function(frId, token, failureCallback) {
+      getFacilityRepositoryData: function(frId, token) {
         $scope.form.fr =
           facilityRepositoryResource.get({
               facilityRepositoryId: frId,
@@ -512,8 +495,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
               $scope.form.getSectors($scope.form.fr.data.sectors);
               
             }, function() {
-              failureCallback();
-              $scope._warn('Invalid token and/or id provided');
+              $scope._state.go('404');
             }
           );        
       },
@@ -540,11 +522,17 @@ angular.module('afredApp').controller('FacilitiesFormController',
         
         $scope.form.disciplines[0].isRequired = true;
         
-        angular.forEach($scope.form.disciplines, function(discipline) {
-          if (discipline.isSelected) {
+        // Loop through the disciplines until we find one that has been
+        // selected. If none of them have been selected, then the 'isRequired'
+        // property of '$scope.form.disciplines[0]' will remain true. Hence
+        // form validation will fail.
+        var length = $scope.form.disciplines.length;
+        for (var i = 0; i < length; i++) {
+          if ($scope.form.disciplines[i].isSelected) {
             $scope.form.disciplines[0].isRequired = false;
+            break;
           }
-        });
+        }
       },
       
       /**
@@ -555,129 +543,99 @@ angular.module('afredApp').controller('FacilitiesFormController',
         
         $scope.form.sectors[0].isRequired = true;
         
-        angular.forEach($scope.form.sectors, function(sector) {
-          if (sector.isSelected) {
-            $scope.form.sectors[0].isRequired = false;
-          }
-        });
-      },
-      
-      /**
-       * Saves the form data to local storage.
-       *
-       * Side effects:
-       * localStorage 'facilities', 'disciplines', and 'sectors' are saved.
-       * $scope.form.loading.save Set to true at the beginning of the function
-       *     call and then set to false once all processing is complete.
-       * $scope.form.isStorageSupported Set to false if the operation fails.
-       *
-       * Uses/calls/requires:
-       * $scope.form.provinces.$resolved
-       * $scope.form.disciplines.$resolved
-       * $scope.form.sectors.$resolved
-       * $scope.form.loading.disciplines
-       * $scope.form.loading.sectors
-       * $scope.form.getLsName()
-       * $scope.form.getSelectedDisciplines()
-       * $scope.form.getSelectedSectors()
-       *  
-       * @return {integer} 1 if the operation was successful, 0 if local storage
-       *     is not supported, and -1 if form data has not been resolved (the
-       *     function will not attempt to save).
-       */
-      save: function() {
-        // Because of async issues, we have to make sure that all data has been
-        // retrieved before attempting to save. Otherwise the form might end up
-        // overriding actual data with blank data.
-        if ($scope.form.organizations.$resolved
-            && $scope.form.provinces.$resolved
-            && $scope.form.disciplines.$resolved
-            && $scope.form.sectors.$resolved
-            && !$scope.form.loading.disciplines
-            && !$scope.form.loading.sectors) {
-          var f = $scope.form.getLsName('facility');
-          var d = $scope.form.getLsName('disciplines');
-          var s = $scope.form.getLsName('sectors');
-          var dData = $scope.form.getSelectedDisciplines(true);
-          var sData = $scope.form.getSelectedSectors(true);
-          
-          try {
-            localStorage.setItem(f, angular.toJson($scope.form.data));
-            localStorage.setItem(d, angular.toJson(dData));
-            localStorage.setItem(s, angular.toJson(sData));
-                        
-            // Set the loading flag to false.
-            $scope.form.loading.save = false;
-            
-            return 1;
-          } catch(e) {
-            // Local storage is not supported.
-            $scope.form.isStorageSupported = false;
-            
-            // We need to set this to false if local storage is not supported
-            // otherwise the form will never get displayed.
-            $scope.form.loading.save = false;
-            return 0;
+        var length = $scope.form.sectors.length;
+        for (var i = 0; i < length; i++) {
+          if ($scope.form.sectors[i].isSelected) {
+            $scope.form.disciplines[0].isRequired = false;
           }
         }
-        
-        return -1;
       },
       
       /**
-       * Retrieves any saved data from local storage.
+       * Note: If this function is not being used, set '$scope.loading.save'
+       * to false manually. Otherwise the form will not be displayed.
+       *
+       * Retrieve existing data from locol storage then continuously save the
+       * form data to local storage every 'interval' milliseconds.
        *
        * Side effects:
-       * $scope.form.data Data retrieved from localstorage is attached to this.
-       * $scope.form.loading.save Set to false if the operation fails because
-       *     that means that local storage is not supported. We have to set
-       *     this to false because in case the '$scope.form.save()' function
-       *     doesn't get called, '$scope.form.loading' will always be true.
+       * $scope.form.isAutosaving ID returned from $interval is attached to this
+       *     if the operation is successful.
+       * $scope.form.data Data retrieved from local storage is attached to this.
+       * $scope.form.loading.save Is set to false once the data has been
+       *     retrieved or if the operation fails.
        *
-       * Uses/calls/requires:
+       * Calls/uses/requires:
+       * $interval
+       * $scope._state.current.name
+       * $scope.form.organizations.$resolved
        * $scope.form.provinces.$resolved
        * $scope.form.disciplines.$resolved
        * $scope.form.sectors.$resolved
        * $scope.form.loading.disciplines
        * $scope.form.loading.sectors
-       *  
-       * @returns {integer} 1 if the operation was successful regardless if data
-       *     was actually retrieved. 0 if local storage is not supported. -1 if
-       *     the form data (organizations, provinces, disciplines, sectors) has
-       *     not been resolved. -1 also means that the function did not attempt
-       *     to retrieve the data.
+       * $scope.form.getDisciplines()
+       * $scope.form.getSectors()
+       * 
+       * @param {integer} interval Number of milliseconds between each
+       *     interval. If not provided, a default of 500 milliseconds is used.
        */
-      getSave: function() {
-        // See '$scope.form.save()' for explanation.
-        if ($scope.form.organizations.$resolved
+      startAutosave: function(interval) {
+        // Local storage item names.
+        var f = $scope._state.current.name + '-' + 'facility';
+        var d = $scope._state.current.name + '-' + 'disciplines';
+        var s = $scope._state.current.name + '-' + 'sectors';
+
+        // We're putting the code below inside an interval because we have to
+        // test if all the form data has fully loaded before attempting to
+        // retrieve and save data. Otherwise data might be overwritten with
+        // blank data.
+        var intervalId = $interval(function() {
+          if ($scope.form.organizations.$resolved
             && $scope.form.provinces.$resolved
             && $scope.form.disciplines.$resolved
             && $scope.form.sectors.$resolved
             && !$scope.form.loading.disciplines
             && !$scope.form.loading.sectors) {
-          try {
-            var f = localStorage.getItem($scope.form.getLsName('facility'));
-            var d = localStorage.getItem($scope.form.getLsName('disciplines'));
-            var s = localStorage.getItem($scope.form.getLsName('sectors'));
-          
-            if (f && d && s) {
-              $scope.form.data = angular.fromJson(f);
-              $scope.form.getDisciplines(angular.fromJson(d));
-              $scope.form.getSectors(angular.fromJson(s));
+            // Once the condition passes (i.e. the form has loaded), cancel the
+            // interval.
+            $interval.cancel(intervalId);
+
+            // This is in a try/catch block because we want to test if
+            // local storage is supported by the browser. If it's not, quit.
+            try {
+              $scope.form.data = angular.fromJson(localStorage.getItem(f));
+              $scope.form.getDisciplines(angular.fromJson(localStorage.getItem(d)));
+              $scope.form.getSectors(angular.fromJson(localStorage.getItem(s)));
+              
+              // Loading flag is set to true.
+              $scope.form.loading.save = false;
+            } catch(e) {
+              
+              // This means that local storage is (probably) not supported. So
+              // The loading flag still has to be set to true, otherwise the
+              // form will not be shown.
+              $scope.form.loading.save = false;
+              return;
+            }           
+            
+            // Continuously save data (if it's not already doing so).
+            if (!$scope.form.isAutosaving) {
+              try {
+                $scope.form.isAutosaving = $interval(function() {
+                  var dData = $scope.form.getSelectedDisciplines(true);
+                  var sData = $scope.form.getSelectedSectors(true);
+            
+                  localStorage.setItem(f, angular.toJson($scope.form.data));
+                  localStorage.setItem(d, angular.toJson(dData));
+                  localStorage.setItem(s, angular.toJson(sData));               
+                }, interval ? interval : 500);
+              } catch(e) {
+                $interval.cancel($scope.form.isAutosaving);
+              }          
             }
-            return 1;
-          } catch(e) {
-            // Local storage is not supported.
-            $scope.form.isStorageSupported = false;
-            
-            // See explanation in '$scope.form.save()'.
-            $scope.form.loading.save = false;
-            
-            return 0;
           }
-        }
-        
-        return -1;
+        }, 500);
       },
       
       /**
@@ -691,6 +649,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
        * Uses/calls/requires:
        * $interval
        * $scope.form.initialise()
+       * $scope._state.current.name
        *
        * @param dontConfirm If set to true, confirmation modal will not be shown
        *     and localStorage will be cleared immediately and the form will be
@@ -713,58 +672,19 @@ angular.module('afredApp').controller('FacilitiesFormController',
         function remove() {
           try {
             // We have to stop autosaving otherwise clearing the data won't
-            // work if the page is reloaded after this function is called (the
-            // '$scope.forn.save()' function might have been called before
-            // the page was reloaded thereby saving the form data again).
+            // work if the page is reloaded after this function is called.
             $interval.cancel($scope.form.isAutosaving);
             
-            localStorage.removeItem($scope.form.getLsName('facility'));
-            localStorage.removeItem($scope.form.getLsName('disciplines'));
-            localStorage.removeItem($scope.form.getLsName('sectors'));
+            var f = $scope._state.current.name + '-' + 'facility';
+            var d = $scope._state.current.name + '-' + 'disciplines';
+            var s = $scope._state.current.name + '-' + 'sectors';
+            localStorage.removeItem(f);
+            localStorage.removeItem(d);
+            localStorage.removeItem(s);
           } catch(e) {
-            // Local storage is not supported.
-            $scope.form.isStorageSupported = false;
+            // Do nothing if local storage is not supported.
           }
         }
-      },
-      
-      /**
-       * Continuously save the form data to local storage every 'interval'
-       * milliseconds.
-       *
-       * Side effects:
-       * $scope.form.isAutosaving ID returned from $interval is attached to this
-       *     if the operation is successful.
-       * 
-       * @param {integer} interval Number of milliseconds between each
-       *     interval. If not provided, a default of 500 milliseconds is used.
-       */
-      startAutosave: function(interval) {
-        if (!$scope.form.isAutosaving && $scope.form.isStorageSupported) {
-          try {
-            $scope.form.isAutosaving = $interval(function() {
-              $scope.form.save();
-            }, interval ? interval : 500);
-            $rootScope._formIsAutosaving = $scope.form.isAutosaving;
-          } catch(e) {
-            // Local storage is not supported.
-            $scope.form.isStorageSupported = false;
-            $interval.cancel($scope.form.isAutosaving);
-          }          
-        }
-      },
-      
-      /**
-       * Retrieves the item name used for storing form data.
-       *
-       * Uses/calls/requires:
-       * $scope._state.current.name
-       * 
-       * @param {string} item The item to retrieve (facility, disciplines,
-       *     sectors)
-       */
-      getLsName: function(item) {
-        return $scope._state.current.name + '-' + item;
       },
       
       /**
