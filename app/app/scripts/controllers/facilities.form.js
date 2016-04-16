@@ -604,9 +604,13 @@ angular.module('afredApp').controller('FacilitiesFormController',
             // This is in a try/catch block because we want to test if
             // local storage is supported by the browser. If it's not, quit.
             try {
-              $scope.form.data = angular.fromJson(localStorage.getItem(f));
-              $scope.form.getDisciplines(angular.fromJson(localStorage.getItem(d)));
-              $scope.form.getSectors(angular.fromJson(localStorage.getItem(s)));
+              var data = angular.fromJson(localStorage.getItem(f));
+
+              if (facility) {
+                $scope.form.data = data;
+                $scope.form.getDisciplines(angular.fromJson(localStorage.getItem(d)));
+                $scope.form.getSectors(angular.fromJson(localStorage.getItem(s)));
+              }              
               
               // Loading flag is set to true.
               $scope.form.loading.save = false;
