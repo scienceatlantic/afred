@@ -7,7 +7,11 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
       $injector.invoke(['$state', function($state) {
         $state.go('404');
       }]);
-    }); 
+    });
+    
+    // Redirect to search if user is on root. Otherwise the user will be shown
+    // the 404 page.
+    $urlRouterProvider.when('', 'search');
     
     $stateProvider
       .state('search', {
