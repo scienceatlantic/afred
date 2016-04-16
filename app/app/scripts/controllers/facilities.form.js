@@ -606,7 +606,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
             try {
               var data = angular.fromJson(localStorage.getItem(f));
 
-              if (facility) {
+              if (data) {
                 $scope.form.data = data;
                 $scope.form.getDisciplines(angular.fromJson(localStorage.getItem(d)));
                 $scope.form.getSectors(angular.fromJson(localStorage.getItem(s)));
