@@ -83,12 +83,6 @@
           </div><!-- End of .row -->
         </div>
       </div><!-- End of ng-form -->
-          
-      <div class="row">
-        <div class="col-md-6">      
-
-        </div><!-- End of .col-*-* -->
-      </div>
   
       <hr>
     
@@ -180,20 +174,25 @@
                     <input type="email" class="form-control" name="contactEmail{{ $index }}" data-ng-model="c.email" data-ng-model-options="{ debounce: 500 }" placeholder="me@example.com" maxlength="254" required>
                   </div>
                   
+                  <!-- Telephone field for the primary contact ($index == 0) is mandatory. -->
                   <div data-af-field data-af-field-label="Telephone*" data-ng-if="$index === 0">
                     <input type="text" class="form-control" name="contactTelephone{{ $index }}" data-ng-model="c.telephone" data-ng-model-options="{ debounce: 500 }" data-ng-pattern="/^\d{10}$/" placeholder="5555555555" required>
                   </div>
                   
+                  <!-- Telephone field for contacts ($index > 0) is not mandatory -->
                   <div data-af-field data-af-field-label="Telephone" data-ng-if="$index !== 0">
                     <input type="text" class="form-control" name="contactTelephone{{ $index }}" data-ng-model="c.telephone" data-ng-model-options="{ debounce: 500 }" data-ng-pattern="/^\d{10}$/" placeholder="5555555555">
                   </div>
                 </div><!-- End of .col-x-x -->
                 
                 <div class="col-lg-6">
+                  
+                  <!-- Position field for the primary contact ($index == 0) is mandatory -->
                   <div data-af-field data-af-field-label="Position*" data-ng-if="$index === 0" data-af-field-model="c.position">
                     <input type="text" class="form-control" name="contactPosition{{ $index }}" data-ng-model="c.position" maxlength="100" required>
                   </div>
                   
+                  <!-- Position field for contacts ($index > 0) is not mandatory -->
                   <div data-af-field data-af-field-label="Position" data-ng-if="$index !== 0" data-af-field-model="c.position">
                     <input type="text" class="form-control" name="contactPosition{{ $index }}" data-ng-model="c.position" maxlength="100">
                   </div>

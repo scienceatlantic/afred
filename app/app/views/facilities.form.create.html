@@ -1,58 +1,54 @@
-<div class="row">
-  <div class="col-lg-12">
-    <h3>Submit a Facility</h3>
-    
-    <p data-ng-show="view.show == 'FORM'">
-      To submit equipment or facilities for inclusion in the AFRED database, please complete the form below.
-    </p>
-    
-    <div data-af-loading="!(form.organizations.$resolved || form.provinces.$resolved || form.disciplines.$resolved || form.sectors.$resolved) || (form.loading.disciplines || form.loading.sectors || form.loading.save)" data-af-loading-text="Preparing the form..." data-ng-show="view.show == 'FORM'">
-      <div data-ng-include="'views/includes/facilities.form.html'"></div>
+<h2 class="h3">Submit a Facility</h2>
+
+<p data-ng-show="view.show == 'FORM'">
+  To submit equipment or facilities for inclusion in the AFRED database, please complete the form below.
+</p>
+
+<div data-af-loading="!(form.organizations.$resolved || form.provinces.$resolved || form.disciplines.$resolved || form.sectors.$resolved) || (form.loading.disciplines || form.loading.sectors || form.loading.save)" data-af-loading-text="Preparing the form..." data-ng-show="view.show == 'FORM'">
+  <div data-ng-include="'views/includes/facilities.form.html'"></div>
+</div>
+
+<div data-ng-show="view.show == 'PREVIEW'">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <div data-ng-include="'views/includes/facility.html'"></div>
     </div>
-    
-    <div data-ng-show="view.show == 'PREVIEW'">
-      <div class="panel panel-default">
-        <div class="panel-body">
-          <div data-ng-include="'views/includes/facility.html'"></div>
-        </div>
-      </div>
-      
-      <div class="panel panel-default" data-ng-show="facility.organization.ilo.firstName">
-        <div class="panel-body">
-          <div data-ng-include="'views/includes/ilo.html'"></div>
-        </div>
-      </div>
-      
-      <div class="panel panel-default">
-        <div class="panel-body">
-          <div data-ng-include="'views/includes/contacts.html'"></div>
-        </div>
-      </div>
-          
-      <div class="panel panel-default">
-        <div class="panel-body">
-          <div data-ng-include="'views/includes/equipment.html'"></div>
-        </div>
-      </div>
-      
-      <p>
-        <button class="btn btn-default" data-ng-click="submit()" data-af-loading-btn="fr.$resolved === false" data-af-loading-btn-text="Submitting..." data-ng-disabled="fr.$resolved === false">Submit <span class="fa fa-check"></span></button>
-        <button class="btn btn-default" data-ng-click="goBack()" data-ng-disabled="fr.$resolved === false">Go Back <span class="fa fa-arrow-left"></span></button>
-      </p>
+  </div>
+  
+  <div class="panel panel-default" data-ng-show="facility.organization.ilo.firstName">
+    <div class="panel-body">
+      <div data-ng-include="'views/includes/ilo.html'"></div>
     </div>
-    
-    <div data-ng-show="view.show == 'SUCCESS_MESSAGE'">
-      <p>Thank you! Your information has been successfully submitted.</p>
-      
-      <p>The primary contact listed in your submission will receive an email with next steps once the record has been reviewed.</p>
-      
-      <p>Would you like to submit <a href="" data-ng-click="_location.reload()">another</a> facility?</p>
-      
-      <p>Go to <a data-ui-sref="search">homepage</a>.</p>
+  </div>
+  
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <div data-ng-include="'views/includes/contacts.html'"></div>
     </div>
-    
-    <div data-ng-show="view.show =='FAILURE_MESSAGE'">
-      <p>Oh no... it looks like something went wrong!</p>
+  </div>
+      
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <div data-ng-include="'views/includes/equipment.html'"></div>
     </div>
-  </div><!-- End of .col-x-x -->
-</div><!-- End of .row -->
+  </div>
+  
+  <p>
+    <button class="btn btn-default" data-ng-click="submit()" data-af-loading-btn="fr.$resolved === false" data-af-loading-btn-text="Submitting..." data-ng-disabled="fr.$resolved === false">Submit <span class="fa fa-check"></span></button>
+    <button class="btn btn-default" data-ng-click="goBack()" data-ng-disabled="fr.$resolved === false">Go Back <span class="fa fa-arrow-left"></span></button>
+  </p>
+</div>
+
+<div data-ng-show="view.show == 'SUCCESS_MESSAGE'">
+  <p>Thank you! Your information has been successfully submitted.</p>
+  
+  <p>The primary contact listed in your submission will receive an email with next steps once the record has been reviewed.</p>
+  
+  <p>Would you like to submit <a href="" data-ng-click="_location.reload()">another</a> facility?</p>
+  
+  <p>Go to <a data-ui-sref="search">homepage</a>.</p>
+</div>
+
+<div data-ng-show="view.show =='FAILURE_MESSAGE'">
+  <p>Oh no... it looks like something went wrong!</p>
+</div>
