@@ -546,7 +546,8 @@ angular.module('afredApp').controller('FacilitiesFormController',
         var length = $scope.form.sectors.length;
         for (var i = 0; i < length; i++) {
           if ($scope.form.sectors[i].isSelected) {
-            $scope.form.disciplines[0].isRequired = false;
+            $scope.form.sectors[0].isRequired = false;
+            break;
           }
         }
       },
