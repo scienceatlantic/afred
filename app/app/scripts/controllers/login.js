@@ -15,20 +15,24 @@ angular.module('afredApp').controller('LoginController',
       $scope.loading.login = true;
       
       $scope.auth = $scope._auth.login($scope.credentials).then(function(response) {
+        console.log($scope.auth);
         // If login was successful, save the authenticated user's details
-        // and redirect the user to the dashboard.
-        $scope._auth.save(response);
-        
-        if ($scope._stateParams.redirect) {
-          location = $scope._stateParams.redirect;
+        // and redirect the user to the dashboard (if a redirect param was not
+        // provided).
+        if ($scope._auth.save(response)) {
+          if ($scope._stateParams.redirect) {
+            location.href = $scope._stateParams.redirect;
+          } else {
+            $scope._state.go('admin.dashboard');
+          }
         } else {
-          $scope._state.go('admin.dashboard');
+          $scope.credentials.invalid = true;
+          
+          // Set loading flag to false.
+          $scope.loading.login = false;
         }
-      }, function() {
-        $scope.credentials.invalid = true;
-        
-        // Set loading flag to false.
-        $scope.loading.login = false;
+      }, function(response) {
+        $scope._httpError(response);
       });
     };
     

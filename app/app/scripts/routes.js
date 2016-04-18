@@ -81,9 +81,11 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         resolve: {
           ping: ['$rootScope', '$state', function($rootScope, $state) {
             return $rootScope._auth.ping().then(function(response) {
-              $rootScope._auth.save(response.data);
+              if (!$rootScope._auth.save(response)) {
+                $rootScope._state.go('login', { redirect: location.href }); 
+              }
             }, function() {
-              $state.go('login', { redirect: location.href });
+              $rootScope._httpError(response);
             });
           }]
         }
@@ -119,10 +121,11 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         resolve: {
           ping: ['$rootScope', '$state', function($rootScope, $state) {
             return $rootScope._auth.ping().then(function(response) {
-              $state.go('admin.dashboard');
+              if ($rootScope._auth.save(response)) {  
+                $rootScope._state.go('admin.dashboard');
+              }
             }, function() {
-              // Error function has to be defined in order for the login
-              // page to render.
+              $rootScope._httpError(response);
             });
           }]
         }

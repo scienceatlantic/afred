@@ -34,7 +34,7 @@ class AuthController extends Controller
             return $this->_toCamelCase(Auth::user()->toArray());
         }
         
-        abort(401, 'Not authorized');
+        return 'Not authorised';
     }
     
     public function ping()
@@ -46,7 +46,7 @@ class AuthController extends Controller
             return $this->_toCamelCase(Auth::user()->toArray());
         }
         
-        abort(401, 'Not authenticated');
+        return 'Not authenticated';
     }
     
     public function logout()

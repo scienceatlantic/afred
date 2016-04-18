@@ -73,11 +73,6 @@ angular.module('afredApp').run(['$rootScope',
       /**
        *
        */
-      resolved: false,
-      
-      /**
-       *
-       */
       login: function(credentials) {
         return $http.post($rootScope._config.api.address + '/auth/login',
           credentials);
@@ -89,8 +84,7 @@ angular.module('afredApp').run(['$rootScope',
       logout: function() {
         $http.get($rootScope._config.api.address + '/auth/logout').then(
           function() {
-            $rootScope._auth.user = {};
-            $state.go('login');
+            $rootScope._auth.destroy(true);
           }
         );
       },
@@ -105,22 +99,55 @@ angular.module('afredApp').run(['$rootScope',
       /**
        *
        */
-      save: function(data) {
-        $rootScope._auth.user = data;
-        angular.forEach(data.roles, function(role) {
-          if (role.name == 'Admin') {
-            $rootScope._auth.user.isAdmin = true;
-          }
-        });
+      save: function(response) {
+        var resp = response.data ? response.data : response;
+        
+        if (resp.firstName) {
+          $rootScope._auth.user = resp;
+          
+          angular.forEach(resp.roles, function(role) {
+            if (role.name == 'Admin') {
+              $rootScope._auth.user.isAdmin = true;
+            }
+          });
+          
+          return true;
+        }
+        
+        return false;
       },
+      
+      destroy: function(redirectToLogin) {
+        $rootScope._auth.user = {};
+        
+        if (redirectToLogin) {
+          $rootScope._state.go('login');
+        }
+      }
     };
     
+    // Try pinging on app load to check if user is already logged in.
     $rootScope._auth.ping().then(function(response) {
-      $rootScope._auth.save(response.data);
-      $rootScope._auth.resolved = true;
+      $rootScope._auth.save(response);
     }, function() {
-      $rootScope._auth.resolved = true;
+      // If the ping fails, redirect to 500?
     });
+    
+    
+    
+    //
+    $rootScope._httpError = function(response) {
+      var statusCode = angular.isObject(response) ? response.status : response;
+      
+      switch (statusCode) {
+        case '404':
+        case '500':
+          $rootScope._state.go(statusCode);
+          
+        default:
+          $rootScope._state.go('500');
+      }
+    };
     
     /* ---------------------------------------------------------------------
      * Helper functions

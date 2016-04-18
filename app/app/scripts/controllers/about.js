@@ -10,8 +10,8 @@ angular.module('afredApp').controller('AboutController',
      * --------------------------------------------------------------------- */
     
     $scope.wp = wpResource.getPage($scope._config.wp.pages['about']);
-    $scope.wp.$promise.then(null, function() {
-      $scope._state.go('500');
+    $scope.wp.$promise.then(null, function(response) {
+      $scope._httpError(response);
     });
   }
 ]);
