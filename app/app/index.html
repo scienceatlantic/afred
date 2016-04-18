@@ -28,80 +28,96 @@
     <!-- Title -->
     <title>AFRED</title>
   </head>
-  <body data-ng-app="afredApp">
-    <!--[if lt IE 10]>
-      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-    <![endif]-->
-
-    <!-- App content -->
-    <div>      
-      <!-- Header -->
-      <header class="jumbotron">
+  <body data-ng-app="afredApp" data-ng-cloak>
+    <!-- Error pages container -->
+    <div data-ng-if="_state.is('404') || _state.is('500')">
+      <div data-ui-view></div>
+    </div>
+    
+    <!-- All other content container -->
+    <div data-ng-if="!_state.is('404') && !_state.is('500')">
+      <!--[if lt IE 10]>
+        <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+      <![endif]-->
+  
+      <!-- App content -->
+      <div>      
+        <!-- Header -->
+        <header class="jumbotron">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-9">
+                <div class="page-header">
+                  <div style="margin: -130px -120px -75px -120px;">
+                    <img src="images/afred-logo-colourgradient-bottomtagline.png" width="700px;">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+        
+        <!-- Main Navigation -->
+        <nav class="navbar navbar-default" role="navigation">
+          <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+            </div><!-- End of .navbar-header -->
+              
+            <div class="collapse navbar-collapse" id="main-navbar">
+              <ul class="nav navbar-nav">
+                <li data-ui-sref-active="active"><a data-ui-sref="search">Search</a></li>
+                <li data-ui-sref-active="active"><a data-ui-sref="facilities.form.create">Submit a Facility</a></li>
+                <li data-ui-sref-active="active"><a data-ui-sref="facilities.update">Update</a></li>
+                <li data-ui-sref-active="active"><a data-ui-sref="about">About</a></li>
+              </ul>
+              
+              <ul class="nav navbar-nav navbar-right">
+                <li role="presentation" class="dropdown" data-ng-show="_auth.user.email">
+                  <a class="dropdown-toggle" data-toggle="dropdown" href="" role="button" aria-haspopup="true" aria-expanded="false">
+                    Admin <span class="caret"></span>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a data-ui-sref="admin.dashboard">Dashboard</a></li>
+                    <li><a data-ui-sref="admin.facilities">Facilities</a></li>
+                  </ul>
+                </li>
+                <li data-ui-sref-active="active" data-ng-hide="_auth.user.email"><a data-ui-sref="login">Administrator Login</a></li>
+                <li><a data-ui-sref="login" data-ng-show="_auth.user.email" data-ng-click="_auth.logout()">Logout</a></li>
+              </ul>
+            </div><!-- End of .collapse -->
+            
+            <div style="padding-right: 13px;" data-ng-show="_auth.user.firstName">
+              <div class="pull-right">
+                <p>Logged in as <b>{{ _auth.user.firstName }} {{ _auth.user.lastName }}</b></p>
+              </div>
+            </div>
+          </div><!-- End of .container -->
+        </nav>
+  
+        <!-- View -->
         <div class="container">
-          <div class="page-header">
-            <div style="margin: -130px -120px -75px -120px;">
-              <img src="images/afred-logo-colourgradient-bottomtagline.png" width="700px;">
+          <div class="row">
+            <div class="col-md-10">
+              <div data-ui-view></div>
             </div>
           </div>
         </div>
-      </header>
-      
-      <!-- Main Navigation -->
-      <nav class="navbar navbar-default" role="navigation" data-ng-cloak>
-        <div class="container">
-          <!-- Brand and toggle get grouped for better mobile display -->
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-navbar">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-          </div><!-- End of .navbar-header -->
-            
-          <div class="collapse navbar-collapse" id="main-navbar">
-            <ul class="nav navbar-nav">
-              <li data-ui-sref-active="active"><a data-ui-sref="search">Search</a></li>
-              <li data-ui-sref-active="active"><a data-ui-sref="facilities.form.create">Submit a Facility</a></li>
-              <li data-ui-sref-active="active"><a data-ui-sref="facilities.update">Update</a></li>
-              <li data-ui-sref-active="active"><a data-ui-sref="about">About</a></li>
-            </ul>
-            
-            <ul class="nav navbar-nav navbar-right">
-              <li role="presentation" class="dropdown" data-ng-show="_auth.user.email">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="" role="button" aria-haspopup="true" aria-expanded="false">
-                  Admin <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu">
-                  <li><a data-ui-sref="admin.dashboard">Dashboard</a></li>
-                  <li><a data-ui-sref="admin.facilities">Facilities</a></li>
-                </ul>
-              </li>
-              <li data-ui-sref-active="active" data-ng-hide="_auth.user.email"><a data-ui-sref="login">Administrator Login</a></li>
-              <li><a data-ui-sref="login" data-ng-show="_auth.user.email" data-ng-click="_auth.logout()">Logout</a></li>
-            </ul>
-          </div><!-- End of .collapse -->
-          
-          <div style="padding-right: 13px;" data-ng-show="_auth.user.firstName">
-            <div class="pull-right">
-              <p>Logged in as <b>{{ _auth.user.firstName }} {{ _auth.user.lastName }}</b></p>
-            </div>
+        
+        <!-- Footer -->
+        <footer class="footer">
+          <div class="container">
+            <p>Science Atlantic</p>
           </div>
-        </div><!-- End of .container -->
-      </nav>
-
-      <!-- View -->
-      <div class="container">
-        <div data-ui-view></div>
-      </div>
-      
-      <!-- Footer -->
-      <footer class="footer">
-        <div class="container">
-          <p>Science Atlantic</p>
-        </div>
-      </footer>
-    </div><!-- End of content container -->
+        </footer>
+      </div><!-- End of content container -->
+    </div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
     <script>

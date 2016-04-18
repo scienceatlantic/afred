@@ -71,7 +71,8 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
       }).
       state('about', {
         url: '/about',
-        templateUrl: 'views/about.html'
+        templateUrl: 'views/about.html',
+        controller: 'AboutController'
       }).
       state('admin', {
         'abstract': true,
@@ -127,7 +128,10 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         }
       }).
       state('404', {
-        templateUrl: 'views/errors/404.html'
+        templateUrl: 'views/error.html'
+      }).
+      state('500', {
+        templateUrl: 'views/error.html'
       });
   }
 ]);
