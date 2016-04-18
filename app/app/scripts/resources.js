@@ -248,14 +248,14 @@ angular.module('afredApp').factory('wpResource',
           url: root + '/pages',
           method: 'GET',
           isArray: true,
-          headers,
+          headers: headers,
           withCredentials: false
         },
         getPage: {
           url: root + '/pages/:pageId',
           method: 'GET',
           isArray: false,
-          headers,
+          headers: headers,
           withCredentials: false
         }
       }
