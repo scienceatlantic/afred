@@ -33,8 +33,8 @@ angular.module('afredApp').run(['$rootScope', function($rootScope) {
       // Application authentication. Will be sent as a header with each request
       // to the API.
       appAuth: {
-        username: '',
-        password: '',
+        username: 'development',
+        password: 'R0KU jxX7 KjOR vDvX yPCQ 3DR0',
       },
       
       address: 'http://afred.ca/wp/api/wp-json/wp/v2',
@@ -42,8 +42,10 @@ angular.module('afredApp').run(['$rootScope', function($rootScope) {
       // Location of specific pages on WordPress. 
       pages: {
         'about': { pageId: 5 },
-        'update facility instructions': { pageId: '' },
-        'submit a facility intro': { pageId: 4 }
+        'update a facility': { pageId: '' },
+        'submit a facility': { pageId: 12 },
+        'submit a facility - success' : { pageId: 19 },
+        'submit a facility - failure' : { pageId: 21 }
       }
     },
     
