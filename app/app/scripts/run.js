@@ -133,8 +133,6 @@ angular.module('afredApp').run(['$rootScope',
       // If the ping fails, redirect to 500?
     });
     
-    
-    
     //
     $rootScope._httpError = function(response) {
       var statusCode = angular.isObject(response) ? response.status : response;
@@ -143,7 +141,8 @@ angular.module('afredApp').run(['$rootScope',
         case '404':
         case '500':
           $rootScope._state.go(statusCode);
-          
+          break;
+        
         default:
           $rootScope._state.go('500');
       }
