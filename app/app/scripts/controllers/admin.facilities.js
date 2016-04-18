@@ -20,14 +20,29 @@ angular.module('afredApp').controller('AdminFacilitiesController',
       fr: {},
       
       /**
-       * Holds all form data.
-       * @type
+       * Form related objects/functions.
+       * @type {object}
        */
       form: {
+        /**
+         * Stores all form data.
+         */
         data: {
           state: null, // Facility repository state.
           page: null, // Page number (pagination).
           visibility: null
+        },
+        
+        /**
+         * Clears the form.
+         *
+         * Side effects:
+         * $scope.facilities.form.data All properties are set to null.
+         */
+        clear: function() {
+          $scope.facilities.form.data.state = null,
+          $scope.facilities.form.data.page = null,
+          $scope.facilities.form.data.visibility = null          
         }
       },
       
@@ -50,6 +65,8 @@ angular.module('afredApp').controller('AdminFacilitiesController',
         if (resetPage) {
           $scope.facilities.form.data.page = 1;
           
+          // If we're viewing PUBLISHED facilities, set visibility to 1. This
+          // means that public facilities is the default view.
           if ($scope.facilities.form.data.state == 'PUBLISHED') {
             $scope.facilities.form.data.visibility = 1;
           } else {
@@ -61,7 +78,7 @@ angular.module('afredApp').controller('AdminFacilitiesController',
       },
       
       /**
-       * Parses the parameters.
+       * Parses the parameters. To be used by a child state.
        *
        * Side effects:
        * $scope.facilities.form.data.state State is updated to match the value
@@ -69,7 +86,7 @@ angular.module('afredApp').controller('AdminFacilitiesController',
        * $scope.facilities.form.data.page Page number is updated to match value
        *     retrieved from the URL if it is valid.
        * $scope.facilities.form.data.visibility If '$scope._stateParams.state'
-       *     = PUBLISHED, visibility is updated to match value retrieveed from
+       *     = PUBLISHED, visibility is updated to match value retrieved from
        *     the URL if it is valid. If invalid, gets set to 1. If state is not
        *     PUBLISHED, visibility is set to null.
        *
@@ -140,6 +157,6 @@ angular.module('afredApp').controller('AdminFacilitiesController',
           visibility: $scope.facilities.form.data.visibility
         });
       }
-    };    
+    };
   }
 ]);

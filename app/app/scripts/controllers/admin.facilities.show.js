@@ -196,5 +196,14 @@ angular.module('afredApp').controller('AdminFacilitiesShowController', [
     
     // Retrieve the facility repository record.
     $scope.getFacilityRepository();
+    
+    // See reason for this bit in 'admin.facilities.state.js'.
+    $scope.$on('$stateChangeStart',
+      function(event, toState, toParams, fromState, fromParams, options) {
+        if (toState.name == 'admin.facilities') {
+          $scope.facilities.form.clear();
+        }
+      }
+    );
   }
 ]);
