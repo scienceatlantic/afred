@@ -74,7 +74,7 @@ angular.module('afredApp').controller('AdminFacilitiesController',
           }
         }
         
-        $scope._state.go('admin.facilities.state', $scope.facilities.form.data);
+        $scope._state.go('admin.facilities.index', $scope.facilities.form.data);
       },
       
       /**
@@ -149,7 +149,7 @@ angular.module('afredApp').controller('AdminFacilitiesController',
        * $scope.facility.form.data.page
        * $scope.facility.form.data.state
        */
-      get: function() {
+      query: function() {
         $scope.facilities.fr = facilityRepositoryResource.query({
           page: $scope.facilities.form.data.page,
           itemsPerPage: 10,
@@ -158,5 +158,20 @@ angular.module('afredApp').controller('AdminFacilitiesController',
         });
       }
     };
+    
+    /* ---------------------------------------------------------------------
+     * Initialisation code.
+     * --------------------------------------------------------------------- */
+    
+    // Remember that angular ui router does not re-instantiate parent
+    // controllers, so clear the form data if we're returning (e.g. browser
+    // history) from a child state.
+    $scope.$on('$stateChangeStart',
+      function(event, toState, toParams, fromState, fromParams, options) {
+        if (fromState.name == 'admin.facilities.index') {
+          $scope.facilities.form.clear();
+        }
+      }
+    );
   }
 ]);

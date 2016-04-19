@@ -140,6 +140,9 @@ angular.module('afredApp').factory('organizationResource',
           params: {
             paginate: 0
           }
+        },
+        update: {
+          method: 'PUT'
         }
       }
     );

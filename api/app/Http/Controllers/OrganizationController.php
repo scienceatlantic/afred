@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 // Models.
+use App\Ilo;
 use App\Organization;
 
 // Requests.
@@ -28,7 +29,11 @@ class OrganizationController extends Controller
      */
     public function index(Request $request)
     {
-        $o = Organization::with('ilo')->notHidden()->orderBy('name', 'asc');
+        if ($request->input('showHidden', false)) {
+            $o = Organization::with('ilo')->orderBy('name', 'asc');
+        } else {
+            $o = Organization::with('ilo')->notHidden()->orderBy('name', 'asc');
+        }
         $o = $this->_paginate ? $o->paginate($this->_ipp) : $o->get();
         return $this->_toCamelCase($o->toArray());
     }
@@ -42,6 +47,28 @@ class OrganizationController extends Controller
     public function store(Request $request)
     {
         //
+    }
+    
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $o = Organization::with('ilo')->find($id);
+        $o->name = $request->name;
+        $o->isHidden = $request->isHidden;
+        $o->save();
+        
+        if ($request->ilo) {
+            $ilo = Ilo::where('organizationId', $o->id)->first();
+            
+        }
+        
+        return $this->_toCamelCase($o->toArray());
     }
 
     /**
@@ -64,7 +91,6 @@ class OrganizationController extends Controller
      */
     public function destroy($id)
     {
-        // 
-        //Organization::destroy($id);
+        Organization::destroy($id);
     }
 }

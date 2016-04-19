@@ -104,15 +104,41 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         templateUrl: 'views/admin.facilities.html',
         controller: 'AdminFacilitiesController'
       }).
-      state('admin.facilities.state', {
-        url: '/state/:state?visibility&page',
-        templateUrl: 'views/admin.facilities.state.html',
-        controller: 'AdminFacilitiesStateController'
+      state('admin.facilities.index', {
+        url: '/index/?state&visibility&page',
+        templateUrl: 'views/admin.facilities.index.html',
+        controller: 'AdminFacilitiesIndexController'
       }).
       state('admin.facilities.show', {
         url: '/show?facilityRepositoryId',
         templateUrl: 'views/admin.facilities.show.html',
         controller: 'AdminFacilitiesShowController'
+      }).
+      state('admin.organizations', {
+        'abstract': true,
+        url: '/organizations',
+        templateUrl: 'views/admin.organizations.html',
+        controller: 'AdminOrganizationsController'
+      }).
+      state('admin.organizations.index', {
+        url: '/index?page',
+        templateUrl: 'views/admin.organizations.index.html',
+        controller: 'AdminOrganizationsIndexController'        
+      }).
+      state('admin.organizations.show', {
+        url: '/:organizationId',
+        templateUrl: 'views/admin.organizations.show.html',
+        controller: 'AdminOrganizationsShowController'
+      }).
+      state('admin.provinces', {
+        url: '/provinces',
+        templateUrl: 'views/admin.provinces.html',
+        controller: 'AdminProvincesController'
+      }).
+      state('admin.provinces.show', {
+        url: '/:provinceId',
+        templateUrl: 'views/admin.provinces.show.html',
+        controller: 'AdminProvincesShowController'
       }).
       state('login', {
         url: '/login?redirect',

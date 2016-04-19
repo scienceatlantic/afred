@@ -13,13 +13,13 @@
     <span data-ng-show="_stateParams.state == 'REJECTED'">Rejected</span>
     <span data-ng-show="_stateParams.state == 'DELETED'">Deleted</span>
   </span>
-  <span data-ng-show="_stateParams.facilityId">
-    / {{ _stateParams.facilityId }}
+  <span data-ng-show="_stateParams.facilityRepositoryId">
+    / Facility Repository ID: {{ _stateParams.facilityRepositoryId }}
   </span>
 </h3>
 
 <!-- Only show this portion if we're not viewing a particular record -->
-<div class="row" data-ng-show="_state.current.name == 'admin.facilities' || _state.current.name == 'admin.facilities.state'"> 
+<div class="row" data-ng-show="_state.current.name == 'admin.facilities' || _state.current.name == 'admin.facilities.index'"> 
   <div class="col-md-5">
     <div class="form-group">
       <label for="state">State:</label>
@@ -38,5 +38,5 @@
   </div>
 </div>
 
-<!-- A selected record will appear here -->
+<!-- Child state container -->
 <div data-ui-view></div>

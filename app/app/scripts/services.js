@@ -16,3 +16,20 @@ angular.module('afredApp').service('confirmModal', [
     };
   }
 ]);
+
+angular.module('afredApp').service('infoModal', [
+  '$uibModal',
+  function($uibModal) {    
+    this.open = function(template) {
+      return $uibModal.open({
+        templateUrl: 'views/modals/info.html',
+        controller: ['$scope', '$uibModalInstance',
+          function($scope, $uibModalInstance) {
+            $scope.modal = $uibModalInstance;
+            $scope.template = 'views/includes/modal-' + template + '.html';
+          }
+        ]
+      });        
+    };
+  }
+]);
