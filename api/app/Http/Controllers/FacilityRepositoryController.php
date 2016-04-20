@@ -45,7 +45,7 @@ class FacilityRepositoryController extends Controller
      */
     public function index(IndexFacilityRepositoryRequest $request)
     {        
-        $fr = FacilityRepository::query();
+        $fr = FacilityRepository::with('reviewer', 'facility');
         
         // Narrow down query by state.
         if (($state = $request->input('state'))) {
@@ -77,12 +77,7 @@ class FacilityRepositoryController extends Controller
             $fr->where('facilityId', $facilityId);
         }
         
-        // Order by.
-        $this->_orderBy((new FacilityRepository())->getTable(), $fr); 
-        
-        // Lazy load other data, paginate, camel case, and return.
-        return $this->_toCamelCase($fr->with('reviewer', 'facility')
-            ->paginate($this->_ipp)->toArray());
+        return $this->pageOrGet($fr);
     }
 
     /**
@@ -99,9 +94,9 @@ class FacilityRepositoryController extends Controller
             },
             'reviewer',
             'facility'
-        ])->findOrFail($id);
+        ])->findOrFail($id)->toArray();
         
-        return $this->_toCamelCase($fr->toArray());
+        return $this->toCcArray($fr);
     }
 
     /**
@@ -114,7 +109,7 @@ class FacilityRepositoryController extends Controller
     public function update(UpdateFacilityRepositoryRequest $request, $id = null)
     { 
         // Grab the current datetime.
-        $now = $this->_now();
+        $now = $this->now();
         
         // Grab the existing Facility Repository record (ie. state !=
         // PENDING_APPROVAL) otherwise create a new one.
@@ -194,7 +189,7 @@ class FacilityRepositoryController extends Controller
         // Generate an event (emails might need to be sent out).
         event(new FacilityRepositoryEvent($fr));
         
-        // Return the update record.
+        // Return the updated record.
         return FacilityRepository::with('reviewer', 'facility')->find($fr->id);
     }
         

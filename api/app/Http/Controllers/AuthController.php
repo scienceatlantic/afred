@@ -31,7 +31,7 @@ class AuthController extends Controller
             // Lazy load user roles.
             Auth::user()->roles;
             
-            return $this->_toCamelCase(Auth::user()->toArray());
+            return $this->toCcArray(Auth::user()->toArray());
         }
         
         return 'Not authorised';
@@ -43,7 +43,7 @@ class AuthController extends Controller
             // Lazy load user roles.
             Auth::user()->roles;
             
-            return $this->_toCamelCase(Auth::user()->toArray());
+            return $this->toCcArray(Auth::user()->toArray());
         }
         
         return 'Not authenticated';

@@ -41,11 +41,9 @@ class FacilityController extends Controller
                                 'primaryContact',
                                 'contacts',
                                 'equipment');
-            $f = $this->_paginate ? $f->paginate($this->_ipp) : $f->get();
-            return $this->_toCamelCase($f->toArray());            
-        } else {
-            return $this->_indexMatchingFacilities($email);
+            return $this->pageOrGet($f);            
         }
+        return $this->indexMatchingFacilities($email);
     }
 
     /**
@@ -62,8 +60,8 @@ class FacilityController extends Controller
                             'sectors',
                             'primaryContact',
                             'contacts',
-                            'equipment')->findOrFail($id);        
-        return $this->_toCamelCase($f->toArray());   
+                            'equipment')->findOrFail($id)->toArray();        
+        return $this->toCcArray($f);   
     }
     
     public function updateVisibility()
@@ -82,7 +80,7 @@ class FacilityController extends Controller
         return Facility::find($id)->delete();
     }
     
-    private function _indexMatchingFacilities($email)
+    private function indexMatchingFacilities($email)
     {
         // Find all matching contacts and grab their facility IDs.
         $cF = Contact::where('email', $email)->select('facilityId');
@@ -104,8 +102,7 @@ class FacilityController extends Controller
                      'facility_update_links.editorLastName',
                      'facility_update_links.editorEmail',
                      'facility_update_links.status');
-                
-        $f = $this->_paginate ? $f->paginate($this->_ipp) : $f->get();
-        return $this->_toCamelCase($f->toArray());
+        
+        return $this->pageOrGet($f);
     }
 }

@@ -74,9 +74,9 @@ class FacilityUpdateLinkController extends Controller
                 'editorFirstName' => $c->firstName,
                 'editorLastName'  => $c->lastName,
                 'editorEmail'     => $c->email,
-                'token'           => $this->_generateUniqueToken(),
+                'token'           => $this->generateUniqueToken(),
                 'status'          => 'OPEN',
-                'dateRequested'   => $this->_now()
+                'dateRequested'   => $this->now()
             ]);
             
             event(new FacilityUpdateLinksEvent($ful));
@@ -98,7 +98,7 @@ class FacilityUpdateLinkController extends Controller
         //
     }
     
-    private function _generateUniqueToken()
+    private function generateUniqueToken()
     {
         while (($token = strtolower(str_random(25)))) {
             if (!FacilityUpdateLink::where('token', $token)->first()) {

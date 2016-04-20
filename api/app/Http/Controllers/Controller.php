@@ -22,52 +22,52 @@ abstract class Controller extends BaseController
      * To paginate flag.
      * @type {boolean} 
      */
-    protected $_paginate;
+    protected $paginate;
     
     /**
      * Items per page (pagination).
      * @type {int}
      */
-    protected $_ipp;
+    protected $itemsPerPage;
     
     /**
      * Note: Deprecate this?
      * @type {string}
      */
-    protected $_expand;
+    protected $expand;
     
     /**
      * Columns to perform an 'order by' operation on the database query in
      * ascending fashion.
      * @type {array}
      */
-    protected $_orderByAsc;
+    protected $orderByAsc;
     
     /**
      * Columns to perform an 'order by' operation on the databse query in
      * ascending fashion.
      * @type {array}
      */
-    protected $_orderByDesc;
+    protected $orderByDesc;
     
     function __construct(Request $request)
     {
         // To paginate or not. Default is to paginate.
-        $this->_paginate = boolval($request->input('paginate', true));
+        $this->paginate = boolval($request->input('paginate', true));
         
         // Number of items per page. Default is 15 items.
-        $this->_ipp = intval($request->input('itemsPerPage', 15));
+        $this->itemsPerPage = intval($request->input('itemsPerPage', 15));
         
         // Grab (if available) relationships to expand. (Deprecate?)
-        $this->_expand = $request->input('expand', null);
+        $this->expand = explode(',', $request->input('expand', null));
         
         // Grab and parse (if available) items to order by (ascending). It
         // expects a string of comma separated values.
-        $this->_orderByAsc = explode(',', $request->input('orderByAsc', ""));
+        $this->orderByAsc = explode(',', $request->input('orderByAsc', ""));
         
         // Grab and parse (if available) items to order by (descending). It
         // expects a string of comma separated values.
-        $this->_orderByDesc = explode(',', $request->input('orderByDesc', ""));
+        $this->orderByDesc = explode(',', $request->input('orderByDesc', ""));
     }
     
     /**
@@ -76,74 +76,59 @@ abstract class Controller extends BaseController
      *     on.
      * @param {Eloquent model} $model Model the operation will be performed on.
      */
-    protected function _orderBy($table, $model)
+    protected function orderBy($table, $model)
     {        
-        foreach($this->_orderByAsc as $column) {
+        foreach($this->orderByAsc as $column) {
             if (Schema::hasColumn($table, $column)) {
                 $model->orderBy($column, 'asc');
             }
         }
         
-        foreach($this->_orderByDesc as $column) {
+        foreach($this->orderByDesc as $column) {
             if (Schema::hasColumn($table, $column)) {
                 $model->orderBy($column, 'desc');
             }
         }      
     }
     
-    // Note: remove this?
-    protected function _expandModelRelationships($model, $isArray = false)
-    {
-        if ($this->_expand) {
-            $relationships = explode(',', $this->_expand);
-                                     
-            foreach ($relationships as $relationship) {
-                $nested = explode('.', $relationship);
-                
-                if (count($nested) > 1) {
-                    if ($isArray) {
-                        foreach($model as $m) {
-                            $m->$nested[0]->$nested[1];
-                        }                       
-                    } else {
-                        $model->$nested[0]->$nested[1];
-                    }
-                } else {
-                    if ($isArray) {
-                        foreach($model as $m) {
-                            $m->$relationship;
-                        }                       
-                    } else {
-                        $model->$relationship;
-                    }
-                }
-            }
-        }
-    }
-    
     /**
      * Returns an associative array whose keys have been converted to camel
      * case.
-     * 
      * @param {array} $array Associative array.
-     * @return {array} An associative array whose keys are camel cased.
+     * @return {array}
      */
-    protected function _toCamelCase($array)
+    protected function toCcArray($array)
     { 
         $a = [];
-        
         foreach($array as $k => $v) {
-            $a[camel_case($k)] = is_array($v) ? $this->_toCamelCase($v) : $v;
+            $a[camel_case($k)] = is_array($v) ? $this->toCcArray($v) : $v;
+        }
+        return $a;
+    }
+    
+    /**
+     * Returns an Eloquent model after a paginate() or get() method is applied
+     * to the model.
+     * @param {Eloquent model} $model
+     * @toCcArray {bool} If set to true, a camel-cased array is returned.
+     *     Otherwise the Eloquent model is returned.
+     */
+    protected function pageOrGet($model, $toCcArray = true)
+    {
+        if ($this->paginate) {
+            $model = $model->paginate($this->itemsPerPage);
+        } else {
+            $model = $model->get();
         }
         
-        return $a;
+        return $toCcArray ? $this->toCcArray($model->toArray()) : $model;
     }
     
     /**
      * Returns the current datetime.
      * @return {string} Current datetime.
      */
-    public function _now()
+    public function now()
     {
         return Carbon::now()->toDateTimeString();
     }

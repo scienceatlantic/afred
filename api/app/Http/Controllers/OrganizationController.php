@@ -8,6 +8,9 @@ use App\Http\Controllers\Controller;
 // Laravel.
 use Illuminate\Http\Request;
 
+// Misc.
+use DB;
+
 // Models.
 use App\Ilo;
 use App\Organization;
@@ -29,13 +32,19 @@ class OrganizationController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->input('showHidden', false)) {
-            $o = Organization::with('ilo')->orderBy('name', 'asc');
-        } else {
-            $o = Organization::with('ilo')->notHidden()->orderBy('name', 'asc');
+        $o = Organization::with('ilo');
+        
+        if ($request->has('isHidden')) {
+            if ($request->input('isHidden', 0)) {
+                $o->hidden();
+            } else {
+                $o->notHidden();
+            }
         }
-        $o = $this->_paginate ? $o->paginate($this->_ipp) : $o->get();
-        return $this->_toCamelCase($o->toArray());
+        
+        $o->orderBy('name', 'asc');
+        
+        return $this->pageOrGet($o);
     }
 
     /**
@@ -46,7 +55,7 @@ class OrganizationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
     
     /**
@@ -61,14 +70,9 @@ class OrganizationController extends Controller
         $o = Organization::with('ilo')->find($id);
         $o->name = $request->name;
         $o->isHidden = $request->isHidden;
-        $o->save();
-        
-        if ($request->ilo) {
-            $ilo = Ilo::where('organizationId', $o->id)->first();
-            
-        }
-        
-        return $this->_toCamelCase($o->toArray());
+        $o->dateAdded = $this->now();
+        $o->save()->toArray();        
+        return $this->toCcArray($o);
     }
 
     /**
@@ -79,8 +83,8 @@ class OrganizationController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $o = Organization::with('ilo')->findOrFail($id);
-        return $this->_toCamelCase($o->toArray());
+        $o = Organization::with('ilo')->findOrFail($id)->toArray();
+        return $this->toCcArray($o);
     }
 
     /**
@@ -91,6 +95,9 @@ class OrganizationController extends Controller
      */
     public function destroy($id)
     {
-        Organization::destroy($id);
+        $o = Organization::findOrFail($id);
+        $deletedOrg = $this->toCcArray($o->toArray());
+        $o->delete();
+        return $deletedOrg;
     }
 }
