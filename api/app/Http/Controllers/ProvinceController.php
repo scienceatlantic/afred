@@ -28,7 +28,18 @@ class ProvinceController extends Controller
      */
     public function index(Request $request)
     {
-        $p = Province::notHidden()->orderBy('name', 'asc');
+        $p = Province::query();
+        
+        if ($request->has('isHidden')) {
+            if ($request->input('isHidden', 0)) {
+                $p->hidden();
+            } else {
+                $p->notHidden();
+            }
+        }
+        
+        $p->orderBy('name', 'asc');
+        
         return $this->pageOrGet($p);
     }
 
@@ -40,7 +51,12 @@ class ProvinceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $p = new Province();
+        $p->name = $request->name;
+        $p->isHidden = $request->isHidden;
+        $p->dateAdded = $this->now();
+        $p->save();
+        return $this->toCcArray($p->toArray());
     }
 
     /**
@@ -63,7 +79,11 @@ class ProvinceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $p = Province::findOrFail($id);
+        $p->name = $request->name;
+        $p->isHidden = $request->isHidden;
+        $p->save();
+        return $this->toCcArray($p->toArray());
     }
 
     /**
@@ -74,6 +94,9 @@ class ProvinceController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $p = Province::findOrFail($id);
+        $deletedProvince = $p->toArray();
+        $p->delete();
+        return $this->toCcArray($deletedProvince);
     }
 }

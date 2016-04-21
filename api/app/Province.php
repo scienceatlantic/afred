@@ -23,4 +23,9 @@ class Province extends Model
     {
         return $query->where('isHidden', false);
     }
+    
+    public function scopeHidden($query)
+    {
+        return $query->where('isHidden', true);
+    }
 }

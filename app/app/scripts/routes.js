@@ -136,9 +136,20 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         controller: 'AdminOrganizationsShowController'
       }).
       state('admin.provinces', {
+        'abstract': true,
         url: '/provinces',
         templateUrl: 'views/admin.provinces.html',
         controller: 'AdminProvincesController'
+      }).
+      state('admin.provinces.index', {
+        url: '/index?page',
+        templateUrl: 'views/admin.provinces.index.html',
+        controller: 'AdminProvincesIndexController'
+      }).
+      state('admin.provinces.create', {
+        url: '/create',
+        templateUrl: 'views/admin.provinces.create.html',
+        controller: 'AdminProvincesCreateController'
       }).
       state('admin.provinces.show', {
         url: '/:provinceId',

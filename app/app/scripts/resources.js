@@ -171,6 +171,9 @@ angular.module('afredApp').factory('provinceResource',
           params: {
             paginate: 0
           }
+        },
+        update: {
+          method: 'PUT'
         }
       }
     );
