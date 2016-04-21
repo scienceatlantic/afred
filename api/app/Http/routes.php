@@ -42,7 +42,10 @@ Route::resource('organizations', 'OrganizationController', [
  *****************************************************************************/
 Route::resource('provinces', 'ProvinceController', [
 	'only' => ['index',
-			   'show']]);
+			   'store',
+               'show',
+               'update',
+               'destroy']]);
 
                
 /******************************************************************************
