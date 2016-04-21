@@ -229,6 +229,9 @@ angular.module('afredApp').factory('sectorResource',
           params: {
             paginate: 0
           }
+        },
+        update: {
+          method: 'PUT'
         }
       }
     );

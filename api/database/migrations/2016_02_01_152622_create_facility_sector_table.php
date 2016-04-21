@@ -24,7 +24,7 @@ class CreateFacilitySectorTable extends Migration
             $table->foreign('sectorId')
                 ->references('id')
                 ->on('sectors')
-                ->onDelete('cascade');
+                ->onDelete('restrict');
             $table->primary(['facilityId', 'sectorId']);
         });
     }

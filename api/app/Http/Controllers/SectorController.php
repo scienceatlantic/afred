@@ -30,4 +30,59 @@ class SectorController extends Controller
     {
         return $this->pageOrGet(Sector::orderBy('name', 'asc'));
     }
+    
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $s = new Sector();
+        $s->name = $request->name;
+        $s->dateAdded = $this->now();
+        $s->save();
+        return $this->toCcArray($s->toArray());
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        return $this->toCcArray(Sector::findOrFail($id)->toArray());
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $s = Sector::findOrFail($id);
+        $s->name = $request->name;
+        $s->save();
+        return $this->toCcArray($s->toArray());
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $s = Sector::findOrFail($id);
+        $deletedSector = $s->toArray();
+        $s->delete();
+        return $this->toCcArray($deletedSector);
+    }
 }

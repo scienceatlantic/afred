@@ -59,7 +59,11 @@ Route::resource('disciplines', 'DisciplineController', [
  * Sector routes.
  *****************************************************************************/
 Route::resource('sectors', 'SectorController', [
-	'only' => ['index']]);
+	'only' => ['index',
+			   'store',
+               'show',
+               'update',
+               'destroy']]);
 
 			   
 /******************************************************************************
