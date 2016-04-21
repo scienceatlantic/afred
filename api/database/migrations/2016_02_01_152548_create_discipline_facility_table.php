@@ -18,7 +18,7 @@ class CreateDisciplineFacilityTable extends Migration
             $table->foreign('disciplineId')
                 ->references('id')
                 ->on('disciplines')
-                ->onDelete('cascade');
+                ->onDelete('restrict');
             $table->integer('facilityId')
                 ->unsigned();
             $table->foreign('facilityId')

@@ -52,7 +52,11 @@ Route::resource('provinces', 'ProvinceController', [
  * Discipline routes.
  *****************************************************************************/
 Route::resource('disciplines', 'DisciplineController', [
-	'only' => ['index']]);
+	'only' => ['index',
+			   'store',
+               'show',
+               'update',
+               'destroy']]);
 
     
 /******************************************************************************

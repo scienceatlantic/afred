@@ -201,6 +201,9 @@ angular.module('afredApp').factory('disciplineResource',
           params: {
             paginate: 0
           }
+        },
+        update: {
+          method: 'PUT'
         }
       }
     );

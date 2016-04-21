@@ -177,6 +177,27 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         templateUrl: 'views/admin.sectors.show.html',
         controller: 'AdminSectorsShowController'
       }).
+      state('admin.disciplines', {
+        'abstract': true,
+        url: '/disciplines',
+        templateUrl: 'views/admin.disciplines.html',
+        controller: 'AdminDisciplinesController'
+      }).
+      state('admin.disciplines.index', {
+        url: '/index?page',
+        templateUrl: 'views/admin.disciplines.index.html',
+        controller: 'AdminDisciplinesIndexController'
+      }).
+      state('admin.disciplines.create', {
+        url: '/create',
+        templateUrl: 'views/admin.disciplines.create.html',
+        controller: 'AdminDisciplinesCreateController'
+      }).
+      state('admin.disciplines.show', {
+        url: '/:disciplineId',
+        templateUrl: 'views/admin.disciplines.show.html',
+        controller: 'AdminDisciplinesShowController'
+      }).
       state('login', {
         url: '/login?redirect',
         templateUrl: 'views/login.html',
