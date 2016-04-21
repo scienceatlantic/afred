@@ -33,3 +33,20 @@ angular.module('afredApp').service('infoModal', [
     };
   }
 ]);
+
+angular.module('afredApp').service('warningModal', [
+  '$uibModal',
+  function($uibModal) {    
+    this.open = function(template) {
+      return $uibModal.open({
+        templateUrl: 'views/modals/warning.html',
+        controller: ['$scope', '$uibModalInstance',
+          function($scope, $uibModalInstance) {
+            $scope.modal = $uibModalInstance;
+            $scope.template = 'views/includes/modal-' + template + '.html';
+          }
+        ]
+      });        
+    };
+  }
+]);
