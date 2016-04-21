@@ -65,8 +65,7 @@ angular.module('afredApp').controller('AdminOrganizationsController', [
       query: function() {
         $scope.organizations.resource = organizationResource.query({
           page: $scope.organizations.form.data.page,
-          itemsPerPage: 10,
-          showHidden: true
+          itemsPerPage: 10
         });
       }
     }; 
