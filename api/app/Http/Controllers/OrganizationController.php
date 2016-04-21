@@ -55,7 +55,12 @@ class OrganizationController extends Controller
      */
     public function store(Request $request)
     {
-        
+        $o = new Organization();
+        $o->name = $request->name;
+        $o->isHidden = $request->isHidden;
+        $o->dateAdded = $this->now();
+        $o->save();
+        return $this->toCcArray($o->toArray());
     }
     
     /**
@@ -70,9 +75,8 @@ class OrganizationController extends Controller
         $o = Organization::with('ilo')->find($id);
         $o->name = $request->name;
         $o->isHidden = $request->isHidden;
-        $o->dateAdded = $this->now();
-        $o->save()->toArray();        
-        return $this->toCcArray($o);
+        $o->save();        
+        return $this->toCcArray($o->toArray());
     }
 
     /**

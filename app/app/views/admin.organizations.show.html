@@ -18,9 +18,9 @@
       <input type="text" class="form-control" name="organizationDate" data-ng-model="organization.dateAdded" placeholder="E.g. Acadia University" disabled required>
     </div>
     
-    <p class="pull-right">
-      <button class="btn btn-default btn-sm" data-ng-disabled="organizationForm.$pristine || organizationForm.$invalid" data-ng-click="update()">Update <span class="fa fa-check"></span></button>
-      <button class="btn btn-default btn-sm" data-ng-click="remove()">Delete <span class="fa fa-close"></span></button>
+    <p>
+      <button class="btn btn-default btn-sm" data-ng-disabled="organizationForm.$pristine || organizationForm.$invalid || loading.update || loading.remove" data-ng-click="update(organizationForm)">Update <span class="fa fa-check"></span></button>
+      <button class="btn btn-default btn-sm" data-ng-click="remove()" data-ng-disabled="loading.update || loading.remove">Delete <span class="fa fa-close"></span></button>
     </p>
   </form>
 </div>

@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 class Organization extends Model
-{
+{   
     /**
      * The attributes that should be mutated to dates.
      *
@@ -37,5 +37,10 @@ class Organization extends Model
     public function scopeNotHidden($query)
     {
         $query->where('isHidden', false);
+    }
+    
+    public function scopeHidden($query)
+    {
+        $query->where('isHidden', true);
     }
 }

@@ -125,6 +125,11 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         templateUrl: 'views/admin.organizations.index.html',
         controller: 'AdminOrganizationsIndexController'        
       }).
+      state('admin.organizations.create', {
+        url: '/create',
+        templateUrl: 'views/admin.organizations.create.html',
+        controller: 'AdminOrganizationsCreateController'
+      }).
       state('admin.organizations.show', {
         url: '/:organizationId',
         templateUrl: 'views/admin.organizations.show.html',
