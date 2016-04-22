@@ -28,7 +28,9 @@ angular.module('afredApp').service('infoModal', [
             $scope.modal = $uibModalInstance;
             $scope.template = 'views/includes/modal-' + template + '.html';
           }
-        ]
+        ],
+        keyboard: false,
+        backdrop: 'static'
       });        
     };
   }
@@ -45,7 +47,9 @@ angular.module('afredApp').service('warningModal', [
             $scope.modal = $uibModalInstance;
             $scope.template = 'views/includes/modal-' + template + '.html';
           }
-        ]
+        ],
+        keyboard: false,
+        backdrop: 'static'
       });        
     };
   }
