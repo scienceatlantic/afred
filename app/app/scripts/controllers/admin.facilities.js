@@ -15,12 +15,14 @@ angular.module('afredApp').controller('AdminFacilitiesController',
     $scope.facilities = {
       /**
        * Holds the promise returned from '$scope.facilities.get()'.
+       * 
        * @type {promise}
        */
       fr: {},
       
       /**
        * Form related objects/functions.
+       *
        * @type {object}
        */
       form: {

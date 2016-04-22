@@ -1,114 +1,106 @@
-<div data-ng-show="view.show == 'ERROR'">
-  <div data-af-error="true" data-af-error-type="'404'">
-    Invalid URL.
-  </div>
-</div>
-
-<div data-ng-show="view.show == 'FACILITY'">
-  <div data-af-loading="!fr.$resolved || (!facility.organization.$resolved && !facility.organization.name) || !facility.province.$resolved || loading.disciplines || loading.sectors">
-    <hr>
-    <div>
-      <p class="text-muted">Record Information</p>
+<div data-af-loading="!fr.$resolved || (!facility.organization.$resolved && !facility.organization.name) || !facility.province.$resolved || loading.disciplines || loading.sectors">
+  <hr>
+  <div>
+    <p class="text-muted">Record Information</p>
+      
+    <div class="row">
+      <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
+        <label>State</label>
+      </div>
+      <div class="col-sm-9">
+        <b>
+          <span class="text-info" data-ng-show="facility.state == 'PENDING_APPROVAL'">PENDING APPROVAL</span>
+          <span class="text-info" data-ng-show="facility.state == 'PENDING_EDIT_APPROVAL'">PENDING EDIT APPROVAL</span>
+          <span class="text-success" data-ng-show="facility.state == 'PUBLISHED'">PUBLISHED</span>
+          <span class="text-success" data-ng-show="facility.state == 'PUBLISHED_EDIT'">PUBLISHED EDIT</span>
+          <span class="text-danger" data-ng-show="facility.state == 'REJECTED'">REJECTED</span>
+          <span class="text-danger" data-ng-show="facility.state == 'REJECTED_EDIT'">REJECTED EDIT</span>
+        </b>
+      </div>
+    </div>
         
-      <div class="row">
-        <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
-          <label>State</label>
-        </div>
-        <div class="col-sm-9">
-          <b>
-            <span class="text-info" data-ng-show="facility.state == 'PENDING_APPROVAL'">PENDING APPROVAL</span>
-            <span class="text-info" data-ng-show="facility.state == 'PENDING_EDIT_APPROVAL'">PENDING EDIT APPROVAL</span>
-            <span class="text-success" data-ng-show="facility.state == 'PUBLISHED'">PUBLISHED</span>
-            <span class="text-success" data-ng-show="facility.state == 'PUBLISHED_EDIT'">PUBLISHED EDIT</span>
-            <span class="text-danger" data-ng-show="facility.state == 'REJECTED'">REJECTED</span>
-            <span class="text-danger" data-ng-show="facility.state == 'REJECTED_EDIT'">REJECTED EDIT</span>
-          </b>
-        </div>
+    <div class="row">
+      <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
+        <label>Search visibility</label>
       </div>
-          
-      <div class="row">
-        <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
-          <label>Search visibility</label>
-        </div>
-        <div class="col-sm-9">
-          <span data-ng-show="facility.state != 'PUBLISHED' && facility.state != 'PUBLISHED_EDIT' && facility.isPublic">Public</span>
-          <span data-ng-show="facility.state != 'PUBLISHED' && facility.state != 'PUBLISHED_EDIT' && !facility.isPublic">Private</span>
-          <span class="label label-default" data-ng-show="facility.state != 'PUBLISHED' && facility.state != 'PUBLISHED_EDIT'">N/A</span>        
-        </div>
+      <div class="col-sm-9">
+        <span data-ng-show="(facility.state == 'PUBLISHED' || facility.state == 'PUBLISHED_EDIT') && facility.isPublic">Public</span>
+        <span data-ng-show="(facility.state == 'PUBLISHED' || facility.state == 'PUBLISHED_EDIT') && !facility.isPublic">Private</span>
+        <span class="label label-default" data-ng-show="facility.state != 'PUBLISHED' && facility.state != 'PUBLISHED_EDIT'">N/A</span>        
       </div>
-      
-      <div class="row">
-        <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
-          <label>Reviewed by</label>
-        </div>
-        <div class="col-sm-9">
-          {{ fr.reviewer.firstName }} {{ fr.reviewer.lastName }}
-          <span class="label label-default" data-ng-show="facility.state == 'PENDING_APPROVAL' || facility.state == 'PENDING_EDIT_APPROVAL'">N/A</span>        
-        </div>
-      </div>
-      
-      <div class="row">
-        <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
-          <label>Reviewer message</label>
-        </div>
-        <div class="col-sm-9">
-          {{ fr.reviewerMessage }}
-          <span class="label label-default" data-ng-show="facility.state == 'PENDING_APPROVAL' || facility.state == 'PENDING_EDIT_APPROVAL'">N/A</span>
-          <span class="label label-default" data-ng-show="(facility.state != 'PENDING_APPROVAL' && facility.state != 'PENDING_EDIT_APPROVAL') && !fr.reviewerMessage">No message was provided.</span>        
-        </div>
-      </div>
-      
-      <div class="row" data-ng-show="fr.state == 'PENDING_EDIT_APPROVAL'">
-        <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
-          <label>Current record:</label>
-        </div>
-        <div class="col-sm-9">
-          <a data-ui-sref="admin.facilities.show({ facilityRepositoryId: fr.fulA.frIdBefore })" target="_blank">Click here</a>
-        </div>
-      </div>
-    </div> 
-    <br>
-    <br>
-    
-    <div data-ng-include="'views/includes/facility.html'"></div>
-    <br>
-    <br>
-    
-    <div data-ng-show="facility.organization.ilo.firstName">
-      <div data-ng-include="'views/includes/ilo.html'"></div>
-      <br>
-      <br>
     </div>
     
-    <div data-ng-include="'views/includes/contacts.html'"></div>
+    <div class="row">
+      <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
+        <label>Reviewed by</label>
+      </div>
+      <div class="col-sm-9">
+        {{ fr.reviewer.firstName }} {{ fr.reviewer.lastName }}
+        <span class="label label-default" data-ng-show="facility.state == 'PENDING_APPROVAL' || facility.state == 'PENDING_EDIT_APPROVAL'">N/A</span>        
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
+        <label>Reviewer message</label>
+      </div>
+      <div class="col-sm-9">
+        <span data-ng-show="(facility.state == 'PUBLISHED' || facility.state == 'PUBLISHED_EDIT')">{{ fr.reviewerMessage }}</span>
+        <span class="label label-default" data-ng-show="facility.state == 'PENDING_APPROVAL' || facility.state == 'PENDING_EDIT_APPROVAL'">N/A</span>
+        <span class="label label-default" data-ng-show="(facility.state == 'PUBLISHED' || facility.state == 'PUBLISHED_EDIT') && !fr.reviewerMessage">No message was provided.</span>        
+      </div>
+    </div>
+    
+    <div class="row" data-ng-show="fr.state == 'PENDING_EDIT_APPROVAL'">
+      <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
+        <label>Current record:</label>
+      </div>
+      <div class="col-sm-9">
+        <a data-ui-sref="admin.facilities.show({ facilityRepositoryId: fr.fulA.frIdBefore })" target="_blank">Click here</a>
+      </div>
+    </div>
+  </div> 
+  <br>
+  <br>
+  
+  <div data-ng-include="'views/includes/facility.html'"></div>
+  <br>
+  <br>
+  
+  <div data-ng-show="facility.organization.ilo.firstName">
+    <div data-ng-include="'views/includes/ilo.html'"></div>
     <br>
     <br>
+  </div>
+  
+  <div data-ng-include="'views/includes/contacts.html'"></div>
+  <br>
+  <br>
+  
+  <div data-ng-include="'views/includes/equipment.html'"></div>
+  
+  <div style="padding: 3px;" data-ng-show="facility.state == 'PENDING_APPROVAL' || facility.state == 'PENDING_EDIT_APPROVAL'">
+    <hr>
+    <br>
     
-    <div data-ng-include="'views/includes/equipment.html'"></div>
+    <div class="row">
+      <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
+        <label>Reviewer message</label>
+        <p>This is optional. It will be included in the email to the primary contact</p>
+      </div>
     
-    <div style="padding: 3px;" data-ng-show="facility.state == 'PENDING_APPROVAL' || facility.state == 'PENDING_EDIT_APPROVAL'">
-      <hr>
-      <br>
-      
-      <div class="row">
-        <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
-          <label>Reviewer message</label>
-          <p>This is optional. It will be included in the email to the primary contact</p>
-        </div>
-      
-        <div class="col-sm-7">
-          <div class="form-group">
-            <textarea class="form-control" id="reviewerMessage" rows="7" data-ng-model="fr.reviewerMessage"></textarea>
-          </div>
+      <div class="col-sm-7">
+        <div class="form-group">
+          <textarea class="form-control" id="reviewerMessage" rows="7" data-ng-model="fr.reviewerMessage"></textarea>
         </div>
       </div>
-      
-      <p>
-        <button type="button" class="btn btn-default" data-ng-click="approve();" data-ng-show="facility.state == 'PENDING_APPROVAL'" data-af-loading-btn="loading.approve" data-ng-disabled="loading.approve || loading.reject || loading.approveEdit || loading.rejectEdit">Approve <span class="glyphicon glyphicon-ok"></span></button>
-        <button type="button" class="btn btn-default" data-ng-click="reject();" data-ng-show="facility.state == 'PENDING_APPROVAL'" data-af-loading-btn="loading.reject" data-ng-disabled="loading.approve || loading.reject || loading.approveEdit || loading.rejectEdit">Reject <span class="glyphicon glyphicon-remove"></span></button>
-        <button type="button" class="btn btn-default" data-ng-click="approveEdit();" data-ng-show="facility.state == 'PENDING_EDIT_APPROVAL'" data-af-loading-btn="loading.approveEdit" data-ng-disabled="loading.approve || loading.reject || loading.approveEdit || loading.rejectEdit">Approve edit <span class="glyphicon glyphicon-ok"></span></button>
-        <button type="button" class="btn btn-default" data-ng-click="rejectEdit();" data-ng-show="facility.state == 'PENDING_EDIT_APPROVAL'" data-af-loading-btn="loading.rejectEdit" data-ng-disabled="loading.approve || loading.reject || loading.approveEdit || loading.rejectEdit">Reject edit <span class="glyphicon glyphicon-remove"></span></button>
-      </p>
     </div>
+    
+    <p>
+      <button type="button" class="btn btn-default" data-ng-click="approve();" data-ng-show="facility.state == 'PENDING_APPROVAL'" data-af-loading-btn="loading.approve" data-ng-disabled="loading.approve || loading.reject || loading.approveEdit || loading.rejectEdit">Approve <span class="glyphicon glyphicon-ok"></span></button>
+      <button type="button" class="btn btn-default" data-ng-click="reject();" data-ng-show="facility.state == 'PENDING_APPROVAL'" data-af-loading-btn="loading.reject" data-ng-disabled="loading.approve || loading.reject || loading.approveEdit || loading.rejectEdit">Reject <span class="glyphicon glyphicon-remove"></span></button>
+      <button type="button" class="btn btn-default" data-ng-click="approveEdit();" data-ng-show="facility.state == 'PENDING_EDIT_APPROVAL'" data-af-loading-btn="loading.approveEdit" data-ng-disabled="loading.approve || loading.reject || loading.approveEdit || loading.rejectEdit">Approve edit <span class="glyphicon glyphicon-ok"></span></button>
+      <button type="button" class="btn btn-default" data-ng-click="rejectEdit();" data-ng-show="facility.state == 'PENDING_EDIT_APPROVAL'" data-af-loading-btn="loading.rejectEdit" data-ng-disabled="loading.approve || loading.reject || loading.approveEdit || loading.rejectEdit">Reject edit <span class="glyphicon glyphicon-remove"></span></button>
+    </p>
   </div>
 </div>
