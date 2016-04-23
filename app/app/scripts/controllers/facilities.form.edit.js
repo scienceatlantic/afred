@@ -44,21 +44,16 @@ angular.module('afredApp').controller('FacilitiesFormEditController',
      *
      */
     $scope.submit = function() {
-      $scope.fr = facilityRepositoryResource.submitEdit(
-        {
-          facilityRepositoryId: $scope._stateParams.facilityRepositoryId,
-          token: $scope._stateParams.token
-        },
-        {
-          data: $scope.form.formatForApi()
-        },
-        function() {
-          $scope.view.show = 'SUCCESS_MESSAGE';
-        },
-        function() {
-          $scope.view.show = 'FAILURE_MESSAGE';
-        }
-      );
+      $scope.fr = facilityRepositoryResource.submitEdit({
+        facilityRepositoryId: $scope._stateParams.facilityRepositoryId,
+        token: $scope._stateParams.token
+      }, {
+        data: $scope.form.formatForApi()
+      }, function() {
+        $scope.view.show = 'SUCCESS_MESSAGE';
+      }, function() {
+        $scope.view.show = 'FAILURE_MESSAGE';
+      });
     };
     
     /* ---------------------------------------------------------------------
@@ -67,7 +62,7 @@ angular.module('afredApp').controller('FacilitiesFormEditController',
     // Initialise the form. True is passed because we're in edit mode.
     $scope.form.initialise(true);
     
-    // Get the facility data. 
+    // Get the facility data to edit. 
     $scope.form.getFacilityRepositoryData(
       $scope._stateParams.facilityRepositoryId,
       $scope._stateParams.token

@@ -29,48 +29,56 @@ angular.module('afredApp').controller('FacilitiesFormController',
     $scope.form = {      
       /**
        * Form data that will be submitted to the API.
+       * 
        * @type {object}
        */
       data: {},
           
       /**
        * Holds an instance of 'facilityRepositoryResource'.
-       * @type {resource}
+       *
+       * @type {Angular resource}
        */
       facilityRepository: {},
       
       /**
        * Keeps track of the current 'contact' being viewed.
+       *
        * @type {integer}
        */
       contactIndex: null,
       
       /**
        * Keeps track of the current 'equipment' being viewed.
+       *
        * @type {integer}
        */
       equipmentIndex: null,
       
       /**
        * Array of available organizations for the 'Organizations' dropdown.
+       *
        * @type {array}
        */
       organizations: [],
       
       /**
        * Array of available provinces for the 'Provinces' dropdown.
+       *
        * @type {array}
        */
       provinces: [],
       
       /**
        * Array of all disciplines for the 'Disciplines' dropdown.
+       *
        * @type {array}
        */
       disciplines: [],
       
       /**
        * Array of all sectors for the 'Sectors' dropdown.
+       *
        * @type {array}
        */
       sectors: [],
@@ -79,6 +87,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
        * Holds the unique ID returned by '$scope.form.startAutosave()'. Can be
        * used to either stop or prevent '$scope.form.startAutosave()' from
        * running more than one interval at a time.
+       *
        * @type {integer}
        */
       isAutosaving: 0,
@@ -88,6 +97,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
        * resource factories are insufficient because we're still doing some
        * processing after the data has been retrieved from the API. These flags
        * will be set to false after all processing has been completed.
+       *
        * @type {object}
        */
       loading: {
@@ -111,7 +121,10 @@ angular.module('afredApp').controller('FacilitiesFormController',
        * $scope.form.addEquipment()
        * 
        * @param {boolean} isEdit If in edit mode, this will prevent the function
-       *     from calling '$scope.form.getDisciplines()' and
+       *     from calling:
+       *     '$scope.form.getOrganizations()',
+       *     '$scope.form.getProvinces()',
+       *     '$scope.form.getDisciplines()', and
        *     '$scope.form.getSectors()' since
        *     '$scope.form.getFacilityRepositoryData()' will call them.
        */
@@ -143,14 +156,14 @@ angular.module('afredApp').controller('FacilitiesFormController',
           // Equipment information
           equipment: []
         };
-        
-        // Get an array of all available organizations.
-        $scope.form.getOrganizations();
-        
-        // Get an array all available provinces.
-        $scope.form.getProvinces();
        
         if (!isEdit) {
+          // Get an array of all available organizations.
+          $scope.form.getOrganizations();
+          
+          // Get an array all available provinces.
+          $scope.form.getProvinces();
+        
           // Get an array of all disciplines.
           $scope.form.getDisciplines();
           
@@ -277,24 +290,40 @@ angular.module('afredApp').controller('FacilitiesFormController',
        *
        * Uses/calls/requires:
        * organizationResource
+       *
+       * @param (integer) organizationId If it edit mode, the facility being
+       *     edited could belong to an organization that is (or was recently
+       *     made) hidden. If it is hidden, the API wouldn't have returned it,
+       *     so we need to retrieve it and manually push it into the array.
        */
-      getOrganizations: function() {
-        $scope.form.organizations = organizationResource.queryNoPaginate(
-          {
-            expand: 'ilo'
-          },
-          function() {
-            // Find the 'N/A' option and push it to the end of the array.
-            for (var i = 0; i < $scope.form.organizations.length; i++) {
-              if ($scope.form.organizations[i].name == 'N/A') {
-                $scope.form.organizations.push(
-                  ($scope.form.organizations.splice(i, 1))[0]);
-                break;
-              }
+      getOrganizations: function(organizationId) {
+        $scope.form.organizations = organizationResource.queryNoPaginate({
+          isHidden: 0
+        }, function() {
+          // Find the 'N/A' option and push it to the end of the array.
+          for (var i = 0; i < $scope.form.organizations.length; i++) {
+            if ($scope.form.organizations[i].name == 'N/A') {
+              var na = ($scope.form.organizations.splice(i, 1))[0];
+              $scope.form.organizations.push(na);
+              break;
             }
-            
-            // Add an option for 'Other'.
-            $scope.form.organizations.push({id: -1, name: 'Other'});
+          }
+          
+          // Hidden organization check.
+          if (organizationId) {
+            if ($scope.form.organizations.indexOf(organizationId) < 0) {
+              organizationResource.get({ organizationId: organizationId },
+                function(data) {
+                  $scope.form.organizations.push(data);
+                }
+              );
+            }
+          }
+          
+          // Add an option for 'Other'.
+          $scope.form.organizations.push({ id: -1, name: 'Other' });
+        }, function(response) {
+          $scope._httpError(response);
         });
       },
       
@@ -307,20 +336,36 @@ angular.module('afredApp').controller('FacilitiesFormController',
        *
        * Uses/calls/requires:
        * provinceResource
+       *
+       * @param {integer} provinceId See reason in
+       *     '$scope.form.getOrganizations()'.
        */
-      getProvinces: function() {
-        $scope.form.provinces = provinceResource.queryNoPaginate(null,
-          function() {
-            // Find the 'N/A' option and push it to the end of the array.
-            for (var i = 0; i < $scope.form.provinces.length; i++) {
-              if ($scope.form.provinces[i].name == 'N/A') {
-                $scope.form.provinces.push(
-                  ($scope.form.provinces.splice(i, 1))[0]);
-                break;
-              }
+      getProvinces: function(provinceId) {
+        $scope.form.provinces = provinceResource.queryNoPaginate({
+          isHidden: 0
+        }, function() {
+          // Find the 'N/A' option and push it to the end of the array.
+          for (var i = 0; i < $scope.form.provinces.length; i++) {
+            if ($scope.form.provinces[i].name == 'N/A') {
+              var na = ($scope.form.provinces.splice(i, 1))[0]; 
+              $scope.form.provinces.push(na);
+              break;
             }
           }
-        );
+          
+          // Hidden province check.
+          if (provinceId) {
+            if ($scope.form.provinces.indexOf(provinceId) < 0) {
+              provinceResource.get({ provinceId: provinceId },
+                function(data) {
+                  $scope.form.provinces.push(data);
+                }
+              );              
+            }
+          }
+        }, function (response) {
+          $scope._httpError(response);
+        });
       },
       
       /**
@@ -386,6 +431,8 @@ angular.module('afredApp').controller('FacilitiesFormController',
             
             // Set loading flag to false.
             $scope.form.loading.disciplines = false;
+          }, function(response) {
+            $scope._httpError(response);
           }
         );
       },
@@ -443,6 +490,8 @@ angular.module('afredApp').controller('FacilitiesFormController',
             
             // Set loading flag to false.
             $scope.form.loading.sectors = false;
+          }, function(response) {
+            $scope.httpError(response);
           }
         );
       },
@@ -466,38 +515,43 @@ angular.module('afredApp').controller('FacilitiesFormController',
        *     the facility repository record.
        */
       getFacilityRepositoryData: function(frId, token) {
-        $scope.form.fr =
-          facilityRepositoryResource.get({
-              facilityRepositoryId: frId,
-              token: token
-            },
-            function() {
-              $scope.form.data = angular.copy($scope.form.fr.data);
-              
-              // Since the form stores all contacts (primary or not) in the
-              // '$scope.form.contacts' array, we need to format the data
-              // retrieved from the API to match the form. The first part checks
-              // if there's any data in the contacts array (since non-primary)
-              // contacts are optional.
-              if (angular.isArray($scope.form.data.contacts)) {
-                $scope.form.data.contacts.unshift(
-                  $scope.form.fr.data.primaryContact);
-              } else {
-                $scope.form.data.contacts = [];
-                $scope.form.data.contacts.push(
-                  $scope.form.fr.data.primaryContact);
-              }
-              
-              // Get the disciplines and sectors for the form. We're calling
-              // these methods now because we needed '$scope.form.fr.data'
-              // to be able to mark all the selected disciplines and sectors.
-              $scope.form.getDisciplines($scope.form.fr.data.disciplines);
-              $scope.form.getSectors($scope.form.fr.data.sectors);
-              
-            }, function() {
-              $scope._state.go('404');
-            }
-          );        
+        $scope.form.fr = facilityRepositoryResource.get({
+          facilityRepositoryId: frId,
+          token: token
+        }, function() {
+          $scope.form.data = angular.copy($scope.form.fr.data);
+          
+          // Since the form stores all contacts (primary or not) in the
+          // '$scope.form.contacts' array, we need to format the data
+          // retrieved from the API to match the form. The first part checks
+          // if there's any data in the contacts array (since non-primary)
+          // contacts are optional.
+          if (angular.isArray($scope.form.data.contacts)) {
+            $scope.form.data.contacts.unshift(
+              $scope.form.fr.data.primaryContact);
+          } else {
+            $scope.form.data.contacts = [];
+            $scope.form.data.contacts.push(
+              $scope.form.fr.data.primaryContact);
+          }
+          
+          // Get the list of organizations and provinces. We're calling them
+          // now because we need to check for hidden organizations and
+          // provinces.
+          var organizationId = $scope.form.fr.data.facility.organizationId;
+          $scope.form.getOrganizations(organizationId);
+          var provinceId = $scope.form.fr.data.facility.provinceId;
+          $scope.form.getProvinces(provinceId);
+          
+          // Get the disciplines and sectors for the form. We're calling
+          // these methods now because we needed '$scope.form.fr.data'
+          // to be able to mark all the selected disciplines and sectors.
+          $scope.form.getDisciplines($scope.form.fr.data.disciplines);
+          $scope.form.getSectors($scope.form.fr.data.sectors);
+          
+        }, function(response) {
+          $scope._httpError(response);
+        });        
       },
       
       /**

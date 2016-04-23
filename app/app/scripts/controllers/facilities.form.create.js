@@ -62,18 +62,15 @@ angular.module('afredApp').controller('FacilitiesFormCreateController',
      * $scope.form.clearSave()
      */
     $scope.submit = function() {
-      $scope.fr = facilityRepositoryResource.submit(
-        {
-          data: $scope.form.formatForApi()
-        },
-        function() {
-          // Clear any saved data.
-          $scope.form.clearSave(true);
-          $scope.view.show = 'SUCCESS_MESSAGE';
-        }, function() {
-          $scope.view.show = 'FAILURE_MESSAGE';
-        }
-      );
+      $scope.fr = facilityRepositoryResource.submit({
+        data: $scope.form.formatForApi()
+      }, function() {
+        // Clear any saved data.
+        $scope.form.clearSave(true);
+        $scope.view.show = 'SUCCESS_MESSAGE';
+      }, function() {
+        $scope.view.show = 'FAILURE_MESSAGE';
+      });
     };
     
     /* ---------------------------------------------------------------------
