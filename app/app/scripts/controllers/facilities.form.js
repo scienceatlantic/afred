@@ -491,7 +491,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
             // Set loading flag to false.
             $scope.form.loading.sectors = false;
           }, function(response) {
-            $scope.httpError(response);
+            $scope._httpError(response);
           }
         );
       },
