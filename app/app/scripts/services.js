@@ -1,5 +1,11 @@
 'use strict';
 
+/** 
+ * @fileoverview Angular services are stored here.
+ * @see https://docs.angularjs.org/api/auto/service/$provide#service
+ * @see https://docs.angularjs.org/guide/services
+ */
+
 angular.module('afredApp').service('confirmModal', [
   '$uibModal',
   function($uibModal) {    

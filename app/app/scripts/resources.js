@@ -1,5 +1,10 @@
 'use strict';
 
+/** 
+ * @fileoverview Angular $resource(s) to facilitate communication with the API.
+ * @see https://docs.angularjs.org/api/ngResource/service/$resource
+ */
+
 angular.module('afredApp').factory('facilityResource',
   ['$rootScope',
    '$resource',
@@ -251,7 +256,9 @@ angular.module('afredApp').factory('wpResource',
     var headers = {
       'Authorization': 'Basic '
         + btoa($rootScope._config.wp.appAuth.username + ':'
-        + $rootScope._config.wp.appAuth.password)
+        + $rootScope._config.wp.appAuth.password),
+      'X-CSRF-TOKEN': undefined // Override the global default headers.
+                                // WordPress does not need this.
     };
     
     return $resource(root, null,

@@ -1,13 +1,11 @@
 'use strict';
 
 /**
- * @ngdoc overview
- * @name afredApp
- * @description
- * # afredApp
- *
- * Main module of the application.
+ * @fileoverview Instantiate app with required modules.
+ * @author Prasad Rajandran (prasad@scienceatlantic.ca)
+ * @see https://docs.angularjs.org/api/ng/type/angular.Module
  */
+
 angular.module('afredApp', [
   'ngAnimate',
   'ngCookies',
@@ -20,5 +18,3 @@ angular.module('afredApp', [
   'textAngular',
   'ta-maxlength'
 ]);
-
-

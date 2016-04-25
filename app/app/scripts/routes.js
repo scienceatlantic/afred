@@ -1,18 +1,24 @@
 'use strict';
 
+/**
+ * @fileoverview Router.
+ * @see https://github.com/angular-ui/ui-router/wiki
+ */
+
 angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
   function($stateProvider, $urlRouterProvider, $rootScope) {
-    // Code: http://stackoverflow.com/questions/26181141/angularjs-ui-router-otherwise-to-state-instead-of-url
+    // If page (state) not found, show 404.
+    // See: http://stackoverflow.com/questions/26181141/angularjs-ui-router-otherwise-to-state-instead-of-url
     $urlRouterProvider.otherwise(function($injector, $location) {
       $injector.invoke(['$state', function($state) {
         $state.go('404');
       }]);
     });
     
-    // Redirect to search if user is on root. Otherwise the user will be shown
-    // the 404 page.
+    // Redirect to search if user is on root. Otherwise the user will see 404.
     $urlRouterProvider.when('', 'search');
     
+    // Routes.
     $stateProvider
       .state('search', {
         url: '/search',
