@@ -190,7 +190,8 @@ class FacilityRepositoryController extends Controller
         event(new FacilityRepositoryEvent($fr));
         
         // Return the updated record.
-        return FacilityRepository::with('reviewer', 'facility')->find($fr->id);
+        $f = FacilityRepository::with('reviewer', 'facility')->find($fr->id);
+        return $this->toCcArray($f->toArray());
     }
         
     private function _formatFrData($r, $now, $isUpdate = false, $fr = null)
@@ -253,11 +254,21 @@ class FacilityRepositoryController extends Controller
     private function _publishFacility($fr, $d, $isUpdate = false)
     {        
         // Organization section.
-        // If the organization key in $d exists, create the
-        // organization and store its key into $d['facility'].
+        // If the organization key in $d exists (i.e. a custom organization was
+        // selected), check if its name is unique. If it is unique, create the
+        // organization and store its key in '$d['facility']['organizationId'].
+        // If it is not unique, just grab the existing organization's ID and
+        // store it in '$d['facility']['organizationId'].
         if (array_key_exists('organization', $d)) {
-            $orgId = Organization::create($d['organization'])->getKey();
-            $d['facility']['organizationId'] = $orgId;
+            $o = Organization::where('name', $d['organization']['name'])
+                ->first();
+            if (!$o) {
+                $o = Organization::create($d['organization']);
+            }
+            $d['facility']['organizationId'] = $o->id;
+            
+            // Delete the organizatio key since we no longer need it.
+            unset($d['organization']);
         }
         
         // Facility section.
