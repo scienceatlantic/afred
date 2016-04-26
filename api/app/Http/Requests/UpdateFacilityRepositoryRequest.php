@@ -43,7 +43,7 @@ class UpdateFacilityRepositoryRequest extends Request
             case 'PUBLISHED_EDIT':
             case 'REJECTED':
             case 'REJECTED_EDIT':
-                return $this->_isAtLeastAdmin();
+                return $this->isAtLeastAdmin();
             
             default:
                 return false;

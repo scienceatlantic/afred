@@ -39,7 +39,7 @@ class ShowFacilityRepositoryRequest extends Request
                 $token)->first();
             
             return $ful && $ful->status == 'OPEN';
-        } else if ($this->_isAtLeastAdmin()) {
+        } else if ($this->isAtLeastAdmin()) {
             return true;
         }
     }
