@@ -94,7 +94,7 @@ class OrganizationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(OrganizationRequest $id)
+    public function destroy(OrganizationRequest $request, $id)
     {
         $o = Organization::findOrFail($id);
         $deletedOrg = $this->toCcArray($o->toArray());
