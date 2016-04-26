@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 
 // Requests
 use App\Http\Requests;
+use App\Http\Requests\SectorRequest;
 
 // Models.
 use App\Sector;
@@ -26,7 +27,7 @@ class SectorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(SectorRequest $request)
     {
         return $this->pageOrGet(Sector::orderBy('name', 'asc'));
     }
@@ -37,7 +38,7 @@ class SectorController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(SectorRequest $request)
     {
         $s = new Sector();
         $s->name = $request->name;
@@ -52,7 +53,7 @@ class SectorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(SectorRequest $request, $id)
     {
         return $this->toCcArray(Sector::findOrFail($id)->toArray());
     }
@@ -64,7 +65,7 @@ class SectorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(SectorRequest $request, $id)
     {
         $s = Sector::findOrFail($id);
         $s->name = $request->name;
@@ -78,7 +79,7 @@ class SectorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(SectorRequest $request, $id)
     {
         $s = Sector::findOrFail($id);
         $deletedSector = $s->toArray();

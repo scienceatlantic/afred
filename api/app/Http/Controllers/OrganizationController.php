@@ -8,15 +8,12 @@ use App\Http\Controllers\Controller;
 // Laravel.
 use Illuminate\Http\Request;
 
-// Misc.
-use DB;
-
 // Models.
-use App\Ilo;
 use App\Organization;
 
 // Requests.
 use App\Http\Requests;
+use App\Http\Requests\OrganizationRequest;
 
 class OrganizationController extends Controller
 {
@@ -30,7 +27,7 @@ class OrganizationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(OrganizationRequest $request)
     {
         $o = Organization::with('ilo');
         
@@ -53,7 +50,7 @@ class OrganizationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(OrganizationRequest $request)
     {
         $o = new Organization();
         $o->name = $request->name;
@@ -70,9 +67,9 @@ class OrganizationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(OrganizationRequest $request, $id)
     {
-        $o = Organization::with('ilo')->find($id);
+        $o = Organization::with('ilo')->findOrFail($id);
         $o->name = $request->name;
         $o->isHidden = $request->isHidden;
         $o->save();        
@@ -85,7 +82,7 @@ class OrganizationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $id)
+    public function show(OrganizationRequest $request, $id)
     {
         $o = Organization::with('ilo')->findOrFail($id)->toArray();
         return $this->toCcArray($o);
@@ -97,7 +94,7 @@ class OrganizationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(OrganizationRequest $id)
     {
         $o = Organization::findOrFail($id);
         $deletedOrg = $this->toCcArray($o->toArray());

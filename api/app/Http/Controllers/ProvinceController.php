@@ -13,6 +13,7 @@ use App\Province;
 
 // Requests.
 use App\Http\Requests;
+use App\Http\Requests\ProvinceRequest;
 
 class ProvinceController extends Controller
 {
@@ -26,7 +27,7 @@ class ProvinceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(ProvinceRequest $request)
     {
         $p = Province::query();
         
@@ -49,7 +50,7 @@ class ProvinceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProvinceRequest $request)
     {
         $p = new Province();
         $p->name = $request->name;
@@ -65,7 +66,7 @@ class ProvinceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(ProvinceRequest $request, $id)
     {
         return $this->toCcArray(Province::findOrFail($id)->toArray());
     }
@@ -77,7 +78,7 @@ class ProvinceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProvinceRequest $request, $id)
     {
         $p = Province::findOrFail($id);
         $p->name = $request->name;
@@ -92,7 +93,7 @@ class ProvinceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(ProvinceRequest $request, $id)
     {
         $p = Province::findOrFail($id);
         $deletedProvince = $p->toArray();

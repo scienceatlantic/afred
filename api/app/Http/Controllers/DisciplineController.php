@@ -13,6 +13,7 @@ use App\Discipline;
 
 // Requests.
 use App\Http\Requests;
+use App\Http\Requests\DisciplineRequest;
 
 class DisciplineController extends Controller
 {
@@ -26,7 +27,7 @@ class DisciplineController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(DisciplineRequest $request)
     {
         return $this->pageOrGet(Discipline::orderBy('name', 'asc'));
     }
@@ -37,7 +38,7 @@ class DisciplineController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(DisciplineRequest $request)
     {
         $d = new Discipline();
         $d->name = $request->name;
@@ -52,7 +53,7 @@ class DisciplineController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(DisciplineRequest $request, $id)
     {
         return $this->toCcArray(Discipline::findOrFail($id)->toArray());
     }
@@ -64,7 +65,7 @@ class DisciplineController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(DisciplineRequest $request, $id)
     {
         $d = Discipline::findOrFail($id);
         $d->name = $request->name;
@@ -78,7 +79,7 @@ class DisciplineController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(DisciplineRequest $request, $id)
     {
         $d = Discipline::findOrFail($id);
         $deletedDiscipline = $d->toArray();
