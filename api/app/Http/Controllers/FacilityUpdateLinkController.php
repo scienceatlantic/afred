@@ -20,6 +20,7 @@ use App\FacilityUpdateLink;
 
 // Requests.
 use App\Http\Requests;
+use App\Http\Requests\FacilityUpdateLinkRequest;
 
 class FacilityUpdateLinkController extends Controller
 {
@@ -33,9 +34,15 @@ class FacilityUpdateLinkController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
-    {        
-        return null;
+    public function index(FacilityUpdateLinkRequest $request)
+    {
+        $ful = FacilityUpdateLink::with('frB.facility', 'frA');
+        
+        if ($request->status) {
+            $ful->where('status', $request->status);
+        }
+        
+        return $this->pageOrGet($ful);
     }    
     
     
@@ -45,7 +52,7 @@ class FacilityUpdateLinkController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function generateToken(Request $request)
+    public function store(FacilityUpdateLinkRequest $request)
     {
         $facilityId = $request->input('facilityId', null);
         $email = $request->input('email', null);
@@ -76,7 +83,7 @@ class FacilityUpdateLinkController extends Controller
                 'editorEmail'     => $c->email,
                 'token'           => $this->generateUniqueToken(),
                 'status'          => 'OPEN',
-                'dateRequested'   => $this->now()
+                'dateOpened'      => $this->now()
             ]);
             
             event(new FacilityUpdateLinksEvent($ful));
@@ -93,7 +100,7 @@ class FacilityUpdateLinkController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroyToken($id)
+    public function destroy($id)
     {
         //
     }

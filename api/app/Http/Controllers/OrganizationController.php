@@ -52,10 +52,14 @@ class OrganizationController extends Controller
      */
     public function store(OrganizationRequest $request)
     {
+        // Get current datetime.
+        $now = $this->now();
+        
         $o = new Organization();
         $o->name = $request->name;
         $o->isHidden = $request->isHidden;
-        $o->dateAdded = $this->now();
+        $o->dateCreated = $now;
+        $o->dateUpdated = $now;
         $o->save();
         return $this->toCcArray($o->toArray());
     }
@@ -72,6 +76,7 @@ class OrganizationController extends Controller
         $o = Organization::with('ilo')->findOrFail($id);
         $o->name = $request->name;
         $o->isHidden = $request->isHidden;
+        $o->dateUpdated = $this->now();
         $o->save();        
         return $this->toCcArray($o->toArray());
     }

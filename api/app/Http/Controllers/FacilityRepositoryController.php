@@ -130,12 +130,14 @@ class FacilityRepositoryController extends Controller
                 $fr->facilityId = $fr->data['facility']['id'];
                 $fr->reviewerId = Auth::user()->id;
                 $fr->reviewerMessage = $request->input('reviewerMessage', null);
+                $fr->dateReviewed = $now;
                 $fr->update();
                 break;
             
             case 'REJECTED':
                 $fr->reviewerId = Auth::user()->id;
                 $fr->reviewerMessage = $request->input('reviewerMessage', null);
+                $fr->dateReviewed = $now;
                 $fr->update();
                 break;
             
@@ -158,30 +160,35 @@ class FacilityRepositoryController extends Controller
                 // since we're waiting for the admin to review it).
                 $ful->frIdAfter = $fr->id;
                 $ful->status = 'PENDING';
+                $ful->datePending = $now;
                 $ful->save();
                 break;
             
             case 'PUBLISHED_EDIT':
                 $fr->reviewerId = Auth::user()->id;
                 $fr->reviewerMessage = $request->input('reviewerMessage', null);
+                $fr->dateReviewed = $now;
                 $fr->data = $this->_publishFacility($fr, $fr->data, true);
                 $fr->update();
                 
                 // Admin has reviewed the record, close the token.
                 $ful = $fr->fulA()->pending()->first();
                 $ful->status = 'CLOSED';
+                $ful->dateClosed = $now;
                 $ful->update();
                 break;
             
             case 'REJECTED_EDIT':
                 $fr->reviewerId = Auth::user()->id;
                 $fr->reviewerMessage = $request->input('reviewerMessage', null);
+                $fr->dateReviewed = $now;
                 $fr->update();
                 
-                // Like 'PUBLISHED_EDIT', the admin as reviewed the record,
+                // Like 'PUBLISHED_EDIT', the admin has reviewed the record,
                 // close it.
                 $ful = $fr->fulA()->pending()->first();
                 $ful->status = 'CLOSED';
+                $ful->dateClosed = $now;
                 $ful->update();
                 break;
         }
@@ -207,7 +214,8 @@ class FacilityRepositoryController extends Controller
             $d['organization'] = (new Organization($r->data['organization']))
                 ->toArray();
             $d['organization']['isHidden'] = false;
-            $d['organization']['dateAdded'] = $now;
+            $d['organization']['dateCreated'] = $now;
+            $d['organization']['dateUpdated'] = $now;
         }
 
         // Facility section.
@@ -216,13 +224,13 @@ class FacilityRepositoryController extends Controller
         $d['facility']['dateUpdated'] = $now;
         // This part is for updates.
         if ($isUpdate) {
-            // ID and date submitted are maintained.
+            // ID and date published are maintained.
             $d['facility']['id'] = $fr->facility->id;
-            $d['facility']['dateSubmitted'] = $fr->facility->dateSubmitted
+            $d['facility']['datePublished'] = $fr->facility->datePublished
                 ->toDateTimeString();
         // For new records.
         } else {
-            $d['facility']['dateSubmitted'] = $now;         
+            $d['facility']['datePublished'] = $now;         
         }
         
         // Disciplines section.
@@ -321,7 +329,7 @@ class FacilityRepositoryController extends Controller
             }                       
         }
         
-        // Equipment section
+        // Equipment section.
         foreach($d['equipment'] as $i => $e) {
             $d['equipment'][$i] = $f->equipment()->create($e)->toArray();
             $e = $f->equipment()->find($d['equipment'][$i]['id']);

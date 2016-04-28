@@ -40,9 +40,13 @@ class DisciplineController extends Controller
      */
     public function store(DisciplineRequest $request)
     {
+        // Get current datetime.
+        $now = $this->now();
+        
         $d = new Discipline();
         $d->name = $request->name;
-        $d->dateAdded = $this->now();
+        $d->dateCreated = $now;
+        $d->dateUpdated = $now;
         $d->save();
         return $this->toCcArray($d->toArray());
     }
@@ -69,6 +73,7 @@ class DisciplineController extends Controller
     {
         $d = Discipline::findOrFail($id);
         $d->name = $request->name;
+        $d->dateUpdated = $this->now();
         $d->save();
         return $this->toCcArray($d->toArray());
     }
