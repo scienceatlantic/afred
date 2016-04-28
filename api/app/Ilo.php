@@ -11,7 +11,8 @@ class Ilo extends Model
      *
      * @var array
      */
-    protected $dates = ['dateAdded',
+    protected $dates = ['dateCreated',
+                        'dateUpdated',
                         'created_at',
                         'updated_at'];
     

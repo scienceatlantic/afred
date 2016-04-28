@@ -15,6 +15,8 @@ class CreateSettingsTable extends Migration
         Schema::create('settings', function (Blueprint $table) {
             $table->string('name')->primary();
             $table->string('value');
+            $table->dateTime('dateCreated');
+            $table->dateTime('dateUpdated');
         });
     }
 

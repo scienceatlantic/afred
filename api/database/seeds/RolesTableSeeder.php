@@ -18,13 +18,14 @@ class RolesTableSeeder extends Seeder
     {
         $now = Carbon::now();
         
+        // Delete existing roles.
         DB::table('roles')->delete();
         
         $roles = [
             [
                 'name'        => 'Admin',
-                'permission'  => 10, // Arbitrary value, since we only have
-                                     // one role at the moment.
+                'permission'  => 10, // Arbitrary value, since we only have one
+                                     // role at the moment.
                 'dateCreated' => $now
             ],
         ];

@@ -12,6 +12,7 @@ class FacilityRepository extends Model
      * @var array
      */
     protected $dates = ['dateSubmitted',
+                        'dateReviewed',
                         'created_at',
                         'updated_at'];
     
@@ -29,11 +30,12 @@ class FacilityRepository extends Model
      */
     protected $fillable = [
         'facilityId',
-        'userId',
+        'reviewerId',
         'state',
         'data',
-        'reviewMessage',
-        'dateSubmitted'
+        'reviewerMessage',
+        'dateSubmitted',
+        'dateReviewed'
     ];
     
 /**

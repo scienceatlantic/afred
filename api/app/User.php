@@ -31,6 +31,16 @@ class User extends Model implements AuthenticatableContract,
     protected $table = 'users';
 
     /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['dateCreated',
+                        'dateUpdated',
+                        'created_at',
+                        'updated_at'];
+    
+    /**
      * The attributes that are mass assignable.
      *
      * @var array

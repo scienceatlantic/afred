@@ -353,13 +353,13 @@ class ImportAfredV1DataSeeder extends Seeder
           array('lab_list_id' => '252','inventory_id' => '260','lab' => 'Vibratome','fee' => '1','guest' => '1','host' => '1','descr' => 'Vibratome series 1000 microtome')
         );
         
-        $apiAddress = Setting::find('API_ADDRESS');
+        $apiAddress = Setting::find('apiAddress');
         
         // Login to the API to get the session cookie.
         $url = $apiAddress->value . '/auth/login';
         $jsonData = json_encode([
-            'email' => 'prasad@scienceatlantic.ca',
-            'password' => 'acenet-usability-study'
+            'email'    => 'prasad@scienceatlantic.ca',
+            'password' => 'password'
         ]);            
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_HEADER, true);
@@ -394,7 +394,7 @@ class ImportAfredV1DataSeeder extends Seeder
                 'website'        => $f['url'],
                 'description'    => $f['does'],
                 'isPublic'       => true,
-                'dateSubmitted'  => $f['date_posted'],
+                'datePublished'  => $f['date_posted'],
                 'dateUpdated'    => $f['date_updated']
             ];
             
@@ -411,7 +411,7 @@ class ImportAfredV1DataSeeder extends Seeder
                 'telephone'  => $f['telephone'],
                 'extension'  => null,
                 'position'   => $f['position'],
-                'website'    => ''
+                'website'    => null
             ];
             
             // Equipment.
@@ -427,7 +427,9 @@ class ImportAfredV1DataSeeder extends Seeder
                         'specifications'    => null,
                         'isPublic'          => true,
                         'hasExcessCapacity' => false,
-                        'yearPurchased'     => null                   
+                        'yearPurchased'     => null,
+                        'yearManufactured'  => null,
+                        'keywords'          => null
                     ]);
                 }
             }

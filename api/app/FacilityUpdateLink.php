@@ -7,20 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class FacilityUpdateLink extends Model
 {
     /**
-     * The attributes that are mass assignable.
+     * The attributes that should be mutated to dates.
      *
      * @var array
      */
-    protected $fillable = [
-        'frIdBefore',
-        'frIdAfter',
-        'editorFirstName',
-        'editorLastName',
-        'editorEmail',
-        'token',
-        'status',
-        'dateRequested'
-    ];
+    protected $dates = ['dateOpened',
+                        'datePending',
+                        'dateClosed',
+                        'created_at',
+                        'updated_at'];
     
     /**
      * The attributes excluded from the model's JSON form.
@@ -28,7 +23,17 @@ class FacilityUpdateLink extends Model
      * @var array
      */
     protected $hidden = ['token'];
-        
+    
+    public function frA()
+    {
+        return $this->belongsTo('App\FacilityRepository', 'frIdAfter');
+    }    
+    
+    public function frB()
+    {
+        return $this->belongsTo('App\FacilityRepository', 'frIdBefore');
+    }
+    
     public function scopeOpen($query)
     {
         return $query->where('status', 'OPEN');

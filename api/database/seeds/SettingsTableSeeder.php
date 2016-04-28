@@ -3,6 +3,9 @@
 // Laravel.
 use Illuminate\Database\Seeder;
 
+// Misc.
+use Carbon\Carbon;
+
 class SettingsTableSeeder extends Seeder
 {
     /**
@@ -12,49 +15,60 @@ class SettingsTableSeeder extends Seeder
      */
     public function run()
     {
+        $now = Carbon::now();
+        
         DB::table('settings')->delete();
         
-        DB::table('settings')->insert([
-            [
-                'name'  => 'APP_NAME',
-                'value' => 'Atlantic Facilities and Research Equipment Database'
-            ],
-            [
-                'name'  => 'APP_ACRONYM',
-                'value' => 'AFRED'           
-            ],
-            [
-                'name'  => 'API_ADDRESS',
-                'value' => 'http://localhost:8000'           
-            ],
-            [
-                'name'  => 'APP_ADDRESS',
-                'value' => 'http://localhost:9000/#'           
-            ],
-            [
-                'name'  => 'ORGANIZATION_NAME',
-                'value' => 'Science Atlantic'           
-            ],           
-            [
-                'name'  => 'EMAIL_NAME',
-                'value' => 'AFRED'           
-            ],
-            [
-                'name'  => 'EMAIL_ADDRESS',
-                'value' => 'afred@scienceatlantic.ca'           
-            ],
-            [
-                'name'  => 'EMAIL_SUBJECT_PREFIX',
-                'value' => 'AFRED 2.0 | Science Atlantic - (test) '           
-            ],
-            [
-                'name'  => 'GENERAL_CONTACT_NAME',
-                'value' => 'Patty King'           
-            ],
-            [
-                'name'  => 'GENERAL_CONTACT_EMAIL_ADDRESS',
-                'value' => 'patty@scienceatlantic.ca'           
-            ],
-        ]);
+        DB::table('settings')->insert([[
+            'name'        => 'appName',
+            'value'       => 'Atlantic Facilities and Research Equipment Database',
+            'dateCreated' => $now,
+            'dateUpdated' => $now
+        ], [
+            'name'        => 'appAcronym',
+            'value'       => 'AFRED',
+            'dateCreated' => $now,
+            'dateUpdated' => $now
+        ], [
+            'name'        => 'apiAddress',
+            'value'       => 'http://localhost:8000',
+            'dateCreated' => $now,
+            'dateUpdated' => $now
+        ], [
+            'name'        => 'appAddress',
+            'value'       => 'http://localhost:9000/#',
+            'dateCreated' => $now,
+            'dateUpdated' => $now
+        ], [
+            'name'        => 'organizationName',
+            'value'       => 'Science Atlantic',
+            'dateCreated' => $now,
+            'dateUpdated' => $now
+        ], [
+            'name'        => 'emailName',
+            'value'       => 'AFRED',
+            'dateCreated' => $now,
+            'dateUpdated' => $now
+        ], [
+            'name'        => 'emailAddress',
+            'value'       => 'afred@scienceatlantic.ca',
+            'dateCreated' => $now,
+            'dateUpdated' => $now
+        ], [
+            'name'        => 'emailSubjectPrefix',
+            'value'       => 'AFRED 2.0 | Science Atlantic - (test) ',
+            'dateCreated' => $now,
+            'dateUpdated' => $now
+        ], [
+            'name'        => 'generalContactName',
+            'value'       => 'Patty King',
+            'dateCreated' => $now,
+            'dateUpdated' => $now
+        ], [
+            'name'        => 'generalContactEmailAddress',
+            'value'       => 'patty@scienceatlantic.ca',
+            'dateCreated' => $now,
+            'dateUpdated' => $now
+        ]]);
     }
 }

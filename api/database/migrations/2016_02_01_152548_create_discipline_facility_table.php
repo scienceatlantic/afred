@@ -13,17 +13,11 @@ class CreateDisciplineFacilityTable extends Migration
     public function up()
     {
         Schema::create('discipline_facility', function (Blueprint $table) {
-            $table->integer('disciplineId')
-                ->unsigned();
-            $table->foreign('disciplineId')
-                ->references('id')
-                ->on('disciplines')
+            $table->integer('disciplineId')->unsigned();
+            $table->foreign('disciplineId')->references('id')->on('disciplines')
                 ->onDelete('restrict');
-            $table->integer('facilityId')
-                ->unsigned();
-            $table->foreign('facilityId')
-                ->references('id')
-                ->on('facilities')
+            $table->integer('facilityId')->unsigned();
+            $table->foreign('facilityId')->references('id')->on('facilities')
                 ->onDelete('cascade');
             $table->primary(['disciplineId', 'facilityId']);
         });

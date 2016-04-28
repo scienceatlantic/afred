@@ -11,7 +11,8 @@ class Organization extends Model
      *
      * @var array
      */
-    protected $dates = ['dateAdded',
+    protected $dates = ['dateCreated',
+                        'dateUpdated',
                         'created_at',
                         'updated_at'];
     
@@ -22,7 +23,9 @@ class Organization extends Model
      */
     protected $fillable = [
         'name',
-        'dateAdded'
+        'isHidden',
+        'dateCreated',
+        'dateUpdated'
     ];
     
     public function ilo()
