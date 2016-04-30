@@ -8,6 +8,9 @@ angular.module('afredApp').filter('afStrToDate',
       var d = dt[0].split('-');
       var t = dt.length > 1 ? dt[1].split(':') : null;
       
+      // Months start from 0 - 11 for the Date() constructor in JavaScript.
+      d[1] = d[1] - 1;
+      
       if (d && t) {
         return new Date(d[0], d[1], d[2], t[0], t[1], t[2]);  
       } else {
