@@ -40,9 +40,13 @@ class SectorController extends Controller
      */
     public function store(SectorRequest $request)
     {
+        // Get current datetime.
+        $now = $this->now();
+        
         $s = new Sector();
         $s->name = $request->name;
-        $s->dateAdded = $this->now();
+        $s->dateCreated = $now;
+        $s->dateUpdated = $now;
         $s->save();
         return $this->toCcArray($s->toArray());
     }
@@ -69,6 +73,7 @@ class SectorController extends Controller
     {
         $s = Sector::findOrFail($id);
         $s->name = $request->name;
+        $s->dateUpdated = $this->now();
         $s->save();
         return $this->toCcArray($s->toArray());
     }

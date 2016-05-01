@@ -52,10 +52,14 @@ class ProvinceController extends Controller
      */
     public function store(ProvinceRequest $request)
     {
+        // Get current datetime.
+        $now = $this->now();
+        
         $p = new Province();
         $p->name = $request->name;
         $p->isHidden = $request->isHidden;
-        $p->dateAdded = $this->now();
+        $p->dateCreated = $now;
+        $p->dateUpdated = $now;
         $p->save();
         return $this->toCcArray($p->toArray());
     }
@@ -83,6 +87,7 @@ class ProvinceController extends Controller
         $p = Province::findOrFail($id);
         $p->name = $request->name;
         $p->isHidden = $request->isHidden;
+        $p->dateUpdated = $this->now();
         $p->save();
         return $this->toCcArray($p->toArray());
     }
