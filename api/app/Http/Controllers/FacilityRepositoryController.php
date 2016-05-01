@@ -142,22 +142,23 @@ class FacilityRepositoryController extends Controller
                 break;
             
             case 'PENDING_EDIT_APPROVAL':
-                // Grab the facility update link record before we update the
-                // facility repository record below.
-                $ful = $fr->fulB()->open()->first();
-                
-                // We're actually creating a new facility repository record
-                // here. We have to pass the old facility repository record
-                // into the formatData function because we need its link
-                // to the facility before we can create a new one.
-                $fr->data = $this->formatData($request, $now, $fr);
+                // Create a new facility repository record and copy the state
+                // and facilityId from the old record.
+                $frBeforeUpdate = $fr;
+                $fr = new FacilityRepository();
+                $fr->facilityId = $frBeforeUpdate->facilityId;
+                $fr->state = $frBeforeUpdate->state;
+                // We're passing the old facility repository record into
+                // the 'formatData' function because we need the existing
+                // record's details.
+                $fr->data = $this->formatData($request, $now, $frBeforeUpdate);
                 $fr->dateSubmitted = $now;
-                $fr = new FacilityRepository($fr->toArray());
                 $fr->save();
                 
-                // Update the token with the facility repository's id
-                // (frIdAfter) and mark it as pending (it's no longer open,
-                // since we're waiting for the admin to review it).
+                // Mark the facility update link record as pending and update
+                // its 'frIdAfter' column with the id of the new facility
+                // repository record.
+                $ful = $frBeforeUpdate->fulB()->open()->first();
                 $ful->frIdAfter = $fr->id;
                 $ful->status = 'PENDING';
                 $ful->datePending = $now;
