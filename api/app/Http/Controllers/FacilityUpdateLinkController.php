@@ -36,7 +36,7 @@ class FacilityUpdateLinkController extends Controller
      */
     public function index(FacilityUpdateLinkRequest $request)
     {
-        $ful = FacilityUpdateLink::with('frB.facility', 'frA');
+        $ful = FacilityUpdateLink::with('frB', 'frA');
         
         if ($request->status) {
             $ful->where('status', $request->status);
