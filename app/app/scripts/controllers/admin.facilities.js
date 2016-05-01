@@ -63,7 +63,7 @@ angular.module('afredApp').controller('AdminFacilitiesController',
        *
        * @param {boolean} resetPage If true, the page number is reset to 1.
        */
-      goToResultsPage: function(resetPage) {
+      index: function(resetPage) {
         if (resetPage) {
           $scope.facilities.form.data.page = 1;
           
