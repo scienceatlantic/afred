@@ -47,6 +47,11 @@ class FacilityUpdateLink extends Model
         return $query->where('status', '<>','CLOSED');
     }
     
+    public function getFullName()
+    {
+        return $this->editorFirstName . ' ' . $this->editorLastName;
+    }
+    
     /**
      * Verifies that the token provided matches a record with an open status.
      *
