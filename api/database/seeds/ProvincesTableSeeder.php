@@ -30,7 +30,7 @@ class ProvincesTableSeeder extends Seeder
             'dateUpdated' => $now
         ], [
             'name'        => 'Atlantic Region',
-            'isHidden'    => true,
+            'isHidden'    => false,
             'dateCreated' => $now,
             'dateUpdated' => $now                      
         ], [
