@@ -16,14 +16,20 @@
   <span data-ng-show="_stateParams.facilityRepositoryId">
     / Facility Repository ID: {{ _stateParams.facilityRepositoryId }}
   </span>
+  <span data-ng-show="_state.current.name == 'admin.facilities.updates' || _state.current.name == 'admin.'">
+    / Update Requests
+    <span data-ng-show="_stateParams.status == 'OPEN'">/ Open</span>
+    <span data-ng-show="_stateParams.status == 'PENDING'">/ Pending</span>
+    <span data-ng-show="_stateParams.status == 'CLOSED'">/ Closed</span>
+  </span>
 </h3>
 
-<!-- Only show this portion if we're not viewing a particular record -->
+<!-- Only show this portion if we're in admin.facilities or admin.facilities.index -->
 <div class="row" data-ng-show="_state.current.name == 'admin.facilities' || _state.current.name == 'admin.facilities.index'"> 
   <div class="col-md-5">
     <div class="form-group">
       <label for="state">State:</label>
-      <select class="form-control input-sm" name="state" id="state" data-ng-model="facilities.form.data.state" data-ng-change="facilities.goToResultsPage(true)">
+      <select class="form-control input-sm" name="state" id="state" data-ng-model="facilities.form.data.state" data-ng-change="facilities.index(true)">
         <option value="PENDING_APPROVAL">Pending Approval</option>
         <option value="PUBLISHED">Published</option>
         <option value="REJECTED">Rejected</option>
@@ -33,9 +39,13 @@
     
     <div class="form-group" data-ng-show="facilities.form.data.state == 'PUBLISHED'">
       <label for="state">Visibility:</label>
-      <select class="form-control input-sm" name="visibility" id="visibility" data-ng-model="facilities.form.data.visibility" data-ng-options="v.value as v.label for v in [{ value: 1, label: 'Public' }, { value: 0, label: 'Private' }]" data-ng-change="facilities.goToResultsPage()"></select>
+      <select class="form-control input-sm" name="visibility" id="visibility" data-ng-model="facilities.form.data.visibility" data-ng-options="v.value as v.label for v in [{ value: 1, label: 'Public' }, { value: 0, label: 'Private' }]" data-ng-change="facilities.index()"></select>
     </div>
   </div>
+</div>
+
+<div data-ng-show="_state.current.name != 'admin.facilities.updates' && _state.current.name != 'admin.facilities.updates.index'">
+  <p><a data-ui-sref="admin.facilities.updates">View update requests</a></p>
 </div>
 
 <!-- Child state container -->
