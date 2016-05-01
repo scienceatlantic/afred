@@ -38,10 +38,9 @@ angular.module('afredApp').controller('AdminProvincesShowController', [
      *     button.
      */
     $scope.update = function(formCtrl) {
-      $scope.loading.update = true;
       var t = 'update-province'; // Template name (to shorten code).
-      
       confirmModal.open(t).result.then(function() {
+        $scope.loading.update = true;
         $scope.province.$update(function(response) {
           infoModal.open(t + '-success').result.then(function() {
             $scope.commit();
@@ -55,9 +54,6 @@ angular.module('afredApp').controller('AdminProvincesShowController', [
             $scope.loading.update = false;
           });
         });
-      }, function() {
-        // If the user hits the cancel button, we have to reset the AJAX flag.
-        $scope.loading.update = false;
       });
     };
     
@@ -78,10 +74,9 @@ angular.module('afredApp').controller('AdminProvincesShowController', [
      * warningModal
      */
     $scope.remove = function() {
-      $scope.loading.remove = true;
       var t = 'delete-province'; // Template name (to shorten code).
-      
       confirmModal.open(t).result.then(function() {
+        $scope.loading.remove = true;
         $scope.province.$delete(function() {
           infoModal.open(t + '-success').result.then(function() {
             $scope.loading.remove = false;
@@ -91,9 +86,6 @@ angular.module('afredApp').controller('AdminProvincesShowController', [
           warningModal.open(t + '-failed');
           $scope.loading.remove = false;
         });
-      }, function() {
-        // Cancel button is clicked, reset AJAX flag.
-        $scope.loading.remove = false;
       });
     };
     
@@ -152,7 +144,7 @@ angular.module('afredApp').controller('AdminProvincesShowController', [
      */
     $scope.loading = {
       update: false, // Update operation.
-      remove: false // Remvoe operation.
+      remove: false // Remove operation.
     };
     
     /**
