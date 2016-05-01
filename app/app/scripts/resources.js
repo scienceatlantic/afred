@@ -82,25 +82,25 @@ angular.module('afredApp').factory('facilityRepositoryResource',
           }
         },
         queryTokens: {
-          url: root + '/facilities',
+          url: root + '/facility-update-links',
           method: 'GET',
           isArray: false
         },
         queryTokensNoPaginate: {
-          url: root + '/facilities',
+          url: root + '/facility-update-links',
           method: 'GET',
           isArray: true,
           params: {
             paginate: 0
           }
         },
-        generateToken: {
-          url: root + '/facility-update-links/generate-token',
+        createToken: {
+          url: root + '/facility-update-links',
           method: 'POST'
         },
-        verifyToken: {
-          url: root + '/facility-repository/verify-token',
-          method: 'POST'
+        destroyToken: {
+          url: root + '/facility-update-links/:facilityUpdateLinkId',
+          method: 'DELETE'
         }
       }
     );
