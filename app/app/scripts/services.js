@@ -15,7 +15,7 @@ angular.module('afredApp').service('confirmModal', [
         controller: ['$scope', '$uibModalInstance',
           function($scope, $uibModalInstance) {
             $scope.modal = $uibModalInstance;
-            $scope.template = 'views/includes/modal-' + template + '.html';
+            $scope.template = 'views/includes/modals/'+ template + '.html';
           }
         ]
       });        
@@ -32,7 +32,7 @@ angular.module('afredApp').service('infoModal', [
         controller: ['$scope', '$uibModalInstance',
           function($scope, $uibModalInstance) {
             $scope.modal = $uibModalInstance;
-            $scope.template = 'views/includes/modal-' + template + '.html';
+            $scope.template = 'views/includes/modals/' + template + '.html';
           }
         ],
         keyboard: false,
@@ -51,7 +51,7 @@ angular.module('afredApp').service('warningModal', [
         controller: ['$scope', '$uibModalInstance',
           function($scope, $uibModalInstance) {
             $scope.modal = $uibModalInstance;
-            $scope.template = 'views/includes/modal-' + template + '.html';
+            $scope.template = 'views/includes/modals/' + template + '.html';
           }
         ],
         keyboard: false,
