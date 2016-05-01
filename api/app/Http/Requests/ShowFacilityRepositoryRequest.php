@@ -7,7 +7,7 @@ use Log;
 use Route;
 
 // Models.
-use App\FacilityRepository;
+use App\FacilityUpdateLink;
 
 // Requests.
 use App\Http\Requests\Request;
@@ -21,27 +21,17 @@ class ShowFacilityRepositoryRequest extends Request
      */
     public function authorize()
     {
-        // If both a facility repository ID and token (facility update link) was
-        // provided in the request, we're going to assume the user (could be a
-        // regular user or an admin) wants to update a particular facility.
-        // If a token wasn't provided, we're assuming the admin just wants to
-        // view a particular facility. Remember that an admin will also need to
-        // generate a token in order to be able to update a particular facility.
-        $id = Route::input('facility_repository');
+        // If the request was made with a token, we're going to assume that the
+        // request is being made for an edit session. We need to verify that the
+        // token is valid (i.e. matches an open facility update link record). If
+        // no token was provided with the request, assume that an admin is
+        // request the record.
         $token = $this->instance()->input('token', null);
-        
-        if ($id && $token) {            
-            // Find a facility update link record with a matching 'frIdBefore'
-            // and 'token' value.
-            
-            // find or fail?
-            $ful = FacilityRepository::find($id)->fulsB()->where('token',
-                $token)->first();
-            
-            return $ful && $ful->status == 'OPEN';
-        } else if ($this->isAtLeastAdmin()) {
-            return true;
+        if ($token) {
+            $id = Route::input('facility_repository');
+            return FacilityUpdateLink::verifyToken($id, $token);
         }
+        return $this->isAtLeastAdmin();
     }
 
     /**
@@ -51,8 +41,6 @@ class ShowFacilityRepositoryRequest extends Request
      */
     public function rules()
     {
-        return [
-            //
-        ];
+        return [];
     }
 }

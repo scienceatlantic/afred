@@ -2,9 +2,6 @@
 
 namespace App\Http\Requests;
 
-// Misc.
-use Log;
-
 // Requests.
 use App\Http\Requests\Request;
 
@@ -27,8 +24,6 @@ class IndexFacilityRepositoryRequest extends Request
      */
     public function rules()
     {
-        return [
-            //
-        ];
+        return [];
     }
 }
