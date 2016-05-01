@@ -62,7 +62,7 @@
         <div data-af-field data-af-field-label="Research disciplines*" data-af-field-name="facilityDisciplinesC10" data-af-field-popover="Please select at least one applicable discipline.">
           <div class="row">
             <div class="col-md-6">
-              <div data-ng-repeat="d in form.disciplines | limitTo: 5">
+              <div data-ng-repeat="d in form.disciplines | limitTo: form.disciplines.length / 2">
                 <div class="checkbox">
                   <label>
                     <input type="checkbox" name="facilityDisciplinesC1{{ $index }}" data-ng-model="d.isSelected" data-ng-change="form.validateDisciplines(disciplinesForm)" data-ng-required="form.disciplines[0].isRequired"> {{d.name}}
@@ -72,7 +72,7 @@
             </div>
             
             <div class="col-md-6">
-              <div data-ng-repeat="d in form.disciplines | limitTo: 4:5">
+              <div data-ng-repeat="d in form.disciplines | limitTo: form.disciplines.length:(form.disciplines.length / 2)">
                 <div class="checkbox">
                   <label>
                     <input type="checkbox" name="facilityDisciplinesC2{{ $index }}" data-ng-model="d.isSelected" data-ng-change="form.validateDisciplines(disciplinesForm)" data-ng-required="form.disciplines[0].isRequired"> {{d.name}}
@@ -94,7 +94,7 @@
         <div data-af-field data-af-field-label="Sectors of application*" data-af-field-name="facilitySectorsC10" data-af-field-popover="Please select at least one applicable sector.">
           <div class="row">
             <div class="col-md-6">
-              <div data-ng-repeat="s in form.sectors | limitTo: 15">
+              <div data-ng-repeat="s in form.sectors | limitTo: form.sectors.length / 2">
                 <div class="checkbox">
                   <label>
                     <input type="checkbox" name="facilitySectorsC1{{ $index }}" data-ng-model="s.isSelected" data-ng-change="form.validateSectors(sectorsForm)" data-ng-required="form.sectors[0].isRequired"> {{s.name}}
@@ -104,7 +104,7 @@
             </div>
             
             <div class="col-md-6">
-              <div data-ng-repeat="s in form.sectors | limitTo: 14:15">
+              <div data-ng-repeat="s in form.sectors | limitTo: form.sectors.length:(form.sectors.length / 2)">
                 <div class="checkbox">
                   <label>
                     <input type="checkbox" name="facilitySectorsC2{{ $index }}" data-ng-model="s.isSelected" data-ng-change="form.validateSectors(sectorsForm)" data-ng-required="form.sectors[0].isRequired"> {{s.name}}
