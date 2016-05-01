@@ -5,7 +5,7 @@ Hello {{ $recipientName }},
 
 Thank you!
 
-Your information has been successfully submitted into {{ $settings['APP_NAME'] }}.
+Your information has been successfully submitted into {{ $settings['appName'] }}.
 
 You will received another email once the submission has been reviewed.
 

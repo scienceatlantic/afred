@@ -40,27 +40,25 @@ class FacilityUpdateLinksListener extends BaseListener
         $email = $event->ful->email;
         $email = 'prasad@scienceatlantic.ca';
         $template = 'emails.events.ful.token-requested'; 
-        $subject = $this->_settings['EMAIL_SUBJECT_PREFIX'] . 'Facility update request (fr #' . $event->ful->frIdBefore . ')';
-        $name = $event->ful->editorFirstName
-            . ' ' . $event->ful->editorLastName;
+        $subject = $this->_settings['emailSubjectPrefix'] . 'Facility update request (fr #' . $event->ful->frIdBefore . ')';
         
         $data = [
-            'name'       => $name,
-            'frIdBefore' => $event->ful->frIdBefore,
-            'token'      => $event->ful->token,
-            'settings'   => $this->_settings  
+            'recipientName' => $event->ful->getFullName(),
+            'frIdBefore'    => $event->ful->frIdBefore,
+            'token'         => $event->ful->token,
+            'settings'      => $this->_settings  
         ];
         
         $to = [
-            'name' => $name,
+            'name'  => $event->ful->getFullName(),
             'email' => $event->ful->editorEmail
         ];
         
         $bcc = [];
-        foreach(Role::admin()->users()->get() as $a) {
+        foreach(Role::admin()->users()->get() as $admin) {
             array_push($bcc, [
-                'name'  => $a->firstName . ' ' . $a->lastName,
-                'email' => $a->email
+                'name'  => $admin->getFullName(),
+                'email' => $admin->email
             ]);
         }
         

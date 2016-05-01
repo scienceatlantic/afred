@@ -40,7 +40,7 @@ class FacilityRepositoryListener extends BaseListener
         $tPfx = 'emails.events.fr.'; 
         
         // Email subject prefix.
-        $sPfx = $this->_settings['EMAIL_SUBJECT_PREFIX'];
+        $sPfx = $this->_settings['emailSubjectPrefix'];
         
         // Email subject suffix. We're attaching the facility repository's ID
         // to all emails as the suffix.

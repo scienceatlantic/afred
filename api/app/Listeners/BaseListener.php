@@ -16,12 +16,11 @@ abstract class BaseListener
     public function __construct()
     {
         $this->_settings = [
-            'APP_NAME'             => Setting::find('APP_NAME')->value,
-            'APP_ACRONYM'          => Setting::find('APP_ACRONYM')->value,
-            'APP_ADDRESS'          => Setting::find('APP_ADDRESS')->value,
-            'EMAIL_ADDRESS'        => Setting::find('EMAIL_ADDRESS')->value,
-            'EMAIL_SUBJECT_PREFIX' => Setting::find('EMAIL_SUBJECT_PREFIX')
-                                          ->value
+            'appName'            => Setting::find('appName')->value,
+            'appAcronym'         => Setting::find('appAcronym')->value,
+            'appAddress'         => Setting::find('appAddress')->value,
+            'emailAddress'       => Setting::find('emailAddress')->value,
+            'emailSubjectPrefix' => Setting::find('emailSubjectPrefix')->value
         ];
     }
     

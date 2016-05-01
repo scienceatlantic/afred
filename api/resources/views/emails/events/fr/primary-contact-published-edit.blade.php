@@ -7,7 +7,7 @@ Congratulations!
 
 Your edit has been approved.
 
-Please check your listing here {{ $settings['APP_ADDRESS'] }}/facilities/{{ $facilityId }}.
+Please check your listing here {{ $settings['appAddress'] }}/facilities/{{ $facilityId }}.
 
 If you wish to make edits to your listing at any time, please follow the instructions on this page <URL>.
 

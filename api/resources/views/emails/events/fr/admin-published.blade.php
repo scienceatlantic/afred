@@ -9,5 +9,5 @@ This is a confirmation email that you have approved '{{ $facilityName }}'.
 '{{ $facilityName }}' has been approved by {{ $reviewerName }}.
 @endif
 
-The facility can be found here: {{ $settings['APP_ADDRESS'] }}/facilities/{{ $facilityId }}
+The facility can be found here: {{ $settings['appAddress'] }}/facilities/{{ $facilityId }}
 @stop
