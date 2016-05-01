@@ -120,6 +120,16 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         templateUrl: 'views/admin.facilities.show.html',
         controller: 'AdminFacilitiesShowController'
       }).
+      state('admin.facilities.updates', {
+        url: '/update-requests',
+        templateUrl: 'views/admin.facilities.updates.html',
+        controller: 'AdminFacilitiesUpdatesController'
+      }).
+      state('admin.facilities.updates.index', {
+        url: '/index?status&page',
+        templateUrl: 'views/admin.facilities.updates.index.html',
+        controller: 'AdminFacilitiesUpdatesIndexController'
+      }).
       state('admin.organizations', {
         'abstract': true,
         url: '/organizations',
