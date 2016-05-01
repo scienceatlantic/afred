@@ -64,7 +64,7 @@ class FacilityRepository extends Model
      * the facility repository record (frIdBefore) is still the most recent
      * version of the facility.
      */
-    public function fulsB()
+    public function fulB()
     {
         return $this->hasMany('App\FacilityUpdateLink', 'frIdBefore');
     }

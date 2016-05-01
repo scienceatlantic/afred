@@ -120,13 +120,13 @@ class FacilityRepositoryController extends Controller
         
         switch ($fr->state) {
             case 'PENDING_APPROVAL':
-                $fr->data = $this->_formatFrData($request, $now);
+                $fr->data = $this->formatData($request, $now);
                 $fr->dateSubmitted = $now;
                 $fr->save();
                 break;
             
             case 'PUBLISHED':
-                $fr->data = $this->_publishFacility($fr, $fr->data);
+                $fr->data = $this->publishFacility($fr, $fr->data);
                 $fr->facilityId = $fr->data['facility']['id'];
                 $fr->reviewerId = Auth::user()->id;
                 $fr->reviewerMessage = $request->input('reviewerMessage', null);
@@ -144,13 +144,13 @@ class FacilityRepositoryController extends Controller
             case 'PENDING_EDIT_APPROVAL':
                 // Grab the facility update link record before we update the
                 // facility repository record below.
-                $ful = $fr->fulsB()->open()->first();
+                $ful = $fr->fulB()->open()->first();
                 
                 // We're actually creating a new facility repository record
                 // here. We have to pass the old facility repository record
-                // into the _formatFrData function because we need its link
+                // into the formatData function because we need its link
                 // to the facility before we can create a new one.
-                $fr->data = $this->_formatFrData($request, $now, true, $fr);
+                $fr->data = $this->formatData($request, $now, $fr);
                 $fr->dateSubmitted = $now;
                 $fr = new FacilityRepository($fr->toArray());
                 $fr->save();
@@ -168,7 +168,7 @@ class FacilityRepositoryController extends Controller
                 $fr->reviewerId = Auth::user()->id;
                 $fr->reviewerMessage = $request->input('reviewerMessage', null);
                 $fr->dateReviewed = $now;
-                $fr->data = $this->_publishFacility($fr, $fr->data, true);
+                $fr->data = $this->publishFacility($fr, $fr->data, true);
                 $fr->update();
                 
                 // Admin has reviewed the record, close the token.
@@ -201,7 +201,7 @@ class FacilityRepositoryController extends Controller
         return $this->toCcArray($f->toArray());
     }
         
-    private function _formatFrData($r, $now, $isUpdate = false, $fr = null)
+    private function formatData($r, $now, $fr = false)
     {
         // Will hold all the data that will be returned by the function.
         $d = [];
@@ -223,7 +223,7 @@ class FacilityRepositoryController extends Controller
         $d['facility']['isPublic'] = true;
         $d['facility']['dateUpdated'] = $now;
         // This part is for updates.
-        if ($isUpdate) {
+        if ($fr) {
             // ID and date published are maintained.
             $d['facility']['id'] = $fr->facility->id;
             $d['facility']['datePublished'] = $fr->facility->datePublished
@@ -259,7 +259,7 @@ class FacilityRepositoryController extends Controller
         return $d;
     }
     
-    private function _publishFacility($fr, $d, $isUpdate = false)
+    private function publishFacility($fr, $d, $isUpdate = false)
     {        
         // Organization section.
         // If the organization key in $d exists (i.e. a custom organization was
