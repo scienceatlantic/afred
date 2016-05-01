@@ -283,6 +283,10 @@
                     <input type="text" class="form-control" name="equipmentYearPurchased{{ $index }}" data-ng-model="e.yearPurchased" data-ng-model-options="{ debounce: 500 }" pattern="(?:19|20)[0-9]{2}" placeholder="E.g. 1995">
                   </div>
                   
+                  <div data-af-field data-af-field-label="Year manufactured">
+                    <input type="text" class="form-control" name="equipmentYearManufactured{{ $index }}" data-ng-model="e.yearManufactured" data-ng-model-options="{ debounce: 500 }" pattern="(?:19|20)[0-9]{2}" placeholder="E.g. 1990">
+                  </div>
+                  
                   <div data-af-field data-af-field-label="Excess capacity*" data-af-field-popover="Explanation here...">
                     <div class="radio">
                       <label>

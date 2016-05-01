@@ -244,6 +244,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
           specifications: null,
           purpose: null,
           yearPurchased: null,
+          yearManufactured: null,
           isPublic: null,
           hasExcessCapacity: null,
           keywords: null
