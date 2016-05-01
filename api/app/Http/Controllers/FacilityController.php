@@ -18,6 +18,7 @@ use App\PrimaryContact;
 
 // Requests.
 use App\Http\Requests;
+use App\Http\Requests\FacilityRequest;
 
 class FacilityController extends Controller
 {
@@ -31,9 +32,9 @@ class FacilityController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(FacilityRequest $request)
     {
-        if (!($email = $request->input('email', null))) {
+        if (!($email = $request->email)) {
             $f = Facility::with('province',
                                 'organization',
                                 'disciplines',
@@ -52,7 +53,7 @@ class FacilityController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $id)
+    public function show(FacilityRequest $request, $id)
     {
         $f = Facility::with('province',
                             'organization',
@@ -64,9 +65,21 @@ class FacilityController extends Controller
         return $this->toCcArray($f);   
     }
     
-    public function updateVisibility()
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(FacilityRequest $request, $id)
     {
-        
+        // We can on update a facility record my marking it as private or
+        // public.
+        $f = Facility::findOrFail($id);
+        $f->isPublic = $request->isPublic;
+        $f->update();
+        return $this->toCcArray($f->toArray());
     }
 
     /**
@@ -75,9 +88,12 @@ class FacilityController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(FacilityRequest $request, $id)
     {
-        return Facility::find($id)->delete();
+        $f = Facility::findOrFail($id);
+        $deletedFacility = $this->toCcArray($f->toArray());
+        $f->delete();
+        return $deletedFacility;
     }
     
     private function indexMatchingFacilities($email)

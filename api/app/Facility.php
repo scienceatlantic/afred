@@ -44,7 +44,7 @@ class Facility extends Model
         'dateUpdated'
     ];
     
-    public function revision()
+    public function currentRevision()
     {
         return $this->belongsTo('App\FacilityRepository',
             'facilityRepositoryId');
