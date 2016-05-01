@@ -73,7 +73,6 @@ Route::resource('sectors', 'SectorController', [
  *****************************************************************************/	  
 Route::resource('facilities', 'FacilityController', [
 	'only' => ['index',
-			   'store',
 			   'show',
 			   'update',
 			   'destroy']]);
