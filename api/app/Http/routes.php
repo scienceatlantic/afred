@@ -34,6 +34,17 @@ Route::resource('organizations', 'OrganizationController', [
 			   'update',
 			   'destroy']]);
 
+               
+/******************************************************************************
+ * ILO routes.
+ *****************************************************************************/
+Route::resource('ilos', 'IloController', [
+	'only' => ['index',
+			   'store',
+			   'show',
+			   'update',
+			   'destroy']]);
+
 			   
 /******************************************************************************
  * Province routes.

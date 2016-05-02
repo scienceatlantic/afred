@@ -154,6 +154,37 @@ angular.module('afredApp').factory('organizationResource',
   }
 ]);
 
+angular.module('afredApp').factory('iloResource',
+  ['$rootScope',
+   '$resource',
+   function($rootScope,
+            $resource) {
+    var root = $rootScope._config.api.address;
+    
+    return $resource(root + '/ilos/:iloId',
+      {
+        iloId: '@id'
+      },
+      {
+        query: {
+          method: 'GET',
+          isArray: false
+        },
+        queryNoPaginate: {
+          method: 'GET',
+          isArray: true,
+          params: {
+            paginate: 0
+          }
+        },
+        update: {
+          method: 'PUT'
+        }
+      }
+    );
+  }
+]);
+
 angular.module('afredApp').factory('provinceResource',
   ['$rootScope',
    '$resource',
