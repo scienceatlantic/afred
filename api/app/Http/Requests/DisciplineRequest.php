@@ -16,6 +16,7 @@ class DisciplineRequest extends Request
         switch ($this->method()) {
             case 'GET':
                 return true;
+            
             default:
                 return $this->isAtLeastAdmin(); 
         }
@@ -28,16 +29,14 @@ class DisciplineRequest extends Request
      */
     public function rules()
     {
-        switch ($this->method()) {
-            case 'GET':
-            case 'DELETE':
-                return [];
-            
-            case 'PUT':            
+        $r = [];
+        switch ($this->method()) {            
+            case 'PUT':
+                $r['id'] = 'required|exists:disciplines,id';
             case 'POST':
-                return [
-                  'name' => 'required'
-                ];
+                $r['name'] = 'required';
+                break;
         }
+        return $r;
     }
 }

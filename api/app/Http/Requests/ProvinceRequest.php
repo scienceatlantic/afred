@@ -16,6 +16,7 @@ class ProvinceRequest extends Request
         switch ($this->method()) {
             case 'GET':
                 return true;
+            
             default:
                 return $this->isAtLeastAdmin(); 
         }
@@ -28,17 +29,15 @@ class ProvinceRequest extends Request
      */
     public function rules()
     {
-        switch ($this->method()) {
-            case 'GET':
-            case 'DELETE':
-                return [];
-            
-            case 'PUT':            
+        $r = [];
+        switch ($this->method()) {            
+            case 'PUT':
+                $r['id'] = 'required|exists:provinces,id';
             case 'POST':
-                return [
-                  'name'     => 'required',
-                  'isHidden' => 'digits_between:0,1'
-                ];
+                $r['name'] = 'required';
+                $r['isHidden'] = 'digits_between:0,1';
+                break;
         }
+        return $r;
     }
 }
