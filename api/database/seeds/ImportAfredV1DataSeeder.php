@@ -4,7 +4,6 @@
 use Illuminate\Database\Seeder;
 
 // Misc.
-use \Log;
 use App\Setting;
 
 class ImportAfredV1DataSeeder extends Seeder
@@ -355,7 +354,7 @@ class ImportAfredV1DataSeeder extends Seeder
         
         $apiAddress = Setting::find('apiAddress');
         
-        // Login to the API to get the session cookie.
+        // Login to the API to get the session cookie (Lines 358 - 379).
         $url = $apiAddress->value . '/auth/login';
         $jsonData = json_encode([
             'email'    => 'prasad@scienceatlantic.ca',

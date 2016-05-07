@@ -3,9 +3,6 @@
 // Laravel.
 use Illuminate\Database\Seeder;
 
-// Misc.
-use \Log;
-
 // Models.
 use Carbon\Carbon;
 use App\User;
