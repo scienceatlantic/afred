@@ -43,6 +43,6 @@
     "'components-font-awesome' is a shim fix because font-awesome doesn't play so well with yeoman"
   ],
   "resolutions": {
-    "angular": ">=1.3.x"
+    "angular": ">=1.4.x"
   }
 }
