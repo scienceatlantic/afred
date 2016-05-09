@@ -16,5 +16,6 @@ angular.module('afredApp', [
   'ui.bootstrap',
   'angularUtils.directives.dirPagination',
   'textAngular',
-  'ta-maxlength'
+  'ta-maxlength',
+  'ngFx'
 ]);

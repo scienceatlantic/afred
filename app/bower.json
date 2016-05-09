@@ -17,7 +17,8 @@
     "textAngular": "~1.5.0",
     "font-awesome": "fontawesome#~4.5.0",
     "components-font-awesome": "~4.5.0",
-    "ta-maxlength": "~0.0.1"
+    "ta-maxlength": "~0.0.1",
+    "ngFx": "ng-fx#^1.1.0"
   },
   "overrides": {
     "bootstrap": {
@@ -33,6 +34,10 @@
     "angular-scenario": "~1.4.9"
   },
   "appPath": "app",
+  "resolutions": {
+    "angular": ">=1.4.x",
+    "angular-animate": "~1.4.9"
+  },
   "__comments": [
     "--- This key is for comments ---",
     "BOOTSTRAP FIX:",
@@ -41,8 +46,5 @@
     "Basically, the 'overrides' above property fixes that.",
     "FONT AWESOME FIX:",
     "'components-font-awesome' is a shim fix because font-awesome doesn't play so well with yeoman"
-  ],
-  "resolutions": {
-    "angular": ">=1.4.x"
-  }
+  ]
 }
