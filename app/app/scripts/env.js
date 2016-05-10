@@ -22,7 +22,7 @@ angular.module('afredApp').run(['$rootScope', function($rootScope) {
      * --------------------------------------------------------------------- */
     app: {
       name: 'Atlantic Facilities and Research Equipment Database',
-      acronym: 'AFRED',
+      shortname: 'AFRED',
       address: '//localhost:9000/#'
     },
     
@@ -42,10 +42,9 @@ angular.module('afredApp').run(['$rootScope', function($rootScope) {
       // Location of specific pages on WordPress. 
       pages: {
         'about': { pageId: 5 },
-        'update a facility': { pageId: '' },
-        'submit a facility': { pageId: 12 },
-        'submit a facility - success' : { pageId: 19 },
-        'submit a facility - failure' : { pageId: 21 }
+        'terms of service': { pageId: 38 },
+        'privacy policy': { pageId: 36 },
+        'disclaimer': { pageId: 40 }
       }
     },
     
@@ -64,9 +63,23 @@ angular.module('afredApp').run(['$rootScope', function($rootScope) {
      * Contact information.
      * --------------------------------------------------------------------- */
     contacts: {
+      /**
+       * Should be a shared account.
+       */
       general: {
-        name: 'Patty King',
-        title: 'AFRED Program Manager',
+        firstName: '',
+        lastName: '',
+        title: '',
+        email: 'afred@scienceatlantic.ca'
+      },
+      
+      /**
+       * Personal email account.
+       */
+      personal: {
+        firstName: 'Patty',
+        lastName: 'King',
+        title: '',
         email: 'patty.king@scienceatlantic.ca'
       }
     }
