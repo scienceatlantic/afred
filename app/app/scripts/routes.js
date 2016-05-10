@@ -80,6 +80,25 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         templateUrl: 'views/about.html',
         controller: 'AboutController'
       }).
+      state('about.legal', {
+        url: '/legal',
+        template: '<div data-ui-view></div>'
+      }).
+      state('about.legal.privacyPolicy', {
+        url: '/privacy-policy',
+        templateUrl: 'views/about.legal.privacy-policy.html',
+        controller: 'AboutLegalPrivacyPolicyController'
+      }).
+      state('about.legal.termsOfService', {
+        url: '/terms-of-service',
+        templateUrl: 'views/about.legal.terms-of-service.html',
+        controller: 'AboutLegalTermsOfServiceController'
+      }).
+      state('about.legal.disclaimer', {
+        url: '/disclaimer',
+        templateUrl: 'views/about.legal.disclaimer.html',
+        controller: 'AboutLegalDisclaimerController'
+      }).
       state('admin', {
         'abstract': true,
         url: '/admin',
