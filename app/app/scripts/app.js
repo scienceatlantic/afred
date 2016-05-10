@@ -17,5 +17,6 @@ angular.module('afredApp', [
   'angularUtils.directives.dirPagination',
   'textAngular',
   'ta-maxlength',
-  'ngFx'
+  'ngFx',
+  'angular-bind-html-compile'
 ]);

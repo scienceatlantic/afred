@@ -18,7 +18,8 @@
     "font-awesome": "fontawesome#~4.5.0",
     "components-font-awesome": "~4.5.0",
     "ta-maxlength": "~0.0.1",
-    "ngFx": "ng-fx#^1.1.0"
+    "ngFx": "ng-fx#^1.1.0",
+    "angular-bind-html-compile": "^1.2.1"
   },
   "overrides": {
     "bootstrap": {
