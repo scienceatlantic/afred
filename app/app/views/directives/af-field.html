@@ -1,20 +1,19 @@
-<div data-ng-class="{'form-group': true,
-                     'form-group-sm': true,
-                     'has-error': form[name].$invalid && form[name].$dirty}">
-  
-  <label class="col-sm-4 control-label">
-    <span class="fa fa-question-circle" data-ng-show="popover" data-uib-popover="{{ popover }}" data-popover-trigger="mouseenter"></span> {{ label }}
-  </label>
+<div class="form-group form-group-sm" data-ng-class="{ 'has-error': form[name].$invalid && form[name].$dirty }">
+  <!-- Field label. -->
+  <label class="col-sm-4 control-label">{{ label }}</label>
   
   <div class="col-sm-8">
+    <!-- Input field goes here. -->
     <div data-ng-transclude></div>
     
+    <!-- Field length count goes here. -->
     <p class="text-muted" data-ng-show="model.length">
       <small>
         <span data-ng-if="!isTextAngular">{{ model.length }}</span><span data-ng-if="isTextAngular">{{ getTextAngularContentLength(model) }}</span>/{{ maxLength }} characters remaining.
       </small>
     </p>
     
+    <!-- Validation error text. -->
     <p>
       <small>
         <span class="text-danger" data-ng-show="form[name].$error.required && form[name].$dirty">This is required</span>

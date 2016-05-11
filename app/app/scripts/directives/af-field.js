@@ -16,7 +16,6 @@ angular.module('afredApp').directive('afField', [
       scope: {
         label: '@afFieldLabel',
         nameOverride: '@afFieldName',
-        popover: '@afFieldPopover',
         model: '=afFieldModel',
       },
       link: function($scope, element, attrs, form) { 
@@ -59,7 +58,7 @@ angular.module('afredApp').directive('afField', [
           })
         }
         
-        $scope.form = form; 
+        $scope.form = form;
       }
     };
   }
