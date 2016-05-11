@@ -18,7 +18,7 @@ angular.module('afredApp').run(['$rootScope', function($rootScope) {
     },
     
     /* ---------------------------------------------------------------------
-     * APP settings.
+     * App settings.
      * --------------------------------------------------------------------- */
     app: {
       name: 'Atlantic Facilities and Research Equipment Database',
