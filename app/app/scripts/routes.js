@@ -81,6 +81,7 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         controller: 'AboutController'
       }).
       state('about.legal', {
+        'abstract': true,
         url: '/legal',
         template: '<div data-ui-view></div>'
       }).
