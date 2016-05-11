@@ -27,6 +27,18 @@ angular.module('afredApp').controller('FacilitiesFormEditController',
     $scope.preview = function() {
       $scope.facility = $scope.form.formatForPreview();
       $scope.view.show = 'PREVIEW';
+      scrollTo(0, 300);
+    };
+    
+    /**
+     * Returns view to the form.
+     *
+     * Side effects:
+     * $scope.view.show Set to 'FORM'.
+     */
+    $scope.goBack = function() {
+      $scope.view.show = 'FORM';
+      scrollTo(0, 0);
     };
     
     /**

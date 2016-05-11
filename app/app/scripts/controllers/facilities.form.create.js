@@ -4,11 +4,9 @@ angular.module('afredApp').controller('FacilitiesFormCreateController',
   ['$scope',
    '$interval',
    'facilityRepositoryResource',
-   'wpResource',
   function($scope,
            $interval,
-           facilityRepositoryResource,
-           wpResource) {
+           facilityRepositoryResource) {
     // See explanation at the bottom ($stateChangeStart) for why this is needed.
     if ($scope._state.needToReload) {
       $scope._location.reload();
@@ -34,7 +32,6 @@ angular.module('afredApp').controller('FacilitiesFormCreateController',
       $scope.view.show = 'PREVIEW';
       scrollTo(0, 300);
     };
-    
     
     /**
      * Returns view to the form.
@@ -66,7 +63,7 @@ angular.module('afredApp').controller('FacilitiesFormCreateController',
         data: $scope.form.formatForApi()
       }, function() {
         // Clear any saved data.
-        $scope.form.clearSave(true);
+        //$scope.form.clearSave(true);
         $scope.view.show = 'SUCCESS_MESSAGE';
       }, function() {
         $scope.view.show = 'FAILURE_MESSAGE';
@@ -99,27 +96,6 @@ angular.module('afredApp').controller('FacilitiesFormCreateController',
     
     // Start autosaving to local storage.
     $scope.form.startAutosave();
-    
-    // Get intro content from WordPress.
-    var page = $scope._config.wp.pages['submit a facility'];
-    $scope.wp = wpResource.getPage(page);
-    $scope.wp.$promise.then(null, function() {
-      $scope._state.go('500');
-    });
-    
-    // Get success message content from WordPress.
-    var page = $scope._config.wp.pages['submit a facility - success'];
-    $scope.wpSuccess = wpResource.getPage(page);
-    $scope.wpSuccess.$promise.then(null, function() {
-      $scope._state.go('500');
-    });
-    
-    // Get failure message content from WordPress.
-    var page = $scope._config.wp.pages['submit a facility - failure'];
-    $scope.wpFailure = wpResource.getPage(page);
-    $scope.wpFailure.$promise.then(null, function() {
-      $scope._state.go('500');
-    });
     
     // Stops the '$scope.form.startAutosave()' from autosaving if we leave
     // this state. We're also setting the 'needToReload' property of
