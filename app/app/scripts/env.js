@@ -44,7 +44,8 @@ angular.module('afredApp').run(['$rootScope', function($rootScope) {
         'about': { pageId: 5 },
         'terms of service': { pageId: 38 },
         'privacy policy': { pageId: 36 },
-        'disclaimer': { pageId: 40 }
+        'disclaimer': { pageId: 40 },
+        'form guide': { pageId: 48 }
       }
     },
     

@@ -52,6 +52,11 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         template: '<div data-ui-view></div>',
         controller: 'FacilitiesFormController'
       }).
+      state('facilities.form.guide', {
+        url: '/guide',
+        templateUrl: 'views/facilities.form.guide.html',
+        controller: 'FacilitiesFormGuideController'
+      }).
       state('facilities.form.create', {
         url: '/create',
         templateUrl: 'views/facilities.form.create.html',
