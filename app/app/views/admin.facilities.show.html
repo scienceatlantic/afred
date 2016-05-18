@@ -16,6 +16,10 @@
           <span class="text-danger" data-ng-show="facility.state == 'REJECTED'">REJECTED</span>
           <span class="text-danger" data-ng-show="facility.state == 'REJECTED_EDIT'">REJECTED EDIT</span>
         </b>
+        <b data-ng-show="fr.facility.currentRevision.id">(current published revision)</b>
+        <span data-ng-show="facility.state == 'PUBLISHED' || facility.state == 'PUBLISHED_EDIT'">
+          <b data-ng-hide="fr.facility.currentRevision.id">(previous revision)</b>
+        </span>
       </div>
     </div>
         
@@ -63,21 +67,7 @@
   <br>
   <br>
   
-  <div data-ng-include="'views/includes/facility.html'"></div>
-  <br>
-  <br>
-  
-  <div data-ng-show="facility.organization.ilo.firstName">
-    <div data-ng-include="'views/includes/ilo.html'"></div>
-    <br>
-    <br>
-  </div>
-  
-  <div data-ng-include="'views/includes/contacts.html'"></div>
-  <br>
-  <br>
-  
-  <div data-ng-include="'views/includes/equipment.html'"></div>
+  <div data-af-facility="all" data-af-facility-model="facility" data-af-facility-is-preview="true"></div>
   
   <div style="padding: 3px;" data-ng-show="facility.state == 'PENDING_APPROVAL' || facility.state == 'PENDING_EDIT_APPROVAL'">
     <hr>

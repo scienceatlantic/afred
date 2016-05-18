@@ -1,0 +1,29 @@
+<div>
+  <!-- Facility. -->
+  <div data-ng-class="{ 'panel': !hidePanel, 'panel-default': !hidePanel }" data-ng-if="view == 'facility' || view == 'all'">
+    <div data-ng-class="{ 'panel-body': !hidePanel }">  
+      <div data-ng-include="'views/includes/facility.html'"></div>
+    </div>
+  </div>
+  
+  <!-- Contacts. -->
+  <div data-ng-class="{ 'panel': !hidePanel, 'panel-default': !hidePanel }" data-ng-if="view == 'contacts' || view == 'all'">
+    <div data-ng-class="{ 'panel-body': !hidePanel }"> 
+      <div data-ng-include="'views/includes/contacts.html'"></div>
+    </div>
+  </div>    
+  
+  <!-- ILO. -->
+  <div data-ng-class="{ 'panel': !hidePanel, 'panel-default': !hidePanel }" data-ng-if="view == 'ilo' || (view == 'ilo' && facility.organization.ilo.firstName)">
+    <div data-ng-class="{ 'panel-body': !hidePanel }"> 
+      <div data-ng-include="'views/includes/ilo.html'"></div>
+    </div>
+  </div>   
+  
+  <!-- Equipment. -->
+  <div data-ng-class="{ 'panel': !hidePanel, 'panel-default': !hidePanel }" data-ng-if="view =='equipment' || view == 'all'">
+    <div data-ng-class="{ 'panel-body': !hidePanel }"> 
+      <div data-ng-include="'views/includes/equipment.html'"></div>
+    </div>
+  </div>   
+</div>
