@@ -78,7 +78,9 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         template: '<div data-ui-view></div>'
       }).
       state('facilities.show.equipment.show', {
-        url: '/:equipmentId'
+        url: '/:equipmentId',
+        templateUrl: 'views/facilities.show.equipment.show.html',
+        controller: 'FacilitiesShowEquipmentShowController',
       }).
       state('about', {
         url: '/about',
