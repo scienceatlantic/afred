@@ -14,7 +14,7 @@
   </div>    
   
   <!-- ILO. -->
-  <div data-ng-class="{ 'panel': !hidePanel, 'panel-default': !hidePanel }" data-ng-if="view == 'ilo' || (view == 'ilo' && facility.organization.ilo.firstName)">
+  <div data-ng-class="{ 'panel': !hidePanel, 'panel-default': !hidePanel }" data-ng-if="(view == 'all' || view == 'ilo') && facility.organization.ilo.firstName">
     <div data-ng-class="{ 'panel-body': !hidePanel }"> 
       <div data-ng-include="'views/includes/ilo.html'"></div>
     </div>
