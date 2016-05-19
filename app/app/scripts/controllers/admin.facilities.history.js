@@ -68,7 +68,7 @@ angular.module('afredApp').controller('AdminFacilitiesHistoryController', [
         $scope.history.resource = facilityRepositoryResource.query({
           facilityId: $scope._stateParams.facilityId,
           page: $scope.history.form.data.page,
-          itemsPerPage: 10
+          itemsPerPage: 5
         });
       }
     }; 
