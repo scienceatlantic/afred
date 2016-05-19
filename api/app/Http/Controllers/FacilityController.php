@@ -55,6 +55,12 @@ class FacilityController extends Controller
      */
     public function show(FacilityRequest $request, $id)
     {
+        // If an equipment ID is also provided, check that the facility has
+        // that piece of equipment.
+        if ($equipmentId = $request->equipmentId) {
+            Facility::find($id)->equipment()->findOrFail($equipmentId);
+        }
+        
         $f = Facility::with('province',
                             'organization',
                             'disciplines',
