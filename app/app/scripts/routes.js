@@ -147,6 +147,17 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         templateUrl: 'views/admin.facilities.show.html',
         controller: 'AdminFacilitiesShowController'
       }).
+      state('admin.facilities.history', {
+        'abstract': true,
+        url: '/history?facilityId',
+        templateUrl: 'views/admin.facilities.history.html',
+        controller: 'AdminFacilitiesHistoryController'
+      }).
+      state('admin.facilities.history.index', {
+        url: '?page',
+        templateUrl: 'views/admin.facilities.history.index.html',
+        controller: 'AdminFacilitiesHistoryIndexController'
+      }).
       state('admin.facilities.updates', {
         url: '/update-requests',
         templateUrl: 'views/admin.facilities.updates.html',

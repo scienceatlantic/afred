@@ -1,0 +1,31 @@
+<div data-af-loading="!history.resource.$resolved">
+  <hr>
+  
+  <div data-ng-hide="history.resource.data.length">
+    <p>Nothing found.</p>
+  </div>
+  
+  <div data-ng-show="history.resource.data.length">
+    <ol>
+      <li data-dir-paginate="f in history.resource.data | itemsPerPage: history.resource.perPage" data-total-items="history.resource.total" data-current-page="history.form.data.page">
+        <p><a data-ui-sref="admin.facilities.show({ facilityRepositoryId: f.id })">{{ f.data.facility.name }}</a></p>
+  
+        <p>
+          <span>
+            <span data-ng-show="f.state == 'PUBLISHED'">Published</span>
+            <span data-ng-show="f.state == 'PUBLISHED_EDIT'">Published Edit</span>
+            <span data-ng-show="f.state == 'PENDING_EDIT_APPROVAL'">Pending Edit Approval</span>
+          </span>
+          <span class="label label-default" data-ng-show="f.facility.currentRevision.id">Current published revision</span>
+        </p>
+        
+        <p>{{ f.dateSubmitted | afStrToDate | date:'medium' }}</p>
+        <br>
+      </li>
+    </ol>
+    
+    <hr>
+
+    <div data-dir-pagination-controls data-on-page-change="_state.go('admin.history.index', { page: history.form.data.page })" data-auto-hide="false"></div>
+  </div>
+</div>
