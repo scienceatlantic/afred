@@ -12,22 +12,18 @@
 
 <!-- Success message. -->
 <div data-ng-show="view.show == 'SUCCESS_MESSAGE'">
-  <p>
-    Thank you! Your information has been successfully submitted.  
+  <p>Thank you!</p>
+  
+  <p>Your information has been successfully submitted.</p>
     
-    The contact that received the unique link to this page will receive a follow-up email once the record has been reviewed.
+  <p>The contact that received the unique link to this page will receive a follow-up email once the record has been reviewed.</p>
     
-    Go to <a href="search">homepage</a>.
-  </p>
+  <p>Go to <a href="search">homepage</a>.</p>
 </div>
 
 <!-- Failure message. -->
 <div data-ng-show="view.show =='FAILURE_MESSAGE'">
-  <p>
-    Sorry! A technical difficulty was encountered and your information was not successfully submitted. 
-  </p>
+  <p>Sorry! A technical difficulty was encountered and your information was not successfully submitted.</p>
 
-  <p>
-    Please contact <a href="mailto:{{ _config.contacts.general.email }}">{{ _config.contacts.general.email }}</a>.
-  </p>
+  <p>Please contact <a href="mailto:{{ _config.contacts.general.email }}">{{ _config.contacts.general.email }}</a>.</p>
 </div>
