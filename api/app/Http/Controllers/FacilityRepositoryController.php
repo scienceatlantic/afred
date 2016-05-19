@@ -44,8 +44,8 @@ class FacilityRepositoryController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(IndexFacilityRepositoryRequest $request)
-    {        
-        $fr = FacilityRepository::with('reviewer', 'facility');
+    {
+        $fr = FacilityRepository::with('reviewer', 'facility', 'publishedFacility');
         
         // Narrow down query by state.
         if (($state = $request->input('state'))) {
@@ -93,7 +93,8 @@ class FacilityRepositoryController extends Controller
                 $query->pending();
             },
             'reviewer',
-            'facility'
+            'facility',
+            'publishedFacility'
         ])->findOrFail($id)->toArray();
         
         return $this->toCcArray($fr);

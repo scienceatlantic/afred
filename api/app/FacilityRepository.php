@@ -47,9 +47,14 @@ class FacilityRepository extends Model
         'data' => 'array',
     ];
     
-    public function facility()
+    public function publishedFacility()
     {
         return $this->hasOne('App\Facility', 'facilityRepositoryId');
+    }
+    
+    public function facility()
+    {
+        return $this->belongsTo('App\Facility', 'facilityId');
     }
     
     public function reviewer()
