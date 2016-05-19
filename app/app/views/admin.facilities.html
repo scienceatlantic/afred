@@ -1,6 +1,7 @@
 <h3>
+  <!-- Breadcrumbs. -->
   Admin / Facilities
-  <!-- Breadcrumbs -->
+  <!-- Facility state. -->
   <span data-ng-show="_stateParams.state">
     /
     <span data-ng-show="_stateParams.state == 'PUBLISHED'">Published
@@ -21,6 +22,11 @@
     <span data-ng-show="_stateParams.status == 'OPEN'">/ Open</span>
     <span data-ng-show="_stateParams.status == 'PENDING'">/ Pending</span>
     <span data-ng-show="_stateParams.status == 'CLOSED'">/ Closed</span>
+  </span>
+  
+  <!-- Facility history -->
+  <span data-ng-show="_stateParams.facilityId">
+    / Facility ID: {{ _stateParams.facilityId }} / History
   </span>
 </h3>
 
