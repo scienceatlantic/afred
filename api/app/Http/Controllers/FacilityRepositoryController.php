@@ -45,7 +45,8 @@ class FacilityRepositoryController extends Controller
      */
     public function index(IndexFacilityRepositoryRequest $request)
     {
-        $fr = FacilityRepository::with('reviewer', 'facility', 'publishedFacility');
+        $fr = FacilityRepository::with('reviewer', 'facility',
+            'publishedFacility');
         
         // Narrow down query by state.
         if (($state = $request->input('state'))) {
@@ -64,11 +65,12 @@ class FacilityRepositoryController extends Controller
                 $fr->where('state', 'REJECTED')
                     ->orWhere('state', 'REJECTED_EDIT');
             }
-            // This part needs work!
             else if ($state == 'DELETED') {
-                $frId = Facility::select('facilityRepositoryId')->get();
-                $fr->whereNotIn('id', $frId)
-                    ->whereNotNull('facilityId');
+                $facilityIds = Facility::select('id')->get();
+                $fr->whereNotIn('facilityId', $facilityIds)
+                    ->where('state', '!=', 'PENDING_APPROVAL')
+                    ->where('state', '!=', 'PENDING_EDIT_APPROVAL')
+                    ->groupBy('facilityId');
             }
         }
         
