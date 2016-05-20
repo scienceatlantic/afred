@@ -6,13 +6,13 @@
   </div>
   
   <div data-ng-show="disciplines.resource.data.length">
-    <div data-dir-paginate="d in disciplines.resource.data | itemsPerPage: disciplines.resource.perPage" data-total-items="disciplines.resource.total" data-current-page="disciplines.form.data.page">
-      <p>
-        {{ $index + 1 + (disciplines.resource.perPage * (disciplines.resource.currentPage - 1)) }}. <a data-ui-sref="admin.disciplines.show({ disciplineId: d.id })">{{ d.name }}</a>
-      </p>
-    </div>
-    
-    <hr>
+    <ol start="{{ (disciplines.resource.perPage * (disciplines.resource.currentPage - 1) + 1)  }}">
+      <li data-dir-paginate="d in disciplines.resource.data | itemsPerPage: disciplines.resource.perPage" data-total-items="disciplines.resource.total" data-current-page="disciplines.form.data.page">
+        <p>
+          <a data-ui-sref="admin.disciplines.show({ disciplineId: d.id })">{{ d.name }}</a>
+        </p>
+      </li>
+    </ol>
 
     <div data-dir-pagination-controls data-on-page-change="_state.go('admin.disciplines.index', { page: disciplines.form.data.page })" data-auto-hide="false"></div>
   </div>
