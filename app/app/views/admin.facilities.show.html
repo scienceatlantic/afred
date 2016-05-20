@@ -3,50 +3,64 @@
   <!-- Record information. -->
   <div>
     <p class="text-muted">Record Information</p>
-      
+    
     <div class="row">
+      <!-- Facility state. -->
       <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
         <label>State</label>
       </div>
     
       <div class="col-sm-9">
-        <!-- Facility state. -->
         <p>
           <b>
+            <!-- Pending. -->
             <span class="text-info" data-ng-show="facility.state == 'PENDING_APPROVAL'">PENDING APPROVAL</span>
             <span class="text-info" data-ng-show="facility.state == 'PENDING_EDIT_APPROVAL'">PENDING EDIT APPROVAL</span>
-            <span class="text-success" data-ng-show="facility.state == 'PUBLISHED'">PUBLISHED</span>
-            <span class="text-success" data-ng-show="facility.state == 'PUBLISHED_EDIT'">PUBLISHED EDIT</span>
-            <span class="text-danger" data-ng-show="facility.state == 'REJECTED'">REJECTED</span>
-            <span class="text-danger" data-ng-show="facility.state == 'REJECTED_EDIT'">REJECTED EDIT</span>
+            
+            <!-- Published and current. -->
+            <span class="text-success" data-ng-show="(facility.state == 'PUBLISHED' || facility.state == 'PUBLISHED_EDIT') && fr.publishedFacility.id && fr.facility.id">
+              CURRENT PUBLISHED REVISION
+            </span>
+            
+            <!-- Published but old. -->
+            <span class="text-warning" data-ng-show="(facility.state == 'PUBLISHED' || facility.state == 'PUBLISHED_EDIT') && !fr.publishedFacility.id && fr.facility.id">
+              PREVIOUS PUBLISHED REVISION
+            </span>
+            
+            <!-- Rejected. -->
+            <span class="text-danger" data-ng-show="facility.state == 'REJECTED'">
+              REJECTED
+            </span>
+            
+            <!-- Rejected edit. -->
+            <span class="text-danger" data-ng-show="facility.state == 'REJECTED_EDIT'">
+              REJECTED EDIT
+            </span>
+            
+            <!-- Deleted. -->
+            <span class="text-danger" data-ng-show="(facility.state != 'PENDING' || facility.state != 'PENDING_APPROVAL') && !fr.facility.id">
+              DELETED
+            </span>
           </b>
         </p>
         
-        <p data-ng-show="!fr.facility.id">
-          <span class="label label-default">Deleted</span>
-        </p>
-        
-        <!-- Current revision label. -->
+        <!-- Current revision anchor (only shown if not already viewing current revision). -->
         <p>
-          <span class="label label-default" data-ng-show="fr.publishedFacility.id">Current published revision</span>
-        </p>
-        
-        <!-- Previous revision label. -->
-        <p>
-          <span data-ng-show="facility.state == 'PUBLISHED' || facility.state == 'PUBLISHED_EDIT'">
-            <span class="label label-default" data-ng-hide="fr.publishedFacility.id">Previous revision</span>
+          <span data-ng-show="!fr.publishedFacility.id && fr.facility.id">
+            <a data-ui-sref="admin.facilities.show({ facilityRepositoryId: fr.facility.facilityRepositoryId })">Current published revision</a>
           </span>
         </p>
         
         <!-- Revision history anchor. -->
         <p>
           <span data-ng-show="fr.facilityId">
-            <a data-ui-sref="admin.facilities.history.index({ facilityId: fr.facilityId })">History</a>
+            <a data-ui-sref="admin.facilities.history.index({ facilityId: fr.facilityId })">Revision history</a>
           </span>
         </p>
       </div>
     </div>
-        
+    
+    <!-- Search visiblity -->
     <div class="row">
       <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
         <label>Search visibility</label>
@@ -59,6 +73,7 @@
       </div>
     </div>
     
+    <!-- Reviewed by. -->
     <div class="row">
       <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
         <label>Reviewed by</label>
@@ -66,31 +81,44 @@
     
       <div class="col-sm-9">
         {{ fr.reviewer.firstName }} {{ fr.reviewer.lastName }}
-        <span class="label label-default" data-ng-show="facility.state == 'PENDING_APPROVAL' || facility.state == 'PENDING_EDIT_APPROVAL'">N/A</span>        
+        <span class="label label-default" data-ng-show="!fr.reviewer.firstName">N/A</span>        
       </div>
     </div>
     
+    <!-- Reviewer message. -->
     <div class="row">
       <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
         <label>Reviewer message</label>
       </div>
     
       <div class="col-sm-9">
-        <span data-ng-show="(facility.state == 'PUBLISHED' || facility.state == 'PUBLISHED_EDIT')">{{ fr.reviewerMessage }}</span>
-        <span class="label label-default" data-ng-show="facility.state == 'PENDING_APPROVAL' || facility.state == 'PENDING_EDIT_APPROVAL'">N/A</span>
-        <span class="label label-default" data-ng-show="(facility.state == 'PUBLISHED' || facility.state == 'PUBLISHED_EDIT') && !fr.reviewerMessage">No message was provided</span>        
+        {{ fr.reviewerMessage }}
+        <span class="label label-default" data-ng-show="!fr.reviewer.firstName">N/A</span>
+        <span class="label label-default" data-ng-show="fr.reviewer.firstName && !fr.reviewerMessage">No message was provided</span>        
       </div>
     </div>
     
-    <div class="row" data-ng-show="fr.state == 'PENDING_EDIT_APPROVAL'">
+    <!-- Date submitted. -->
+    <div class="row">
       <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
-        <label>Current record:</label>
+        <label>Date submitted</label>
       </div>
     
       <div class="col-sm-9">
-        <a data-ui-sref="admin.facilities.show({ facilityRepositoryId: fr.fulA.frIdBefore })" target="_blank">Click here</a>
+        {{ fr.dateSubmitted | afStrToDate | date:'medium' }}
       </div>
     </div>
+    
+    <!-- Date reviewed. -->
+    <div class="row">
+      <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
+        <label>Date reviewed</label>
+      </div>
+    
+      <div class="col-sm-9">
+        <span data-ng-if="fr.reviewer.firstName">{{ fr.dateReviewed | afStrToDate | date:'medium' }}</span>
+        <span class="label label-default" data-ng-show="!fr.reviewer.firstName">N/A</span>
+      </div>
   </div> 
   <br>
   <br>

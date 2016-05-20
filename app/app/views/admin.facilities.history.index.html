@@ -15,13 +15,14 @@
         <p><a data-ui-sref="admin.facilities.show({ facilityRepositoryId: f.id })">{{ f.data.facility.name }}</a></p>
   
         <p>
-          <span>
-            <span data-ng-show="f.state == 'PUBLISHED'">Published</span>
-            <span data-ng-show="f.state == 'PUBLISHED_EDIT'">Published Edit</span>
-            <span data-ng-show="f.state == 'REJECTED_EDIT'">Rejected Edit</span>
-            <span data-ng-show="f.state == 'PENDING_EDIT_APPROVAL'">Pending Edit Approval</span>
-          </span>
-          <span class="label label-default" data-ng-show="f.facility.currentRevision.id">Current published revision</span>
+          <b>
+            <span class="text-success" data-ng-show="f.publishedFacility.id">CURRENT PUBLISHED REVISION</span>
+            <span class="text-warning" data-ng-show="!f.publishedFacility.id && f.facility.id && f.state != 'REJECTED_EDIT'">PREVIOUS PUBLISHED REVISION</span>
+            <span class="text-info" data-ng-show="f.state == 'PENDING_EDIT_APPROVAL'">PENDING EDIT APPROVAL</span>
+            <span class="text-danger" data-ng-show="f.state == 'REJECTED'">REJECTED</span>
+            <span class="text-danger" data-ng-show="f.facility.id && f.state == 'REJECTED_EDIT'">REJECTED EDIT</span>
+            <span class="text-danger" data-ng-show="f.state != 'REJECTED' && !f.facility.id">DELETED</span>
+          </b>
         </p>
         
         <p>{{ f.dateSubmitted | afStrToDate | date:'medium' }}</p>
