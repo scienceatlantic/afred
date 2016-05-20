@@ -4,6 +4,11 @@
 angular.module('afredApp').filter('afStrToDate',
   function() {
     return function(dateString) {
+      // If falsy, return empty string.
+      if (!dateString) {
+        return '';  
+      }
+      
       var dt = dateString.split(' ');
       var d = dt[0].split('-');
       var t = dt.length > 1 ? dt[1].split(':') : null;
