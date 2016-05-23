@@ -198,7 +198,7 @@ class FacilityRepositoryController extends Controller
         }
         
         // Generate an event (emails might need to be sent out).
-        //event(new FacilityRepositoryEvent($fr));
+        event(new FacilityRepositoryEvent($fr));
         
         // Return the updated record.
         $f = FacilityRepository::with('reviewer', 'facility')->find($fr->id);
