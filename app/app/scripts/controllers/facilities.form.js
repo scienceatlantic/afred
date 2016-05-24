@@ -312,12 +312,20 @@ angular.module('afredApp').controller('FacilitiesFormController',
           
           // Hidden organization check.
           if (organizationId) {
-            if ($scope.form.organizations.indexOf(organizationId) < 0) {
+            var isFound = false;
+            for (var i = 0; i < $scope.form.organizations.length; i++) {
+              if ($scope.form.organizations[i].id == organizationId) {
+                isFound = true;
+                break;
+              }
+            }
+            
+            if (!isFound) {
               organizationResource.get({ organizationId: organizationId },
-                function(data) {
-                  $scope.form.organizations.push(data);
+                function(data) {                  
+                  $scope.form.organizations.push(data);  
                 }
-              );
+              );              
             }
           }
           
@@ -356,12 +364,20 @@ angular.module('afredApp').controller('FacilitiesFormController',
           
           // Hidden province check.
           if (provinceId) {
-            if ($scope.form.provinces.indexOf(provinceId) < 0) {
+            var isFound = false;
+            for (var i = 0; i < $scope.form.provinces.length; i++) {
+              if ($scope.form.provinces[i].id == provinceId) {
+                isFound = true;
+                break;
+              }
+            }
+            
+            if (!isFound) {
               provinceResource.get({ provinceId: provinceId },
                 function(data) {
                   $scope.form.provinces.push(data);
                 }
-              );              
+              );                
             }
           }
         }, function (response) {
