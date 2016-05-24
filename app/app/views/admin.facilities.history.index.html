@@ -5,11 +5,7 @@
     <p>Nothing found.</p>
   </div>
   
-  <div data-ng-show="history.resource.data.length">
-    <p>
-      <b><span data-ng-show="!history.resource.data[0].facility.id">Note: This facility has been deleted.</span></b>
-    </p>
-    
+  <div data-ng-show="history.resource.data.length">    
     <ol start="{{ (history.resource.perPage * (history.resource.currentPage - 1) + 1)  }}">
       <li data-dir-paginate="f in history.resource.data | itemsPerPage: history.resource.perPage" data-total-items="history.resource.total" data-current-page="history.form.data.page">
         <p><a data-ui-sref="admin.facilities.show({ facilityRepositoryId: f.id })">{{ f.data.facility.name }}</a></p>
@@ -29,8 +25,6 @@
         <br>
       </li>
     </ol>
-    
-    <hr>
 
     <div data-dir-pagination-controls data-on-page-change="_state.go('admin.facilities.history.index', { page: history.form.data.page })" data-auto-hide="false"></div>
   </div>
