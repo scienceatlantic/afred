@@ -91,8 +91,11 @@ class FacilityRepositoryController extends Controller
     public function show(ShowFacilityRepositoryRequest $request, $id)
     {
         $fr = FacilityRepository::with([
+            'fulB' => function($query) {
+                $query->notClosed();
+            },
             'fulA' => function($query) {
-                $query->pending();
+                $query->notClosed();
             },
             'reviewer',
             'facility',
@@ -229,9 +232,9 @@ class FacilityRepositoryController extends Controller
         // This part is for updates.
         if ($fr) {
             // ID and date published are maintained.
-            $d['facility']['id'] = $fr->facility->id;
-            $d['facility']['datePublished'] = $fr->facility->datePublished
-                ->toDateTimeString();
+            $d['facility']['id'] = $fr->publishedFacility->id;
+            $d['facility']['datePublished'] = $fr->publishedFacility
+                ->datePublished->toDateTimeString();
         // For new records.
         } else {
             $d['facility']['datePublished'] = $now;         
@@ -304,14 +307,14 @@ class FacilityRepositoryController extends Controller
         } else {
             // This line automatically inserts the facility repository's ID
             // into the newly created record.
-            $f = $fr->facility()->create($d['facility']);
+            $f = $fr->publishedFacility()->create($d['facility']);
             $d['facility'] = $f->toArray();
         }
         
         // Strip the HTML tags for the search function. We're not including it
         // in '$d' because we don't need the stripped text stored in facility
         // repository.
-        $f = $fr->facility()->first();
+        $f = $fr->publishedFacility()->first();
         $f->descriptionNoHtml = strip_tags($f->description);
         $f->update();
         
