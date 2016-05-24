@@ -9,6 +9,7 @@ angular.module('afredApp').controller('AdminFacilitiesShowController', [
   'provinceResource',
   'disciplineResource',
   'sectorResource',
+  'facilityResource',
   'facilityRepositoryResource',
   function($scope,
            confirmModal,
@@ -18,6 +19,7 @@ angular.module('afredApp').controller('AdminFacilitiesShowController', [
            provinceResource,
            disciplineResource,
            sectorResource,
+           facilityResource,
            facilityRepositoryResource) {
     /* ---------------------------------------------------------------------
      * Functions.
@@ -59,14 +61,14 @@ angular.module('afredApp').controller('AdminFacilitiesShowController', [
      * Side effects:
      * $scope.loading.approve Set to true at the start of the function and set
      *     to false when the AJAX call is complete.
-     * $scope.fr.state Set to 'PUBLISHED'.
-     * $scope.facility.state Set to 'PUBLISHED' if the AJAX call was successful.
      *
      * Uses/calls/requires:
      * confirmModal
      * infoModal
      * warningModal
      * $scope.fr.$approve()
+     * $scope.getFacilityRepository() Called if the AJAX operation was
+     *     successful.
      */
     $scope.approve = function() {
       var t = 'approve-facility'; // Template name (to shorten code).
@@ -75,8 +77,8 @@ angular.module('afredApp').controller('AdminFacilitiesShowController', [
         $scope.fr.state = 'PUBLISHED';
         $scope.fr.$approve(function() {
           infoModal.open(t + '-success').result.then(function() {
-            $scope.facility.state = $scope.fr.state;
-            $scope.loading.approve = false;            
+            $scope.loading.approve = false;
+            $scope.getFacilityRepository();
           });
         }, function() {
           warningModal.open(t + '-failed').result.then(function() {
@@ -92,14 +94,14 @@ angular.module('afredApp').controller('AdminFacilitiesShowController', [
      * Side effects:
      * $scope.loading.reject Set to true at the start of the function and then
      *     set to false after the AJAX operation is complete.
-     * $scope.fr.state Set to 'REJECTED'.
-     * $scope.facility.state Set to 'REJECTED' if the AJAX call was successful.
      *
      * Calls/uses/requires:
      * confirmModal
      * infoModal
      * warningModal
      * $scope.fr.$reject()
+     * $scope.getFacilityRepository() Called if the AJAX operation was
+     *     successful.
      */
     $scope.reject = function() {
       var t = 'reject-facility'; // Template name (to shorten code).
@@ -107,9 +109,9 @@ angular.module('afredApp').controller('AdminFacilitiesShowController', [
         $scope.loading.reject = true;
         $scope.fr.state = 'REJECTED';
         $scope.fr.$reject(function() {
-          infoModal.open(t + '-success').result.then(function() {
-            $scope.facility.state = $scope.fr.state;
-            $scope.loading.reject = false;            
+          infoModal.open(t + '-success').result.then(function() {            
+            $scope.loading.reject = false;
+            $scope.getFacilityRepository();
           });
         }, function() {
           warningModal.open(t + '-failed').result.then(function() {
@@ -125,15 +127,14 @@ angular.module('afredApp').controller('AdminFacilitiesShowController', [
      * Side effects:
      * $scope.loading.approveEdit Set to true at the start of the function and
      *     set to false when the AJAX call is complete.
-     * $scope.fr.state Set to 'PUBLISHED_EDIT'.
-     * $scope.facility.state Set to 'PUBLISHED_EDIT' if the AJAX call was
-     *     successful.
      *
      * Uses/calls/requires:
      * confirmModal
      * infoModal
      * warningModal
      * $scope.fr.$approveEdit()
+     * $scope.getFacilityRepository() Called if the AJAX operation was
+     *     successful.
      */
     $scope.approveEdit = function() {
       var t = 'approve-facility-edit'; // Template name (to shorten code).
@@ -142,8 +143,8 @@ angular.module('afredApp').controller('AdminFacilitiesShowController', [
         $scope.fr.state = 'PUBLISHED_EDIT';
         $scope.fr.$approveEdit(function() {
           infoModal.open(t + '-success').result.then(function() {
-            $scope.facility.state = $scope.fr.state;
-            $scope.loading.approveEdit = false;                    
+            $scope.loading.approveEdit = false;
+            $scope.getFacilityRepository();
           });
         }, function() {
           warningModal.open(t + '-failed').result.then(function() {
@@ -158,16 +159,15 @@ angular.module('afredApp').controller('AdminFacilitiesShowController', [
      *
      * Side effects:
      * $scope.loading.rejectEdit Set to true at the start of the function and
-     *     set to false when the AJAX call is complete.
-     * $scope.fr.state Set to 'REJECTED_EDIT'.
-     * $scope.facility.state Set to 'REJECTED_EDIT' if the AJAX call was
-     *     successful.
+     *     set to false when the AJAX call is complete.     
      *
      * Uses/calls/requires:
      * confirmModal
      * infoModal
      * warningModal
      * $scope.fr.$rejectEdit()
+     * $scope.getFacilityRepository() Called if the AJAX operation was
+     *     successful.
      */
     $scope.rejectEdit = function() {
       var t = 'reject-facility-edit'; // Template name (to shorten code).
@@ -176,8 +176,8 @@ angular.module('afredApp').controller('AdminFacilitiesShowController', [
         $scope.fr.state = 'REJECTED_EDIT';
         $scope.fr.$rejectEdit(function() {
           infoModal.open(t + '-success').result.then(function() {
-            $scope.facility.state = $scope.fr.state;
-            $scope.loading.rejectEdit = false;          
+            $scope.loading.rejectEdit = false;
+            $scope.getFacilityRepository();
           });
         }, function() {
           warningModal.open(t + '-failed').result.then(function() {
@@ -209,6 +209,13 @@ angular.module('afredApp').controller('AdminFacilitiesShowController', [
       $scope.facility.contacts = angular.copy($scope.fr.data.contacts);
       $scope.facility.equipment = angular.copy($scope.fr.data.equipment);
       $scope.facility.state = $scope.fr.state;
+      
+      try {
+        $scope.facility.isPublic = $scope.fr.publishedFacility.isPublic;
+      } catch (e) {
+        // Do nothing if it fails.
+      }
+      
             
       // Primary contact & contacts section. In the DB primary contacts and
       // regular contacts are stored in separate tables, however, when the user
@@ -281,6 +288,170 @@ angular.module('afredApp').controller('AdminFacilitiesShowController', [
       // This affects the HTML template.
       $scope.facility.isNewOrganization =
         !$scope.fr.data.facility.organizationId;
+    };
+    
+    /**
+     * Hides a facility (does not appear in search results).
+     *
+     * Side effects:
+     * $scope.loading.hide Set to true at the start of the function and then
+     *     set to false after the AJAX operation is complete.
+     * 
+     * 
+     * Calls/uses/requires:
+     * confirmModal
+     * infoModal
+     * warningModal
+     * $scope.fr.facilityId
+     * $scope.getFacilityRepository() Called if the AJAX operation was
+     *     successful.
+     */
+    $scope.hide = function() {
+      var t = 'hide-facility';
+      confirmModal.open(t).result.then(function() {
+        $scope.loading.hide = true;
+        facilityResource.update({ facilityId: $scope.fr.facilityId }, {
+          isPublic: 0
+        }, function() {
+          infoModal.open(t + '-success').result.then(function() {
+            $scope.loading.hide = false;
+            $scope.getFacilityRepository();
+          });
+        }, function() {
+          warningModal.open(t + '-failed').result.then(function() {
+            $scope.loading.hide = false;
+          });
+        });  
+      });
+    };
+    
+    /**
+     * Unhides a facility (appears in search results).
+     *
+     * Side effects:
+     * $scope.loading.unhide Set to true at the start of the function and then
+     *     set to false after the AJAX operation is complete.
+     * 
+     * 
+     * Calls/uses/requires:
+     * confirmModal
+     * infoModal
+     * warningModal
+     * $scope.fr.facilityId
+     * $scope.getFacilityRepository() Called if the AJAX operation was
+     *     successful.
+     */
+    $scope.unhide = function() {
+      var t = 'unhide-facility';
+      confirmModal.open(t).result.then(function() {
+        $scope.loading.unhide = true;
+        facilityResource.update({
+          facilityId: $scope.fr.facilityId
+        }, {
+          isPublic: 1
+        }, function() {
+          infoModal.open(t + '-success').result.then(function() {
+            $scope.loading.unhide = false;
+            $scope.getFacilityRepository();
+          });
+        }, function() {
+          warningModal.open(t + '-failed').result.then(function() {
+            $scope.loading.unhide = false;
+          });
+        });  
+      });      
+    };
+    
+    /**
+     * Generates an update request and redirects the user to the edit form.
+     *
+     * Side effects:
+     * $scope.loading.edt Set to true at the start of the function and then
+     *     set to false when the AJAX operation is complete.
+     *
+     * Calls/uses/requires:
+     * confirmModal
+     * infoModal
+     * warningModal
+     * facilityRepositoryResource
+     * $scope._auth.user.email
+     * $scope.fr.id
+     * $scope.fr.facilityId
+     */
+    $scope.edit = function() {
+      var t = 'edit-facility';
+      
+      // If the facility has an open/pending update request, prevent the user
+      // from opening a new one.
+      if ($scope.fr.fulB.length) {
+        warningModal.open(t + '-not-allowed');
+        return;
+      }
+      
+      confirmModal.open(t).result.then(function() {
+        $scope.loading.edit = true;
+        facilityRepositoryResource.createToken({
+          isAdmin: 1,
+          email: $scope._auth.user.email,
+          facilityId: $scope.fr.facilityId
+        }, null, function(response) {
+          infoModal.open(t + '-success').result.then(function() {
+            $scope.loading.edit = false;
+            $scope._state.go('facilities.form.edit', {
+              facilityRepositoryId: $scope.fr.id,
+              token: response.token
+            });            
+          });        
+        }, function() {
+          warningModal.open(t + '-failed').result.then(function() {
+            $scope.loading.edit = false;
+          });
+        });        
+      })
+    };
+    
+    /**
+     * Deletes a published facility.
+     *
+     * Side effects:
+     * $scope.loading.remove Set to true at the start of the function and the
+     *     set to false when the AJAX operation is complete.
+     *
+     * Calls/uses/requires:
+     * confirmModal
+     * infoModal
+     * warningModal
+     * $scope.fr.fulB.length
+     * $scope.fr.facilityId
+     * facilityResource
+     * $scope.getFacilityRepository()
+     *
+     */
+    $scope.remove = function() {
+      var t = 'delete-facility';
+      
+      // If the facility has an open/pending update request, prevent the user
+      // from deleting the facility.
+      if ($scope.fr.fulB.length) {
+        warningModal.open(t + '-not-allowed');
+        return;
+      }
+      
+      confirmModal.open(t).result.then(function() {
+        $scope.loading.remove = true;
+        facilityResource.remove({
+          facilityId: $scope.fr.facilityId
+        }, null, function() {
+          infoModal.open(t + '-success').result.then(function() {
+            $scope.loading.remove = false;
+            $scope.getFacilityRepository();
+          });
+        }, function() {
+          warningModal.open(t + '-failed').result.then(function() {
+            $scope.loading.remove = false;
+          });
+        });        
+      });
     };
     
     /* ---------------------------------------------------------------------
