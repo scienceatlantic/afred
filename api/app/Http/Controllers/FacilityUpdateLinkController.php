@@ -12,6 +12,7 @@ use App\Events\FacilityUpdateLinksEvent;
 use Illuminate\Http\Request;
 
 // Misc.
+use Auth;
 use Log;
 
 // Models.
@@ -60,10 +61,19 @@ class FacilityUpdateLinkController extends Controller
         // Find the facility.
         $f = Facility::findOrFail($id);
         
-        // Find the matching primary contact or (regular) contact.
-        if (!$c = $f->primaryContact()->where('email', $e)->first()) {
-            $c = $f->contact()->where('email', $e)->firstOrFail();
+        if ($request->isAdmin) {
+            if (!(Auth::check() && Auth::user()->isAtLeastAdmin())) {
+                abort(403);
+            }
+            
+            $c = Auth::user();
+        } else {
+            // Find the matching primary contact or (regular) contact.
+            if (!$c = $f->primaryContact()->where('email', $e)->first()) {
+                $c = $f->contact()->where('email', $e)->firstOrFail();
+            }           
         }
+
         
         // Only create a new facility update link record if the facility doesn't
         // already have an open/pending facility update link record.
@@ -79,7 +89,10 @@ class FacilityUpdateLinkController extends Controller
             $ful->save();
             
             event(new FacilityUpdateLinksEvent($ful));
-            return $ful;
+            
+            if (Auth::check() && Auth::user()->isAtLeastAdmin()) {
+                return $ful;   
+            }
         } 
         abort(400);
     }
