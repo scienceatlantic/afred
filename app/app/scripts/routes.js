@@ -39,7 +39,7 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
       state('facilities', {
         'abstract': true,
         url: '/facilities',
-        templateUrl: 'views/facilities.html'
+        template: '<div data-ui-view></div>'
       }).
       state('facilities.update', {
         url: '/update',
