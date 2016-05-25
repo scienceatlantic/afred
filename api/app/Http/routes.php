@@ -109,6 +109,7 @@ Route::resource('facility-repository', 'FacilityRepositoryController', [
  Route::resource('facility-update-links', 'FacilityUpdateLinkController', [
 	'only' => ['index',
                'store',
+               'update',
                'destroy']]);
 
 
