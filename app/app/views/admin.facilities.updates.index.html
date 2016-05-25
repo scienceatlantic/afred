@@ -5,28 +5,34 @@
     <p>Nothing found.</p>
   </div>
   
-  <div data-ng-show="facilities.updates.fr.data.length">
-    <div data-dir-paginate="f in facilities.updates.fr.data | itemsPerPage: facilities.updates.fr.perPage" data-total-items="facilities.updates.fr.total" data-pagination-id="facilityRepository" data-current-page="facilities.updates.form.data.page">
-      <div class="panel panel-default">
-        <div class="panel-body">
-          <p>{{ $index + 1 + (facilities.updates.fr.perPage * (facilities.updates.fr.currentPage - 1)) }}. {{ f.frB.data.facility.name }}</p>
-          <p><b>Facility:</b> <a data-ui-sref="admin.facilities.show({ facilityRepositoryId: f.frB.id })">before update</a><span data-ng-show="f.frA.id">, <a data-ui-sref="admin.facilities.show({ facilityRepositoryId: f.frA.id })">after update</a></span></p>
-          <p><b></b></p>
-          <p><b>Status:</b> {{ f.status }}</p>
-          <p><b>Requested by: </b> {{ f.editorFirstName }} {{ f.editorLastName }} (<a href="mailto:{{ f.editorEmail }}">{{ f.editorEmail }}</a>)</p>
-          <p><b>Date opened:</b> {{ f.dateOpened | afStrToDate | date:'medium' }}</p>
-          <p data-ng-if="f.status != 'OPEN'"><b>Date pending:</b> {{ f.datePending | afStrToDate | date:'medium' }}</p>
-          <p data-ng-if="f.status == 'CLOSED'"><b>Date closed:</b> {{ f.dateClosed | afStrToDate | date:'medium'}}</p>
-          <p data-ng-show="f.status =='OPEN'"><b>Update URL: <a data-ui-sref="facilities.form.edit({ facilityRepositoryId: f.frIdBefore, token: f.token })" target="_blank">link</a></b></p>
-          <p data-ng-show="f.status == 'OPEN'">
-            <button class="btn btn-default btn-xs">Close this request <span class="fa fa-close"></span></button>
-            <button class="btn btn-danger btn-xs">Delete this request <span class="fa fa-close"></span></button>
-          </p>
-        </div>
-      </div>
-    </div>
-    
-    <hr>
+  <div data-ng-show="facilities.updates.fr.data.length">          
+    <ol start="{{ (facilities.updates.fr.perPage * (facilities.updates.fr.currentPage - 1) + 1)  }}">
+      <li data-dir-paginate="f in facilities.updates.fr.data | itemsPerPage: facilities.updates.fr.perPage" data-total-items="facilities.updates.fr.total" data-pagination-id="facilityRepository" data-current-page="facilities.updates.form.data.page">
+        <p>{{ f.frB.data.facility.name }}</p>
+        
+        <p><b>Facility:</b> <a data-ui-sref="admin.facilities.show({ facilityRepositoryId: f.frB.id })">before update</a><span data-ng-show="f.frA.id">, <a data-ui-sref="admin.facilities.show({ facilityRepositoryId: f.frA.id })">after update</a></span></p>
+        
+        <p><b>Status:</b> {{ f.status }}</p>
+        
+        <p><b>Requested by: </b> {{ f.editorFirstName }} {{ f.editorLastName }} (<a href="mailto:{{ f.editorEmail }}">{{ f.editorEmail }}</a>)</p>
+        
+        <p><b>Date opened:</b> {{ f.dateOpened | afStrToDate | date:'medium' }}</p>
+        
+        <p data-ng-if="f.status != 'OPEN'"><b>Date pending:</b> {{ f.datePending | afStrToDate | date:'medium' }}</p>
+        
+        <p data-ng-if="f.status == 'CLOSED'"><b>Date closed:</b> {{ f.dateClosed | afStrToDate | date:'medium'}}</p>
+        
+        <p data-ng-show="f.status =='OPEN'"><b>Update URL: <a data-ui-sref="facilities.form.edit({ facilityRepositoryId: f.frIdBefore, token: f.token })" target="_blank">link</a></b></p>
+        
+        <p data-ng-show="f.status == 'OPEN'">
+          <button class="btn btn-default btn-sm" data-ng-click="facilities.updates.close($index, f)" data-af-loading-btn="$index === facilities.updates.loading.selectedBtnIndex && facilities.updates.loading.close" data-ng-disabled="facilities.updates.loading.close">
+            Close <span class="fa fa-close"></span>
+          </button>
+        </p>
+        
+        <hr data-ng-show="$index < (facilities.updates.fr.data.length - 1)">
+      </li>
+    </ol>
     
     <div data-dir-pagination-controls data-on-page-change="facilities.updates.index()" data-pagination-id="facilityRepository" data-auto-hide="false"></div>
   </div>

@@ -2,8 +2,14 @@
 
 angular.module('afredApp').controller('AdminFacilitiesUpdatesController', [
   '$scope',
+  'confirmModal',
+  'infoModal',
+  'warningModal',
   'facilityRepositoryResource',
   function($scope,
+           confirmModal,
+           infoModal,
+           warningModal,
            facilityRepositoryResource) {
     /* ---------------------------------------------------------------------
      * Functions.
@@ -14,7 +20,7 @@ angular.module('afredApp').controller('AdminFacilitiesUpdatesController', [
      */
     $scope.facilities.updates = {
       /**
-       * Holds the promise returned from '$scope.facilities.updates.get()'.
+       * Holds the promise returned from '$scope.facilities.updates.query()'.
        * 
        * @type {promise}
        */
@@ -30,7 +36,7 @@ angular.module('afredApp').controller('AdminFacilitiesUpdatesController', [
          * Stores all form data.
          */
         data: {
-          status: null, // Facility update link statu.
+          status: null, // Facility update link status.
           page: null, // Page number (pagination).
         },
         
@@ -127,9 +133,68 @@ angular.module('afredApp').controller('AdminFacilitiesUpdatesController', [
       query: function() {
         $scope.facilities.updates.fr = facilityRepositoryResource.queryTokens({
           page: $scope.facilities.updates.form.data.page,
-          itemsPerPage: 10,
+          itemsPerPage: 5,
           status: $scope.facilities.updates.form.data.status
         });
+      },
+      
+      /**
+       * Close an open token.
+       *
+       * Side effects:
+       * $scope.facilities.updates.loading.selectedBtnIndex Is set equal to the
+       *     'index' param. Is set to null after the AJAX operation is
+       *     complete.
+       * $scope.facilities.updates.loading.close Set to true at the start of the
+       *     function and then set to false after the AJAX operation is
+       *     complete.
+       * $scope.facilities.updates.fr.data Removes the closed token from the
+       *     array if the operation was successful.
+       *
+       * Calls/uses/requires:
+       * confirmModal
+       * infoModal
+       * warningModal
+       * facilityRepositoryResource
+       *
+       * @param {integer} index Index of the element in
+       *     '$scope.facilities.updates.fr.data' that will be closed.
+       * @param {object} token The token element from
+       *     '$scope.facilities.updates.fr.data' that will be closed.
+       */
+      close: function(index, token) {
+        var t = 'close-token';
+        
+        confirmModal.open(t).result.then(function() {
+          $scope.facilities.updates.loading.selectedBtnIndex = index;
+          $scope.facilities.updates.loading.close = true;
+          facilityRepositoryResource.updateToken({
+            facilityUpdateLinkId: token.id
+          }, {
+            status: 'CLOSED'
+          }, function() {
+            infoModal.open(t + '-success').result.then(function() {
+              $scope.facilities.updates.fr.data.splice(index, 1);        
+              $scope.facilities.updates.loading.close = false;
+              $scope.facilities.updates.loading.selectedBtnIndex = null;
+            });
+          }, function() {
+            warningModal.open(t + '-failed').result.then(function() {
+              $scope.facilities.updates.loading.close = false;
+              $scope.facilities.updates.loading.selectedBtnIndex = null;
+            });
+          });
+        });
+      },
+      
+      /**
+       * AJAX loading flags.
+       *
+       * @type {object}
+       */
+      loading: {
+        close: false, // For the 'close' operation.
+        selectedBtnIndex: null // Index of the selected button.
       }
     };
   }
