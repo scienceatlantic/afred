@@ -192,6 +192,10 @@ angular.module('afredApp').run(['$rootScope',
       var statusCode = angular.isObject(response) ? response.status : response;
       
       switch (statusCode) {
+        case '403':
+          $rootScope._state.go('login');
+          break;
+        
         case '404':
         case '500':
           $rootScope._state.go(statusCode);
