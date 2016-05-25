@@ -98,6 +98,10 @@ angular.module('afredApp').factory('facilityRepositoryResource',
           url: root + '/facility-update-links',
           method: 'POST'
         },
+        updateToken: {
+          url: root + '/facility-update-link/:facilityUpdateLinkId',
+          method: 'PUT'
+        },
         destroyToken: {
           url: root + '/facility-update-links/:facilityUpdateLinkId',
           method: 'DELETE'
