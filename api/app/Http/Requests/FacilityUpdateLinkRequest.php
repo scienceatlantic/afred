@@ -2,6 +2,13 @@
 
 namespace App\Http\Requests;
 
+// Misc.
+use Route;
+
+// Models.
+use App\FacilityUpdateLink;
+
+// Requests.
 use App\Http\Requests\Request;
 
 class FacilityUpdateLinkRequest extends Request
@@ -14,15 +21,19 @@ class FacilityUpdateLinkRequest extends Request
     public function authorize()
     {
         switch($this->method()) {
-            // Admin only methods.
-            case 'GET':
-            case 'DELETE':
-            case 'UPDATE':
-                return $this->isAtLeastAdmin();
-            
             // A new token is being opened.
             case 'POST':
                 return true;
+            
+            case 'PUT':            
+            case 'DELETE':
+                // Only allowed to update/delete a record that is 'OPEN'.
+                $id = Route::input('facility_update_links');
+                $ful = FacilityUpdateLink::findOrFail($id);
+                return $ful->status == 'OPEN' && $this->isAtLeastAdmin();
+
+            default:
+                return $this->isAtLeastAdmin();            
         }
         return false;
     }
@@ -34,6 +45,17 @@ class FacilityUpdateLinkRequest extends Request
      */
     public function rules()
     {
-        return [];
+        $r = [];
+        switch ($this->method()) {            
+            case 'POST':
+                $r['facilityId'] = 'required';
+                $r['email'] = '';
+                $r['isAdmin'] = '';
+                break;
+            
+            case 'PUT':
+                $r['status'] = 'regex:/CLOSED/';
+        }
+        return $r;
     }
 }

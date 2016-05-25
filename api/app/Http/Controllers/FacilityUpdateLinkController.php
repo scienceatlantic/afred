@@ -44,7 +44,24 @@ class FacilityUpdateLinkController extends Controller
         }
         
         return $this->pageOrGet($ful);
-    }    
+    }
+    
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(FacilityUpdateLinkRequest $request, $id)
+    {
+        $ful = FacilityUpdateLink::findOrFail($id);
+        return '';
+        $ful->status = 'CLOSED';
+        $ful->dateClosed = $this->now();
+        $ful->save();
+        return $ful;
+    }
     
     /**
      * Store a newly created resource in storage.
@@ -106,14 +123,9 @@ class FacilityUpdateLinkController extends Controller
     public function destroy(FacilityUpdateLinkRequest $request, $id)
     {
         $ful = FacilityUpdateLink::findOrFail($id);
-        
-        // Only allowed to delete a record if it is open. 
-        if ($ful->status == 'OPEN') {
-            $deletedFul = $this->toCcArray($ful->toArray());
-            $ful->delete();
-            return $deletedFul;
-        }
-        abort(400);
+        $deletedFul = $this->toCcArray($ful->toArray());
+        $ful->delete();
+        return $deletedFul;
     }
     
     /**
