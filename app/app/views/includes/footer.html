@@ -13,9 +13,9 @@
     <div class="col-md-3">
       <p><b>What is AFRED?</b></p>
       
-      <p><a href="//afred.ca/coming-soon/">Find out what AFRED can do for you!</a></p>
+      <p><a href="//afred.ca/coming-soon/" target="_blank">Find out what AFRED can do for you!</a></p>
       
-      <p><a href="" target="_blank">Partners and Supporters</a></p>
+      <p><a href="//afred.ca/coming-soon/#partners-and-supporters" target="_blank">All Partners and Supporters</a></p>
     </div>
     
     <div class="col-md-3">
@@ -29,15 +29,13 @@
     </div>
     
     <div class="col-md-3">
-      <p><b>An intiative of Science Atlantic</b></p>
+      <p><b>Key partners</b></p>
       
-      <img src="">
+      <a data-ng-href="{{ main.footer.slider.currentImgUrl }}" target="_blank">
+        <img data-ng-src="{{ main.footer.slider.currentImgSrc }}" alt="Key partners">
+      </a>
     </div>
   </div>
   
-  <div class="row">
-    <div class="col-md-12">
-      <p class="text-center">Copyright &copy; 2004 - 2016 Science Atlantic. All Rights Reserved.</p>
-    </div>
-  </div>
+  <p class="text-center text-muted">Copyright &copy; 2004 - {{ main.footer.copyrightEndYear }} Science Atlantic. All Rights Reserved.</p>
 </div>
