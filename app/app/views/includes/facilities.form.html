@@ -1,8 +1,10 @@
 <p>
   To submit facilities and equipment for inclusion in the Atlantic Facilities
-  and Research Equipment Database (AFRED), please complete the form below.  For
-  help on what to include in a particular field, please have a look at our
-  <a data-ui-sref="facilities.form.guide" target="_blank">guide</a>.
+  and Research Equipment Database (AFRED), please complete the form below.
+  <b>
+    For help regarding what to include in a particular field, please have a look
+    at our <a data-ui-sref="facilities.form.guide" target="_blank">guide</a>.
+  </b>
 </p>
 
 <p>
@@ -19,328 +21,35 @@
 </p>
 
 <form class="form-horizontal" name="facilityForm" role="form" novalidate>
-  <!-- ======================================================
-    -- [START] Facility section
-    -- ====================================================== !-->
+  <!-- Facility section. -->
   <div class="panel panel-default">    
     <div class="panel-body">
       <p class="text-muted">Research Facility Information</p>
       <hr>
-      
-      <div class="row">
-        <div class="col-lg-6">
-          <div data-af-field data-af-field-label="Facility/Lab*" data-af-field-model="form.data.facility.name">
-            <input class="form-control" name="facilityName" data-ng-model="form.data.facility.name" maxlength="50" required>
-          </div>
-          
-          <div data-af-field data-af-field-label="Organization*">
-            <select class="form-control" name="facilityOrganization" id="facility-organization" data-ng-model="form.data.facility.organizationId" data-ng-options="i.id as i.name for i in form.organizations" required>
-            </select>
-          </div>
-          
-          <div data-af-field data-af-field-label="Organization name*" data-ng-if="form.data.facility.organizationId == -1" data-af-field-model="form.data.organization.name">
-            <input type="text" class="form-control" name="facilityOrganizationName" data-ng-model="form.data.organization.name" maxlength="50" required>
-          </div>
-        </div><!-- End of .col-x-x -->
-
-        <div class="col-lg-6">
-          <div data-af-field data-af-field-label="City" data-af-field-model="form.data.facility.city">
-            <input type="text" class="form-control" name="facilityCity" data-ng-model="form.data.facility.city" maxlength="50">
-          </div>
-          
-          <div data-af-field data-af-field-label="Province/Region*">          
-            <select class="form-control" name="facilityProvince" id="facility-province" data-ng-model="form.data.facility.provinceId" data-ng-options="p.id as p.name for p in form.provinces" required>
-            </select>
-          </div>
-          
-          <div data-af-field data-af-field-label="Facility website" data-af-field-model="form.data.facility.website">
-            <input type="url" class="form-control" name="facilityWebsite" data-ng-model="form.data.facility.website" data-ng-model-options="{ debounce: 500 }" placeholder="http://example.com" maxlength="2083">
-          </div>
-        </div><!-- End of .col-x-x -->
-      </div><!-- End of .row -->
-      
-      
-      <div data-af-field data-af-field-label="What the facility does*" data-af-field-model="form.data.facility.description">
-        <div data-text-angular data-ng-model="form.data.facility.description" name="facilityDescription" data-ta-maxlength="2000" required></div>
-      </div>
-      
-      <hr>
-      
-      <div data-ng-form name="disciplinesForm">
-        <!--
-          -- This part is a bit of a hack. The directive 'af-field' is not able to retrieve all the details (name, id, etc)
-          -- from the input element (probably because of ng-repeat) by itself. So we're using the 'af-field-name' option
-          -- to override the default behaviour of the directive and just provide it with the name manually. Each checkbox
-          -- has a unique name so we're not able to provide the directive with the names of all the checkboxes so we're
-          -- only giving it the name of the first checkbox. Technically the directive should be repeated for each checkbox
-          -- but then we'll end up losing the layout and each checkbox will end up up with its own label. Since we're only
-          -- providing the name of the first checkbox, validation is a problem.  Please have a look at the
-          -- '$scope.form.validateDisciplines()' function for how this was dealt with.
-          -->
-        <div data-af-field data-af-field-label="Research disciplines*" data-af-field-name="facilityDisciplinesC10">
-          <div class="row">
-            <div class="col-md-6">
-              <div data-ng-repeat="d in form.disciplines | limitTo: form.disciplines.length / 2">
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" name="facilityDisciplinesC1{{ $index }}" data-ng-model="d.isSelected" data-ng-change="form.validateDisciplines(disciplinesForm)" data-ng-required="form.disciplines[0].isRequired"> {{d.name}}
-                  </label>
-                </div>
-              </div>
-            </div>
-            
-            <div class="col-md-6">
-              <div data-ng-repeat="d in form.disciplines | limitTo: form.disciplines.length:(form.disciplines.length / 2)">
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" name="facilityDisciplinesC2{{ $index }}" data-ng-model="d.isSelected" data-ng-change="form.validateDisciplines(disciplinesForm)" data-ng-required="form.disciplines[0].isRequired"> {{d.name}}
-                  </label>
-                </div>
-              </div>
-            </div>    
-          </div><!-- End of .row -->
-        </div>
-      </div><!-- End of ng-form -->
-  
-      <hr>
-    
-      <div data-ng-form name="sectorsForm">
-        <!--
-          -- Please have a look at the comments for 'disciplinesForm' above for how we're using the 'af-field' directive.
-          -- Exact same scenario here.
-          -->
-        <div data-af-field data-af-field-label="Sectors of application*" data-af-field-name="facilitySectorsC10">
-          <div class="row">
-            <div class="col-md-6">
-              <div data-ng-repeat="s in form.sectors | limitTo: form.sectors.length / 2">
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" name="facilitySectorsC1{{ $index }}" data-ng-model="s.isSelected" data-ng-change="form.validateSectors(sectorsForm)" data-ng-required="form.sectors[0].isRequired"> {{s.name}}
-                  </label>
-                </div>
-              </div>
-            </div>
-            
-            <div class="col-md-6">
-              <div data-ng-repeat="s in form.sectors | limitTo: form.sectors.length:(form.sectors.length / 2)">
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" name="facilitySectorsC2{{ $index }}" data-ng-model="s.isSelected" data-ng-change="form.validateSectors(sectorsForm)" data-ng-required="form.sectors[0].isRequired"> {{s.name}}
-                  </label>
-                </div>
-              </div> 
-            </div>
-          </div><!-- End of .row -->
-        </div>
-      </div><!-- End of .ng-form -->
+      <div data-ng-include="'views/includes/facilities.form.facility.html'"></div>
     </div><!-- End of .panel-body -->
   </div><!-- End of .panel -->
-  <!-- ======================================================
-    -- [END] Facility section
-    -- ====================================================== !-->
   
-  <!-- ======================================================
-    -- [START] Contact information
-    -- ====================================================== !-->
+  <!-- Contact section. -->
   <div class="panel panel-default">    
     <div class="panel-body">
       <p class="text-muted" style="display: inline-block;">Contact Information</p>
       <span data-ng-show="form.contactIndex === 0" class="label label-info">Primary point of contact</span>
       <hr>
   
-      <div class="row">
-        <div class="col-lg-2">
-          <table class="table table-condensed table-list">
-            <tbody>
-              <tr data-ng-repeat="c in form.data.contacts" data-ng-class="{active: form.contactIndex === $index}" data-ng-click="form.contactIndex = $index">
-                <td>
-                  <a href="">
-                    <span data-ng-class="{ 'text-danger': facilityForm['contactForm' + $index].$invalid && facilityForm['contactForm' + $index].$dirty }">
-                      <span data-ng-hide="c.firstName || c.lastName">Contact #{{$index + 1}}</span>
-                      <span data-ng-show="c.firstName || c.lastName">{{c.firstName}} {{c.lastName}}</span>
-                    </span>
-                  </a>
-                </td>
-                <td>
-                  <a href="" data-ng-show="$index !== 0" data-ng-click="form.removeContact($index)">
-                    <span class="text-danger">
-                      <span class="glyphicon glyphicon-remove"></span>
-                    </span>
-                  </a>                         
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          
-          <button type="button" class="btn btn-default btn-sm" data-ng-click="form.addContact()">Contacts <span class="fa fa-plus"></span></button>
-        </div><!-- End of .col-x-x -->
-        
-        <div class="col-lg-10">                    
-          <div data-ng-repeat="c in form.data.contacts">
-            <div data-ng-form name="contactForm{{ $index }}">
-              <div class="row" data-ng-show="form.contactIndex === $index">
-                <div class="col-lg-6">
-                  <div data-af-field data-af-field-label="First name*" data-af-field-model="c.firstName">
-                    <input type="text" class="form-control" name="contactFirstName{{ $index }}" data-ng-model="c.firstName" maxlength="50" required>
-                  </div>
-                  
-                  <div data-af-field data-af-field-label="Last name*" data-af-field-model="c.lastName">
-                    <input type="text" class="form-control" name="contactLastName{{ $index }}" data-ng-model="c.lastName" maxlength="50" required>
-                  </div>
-                  
-                  <div data-af-field data-af-field-label="Email*" data-af-field-model="c.email">
-                    <input type="email" class="form-control" name="contactEmail{{ $index }}" data-ng-model="c.email" data-ng-model-options="{ debounce: 500 }" placeholder="me@example.com" maxlength="254" required>
-                  </div>
-                  
-                  <!-- Telephone field for the primary contact ($index == 0) is mandatory. -->
-                  <div data-af-field data-af-field-label="Telephone*" data-ng-if="$index === 0">
-                    <input type="text" class="form-control" name="contactTelephone{{ $index }}" data-ng-model="c.telephone" data-ng-model-options="{ debounce: 500 }" data-ng-pattern="/^\d{10}$/" placeholder="5555555555" required>
-                  </div>
-                  
-                  <!-- Telephone field for contacts ($index > 0) is not mandatory -->
-                  <div data-af-field data-af-field-label="Telephone" data-ng-if="$index !== 0">
-                    <input type="text" class="form-control" name="contactTelephone{{ $index }}" data-ng-model="c.telephone" data-ng-model-options="{ debounce: 500 }" data-ng-pattern="/^\d{10}$/" placeholder="5555555555">
-                  </div>
-                </div><!-- End of .col-x-x -->
-                
-                <div class="col-lg-6">
-                  <!-- Position field for the primary contact ($index == 0) is mandatory -->
-                  <div data-af-field data-af-field-label="Position*" data-ng-if="$index === 0" data-af-field-model="c.position">
-                    <input type="text" class="form-control" name="contactPosition{{ $index }}" data-ng-model="c.position" maxlength="100" required>
-                  </div>
-                  
-                  <!-- Position field for contacts ($index > 0) is not mandatory -->
-                  <div data-af-field data-af-field-label="Position" data-ng-if="$index !== 0" data-af-field-model="c.position">
-                    <input type="text" class="form-control" name="contactPosition{{ $index }}" data-ng-model="c.position" maxlength="100">
-                  </div>
-                  
-                  <div data-af-field data-af-field-label="Website" data-af-field-model="c.website">
-                    <input type="url" class="form-control" name="contactWebsite{{ $index }}" data-ng-model="c.website" data-ng-model-options="{ debounce: 500 }" maxlength="2083" placeholder="http://example.com">
-                  </div>
-                  
-                  <div data-af-field data-af-field-label="Extension" data-af-field-model="c.extension">
-                    <input type="text" class="form-control" name="contactExtension{{ $index }}" data-ng-model="c.extension" maxlength="10">
-                  </div>
-                </div><!-- End of .col-x-x -->
-              </div><!-- End of .row -->
-            </div><!-- End of ng-form -->
-          </div><!-- End of ng-repeat -->
-        </div><!-- End of .col-x-x -->
-      </div><!--End of .row -->
+      <div data-ng-include="'views/includes/facilities.form.contacts.html'"></div>
     </div><!-- End of .panel-body -->
   </div><!-- End of .panel -->
-  <!-- ======================================================
-    -- [END] Contact information
-    -- ====================================================== !-->
   
-  <!-- ======================================================
-    -- [START] Equipment information
-    -- ====================================================== !-->  
+  <!-- Equipment section. -->
   <div class="panel panel-default">    
     <div class="panel-body">
       <p class="text-muted">Equipment Information</p>
       <hr>
       
-      <div class="row">
-        <div class="col-lg-2">
-          <table class="table table-condensed table-list">
-            <tbody>
-              <tr data-ng-repeat="e in form.data.equipment" data-ng-class="{active: form.equipmentIndex === $index}" data-ng-click="form.equipmentIndex = $index">
-                <td>
-                  <a href="">
-                    <span data-ng-class="{ 'text-danger': facilityForm['equipmentForm' + $index].$invalid && facilityForm['equipmentForm' + $index].$dirty }">
-                      <span data-ng-hide="e.type">Equipment #{{$index + 1}}</span>
-                      <span data-ng-show="e.type">{{e.type}} <span data-ng-show="e.manufacturer">({{e.manufacturer}})</span></span>
-                    </span>
-                  </a>
-                </td>
-                <td>
-                  <a href="" data-ng-show="$index !== 0" data-ng-click="form.removeEquipment($index)">
-                    <span class="text-danger">
-                      <span class="glyphicon glyphicon-remove"></span>
-                    </span>
-                  </a>                         
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          
-          <button type="button" class="btn btn-default btn-sm" data-ng-click="form.addEquipment()">Equipment <span class="fa fa-plus"></span></button>
-        </div><!-- End of .col-x-x -->
-        
-        <div class="col-lg-10">
-          <div data-ng-repeat="e in form.data.equipment">
-            <div data-ng-form name="equipmentForm{{ $index }}">
-              <div class="row" data-ng-show="form.equipmentIndex === $index">
-                <div class="col-lg-12">
-                  <div data-af-field data-af-field-label="Type*" data-af-field-model="e.type">
-                    <input type="text" class="form-control" name="equipmentType{{ $index }}" data-ng-model="e.type" placeholder="E.g. Magnetic resonance imaging (MRI)" maxlength="200" required>
-                  </div>
-                  
-                  <div data-af-field data-af-field-label="Manufacturer" data-af-field-model="e.manufacturer">
-                    <input type="text" class="form-control" name="equipmentManufacturer{{ $index }}" placeholder="E.g. Hitachi Medical" data-ng-model="e.manufacturer" maxlength="100">
-                  </div>
-
-                  <div data-af-field data-af-field-label="Model" data-af-field-model="e.model">
-                    <input type="text" class="form-control" name="equipmentModel{{ $index }}" placeholder="E.g. Echelon Oval 1.5T Ultra-Wide MRI system" data-ng-model="e.model" maxlength="100">
-                  </div>
-                  
-                  <!--
-                    -- For this part, we have to use $index to make the names unique otherwise textAngular will complain. The same
-                    -- goes for equipment specifications.
-                    -->
-                  <div data-af-field data-af-field-label="Equipment purpose*" data-af-field-model="e.purpose">
-                    <div data-text-angular name="equipmentPurpose{{ $index }}" data-ng-model="e.purpose" maxlength="2000" placeholder="E.g. Magnetic resonance imaging (MRI) is a medical imaging technique used in radiology..." required></div>
-                  </div>
-                  
-                  <div data-af-field data-af-field-label="Equipment specifications" data-af-field-model="e.specifications">
-                    <div data-text-angular name="equipmentSpecifications{{ $index }}" data-ng-model="e.specifications" placeholder="E.g. - 50 x 50 x 50 cm FOV..." maxlength="2000"></div>
-                  </div>
-                  
-                  <div data-af-field data-af-field-label="Year purchased">
-                    <input type="text" class="form-control" name="equipmentYearPurchased{{ $index }}" data-ng-model="e.yearPurchased" data-ng-model-options="{ debounce: 500 }" pattern="(?:19|20)[0-9]{2}" placeholder="E.g. 1995">
-                  </div>
-                  
-                  <div data-af-field data-af-field-label="Year manufactured">
-                    <input type="text" class="form-control" name="equipmentYearManufactured{{ $index }}" data-ng-model="e.yearManufactured" data-ng-model-options="{ debounce: 500 }" pattern="(?:19|20)[0-9]{2}" placeholder="E.g. 1990">
-                  </div>
-                  
-                  <div data-af-field data-af-field-label="Excess capacity*">
-                    <div class="radio">
-                      <label>
-                        <input type="radio" name="equipmentExcessCapacity{{ $index }}" data-ng-model="e.hasExcessCapacity" data-ng-value="true" required> Yes 
-                      </label>
-                      <label>
-                        <input type="radio" name="equipmentExcessCapacity{{ $index }}" data-ng-model="e.hasExcessCapacity" data-ng-value="false" required> No
-                      </label>
-                    </div>
-                  </div>
-                  
-                  <div data-af-field data-af-field-label="Search visibility*">
-                    <div class="radio">
-                      <label>
-                        <input type="radio" name="equipmentIsPublic{{ $index }}" data-ng-model="e.isPublic" data-ng-value="true" selected required> Public 
-                      </label>
-                      <label>
-                        <input type="radio" name="equipmentIsPublic{{ $index }}" data-ng-model="e.isPublic" data-ng-value="false" required> Hidden
-                      </label>
-                    </div>
-                  </div>
-                  
-                  <div data-af-field data-af-field-label="Keywords">
-                    <input type="text" class="form-control" name="equipmentKeywords{{ $index }}" data-ng-model="e.keywords" placeholder="NMRI, MRT, etc">
-                  </div>
-                </div><!-- End of .col-x-x -->
-              </div><!-- End of .row -->
-            </div><!-- End of ng-form -->
-          </div><!-- End of ng-repeat -->
-        </div><!-- End of col-x-x -->
-      </div><!-- End of .row -->
+      <div data-ng-include="'views/includes/facilities.form.equipment.html'"></div>
     </div><!-- End of .panel-body -->
   </div><!-- End of .panel -->
-  <!-- ======================================================
-    -- [END] Equipment information
-    -- ====================================================== !-->
   
   <div>
     <p class="small">* Required field</p>

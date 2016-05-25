@@ -1,0 +1,79 @@
+<div class="row">
+  <div class="col-lg-2">
+    <table class="table table-condensed table-list">
+      <tbody>
+        <tr data-ng-repeat="c in form.data.contacts" data-ng-class="{active: form.contactIndex === $index}" data-ng-click="form.contactIndex = $index">
+          <td>
+            <a href="">
+              <span data-ng-class="{ 'text-danger': facilityForm['contactForm' + $index].$invalid && facilityForm['contactForm' + $index].$dirty }">
+                <span data-ng-hide="c.firstName || c.lastName">Contact #{{$index + 1}}</span>
+                <span data-ng-show="c.firstName || c.lastName">{{c.firstName}} {{c.lastName}}</span>
+              </span>
+            </a>
+          </td>
+          <td>
+            <a href="" data-ng-show="$index !== 0" data-ng-click="form.removeContact($index)">
+              <span class="text-danger">
+                <span class="glyphicon glyphicon-remove"></span>
+              </span>
+            </a>                         
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <button type="button" class="btn btn-default btn-sm" data-ng-click="form.addContact()">Contacts <span class="fa fa-plus"></span></button>
+  </div><!-- End of .col-x-x -->
+  
+  <div class="col-lg-10">                    
+    <div data-ng-repeat="c in form.data.contacts">
+      <div data-ng-form name="contactForm{{ $index }}">
+        <div class="row" data-ng-show="form.contactIndex === $index">
+          <div class="col-lg-6">
+            <div data-af-field data-af-field-label="First name*" data-af-field-model="c.firstName">
+              <input type="text" class="form-control" name="contactFirstName{{ $index }}" data-ng-model="c.firstName" maxlength="50" required>
+            </div>
+            
+            <div data-af-field data-af-field-label="Last name*" data-af-field-model="c.lastName">
+              <input type="text" class="form-control" name="contactLastName{{ $index }}" data-ng-model="c.lastName" maxlength="50" required>
+            </div>
+            
+            <div data-af-field data-af-field-label="Email*" data-af-field-model="c.email">
+              <input type="email" class="form-control" name="contactEmail{{ $index }}" data-ng-model="c.email" data-ng-model-options="{ debounce: 500 }" placeholder="me@example.com" maxlength="254" required>
+            </div>
+            
+            <!-- Telephone field for the primary contact ($index == 0) is mandatory. -->
+            <div data-af-field data-af-field-label="Telephone*" data-ng-if="$index === 0">
+              <input type="text" class="form-control" name="contactTelephone{{ $index }}" data-ng-model="c.telephone" data-ng-model-options="{ debounce: 500 }" data-ng-pattern="/^\d{10}$/" placeholder="5555555555" required>
+            </div>
+            
+            <!-- Telephone field for contacts ($index > 0) is not mandatory -->
+            <div data-af-field data-af-field-label="Telephone" data-ng-if="$index !== 0">
+              <input type="text" class="form-control" name="contactTelephone{{ $index }}" data-ng-model="c.telephone" data-ng-model-options="{ debounce: 500 }" data-ng-pattern="/^\d{10}$/" placeholder="5555555555">
+            </div>
+          </div><!-- End of .col-x-x -->
+          
+          <div class="col-lg-6">
+            <!-- Position field for the primary contact ($index == 0) is mandatory -->
+            <div data-af-field data-af-field-label="Position*" data-ng-if="$index === 0" data-af-field-model="c.position">
+              <input type="text" class="form-control" name="contactPosition{{ $index }}" data-ng-model="c.position" maxlength="100" required>
+            </div>
+            
+            <!-- Position field for contacts ($index > 0) is not mandatory -->
+            <div data-af-field data-af-field-label="Position" data-ng-if="$index !== 0" data-af-field-model="c.position">
+              <input type="text" class="form-control" name="contactPosition{{ $index }}" data-ng-model="c.position" maxlength="100">
+            </div>
+            
+            <div data-af-field data-af-field-label="Website" data-af-field-model="c.website">
+              <input type="url" class="form-control" name="contactWebsite{{ $index }}" data-ng-model="c.website" data-ng-model-options="{ debounce: 500 }" maxlength="2083" placeholder="http://example.com">
+            </div>
+            
+            <div data-af-field data-af-field-label="Extension" data-af-field-model="c.extension">
+              <input type="text" class="form-control" name="contactExtension{{ $index }}" data-ng-model="c.extension" maxlength="10">
+            </div>
+          </div><!-- End of .col-x-x -->
+        </div><!-- End of .row -->
+      </div><!-- End of ng-form -->
+    </div><!-- End of ng-repeat -->
+  </div><!-- End of .col-x-x -->
+</div><!--End of .row -->
