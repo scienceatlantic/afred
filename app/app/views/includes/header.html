@@ -1,11 +1,17 @@
 <div class="container">
-  <div class="row">
-    <div class="col-md-9">
-      <div class="page-header">
-        <div style="margin: -130px -120px -75px -120px;">
-          <img src="images/afred-logo-colourgradient-bottomtagline.png" width="700px;">
-        </div>
+  <div>
+    <!-- AFRED Logo for desktop screens. -->
+    <div data-ng-if="_window.innerWidth > 500">
+      <div style="margin: 50px 0 50px 0;">
+        <img src="images/afred-logo-colour-gradient-bottom-tagline-470x125.png" atl="AFRED logo">
       </div>
+    </div>
+    
+    <!-- AFRED Logo for small screens. -->
+    <div data-ng-if="_window.innerWidth <= 500">
+      <div class="text-center" style="margin: 20px 0 20px 0;">
+        <img src="images/afred-symbol-bottom-text 200x170.png" alt="AFRED logo">
+      </div> 
     </div>
   </div>
 </div>
