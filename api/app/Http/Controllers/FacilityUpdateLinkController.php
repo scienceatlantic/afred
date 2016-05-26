@@ -56,7 +56,6 @@ class FacilityUpdateLinkController extends Controller
     public function update(FacilityUpdateLinkRequest $request, $id)
     {
         $ful = FacilityUpdateLink::findOrFail($id);
-        return '';
         $ful->status = 'CLOSED';
         $ful->dateClosed = $this->now();
         $ful->save();
