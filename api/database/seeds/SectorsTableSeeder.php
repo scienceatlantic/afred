@@ -24,15 +24,15 @@ class SectorsTableSeeder extends Seeder
         DB::table('sectors')->delete();
         
         $sectors = [[
-            'name'        => 'Aerospace and satellites',
+            'name'        => 'Aerospace and Satellites',
             'dateCreated' => $now,
             'dateUpdated' => $now
         ], [
-            'name'        => 'Agriculture, animal science and food',
+            'name'        => 'Agriculture, Animal Science and Food',
             'dateCreated' => $now,
             'dateUpdated' => $now            
         ], [
-            'name'        => 'Arts and cultural industries',
+            'name'        => 'Arts and Cultural Industries',
             'dateCreated' => $now,
             'dateUpdated' => $now            
         ], [
@@ -40,31 +40,35 @@ class SectorsTableSeeder extends Seeder
             'dateCreated' => $now,
             'dateUpdated' => $now            
         ], [
-            'name'        => 'Biotechnology/Biomedical',
+            'name'        => 'Biomedical',
             'dateCreated' => $now,
             'dateUpdated' => $now            
         ], [
-            'name'        => 'Chemical industries',
+            'name'        => 'Biotechnology',
             'dateCreated' => $now,
             'dateUpdated' => $now            
         ], [
-            'name'        => 'Clean technology',
+            'name'        => 'Chemical Industries',
             'dateCreated' => $now,
             'dateUpdated' => $now            
         ], [
-            'name'        => 'Construction (including building, civil engineering, specialty trades)',
+            'name'        => 'Clean Technology',
             'dateCreated' => $now,
             'dateUpdated' => $now            
         ], [
-            'name'        => 'Consumer durables',
+            'name'        => 'Construction (including Building, Civil Engineering, Specialty Trades)',
             'dateCreated' => $now,
             'dateUpdated' => $now            
         ], [
-            'name'        => 'Consumer non-durables',
+            'name'        => 'Consumer Durables',
             'dateCreated' => $now,
             'dateUpdated' => $now            
         ], [
-            'name'        => 'Defense and security industries',
+            'name'        => 'Consumer Non-Durables',
+            'dateCreated' => $now,
+            'dateUpdated' => $now            
+        ], [
+            'name'        => 'Defense and Security Industries',
             'dateCreated' => $now,
             'dateUpdated' => $now            
         ], [
@@ -72,63 +76,63 @@ class SectorsTableSeeder extends Seeder
             'dateCreated' => $now,
             'dateUpdated' => $now            
         ], [
-            'name'        => 'Energy (renewable and fossil)',
+            'name'        => 'Energy (Renewable and Fossil)',
             'dateCreated' => $now,
             'dateUpdated' => $now            
         ], [
-            'name'        => 'Environmental technologies and related services',
+            'name'        => 'Environmental Technologies and Related Services',
             'dateCreated' => $now,
             'dateUpdated' => $now            
         ], [
-            'name'        => 'Financial services and insurance',
+            'name'        => 'Financial Services and Insurance',
             'dateCreated' => $now,
             'dateUpdated' => $now            
         ], [
-            'name'        => 'Fisheries and aquaculture',
+            'name'        => 'Fisheries and Aquaculture',
             'dateCreated' => $now,
             'dateUpdated' => $now            
         ], [
-            'name'        => 'Forestry and forest-based industries',
+            'name'        => 'Forestry and Forest-Based Industries',
             'dateCreated' => $now,
             'dateUpdated' => $now            
         ], [
-            'name'        => 'Health care and social services',
+            'name'        => 'Health Care and Social Services',
             'dateCreated' => $now,
             'dateUpdated' => $now            
         ], [
-            'name'        => 'Information and communication technologies and media',
+            'name'        => 'Information and Communication Technologies and Media',
             'dateCreated' => $now,
             'dateUpdated' => $now            
         ], [
-            'name'        => 'Life sciences, pharmaceuticals and medical equipment',
+            'name'        => 'Life Sciences, Pharmaceuticals and Medical Equipment',
             'dateCreated' => $now,
             'dateUpdated' => $now            
         ], [
-            'name'        => 'Management and business related services',
+            'name'        => 'Management and Business Related Services',
             'dateCreated' => $now,
             'dateUpdated' => $now            
         ], [
-            'name'        => 'Manufacturing and processing',
+            'name'        => 'Manufacturing and Processing',
             'dateCreated' => $now,
             'dateUpdated' => $now            
         ], [
-            'name'        => 'Mining, minerals and metals',
+            'name'        => 'Mining, Minerals and Metals',
             'dateCreated' => $now,
             'dateUpdated' => $now            
         ], [
-            'name'        => 'Ocean industries',
+            'name'        => 'Ocean Industries',
             'dateCreated' => $now,
             'dateUpdated' => $now            
         ], [
-            'name'        => 'Policy and governance',
+            'name'        => 'Policy and Governance',
             'dateCreated' => $now,
             'dateUpdated' => $now            
         ], [
-            'name'        => 'Professional and technical services (including legal services, architecture, engineering)',
+            'name'        => 'Professional and Technical Services (including Legal Services, Architecture, Engineering)',
             'dateCreated' => $now,
             'dateUpdated' => $now            
         ], [
-            'name'        => 'Tourism and hospitality',
+            'name'        => 'Tourism and Hospitality',
             'dateCreated' => $now,
             'dateUpdated' => $now            
         ], [

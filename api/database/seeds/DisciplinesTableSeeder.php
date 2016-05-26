@@ -24,7 +24,7 @@ class DisciplinesTableSeeder extends Seeder
         DB::table('disciplines')->delete();
         
         $disciplines = [[
-            'name'        => 'Astronomy/Astrophysics/Physics',
+            'name'        => 'Astronomy and Physics',
             'dateCreated' => $now,
             'dateUpdated' => $now
         ], [
@@ -32,7 +32,11 @@ class DisciplinesTableSeeder extends Seeder
             'dateCreated' => $now,
             'dateUpdated' => $now
         ], [
-            'name'        => 'Biotechnology and Biomedical',
+            'name'        => 'Biotechnology',
+            'dateCreated' => $now,
+            'dateUpdated' => $now
+        ], [
+            'name'        => 'Biomedical',
             'dateCreated' => $now,
             'dateUpdated' => $now
         ], [
@@ -44,7 +48,11 @@ class DisciplinesTableSeeder extends Seeder
             'dateCreated' => $now,
             'dateUpdated' => $now
         ], [
-            'name'        => 'Engineering - Agricultural, Forest, Environmental, Mining and Mineral',
+            'name'        => 'Computer Science and Software Engineering',
+            'dateCreated' => $now,
+            'dateUpdated' => $now
+        ], [
+            'name'        => 'Engineering - Agricultural, Forest, Environmental, Mining, Mineral',
             'dateCreated' => $now,
             'dateUpdated' => $now
         ], [
@@ -52,19 +60,23 @@ class DisciplinesTableSeeder extends Seeder
             'dateCreated' => $now,
             'dateUpdated' => $now
         ], [
-            'name'        => 'Engineering - Civil, Structural, Industrial, Mechanical, Electrical',
+            'name'        => 'Engineering - Civil, Structural',
             'dateCreated' => $now,
             'dateUpdated' => $now
         ], [
-            'name'        => 'Environmental and Earth Science',
+            'name'        => 'Engineering - Industrial, Mechanical, Electrical',
             'dateCreated' => $now,
             'dateUpdated' => $now
         ], [
-            'name'        => 'Geomatics',
+            'name'        => 'Environmental and Earth Sciences',
             'dateCreated' => $now,
             'dateUpdated' => $now
         ], [
-            'name'        => 'Humanities and Social Science',
+            'name'        => 'Geomatics and Geodesy',
+            'dateCreated' => $now,
+            'dateUpdated' => $now
+        ], [
+            'name'        => 'Humanities and Social Sciences',
             'dateCreated' => $now,
             'dateUpdated' => $now
         ], [
@@ -72,11 +84,11 @@ class DisciplinesTableSeeder extends Seeder
             'dateCreated' => $now,
             'dateUpdated' => $now
         ], [
-            'name'        => 'Mathematics/Statistics/Computer Sciences',
+            'name'        => 'Mathematics and Statistics',
             'dateCreated' => $now,
             'dateUpdated' => $now
         ], [
-            'name'        => 'Medical Science',
+            'name'        => 'Medical Sciences',
             'dateCreated' => $now,
             'dateUpdated' => $now
         ], [
@@ -84,7 +96,7 @@ class DisciplinesTableSeeder extends Seeder
             'dateCreated' => $now,
             'dateUpdated' => $now
         ], [
-            'name'        => 'Veterinary Studies',
+            'name'        => 'Veterinary Sciences',
             'dateCreated' => $now,
             'dateUpdated' => $now
         ]];
