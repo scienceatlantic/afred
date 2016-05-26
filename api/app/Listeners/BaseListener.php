@@ -11,20 +11,26 @@ use App\Setting;
 
 abstract class BaseListener
 {
-    protected $_settings;
+    protected $settings;
     
     public function __construct()
     {
-        $this->_settings = [
-            'appName'            => Setting::find('appName')->value,
-            'appAcronym'         => Setting::find('appAcronym')->value,
-            'appAddress'         => Setting::find('appAddress')->value,
-            'emailAddress'       => Setting::find('emailAddress')->value,
-            'emailSubjectPrefix' => Setting::find('emailSubjectPrefix')->value
+        $this->settings = [
+            'appName'                 => Setting::find('appName')->value,
+            'appShortName'            => Setting::find('appShortName')->value,
+            'appAddress'              => Setting::find('appAddress')->value,
+            'emailAddress'            => Setting::find('emailAddress')->value,
+            'emailSubjectPrefix'      => Setting::find('emailSubjectPrefix')->value,
+            'generalContactEmail'     => Setting::find('generalContactEmail')->value,
+            'generalContactTelephone' => Setting::find('generalContactTelephone')->value,
+            'personalContactName'     => Setting::find('personalContactName')->value,
+            'personalContactTitle'    => Setting::find('personalContactTitle')->value,
+            'personalContactEmail'    => Setting::find('personalContactEmail')->value,
+            'twitterHandle'           => Setting::find('twitterHandle')->value
         ];
     }
     
-    protected function _mail($template,
+    protected function mail($template,
                              $subject,
                              $data,
                              $to,
@@ -49,13 +55,13 @@ abstract class BaseListener
                         // single recipient. This part is for arrays.
                         if (!array_key_exists('name', $recipient)) {
                             foreach($recipient as $r) {
-                                if ($this->_validateRecipient($r)) {
+                                if ($this->validateRecipient($r)) {
                                     array_push($validRecipients, $r);
                                 }
                             }
                         // And this part is for a single recipient.
                         } else {
-                            if ($this->_validateRecipient($recipient)) {
+                            if ($this->validateRecipient($recipient)) {
                                 array_push($validRecipients, $recipient);
                             }
                         }
@@ -75,7 +81,7 @@ abstract class BaseListener
         }
     }
     
-    private function _validateRecipient($r)
+    private function validateRecipient($r)
     {
         return array_key_exists('name', $r)
             && array_key_exists('email', $r)
