@@ -25,7 +25,7 @@ class SettingsTableSeeder extends Seeder
             'dateCreated' => $now,
             'dateUpdated' => $now
         ], [
-            'name'        => 'appAcronym',
+            'name'        => 'appShortName',
             'value'       => 'AFRED',
             'dateCreated' => $now,
             'dateUpdated' => $now
@@ -36,7 +36,7 @@ class SettingsTableSeeder extends Seeder
             'dateUpdated' => $now
         ], [
             'name'        => 'appAddress',
-            'value'       => 'http://localhost:9000/#',
+            'value'       => 'http://localhost:9000',
             'dateCreated' => $now,
             'dateUpdated' => $now
         ], [
@@ -56,17 +56,37 @@ class SettingsTableSeeder extends Seeder
             'dateUpdated' => $now
         ], [
             'name'        => 'emailSubjectPrefix',
-            'value'       => 'AFRED 2.0 | Science Atlantic - (test) ',
+            'value'       => 'AFRED | ',
             'dateCreated' => $now,
             'dateUpdated' => $now
         ], [
-            'name'        => 'generalContactName',
+            'name'        => 'twitterHandle',
+            'value'       => '@AFREDatabase',
+            'dateCreated' => $now,
+            'dateUpdated' => $now
+        ], [
+            'name'        => 'generalContactEmail',
+            'value'       => 'afred@scienceatlantic.ca',
+            'dateCreated' => $now,
+            'dateUpdated' => $now
+        ], [
+            'name'        => 'generalContactTelephone',
+            'value'       => '(902) 494-6910',
+            'dateCreated' => $now,
+            'dateUpdated' => $now
+        ], [
+            'name'        => 'personalContactName',
             'value'       => 'Patty King',
             'dateCreated' => $now,
             'dateUpdated' => $now
         ], [
-            'name'        => 'generalContactEmailAddress',
-            'value'       => 'patty@scienceatlantic.ca',
+            'name'        => 'personalContactTitle',
+            'value'       => 'AFRED Program Manager',
+            'dateCreated' => $now,
+            'dateUpdated' => $now
+        ], [
+            'name'        => 'personalContactEmail',
+            'value'       => 'patty.king@scienceatlantic.ca',
             'dateCreated' => $now,
             'dateUpdated' => $now
         ]]);
