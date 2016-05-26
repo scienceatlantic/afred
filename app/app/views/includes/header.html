@@ -3,14 +3,18 @@
     <!-- AFRED Logo for desktop screens. -->
     <div data-ng-if="_window.innerWidth > 500">
       <div style="margin: 50px 0;">
-        <img src="images/afred-logo-colour-gradient-bottom-tagline-470x125.png" atl="AFRED logo">
+        <a data-ui-sref="search">
+          <img src="images/afred-logo-colour-gradient-bottom-tagline-470x125.png" atl="AFRED logo">
+        </a>
       </div>
     </div>
     
     <!-- AFRED Logo for small screens. -->
     <div data-ng-if="_window.innerWidth <= 500">
       <div class="text-center" style="margin: 20px 0;">
-        <img src="images/afred-symbol-bottom-text 200x170.png" alt="AFRED logo">
+        <a data-ui-sref="search">
+          <img src="images/afred-symbol-bottom-text 200x170.png" alt="AFRED logo">
+        </a>
       </div> 
     </div>
   </div>
