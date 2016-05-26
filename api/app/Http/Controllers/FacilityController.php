@@ -120,11 +120,13 @@ class FacilityController extends Controller
         // Add the two results together and grab all the matching facilities.
         $ids = $cF->union($pcF)->get()->toArray();
         
-        $f = Facility::leftJoin('facility_update_links',
-                                'facility_update_links.frIdBefore', '=',
-                                'facilities.facilityRepositoryId')
-            ->whereIn('facilities.id', $ids)
-            ->where('facility_update_links.status', '!=', 'CLOSED')
+        // Return the facility data 'left joined' with facility update link
+        // records that are not 'CLOSED'.
+        $f = Facility::leftJoin('facility_update_links', function($join) {
+                $join->on('facility_update_links.frIdBefore', '=',
+                    'facilities.facilityRepositoryId')
+                    ->where('facility_update_links.status', '!=', 'CLOSED');
+            })->whereIn('facilities.id', $ids)
             ->select('facilities.id',
                      'facilities.name',
                      'facilities.city',
