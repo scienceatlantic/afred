@@ -86,7 +86,7 @@ class FacilityUpdateLinkController extends Controller
         } else {
             // Find the matching primary contact or (regular) contact.
             if (!$c = $f->primaryContact()->where('email', $e)->first()) {
-                $c = $f->contact()->where('email', $e)->firstOrFail();
+                $c = $f->contacts()->where('email', $e)->firstOrFail();
             }           
         }
 
