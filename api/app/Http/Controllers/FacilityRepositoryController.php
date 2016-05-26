@@ -124,6 +124,9 @@ class FacilityRepositoryController extends Controller
         // Set/Update the Facility Repository's state.
         $fr->state = $request->input('state');
         
+        // Placeholder for a facility update link record.
+        $ful = new FacilityUpdateLink();
+        
         switch ($fr->state) {
             case 'PENDING_APPROVAL':
                 $fr->data = $this->formatData($request, $now);
@@ -201,7 +204,7 @@ class FacilityRepositoryController extends Controller
         }
         
         // Generate an event (emails might need to be sent out).
-        event(new FacilityRepositoryEvent($fr));
+        event(new FacilityRepositoryEvent($fr, $ful));
         
         // Return the updated record.
         $f = FacilityRepository::with('reviewer', 'facility')->find($fr->id);
