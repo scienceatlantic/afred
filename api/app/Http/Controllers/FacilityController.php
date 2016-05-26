@@ -124,7 +124,7 @@ class FacilityController extends Controller
                                 'facility_update_links.frIdBefore', '=',
                                 'facilities.facilityRepositoryId')
             ->whereIn('facilities.id', $ids)
-            ->groupBy('facility_update_links.frIdBefore')
+            ->where('facility_update_links.status', '!=', 'CLOSED')
             ->select('facilities.id',
                      'facilities.name',
                      'facilities.city',
