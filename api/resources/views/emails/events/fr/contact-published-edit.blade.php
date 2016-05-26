@@ -5,7 +5,7 @@ Hello {{ $recipientName }},
 
 Congratulations!
 
-Your submission has been approved for inclusion in the
+Your facility edit has been approved for inclusion in the
 {{ $settings['appName'] }} ({{ $settings['appShortName'] }}).
 
 @if ($reviewerName && $reviewerMessage)
@@ -15,19 +15,14 @@ A message from {{ $reviewerName }}:
 --
 @endif
 
-Please check your listing here
+Please check your listing here:
 {{ $settings['appAddress'] }}/#/facilities/{{ $facilityId }}.
 
 You will receive an annual reminder to check your listing for accuracy. If you
-wish to make edits to your listing at any time, please follow the instructions
-on this page.
+wish to make additional edits to your listing at any time, please follow this
+link.
 {{ $settings['appAddress'] }}/#/facilities/update.
 
-@if ($iloName && $iloEmail)
-A copy of this email has also been sent to your organization's industry liaison
-officer (ILO), {{ $iloName }}, at {{ $iloEmail }}.
-@endif
-
-If you have any questions or comments, please contact {{ $settings['personalContactName'] }},
+If you have any questions, please contact {{ $settings['personalContactName'] }},
 {{ $settings['personalContactTitle'] }}, at {{ $settings['personalContactEmail'] }}.
 @stop

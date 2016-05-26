@@ -3,14 +3,16 @@
 @section('content')
 Hello {{ $recipientName }},
 
-Thank you for your submission to the {{ $settings['appName'] }}. Your information has not yet been posteed because we need further information. An AFRED team member will be contacting you shortly to help you complete your posting.
+Thank you for your submission to the {{ $settings['appName'] }}.
+Your information has not yet been posteed because we need further information.
 
 @if ($reviewerName && $reviewerMessage)
-A message from {{ $reviewerName }} has been included in this email:
-{{ $reviewerMessage }}
+--
+A message from {{ $reviewerName }}:
+{!! $reviewerMessage !!}
+--
 @endif
 
-In the meantime, if you have any questions or comments, please contact <NAME>, <TITLE>, at <EMAIL>.
-
-Thank you.
+To complete your listing, or if you have any questions or comments, please
+contact {{ $settings['personalContactName'] }}, {{ $settings['personalContactTitle'] }}, at {{ $settings['personalContactEmail'] }}.
 @stop
