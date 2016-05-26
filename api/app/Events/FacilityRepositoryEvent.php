@@ -11,21 +11,24 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
 // Models.
 use App\FacilityRepository;
+use App\FacilityUpdateLink;
 
 class FacilityRepositoryEvent extends Event
 {
     use SerializesModels;
     
     public $fr;
+    public $ful;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(FacilityRepository $fr)
+    public function __construct(FacilityRepository $fr, FacilityUpdateLink $ful)
     {
         $this->fr = $fr;
+        $this->ful = $ful;
     }
 
     /**
