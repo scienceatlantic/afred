@@ -40,24 +40,35 @@ class FacilityRepositoryListener extends BaseListener
         $tPfx = 'emails.events.fr.'; 
         
         // Email subject prefix.
-        $sPfx = $this->_settings['emailSubjectPrefix'];
+        $sPfx = $this->settings['emailSubjectPrefix'];
         
-        // Email subject suffix. We're attaching the facility repository's ID
-        // to all emails as the suffix.
-        $sSfx = ' (FR-ID: ' . $event->fr->id. ')';
+        // Add the facility repository ID to the email subject prefix.
+        $sPfx .= '(FR-ID: ' . $event->fr->id. ') ';
         
-        // Get the reviewer's name (if applicable)
-        $temp = $event->fr->reviewer()->first();
-        $reviewerName = $temp ? $temp->getFullName() : null;
+        // Get the reviewer's name (if applicable).
+        $reviewer = $event->fr->reviewer()->first();
+        $reviewerName = $reviewer ? $reviewer->getFullName() : null;
         
-        // Get the primary contact's details (name and email).
-        $pc = [];
-        $pc['name'] = $event->fr->data['primaryContact']['firstName']
-                    . ' ' . $event->fr->data['primaryContact']['lastName'];
-        $pc['email'] = $event->fr->data['primaryContact']['email'];
+        // Stores the recipient's details.
+        $c = [];
         
-        // Declare the $ilo variable here first. We're only going to initialise
-        // it if we need it.
+        // Primary contact details.
+        if ($event->fr->state == 'PENDING_APPROVAL'
+            || $event->fr->state == 'PUBLISHED'
+            || $event->fr->state == 'REJECTED') {
+            $c['name'] = $event->fr->data['primaryContact']['firstName']
+                       . ' ' . $event->fr->data['primaryContact']['lastName'];
+            $c['email'] = $event->fr->data['primaryContact']['email'];
+        // Get the details of the person that submitted the edit request.
+        } else if ($event->fr->state == 'PENDING_EDIT_APPROVAL'
+            || $event->fr->state == 'PUBLISHED_EDIT'
+            || $event->fr->state == 'REJECTED_EDIT') {
+            $c['name'] = $event->ful->getFullName();
+            $c['email'] = $event->ful->editorEmail;
+        }
+        
+        // Declare the $ilo variable here first and add data to it later if
+        // we need it.
         $ilo = [];
         
         // Data that will be passed to the email templates.
@@ -70,7 +81,7 @@ class FacilityRepositoryListener extends BaseListener
             'reviewerMessage' => $event->fr->reviewerMessage,
             'iloName'         => '', // Placeholder for the ILO's name.
             'iloEmail'        => '', // Placeholder for the ILO's email.
-            'settings'        => $this->_settings
+            'settings'        => $this->settings
         ];
         
         switch ($event->fr->state) {
@@ -78,11 +89,11 @@ class FacilityRepositoryListener extends BaseListener
             case 'PENDING_APPROVAL':    
                 // Administrator section.
                 $adminT = $tPfx . 'admin-pending-approval';
-                $adminS = $sPfx . 'New research infrastructure information submitted' . $sSfx;             
+                $adminS = $sPfx . 'Facility Submitted';             
                 
                 // Primary contact section.
-                $pcT = $tPfx . 'primary-contact-pending-approval';
-                $pcS = $sPfx . 'Research infrastructure information received' . $sSfx;
+                $cT = $tPfx . 'primary-contact-pending-approval';
+                $cS = $sPfx . 'Facility Submission Received';
                 break;
             
             // Emails are sent out to all admins, the primary contact, and the
@@ -90,13 +101,13 @@ class FacilityRepositoryListener extends BaseListener
             case 'PUBLISHED':
                 // Administrator section.
                 $adminT = $tPfx . 'admin-published';
-                $adminS = $sPfx . 'New research infrastructure information published' . $sSfx;             
+                $adminS = $sPfx . 'Facility Approved';             
                 
                 // Primary contact section.
-                $pcT = $tPfx . 'primary-contact-published';
-                $pcS = $sPfx . 'Research infrastructure information published' . $sSfx;
+                $cT = $tPfx . 'primary-contact-published';
+                $cS = $sPfx . 'Facility Approved';
                 
-                // ILO section.
+                // ILO section (if applicable).
                 $temp = $event->fr->facility()->first();
                 $temp = $temp ? $temp->organization()->first()->ilo() : null;
                 $temp = $temp ? $temp->first() : null;
@@ -111,61 +122,61 @@ class FacilityRepositoryListener extends BaseListener
             case 'REJECTED':
                 // Administrator section.
                 $adminT = $tPfx . 'admin-rejected';
-                $adminS = $sPfx . 'New research infrastructure information rejected' . $sSfx;
+                $adminS = $sPfx . 'Facility Rejected';
                 
                 // Primary contact section.
-                $pcT = $tPfx . 'primary-contact-rejected';
-                $pcS = $sPfx . 'Research infrastructure information rejected' . $sSfx;                              
+                $cT = $tPfx . 'primary-contact-rejected';
+                $cS = $sPfx . 'Facility Submission Follow-up Required';                              
                 break;
             
             // Emails are sent out the all admins and the primary contact.
             case 'PENDING_EDIT_APPROVAL':
                 // Administrator section.
                 $adminT = $tPfx . 'admin-pending-edit-approval';
-                $adminS = $sPfx . 'New research infrastructure information edit submitted' . $sSfx;
+                $adminS = $sPfx . 'Facility Edit Submitted';
                 
-                // Primary contact section.
-                $pcT = $tPfx . 'primary-contact-pending-edit-approval';
-                $pcS = $sPfx . 'Research infrastructure information edit received' . $sSfx;                  
+                // Contact section (could either be a primary contact, contact,
+                // or admin - i.e. person that submitted the edit request).
+                $cT = $tPfx . 'contact-pending-edit-approval';
+                $cS = $sPfx . 'Facility Edit Received';
                 break;
             
             // Emails are sent out to all admins and the primary contact.
             case 'PUBLISHED_EDIT':
                 // Administrator section.
                 $adminT = $tPfx . 'admin-published-edit';
-                $adminS = $sPfx . 'New research infrastructure information edit published' . $sSfx;
+                $adminS = $sPfx . 'Facility Edit Approved';
                 
-                // Primary contact section.
-                $pcT = $tPfx . 'primary-contact-published-edit';
-                $pcS = $sPfx . 'Research infrastructure information edit published' . $sSfx;   
+                // Contact section (could either be a primary contact, contact,
+                // or admin - i.e. person that submitted the edit request).
+                $cT = $tPfx . 'contact-published-edit';
+                $cS = $sPfx . 'Facility Edit Approved';   
                 break;
             
             // Emails are sent out to all admins and the primary contact.
             case 'REJECTED_EDIT':
                 // Administrator section.
                 $adminT = $tPfx . 'admin-rejected-edit';
-                $adminS = $sPfx . 'New research infrastructure information edit rejected' . $sSfx;
+                $adminS = $sPfx . 'Facility Edit Rejected';
                 
-                // Primary contact section.
-                $pcT = $tPfx . 'primary-contact-rejected-edit';
-                $pcS = $sPfx . 'Research infrastructure information edit rejected' . $sSfx;   
+                // Contact section (could either be a primary contact, contact,
+                // or admin - i.e. person that submitted the edit request).
+                $cT = $tPfx . 'contact-rejected-edit';
+                $cS = $sPfx . 'Facility Edit Follow-up Required';   
                 break;
         }
         
         // Email all admins.
         foreach(Role::admin()->users()->get() as $admin) {
             $data['recipientName'] = $admin->getFullName();
-            $this->_mail($adminT, $adminS, $data, [
+            $this->mail($adminT, $adminS, $data, [
                 'name'  => $admin->getFullName(),
                 'email' => $admin->email
             ]);
         }
         
-        // Email primary contact and ILO (if applicable)
-        $data['recipientName'] = $pc['name'];
-        $this->_mail($pcT, $pcS, $data, $pc);
-        //$this->_mail($pcT, $pcS, $data, $pc, $ilo); // Uncomment this line
-                                                      // when we're actually
-                                                      // testing ILO func.
+        // Email the contact and ILO (if applicable).
+        $data['recipientName'] = $c['name'];
+        $this->mail($cT, $cS, $data, $c, $ilo);
     }
 }

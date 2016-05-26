@@ -38,22 +38,26 @@ class FacilityUpdateLinksListener extends BaseListener
     public function handle(FacilityUpdateLinksEvent $event)
     {
         $email = $event->ful->email;
-        $email = 'prasad@scienceatlantic.ca';
-        $template = 'emails.events.ful.token-requested'; 
-        $subject = $this->_settings['emailSubjectPrefix'] . 'Facility update request (fr #' . $event->ful->frIdBefore . ')';
+        $template = 'emails.events.ful.token-requested';
+        $sPfx = $this->settings['emailSubjectPrefix'] . '(FR-ID: ' . $event->ful->frIdBefore. ') ';
+        $subject = $sPfx .'Facility Update Request';
         
+        // Template data.
         $data = [
             'recipientName' => $event->ful->getFullName(),
+            'facilityName'  => $event->ful->frB()->first()->data['facility']['name'],
             'frIdBefore'    => $event->ful->frIdBefore,
             'token'         => $event->ful->token,
-            'settings'      => $this->_settings  
+            'settings'      => $this->settings  
         ];
         
+        // Recipient that requested the edit.
         $to = [
             'name'  => $event->ful->getFullName(),
             'email' => $event->ful->editorEmail
         ];
         
+        // Blind copy all admins.
         $bcc = [];
         foreach(Role::admin()->users()->get() as $admin) {
             array_push($bcc, [
@@ -62,6 +66,6 @@ class FacilityUpdateLinksListener extends BaseListener
             ]);
         }
         
-        $this->_mail($template, $subject, $data, $to, $bcc);
+        $this->mail($template, $subject, $data, $to, null, $bcc);
     }
 }
