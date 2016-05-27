@@ -36,7 +36,7 @@ class FacilityController extends Controller
     {
         if (!($email = $request->email)) {
             $f = Facility::with('province',
-                                'organization',
+                                'organization.ilo',
                                 'disciplines',
                                 'sectors',
                                 'primaryContact',
@@ -62,7 +62,7 @@ class FacilityController extends Controller
         }
         
         $f = Facility::with('province',
-                            'organization',
+                            'organization.ilo',
                             'disciplines',
                             'sectors',
                             'primaryContact',
