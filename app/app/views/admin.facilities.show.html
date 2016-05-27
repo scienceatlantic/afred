@@ -57,9 +57,16 @@
             <a data-ui-sref="admin.facilities.history.index({ facilityId: fr.facilityId })">Revision history</a>
           </span>
         </p>
+        
+        <!-- Published link anchor. -->
+        <p>
+          <span data-ng-show="fr.publishedFacility.id">
+            <a data-ui-sref="facilities.show({ facilityId: fr.publishedFacility.id })">Public view</a>
+          </span>
+        </p>
       </div>
     </div>
-    
+
     <!-- Search visiblity -->
     <div class="row">
       <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
