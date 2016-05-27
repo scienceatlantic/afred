@@ -13,11 +13,10 @@
         <p>
           <b>
             <span class="text-success" data-ng-show="f.publishedFacility.id">CURRENT PUBLISHED REVISION</span>
-            <span class="text-warning" data-ng-show="!f.publishedFacility.id && f.facility.id && f.state != 'REJECTED_EDIT'">PREVIOUS PUBLISHED REVISION</span>
+            <span class="text-warning" data-ng-show="!f.publishedFacility.id && f.state != 'PENDING_EDIT_APPROVAL' && f.facility.id && f.state != 'REJECTED_EDIT'">PREVIOUS PUBLISHED REVISION</span>
             <span class="text-info" data-ng-show="f.state == 'PENDING_EDIT_APPROVAL'">PENDING EDIT APPROVAL</span>
-            <span class="text-danger" data-ng-show="f.state == 'REJECTED'">REJECTED</span>
             <span class="text-danger" data-ng-show="f.facility.id && f.state == 'REJECTED_EDIT'">REJECTED EDIT</span>
-            <span class="text-danger" data-ng-show="f.state != 'REJECTED' && !f.facility.id">DELETED</span>
+            <span class="text-danger" data-ng-show="!f.facility.id">DELETED</span>
           </b>
         </p>
         
