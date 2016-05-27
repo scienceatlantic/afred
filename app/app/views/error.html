@@ -6,8 +6,8 @@
       :(
     </div>
     
-    <div data-ng-include="'views/includes/errors/' + _state.current.name + '.html'"></div>
-
-    <p>Click <a data-ui-sref="search">here</a> to get back to the homepage.</p>
+    <div data-ui-view></div>
+    
+    <p data-ng-show="!_state.is('error.500')">Click <a data-ui-sref="search">here</a> to get back to the homepage.</p>
   </div>
 </div>

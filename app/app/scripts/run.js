@@ -198,11 +198,11 @@ angular.module('afredApp').run(['$rootScope',
         
         case '404':
         case '500':
-          $rootScope._state.go(statusCode);
+          $rootScope._state.go('error.' + statusCode);
           break;
         
         default:
-          $rootScope._state.go('500');
+          $rootScope._state.go('error.500');
       }
     };
     

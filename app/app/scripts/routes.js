@@ -11,7 +11,7 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
     // See: http://stackoverflow.com/questions/26181141/angularjs-ui-router-otherwise-to-state-instead-of-url
     $urlRouterProvider.otherwise(function($injector, $location) {
       $injector.invoke(['$state', function($state) {
-        $state.go('404');
+        $state.go('error.404');
       }]);
     });
     
@@ -23,7 +23,10 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
       .state('search', {
         url: '/search',
         templateUrl: 'views/search.html',
-        controller: 'SearchController'
+        controller: 'SearchController',
+        data: {
+          pageTitle: 'Search'
+        }
       }).
       state('search.all', {
         // This line is passed 80 chars, but I'm not breaking it up.
@@ -44,7 +47,10 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
       state('facilities.update', {
         url: '/update',
         templateUrl: 'views/facilities.update.html',
-        controller: 'FacilitiesUpdateController'
+        controller: 'FacilitiesUpdateController',
+        data: {
+          pageTitle: 'Keep your Facility Up-to-date'
+        }
       }).
       state('facilities.form', {
         'abstract': true,
@@ -55,22 +61,34 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
       state('facilities.form.guide', {
         url: '/guide',
         templateUrl: 'views/facilities.form.guide.html',
-        controller: 'FacilitiesFormGuideController'
+        controller: 'FacilitiesFormGuideController',
+        data: {
+          pageTitle: 'Submitting a Facility Guide'
+        }
       }).
       state('facilities.form.create', {
         url: '/create',
         templateUrl: 'views/facilities.form.create.html',
-        controller: 'FacilitiesFormCreateController'
+        controller: 'FacilitiesFormCreateController',
+        data: {
+          pageTitle: 'Submit a Facility'
+        }
       }).
       state('facilities.form.edit', {
         url: '/:facilityRepositoryId/edit?token',
         templateUrl: 'views/facilities.form.edit.html',
-        controller: 'FacilitiesFormEditController'
+        controller: 'FacilitiesFormEditController',
+        data: {
+          pageTitle: 'Edit a Facility'
+        }
       }).
       state('facilities.show', {
         url: '/:facilityId',
         templateUrl: 'views/facilities.show.html',
-        controller: 'FacilitiesShowController'
+        controller: 'FacilitiesShowController',
+        data: {
+          pageTitle: 'Facility'
+        }
       }).
       state('facilities.show.equipment', {
         'abstract': true,
@@ -81,11 +99,17 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         url: '/:equipmentId',
         templateUrl: 'views/facilities.show.equipment.show.html',
         controller: 'FacilitiesShowEquipmentShowController',
+        data: {
+          pageTitle: 'Equipment'
+        }
       }).
       state('about', {
         url: '/about',
         templateUrl: 'views/about.html',
-        controller: 'AboutController'
+        controller: 'AboutController',
+        data: {
+          pageTitle: 'About'
+        }
       }).
       state('about.legal', {
         'abstract': true,
@@ -95,17 +119,26 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
       state('about.legal.privacyPolicy', {
         url: '/privacy-policy',
         templateUrl: 'views/about.legal.privacy-policy.html',
-        controller: 'AboutLegalPrivacyPolicyController'
+        controller: 'AboutLegalPrivacyPolicyController',
+        data: {
+          pageTitle: 'Privacy Policy'
+        }
       }).
       state('about.legal.termsOfService', {
         url: '/terms-of-service',
         templateUrl: 'views/about.legal.terms-of-service.html',
-        controller: 'AboutLegalTermsOfServiceController'
+        controller: 'AboutLegalTermsOfServiceController',
+        data: {
+          pageTitle: 'Terms of Service'
+        }
       }).
       state('about.legal.disclaimer', {
         url: '/disclaimer',
         templateUrl: 'views/about.legal.disclaimer.html',
-        controller: 'AboutLegalDisclaimerController'
+        controller: 'AboutLegalDisclaimerController',
+        data: {
+          pageTitle: 'Disclaimer'
+        }
       }).
       state('admin', {
         'abstract': true,
@@ -125,17 +158,26 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
       }).
       state('admin.account', {
         url: '/account',
-        templateUrl: 'views/admin.account.html'
+        templateUrl: 'views/admin.account.html',
+        data: {
+          pageTitle: 'Admin/Account'
+        }
       }).
       state('admin.dashboard', {
         url: '/dashboard',
         templateUrl: 'views/admin.dashboard.html',
-        controller: 'AdminDashboardController'
+        controller: 'AdminDashboardController',
+        data: {
+          pageTitle: 'Admin/Dashboard'
+        }
       }).
       state('admin.facilities', {
         url: '/facilities',
         templateUrl: 'views/admin.facilities.html',
-        controller: 'AdminFacilitiesController'
+        controller: 'AdminFacilitiesController',
+        data: {
+          pageTitle: 'Admin/Facilities'
+        }
       }).
       state('admin.facilities.index', {
         url: '/index/?state&visibility&page',
@@ -172,7 +214,10 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         'abstract': true,
         url: '/organizations',
         templateUrl: 'views/admin.organizations.html',
-        controller: 'AdminOrganizationsController'
+        controller: 'AdminOrganizationsController',
+        data: {
+          pageTitle: 'Admin/Organizations'
+        }
       }).
       state('admin.organizations.index', {
         url: '/index?page',
@@ -193,7 +238,10 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         'abstract': true,
         url: '/provinces',
         templateUrl: 'views/admin.provinces.html',
-        controller: 'AdminProvincesController'
+        controller: 'AdminProvincesController',
+        data: {
+          pageTitle: 'Admin/Provinces'
+        }
       }).
       state('admin.provinces.index', {
         url: '/index?page',
@@ -214,7 +262,10 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         'abstract': true,
         url: '/sectors',
         templateUrl: 'views/admin.sectors.html',
-        controller: 'AdminSectorsController'
+        controller: 'AdminSectorsController',
+        data: {
+          pageTitle: 'Admin/Sectors'
+        }
       }).
       state('admin.sectors.index', {
         url: '/index?page',
@@ -235,7 +286,10 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         'abstract': true,
         url: '/disciplines',
         templateUrl: 'views/admin.disciplines.html',
-        controller: 'AdminDisciplinesController'
+        controller: 'AdminDisciplinesController',
+        data: {
+          pageTitle: 'Admin/Disciplines'
+        }
       }).
       state('admin.disciplines.index', {
         url: '/index?page',
@@ -256,6 +310,9 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         url: '/login?redirect',
         templateUrl: 'views/login.html',
         controller: 'LoginController',
+        data: {
+          pageTitle: 'Login'
+        },
         resolve: {
           ping: ['$rootScope', '$state', function($rootScope, $state) {
             return $rootScope._auth.ping().then(function(response) {
@@ -268,11 +325,21 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
           }]
         }
       }).
-      state('404', {
+      state('error', {
+        'abstract': true,
         templateUrl: 'views/error.html'
       }).
-      state('500', {
-        templateUrl: 'views/error.html'
+      state('error.404', {
+        templateUrl: 'views/error.404.html',
+        data: {
+          pageTitle: '404'
+        }
+      }).
+      state('error.500', {
+        templateUrl: 'views/error.500.html',
+        data: {
+          pageTitle: '500'
+        }
       });
   }
 ]);

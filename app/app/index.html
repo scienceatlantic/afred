@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-ng-app="afredApp" data-ng-controller="MainController" data-ng-cloak>
   <head>
     <!-- Meta details -->
     <meta charset="utf-8">
@@ -23,17 +23,26 @@
     <!-- endbuild -->
     
     <!-- Title -->
-    <title>AFRED</title>
+    <title data-ng-if="_state.current.data.pageTitle">{{ _state.current.data.pageTitle }} | Atlantic Facilities and Research Equipment Database</title>
+    <title data-ng-if="!_state.current.data.pageTitle">Atlantic Facilities and Research Equipment Database</title>
   </head>
-  <body data-ng-app="afredApp" data-ng-controller="MainController" data-ng-cloak>
+  <body data-ng-cloak>
+    <!-- JavaScript disabled warning message -->
+    <noscript class="h1">
+      The Atlantic Facilities and Research Equipment Database requires
+      JavaScript in order to function. Instructions on how to enable JavaScript
+      can be found <a href="http://enable-javascript.com/" target="_blank">here</a>.
+    </noscript>
+    
     <div>
-    <!-- Error pages container -->
-    <div data-ng-if="_state.is('404') || _state.is('500')">
+    <!-- Error pages container. -->
+    <div data-ng-if="_state.includes('error')">
       <div data-ui-view></div>
     </div>
     
-    <!-- All other content container -->
-    <div data-ng-if="!_state.is('404') && !_state.is('500')">
+    <!-- All other content container. -->
+    <div data-ng-if="!_state.includes('error')">
+      <!-- Outdated browser warning message. -->
       <!--[if lt IE 10]>
         <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
       <![endif]-->
