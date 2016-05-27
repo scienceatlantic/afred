@@ -80,7 +80,7 @@ angular.module('afredApp').run(['$rootScope', function($rootScope) {
       personal: {
         firstName: 'Patty',
         lastName: 'King',
-        title: '',
+        title: 'AFRED Program Manager',
         email: 'patty.king@scienceatlantic.ca'
       }
     }
