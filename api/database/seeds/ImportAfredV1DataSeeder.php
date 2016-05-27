@@ -381,8 +381,19 @@ class ImportAfredV1DataSeeder extends Seeder
         foreach($inventory as $index => $f) {
             $data['state'] = 'PENDING_APPROVAL';
             $data['data'] = [];
+            $data['dateSubmitted'] = $f['date_posted'];
             
             // Facility.
+            
+            // Since v2 doesn't have a 'keywords' field in the facility section,
+            // we're going to merge the keywords into the description of the
+            // facility.
+            $fDescription = '<p>' . $f['does'] . '</p>';
+            if ($f['keywords']) {
+                $fDescription .= '<p><b><u>Keywords:<b><u></p>';
+                $fDescription .= '<p>' . $f['keywords'] . '</p>';
+            }
+            
             $organization = DB::table('organizations')->where('name', trim($f['institution']))->first();
             $province = DB::table('provinces')->where('name', trim(substr($f['province'], 5)))->first();
             $data['data']['facility'] = [
@@ -391,7 +402,7 @@ class ImportAfredV1DataSeeder extends Seeder
                 'provinceId'     => $province ? $province->id : 1,
                 'city'           => $f['city'],
                 'website'        => $f['url'],
-                'description'    => $f['does'],
+                'description'    => $fDescription,
                 'isPublic'       => true,
                 'datePublished'  => $f['date_posted'],
                 'dateUpdated'    => $f['date_updated']
@@ -450,7 +461,8 @@ class ImportAfredV1DataSeeder extends Seeder
             // POST records as 'PUBLISHED'.
             $queryParams = http_build_query([
                 'state' => 'PUBLISHED',
-                'reviewMessage' => 'Importing data from AFRED V1.'
+                'reviewMessage' => 'Importing data from AFRED v1.0.',
+                'dateSubmitted' => $f['date_posted']
             ]);
             $url = $apiAddress->value . '/facility-repository/' . $fr['id'] . '?' . $queryParams;
 
