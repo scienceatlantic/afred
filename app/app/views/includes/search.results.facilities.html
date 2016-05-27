@@ -1,0 +1,22 @@
+<div data-ng-repeat="f in search.results" data-ng-show="f.name">
+  <p>
+    <a data-ui-sref="facilities.show({ facilityId: f.id })" style="text-decoration: none !important;" target="_blank">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <p class="h4">{{ f.name }} <span data-ng-show="f.organization.name">| {{ f.organization.name }}</span></p>
+          
+          <div style="color: #333;">
+            <p class="text-muted"><small>{{ f.city }}, {{ f.province.name }}</small></p>
+            
+            <div data-ng-show="f.descriptionNoHtml">
+              <hr>
+              <div>
+                <span>{{ f.descriptionNoHtml | limitTo: 170 }}</span><span data-ng-show="f.descriptionNoHtml.length > 170">...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </a>
+  </p>
+</div><!-- End of ng-repeat -->

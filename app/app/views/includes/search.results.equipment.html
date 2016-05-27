@@ -1,0 +1,25 @@
+<div data-ng-repeat="e in search.results" data-ng-show="e.type">
+  <p>
+    <a data-ui-sref="facilities.show.equipment.show({ facilityId: e.facility.id, equipmentId: e.id })" style="text-decoration: none !important;" target="_blank">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <p class="h4">{{ e.type }} | {{ e.facility.name }}</p>
+        
+        <div style="color: #333;">
+          <p class="text-muted"><span data-ng-show="e.facility.organization.name">{{ e.facility.organization.name }},</span> {{ e.facility.city }}, {{ e.facility.province.name }}</p>
+          
+          <div>
+            <hr>
+            <p data-ng-show="e.model"><span class="label label-default">Model:</span> {{ e.model }}</p>
+            <p data-ng-show="e.manufacturer"><span class="label label-default">Manufacturer:</span> {{ e.manufacturer }}</p>
+            
+            <div>
+              <span>{{ e.purposeNoHtml | limitTo: 170 }}</span><span data-ng-show="e.purposeNoHtml.length > 170">...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </a>
+  </p>
+</div><!-- End of ng-repeat -->

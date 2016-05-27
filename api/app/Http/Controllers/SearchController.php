@@ -12,8 +12,12 @@ use Illuminate\Http\Request;
 use Log;
 
 // Models.
+use App\Discipline;
 use App\Equipment;
 use App\Facility;
+use App\Organization;
+use App\Province;
+use App\Sector;
 
 // Requests.
 use App\Http\Requests;
@@ -32,6 +36,11 @@ class SearchController extends Controller
      */
     public function index(Request $request)
     {
+        // Check if request is for advanced search options.
+        if ($request->has('advancedSearchOptions')) {
+            return $this->getAdvancedSearchOptions();
+        }
+        
         // Process the query.
         $q = $request->input('q');
         
@@ -152,6 +161,16 @@ class SearchController extends Controller
         }
         
         return $this->pageOrGet($results); 
+    }
+    
+    private static function getAdvancedSearchOptions()
+    {
+        $d = [];
+        $d['disciplines'] = Discipline::all();
+        $d['sectors'] = Sector::all();
+        $d['provinces'] = Province::notHidden()->get();
+        $d['organizations'] = Organization::notHidden()->get();
+        return $d;
     }
     
     private function _processQuery($q)
