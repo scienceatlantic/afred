@@ -4,8 +4,8 @@
 Hello {{ $recipientName }},
 
 Thank you for your submission to the {{ $settings['appName'] }}
-({{ $settings['appShortName'] }}). Your information has not yet been posted
-because we need additional information.
+({{ $settings['appShortName'] }}). Your information has not yet been posted because we need additional
+information.
 
 @if ($reviewerName && $reviewerMessage)
 --
