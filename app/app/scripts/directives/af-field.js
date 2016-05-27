@@ -3,8 +3,10 @@
 /**
  * Directive for form fields.
  */
-angular.module('afredApp').directive('afField',
-  function() {
+angular.module('afredApp').directive('afField', [
+  '$timeout',
+  'textAngularManager',
+  function($timeout, textAngularManager) {
     return {
       restrict: 'A',
       replace: true,
@@ -14,43 +16,50 @@ angular.module('afredApp').directive('afField',
       scope: {
         label: '@afFieldLabel',
         nameOverride: '@afFieldName',
-        typeOverride: '@afFieldType',
-        isTextAngular: '@afFieldTextangular'
+        model: '=afFieldModel',
       },
       link: function($scope, element, attrs, form) { 
+        var field = element.find('input[type!="hidden"], select, ' +
+          'textarea:not([ta-bind]), div[data-text-angular], div[text-angular]');
+        
+        // Note: '$timeout' is used as a hack-ish fix to give Angular time
+        // to interpolate anything inside '{{}}' (if used in a name attribute).
         if ($scope.nameOverride) {
           $scope.name = $scope.nameOverride;
-          
-          $scope.template = {
-            isRadio: $scope.typeOverride === 'radio',
-            isCheckbox: $scope.typeOverride === 'checkbox'
-          };
         } else {
-          var field = element.find('input, select, textarea');
-          
-          if ($scope.isTextAngular) {
-            $scope.name = field.get(1).name;
-            $scope.id = field.get(1).id;
-            
-            $scope.template = {
-              isTextArea: true
-            };
-          } else {
+          $timeout(function() {
             $scope.name = field.attr('name');
-            $scope.id = field.attr('id');
-  
-            $scope.template = {
-              isInput: field.prop('tagName') === 'INPUT',
-              isSelect: field.prop('tagName') === 'SELECT',
-              isTextarea: field.prop('tagName') === 'TEXTAREA',
-              isRadio: field.attr('type') === 'radio',
-              isCheckbox: field.attr('type') === 'checkbox'
-            };     
-          }               
+          });
         }
         
-        $scope.form = form; 
+        try {
+          $scope.maxLength = parseInt(field.attr('maxlength'));
+          
+          if (!$scope.maxLength) {
+            $scope.maxLength = parseInt(field.attr('data-ta-maxlength'));
+          }
+          
+          if (!$scope.maxLength) {
+            $scope.maxLength = parseInt(field.attr('ta-maxlength'));
+          }
+        } catch(e) {
+          // Do nothing.
+        }
+        
+        $scope.isTextAngular = field.hasClass('ta-root');
+        
+        if ($scope.isTextAngular) {
+          $timeout(function() {
+            $scope.getTextAngularContentLength = function() {
+              var ta = textAngularManager.retrieveEditor($scope.name);
+              return angular.element(ta.scope.displayElements.text[0])
+                .text().length;
+            };          
+          })
+        }
+        
+        $scope.form = form;
       }
     };
   }
-);
+]);

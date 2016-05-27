@@ -1,53 +1,29 @@
-<div class="row">
-  <div class="col-lg-12">
-    <h3>Edit a Facility</h3>
+<h1>Edit a Facility</h1>
+
+<!-- Form. -->
+<div data-af-loading="!(form.organizations.$resolved || form.provinces.$resolved || form.disciplines.$resolved || form.sectors.$resolved || form.fr.$resolved) || (form.loading.disciplines || form.loading.sectors)" data-ng-show="view.show == 'FORM'">
+  <div data-ng-include="'views/includes/facilities.form.html'"></div>
+</div>
+
+<!-- Preview. -->
+<div data-ng-show="view.show == 'PREVIEW'">
+  <div data-ng-include="'views/includes/facilities.form.preview.html'"></div>
+</div>
+
+<!-- Success message. -->
+<div data-ng-show="view.show == 'SUCCESS_MESSAGE'">
+  <p>Thank you!</p>
+  
+  <p>Your information has been successfully submitted.</p>
     
-    <div data-af-loading="!(form.organizations.$resolved || form.provinces.$resolved || form.disciplines.$resolved || form.sectors.$resolved || form.fr.$resolved) || (form.loading.disciplines || form.loading.sectors)" data-ng-show="view.show == 'FORM'">
-      <div data-ng-include="'views/includes/facilities.form.html'"></div>
-    </div>
+  <p>The contact that received the unique link to this page will receive a follow-up email once the record has been reviewed.</p>
     
-    <div data-ng-show="view.show == 'PREVIEW'">
-      <div class="panel panel-default">
-        <div class="panel-body">
-          <div data-ng-include="'views/includes/facility.html'"></div>
-        </div>
-      </div>
-      
-      <div class="panel panel-default" data-ng-show="facility.organization.ilo.firstName">
-        <div class="panel-body">
-          <div data-ng-include="'views/includes/ilo.html'"></div>
-        </div>
-      </div>
-      
-      <div class="panel panel-default">
-        <div class="panel-body">
-          <div data-ng-include="'views/includes/contacts.html'"></div>
-        </div>
-      </div>
-          
-      <div class="panel panel-default">
-        <div class="panel-body">
-          <div data-ng-include="'views/includes/equipment.html'"></div>
-        </div>
-      </div>
-      
-      <p>
-        <button class="btn btn-default" data-ng-click="submit()" data-af-loading-btn="fr.$resolved === false" data-ng-disabled="fr.$resolved === false">Submit</button>
-        <button class="btn btn-default" data-ng-click="view.show = 'FORM'" data-ng-disabled="fr.$resolved === false">Go Back</button>
-      </p>
-    </div>
-    
-    <div data-ng-show="view.show == 'SUCCESS_MESSAGE'">
-      <p>Thank you! Your edit has been successfully submitted into AFRED for review.</p>
-      
-    </div>
-    
-    <div data-ng-show="view.show =='FAILURE_MESSAGE'">
-      <p>Oh no... something went wrong!</p>
-    </div>
-    
-    <div data-ng-show="view.show =='INVALID_TOKEN_MESSAGE'">
-      <p>Invalid URL!</p>
-    </div>
-  </div><!-- End of .col-x-x -->
-</div><!-- End of .row -->
+  <p>Go to <a data-ui-sref="search">homepage</a>.</p>
+</div>
+
+<!-- Failure message. -->
+<div data-ng-show="view.show =='FAILURE_MESSAGE'">
+  <p>Sorry! A technical difficulty was encountered and your information was not successfully submitted.</p>
+
+  <p>Please contact <a href="mailto:{{ _config.contacts.general.email }}">{{ _config.contacts.general.email }}</a>.</p>
+</div>

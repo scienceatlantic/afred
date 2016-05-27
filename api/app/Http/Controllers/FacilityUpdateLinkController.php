@@ -12,6 +12,7 @@ use App\Events\FacilityUpdateLinksEvent;
 use Illuminate\Http\Request;
 
 // Misc.
+use Auth;
 use Log;
 
 // Models.
@@ -20,6 +21,7 @@ use App\FacilityUpdateLink;
 
 // Requests.
 use App\Http\Requests;
+use App\Http\Requests\FacilityUpdateLinkRequest;
 
 class FacilityUpdateLinkController extends Controller
 {
@@ -33,11 +35,32 @@ class FacilityUpdateLinkController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
-    {        
-        return null;
-    }    
+    public function index(FacilityUpdateLinkRequest $request)
+    {
+        $ful = FacilityUpdateLink::with('frB', 'frA');
+        
+        if ($request->status) {
+            $ful->where('status', $request->status);
+        }
+        
+        return $this->pageOrGet($ful);
+    }
     
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(FacilityUpdateLinkRequest $request, $id)
+    {
+        $ful = FacilityUpdateLink::findOrFail($id);
+        $ful->status = 'CLOSED';
+        $ful->dateClosed = $this->now();
+        $ful->save();
+        return $ful;
+    }
     
     /**
      * Store a newly created resource in storage.
@@ -45,46 +68,49 @@ class FacilityUpdateLinkController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function generateToken(Request $request)
+    public function store(FacilityUpdateLinkRequest $request)
     {
-        $facilityId = $request->input('facilityId', null);
-        $email = $request->input('email', null);
+        // Local variables to shorten code.
+        $id = $request->input('facilityId', null);
+        $e = $request->input('email', null);
         
-        // Grab the matching facility along with the required relationships.
-        $f = Facility::with([
-            'revision.fulsB' => function($query) {
-              $query->open();  
-            },
-            'primaryContact' => function($query) use ($email) {
-                $query->where('email', $email); 
-            },
-            'contacts' => function($query) use ($email) {
-                $query->where('email', $email);
+        // Find the facility.
+        $f = Facility::findOrFail($id);
+        
+        if ($request->isAdmin) {
+            if (!(Auth::check() && Auth::user()->isAtLeastAdmin())) {
+                abort(403);
             }
-        ])->findOrFail($facilityId);
-        
-        // Check if at least one matching contact was found.
-        if (!($c = $f->primaryContact)) {
-            $c = $f->contacts->firstOrFail();
+            
+            $c = Auth::user();
+        } else {
+            // Find the matching primary contact or (regular) contact.
+            if (!$c = $f->primaryContact()->where('email', $e)->first()) {
+                $c = $f->contacts()->where('email', $e)->firstOrFail();
+            }           
         }
-          
-        if (!count($f->revision->fulsB()->notClosed()->get())) {
-            $ful = FacilityUpdateLink::create([
-                'frIdBefore'      => $f->revision->id,
-                'editorFirstName' => $c->firstName,
-                'editorLastName'  => $c->lastName,
-                'editorEmail'     => $c->email,
-                'token'           => $this->_generateUniqueToken(),
-                'status'          => 'OPEN',
-                'dateRequested'   => $this->_now()
-            ]);
+
+        
+        // Only create a new facility update link record if the facility doesn't
+        // already have an open/pending facility update link record.
+        if (!$f->currentRevision()->first()->fulB()->notClosed()->count()) {
+            $ful = new FacilityUpdateLink();
+            $ful->frIdBefore = $f->currentRevision->id;
+            $ful->editorFirstName = $c->firstName;
+            $ful->editorLastName = $c->lastName;
+            $ful->editorEmail = $c->email;
+            $ful->token = $this->generateUniqueToken();
+            $ful->status = 'OPEN';
+            $ful->dateOpened = $this->now();
+            $ful->save();
             
             event(new FacilityUpdateLinksEvent($ful));
-        } else {
-            abort(404, 'Not found');
-        }
-        
-        return $ful;
+            
+            if (Auth::check() && Auth::user()->isAtLeastAdmin()) {
+                return $ful;   
+            }
+        } 
+        abort(400);
     }
 
     /**
@@ -93,12 +119,19 @@ class FacilityUpdateLinkController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroyToken($id)
+    public function destroy(FacilityUpdateLinkRequest $request, $id)
     {
-        //
+        $ful = FacilityUpdateLink::findOrFail($id);
+        $deletedFul = $this->toCcArray($ful->toArray());
+        $ful->delete();
+        return $deletedFul;
     }
     
-    private function _generateUniqueToken()
+    /**
+     * Generates a unique token.
+     * @return {string} Random 25-character string.
+     */
+    public static function generateUniqueToken()
     {
         while (($token = strtolower(str_random(25)))) {
             if (!FacilityUpdateLink::where('token', $token)->first()) {

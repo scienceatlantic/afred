@@ -13,6 +13,7 @@ use App\Discipline;
 
 // Requests.
 use App\Http\Requests;
+use App\Http\Requests\DisciplineRequest;
 
 class DisciplineController extends Controller
 {
@@ -26,10 +27,68 @@ class DisciplineController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(DisciplineRequest $request)
     {
-        $d = Discipline::orderBy('name', 'asc');        
-        $d = $this->_paginate ? $d->paginate($this->_itemsPerPage) : $d->get();
-        return $this->_toCamelCase($d->toArray());
+        return $this->pageOrGet(Discipline::orderBy('name', 'asc'));
+    }
+    
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(DisciplineRequest $request)
+    {
+        // Get current datetime.
+        $now = $this->now();
+        
+        $d = new Discipline();
+        $d->name = $request->name;
+        $d->dateCreated = $now;
+        $d->dateUpdated = $now;
+        $d->save();
+        return $this->toCcArray($d->toArray());
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show(DisciplineRequest $request, $id)
+    {
+        return $this->toCcArray(Discipline::findOrFail($id)->toArray());
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(DisciplineRequest $request, $id)
+    {
+        $d = Discipline::findOrFail($id);
+        $d->name = $request->name;
+        $d->dateUpdated = $this->now();
+        $d->save();
+        return $this->toCcArray($d->toArray());
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(DisciplineRequest $request, $id)
+    {
+        $d = Discipline::findOrFail($id);
+        $deletedDiscipline = $d->toArray();
+        $d->delete();
+        return $this->toCcArray($deletedDiscipline);
     }
 }

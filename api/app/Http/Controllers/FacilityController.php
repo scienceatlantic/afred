@@ -13,13 +13,12 @@ use Log;
 
 // Models.
 use App\Facility;
-use App\Organization;
-use App\PrimaryContact;
 use App\Contact;
-use App\Equipment;
+use App\PrimaryContact;
 
 // Requests.
 use App\Http\Requests;
+use App\Http\Requests\FacilityRequest;
 
 class FacilityController extends Controller
 {
@@ -33,16 +32,19 @@ class FacilityController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(FacilityRequest $request)
     {
-        if (!($email = $request->input('email', null))) {
-            $f = new Facility();
-            $f = $this->_paginate ? $f->paginate($this->_itemsPerPage) : $f->get();
-            $this->_expandModelRelationships($f, true);
-            return $this->_toCamelCase($f->toArray());            
-        } else {
-            return $this->_indexMatchingFacilities($email);
+        if (!($email = $request->email)) {
+            $f = Facility::with('province',
+                                'organization.ilo',
+                                'disciplines',
+                                'sectors',
+                                'primaryContact',
+                                'contacts',
+                                'equipment');
+            return $this->pageOrGet($f);            
         }
+        return $this->indexMatchingFacilities($email);
     }
 
     /**
@@ -51,16 +53,39 @@ class FacilityController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $id)
+    public function show(FacilityRequest $request, $id)
     {
-        $f = Facility::findOrFail($id);        
-        $this->_expandModelRelationships($f);
-        return $this->_toCamelCase($f->toArray());   
+        // If an equipment ID is also provided, check that the facility has
+        // that piece of equipment.
+        if ($equipmentId = $request->equipmentId) {
+            Facility::find($id)->equipment()->findOrFail($equipmentId);
+        }
+        
+        $f = Facility::with('province',
+                            'organization.ilo',
+                            'disciplines',
+                            'sectors',
+                            'primaryContact',
+                            'contacts',
+                            'equipment')->findOrFail($id)->toArray();        
+        return $this->toCcArray($f);   
     }
     
-    public function updateVisibility()
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(FacilityRequest $request, $id)
     {
-        
+        // We can on update a facility record my marking it as private or
+        // public.
+        $f = Facility::findOrFail($id);
+        $f->isPublic = $request->isPublic;
+        $f->update();
+        return $this->toCcArray($f->toArray());
     }
 
     /**
@@ -69,12 +94,22 @@ class FacilityController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(FacilityRequest $request, $id)
     {
-        return Facility::find($id)->delete();
+        $f = Facility::findOrFail($id);
+
+        // Not allowed to delete a facility if it has an open/pending update
+        // request.
+        if ($f->currentRevision()->first()->fulB()->notClosed()->first()) {
+            abort(400);
+        }
+        
+        $deletedFacility = $this->toCcArray($f->toArray());
+        $f->delete();
+        return $deletedFacility;
     }
     
-    private function _indexMatchingFacilities($email)
+    private function indexMatchingFacilities($email)
     {
         // Find all matching contacts and grab their facility IDs.
         $cF = Contact::where('email', $email)->select('facilityId');
@@ -85,18 +120,21 @@ class FacilityController extends Controller
         // Add the two results together and grab all the matching facilities.
         $ids = $cF->union($pcF)->get()->toArray();
         
-        $f = Facility::leftJoin('facility_update_links',
-                                'facility_update_links.frIdBefore', '=',
-                                'facilities.facilityRepositoryId')
-            ->whereIn('facilities.id', $ids)
+        // Return the facility data 'left joined' with facility update link
+        // records that are not 'CLOSED'.
+        $f = Facility::leftJoin('facility_update_links', function($join) {
+                $join->on('facility_update_links.frIdBefore', '=',
+                    'facilities.facilityRepositoryId')
+                    ->where('facility_update_links.status', '!=', 'CLOSED');
+            })->whereIn('facilities.id', $ids)
             ->select('facilities.id',
                      'facilities.name',
+                     'facilities.city',
                      'facility_update_links.editorFirstName',
                      'facility_update_links.editorLastName',
                      'facility_update_links.editorEmail',
                      'facility_update_links.status');
-                
-        $f = $this->_paginate ? $f->paginate($this->_itemsPerPage) : $f->get();
-        return $this->_toCamelCase($f->toArray());
+        
+        return $this->pageOrGet($f);
     }
 }

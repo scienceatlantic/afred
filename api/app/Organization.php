@@ -5,13 +5,14 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 class Organization extends Model
-{
+{   
     /**
      * The attributes that should be mutated to dates.
      *
      * @var array
      */
-    protected $dates = ['dateAdded',
+    protected $dates = ['dateCreated',
+                        'dateUpdated',
                         'created_at',
                         'updated_at'];
     
@@ -22,7 +23,9 @@ class Organization extends Model
      */
     protected $fillable = [
         'name',
-        'dateAdded'
+        'isHidden',
+        'dateCreated',
+        'dateUpdated'
     ];
     
     public function ilo()
@@ -37,5 +40,10 @@ class Organization extends Model
     public function scopeNotHidden($query)
     {
         $query->where('isHidden', false);
+    }
+    
+    public function scopeHidden($query)
+    {
+        $query->where('isHidden', true);
     }
 }

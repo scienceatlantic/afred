@@ -13,6 +13,7 @@ use App\Organization;
 
 // Requests.
 use App\Http\Requests;
+use App\Http\Requests\OrganizationRequest;
 
 class OrganizationController extends Controller
 {
@@ -26,12 +27,21 @@ class OrganizationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(OrganizationRequest $request)
     {
-        $o = Organization::notHidden()->orderBy('name', 'asc');
-        $o = $this->_paginate ? $o->paginate($this->_itemsPerPage) : $o->get();
-        $this->_expandModelRelationships($o, true);
-        return $this->_toCamelCase($o->toArray());
+        $o = Organization::with('ilo');
+        
+        if ($request->has('isHidden')) {
+            if ($request->input('isHidden', 0)) {
+                $o->hidden();
+            } else {
+                $o->notHidden();
+            }
+        }
+        
+        $o->orderBy('name', 'asc');
+        
+        return $this->pageOrGet($o);
     }
 
     /**
@@ -40,9 +50,35 @@ class OrganizationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(OrganizationRequest $request)
     {
-        //
+        // Get current datetime.
+        $now = $this->now();
+        
+        $o = new Organization();
+        $o->name = $request->name;
+        $o->isHidden = $request->isHidden;
+        $o->dateCreated = $now;
+        $o->dateUpdated = $now;
+        $o->save();
+        return $this->toCcArray($o->toArray());
+    }
+    
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(OrganizationRequest $request, $id)
+    {
+        $o = Organization::with('ilo')->findOrFail($id);
+        $o->name = $request->name;
+        $o->isHidden = $request->isHidden;
+        $o->dateUpdated = $this->now();
+        $o->save();        
+        return $this->toCcArray($o->toArray());
     }
 
     /**
@@ -51,11 +87,10 @@ class OrganizationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $id)
+    public function show(OrganizationRequest $request, $id)
     {
-        $o = Organization::findOrFail($id);
-        $this->_expandModelRelationships($o);
-        return $this->_toCamelCase($o->toArray());
+        $o = Organization::with('ilo')->findOrFail($id)->toArray();
+        return $this->toCcArray($o);
     }
 
     /**
@@ -64,8 +99,11 @@ class OrganizationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(OrganizationRequest $request, $id)
     {
-        Organization::destroy($id);
+        $o = Organization::findOrFail($id);
+        $deletedOrg = $this->toCcArray($o->toArray());
+        $o->delete();
+        return $deletedOrg;
     }
 }

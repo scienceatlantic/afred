@@ -26,4 +26,9 @@ class PrimaryContact extends Model
     {
         return $this->belongsTo('App\Facility', 'facilityId');
     }
+    
+    public function getFullName()
+    {
+        return $this->firstName . ' ' . $this->lastName;
+    }
 }

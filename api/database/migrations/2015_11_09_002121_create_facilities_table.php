@@ -14,34 +14,23 @@ class CreateFacilitiesTable extends Migration
     {
         Schema::create('facilities', function($table) {
             $table->increments('id');
-            $table->integer('facilityRepositoryId')
-                ->unsigned();
-            $table->foreign('facilityRepositoryId')
-                ->references('id')
-                ->on('facility_repository')
-                ->onDelete('restrict');
-            $table->integer('organizationId')
-                ->unsigned();
-            $table->foreign('organizationId')
-                ->references('id')
-                ->on('organizations')
-                ->onDelete('restrict');
-            $table->integer('provinceId')
-                ->unsigned();
-            $table->foreign('provinceId')
-                ->references('id')
-                ->on('provinces')
+            $table->integer('facilityRepositoryId')->unsigned();
+            $table->foreign('facilityRepositoryId')->references('id')
+                ->on('facility_repository')->onDelete('restrict');
+            $table->integer('organizationId')->unsigned();
+            $table->foreign('organizationId')->references('id')
+                ->on('organizations')->onDelete('restrict');
+            $table->integer('provinceId')->unsigned();
+            $table->foreign('provinceId')->references('id')->on('provinces')
                 ->onDelete('restrict');
             $table->string('name', 200);
-            $table->string('city', 150);
-            $table->string('website', 2083)
-                ->nullable();
+            $table->string('city', 150)->nullable();
+            $table->string('website', 2083)->nullable();
             $table->text('description');
             $table->text('descriptionNoHtml');
-            $table->boolean('isPublic')
-                ->default(true);
-            $table->datetime('dateSubmitted');
-            $table->datetime('dateUpdated');
+            $table->boolean('isPublic')->default(true);
+            $table->dateTime('datePublished');
+            $table->dateTime('dateUpdated');
             $table->timestamps();
         });
     }

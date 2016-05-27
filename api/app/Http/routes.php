@@ -11,8 +11,6 @@
 |
 */
 
-Route:get('csrf', 'CsrfController@show');
-
 /******************************************************************************
  * Authentication routes.
  *****************************************************************************/
@@ -36,27 +34,49 @@ Route::resource('organizations', 'OrganizationController', [
 			   'update',
 			   'destroy']]);
 
+               
+/******************************************************************************
+ * ILO routes.
+ *****************************************************************************/
+Route::resource('ilos', 'IloController', [
+	'only' => ['index',
+			   'store',
+			   'show',
+			   'update',
+			   'destroy']]);
+
 			   
 /******************************************************************************
  * Province routes.
  *****************************************************************************/
 Route::resource('provinces', 'ProvinceController', [
 	'only' => ['index',
-			   'show']]);
+			   'store',
+               'show',
+               'update',
+               'destroy']]);
 
                
 /******************************************************************************
  * Discipline routes.
  *****************************************************************************/
 Route::resource('disciplines', 'DisciplineController', [
-	'only' => ['index']]);
+	'only' => ['index',
+			   'store',
+               'show',
+               'update',
+               'destroy']]);
 
     
 /******************************************************************************
  * Sector routes.
  *****************************************************************************/
 Route::resource('sectors', 'SectorController', [
-	'only' => ['index']]);
+	'only' => ['index',
+			   'store',
+               'show',
+               'update',
+               'destroy']]);
 
 			   
 /******************************************************************************
@@ -64,7 +84,6 @@ Route::resource('sectors', 'SectorController', [
  *****************************************************************************/	  
 Route::resource('facilities', 'FacilityController', [
 	'only' => ['index',
-			   'store',
 			   'show',
 			   'update',
 			   'destroy']]);
@@ -75,28 +94,24 @@ Route::resource('facilities', 'FacilityController', [
  *****************************************************************************/
  
 // Merging the functions of 'store' and 'update' into 'update'.
-Route::post('facility-repository',
-	'FacilityRepositoryController@update');
+Route::post('facility-repository', 'FacilityRepositoryController@update');
 
-Route::resource('facility-repository',
-	'FacilityRepositoryController', [
+Route::resource('facility-repository', 'FacilityRepositoryController', [
 	'only' => ['index',
 			   'show',
 			   'update',
 			   'destroy']]);
 
+               
 /******************************************************************************
  * Facility update link routes.
  *****************************************************************************/
-               
-Route::get('facility-update-links/',
-           'FacilityUpdateLinkController@index');
+ Route::resource('facility-update-links', 'FacilityUpdateLinkController', [
+	'only' => ['index',
+               'store',
+               'update',
+               'destroy']]);
 
-Route::post('facility-update-links/generate-token',
-            'FacilityUpdateLinkController@generateToken');
-
-Route::post('facility-update-links/verify-token',
-            'FacilityUpdateLinkController@verifyToken');
 
 /******************************************************************************
  * Search routes

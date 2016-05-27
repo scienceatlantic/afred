@@ -1,9 +1,11 @@
 @extends('layouts.emails.master')
 
 @section('content')
-Hello {{ $name }},
+Hello {{ $recipientName }},
 
-A new facility called '{{ $facility }}' has been submitted into {{ $settings['APP_ACRONYM'] }} and is pending review.
+A new facility, '{{ $facilityName }}', has been submitted into {{ $settings['appShortName'] }}
+and is pending review.
 
-Please login here: {{ $settings['APP_ADDRESS'] }}/#/login
+To view it, please follow the link below:
+{{ $settings['appAddress'] }}/#/admin/facilities/show?facilityRepositoryId={{ $frId }}
 @stop

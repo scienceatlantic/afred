@@ -4,7 +4,6 @@
 use Illuminate\Database\Seeder;
 
 // Misc.
-use \Log;
 use App\Setting;
 
 class ImportAfredV1DataSeeder extends Seeder
@@ -353,13 +352,13 @@ class ImportAfredV1DataSeeder extends Seeder
           array('lab_list_id' => '252','inventory_id' => '260','lab' => 'Vibratome','fee' => '1','guest' => '1','host' => '1','descr' => 'Vibratome series 1000 microtome')
         );
         
-        $apiAddress = Setting::find('API_ADDRESS');
+        $apiAddress = Setting::find('apiAddress');
         
-        // Login to the API to get the session cookie.
+        // Login to the API to get the session cookie (Lines 358 - 379).
         $url = $apiAddress->value . '/auth/login';
         $jsonData = json_encode([
-            'email' => 'prasad@scienceatlantic.ca',
-            'password' => 'acenet-usability-study'
+            'email'    => 'prasad@scienceatlantic.ca',
+            'password' => 'password'
         ]);            
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_HEADER, true);
@@ -382,8 +381,19 @@ class ImportAfredV1DataSeeder extends Seeder
         foreach($inventory as $index => $f) {
             $data['state'] = 'PENDING_APPROVAL';
             $data['data'] = [];
+            $data['dateSubmitted'] = $f['date_posted'];
             
             // Facility.
+            
+            // Since v2 doesn't have a 'keywords' field in the facility section,
+            // we're going to merge the keywords into the description of the
+            // facility.
+            $fDescription = '<p>' . $f['does'] . '</p>';
+            if ($f['keywords']) {
+                $fDescription .= '<p><b><u>Keywords:<b><u></p>';
+                $fDescription .= '<p>' . $f['keywords'] . '</p>';
+            }
+            
             $organization = DB::table('organizations')->where('name', trim($f['institution']))->first();
             $province = DB::table('provinces')->where('name', trim(substr($f['province'], 5)))->first();
             $data['data']['facility'] = [
@@ -392,9 +402,9 @@ class ImportAfredV1DataSeeder extends Seeder
                 'provinceId'     => $province ? $province->id : 1,
                 'city'           => $f['city'],
                 'website'        => $f['url'],
-                'description'    => $f['does'],
+                'description'    => $fDescription,
                 'isPublic'       => true,
-                'dateSubmitted'  => $f['date_posted'],
+                'datePublished'  => $f['date_posted'],
                 'dateUpdated'    => $f['date_updated']
             ];
             
@@ -411,7 +421,7 @@ class ImportAfredV1DataSeeder extends Seeder
                 'telephone'  => $f['telephone'],
                 'extension'  => null,
                 'position'   => $f['position'],
-                'website'    => ''
+                'website'    => null
             ];
             
             // Equipment.
@@ -427,7 +437,9 @@ class ImportAfredV1DataSeeder extends Seeder
                         'specifications'    => null,
                         'isPublic'          => true,
                         'hasExcessCapacity' => false,
-                        'yearPurchased'     => null                   
+                        'yearPurchased'     => null,
+                        'yearManufactured'  => null,
+                        'keywords'          => null
                     ]);
                 }
             }
@@ -449,7 +461,8 @@ class ImportAfredV1DataSeeder extends Seeder
             // POST records as 'PUBLISHED'.
             $queryParams = http_build_query([
                 'state' => 'PUBLISHED',
-                'reviewMessage' => 'Importing data from AFRED V1.'
+                'reviewMessage' => 'Importing data from AFRED v1.0.',
+                'dateSubmitted' => $f['date_posted']
             ]);
             $url = $apiAddress->value . '/facility-repository/' . $fr['id'] . '?' . $queryParams;
 

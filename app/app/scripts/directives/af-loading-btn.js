@@ -11,7 +11,8 @@ angular.module('afredApp').directive('afLoadingBtn',
       transclude: true,
       templateUrl: 'views/directives/af-loading-btn.html',
       scope: {
-        loading: '=afLoadingBtn'
+        loading: '=afLoadingBtn',
+        loadingText: '@afLoadingBtnText'
       }
     };
   }

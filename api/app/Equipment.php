@@ -23,9 +23,14 @@ class Equipment extends Model
         'manufacturer',
         'model',
         'purpose',
+        'purposeNoHtml',
         'specifications',
+        'specificationsNoHtml',
         'isPublic',
-        'hasExcessCapacity'
+        'hasExcessCapacity',
+        'yearPurchased',
+        'yearManufactured',
+        'keywords'
     ];
     
     public function facility()

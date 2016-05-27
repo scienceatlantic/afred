@@ -1,4 +1,8 @@
 <span>
-  <span class="label label-info" data-ng-show="loading">Processing...</span>
+  <span data-ng-show="loading">
+    <span class="fa fa-circle-o-notch fa-spin"></span>
+    <span data-ng-show="loadingText">{{ loadingText }}</span>
+    <span data-ng-hide="loadingText">Loading...</span>
+  </span>
   <span data-ng-hide="loading" data-ng-transclude></span>
 </span>

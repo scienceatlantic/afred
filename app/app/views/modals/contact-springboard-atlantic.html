@@ -1,15 +1,36 @@
 <div class="modal-header">
-  <h4 class="modal-title">
-    <span data-ng-hide="title">Contact Springboard Atlantic</span>
-  </h4>
+  <h1 class="modal-title">
+    <img src="images/springboard-345x125.png">
+  </h1>
 </div>
   
 <form class="form-horizontal" name="form" data-ng-submit="submit()" novalidate>
   <div class="modal-body" data-af-loading="loading.form">
-    <p>
-      --- Explanation of what/who Springboard Atlantic is. ---
-    </p>
+    <h1 class="h4">Contact Springboard Atlantic</h1>
     
+    <div class="text-muted">
+      <p>
+        <a href="http://springboardatlantic.ca" target="_blank">Springboard Atlantic Inc.</a>
+        is collaborating with Science Atlantic on AFRED. Springboard Atlantic
+        Inc. is a not-for-profit corporation with ownership from all 19
+        post-secondary institutions doing research in Atlantic Canada. Formed
+        in 2004, Springboard supports its member institutions by creating and
+        establishing a solid base of resources, expertise and capacity to
+        commercialize and transfer academic knowledge and research to industry.  
+      </p>
+
+      <p>
+        If you can’t find what you’re looking for, please complete the form
+        below to contact Springboard Atlantic for assistance. Please note that
+        the AFRED administrator will also be copied on the message.
+      </p>
+    </div>
+    
+    <hr>
+    
+    <p class="text-warning">This form has been temporarily disabled for the beta.</p>
+    
+    <!--
     <div data-af-field data-af-field-label="Name*">
       <input type="text" class="form-control" name="name" data-ng-model="message.name" required>
     </div>
@@ -21,10 +42,11 @@
     <div data-af-field data-af-field-label="Message*">
       <textarea class="form-control" name="body" data-ng-model="message.body" rows="8" required></textarea>
     </div>
-  </div>
+  </div>-->
   
   <div class="modal-footer">
-    <button type="button" class="btn btn-default btn-sm" data-ng-click="modal.close()" data-ng-disabled="form.$invalid">Send <span class="glyphicon glyphicon-envelope"></span></button>
+    <!--<button type="button" class="btn btn-default btn-sm" data-ng-click="modal.close()" data-ng-disabled="form.$invalid">Send <span class="glyphicon glyphicon-envelope"></span></button>-->
     <button type="button" class="btn btn-default btn-sm" data-ng-click="modal.dismiss()">Cancel <span class="glyphicon glyphicon-remove"></span></button>
   </div>
+  
 </form>

@@ -1,13 +1,18 @@
 @extends('layouts.emails.master')
 
 @section('content')
-Hello {{ $name }},
+Hello {{ $recipientName }},
 
-Congratulations!
+Thank you for your submission to the {{ $settings['appName'] }}.
+Your information has not yet been posteed because we need further information.
 
-Thank you for your submission to the {{ $settings['APP_NAME'] }}. Your information has not yet been posteed because we need further information. An AFRED team member will be contacting you shortly to help you complete your posting.
+@if ($reviewerName && $reviewerMessage)
+--
+A message from {{ $reviewerName }}:
+{!! $reviewerMessage !!}
+--
+@endif
 
-In the meantime, if you have any questions or comments, please contact <NAME>, <TITLE>, at <EMAIL>.
-
-Thank you.
+To complete your listing, or if you have any questions or comments, please
+contact {{ $settings['personalContactName'] }}, {{ $settings['personalContactTitle'] }}, at {{ $settings['personalContactEmail'] }}.
 @stop

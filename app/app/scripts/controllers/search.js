@@ -2,17 +2,9 @@
 
 angular.module('afredApp').controller('SearchController',
   ['$scope',
-   'provinceResource',
-   'organizationResource',
-   'disciplineResource',
-   'sectorResource',
    'searchResource',
    '$uibModal',
    function($scope,
-            provinceResource,
-            organizationResource,
-            disciplineResource,
-            sectorResource,
             searchResource,
             $uibModal) {
     /* ---------------------------------------------------------------------
@@ -26,6 +18,7 @@ angular.module('afredApp').controller('SearchController',
       /**
        * Holds the entire search query including any disciplines, sectors,
        * organizations, provinces, and the search type.
+       * 
        * @type {object}
        */
       query: {
@@ -42,6 +35,17 @@ angular.module('afredApp').controller('SearchController',
        * @type {object}
        */
       advanced: {
+        /**
+         *
+         */
+        show: false,
+        
+        toggle: function() {
+          $scope.search.advanced.show = !$scope.search.advanced.show;
+        },
+        
+        resource: {},
+        
         radios: {
           // True = all, false = select.
           provinces: true,
@@ -100,41 +104,60 @@ angular.module('afredApp').controller('SearchController',
           $scope.search.query['organizationId[]'] = null;
           $scope.search.query['disciplineId[]'] = null;
           $scope.search.query['sectorId[]'] = null;
-        }
+        },
+        
+        get: function() {
+          $scope.search.advanced.resource = searchResource.query({
+            advancedSearchOptions: true
+          }, function(data) {
+            $scope.search.disciplines = data.disciplines;
+            $scope.search.sectors = data.sectors;
+            $scope.search.provinces = data.provinces;
+            $scope.search.organizations = data.organizations;
+          }, function() {
+            // If it fails...
+          });
+        }  
       },
       
       /**
        * Search results.
+       * 
        * @type {array}
        */
       results: [],
       
       /**
        * Holds the 'searchResource' promise.
+       * 
        * @type {object}
        */
       resource: {},
       
       /**
        * Array of disciplines.
+       * 
        * @type {array}
        */
       disciplines: [],
       
       /**
        * Array of sectors.
+       * 
        * @type {array}
        */
       sectors: [],
       
       /**
        * Array of sectors.
+       * 
        * @type {array}
        */
       organizations: [],
       
       /**
        * Array of provinces.
+       * 
        * @type {array}
        */
       provinces: [],
@@ -237,12 +260,13 @@ angular.module('afredApp').controller('SearchController',
        * Retrieves the search results.
        *
        * Side effects:
-       * $scope.search.query 'page' and 'itemsPerPage' are added/updated.
+       * $scope.search.query 'page' and 'itemsPerPage' are added.
        * $scope.search.results Stores search results.
        * $scope.search.resource Stores promise returned from 'searchResource'.
        *
        * Uses/requires:
        * $scope.search.resource
+       * searchResource
        *
        * @param {integer} page Page number of pagination.
        */
@@ -261,7 +285,7 @@ angular.module('afredApp').controller('SearchController',
        * Instantiates a modal that allows the user to contact Springboard
        * Atlantic.
        *
-       * Uses/requires:
+       * Uses/calls/requires:
        * $uibModal
        */
       contactSpringboardAtlantic: function() {        
@@ -341,29 +365,12 @@ angular.module('afredApp').controller('SearchController',
           }
         );        
       },
-      
-      /**
-       * Initialises the form by retrieving disciplines, sectors, organizations,
-       * and provinces.
-       *
-       * Uses/calls/requires:
-       * $scope.search.getDisciplines()
-       * $scope.search.getSectors()
-       * $scope.search.getOrganizations()
-       * $scope.search.getProvinces()
-       */
-      initialise: function() {
-        $scope.search.getDisciplines();
-        $scope.search.getSectors();
-        $scope.search.getOrganizations();
-        $scope.search.getProvinces();
-      }
     };
     
     /* ---------------------------------------------------------------------
      * Initialisation code.
      * --------------------------------------------------------------------- */
     
-    $scope.search.initialise();
+    $scope.search.advanced.get();
   }
 ]);

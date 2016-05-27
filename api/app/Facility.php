@@ -20,7 +20,7 @@ class Facility extends Model
      *
      * @var array
      */
-    protected $dates = ['dateSubmitted',
+    protected $dates = ['datePublished',
                         'dateUpdated',
                         'created_at',
                         'updated_at'];
@@ -38,12 +38,13 @@ class Facility extends Model
         'city',
         'website',
         'description',
+        'descriptionNoHtml',
         'isPublic',
-        'dateSubmitted',
+        'datePublished',
         'dateUpdated'
     ];
     
-    public function revision()
+    public function currentRevision()
     {
         return $this->belongsTo('App\FacilityRepository',
             'facilityRepositoryId');

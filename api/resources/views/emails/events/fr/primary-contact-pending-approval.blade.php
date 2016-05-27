@@ -1,11 +1,14 @@
 @extends('layouts.emails.master')
 
 @section('content')
-Hello {{ $name }},
+Hello {{ $recipientName }},
 
 Thank you!
 
-Your information has been successfully submitted to the {{ $settings['APP_NAME'] }}. You will received another email once the submission has been reviewed.
+Your information has been successfully submitted to the
+{{ $settings['appName'] }} ({{ $settings['appShortName']}}). You will
+receive another email once the submission has been reviewed.
 
-In the meantime if you have any questions, please contact <NAME HERE>, <TITLE HERE>, at <EMAIL ADDRESS HERE>.
+In the meantime if you have any questions, please contact {{ $settings['personalContactName'] }},
+{{ $settings['personalContactTitle'] }}, at {{ $settings['personalContactEmail'] }}.
 @stop

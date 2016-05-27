@@ -1,9 +1,14 @@
 @extends('layouts.emails.master')
 
 @section('content')
-Hello {{ $name }},
+Hello {{ $recipientName }},
 
-'{{ $facility }}' has been approved.
+@if ($recipientName == $reviewerName)
+This is a confirmation email that you have approved '{{ $facilityName }}'.
+@else
+'{{ $facilityName }}' has been approved by {{ $reviewerName }}.
+@endif
 
-It is located at: {{ $settings['APP_ADDRESS'] }}/#/facilities/{{ $facilityId }}
+The facility can be found here:
+{{ $settings['appAddress'] }}/#/facilities/{{ $facilityId }}
 @stop

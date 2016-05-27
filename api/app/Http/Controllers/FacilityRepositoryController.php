@@ -45,14 +45,41 @@ class FacilityRepositoryController extends Controller
      */
     public function index(IndexFacilityRepositoryRequest $request)
     {
-        $state = $request->input('state', '%');
-        $stateOp = $state  == '%' ? 'like' : '=';
+        $fr = FacilityRepository::with('reviewer', 'facility',
+            'publishedFacility');
         
-        $fr = FacilityRepository::where('state', $stateOp, $state)
-            ->with('reviewer')
-            ->paginate($this->_itemsPerPage);
-            
-        return $this->_toCamelCase($fr->toArray());
+        // Narrow down query by state.
+        if (($state = $request->input('state'))) {
+            if ($state == 'PENDING_APPROVAL'
+                || $state == 'PENDING_EDIT_APPROVAL') {
+                $fr->where('state', 'PENDING_APPROVAL')
+                    ->orWhere('state', 'PENDING_EDIT_APPROVAL');
+            }
+            else if ($state == 'PUBLISHED' || $state == 'PUBLISHED_EDIT') {
+                $visibility = (bool) $request->input('visibility', true);
+                $frId = Facility::where('isPublic', $visibility)
+                    ->select('facilityRepositoryId')->get();
+                $fr->whereIn('id', $frId);                       
+            }
+            else if ($state == 'REJECTED' || $state == 'REJECTED_EDIT') {
+                $fr->where('state', 'REJECTED')
+                    ->orWhere('state', 'REJECTED_EDIT');
+            }
+            else if ($state == 'DELETED') {
+                $facilityIds = Facility::select('id')->get();
+                $fr->whereNotIn('facilityId', $facilityIds)
+                    ->where('state', '!=', 'PENDING_APPROVAL')
+                    ->where('state', '!=', 'PENDING_EDIT_APPROVAL')
+                    ->groupBy('facilityId');
+            }
+        }
+        
+        // Narrow down query by facility ID.
+        if ($facilityId = $request->input('facilityId', null)) {
+            $fr->where('facilityId', $facilityId);
+        }
+        
+        return $this->pageOrGet($fr);
     }
 
     /**
@@ -63,7 +90,19 @@ class FacilityRepositoryController extends Controller
      */
     public function show(ShowFacilityRepositoryRequest $request, $id)
     {
-        return FacilityRepository::with('reviewer')->findOrFail($id);            
+        $fr = FacilityRepository::with([
+            'fulB' => function($query) {
+                $query->notClosed();
+            },
+            'fulA' => function($query) {
+                $query->notClosed();
+            },
+            'reviewer',
+            'facility',
+            'publishedFacility'
+        ])->findOrFail($id)->toArray();
+        
+        return $this->toCcArray($fr);
     }
 
     /**
@@ -76,7 +115,7 @@ class FacilityRepositoryController extends Controller
     public function update(UpdateFacilityRepositoryRequest $request, $id = null)
     { 
         // Grab the current datetime.
-        $now = $this->_now();
+        $now = $this->now();
         
         // Grab the existing Facility Repository record (ie. state !=
         // PENDING_APPROVAL) otherwise create a new one.
@@ -85,83 +124,94 @@ class FacilityRepositoryController extends Controller
         // Set/Update the Facility Repository's state.
         $fr->state = $request->input('state');
         
+        // Placeholder for a facility update link record.
+        $ful = new FacilityUpdateLink();
+        
         switch ($fr->state) {
             case 'PENDING_APPROVAL':
-                $fr->data = $this->_formatFrData($request, $now);
+                $fr->data = $this->formatData($request, $now);
                 $fr->dateSubmitted = $now;
                 $fr->save();
                 break;
             
             case 'PUBLISHED':
-                $fr->data = $this->_publishFacility($fr, $fr->data);
+                $fr->data = $this->publishFacility($fr, $fr->data);
                 $fr->facilityId = $fr->data['facility']['id'];
                 $fr->reviewerId = Auth::user()->id;
                 $fr->reviewerMessage = $request->input('reviewerMessage', null);
+                $fr->dateReviewed = $now;
                 $fr->update();
                 break;
             
             case 'REJECTED':
                 $fr->reviewerId = Auth::user()->id;
                 $fr->reviewerMessage = $request->input('reviewerMessage', null);
+                $fr->dateReviewed = $now;
                 $fr->update();
                 break;
             
             case 'PENDING_EDIT_APPROVAL':
-                // Grab the facility update link record before we update the
-                // facility repository record below.
-                $ful = $fr->fulsB()->open()->first();
-                
-                // We're actually creating a new facility repository record
-                // here. We have to pass the old facility repository record
-                // into the _formatFrData function because we need its link
-                // to the facility before we can create a new one.
-                $fr->data = $this->_formatFrData($request, $now, true, $fr);
+                // Create a new facility repository record and copy the state
+                // and facilityId from the old record.
+                $frBeforeUpdate = $fr;
+                $fr = new FacilityRepository();
+                $fr->facilityId = $frBeforeUpdate->facilityId;
+                $fr->state = $frBeforeUpdate->state;
+                // We're passing the old facility repository record into
+                // the 'formatData' function because we need the existing
+                // record's details.
+                $fr->data = $this->formatData($request, $now, $frBeforeUpdate);
                 $fr->dateSubmitted = $now;
-                $fr = new FacilityRepository($fr->toArray());
                 $fr->save();
                 
-                // Update the token with the facility repository's id
-                // (frIdAfter) and mark it as pending (it's no longer open,
-                // since we're waiting for the admin to review it).
+                // Mark the facility update link record as pending and update
+                // its 'frIdAfter' column with the id of the new facility
+                // repository record.
+                $ful = $frBeforeUpdate->fulB()->open()->first();
                 $ful->frIdAfter = $fr->id;
                 $ful->status = 'PENDING';
+                $ful->datePending = $now;
                 $ful->save();
                 break;
             
             case 'PUBLISHED_EDIT':
-                $data = $this->_publishFacility($fr, $fr->data, true);
-                $fr->facilityId = $data['facility']['id'];
                 $fr->reviewerId = Auth::user()->id;
                 $fr->reviewerMessage = $request->input('reviewerMessage', null);
-                $fr->data = $data;
+                $fr->dateReviewed = $now;
+                $fr->data = $this->publishFacility($fr, $fr->data, true);
                 $fr->update();
                 
                 // Admin has reviewed the record, close the token.
                 $ful = $fr->fulA()->pending()->first();
                 $ful->status = 'CLOSED';
+                $ful->dateClosed = $now;
                 $ful->update();
                 break;
             
             case 'REJECTED_EDIT':
                 $fr->reviewerId = Auth::user()->id;
                 $fr->reviewerMessage = $request->input('reviewerMessage', null);
+                $fr->dateReviewed = $now;
                 $fr->update();
                 
-                // Like 'PUBLISHED_EDIT', the admin as reviewed the record,
+                // Like 'PUBLISHED_EDIT', the admin has reviewed the record,
                 // close it.
                 $ful = $fr->fulA()->pending()->first();
                 $ful->status = 'CLOSED';
+                $ful->dateClosed = $now;
                 $ful->update();
                 break;
         }
         
         // Generate an event (emails might need to be sent out).
-        event(new FacilityRepositoryEvent($fr));
+        event(new FacilityRepositoryEvent($fr, $ful));
         
-        return FacilityRepository::with('reviewer')->find($fr->id);
+        // Return the updated record.
+        $f = FacilityRepository::with('reviewer', 'facility')->find($fr->id);
+        return $this->toCcArray($f->toArray());
     }
         
-    private function _formatFrData($r, $now, $isUpdate = false, $fr = null)
+    private function formatData($r, $now, $fr = false)
     {
         // Will hold all the data that will be returned by the function.
         $d = [];
@@ -174,7 +224,8 @@ class FacilityRepositoryController extends Controller
             $d['organization'] = (new Organization($r->data['organization']))
                 ->toArray();
             $d['organization']['isHidden'] = false;
-            $d['organization']['dateAdded'] = $now;
+            $d['organization']['dateCreated'] = $now;
+            $d['organization']['dateUpdated'] = $now;
         }
 
         // Facility section.
@@ -182,14 +233,14 @@ class FacilityRepositoryController extends Controller
         $d['facility']['isPublic'] = true;
         $d['facility']['dateUpdated'] = $now;
         // This part is for updates.
-        if ($isUpdate) {
-            // ID and date submitted are maintained.
-            $d['facility']['id'] = $fr->facility->id;
-            $d['facility']['dateSubmitted'] = $fr->facility->dateSubmitted
-                ->toDateTimeString();
+        if ($fr) {
+            // ID and date published are maintained.
+            $d['facility']['id'] = $fr->publishedFacility->id;
+            $d['facility']['datePublished'] = $fr->publishedFacility
+                ->datePublished->toDateTimeString();
         // For new records.
         } else {
-            $d['facility']['dateSubmitted'] = $now;         
+            $d['facility']['datePublished'] = $now;         
         }
         
         // Disciplines section.
@@ -218,14 +269,24 @@ class FacilityRepositoryController extends Controller
         return $d;
     }
     
-    private function _publishFacility($fr, $d, $isUpdate = false)
+    private function publishFacility($fr, $d, $isUpdate = false)
     {        
         // Organization section.
-        // If the organization key in $d exists, create the
-        // organization and store its key into $d['facility'].
+        // If the organization key in $d exists (i.e. a custom organization was
+        // selected), check if its name is unique. If it is unique, create the
+        // organization and store its key in '$d['facility']['organizationId'].
+        // If it is not unique, just grab the existing organization's ID and
+        // store it in '$d['facility']['organizationId'].
         if (array_key_exists('organization', $d)) {
-            $orgId = Organization::create($d['organization'])->getKey();
-            $d['facility']['organizationId'] = $orgId;
+            $o = Organization::where('name', $d['organization']['name'])
+                ->first();
+            if (!$o) {
+                $o = Organization::create($d['organization']);
+            }
+            $d['facility']['organizationId'] = $o->id;
+            
+            // Delete the organizatio key since we no longer need it.
+            unset($d['organization']);
         }
         
         // Facility section.
@@ -249,14 +310,14 @@ class FacilityRepositoryController extends Controller
         } else {
             // This line automatically inserts the facility repository's ID
             // into the newly created record.
-            $f = $fr->facility()->create($d['facility']);
+            $f = $fr->publishedFacility()->create($d['facility']);
             $d['facility'] = $f->toArray();
         }
         
         // Strip the HTML tags for the search function. We're not including it
         // in '$d' because we don't need the stripped text stored in facility
         // repository.
-        $f = $fr->facility()->first();
+        $f = $fr->publishedFacility()->first();
         $f->descriptionNoHtml = strip_tags($f->description);
         $f->update();
         
@@ -278,7 +339,7 @@ class FacilityRepositoryController extends Controller
             }                       
         }
         
-        // Equipment section
+        // Equipment section.
         foreach($d['equipment'] as $i => $e) {
             $d['equipment'][$i] = $f->equipment()->create($e)->toArray();
             $e = $f->equipment()->find($d['equipment'][$i]['id']);

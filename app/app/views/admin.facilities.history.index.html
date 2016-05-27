@@ -1,0 +1,30 @@
+<div data-af-loading="!history.resource.$resolved">
+  <hr>
+  
+  <div data-ng-hide="history.resource.data.length">
+    <p>Nothing found.</p>
+  </div>
+  
+  <div data-ng-show="history.resource.data.length">    
+    <ol start="{{ (history.resource.perPage * (history.resource.currentPage - 1) + 1)  }}">
+      <li data-dir-paginate="f in history.resource.data | itemsPerPage: history.resource.perPage" data-total-items="history.resource.total" data-current-page="history.form.data.page">
+        <p><a data-ui-sref="admin.facilities.show({ facilityRepositoryId: f.id })">{{ f.data.facility.name }}</a></p>
+  
+        <p>
+          <b>
+            <span class="text-success" data-ng-show="f.publishedFacility.id">CURRENT PUBLISHED REVISION</span>
+            <span class="text-warning" data-ng-show="!f.publishedFacility.id && f.state != 'PENDING_EDIT_APPROVAL' && f.facility.id && f.state != 'REJECTED_EDIT'">PREVIOUS PUBLISHED REVISION</span>
+            <span class="text-info" data-ng-show="f.state == 'PENDING_EDIT_APPROVAL'">PENDING EDIT APPROVAL</span>
+            <span class="text-danger" data-ng-show="f.facility.id && f.state == 'REJECTED_EDIT'">REJECTED EDIT</span>
+            <span class="text-danger" data-ng-show="!f.facility.id">DELETED</span>
+          </b>
+        </p>
+        
+        <p>{{ f.dateSubmitted | afStrToDate | date:'medium' }}</p>
+        <br>
+      </li>
+    </ol>
+
+    <div data-dir-pagination-controls data-on-page-change="_state.go('admin.facilities.history.index', { page: history.form.data.page })" data-auto-hide="false"></div>
+  </div>
+</div>

@@ -3,55 +3,177 @@
 angular.module('afredApp').controller('AdminFacilitiesController',
   ['$scope',
    'facilityRepositoryResource',
-   'facilityResource',
   function($scope,
-           facilityRepositoryResource,
-           facilityResource) {
+           facilityRepositoryResource) {
     /* ---------------------------------------------------------------------
      * Functions.
-     * --------------------------------------------------------------------- */ 
+     * --------------------------------------------------------------------- */
     
-    $scope.getFacilities = function(page, itemsPerPage) {
-      $scope._stateParams.state = $scope.view.state;
+    /**
+     * State class.
+     */
+    $scope.facilities = {
+      /**
+       * Holds the promise returned from '$scope.facilities.get()'.
+       * 
+       * @type {promise}
+       */
+      fr: {},
       
-      page = page ? page : 1;
-      itemsPerPage = itemsPerPage ? itemsPerPage : 5;
-      
-      switch ($scope.view.state) {
-        case 'PUBLISHED':
-          $scope.facilities =
-            facilityResource.query(
-              {
-                itemsPerPage: itemsPerPage,
-                page: page,
-                isPublic: $scope.view.facility.isPublic
-              }
-            );
-          break;
+      /**
+       * Form related objects/functions.
+       *
+       * @type {object}
+       */
+      form: {
+        /**
+         * Stores all form data.
+         */
+        data: {
+          state: null, // Facility repository state.
+          page: null, // Page number (pagination).
+          visibility: null
+        },
         
-        default:
-          $scope.facilities =
-            facilityRepositoryResource.query(
-              {
-                itemsPerPage: itemsPerPage,
-                page: page,
-                state: $scope.view.state
-              }
-            );
+        /**
+         * Clears the form.
+         *
+         * Side effects:
+         * $scope.facilities.form.data All properties are set to null.
+         */
+        clear: function() {
+          $scope.facilities.form.data.state = null,
+          $scope.facilities.form.data.page = null,
+          $scope.facilities.form.data.visibility = null          
+        }
+      },
+      
+      /**
+       * Redirects to the results page.
+       *
+       * Side effects:
+       * $scope.facilities.form.data.page See @param.
+       * $scope.facilities.form.data.visibility If 'resetPage' = true,
+       *     and '$scope.facilities.form.data.state' = PUBLISHED, it is set
+       *     to 1, otherwise null.
+       *
+       * Calls/uses/requires:
+       * $scope._state.go()
+       * $scope.facilities.form.data
+       *
+       * @param {boolean} resetPage If true, the page number is reset to 1.
+       */
+      index: function(resetPage) {
+        if (resetPage) {
+          $scope.facilities.form.data.page = 1;
+          
+          // If we're viewing PUBLISHED facilities, set visibility to 1. This
+          // means that public facilities is the default view.
+          if ($scope.facilities.form.data.state == 'PUBLISHED') {
+            $scope.facilities.form.data.visibility = 1;
+          } else {
+            $scope.facilities.form.data.visibility = null;
+          }
+        }
+        
+        $scope._state.go('admin.facilities.index', $scope.facilities.form.data);
+      },
+      
+      /**
+       * Parses the parameters. To be used by a child state.
+       *
+       * Side effects:
+       * $scope.facilities.form.data.state State is updated to match the value
+       *     retrieved from the URL if it is valid.
+       * $scope.facilities.form.data.page Page number is updated to match value
+       *     retrieved from the URL if it is valid.
+       * $scope.facilities.form.data.visibility If '$scope._stateParams.state'
+       *     = PUBLISHED, visibility is updated to match value retrieved from
+       *     the URL if it is valid. If invalid, gets set to 1. If state is not
+       *     PUBLISHED, visibility is set to null.
+       *
+       * Calls/uses/requires:
+       * $scope._state.go()
+       * $scope._stateParams
+       */
+      parseParams: function() {
+        var state = null;
+        var page = null;
+        var visibility = null;
+        
+        try {
+          state = $scope._stateParams.state.toUpperCase();
+        } catch(e) {
+          // Do nothing.
+        }
+        
+        try {
+          page = parseInt($scope._stateParams.page);
+        } catch(e) {
+          page = 1;
+        }
+        
+        try {
+          visibility = parseInt($scope._stateParams.visibility) == 1 ? 1 : 0;
+        } catch(e) {
+          visibility = 1;
+        }
+        
+        switch (state) {
+          case 'PUBLISHED':
+            $scope.facilities.form.data.visibility = visibility;
+            $scope.facilities.form.data.state = state;
+            $scope.facilities.form.data.page = page;
+            break;
+          
+          case 'PENDING_APPROVAL':
+          case 'REJECTED':
+          case 'DELETED':
+            $scope.facilities.form.data.state = state;
+            $scope.facilities.form.data.page = page;
+            $scope.facilities.form.data.visibility = null;
+            break;
+          
+          default:
+            $scope.facilities.form.data.state = null;
+            $scope._state.go('admin.facilities');
+        }
+      },
+      
+      /**
+       * Retrieves facility repository data from the API.
+       *
+       * Side effects:
+       * $scope.facilities.fr Promise object is attached to this.
+       *
+       * Uses/calls/requires:
+       * facilityRepositoryResource
+       * $scope.facility.form.data.page
+       * $scope.facility.form.data.state
+       */
+      query: function() {
+        $scope.facilities.fr = facilityRepositoryResource.query({
+          page: $scope.facilities.form.data.page,
+          itemsPerPage: 10,
+          state: $scope.facilities.form.data.state,
+          visibility: $scope.facilities.form.data.visibility
+        });
       }
     };
     
     /* ---------------------------------------------------------------------
      * Initialisation code.
-     * --------------------------------------------------------------------- */ 
+     * --------------------------------------------------------------------- */
     
-    $scope.view = {
-      state: $scope._stateParams.state,
-      facility: {
-        isPublic: true
+    // Remember that angular ui router does not re-instantiate parent
+    // controllers, so clear the form data if we're returning (e.g. browser
+    // history) from a child state.
+    $scope.$on('$stateChangeStart',
+      function(event, toState, toParams, fromState, fromParams, options) {
+        if (fromState.name == 'admin.facilities.index') {
+          $scope.facilities.form.clear();
+        }
       }
-    };
-    
-    $scope.getFacilities();
+    );
   }
 ]);

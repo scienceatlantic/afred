@@ -23,120 +23,127 @@ class SectorsTableSeeder extends Seeder
         // Delete existing entries.
         DB::table('sectors')->delete();
         
-        $sectors = [
-            [
-                'name'      => 'Aerospace and satellites',
-                'dateAdded' => $now
-            ],
-            [
-                'name'      => 'Agriculture, animal science and food',
-                'dateAdded' => $now
-            ],
-            [
-                'name'      => 'Arts and cultural industries',
-                'dateAdded' => $now
-            ],
-            [
-                'name'      => 'Automotive',
-                'dateAdded' => $now
-            ],
-            [
-                'name'      => 'Chemical industries',
-                'dateAdded' => $now
-            ],
-            [
-                'name'      => 'Clean technology',
-                'dateAdded' => $now
-            ],
-            [
-                'name'      => 'Construction (including building, civil engineering, specialty trades)',
-                'dateAdded' => $now
-            ],
-            [
-                'name'      => 'Consumer durables',
-                'dateAdded' => $now
-            ],
-            [
-                'name'      => 'Consumer non-durables',
-                'dateAdded' => $now
-            ],
-            [
-                'name'      => 'Defense and security industries',
-                'dateAdded' => $now
-            ],
-            [
-                'name'      => 'Education',
-                'dateAdded' => $now
-            ],
-            [
-                'name'      => 'Energy (renewable and fossil)',
-                'dateAdded' => $now
-            ],
-            [
-                'name'      => 'Environmental technologies and related services',
-                'dateAdded' => $now
-            ],
-            [
-                'name'      => 'Financial services and insurance',
-                'dateAdded' => $now
-            ],
-            [
-                'name'      => 'Fisheries and aquaculture',
-                'dateAdded' => $now
-            ],
-            [
-                'name'      => 'Forestry and forest-based industries',
-                'dateAdded' => $now
-            ],
-            [
-                'name'      => 'Health care and social services',
-                'dateAdded' => $now
-            ],
-            [
-                'name'      => 'Information and communication technologies and media',
-                'dateAdded' => $now
-            ],
-            [
-                'name'      => 'Life sciences, pharmaceuticals and medical equipment',
-                'dateAdded' => $now
-            ],
-            [
-                'name'      => 'Management and business related services',
-                'dateAdded' => $now
-            ],
-            [
-                'name'      => 'Manufacturing and processing',
-                'dateAdded' => $now
-            ],
-            [
-                'name'      => 'Mining, minerals and metals',
-                'dateAdded' => $now
-            ],
-            [
-                'name'      => 'Ocean industries',
-                'dateAdded' => $now
-            ],
-            [
-                'name'      => 'Policy and governance',
-                'dateAdded' => $now
-            ],
-            [
-                'name'      => 'Professional and technical services (including legal services, architecture, engineering)',
-                'dateAdded' => $now
-            ],
-            [
-                'name'      => 'Tourism and hospitality',
-                'dateAdded' => $now
-            ],
-            [
-                'name'      => 'Transportation',
-                'dateAdded' => $now
-            ],
-            [
-                'name'      => 'Utilities',
-                'dateAdded' => $now
-            ]
-        ];
+        $sectors = [[
+            'name'        => 'Aerospace and Satellites',
+            'dateCreated' => $now,
+            'dateUpdated' => $now
+        ], [
+            'name'        => 'Agriculture, Animal Science and Food',
+            'dateCreated' => $now,
+            'dateUpdated' => $now            
+        ], [
+            'name'        => 'Arts and Cultural Industries',
+            'dateCreated' => $now,
+            'dateUpdated' => $now            
+        ], [
+            'name'        => 'Automotive',
+            'dateCreated' => $now,
+            'dateUpdated' => $now            
+        ], [
+            'name'        => 'Biomedical',
+            'dateCreated' => $now,
+            'dateUpdated' => $now            
+        ], [
+            'name'        => 'Biotechnology',
+            'dateCreated' => $now,
+            'dateUpdated' => $now            
+        ], [
+            'name'        => 'Chemical Industries',
+            'dateCreated' => $now,
+            'dateUpdated' => $now            
+        ], [
+            'name'        => 'Clean Technology',
+            'dateCreated' => $now,
+            'dateUpdated' => $now            
+        ], [
+            'name'        => 'Construction (including Building, Civil Engineering, Specialty Trades)',
+            'dateCreated' => $now,
+            'dateUpdated' => $now            
+        ], [
+            'name'        => 'Consumer Durables',
+            'dateCreated' => $now,
+            'dateUpdated' => $now            
+        ], [
+            'name'        => 'Consumer Non-Durables',
+            'dateCreated' => $now,
+            'dateUpdated' => $now            
+        ], [
+            'name'        => 'Defense and Security Industries',
+            'dateCreated' => $now,
+            'dateUpdated' => $now            
+        ], [
+            'name'        => 'Education',
+            'dateCreated' => $now,
+            'dateUpdated' => $now            
+        ], [
+            'name'        => 'Energy (Renewable and Fossil)',
+            'dateCreated' => $now,
+            'dateUpdated' => $now            
+        ], [
+            'name'        => 'Environmental Technologies and Related Services',
+            'dateCreated' => $now,
+            'dateUpdated' => $now            
+        ], [
+            'name'        => 'Financial Services and Insurance',
+            'dateCreated' => $now,
+            'dateUpdated' => $now            
+        ], [
+            'name'        => 'Fisheries and Aquaculture',
+            'dateCreated' => $now,
+            'dateUpdated' => $now            
+        ], [
+            'name'        => 'Forestry and Forest-Based Industries',
+            'dateCreated' => $now,
+            'dateUpdated' => $now            
+        ], [
+            'name'        => 'Health Care and Social Services',
+            'dateCreated' => $now,
+            'dateUpdated' => $now            
+        ], [
+            'name'        => 'Information and Communication Technologies and Media',
+            'dateCreated' => $now,
+            'dateUpdated' => $now            
+        ], [
+            'name'        => 'Life Sciences, Pharmaceuticals and Medical Equipment',
+            'dateCreated' => $now,
+            'dateUpdated' => $now            
+        ], [
+            'name'        => 'Management and Business Related Services',
+            'dateCreated' => $now,
+            'dateUpdated' => $now            
+        ], [
+            'name'        => 'Manufacturing and Processing',
+            'dateCreated' => $now,
+            'dateUpdated' => $now            
+        ], [
+            'name'        => 'Mining, Minerals and Metals',
+            'dateCreated' => $now,
+            'dateUpdated' => $now            
+        ], [
+            'name'        => 'Ocean Industries',
+            'dateCreated' => $now,
+            'dateUpdated' => $now            
+        ], [
+            'name'        => 'Policy and Governance',
+            'dateCreated' => $now,
+            'dateUpdated' => $now            
+        ], [
+            'name'        => 'Professional and Technical Services (including Legal Services, Architecture, Engineering)',
+            'dateCreated' => $now,
+            'dateUpdated' => $now            
+        ], [
+            'name'        => 'Tourism and Hospitality',
+            'dateCreated' => $now,
+            'dateUpdated' => $now            
+        ], [
+            'name'        => 'Transportation',
+            'dateCreated' => $now,
+            'dateUpdated' => $now            
+        ], [
+            'name'        => 'Utilities',
+            'dateCreated' => $now,
+            'dateUpdated' => $now            
+        ]];
         
         foreach($sectors as $sector) {
             Sector::create($sector);

@@ -1,61 +1,58 @@
-<h2>Admin / Facilities</h2>
+<h1>
+  <!-- Breadcrumbs. -->
+  Admin / Facilities
+  <!-- Facility state. -->
+  <span data-ng-show="_stateParams.state">
+    /
+    <span data-ng-show="_stateParams.state == 'PUBLISHED'">Published
+      <span>-
+        <span data-ng-show="_stateParams.visibility == 1">Public</span>
+        <span data-ng-show="_stateParams.visibility == 0">Private</span>
+      </span>
+    </span>
+    <span data-ng-show="_stateParams.state == 'PENDING_APPROVAL'">Pending Approval</span>
+    <span data-ng-show="_stateParams.state == 'REJECTED'">Rejected</span>
+    <span data-ng-show="_stateParams.state == 'DELETED'">Deleted</span>
+  </span>
+  <span data-ng-show="_stateParams.facilityRepositoryId">
+    / Facility Repository ID: {{ _stateParams.facilityRepositoryId }}
+  </span>
+  <span data-ng-show="_state.current.name == 'admin.facilities.updates' || _state.current.name == 'admin.'">
+    / Update Requests
+    <span data-ng-show="_stateParams.status == 'OPEN'">/ Open</span>
+    <span data-ng-show="_stateParams.status == 'PENDING'">/ Pending</span>
+    <span data-ng-show="_stateParams.status == 'CLOSED'">/ Closed</span>
+  </span>
+  
+  <!-- Facility history -->
+  <span data-ng-show="_stateParams.facilityId">
+    / Facility ID: {{ _stateParams.facilityId }} / History
+  </span>
+</h1>
 
-<div> 
-  <div>
+<!-- Only show this portion if we're in admin.facilities or admin.facilities.index -->
+<div class="row" data-ng-show="_state.current.name == 'admin.facilities' || _state.current.name == 'admin.facilities.index'"> 
+  <div class="col-md-5">
     <div class="form-group">
       <label for="state">State:</label>
-      <select class="form-control" name="state" id="state" data-ng-model="view.state" data-ng-change="getFacilities()">
+      <select class="form-control input-sm" name="state" id="state" data-ng-model="facilities.form.data.state" data-ng-change="facilities.index(true)">
         <option value="PENDING_APPROVAL">Pending Approval</option>
-        <option value="PENDING_EDIT_APPROVAL">Pending Edit Approval</option>
         <option value="PUBLISHED">Published</option>
         <option value="REJECTED">Rejected</option>
-        <option value="REJECTED_EDIT">Rejected Edit</option>
+        <option value="DELETED">Deleted</option>
       </select>
     </div>
     
-    <div class="form-group" data-ng-show="view.state == 'PUBLISHED'">
+    <div class="form-group" data-ng-show="facilities.form.data.state == 'PUBLISHED'">
       <label for="state">Visibility:</label>
-      <select class="form-control" name="visibility" id="visibility" data-ng-model="view.isPublic" data-ng-change="getFacilities()">
-        <option value=1>Public</option>
-        <option value=0>Private</option>
-      </select>
-    </div>
-    
-    <div data-ng-show="view.state">      
-      <div data-af-loading="!facilities.$resolved">
-        <div data-ng-hide="facilities.data.length">
-          <p>No results</p>
-        </div>
-        
-        <div data-ng-show="facilities.data.length">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Facility</th>
-              </tr>
-            </thead>
-            
-            <tbody data-ng-show="view.state == 'PUBLISHED'">
-              <tr data-dir-paginate="f in facilities.data | itemsPerPage: facilities.perPage" data-total-items="facilities.total" data-pagination-id="facilities">
-                <td>
-                  <a data-ui-sref="facilities.show({facilityId: f.id})" target="_blank">{{f.name}}</a>
-                </td>
-              </tr>
-            </tbody>
-            
-            <tbody data-ng-show="view.state != 'PUBLISHED'">
-              <tr data-dir-paginate="f in facilities.data | itemsPerPage: facilities.perPage" data-total-items="facilities.total" data-pagination-id="facilityRepository">
-                <td>
-                  <a data-ui-sref="admin.facilityRepository.show({facilityRepositoryId: f.id})">{{f.data.facility.name}}</a>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          
-          <div dir-pagination-controls data-on-page-change="getFacilities(newPageNumber)" data-pagination-id="facilities" data-ng-show="view.state == 'PUBLISHED'"></div>
-          <div dir-pagination-controls data-on-page-change="getFacilities(newPageNumber)" data-pagination-id="facilityRepository" data-ng-show="view.state != 'PUBLISHED'"></div>
-        </div>
-      </div>
+      <select class="form-control input-sm" name="visibility" id="visibility" data-ng-model="facilities.form.data.visibility" data-ng-options="v.value as v.label for v in [{ value: 1, label: 'Public' }, { value: 0, label: 'Private' }]" data-ng-change="facilities.index()"></select>
     </div>
   </div>
 </div>
+
+<div data-ng-show="_state.current.name == 'admin.facilities' || _state.current.name == 'admin.facilities.index'">
+  <p><a data-ui-sref="admin.facilities.updates">View update requests</a></p>
+</div>
+
+<!-- Child state container -->
+<div data-ui-view></div>

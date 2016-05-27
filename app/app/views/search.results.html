@@ -1,5 +1,5 @@
 <div>
-  <div data-af-loading="!search.resource.$resolved && !search.results.length"></div>
+  <div data-af-loading="!search.resource.$resolved && !search.results.length" data-af-loading-text="Searching..."></div>
   
   <p class="h4" data-ng-show="search.results.length">
       We found a total of {{ search.resource.total }}
@@ -24,54 +24,9 @@
     </p>
   </div>
   
-  <div data-ng-show="search.results.length">  
-    <div data-ng-repeat="f in search.results" data-ng-show="f.name">
-      <p>
-        <a href="{{ _config.app.address }}/facilities/{{ f.id }}" style="text-decoration: none !important;" target="_blank">
-          <div class="panel panel-default">
-            <div class="panel-body">
-              <p class="h4">{{ f.name }} <span data-ng-show="f.organization.name">| {{ f.organization.name }}</span></p>
-              
-              <div style="color: #333;">
-                <p class="text-muted"><small>{{ f.city }}, {{ f.province.name }}</small></p>
-                
-                <div data-ng-show="f.descriptionNoHtml">
-                  <hr>
-                  <div>
-                    <span>{{ f.descriptionNoHtml | limitTo: 170 }}</span><span data-ng-show="f.descriptionNoHtml.length > 170">...</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </a>
-      </p>
-    </div><!-- End of ng-repeat -->
-  
-    <div data-ng-repeat="e in search.results" data-ng-show="e.type">
-      <p>
-        <a href="{{ _config.app.address }}/facilities/{{ e.facility.id }}/equipment/{{ e.id }}" style="text-decoration: none !important;" target="_blank">
-        <div class="panel panel-default">
-          <div class="panel-body">
-            <p class="h4">{{ e.type }} | {{ e.facility.name }}</p>
-            
-            <div style="color: #333;">
-              <p class="text-muted"><span data-ng-show="e.facility.organization.name">{{ e.facility.organization.name }},</span> {{ e.facility.city }}, {{ e.facility.province.name }}</p>
-              
-              <div>
-                <hr>
-                <p data-ng-show="e.model"><span class="label label-default">Model:</span> {{ e.model }}</p>
-                <p data-ng-show="e.manufacturer"><span class="label label-default">Manufacturer:</span> {{ e.manufacturer }}</p>
-                
-                <div>
-                  <span>{{ e.purposeNoHtml | limitTo: 170 }}</span><span data-ng-show="e.purposeNoHtml.length > 170">...</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        </a>
-      </p>
-    </div><!-- End of ng-repeat -->
+  <div data-ng-show="search.results.length">    
+    <div data-ng-include="'views/includes/search.results.equipment.html'"></div>
+    
+    <div data-ng-include="'views/includes/search.results.facilities.html'"></div>
   </div>
 </div>

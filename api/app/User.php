@@ -2,8 +2,7 @@
 
 namespace App;
 
-use Log;
-
+// Laravel.
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -11,6 +10,12 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+
+// Misc.
+use Log;
+
+// Models.
+use App\Role;
 
 class User extends Model implements AuthenticatableContract,
                                     AuthorizableContract,
@@ -26,6 +31,16 @@ class User extends Model implements AuthenticatableContract,
     protected $table = 'users';
 
     /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['dateCreated',
+                        'dateUpdated',
+                        'created_at',
+                        'updated_at'];
+    
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -33,7 +48,6 @@ class User extends Model implements AuthenticatableContract,
     protected $fillable = [
         'firstName',
         'lastName',
-        'role',
         'email',
         'password'
     ];
@@ -54,5 +68,19 @@ class User extends Model implements AuthenticatableContract,
     {
         return $this->belongsToMany('App\Role', 'role_user', 'userId',
             'roleId');
+    }
+    
+    public function isAtLeastAdmin()
+    {
+        $rolePermission = Role::where('name', 'Admin')->value('permission');
+        $userPermission = $this->roles()->orderBy('permission', 'desc')
+            ->first()->value('permission');
+            
+        return $userPermission >= $rolePermission;
+    }
+    
+    public function getFullName()
+    {
+        return $this->firstName . ' ' . $this->lastName;
     }
 }

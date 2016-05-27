@@ -27,22 +27,20 @@ angular.module('afredApp').controller('FacilitiesUpdateController',
     $scope.submit = function() {
       // Don't run if the email field is empty.
       if ($scope.form.data.email) {
-        $scope.fr = facilityRepositoryResource.queryTokens(
-          {
-            email: $scope.form.data.email,
-            page: $scope.pagination.page,
-            itemsPerPage: $scope.pagination.itemsPerPage
-          }, function() {
-            // If matches were found.
-            if ($scope.fr.total) { 
-              $scope.facilities = $scope.facilities.concat($scope.fr.data);
-              $scope.view.show = 'RESULTS';
-            // If nothing was found.
-            } else {
-              $scope.view.show = 'NO_RESULTS_MESSAGE';
-            }
+        $scope.fr = facilityResource.query({
+          email: $scope.form.data.email,
+          page: $scope.pagination.page,
+          itemsPerPage: $scope.pagination.itemsPerPage
+        }, function() {
+          // If matches were found.
+          if ($scope.fr.total) { 
+            $scope.facilities = $scope.facilities.concat($scope.fr.data);
+            $scope.view.show = 'RESULTS';
+          // If nothing was found.
+          } else {
+            $scope.view.show = 'NO_RESULTS_MESSAGE';
           }
-        );
+        });
       }
     };
     
@@ -75,7 +73,7 @@ angular.module('afredApp').controller('FacilitiesUpdateController',
      * @param id Facility id.
      */
     $scope.requestToken = function(index, id) {
-      $scope.ful = facilityRepositoryResource.generateToken({
+      $scope.ful = facilityRepositoryResource.createToken({
         facilityId: id,
         email: $scope.form.data.email
       }, function(data) {

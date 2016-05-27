@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-ng-app="afredApp" data-ng-controller="MainController" data-ng-cloak>
   <head>
     <!-- Meta details -->
     <meta charset="utf-8">
     <meta name="author" content="Science Atlantic">
-    <meta name="description" content="Atlantic Facilities and Research Equipment Database">
+    <meta name="description" content="Atlantic Facilities and Research Equipment Database (AFRED)">
     <meta name="viewport" content="width=device-width">
     
     <!-- CSS -->
@@ -23,76 +23,64 @@
     <!-- endbuild -->
     
     <!-- Title -->
-    <title>AFRED | Science Atlantic</title>
+    <title data-ng-if="_state.current.data.pageTitle">{{ _state.current.data.pageTitle }} | Atlantic Facilities and Research Equipment Database</title>
+    <title data-ng-if="!_state.current.data.pageTitle">Atlantic Facilities and Research Equipment Database</title>
   </head>
-  <body data-ng-app="afredApp">
-    <!--[if lt IE 10]>
-      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-    <![endif]-->
-
-    <!-- App content -->
+  <body data-ng-cloak>
+    <!-- JavaScript disabled warning message -->
+    <noscript class="h1">
+      The Atlantic Facilities and Research Equipment Database requires
+      JavaScript in order to function. Instructions on how to enable JavaScript
+      can be found <a href="http://enable-javascript.com/" target="_blank">here</a>.
+    </noscript>
+    
     <div>
-      <!-- Header -->
-      <header class="jumbotron">
-        <div class="container">
-          <div class="page-header">
-            <h1>AFRED</h1>
-            <h2><small>Atlantic Facilities and Research Equipment Database</small></h2>
+    <!-- Error pages container. -->
+    <div data-ng-if="_state.includes('error')">
+      <div data-ui-view></div>
+    </div>
+    
+    <!-- All other content container. -->
+    <div data-ng-if="!_state.includes('error')">
+      <!-- Outdated browser warning message. -->
+      <!--[if lt IE 10]>
+        <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+      <![endif]-->
+  
+      <!-- App content -->
+      <div>      
+        <!-- Header -->
+        <header style="background-color: #f8f8f8;">
+          <!-- Beta version note. -->
+          <div class="container">
+            <p class="text-center text-warning" style="padding-top: 10px;">
+              Please note that this is a beta version of AFRED. If you
+              experience any difficulties using the software, or have any
+              questions or comments, please email
+              <a href="mailto: afred@scienceatlantic.ca">afred@scienceatlantic.ca</a>.
+            </p>
           </div>
+          
+          <div data-ng-include="'views/includes/header.html'"></div>
+        </header>
+        
+        <!-- Main Navigation -->
+        <nav class="navbar navbar-default" role="navigation">
+          <div data-ng-include="'views/includes/nav.html'"></div>
+        </nav>
+  
+        <!-- View -->
+        <div class="container" style="min-height: 300px;">
+          <div data-ui-view></div>
         </div>
-      </header>
-      
-      <!-- Main Navigation -->
-      <nav class="navbar navbar-default" role="navigation">
-        <div class="container">
-          <!-- Brand and toggle get grouped for better mobile display -->
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-navbar">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-          </div><!-- End of .navbar-header -->
-            
-          <div class="collapse navbar-collapse" id="main-navbar">
-            <ul class="nav navbar-nav">
-              <li data-ui-sref-active="active"><a data-ui-sref="search">Search</a></li>
-              <li data-ui-sref-active="active"><a data-ui-sref="facilities.form.create">Submit a Facility</a></li>
-              <li data-ui-sref-active="active"><a data-ui-sref="facilities.update">Update</a></li>
-              <li data-ui-sref-active="active"><a data-ui-sref="about">About</a></li>
-            </ul>
-            
-            <ul class="nav navbar-nav navbar-right">
-              <li role="presentation" class="dropdown" data-ng-show="_auth.user.email">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="" role="button" aria-haspopup="true" aria-expanded="false">
-                  Admin <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu">
-                  <li><a data-ui-sref="admin.dashboard">Dashboard</a></li>
-                  <li><a data-ui-sref="admin.facilities">Facilities</a></li>
-                </ul>
-              </li>
-              <li data-ui-sref-active="active" data-ng-show="!_auth.user.email"><a data-ui-sref="login">Administrator Login</a></li>
-              <li><a data-ui-sref="login" data-ng-show="_auth.user.email" data-ng-click="_auth.logout()">Logout</a></li>
-            </ul>
-          </div><!-- End of .collapse -->
-        </div><!-- End of .container -->
-      </nav>
-
-      <!-- View -->
-      <div class="container">
-        <div data-ui-view></div>
-      </div>
-      
-      <!-- Footer -->
-      <footer class="footer">
-        <div class="container">
-          <p>Science Atlantic</p>
-        </div>
-      </footer>
-    </div><!-- End of content container -->
-
+        
+        <!-- Footer -->
+        <footer class="footer">
+          <div data-ng-include="'views/includes/footer.html'"></div>
+        </footer>
+      </div><!-- End of content container -->
+    </div>
+    
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
     <script>
        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -135,6 +123,11 @@
     <script src="bower_components/textAngular/dist/textAngular.js"></script>
     <script src="bower_components/textAngular/dist/textAngular-sanitize.js"></script>
     <script src="bower_components/textAngular/dist/textAngularSetup.js"></script>
+    <script src="bower_components/jquery-truncate-html/jquery.truncate.js"></script>
+    <script src="bower_components/ta-maxlength/ta-maxlength.js"></script>
+    <script src="bower_components/gsap/src/uncompressed/TweenMax.js"></script>
+    <script src="bower_components/ngFx/dist/ngFx.js"></script>
+    <script src="bower_components/angular-bind-html-compile/angular-bind-html-compile.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -147,20 +140,51 @@
     <script src="scripts/routes.js"></script>
     <script src="scripts/resources.js"></script>
     <script src="scripts/services.js"></script>
+    <script src="scripts/directives/af-facility.js"></script>
     <script src="scripts/directives/af-field.js"></script>
     <script src="scripts/directives/af-loading.js"></script>
     <script src="scripts/directives/af-loading-btn.js"></script>
+    <script src="scripts/filters/af-trust-as-html.js"></script>
     <script src="scripts/filters/af-format-telephone.js"></script>
+    <script src="scripts/filters/af-str-to-date.js"></script>
+    <script src="scripts/controllers/main.js"></script>
     <script src="scripts/controllers/search.js"></script>
     <script src="scripts/controllers/search.results.js"></script>
     <script src="scripts/controllers/facilities.update.js"></script>
     <script src="scripts/controllers/facilities.form.js"></script>
+    <script src="scripts/controllers/facilities.form.guide.js"></script>
     <script src="scripts/controllers/facilities.form.create.js"></script>
     <script src="scripts/controllers/facilities.form.edit.js"></script>
     <script src="scripts/controllers/facilities.show.js"></script>
+    <script src="scripts/controllers/facilities.show.equipment.show.js"></script>
+    <script src="scripts/controllers/about.js"></script>
+    <script src="scripts/controllers/about.legal.terms-of-service.js"></script>
+    <script src="scripts/controllers/about.legal.privacy-policy.js"></script>
+    <script src="scripts/controllers/about.legal.disclaimer.js"></script>
     <script src="scripts/controllers/admin.dashboard.js"></script>
     <script src="scripts/controllers/admin.facilities.js"></script>
-    <script src="scripts/controllers/admin.facility-repository.show.js"></script>
+    <script src="scripts/controllers/admin.facilities.index.js"></script>
+    <script src="scripts/controllers/admin.facilities.show.js"></script>
+    <script src="scripts/controllers/admin.facilities.updates.js"></script>
+    <script src="scripts/controllers/admin.facilities.updates.index.js"></script>
+    <script src="scripts/controllers/admin.facilities.history.js"></script>
+    <script src="scripts/controllers/admin.facilities.history.index.js"></script>
+    <script src="scripts/controllers/admin.organizations.js"></script>
+    <script src="scripts/controllers/admin.organizations.index.js"></script>
+    <script src="scripts/controllers/admin.organizations.show.js"></script>
+    <script src="scripts/controllers/admin.organizations.create.js"></script>
+    <script src="scripts/controllers/admin.provinces.js"></script>
+    <script src="scripts/controllers/admin.provinces.index.js"></script>
+    <script src="scripts/controllers/admin.provinces.show.js"></script>
+    <script src="scripts/controllers/admin.provinces.create.js"></script>
+    <script src="scripts/controllers/admin.sectors.js"></script>
+    <script src="scripts/controllers/admin.sectors.index.js"></script>
+    <script src="scripts/controllers/admin.sectors.show.js"></script>
+    <script src="scripts/controllers/admin.sectors.create.js"></script>
+    <script src="scripts/controllers/admin.disciplines.js"></script>
+    <script src="scripts/controllers/admin.disciplines.index.js"></script>
+    <script src="scripts/controllers/admin.disciplines.show.js"></script>
+    <script src="scripts/controllers/admin.disciplines.create.js"></script>
     <script src="scripts/controllers/login.js"></script>
     <script src="scripts/modals/contact-springboard-atlantic.js"></script>
     <!-- endbuild -->

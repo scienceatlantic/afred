@@ -13,6 +13,7 @@ use App\Province;
 
 // Requests.
 use App\Http\Requests;
+use App\Http\Requests\ProvinceRequest;
 
 class ProvinceController extends Controller
 {
@@ -26,12 +27,21 @@ class ProvinceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(ProvinceRequest $request)
     {
-        $p = Province::notHidden()->orderBy('name', 'asc');
-        $p = $this->_paginate ? $p->paginate($this->_itemsPerPage) : $p->get();
-        $this->_expandModelRelationships($p, true);
-        return $this->_toCamelCase($p->toArray());
+        $p = Province::query();
+        
+        if ($request->has('isHidden')) {
+            if ($request->input('isHidden', 0)) {
+                $p->hidden();
+            } else {
+                $p->notHidden();
+            }
+        }
+        
+        $p->orderBy('name', 'asc');
+        
+        return $this->pageOrGet($p);
     }
 
     /**
@@ -40,9 +50,18 @@ class ProvinceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProvinceRequest $request)
     {
-        //
+        // Get current datetime.
+        $now = $this->now();
+        
+        $p = new Province();
+        $p->name = $request->name;
+        $p->isHidden = $request->isHidden;
+        $p->dateCreated = $now;
+        $p->dateUpdated = $now;
+        $p->save();
+        return $this->toCcArray($p->toArray());
     }
 
     /**
@@ -51,11 +70,9 @@ class ProvinceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(ProvinceRequest $request, $id)
     {
-        $p = Province::findOrFail($id);
-        $this->_expandModelRelationships($p);
-        return $this->_toCamelCase($p->toArray());
+        return $this->toCcArray(Province::findOrFail($id)->toArray());
     }
 
     /**
@@ -65,9 +82,14 @@ class ProvinceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProvinceRequest $request, $id)
     {
-        //
+        $p = Province::findOrFail($id);
+        $p->name = $request->name;
+        $p->isHidden = $request->isHidden;
+        $p->dateUpdated = $this->now();
+        $p->save();
+        return $this->toCcArray($p->toArray());
     }
 
     /**
@@ -76,8 +98,11 @@ class ProvinceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(ProvinceRequest $request, $id)
     {
-        
+        $p = Province::findOrFail($id);
+        $deletedProvince = $p->toArray();
+        $p->delete();
+        return $this->toCcArray($deletedProvince);
     }
 }

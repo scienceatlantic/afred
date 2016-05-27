@@ -11,7 +11,8 @@ class Province extends Model
      *
      * @var array
      */
-    protected $dates = ['dateAdded',
+    protected $dates = ['dateCreated',
+                        'dateUpdated',
                         'created_at',
                         'updated_at'];
     
@@ -22,5 +23,10 @@ class Province extends Model
     public function scopeNotHidden($query)
     {
         return $query->where('isHidden', false);
+    }
+    
+    public function scopeHidden($query)
+    {
+        return $query->where('isHidden', true);
     }
 }

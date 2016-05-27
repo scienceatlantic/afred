@@ -28,19 +28,25 @@ class AuthController extends Controller
         ];
         
         if (Auth::attempt($credentials)) {
-            return $this->_toCamelCase(Auth::user()->toArray());
+            // Lazy load user roles.
+            Auth::user()->roles;
+            
+            return $this->toCcArray(Auth::user()->toArray());
         }
         
-        abort(401, 'Not authorized');
+        return 'Not authorised';
     }
     
     public function ping()
     {
         if (Auth::check()) {
-            return $this->_toCamelCase(Auth::user()->toArray());
+            // Lazy load user roles.
+            Auth::user()->roles;
+            
+            return $this->toCcArray(Auth::user()->toArray());
         }
         
-        abort(401, 'Not authenticated');
+        return 'Not authenticated';
     }
     
     public function logout()

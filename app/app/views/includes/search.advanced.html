@@ -1,0 +1,117 @@
+<div class="panel panel-default">
+  <div class="panel-body">
+    <p>Advanced Search Options</p>
+    
+    <form class="form-horizontal" name="advancedSearchForm" role="form" data-af-loading="!search.advanced.resource.$resolved">    
+      <div class="row">
+        <div class="col-lg-6">
+          <!-- Equipment or Facilities? -->
+          <div class="form-group form-group-sm">
+            <label for="type" class="col-sm-4 control-label">Search for</label>
+            <div class="col-sm-8">
+              <div>
+                <label class="radio-inline">
+                  <input type="radio" data-ng-model="search.query.type" data-ng-value="'equipment'"> Equipment
+                </label>
+                <label class="radio-inline">
+                  <input type="radio" data-ng-model="search.query.type" data-ng-value="'facility'"> Facilities
+                </label>
+              </div>
+            </div>
+          </div>          
+        </div><!-- End of .col-x-x -->
+      </div><!-- End of .row -->
+      
+      <div class="row">
+        <div class="col-lg-6">
+          <!-- Provinces -->
+          <div class="form-group form-group-sm">
+            <label for="province" class="col-sm-4 control-label">Provinces</label>
+            <div class="col-sm-8">
+              <div>
+                <label class="radio-inline">
+                  <input type="radio" data-ng-model="search.advanced.radios.provinces" data-ng-change="search.advanced.radios.update()" data-ng-value="true"> All
+                </label>
+                <label class="radio-inline">
+                  <input type="radio" data-ng-model="search.advanced.radios.provinces" data-ng-change="search.advanced.radios.update()" data-ng-value="false"> Select
+                </label>
+              </div>
+              
+              <div data-ng-hide="search.advanced.radios.provinces">
+                <br>
+                <select class="form-control input-sm" data-ng-model="search.query['provinceId[]']" data-ng-options="p.id as p.name for p in search.provinces" multiple size="10"></select>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Organizations -->
+          <div class="form-group form-group-sm">
+            <label for="organization" class="col-sm-4 control-label">Organizations</label>
+            <div class="col-sm-8">
+              <div>
+                <label class="radio-inline">
+                  <input type="radio" data-ng-model="search.advanced.radios.organizations" data-ng-change="search.advanced.radios.update()" data-ng-value="true"> All
+                </label>
+                <label class="radio-inline">
+                  <input type="radio" data-ng-model="search.advanced.radios.organizations" data-ng-change="search.advanced.radios.update()" data-ng-value="false"> Select
+                </label>
+              </div>
+              
+              <div data-ng-hide="search.advanced.radios.organizations">
+                <br>
+                <select class="form-control input-sm" data-ng-model="search.query['organizationId[]']" data-ng-options="o.id as o.name for o in search.organizations" multiple size="10"></select>
+              </div>
+            </div>
+          </div>          
+        </div><!-- End of .col-x-x -->
+        
+        <div class="col-lg-6">
+          <!-- Disciplines -->
+          <div class="form-group form-group-sm">
+            <label for="disciplines" class="col-sm-4 control-label">Disciplines</label>
+            <div class="col-sm-8">
+              <div>
+                <label class="radio-inline">
+                  <input type="radio" data-ng-model="search.advanced.radios.disciplines" data-ng-change="search.advanced.radios.update()" data-ng-value="true"> All
+                </label>
+                <label class="radio-inline">
+                  <input type="radio" data-ng-model="search.advanced.radios.disciplines" data-ng-change="search.advanced.radios.update()" data-ng-value="false"> Select
+                </label>
+              </div>
+              
+              <div data-ng-hide="search.advanced.radios.disciplines">
+                <br>
+                <select class="form-control input-sm" data-ng-model="search.query['disciplineId[]']" data-ng-options="d.id as d.name for d in search.disciplines" multiple size="10"></select>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Sectors -->
+          <div class="form-group form-group-sm">
+            <label for="sectors" class="col-sm-4 control-label">Sectors</label>
+            <div class="col-sm-8">
+              <div>
+                <label class="radio-inline">
+                  <input type="radio" data-ng-model="search.advanced.radios.sectors" data-ng-change="search.advanced.radios.update()" data-ng-value="true"> All
+                </label>
+                <label class="radio-inline">
+                  <input type="radio" data-ng-model="search.advanced.radios.sectors" data-ng-change="search.advanced.radios.update()" data-ng-value="false"> Select
+                </label>
+              </div>
+              
+              <div data-ng-hide="search.advanced.radios.sectors">
+                <br>
+                <select class="form-control input-sm" data-ng-model="search.query['sectorId[]']" data-ng-options="s.id as s.name for s in search.sectors" multiple size="10"></select>
+              </div>
+            </div>
+          </div>          
+        </div><!-- End of .col-x-x -->
+      </div><!-- End of .row -->
+      
+      <p>
+        <button type="button" class="btn btn-default btn-sm" data-ng-click="search.goToResultsPage(true)" data-ng-class="{ active: _state.current.name == 'search.all' }">Show me everything</button>
+        <button type="button" class="btn btn-default btn-sm" data-ng-click="search.advanced.reset()">Reset <span class="fa fa-refresh"></span></button>
+      </p>
+    </form>
+  </div>
+</div><!-- End of .panel -->

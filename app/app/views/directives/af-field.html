@@ -1,19 +1,26 @@
-<div data-ng-class="{'form-group': true,
-                     'form-group-sm': true,
-                     'has-error': form[name].$invalid && form[name].$dirty}">
-  
-  <label data-ng-if="nameOverride" class="col-sm-4 control-label">{{ label }}</label>
-  
-  <label data-ng-if="!nameOverride" class="col-sm-4 control-label" for="{{ id }}">{{ label }}</label>
+<div class="form-group form-group-sm" data-ng-class="{ 'has-error': form[name].$invalid && form[name].$dirty }">
+  <!-- Field label. -->
+  <label class="col-sm-4 control-label">{{ label }}</label>
   
   <div class="col-sm-8">
+    <!-- Input field goes here. -->
     <div data-ng-transclude></div>
     
+    <!-- Field length count goes here. -->
+    <p class="text-muted" data-ng-show="model.length">
+      <small>
+        <span data-ng-if="!isTextAngular">{{ model.length }}</span><span data-ng-if="isTextAngular">{{ getTextAngularContentLength(model) }}</span>/{{ maxLength }} characters remaining.
+      </small>
+    </p>
+    
+    <!-- Validation error text. -->
     <p>
-      <p class="text-danger" data-ng-show="form[name].$error.required && form[name].$dirty">This is required</p>
-      <p class="text-danger" data-ng-show="form[name].$error.url && form[name].$dirty">That's not a valid URL</p>
-      <p class="text-danger" data-ng-show="form[name].$error.email && form[name].$dirty">That's not a valid email</p>
-      <p class="text-danger" data-ng-show="form[name].$error.pattern && form[name].$dirty">That's not quite right</p>
+      <small>
+        <span class="text-danger" data-ng-show="form[name].$error.required && form[name].$dirty">This is required</span>
+        <span class="text-danger" data-ng-show="form[name].$error.url && form[name].$dirty">That's not a valid URL</span>
+        <span class="text-danger" data-ng-show="form[name].$error.email && form[name].$dirty">That's not a valid email</span>
+        <span class="text-danger" data-ng-show="form[name].$error.pattern && form[name].$dirty">That's not quite right</span>
+      </small>
     </p>
   </div>
 </div>

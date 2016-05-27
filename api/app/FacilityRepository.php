@@ -12,6 +12,7 @@ class FacilityRepository extends Model
      * @var array
      */
     protected $dates = ['dateSubmitted',
+                        'dateReviewed',
                         'created_at',
                         'updated_at'];
     
@@ -29,11 +30,12 @@ class FacilityRepository extends Model
      */
     protected $fillable = [
         'facilityId',
-        'userId',
+        'reviewerId',
         'state',
         'data',
-        'reviewMessage',
-        'dateSubmitted'
+        'reviewerMessage',
+        'dateSubmitted',
+        'dateReviewed'
     ];
     
 /**
@@ -45,9 +47,14 @@ class FacilityRepository extends Model
         'data' => 'array',
     ];
     
-    public function facility()
+    public function publishedFacility()
     {
         return $this->hasOne('App\Facility', 'facilityRepositoryId');
+    }
+    
+    public function facility()
+    {
+        return $this->belongsTo('App\Facility', 'facilityId');
     }
     
     public function reviewer()
@@ -62,7 +69,7 @@ class FacilityRepository extends Model
      * the facility repository record (frIdBefore) is still the most recent
      * version of the facility.
      */
-    public function fulsB()
+    public function fulB()
     {
         return $this->hasMany('App\FacilityUpdateLink', 'frIdBefore');
     }

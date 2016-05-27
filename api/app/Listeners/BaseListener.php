@@ -11,21 +11,26 @@ use App\Setting;
 
 abstract class BaseListener
 {
-    protected $_settings;
+    protected $settings;
     
     public function __construct()
     {
-        $this->_settings = [
-            'APP_NAME'             => Setting::find('APP_NAME')->value,
-            'APP_ACRONYM'          => Setting::find('APP_ACRONYM')->value,
-            'APP_ADDRESS'          => Setting::find('APP_ADDRESS')->value,
-            'EMAIL_ADDRESS'        => Setting::find('EMAIL_ADDRESS')->value,
-            'EMAIL_SUBJECT_PREFIX' => Setting::find('EMAIL_SUBJECT_PREFIX')
-                                          ->value
+        $this->settings = [
+            'appName'                 => Setting::find('appName')->value,
+            'appShortName'            => Setting::find('appShortName')->value,
+            'appAddress'              => Setting::find('appAddress')->value,
+            'emailAddress'            => Setting::find('emailAddress')->value,
+            'emailSubjectPrefix'      => Setting::find('emailSubjectPrefix')->value,
+            'generalContactEmail'     => Setting::find('generalContactEmail')->value,
+            'generalContactTelephone' => Setting::find('generalContactTelephone')->value,
+            'personalContactName'     => Setting::find('personalContactName')->value,
+            'personalContactTitle'    => Setting::find('personalContactTitle')->value,
+            'personalContactEmail'    => Setting::find('personalContactEmail')->value,
+            'twitterHandle'           => Setting::find('twitterHandle')->value
         ];
     }
     
-    protected function _mail($template,
+    protected function mail($template,
                              $subject,
                              $data,
                              $to,
@@ -35,32 +40,36 @@ abstract class BaseListener
         try {
             Mail::send(['text' => $template], $data, function($message)
                 use ($subject, $to, $cc, $bcc) {
-                    if (array_key_exists('name', $to)) {
-                        $message->to($to['email'], $to['name']);
-                    } else {
-                        foreach($to as $rcpt) {
-                            $message->to($rcpt['email'], $rcpt['name']);
-                        }                       
-                    }
+                    $recipients = [
+                        'to'  => $to,
+                        'cc'  => $cc ?: [], // If null, return empty array.
+                        'bcc' => $bcc ?: [] // Ditto.
+                    ];
                     
-                    if ($cc) {
-                        if (array_key_exists('name', $cc)) {
-                            $message->cc($cc['email'], $cc['name']);
+                    foreach($recipients as $type => $recipient) {
+                        // Will hold all the recipients after their details
+                        // have been validated.
+                        $validRecipients = [];
+                        
+                        // Check if it's an array of recipients or just a
+                        // single recipient. This part is for arrays.
+                        if (!array_key_exists('name', $recipient)) {
+                            foreach($recipient as $r) {
+                                if ($this->validateRecipient($r)) {
+                                    array_push($validRecipients, $r);
+                                }
+                            }
+                        // And this part is for a single recipient.
                         } else {
-                            foreach($cc as $rcpt) {
-                                $message->to($rcpt['email'], $rcpt['name']);
-                            }                       
+                            if ($this->validateRecipient($recipient)) {
+                                array_push($validRecipients, $recipient);
+                            }
                         }
-                    }
-                    
-                    if ($bcc) {
-                        if (array_key_exists('name', $bcc)) {
-                            $message->bcc($bcc['email'], $bcc['name']);
-                        } else {
-                            foreach($bcc as $rcpt) {
-                                $message->to($rcpt['email'], $rcpt['name']);
-                            }                       
-                        }
+                        
+                        // Attach recipients to email message.
+                        foreach($validRecipients as $r) {
+                            $message->$type($r['email'], $r['name']);
+                        }                            
                     }
                     
                     $message->subject($subject);
@@ -70,5 +79,13 @@ abstract class BaseListener
         } catch (Exception $e) {
             Log::error($e->getMessage());
         }
+    }
+    
+    private function validateRecipient($r)
+    {
+        return array_key_exists('name', $r)
+            && array_key_exists('email', $r)
+            && $r['name']
+            && $r['email'];     
     }
 }

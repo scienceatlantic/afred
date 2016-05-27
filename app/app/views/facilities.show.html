@@ -1,59 +1,9 @@
-<div class="row">
-  <div class="col-lg-9">
-    <div data-af-loading="!facility.$resolved">
-      <div class="alert alert-danger" data-ng-show="view.show == 'INVALID_FACILITY_ID_MESSAGE'">
-        <p>
-          <span class="h1"><span class="glyphicon glyphicon-exclamation-sign"></span></span>
-          Oops... It looks like the facility you're trying to view has either been taken down (possibly temporarily) or never existed!
-        </p>
-      </div>
-      
-      <div class="alert alert-danger" data-ng-show="view.show == 'INVALID_EQUIPMENT_ID_MESSAGE'">
-        <p>
-          <span class="h1"><span class="glyphicon glyphicon-exclamation-sign"></span></span>
-          Oops... It looks like the piece of equipment you're trying to view has either been taken down or never existed!
-          Click <a data-ui-sref="facilities.show" data-ui-sref-opts="{location: true, inherit: true, reload: true}">here</a> to view the complete facility listing instead.
-        </p>
-      </div>
-      
-      <div data-ng-show="view.show == 'LISTING'">
-        <div class="panel panel-default" data-ng-show="_state.is('facilities.show.equipment.show')">
-          <div class="panel-body">
-            <div data-ng-include="'views/includes/equipment.html'"></div>
-            
-            <br>
-            <p>
-              <button class="btn btn-default" data-ui-sref="facilities.show" data-ui-sref-opts="{location: true, inherit: true, reload: true}">View complete facility listing</button>
-            </p>
-          </div>
-        </div>
-        
-        <div class="panel panel-default">
-          <div class="panel-body">          
-            <div data-ng-include="'views/includes/facility.html'"></div>
-          </div>
-        </div>
-        
-        <div data-ng-show="facility.organization.ilo.firstName">
-          <div class="panel panel-default">
-            <div class="panel-body">
-              <div data-ng-include="'views/includes/ilo.html'"></div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="panel panel-default">
-          <div class="panel-body">
-            <div data-ng-include="'views/includes/contacts.html'"></div>
-          </div>
-        </div>
-        
-        <div class="panel panel-default" data-ng-show="_state.is('facilities.show')">
-          <div class="panel-body">
-            <div data-ng-include="'views/includes/equipment.html'"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div><!-- End of .col-x-x -->
-</div><!-- End of .row -->
+<!-- state: facilities.show -->
+<div data-ng-if="_state.current.name == 'facilities.show'">
+  <div data-af-loading="!facilities.resource.$resolved">      
+    <div data-af-facility="all" data-af-facility-model="facilities.resource"></div>
+  </div>
+</div>
+
+<!-- state: facilities.show.equipment.show -->
+<div data-ui-view></div>
