@@ -63,7 +63,7 @@ angular.module('afredApp').controller('FacilitiesFormCreateController',
         data: $scope.form.formatForApi()
       }, function() {
         // Clear any saved data.
-        //$scope.form.clearSave(true);
+        $scope.form.clearSave(true);
         $scope.view.show = 'SUCCESS_MESSAGE';
       }, function() {
         $scope.view.show = 'FAILURE_MESSAGE';
