@@ -34,7 +34,10 @@
   <div class="panel panel-default">    
     <div class="panel-body">
       <p class="text-muted" style="display: inline-block;">Contact Information</p>
+      
       <span data-ng-show="form.contactIndex === 0" class="label label-info">Primary point of contact</span>
+      
+      <p class="text-muted">{{ form.data.contacts.length }} out of 10 maximum</p>
       <hr>
   
       <div data-ng-include="'views/includes/facilities.form.contacts.html'"></div>
@@ -45,6 +48,8 @@
   <div class="panel panel-default">    
     <div class="panel-body">
       <p class="text-muted">Equipment Information</p>
+      
+      <p class="text-muted">{{ form.data.equipment.length }} out of 50 maximum</p>
       <hr>
       
       <div data-ng-include="'views/includes/facilities.form.equipment.html'"></div>

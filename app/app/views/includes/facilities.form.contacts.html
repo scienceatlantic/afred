@@ -22,7 +22,7 @@
       </tbody>
     </table>
     
-    <button type="button" class="btn btn-default btn-sm" data-ng-click="form.addContact()">Contacts <span class="fa fa-plus"></span></button>
+    <button type="button" class="btn btn-default btn-sm" data-ng-click="form.addContact()" data-ng-disabled="form.data.contacts.length > 9">Contacts <span class="fa fa-plus"></span></button>
   </div><!-- End of .col-x-x -->
   
   <div class="col-lg-10">                    

@@ -22,7 +22,7 @@
       </tbody>
     </table>
     
-    <button type="button" class="btn btn-default btn-sm" data-ng-click="form.addEquipment()">Equipment <span class="fa fa-plus"></span></button>
+    <button type="button" class="btn btn-default btn-sm" data-ng-click="form.addEquipment()" data-ng-disabled="form.data.equipment.length > 49">Equipment <span class="fa fa-plus"></span></button>
   </div><!-- End of .col-x-x -->
   
   <div class="col-lg-10">
