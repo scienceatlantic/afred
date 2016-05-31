@@ -84,8 +84,8 @@
               </div>
             </div>
             
-            <div data-af-field data-af-field-label="Keywords">
-              <input type="text" class="form-control" name="equipmentKeywords{{ $index }}" data-ng-model="e.keywords" placeholder="NMRI, MRT, etc">
+            <div data-af-field data-af-field-label="Keywords" data-af-field-model="e.keywords">
+              <input type="text" class="form-control" name="equipmentKeywords{{ $index }}" data-ng-model="e.keywords" placeholder="NMRI, MRT, etc" maxlength="500">
             </div>
           </div><!-- End of .col-x-x -->
         </div><!-- End of .row -->
