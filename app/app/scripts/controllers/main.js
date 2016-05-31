@@ -51,15 +51,12 @@ angular.module('afredApp').controller('MainController',
            * currentImgIndex Increments the index every 'interval' milliseconds.
            *     The index is reset to 0 when it's more than 3.
            */
-          run: function() {
-            // Alias to shorten code.
-            var s = $scope.main.footer.slider;
-            
+          run: function() {            
             $interval(function() {
-              if (++s.currentImgIndex == 4) {
-                s.currentImgIndex = 0;
+              if (++$scope.main.footer.slider.currentImgIndex == 4) {
+                $scope.main.footer.slider.currentImgIndex = 0;
               }
-            }, s.interval);
+            }, $scope.main.footer.slider.interval);
           }
         }       
       }
