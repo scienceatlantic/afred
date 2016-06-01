@@ -166,6 +166,9 @@ angular.module('afredApp').controller('SearchController',
        * Redirects to the search results page. The search results are shown in
        * a separate state so that the search parameters can be attached to the
        * URL.
+       *
+       * Side effects:
+       * $scope.search.results Cleared if redirected back to 'search'.
        * 
        * Uses/requires:
        * $scope.search.query
@@ -180,7 +183,10 @@ angular.module('afredApp').controller('SearchController',
           if ($scope.search.query.q) {
             $scope._state.go('search.q', $scope.search.query);
           // Otherwise return to the main search page
-          } else { 
+          } else {
+            // Clear search results if going back to main search page.
+            $scope.search.results = [];
+            
             $scope._state.go('search');
           }   
         } else {
