@@ -91,4 +91,14 @@ class Facility extends Model
     {
         return $this->hasMany('App\Equipment', 'facilityId');
     }
+    
+    public function scopeHidden($query)
+    {
+        return $query->where('isPublic', false);
+    }
+    
+    public function scopeNotHidden($query)
+    {
+        return $query->where('isPublic', true);
+    }
 }
