@@ -117,3 +117,8 @@ Route::resource('facility-repository', 'FacilityRepositoryController', [
  * Search routes
  *****************************************************************************/
 Route::get('search/','SearchController@index');
+
+/******************************************************************************
+ * Dashboard routes.
+ *****************************************************************************/
+Route::get('dashboard/', 'DashboardController@index');
