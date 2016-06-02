@@ -1,0 +1,12 @@
+<div class="col-sm-4">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <p><b><small>{{ label }}</small></b></p>
+      
+      <p class="h1">
+        <a data-ui-sref="{{ sref }}" data-ng-if="sref">{{ value }}</a>
+        <span data-ng-if="!sref">{{ value }}</span>
+      </p>
+    </div>
+  </div>
+</div>
