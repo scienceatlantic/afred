@@ -1,15 +1,16 @@
-<div class="form-group form-group-sm" data-ng-class="{ 'has-error': form[name].$invalid && form[name].$dirty }">
+<div class="form-group" data-ng-class="{ 'has-error': form[name].$invalid && form[name].$dirty, 'form-group-sm': !isMd }">
   <!-- Field label. -->
-  <label class="col-sm-4 control-label">{{ label }}</label>
+  <label class="control-label" data-ng-class="{ 'col-sm-4': !isVertical }">{{ label }}</label>
   
-  <div class="col-sm-8">
+  <div data-ng-class="{ 'col-sm-8': !isVertical }">
     <!-- Input field goes here. -->
     <div data-ng-transclude></div>
     
     <!-- Field length count goes here. -->
     <p class="text-muted" data-ng-show="model.length">
       <small>
-        <span data-ng-if="!isTextAngular">{{ model.length }}</span><span data-ng-if="isTextAngular">{{ getTextAngularContentLength(model) }}</span>/{{ maxLength }} characters remaining.
+        <span data-ng-if="!isTextAngular">{{ model.length }}</span><!--
+     --><span data-ng-if="isTextAngular">{{ getTextAngularContentLength(model) }}</span>/{{ maxLength }} characters remaining.
       </small>
     </p>
     
