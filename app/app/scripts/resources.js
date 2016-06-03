@@ -281,6 +281,25 @@ angular.module('afredApp').factory('sectorResource',
   }
 ]);
 
+angular.module('afredApp').factory('emailResource',
+  ['$rootScope',
+   '$resource',
+   function($rootScope,
+            $resource) {
+    var root = $rootScope._config.api.address;
+    
+    return $resource(root + '/email', {
+        contactForm: {
+          method: 'POST',
+          params: {
+            type: 'contactForm'
+          }
+        }
+      }
+    );
+  }
+]);
+
 angular.module('afredApp').factory('wpResource',
   ['$rootScope',
    '$resource',
