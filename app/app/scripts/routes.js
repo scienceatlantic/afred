@@ -6,10 +6,10 @@
  */
 
 angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
-  function($stateProvider, $urlRouterProvider, $rootScope) {
+  function($stateProvider, $urlRouterProvider) {
     // If page (state) not found, show 404.
     // See: http://stackoverflow.com/questions/26181141/angularjs-ui-router-otherwise-to-state-instead-of-url
-    $urlRouterProvider.otherwise(function($injector, $location) {
+    $urlRouterProvider.otherwise(function($injector) {
       $injector.invoke(['$state', function($state) {
         $state.go('error.404');
       }]);
@@ -153,12 +153,12 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         url: '/admin',
         templateUrl: 'views/admin.html',
         resolve: {
-          ping: ['$rootScope', '$state', function($rootScope, $state) {
+          ping: ['$rootScope', function($rootScope) {
             return $rootScope._auth.ping().then(function(response) {
               if (!$rootScope._auth.save(response)) {
                 $rootScope._state.go('login', { redirect: location.href }); 
               }
-            }, function() {
+            }, function(response) {
               $rootScope._httpError(response);
             });
           }]
@@ -322,12 +322,12 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
           pageTitle: 'Login'
         },
         resolve: {
-          ping: ['$rootScope', '$state', function($rootScope, $state) {
+          ping: ['$rootScope', function($rootScope) {
             return $rootScope._auth.ping().then(function(response) {
               if ($rootScope._auth.save(response)) {  
                 $rootScope._state.go('admin.dashboard');
               }
-            }, function() {
+            }, function(response) {
               $rootScope._httpError(response);
             });
           }]

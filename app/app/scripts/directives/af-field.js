@@ -60,7 +60,7 @@ angular.module('afredApp').directive('afField', [
               return angular.element(ta.scope.displayElements.text[0])
                 .text().length;
             };          
-          })
+          });
         }
         
         $scope.form = form;
