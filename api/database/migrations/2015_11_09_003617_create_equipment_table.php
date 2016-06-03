@@ -28,7 +28,7 @@ class CreateEquipmentTable extends Migration
             $table->boolean('hasExcessCapacity');
             $table->smallInteger('yearPurchased')->unsigned()->nullable();
             $table->smallInteger('yearManufactured')->unsigned()->nullable();
-            $table->string('keywords', 200)->nullable();
+            $table->string('keywords', 500)->nullable();
             $table->timestamps();
         });
     }

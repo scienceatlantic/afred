@@ -1,0 +1,25 @@
+<h1>Contact</h1>
+
+<p>Submit your questions using the form below.</p>
+
+<form name="contactForm" role="form" novalidate style="max-width: 500px;">
+  <div data-af-field data-af-field-label="Name*" data-af-field-is-md="true" data-af-field-is-vertical="true" data-af-field-model="contact.name">
+    <input type="text" name="name" class="form-control" data-ng-model="contact.name" maxlength="50" required>
+  </div>
+
+  <div data-af-field data-af-field-label="Email*" data-af-field-is-md="true" data-af-field-is-vertical="true" data-af-field-model="contact.email">
+    <input type="email" name="email" class="form-control" data-ng-model="contact.email" data-ng-model-options="{ debounce: 500 }" maxlength="254" required>
+  </div>
+  
+  <div data-af-field data-af-field-label="Subject" data-af-field-is-md="true" data-af-field-is-vertical="true" data-af-field-model="contact.subject">
+    <input type="text" name="subject" class="form-control" data-ng-model="contact.subject" maxlength="50">
+  </div> 
+  
+  <div data-af-field data-af-field-label="Message*" data-af-field-is-md="true" data-af-field-is-vertical="true" data-af-field-model="contact.message">
+    <textarea class="form-control" name="message" rows="6" data-ng-model="contact.message" maxlength="1000" required></textarea>
+  </div>
+  
+  <p>
+    <button type="button" class="btn btn-default" data-ng-click="submit()" data-ng-disabled="contactForm.$invalid">Submit <span class="fa fa-paper-plane"></span></button>
+  </p>
+</form>

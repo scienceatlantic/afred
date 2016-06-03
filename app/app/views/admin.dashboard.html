@@ -1,39 +1,35 @@
 <h1>Admin / Dashboard</h1>
 
-<div class="row">
-  <div class="col-sm-4">
-    <div class="panel panel-default">
-      <div class="panel-body" style="min-height: 119px;">
-          <p class="label label-default">Published</p>
-          
-          <div data-af-loading="!facilityStats.published.$resolved">
-            <p class="h1">{{facilityStats.published.total}}</p>
-          </div>
-      </div>
-    </div>
+<div data-af-loading="loading.stats">
+  <p class="lead">Facilities</p>
+  
+  <div class="row">
+    <div data-af-dashboard-value="stats.data.facilities.published.total" data-af-dashboard-value-label="PUBLISHED - TOTAL"></div>
+    
+    <div data-af-dashboard-value="stats.data.facilities.published.public" data-af-dashboard-value-label="PUBLISHED - PUBLIC" data-af-dashboard-value-sref="admin.facilities.index({ state: 'PUBLISHED', visibility: 1 })"></div>
+    
+    <div data-af-dashboard-value="stats.data.facilities.published.private" data-af-dashboard-value-label="PUBLISHED - PRIVATE" data-af-dashboard-value-sref="admin.facilities.index({ state: 'PUBLISHED', visibility: 0 })"></div>
   </div>
   
-  <div class="col-sm-4">
-    <div class="panel panel-default">
-      <div class="panel-body" style="min-height: 119px;">
-        <p class="label label-default">Pending Approval</p>
-        
-        <div data-af-loading="!facilityStats.pendingApproval.$resolved">
-          <p class="h1">{{facilityStats.pendingApproval.total}}</p>
-        </div>
-      </div>
-    </div>
+  <div class="row">
+    <div data-af-dashboard-value="stats.data.facilities.pendingApproval" data-af-dashboard-value-label="PENDING APPROVAL" data-af-dashboard-value-sref="admin.facilities.index({ state: 'PENDING_APPROVAL' })"></div>
+    
+    <div data-af-dashboard-value="stats.data.facilities.rejected" data-af-dashboard-value-label="REJECTED" data-af-dashboard-value-sref="admin.facilities.index({ state: 'REJECTED' })"></div>
   </div>
   
-  <div class="col-sm-4">
-    <div class="panel panel-default">
-      <div class="panel-body" style="min-height: 119px;">
-        <p class="label label-default">Pending Edit Approval</p>
-        
-        <div data-af-loading="!facilityStats.pendingEditApproval.$resolved">
-          <p class="h1">{{facilityStats.pendingEditApproval.total}}</p>
-        </div>
-      </div>
-    </div>
+  <p class="lead">Equipment</p>
+  
+  <div class="row">
+    <div data-af-dashboard-value="stats.data.equipment.total" data-af-dashboard-value-label="TOTAL"></div>
+    
+    <div data-af-dashboard-value="stats.data.equipment.public" data-af-dashboard-value-label="PUBLIC"></div>
+    
+    <div data-af-dashboard-value="stats.data.equipment.private" data-af-dashboard-value-label="PRIVATE"></div>
   </div>
+  
+  <div class="row">
+    <div data-af-dashboard-value="stats.data.equipment.hasExcessCapacity" data-af-dashboard-value-label="HAS EXCESS CAPACITY"></div>
+    
+    <div data-af-dashboard-value="stats.data.equipment.noExcessCapacity" data-af-dashboard-value-label="NO EXCESS CAPACITY"></div>
+  </div>  
 </div>

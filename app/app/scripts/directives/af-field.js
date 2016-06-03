@@ -17,8 +17,11 @@ angular.module('afredApp').directive('afField', [
         label: '@afFieldLabel',
         nameOverride: '@afFieldName',
         model: '=afFieldModel',
+        isMd: '=afFieldIsMd',
+        isVertical: '=afFieldIsVertical'
       },
-      link: function($scope, element, attrs, form) { 
+      link: function($scope, element, attrs, form) {
+        // Find the form field element.
         var field = element.find('input[type!="hidden"], select, ' +
           'textarea:not([ta-bind]), div[data-text-angular], div[text-angular]');
         
@@ -32,6 +35,7 @@ angular.module('afredApp').directive('afField', [
           });
         }
         
+        // Parse the 'maxLength' property.
         try {
           $scope.maxLength = parseInt(field.attr('maxlength'));
           
@@ -46,6 +50,7 @@ angular.module('afredApp').directive('afField', [
           // Do nothing.
         }
         
+        // TextAngular code.
         $scope.isTextAngular = field.hasClass('ta-root');
         
         if ($scope.isTextAngular) {
@@ -55,7 +60,7 @@ angular.module('afredApp').directive('afField', [
               return angular.element(ta.scope.displayElements.text[0])
                 .text().length;
             };          
-          })
+          });
         }
         
         $scope.form = form;

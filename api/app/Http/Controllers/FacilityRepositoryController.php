@@ -49,29 +49,25 @@ class FacilityRepositoryController extends Controller
             'publishedFacility');
         
         // Narrow down query by state.
-        if (($state = $request->input('state'))) {
-            if ($state == 'PENDING_APPROVAL'
-                || $state == 'PENDING_EDIT_APPROVAL') {
-                $fr->where('state', 'PENDING_APPROVAL')
-                    ->orWhere('state', 'PENDING_EDIT_APPROVAL');
-            }
-            else if ($state == 'PUBLISHED' || $state == 'PUBLISHED_EDIT') {
-                $visibility = (bool) $request->input('visibility', true);
-                $frId = Facility::where('isPublic', $visibility)
-                    ->select('facilityRepositoryId')->get();
-                $fr->whereIn('id', $frId);                       
-            }
-            else if ($state == 'REJECTED' || $state == 'REJECTED_EDIT') {
-                $fr->where('state', 'REJECTED')
-                    ->orWhere('state', 'REJECTED_EDIT');
-            }
-            else if ($state == 'DELETED') {
-                $facilityIds = Facility::select('id')->get();
-                $fr->whereNotIn('facilityId', $facilityIds)
-                    ->where('state', '!=', 'PENDING_APPROVAL')
-                    ->where('state', '!=', 'PENDING_EDIT_APPROVAL')
-                    ->groupBy('facilityId');
-            }
+        switch ($request->input('state')) {
+            case 'PENDING_APPROVAL':
+            case 'PENDING_EDIT_APPROVAL':
+                $fr->pendingApproval(true);
+                break;
+            
+            case 'PUBLISHED':
+            case 'PUBLISHED_EDIT':
+                $fr->published((bool) $request->input('visibility', true));
+                break;
+            
+            case 'REJECTED':
+            case 'REJECTED_EDIT':
+                $fr->rejected(true);
+                break;
+            
+            case 'DELETED':
+                $fr->deleted();
+                break;
         }
         
         // Narrow down query by facility ID.

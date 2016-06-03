@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Facility;
 
 class FacilityRepository extends Model
 {
@@ -83,5 +84,56 @@ class FacilityRepository extends Model
     public function fulA()
     {
         return $this->hasOne('App\FacilityUpdateLink', 'frIdAfter');
+    }
+    
+    public function scopePendingApproval($query, $includeEdits = false)
+    {
+        $query->where('state', 'PENDING_APPROVAL');
+        
+        if ($includeEdits) {
+            $query->orWhere('state', 'PENDING_EDIT_APPROVAL');
+        }
+        
+        return $query;
+    }
+    
+    public function scopePendingEditApproval($query)
+    {
+        return $query->where('state', 'PENDING_EDIT_APPROVAL');
+    }
+    
+    public function scopePublished($query, $isPublic = -1)
+    {
+        $f = Facility::query();
+        
+        if ($isPublic != -1) {
+            $f->where('isPublic', $isPublic);
+        }
+        
+        $query->whereIn('id', $f->select('facilityRepositoryId')->get());        
+    }
+    
+    public function scopeRejected($query, $includeEdits = false)
+    {
+        $query->where('state', 'REJECTED');
+        
+        if ($includeEdits) {
+            $query->orWhere('state', 'REJECTED_EDIT');
+        }
+        
+        return $query;
+    }
+    
+    public function scopeRejectedEdit($query)
+    {
+        return $query->where('state', 'REJECTED_EDIT');
+    }
+    
+    public function scopeDeleted($query)
+    {
+        $query->whereNotIn('facilityId', Facility::select('id')->get())
+            ->where('state', '!=', 'PENDING_APPROVAL')
+            ->where('state', '!=', 'PENDING_EDIT_APPROVAL')
+            ->groupBy('facilityId');
     }
 }

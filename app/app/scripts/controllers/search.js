@@ -168,7 +168,7 @@ angular.module('afredApp').controller('SearchController',
        * URL.
        *
        * Side effects:
-       * $scope.search.results Array is cleared.
+       * $scope.search.results Cleared if redirected back to 'search'.
        * 
        * Uses/requires:
        * $scope.search.query
@@ -177,16 +177,16 @@ angular.module('afredApp').controller('SearchController',
        * @param {boolean} showAll true = show everything, false = regular
        *     search.
        */
-      goToResultsPage: function(showAll) {
-        // Clear the search results array since we're starting a new search.
-        $scope.search.results = [];
-        
+      goToResultsPage: function(showAll) {        
         if (!showAll) {
-          // Search only if the query is not empty
+          // Search only if the query is not empty.
           if ($scope.search.query.q) {
             $scope._state.go('search.q', $scope.search.query);
           // Otherwise return to the main search page
-          } else { 
+          } else {
+            // Clear search results if going back to main search page.
+            $scope.search.results = [];
+            
             $scope._state.go('search');
           }   
         } else {
@@ -207,34 +207,25 @@ angular.module('afredApp').controller('SearchController',
        * $scope.search.toInt()
        */
       parseParams: function() {
-        $scope.search.query = {
-          q: $scope._stateParams.q,
-          type: $scope._stateParams.type == 'facility' ?
-            'facility' : 'equipment',
-          'provinceId[]':
-            $scope.search.toInt($scope._stateParams['provinceId[]']),
-          'organizationId[]':
-            $scope.search.toInt($scope._stateParams['organizationId[]']),
-          'disciplineId[]':
-            $scope.search.toInt($scope._stateParams['disciplineId[]']),
-          'sectorId[]':
-            $scope.search.toInt($scope._stateParams['sectorId[]'])
-        };
+        // Aliases to shorten code.
+        var s = $scope.search;
+        var p = $scope._stateParams;
+        var r = $scope.search.advanced.radios;
+        
+        s.query.q = p.q;
+        s.query.type = p.type == 'facility' ? 'facility' : 'equipment';
+        s.query['provinceId[]'] = s.toInt(p['provinceId[]']);
+        s.query['organizationId[]'] = s.toInt(p['organizationId[]']);
+        s.query['disciplineId[]'] = s.toInt(p['disciplineId[]']);
+        s.query['sectorId[]'] = s.toInt(p['sectorId']);
         
         // Update the radio buttons. If a (or more) province, organization,
-        // discipline, or sector was select, set the radio button to false
-        // (ie. 'Select').
-        $scope.search.advanced.radios.provinces =
-          $scope.search.query['provinceId[]'].length == 0;
-        
-        $scope.search.advanced.radios.organizations =
-          $scope.search.query['organizationId[]'].length == 0;
-          
-        $scope.search.advanced.radios.disciplines =
-          $scope.search.query['disciplineId[]'].length == 0;
-          
-        $scope.search.advanced.radios.sectors =
-          $scope.search.query['sectorId[]'].length == 0;
+        // discipline, or sector was selected, set the radio button to false
+        // (i.e. 'Select').
+        r.provinces = s.query['provinceId[]'].length == 0;
+        r.organizations = s.query['organizationId[]'].length == 0;
+        r.disciplines = s.query['disciplineId[]'].length == 0;
+        r.sectors = s.query['sectorId[]'].length == 0;
       },
       
       /**
@@ -273,7 +264,7 @@ angular.module('afredApp').controller('SearchController',
       getResults: function(page) {
         $scope.search.query.page = page ? page : 1;
         $scope.search.query.itemsPerPage = 10;
-        
+
         $scope.search.resource = searchResource.query($scope.search.query,
           function(results) {
             $scope.search.results = $scope.search.results.concat(results.data);
