@@ -140,6 +140,14 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
           pageTitle: 'Disclaimer'
         }
       }).
+      state('contact', {
+        url: '/contact',
+        templateUrl: 'views/contact.html',
+        controller: 'ContactController',
+        data: {
+          pageTitle: 'Contact'
+        }
+      }).
       state('admin', {
         'abstract': true,
         url: '/admin',
