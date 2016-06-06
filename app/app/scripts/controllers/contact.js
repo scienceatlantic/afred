@@ -9,17 +9,39 @@ angular.module('afredApp').controller('ContactController',
      * Functions.
      * --------------------------------------------------------------------- */
     
-    $scope.submit = function(form) {
-      $scope.resource = emailResource.contactForm($scope.contact, function() {
-        // Reset the form and data.
-        form.$setPristine();
-        $scope.contact = {};
-        
-        // Show success message.
+    /**
+     * Submits form data to API.
+     *
+     * Side effects:
+     * $scope.resource Angular resource returned from 'emailResource' is stored
+     *     here.
+     * $scope.view.show Is set to 'SUCCESS' on success, or 'FAILURE' on failure.
+     * 
+     * Calls/uses/requires:
+     * emailResource
+     * $scope.contact
+     */
+    $scope.submit = function() {
+      $scope.resource = emailResource.contactForm($scope.contact, function() {        
         $scope.view.show = 'SUCCESS';
       }, function() {
         $scope.view.show = 'FAILURE';
       });
+    };
+    
+    /**
+     * Resets contact form.
+     *
+     * Side effects:
+     * $scope.contact Is set to empty object.
+     * $scope.view.show Is set to 'CONTACT_FORM'.
+     *
+     * @param {Angular form} form Contact form controller.
+     */
+    $scope.reset = function(form) {
+      form.$setPristine();
+      $scope.contact = {};
+      $scope.view.show = 'CONTACT_FORM';
     };
     
     /* ---------------------------------------------------------------------
@@ -41,7 +63,7 @@ angular.module('afredApp').controller('ContactController',
     /**
      * Code related to the HTML view.
      */
-    $scope.show = {
+    $scope.view = {
       /**
        * Controls what is displayed.
        *
