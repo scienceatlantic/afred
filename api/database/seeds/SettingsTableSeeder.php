@@ -89,6 +89,26 @@ class SettingsTableSeeder extends Seeder
             'value'       => 'patty.king@scienceatlantic.ca',
             'dateCreated' => $now,
             'dateUpdated' => $now
+        ], [
+            'name'        => 'contactFormEmail',
+            'value'       => 'afred@scienceatlantic.ca',
+            'dateCreated' => $now,
+            'dateUpdated' => $now
+        ], [
+            'name'        => 'contactFormName',
+            'value'       => 'AFRED',
+            'dateCreated' => $now,
+            'dateUpdated' => $now
+        ], [
+            'name'        => 'springboardFormEmail',
+            'value'       => 'info@springboardatlantic.ca',
+            'dateCreated' => $now,
+            'dateUpdated' => $now
+        ], [
+            'name'        => 'springboardFormName',
+            'value'       => 'Springboard Atlantic',
+            'dateCreated' => $now,
+            'dateUpdated' => $now
         ]]);
     }
 }
