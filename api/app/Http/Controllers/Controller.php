@@ -128,8 +128,9 @@ abstract class Controller extends BaseController
      * Returns the current datetime.
      * @return {string} Current datetime.
      */
-    public function now()
+    public function now($toDateTimeString = true)
     {
-        return Carbon::now()->toDateTimeString();
+        $now = Carbon::now();
+        return $toDateTimeString ? $now->toDateTimeString() : $now;
     }
 }
