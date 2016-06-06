@@ -25,38 +25,57 @@ class EmailController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request  $r
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        // Email subject prefix.
-        $sPfx = Setting::find('emailSubjectPrefix');
-        
-    
+    public function store(Request $r)
+    {    
+        // Data that will be passed to the event handler.
         $e = [
+            // Location of the email template.
             'template' => 'emails.events.email.message',
-            'subject'  => $sPfx,
+            
+            // Email subject.
+            'subject'  => Setting::find('emailSubjectPrefix')->value,
+            
+            // Email template data.
             'data'     => [
-                'type'    => '',
-                'date'    => $this->now(),
-                'message' => $request->message,
+                'type'    => null,
+                'subject' => null,
+                'date'    => $this->now(false)->toDayDateTimeString(),
+                'from'    => null,
+                'body'    => $r->message,
             ],
+            
+            // Email recipieint.
             'to'       => [],
+            
+            // "cc".
             'cc'       => [],
-            'bcc'      => []
+            
+            // "bcc".
+            'bcc'      => [],
+            
+            // Reply to.
+            'replyTo'  => [
+                'email' => null,
+                'name'  => null
+            ]
         ];
         
-        switch($request->type) {
+        switch($r->type) {
             // Contact form message.
             case 'contactForm':
-                $e['subject'] .= 'Contact Form - ' . $request->subject;
+                $e['subject'] .= 'Contact Form - ' . $r->subject;
                 $e['data']['type'] = 'AFRED Website Contact Form';
-                
-                $e['to'] = [
-                    'name'  => 'Prasad',
-                    'email' => 'prasad@scienceatlantic.ca'
-                ];
+                $e['data']['subject'] = $r->subject;
+                $e['data']['from'] = $r->name . ' (' . $r->email . ')';
+                array_push($e['to'], [
+                    'name'  => Setting::find('contactFormName')->value,
+                    'email' => Setting::find('contactFormEmail')->value
+                ]);
+                $e['replyTo']['email'] = $r->email;
+                $e['replyTo']['name'] = $r->name;
                 
                 event(new EmailEvent($e));
                 return;
