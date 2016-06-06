@@ -268,7 +268,7 @@ angular.module('afredApp').factory('emailResource',
             $resource) {
     var root = $rootScope._config.api.address;
     
-    return $resource(root + '/email', {
+    return $resource(root + '/email', null, {
       contactForm: {
         method: 'POST',
         params: {
