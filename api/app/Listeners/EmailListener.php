@@ -34,6 +34,6 @@ class EmailListener extends BaseListener
         
         // Mail message.
         $this->mail($e['template'], $e['subject'], $e['data'], $e['to'],
-            $e['cc'], $e['bcc']);
+            $e['cc'], $e['bcc'], $e['replyTo']);
     }
 }
