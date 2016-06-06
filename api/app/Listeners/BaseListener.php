@@ -35,16 +35,19 @@ abstract class BaseListener
                              $data,
                              $to,
                              $cc = null,
-                             $bcc = null)
+                             $bcc = null,
+                             $replyTo = null)
     {
         try {
             Mail::send(['text' => $template], $data, function($message)
-                use ($subject, $to, $cc, $bcc) {
+                use ($subject, $to, $cc, $bcc, $replyTo) {
                     $recipients = [
                         'to'  => $to,
                         'cc'  => $cc ?: [], // If null, return empty array.
                         'bcc' => $bcc ?: [] // Ditto.
                     ];
+                    
+                    $replyTo = $replyTo ? $replyTo : [];
                     
                     foreach($recipients as $type => $recipient) {
                         // Will hold all the recipients after their details
@@ -73,6 +76,9 @@ abstract class BaseListener
                     }
                     
                     $message->subject($subject);
+                    if ($this->validateRecipient($replyTo)) {
+                        $message->replyTo($replyTo['email'], $replyTo['name']);   
+                    }                    
                 }
             );            
             
