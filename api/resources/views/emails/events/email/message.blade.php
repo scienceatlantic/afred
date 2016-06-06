@@ -3,10 +3,13 @@
 @section('content')
 Hello,
 
-Message details:
-Type: {{ $type }}
+Details:
+Type: {!! $type !!}
 Date: {{ $date }}
+@if ($from)
+From: {!! $from !!}
+@endif
 
 Message:
-
+{!! $body !!}
 @stop
