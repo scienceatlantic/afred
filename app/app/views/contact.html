@@ -5,20 +5,20 @@
   <div data-ng-show="view.show == 'CONTACT_FORM'">
     <p>Submit your questions using the form below.</p>
     
-    <div data-af-field data-af-field-label="Name*" data-af-field-is-md="true" data-af-field-is-vertical="true" data-af-field-model="contact.name">
-      <input type="text" name="name" class="form-control" data-ng-model="contact.name" maxlength="50" data-ng-disabled="resource.$resolved === false" required>
+    <div data-af-field data-af-field-label="Name*" data-af-field-is-md="true" data-af-field-is-vertical="true" data-af-field-model="message.name">
+      <input type="text" name="name" class="form-control" data-ng-model="message.name" maxlength="50" data-ng-disabled="resource.$resolved === false" required>
     </div>
   
-    <div data-af-field data-af-field-label="Email*" data-af-field-is-md="true" data-af-field-is-vertical="true" data-af-field-model="contact.email">
-      <input type="email" name="email" class="form-control" data-ng-model="contact.email" data-ng-model-options="{ debounce: 500 }" maxlength="254" data-ng-disabled="resource.$resolved === false" required>
+    <div data-af-field data-af-field-label="Email*" data-af-field-is-md="true" data-af-field-is-vertical="true" data-af-field-model="message.email">
+      <input type="email" name="email" class="form-control" data-ng-model="message.email" data-ng-model-options="{ debounce: 500 }" maxlength="254" data-ng-disabled="resource.$resolved === false" required>
     </div>
     
-    <div data-af-field data-af-field-label="Subject" data-af-field-is-md="true" data-af-field-is-vertical="true" data-af-field-model="contact.subject">
-      <input type="text" name="subject" class="form-control" data-ng-model="contact.subject" data-ng-disabled="resource.$resolved === false" maxlength="50">
+    <div data-af-field data-af-field-label="Subject" data-af-field-is-md="true" data-af-field-is-vertical="true" data-af-field-model="message.subject">
+      <input type="text" name="subject" class="form-control" data-ng-model="message.subject" data-ng-disabled="resource.$resolved === false" maxlength="50">
     </div> 
     
-    <div data-af-field data-af-field-label="Message*" data-af-field-is-md="true" data-af-field-is-vertical="true" data-af-field-model="contact.message">
-      <textarea class="form-control" name="message" rows="6" data-ng-model="contact.message" maxlength="1000" data-ng-disabled="resource.$resolved === false" required></textarea>
+    <div data-af-field data-af-field-label="Message*" data-af-field-is-md="true" data-af-field-is-vertical="true" data-af-field-model="message.body">
+      <textarea class="form-control" name="message" rows="6" data-ng-model="message.body" maxlength="1000" data-ng-disabled="resource.$resolved === false" required></textarea>
     </div>
     
     <p>
