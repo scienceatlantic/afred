@@ -44,7 +44,7 @@ class EmailController extends Controller
                 'subject' => null,
                 'date'    => $this->now(false)->toDayDateTimeString(),
                 'from'    => null,
-                'body'    => $r->message,
+                'body'    => $r->body,
             ],
             
             // Email recipieint.
@@ -82,7 +82,18 @@ class EmailController extends Controller
             
             // Springboard Atlantic contact modal when a user is not able to
             // find what they're looking for.
-            case 'springboardAtlantic':            
+            case 'springboardAtlantic':
+                $e['subject'] .= 'Springboard Atlantic Form';
+                $e['data']['type'] = 'AFRED Springboard Atlantic Contact Form';
+                $e['data']['from'] = $r->name . ' (' . $r->email . ')';
+                array_push($e['to'], [
+                    'name'  => Setting::find('springboardFormName')->value,
+                    'email' => Setting::find('springboardFormEmail')->value
+                ]);
+                $e['replyTo']['email'] = $r->email;
+                $e['replyTo']['email'] = $r->name;
+                
+                event(new EmailEvent($e));
                 return;
             
             // Report a mistake in a facility listing.
