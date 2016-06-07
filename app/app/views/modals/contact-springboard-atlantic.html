@@ -5,7 +5,7 @@
   </h1>
 </div>
   
-<form class="form-horizontal" name="form" data-ng-submit="submit()" novalidate>
+<form name="springboardForm" data-ng-submit="submit()" novalidate>
   <div class="modal-body" data-af-loading="loading.form">
     <h1 class="h4">Contact Springboard Atlantic</h1>
     
@@ -29,24 +29,48 @@
     
     <hr>
     
-    <p class="text-warning">This form has been temporarily disabled for the beta.</p>
-    
-    <!--
-    <div data-af-field data-af-field-label="Name*">
-      <input type="text" class="form-control" name="name" data-ng-model="message.name" required>
+    <!-- Contact form. -->
+    <div data-ng-show="view.show == 'CONTACT_FORM'">
+      <div class="row">
+        <div class="col-sm-6">
+          <div data-af-field data-af-field-label="Name*" data-af-field-is-md="true" data-af-field-is-vertical="true" data-af-field-model="message.name">
+            <input type="text" name="name" class="form-control" data-ng-model="message.name" maxlength="50" data-ng-disabled="resource.$resolved === false" required>
+          </div>
+        </div>  
+        
+        <div class="col-sm-6">
+          <div data-af-field data-af-field-label="Email*" data-af-field-is-md="true" data-af-field-is-vertical="true" data-af-field-model="message.email">
+            <input type="email" name="email" class="form-control" data-ng-model="message.email" data-ng-model-options="{ debounce: 500 }" maxlength="254" data-ng-disabled="resource.$resolved === false" required>
+          </div>
+        </div>
+      </div>
+      
+      <div data-af-field data-af-field-label="Message*" data-af-field-is-md="true" data-af-field-is-vertical="true" data-af-field-model="message.body">
+        <textarea name="message" class="form-control" data-ng-model="message.body" rows="6" maxlength="1000" data-ng-disabled="resource.$resolved === false" required></textarea>
+      </div>
     </div>
     
-    <div data-af-field data-af-field-label="Email*">
-      <input type="email" class="form-control" name="email" data-ng-model="message.email" data-ng-model-options="{ debounce: 500 }" required>
+    <!-- Success message. -->
+    <div data-ng-show="view.show == 'SUCCESS'">
+      <p>Thank you! Your message has been successfull sent.</p>
     </div>
     
-    <div data-af-field data-af-field-label="Message*">
-      <textarea class="form-control" name="body" data-ng-model="message.body" rows="8" required></textarea>
+    <!-- Failure message. -->
+    <div data-ng-show="view.show == 'FAILURE'">
+      <p>
+        Oh no! It looks like we were not able to successfully send your message.
+      </p>
     </div>
-  </div>-->
+  </div>
   
   <div class="modal-footer">
-    <!--<button type="button" class="btn btn-default btn-sm" data-ng-click="modal.close()" data-ng-disabled="form.$invalid">Send <span class="glyphicon glyphicon-envelope"></span></button>-->
-    <button type="button" class="btn btn-default btn-sm" data-ng-click="modal.dismiss()">Cancel <span class="glyphicon glyphicon-remove"></span></button>
+    <div data-ng-show="view.show == 'CONTACT_FORM'">
+      <button type="submit" class="btn btn-default btn-sm" data-ng-click="submit()" data-af-loading-btn="resource.$resolved === false" data-af-loading-btn-text="Sending..." data-ng-disabled="springboardForm.$pristine || springboardForm.$invalid || resource.$resolved === false">Send <span class="fa fa-envelope"></span></button>
+      <button type="button" class="btn btn-default btn-sm" data-ng-click="modal.dismiss()" data-ng-disabled="resource.$resolved === false">Cancel <span class="fa fa-close"></span></button>
+    </div>
+    
+    <div data-ng-show="view.show != 'CONTACT_FORM'">
+      <button type="button" class="btn btn-default btn-sm" data-ng-click="modal.close()">Close <span class="fa fa-close"></span></button>
+    </div>
   </div>
 </form>

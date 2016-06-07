@@ -2,24 +2,77 @@
 
 angular.module('afredApp').controller('ContactSpringboardAtlanticModalController', [
   '$scope',
+  'emailResource',
   '$uibModalInstance',
-  '$timeout',
-  function($scope, $uibModalInstance, $timeout) {
+  function($scope,
+           emailResource,
+           $uibModalInstance) {
+    /* ---------------------------------------------------------------------
+     * Functions.
+     * --------------------------------------------------------------------- */
+    
     /**
-     * Submits the message
+     * Submits the message to the API.
+     *
+     * 
+     * 
      */
     $scope.submit = function() {
-      $uibModalInstance.close();
+      $scope.resource = emailResource.springboardForm($scope.message,
+        function() {
+          $scope.view.show = 'SUCCESS';  
+      }, function() {
+          $scope.view.show = 'FAILURE';
+      });
     };
     
-    $scope.loading = {
-      form: true
+    /**
+     * Resets the form.
+     *
+     */
+    $scope.reset = function() {
+      $scope.message = {};
     };
     
-    $timeout(function() {
-      $scope.loading.form = false;
-    }, 1000);
+    /* ---------------------------------------------------------------------
+     * Initialisation code.
+     * --------------------------------------------------------------------- */
     
+    /**
+     * Add modal instance to scope.
+     */
     $scope.modal = $uibModalInstance;
+    
+    /**
+     * Holds data returned from emailResource.
+     *
+     * @type {Angular resource}
+     */
+    $scope.resource = null;
+    
+    /**
+     * Holds all form data.
+     *
+     * @type {object}
+     */
+    $scope.message = {
+      name: null,
+      email: null,
+      body: null
+    };
+    
+    /**
+     * Properties related to the view.
+     *
+     * @type {object}
+     */
+    $scope.view = {
+      /**
+       * Controls what is displayed to the user.
+       *
+       * @type {string} 'CONTACT_FORM', 'SUCCESS', 'FAILURE'.
+       */
+      show: 'CONTACT_FORM'
+    };
   }
 ]);
