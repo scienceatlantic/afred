@@ -14,8 +14,12 @@ angular.module('afredApp').controller('ContactSpringboardAtlanticModalController
     /**
      * Submits the message to the API.
      *
-     * 
-     * 
+     * Side effects:
+     * $scope.view.show Set to 'SUCCESS' on success and 'FAILURE' on failure.
+     *
+     * Calls/uses/requires:
+     * $scope.resource Data returned from 'emailResource' is stored here.
+     * emailResource
      */
     $scope.submit = function() {
       $scope.resource = emailResource.springboardForm($scope.message,
@@ -24,14 +28,6 @@ angular.module('afredApp').controller('ContactSpringboardAtlanticModalController
       }, function() {
           $scope.view.show = 'FAILURE';
       });
-    };
-    
-    /**
-     * Resets the form.
-     *
-     */
-    $scope.reset = function() {
-      $scope.message = {};
     };
     
     /* ---------------------------------------------------------------------
