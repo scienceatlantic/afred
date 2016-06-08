@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Log;
 
 // Models.
+use App\Role;
 use App\Setting;
 
 // Requests.
@@ -86,10 +87,21 @@ class EmailController extends Controller
                 $e['subject'] .= 'Springboard Atlantic Form';
                 $e['data']['type'] = 'AFRED Springboard Atlantic Contact Form';
                 $e['data']['from'] = $r->name . ' (' . $r->email . ')';
+                
+                // To Springboard Atlantic.
                 array_push($e['to'], [
                     'name'  => Setting::find('springboardFormName')->value,
                     'email' => Setting::find('springboardFormEmail')->value
                 ]);
+                
+                // Bcc all admins.
+                foreach(Role::admin()->users()->get() as $admin) {
+                    array_push($e['bcc'] , [
+                        'name'  => $admin->getFullName(),
+                        'email' => $admin->email
+                    ]);                    
+                }
+                
                 $e['replyTo']['email'] = $r->email;
                 $e['replyTo']['email'] = $r->name;
                 
