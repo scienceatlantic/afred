@@ -6,8 +6,8 @@
           <td>
             <a href="">
               <span data-ng-class="{ 'text-danger': facilityForm['contactForm' + $index].$invalid && facilityForm['contactForm' + $index].$dirty }">
-                <span data-ng-hide="c.firstName || c.lastName">Contact #{{$index + 1}}</span>
-                <span data-ng-show="c.firstName || c.lastName">{{c.firstName}} {{c.lastName}}</span>
+                <span data-ng-hide="c.firstName || c.lastName">Contact #{{ $index + 1 }}</span>
+                <span data-ng-show="c.firstName || c.lastName">{{ c.firstName }} {{ c.lastName }}</span>
               </span>
             </a>
           </td>
