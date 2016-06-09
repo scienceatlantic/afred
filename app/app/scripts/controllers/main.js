@@ -32,8 +32,8 @@ angular.module('afredApp').controller('MainController',
          * Credit: https://github.com/twbs/bootstrap/issues/12852#issuecomment-36163121
          */
         toggle: function() {
-          angular.element(".navbar-nav li a").click(function(event) {
-            angular.element(".navbar-collapse").collapse('hide');
+          angular.element('.navbar-nav li a').click(function() {
+            angular.element('.navbar-collapse').collapse('hide');
           });
         }
       },
@@ -89,7 +89,7 @@ angular.module('afredApp').controller('MainController',
               s.currentImgIndex += 0.1;
               $timeout(function() {
                 s.currentImgIndex = Math.floor(++s.currentImgIndex);
-                if (s.currentImgIndex == 4) {
+                if (s.currentImgIndex === 4) {
                   s.currentImgIndex = 0;
                 }
               }, 100);        
