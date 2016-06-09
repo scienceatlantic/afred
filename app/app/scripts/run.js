@@ -209,12 +209,7 @@ angular.module('afredApp').run(['$rootScope',
     $rootScope._httpError = function(response) {
       var statusCode = angular.isObject(response) ? response.status : response;
       
-      switch (statusCode) {
-        case 403:
-        case '403':
-          $rootScope._state.go('login');
-          break;
-        
+      switch (statusCode) {        
         case 404:
         case 500:
         case '404':
