@@ -78,6 +78,15 @@ angular.module('afredApp').run(['$rootScope',
       user: {},
       
       /**
+       * AJAX loading flags.
+       *
+       * @type {object}
+       */
+      loading: {
+        logout: false
+      },
+      
+      /**
        * Login function.
        *
        * @param {object} credentials Must contain an 'email' property and a
@@ -90,11 +99,26 @@ angular.module('afredApp').run(['$rootScope',
       
       /**
        * Logout function.
+       *
+       * Side effects:
+       * $rootScope._auth.loading.logout Set to true at the start of the
+       *     function and then set to false after the AJAX operation is
+       *     complete.
+       *
+       * Calls/uses/requires:
+       * $rootScope._config.api.address
+       * $rootScope._auth.destroy()
+       * $http
        */
       logout: function() {
+        $rootScope._auth.loading.logout = true;
+        
         $http.get($rootScope._config.api.address + '/auth/logout').then(
           function() {
+            $rootScope._auth.loading.logout = false;
             $rootScope._auth.destroy(true);
+          }, function() {  
+            $rootScope._auth.loading.logout = false;
           }
         );
       },
