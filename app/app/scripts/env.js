@@ -37,7 +37,7 @@ angular.module('afredApp').run(['$rootScope', function($rootScope) {
         password: 'R0KU jxX7 KjOR vDvX yPCQ 3DR0',
       },
       
-      address: 'http://afred.ca/wp/api/wp-json/wp/v2',
+      address: 'http://afred.ca/api/wp/wp-json/wp/v2',
       
       // Location of specific pages on WordPress. 
       pages: {
