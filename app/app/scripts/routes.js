@@ -337,6 +337,12 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         'abstract': true,
         templateUrl: 'views/error.html'
       }).
+      state('error.403', {
+        templateUrl: 'views/error.403.html',
+        data: {
+          pageTitle: '403'
+        }
+      }).
       state('error.404', {
         templateUrl: 'views/error.404.html',
         data: {
