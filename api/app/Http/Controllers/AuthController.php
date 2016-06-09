@@ -28,6 +28,10 @@ class AuthController extends Controller
         ];
         
         if (Auth::attempt($credentials)) {
+            // Update date last logged in.
+            Auth::user()->dateLastLogin = $this->now();
+            Auth::user()->save();
+            
             // Lazy load user roles.
             Auth::user()->roles;
             
