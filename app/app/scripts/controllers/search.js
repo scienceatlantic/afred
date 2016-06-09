@@ -217,7 +217,7 @@ angular.module('afredApp').controller('SearchController',
         s.query['provinceId[]'] = s.toInt(p['provinceId[]']);
         s.query['organizationId[]'] = s.toInt(p['organizationId[]']);
         s.query['disciplineId[]'] = s.toInt(p['disciplineId[]']);
-        s.query['sectorId[]'] = s.toInt(p['sectorId']);
+        s.query['sectorId[]'] = s.toInt(p['sectorId[]']);
         
         // Update the radio buttons. If a (or more) province, organization,
         // discipline, or sector was selected, set the radio button to false
@@ -237,7 +237,7 @@ angular.module('afredApp').controller('SearchController',
        */
       toInt: function(arr) {
         var values = [];
-        angular.forEach(arr, function(v, k) {
+        angular.forEach(arr, function(v) {
           try {
             values.push(parseInt(v));
           } catch(e) {

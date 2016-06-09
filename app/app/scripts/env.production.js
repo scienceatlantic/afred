@@ -14,7 +14,7 @@ angular.module('afredApp').run(['$rootScope', function($rootScope) {
      * API settings.
      * --------------------------------------------------------------------- */
     api: {
-      address: '//afred.ca/api/v2',
+      address: '//afred.ca/api/app/v2',
     },
     
     /* ---------------------------------------------------------------------
@@ -37,7 +37,7 @@ angular.module('afredApp').run(['$rootScope', function($rootScope) {
         password: 'R0KU jxX7 KjOR vDvX yPCQ 3DR0',
       },
       
-      address: 'http://afred.ca/wp/api/wp-json/wp/v2',
+      address: 'http://afred.ca/api/wp/wp-json/wp/v2',
       
       // Location of specific pages on WordPress. 
       pages: {
@@ -58,31 +58,6 @@ angular.module('afredApp').run(['$rootScope', function($rootScope) {
       warn: true,
       error: true,
       debug: true
-    },
-    
-    /* ---------------------------------------------------------------------
-     * Contact information.
-     * --------------------------------------------------------------------- */
-    contacts: {
-      /**
-       * Should be a shared account.
-       */
-      general: {
-        firstName: '',
-        lastName: '',
-        title: '',
-        email: 'afred@scienceatlantic.ca'
-      },
-      
-      /**
-       * Personal email account.
-       */
-      personal: {
-        firstName: 'Patty',
-        lastName: 'King',
-        title: 'AFRED Program Manager',
-        email: 'patty.king@scienceatlantic.ca'
-      }
     }
   };
 }]);

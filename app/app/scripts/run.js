@@ -14,17 +14,11 @@ angular.module('afredApp').run(['$rootScope',
                                 '$state',
                                 '$stateParams',
                                 '$http',
-                                '$cookies',
-                                '$timeout',
-                                '$resource',
   function($rootScope,
            $log,
            $state,
            $stateParams,
-           $http,
-           $cookies,
-           $timeout,
-           $resource) {
+           $http) {
     
     /* ---------------------------------------------------------------------
      * Log functions. Making it globally accessble.
@@ -84,6 +78,15 @@ angular.module('afredApp').run(['$rootScope',
       user: {},
       
       /**
+       * AJAX loading flags.
+       *
+       * @type {object}
+       */
+      loading: {
+        logout: false
+      },
+      
+      /**
        * Login function.
        *
        * @param {object} credentials Must contain an 'email' property and a
@@ -96,11 +99,26 @@ angular.module('afredApp').run(['$rootScope',
       
       /**
        * Logout function.
+       *
+       * Side effects:
+       * $rootScope._auth.loading.logout Set to true at the start of the
+       *     function and then set to false after the AJAX operation is
+       *     complete.
+       *
+       * Calls/uses/requires:
+       * $rootScope._config.api.address
+       * $rootScope._auth.destroy()
+       * $http
        */
       logout: function() {
+        $rootScope._auth.loading.logout = true;
+        
         $http.get($rootScope._config.api.address + '/auth/logout').then(
           function() {
+            $rootScope._auth.loading.logout = false;
             $rootScope._auth.destroy(true);
+          }, function() {  
+            $rootScope._auth.loading.logout = false;
           }
         );
       },
@@ -193,12 +211,9 @@ angular.module('afredApp').run(['$rootScope',
       
       switch (statusCode) {
         case 403:
-        case '403':
-          $rootScope._state.go('login');
-          break;
-        
         case 404:
         case 500:
+        case '403':
         case '404':
         case '500':
           $rootScope._state.go('error.' + statusCode);
@@ -289,5 +304,21 @@ angular.module('afredApp').run(['$rootScope',
         }
       }
     };
+
+    /* ---------------------------------------------------------------------
+     * Page titles.
+     *
+     * Will update the page titles to match the current state if the current
+     * state has a 'pageTitle' property. See 'routes.js'.
+     * --------------------------------------------------------------------- */
+    
+    // Save the unmodified page title first before making any changes.
+    var upt = angular.element('title').text();
+    
+    // Update the page title on every successful state change.
+    $rootScope.$on('$stateChangeSuccess', function() {
+      var pt = $rootScope._state.current.data.pageTitle;
+      angular.element('title').html(pt ? pt + ' | ' + upt : upt);
+    });
   }
 ]);

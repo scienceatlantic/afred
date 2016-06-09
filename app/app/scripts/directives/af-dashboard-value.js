@@ -4,8 +4,7 @@
  * Directive for form fields.
  */
 angular.module('afredApp').directive('afDashboardValue', [
-  '$rootScope',
-  function($rootScope) {
+  function() {
     return {
       restrict: 'A',
       replace: true,

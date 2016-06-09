@@ -19,10 +19,10 @@ angular.module('afredApp').controller('ContactController',
      * 
      * Calls/uses/requires:
      * emailResource
-     * $scope.contact
+     * $scope.message
      */
     $scope.submit = function() {
-      $scope.resource = emailResource.contactForm($scope.contact, function() {        
+      $scope.resource = emailResource.contactForm($scope.message, function() {        
         $scope.view.show = 'SUCCESS';
       }, function() {
         $scope.view.show = 'FAILURE';
@@ -33,14 +33,14 @@ angular.module('afredApp').controller('ContactController',
      * Resets contact form.
      *
      * Side effects:
-     * $scope.contact Is set to empty object.
+     * $scope.message Is set to empty object.
      * $scope.view.show Is set to 'CONTACT_FORM'.
      *
      * @param {Angular form} form Contact form controller.
      */
     $scope.reset = function(form) {
       form.$setPristine();
-      $scope.contact = {};
+      $scope.message = {};
       $scope.view.show = 'CONTACT_FORM';
     };
     
@@ -53,12 +53,19 @@ angular.module('afredApp').controller('ContactController',
      * 
      * @type {object}
      */
-    $scope.contact = {
+    $scope.message = {
       name: null,
       email: null,
       subject: null,
       message: null
     };
+    
+    /**
+     * Holds data returned from emailResource.
+     *
+     * @type {Angular resource}
+     */
+    $scope.resource = null;
     
     /**
      * Code related to the HTML view.

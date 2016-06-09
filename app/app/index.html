@@ -25,8 +25,7 @@
     <!-- endbuild -->
     
     <!-- Title -->
-    <title data-ng-if="_state.current.data.pageTitle">{{ _state.current.data.pageTitle }} | Atlantic Facilities and Research Equipment Database</title>
-    <title data-ng-if="!_state.current.data.pageTitle">Atlantic Facilities and Research Equipment Database</title>
+    <title>Atlantic Facilities and Research Equipment Database</title>
   </head>
   <body data-ng-cloak>
     <!-- JavaScript disabled warning message -->
@@ -68,7 +67,7 @@
         
         <!-- Main Navigation -->
         <nav class="navbar navbar-default" role="navigation">
-          <div data-ng-include="'views/includes/nav.html'"></div>
+          <div data-ng-include="'views/includes/nav.html'" onload="main.navbar.toggle()"></div>
         </nav>
   
         <!-- View -->

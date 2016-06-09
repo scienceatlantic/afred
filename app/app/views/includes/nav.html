@@ -35,7 +35,7 @@
         </ul>
       </li>
       <li data-ui-sref-active="active" data-ng-hide="_auth.user.email"><a data-ui-sref="login">Administrator Login</a></li>
-      <li><a data-ui-sref="login" data-ng-show="_auth.user.email" data-ng-click="_auth.logout()">Logout</a></li>
+      <li><a data-ui-sref="login" data-ng-show="_auth.user.email" data-ng-click="_auth.logout()" data-af-loading-btn="_auth.loading.logout" data-af-loading-btn-text="Logging out...">Logout</a></li>
     </ul>
   </div><!-- End of .collapse -->
   

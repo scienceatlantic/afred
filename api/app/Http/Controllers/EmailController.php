@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Log;
 
 // Models.
+use App\Role;
 use App\Setting;
 
 // Requests.
@@ -44,7 +45,7 @@ class EmailController extends Controller
                 'subject' => null,
                 'date'    => $this->now(false)->toDayDateTimeString(),
                 'from'    => null,
-                'body'    => $r->message,
+                'body'    => $r->body,
             ],
             
             // Email recipieint.
@@ -82,7 +83,29 @@ class EmailController extends Controller
             
             // Springboard Atlantic contact modal when a user is not able to
             // find what they're looking for.
-            case 'springboardAtlantic':            
+            case 'springboardAtlantic':
+                $e['subject'] .= 'Springboard Atlantic Form';
+                $e['data']['type'] = 'AFRED Springboard Atlantic Contact Form';
+                $e['data']['from'] = $r->name . ' (' . $r->email . ')';
+                
+                // To Springboard Atlantic.
+                array_push($e['to'], [
+                    'name'  => Setting::find('springboardFormName')->value,
+                    'email' => Setting::find('springboardFormEmail')->value
+                ]);
+                
+                // Bcc all admins.
+                foreach(Role::admin()->users()->get() as $admin) {
+                    array_push($e['bcc'] , [
+                        'name'  => $admin->getFullName(),
+                        'email' => $admin->email
+                    ]);                    
+                }
+                
+                $e['replyTo']['email'] = $r->email;
+                $e['replyTo']['email'] = $r->name;
+                
+                event(new EmailEvent($e));
                 return;
             
             // Report a mistake in a facility listing.

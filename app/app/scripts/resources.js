@@ -274,6 +274,12 @@ angular.module('afredApp').factory('emailResource',
         params: {
           type: 'contactForm'
         }
+      },
+      springboardForm: {
+        method: 'POST',
+        params: {
+          type: 'springboardAtlantic'
+        }
       }
     });
   }
