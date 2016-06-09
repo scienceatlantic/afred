@@ -58,31 +58,6 @@ angular.module('afredApp').run(['$rootScope', function($rootScope) {
       warn: true,
       error: true,
       debug: true
-    },
-    
-    /* ---------------------------------------------------------------------
-     * Contact information.
-     * --------------------------------------------------------------------- */
-    contacts: {
-      /**
-       * Should be a shared account.
-       */
-      general: {
-        firstName: '',
-        lastName: '',
-        title: '',
-        email: 'afred@scienceatlantic.ca'
-      },
-      
-      /**
-       * Personal email account.
-       */
-      personal: {
-        firstName: 'Patty',
-        lastName: 'King',
-        title: 'AFRED Program Manager',
-        email: 'patty.king@scienceatlantic.ca'
-      }
     }
   };
 }]);
