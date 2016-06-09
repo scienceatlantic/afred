@@ -14,17 +14,11 @@ angular.module('afredApp').run(['$rootScope',
                                 '$state',
                                 '$stateParams',
                                 '$http',
-                                '$cookies',
-                                '$timeout',
-                                '$resource',
   function($rootScope,
            $log,
            $state,
            $stateParams,
-           $http,
-           $cookies,
-           $timeout,
-           $resource) {
+           $http) {
     
     /* ---------------------------------------------------------------------
      * Log functions. Making it globally accessble.
