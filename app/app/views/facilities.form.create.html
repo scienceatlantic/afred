@@ -21,8 +21,12 @@
     next steps once the record has been reviewed.
   </p>
   
+  <!-- Survey. -->
+  <div data-ng-include="'views/includes/facilities.form.survey.html'"></div>
+  
   <p>
-    Would you like to <a href="" data-ng-click="_location.reload()">submit another facility</a>?
+    Would you like to <a href="" data-ng-click="_location.reload()">submit
+    another facility</a>?
   </p>
   
   <p>
@@ -33,7 +37,8 @@
 <!-- Submission failed message. -->
 <div data-ng-show="view.show == 'FAILURE_MESSAGE'">
   <p>
-    Sorry! A technical difficulty was encountered and your information was not successfully submitted. 
+    Sorry! A technical difficulty was encountered and your information was not
+    successfully submitted. 
   </p>
 
   <p>
