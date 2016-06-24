@@ -15,8 +15,7 @@ class ProvinceRequest extends Request
     {
         switch ($this->method()) {
             case 'GET':
-                return true;
-            
+                return true;            
             default:
                 return $this->isAtLeastAdmin(); 
         }
@@ -33,6 +32,7 @@ class ProvinceRequest extends Request
         switch ($this->method()) {            
             case 'PUT':
                 $r['id'] = 'required|exists:provinces,id';
+                // No break.
             case 'POST':
                 $r['name'] = 'required';
                 $r['isHidden'] = 'digits_between:0,1';

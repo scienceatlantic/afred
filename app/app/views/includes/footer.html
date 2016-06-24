@@ -29,7 +29,13 @@
     </div>
     
     <div class="col-md-3">
-      <p><b>Key partners</b></p>
+      <p>
+        <!-- Heading for Science Atlantic. -->
+        <b data-ng-show="main.footer.slider.currentImgIndex == 0">A project of</b>
+        
+        <!-- Heading for the rest. -->
+        <b data-ng-show="main.footer.slider.currentImgIndex > 0">Supported in part by</b>
+      </p>
       
       <!-- Slider. -->
       <div style="min-height: 90px;">

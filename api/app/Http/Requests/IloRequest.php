@@ -15,8 +15,7 @@ class IloRequest extends Request
     {
         switch ($this->method()) {
             case 'GET':
-                return true;
-            
+                return true;            
             default:
                 return $this->isAtLeastAdmin();
         }
@@ -33,6 +32,7 @@ class IloRequest extends Request
         switch ($this->method()) {
             case 'PUT':
                 $r['id'] = 'required|exists:ilos,id';
+                // No break.
             case 'POST':
                 $r['organizationId'] = 'required|exists:organizations,id';
                 $r['firstName'] = 'required';
