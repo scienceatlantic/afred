@@ -39,9 +39,7 @@ class Facility extends Model
         'website',
         'description',
         'descriptionNoHtml',
-        'isPublic',
-        'datePublished',
-        'dateUpdated'
+        'isPublic'
     ];
     
     public function currentRevision()

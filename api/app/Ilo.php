@@ -16,6 +16,22 @@ class Ilo extends Model
                         'created_at',
                         'updated_at'];
     
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'organizationId',
+        'firstName',
+        'lastName',
+        'email',
+        'telephone',
+        'extension',
+        'position',
+        'website'
+    ];
+    
     public function organization()
     {
         return $this->belongsTo('App\Organization', 'organizationId');
