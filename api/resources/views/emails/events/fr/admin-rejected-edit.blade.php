@@ -1,15 +1,15 @@
 @extends('layouts.emails.master')
 
 @section('content')
-Hello {{ $recipientName }},
+Hello {!! $recipientName !!},
 
 @if ($recipientName == $reviewerName)
 This is a confirmation email that you have rejected an edit of
-'{{ $facilityName }}'.
+'{!! $facilityName !!}'.
 @else
-An edit of '{{ $facilityName }}' has been rejected by {{ $reviewerName }}.
+An edit of '{!! $facilityName !!}' has been rejected by {!! $reviewerName !!}.
 @endif
 
 The rejected edit of the facility can be found here:
-{{ $settings['appAddress'] }}/#/admin/facilities/show?facilityRepositoryId={{ $frId }}
+{!! $settings['appAddress'] !!}/#/admin/facilities/show?facilityRepositoryId={!! $frId !!}
 @stop
