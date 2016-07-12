@@ -20,6 +20,7 @@ class PrimaryContact extends Model
      * @var array
      */
     protected $fillable = [
+        'id',
         'facilityId',
         'firstName',
         'lastName',

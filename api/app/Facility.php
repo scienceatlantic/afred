@@ -31,6 +31,7 @@ class Facility extends Model
      * @var array
      */
     protected $fillable = [
+        'id',
         'facilityRepositoryId',
         'organizationId',
         'provinceId',
@@ -39,7 +40,9 @@ class Facility extends Model
         'website',
         'description',
         'descriptionNoHtml',
-        'isPublic'
+        'isPublic',
+        'datePublished',
+        'dateUpdated'
     ];
     
     public function currentRevision()
