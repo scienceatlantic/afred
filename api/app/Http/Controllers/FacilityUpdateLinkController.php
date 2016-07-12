@@ -89,7 +89,6 @@ class FacilityUpdateLinkController extends Controller
                 $c = $f->contacts()->where('email', $e)->firstOrFail();
             }           
         }
-
         
         // Only create a new facility update link record if the facility doesn't
         // already have an open/pending facility update link record.
