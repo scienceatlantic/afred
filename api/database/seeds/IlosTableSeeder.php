@@ -171,7 +171,7 @@ class IlosTableSeeder extends Seeder
         ], 'Université de Moncton' => [
             'firstName'   => 'Cassidy',
             'lastName'    => 'Weisbord',
-            'email'       => 'cassidy.weisbord@umonton.ca',
+            'email'       => 'cassidy.weisbord@umoncton.ca',
             'telephone'   => '5068584307',
             'position'    => 'Agent d\'innovation – Bureau de soutien à l’innovation',
             'dateCreated' => $now,
