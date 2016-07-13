@@ -1,9 +1,9 @@
 @yield('content')
 
 --
-{{ $settings['appName'] }} ({{ $settings['appShortName'] }})
-{{ $settings['emailAddress'] }} | {{ $settings['generalContactTelephone'] }}
-{{ $settings['appAddress'] }} | Twitter: {{ $settings['twitterHandle'] }}
+{!! $settings['appName'] !!} ({!! $settings['appShortName'] !!})
+{!! $settings['generalContactEmail'] !!} | {!! $settings['generalContactTelephone'] !!}
+{!! $settings['appAddress'] !!} | Twitter: {!! $settings['twitterHandle'] !!}
 
 
 --------------------------------------------------------------------------------

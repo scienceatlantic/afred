@@ -19,7 +19,6 @@ abstract class BaseListener
             'appName'                 => Setting::find('appName')->value,
             'appShortName'            => Setting::find('appShortName')->value,
             'appAddress'              => Setting::find('appAddress')->value,
-            'emailAddress'            => Setting::find('emailAddress')->value,
             'emailSubjectPrefix'      => Setting::find('emailSubjectPrefix')->value,
             'generalContactEmail'     => Setting::find('generalContactEmail')->value,
             'generalContactTelephone' => Setting::find('generalContactTelephone')->value,

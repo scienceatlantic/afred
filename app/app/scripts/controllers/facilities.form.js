@@ -1,8 +1,7 @@
 'use strict';
 
 angular.module('afredApp').controller('FacilitiesFormController',
-  ['$rootScope',
-   '$scope',
+  ['$scope',
    '$interval',
    'organizationResource',
    'provinceResource',
@@ -10,8 +9,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
    'sectorResource',
    'facilityRepositoryResource',
    'confirmModal',
-  function($rootScope,
-           $scope,
+  function($scope,
            $interval,
            organizationResource,
            provinceResource,
@@ -408,8 +406,8 @@ angular.module('afredApp').controller('FacilitiesFormController',
         
         $scope.form.disciplines = disciplineResource.queryNoPaginate(null,
           function() {
-            // Adds an 'isSelected' property for the checkboxes. Used in the
-            // form.
+            // Adds an 'isSelected' property for the checkboxes. It is used in
+            // the form.
             angular.forEach($scope.form.disciplines, function (discipline) {
               discipline.isSelected = false;
             });

@@ -54,17 +54,14 @@ class FacilityRepositoryController extends Controller
             case 'PENDING_EDIT_APPROVAL':
                 $fr->pendingApproval(true);
                 break;
-            
             case 'PUBLISHED':
             case 'PUBLISHED_EDIT':
                 $fr->published((bool) $request->input('visibility', true));
                 break;
-            
             case 'REJECTED':
             case 'REJECTED_EDIT':
                 $fr->rejected(true);
                 break;
-            
             case 'DELETED':
                 $fr->deleted();
                 break;
@@ -125,38 +122,34 @@ class FacilityRepositoryController extends Controller
         
         switch ($fr->state) {
             case 'PENDING_APPROVAL':
-                $fr->data = $this->formatData($request, $now);
+                $fr->data = $this->formatFrData($request);
                 $fr->dateSubmitted = $now;
                 $fr->save();
                 break;
-            
             case 'PUBLISHED':
-                $fr->data = $this->publishFacility($fr, $fr->data);
+                $fr->data = $this->publishFacility($fr);
                 $fr->facilityId = $fr->data['facility']['id'];
                 $fr->reviewerId = Auth::user()->id;
                 $fr->reviewerMessage = $request->input('reviewerMessage', null);
                 $fr->dateReviewed = $now;
                 $fr->update();
-                break;
-            
+                break;            
             case 'REJECTED':
                 $fr->reviewerId = Auth::user()->id;
                 $fr->reviewerMessage = $request->input('reviewerMessage', null);
                 $fr->dateReviewed = $now;
                 $fr->update();
-                break;
-            
+                break;            
             case 'PENDING_EDIT_APPROVAL':
-                // Create a new facility repository record and copy the state
-                // and facilityId from the old record.
+                // Make a copy of the current facility repository record
+                // before we make a copy to store the edited data (we still
+                // need its facility id and link to the facility update link
+                // record).
                 $frBeforeUpdate = $fr;
                 $fr = new FacilityRepository();
                 $fr->facilityId = $frBeforeUpdate->facilityId;
-                $fr->state = $frBeforeUpdate->state;
-                // We're passing the old facility repository record into
-                // the 'formatData' function because we need the existing
-                // record's details.
-                $fr->data = $this->formatData($request, $now, $frBeforeUpdate);
+                $fr->state = 'PENDING_EDIT_APPROVAL';
+                $fr->data = $this->formatFrData($request, true);
                 $fr->dateSubmitted = $now;
                 $fr->save();
                 
@@ -168,13 +161,12 @@ class FacilityRepositoryController extends Controller
                 $ful->status = 'PENDING';
                 $ful->datePending = $now;
                 $ful->save();
-                break;
-            
+                break;            
             case 'PUBLISHED_EDIT':
                 $fr->reviewerId = Auth::user()->id;
                 $fr->reviewerMessage = $request->input('reviewerMessage', null);
                 $fr->dateReviewed = $now;
-                $fr->data = $this->publishFacility($fr, $fr->data, true);
+                $fr->data = $this->publishFacility($fr, true);
                 $fr->update();
                 
                 // Admin has reviewed the record, close the token.
@@ -182,8 +174,7 @@ class FacilityRepositoryController extends Controller
                 $ful->status = 'CLOSED';
                 $ful->dateClosed = $now;
                 $ful->update();
-                break;
-            
+                break;            
             case 'REJECTED_EDIT':
                 $fr->reviewerId = Auth::user()->id;
                 $fr->reviewerMessage = $request->input('reviewerMessage', null);
@@ -206,8 +197,8 @@ class FacilityRepositoryController extends Controller
         $f = FacilityRepository::with('reviewer', 'facility')->find($fr->id);
         return $this->toCcArray($f->toArray());
     }
-        
-    private function formatData($r, $now, $fr = false)
+
+    private function formatFrData($r, $isUpdate = false)
     {
         // Will hold all the data that will be returned by the function.
         $d = [];
@@ -217,27 +208,13 @@ class FacilityRepositoryController extends Controller
         // exising organization was selected). If an organizationId was not
         // provided, store the details (ie. name) in $d.
         if (!$r->data['facility']['organizationId']) {
-            $d['organization'] = (new Organization($r->data['organization']))
-                ->toArray();
-            $d['organization']['isHidden'] = false;
-            $d['organization']['dateCreated'] = $now;
-            $d['organization']['dateUpdated'] = $now;
+            $o = new Organization($r->data['organization']);
+            $d['organization'] = $o->toArray();
         }
 
         // Facility section.
         $d['facility'] = (new Facility($r->data['facility']))->toArray();
         $d['facility']['isPublic'] = true;
-        $d['facility']['dateUpdated'] = $now;
-        // This part is for updates.
-        if ($fr) {
-            // ID and date published are maintained.
-            $d['facility']['id'] = $fr->publishedFacility->id;
-            $d['facility']['datePublished'] = $fr->publishedFacility
-                ->datePublished->toDateTimeString();
-        // For new records.
-        } else {
-            $d['facility']['datePublished'] = $now;         
-        }
         
         // Disciplines section.
         $d['disciplines'] = $r->data['disciplines'];
@@ -254,7 +231,7 @@ class FacilityRepositoryController extends Controller
         if (array_key_exists('contacts', $r->data)) {
             foreach($r->data['contacts'] as $i => $c) {
                 $d['contacts'][$i] = (new Contact($c))->toArray();
-            }            
+            }
         }
         
         // Equipment section.
@@ -262,11 +239,95 @@ class FacilityRepositoryController extends Controller
             $d['equipment'][$i] = (new Equipment($e))->toArray();
         }
         
+        // Remove any unnecessary keys.
+        $d = $this->cleanFrData($d, $isUpdate);
+        
+        // Sort keys and return.
+        return $this->ksortFrData($d);
+    }
+    
+    private function cleanFrData($d, $isUpdate = false)
+    {
+        // Facility section.
+        if (!$isUpdate) {
+            if (array_key_exists('id', $d['facility'])) {
+                unset($d['facility']['id']);
+            }
+            if (array_key_exists('facilityRepositoryId', $d['facility'])) {
+                unset($d['facility']['facilityRepositoryId']);
+            }
+        }
+        if (array_key_exists('datePublished', $d['facility'])) {
+            unset($d['facility']['datePublished']);
+        }
+        if (array_key_exists('dateUpdated', $d['facility'])) {
+            unset($d['facility']['dateUpdated']);
+        }
+        
+        // Primary contact section.
+        if (!$isUpdate) {
+            if (array_key_exists('id', $d['primaryContact'])) {
+                unset($d['primaryContact']['id']);
+            }
+            if (array_key_exists('facilityId', $d['primaryContact'])) {
+                unset($d['primaryContact']['facilityId']);
+            }
+        }
+        
+        // Contacts section.
+        if (!$isUpdate && array_key_exists('contacts', $d)) {
+            foreach($d['contacts'] as &$c) {       
+                if (array_key_exists('id', $c)) {
+                    unset($c['id']);
+                }
+                if (array_key_exists('facilityId', $c)) {
+                    unset($c['facilityId']);
+                }
+            }
+        }
+        
+        // Equipment section.
+        if (!$isUpdate) {
+            foreach($d['equipment'] as &$e) {
+                if (array_key_exists('id', $e)) {
+                    unset($e['id']);
+                }
+                if (array_key_exists('facilityId', $e)) {
+                    unset($e['facilityId']);
+                }
+            }                
+        }
+        
         return $d;
     }
     
-    private function publishFacility($fr, $d, $isUpdate = false)
-    {        
+    private function ksortFrData($d)
+    {
+        if (array_key_exists('organization', $d)) {
+            ksort($d);
+        }
+        ksort($d['facility']);
+        ksort($d['primaryContact']);
+        if (array_key_exists('contacts', $d)) {
+            foreach($d['contacts'] as &$c) {
+                ksort($c);
+            }
+        }
+        foreach($d['equipment'] as &$e) {
+            ksort($e);
+        }
+        ksort($d);
+        return $d;
+    }
+    
+    private function publishFacility($fr, $isUpdate = false)
+    {
+        // Get current datetime.
+        $now = $this->now();
+        
+        // Copy the data array (we cannot modify the contents directly).
+        $d = $fr->data;
+        
         // Organization section.
         // If the organization key in $d exists (i.e. a custom organization was
         // selected), check if its name is unique. If it is unique, create the
@@ -274,46 +335,45 @@ class FacilityRepositoryController extends Controller
         // If it is not unique, just grab the existing organization's ID and
         // store it in '$d['facility']['organizationId'].
         if (array_key_exists('organization', $d)) {
+            // Before creating the organization, double to check to make sure
+            // that an organization with an identical name doesn't already
+            // exist.
             $o = Organization::where('name', $d['organization']['name'])
                 ->first();
+            // If the organization is unique, then we create it.
             if (!$o) {
                 $o = Organization::create($d['organization']);
+                $o->dateCreated = $now;
+                $o->dateUpdated = $now;
+                $o->update();
             }
-            $d['facility']['organizationId'] = $o->id;
-            
-            // Delete the organizatio key since we no longer need it.
+            $d['facility']['organizationId'] = $o->id;     
+            // Delete the organization key since we no longer need it (we don't
+            // need it stored in facility repository after the organization
+            // has been created).
             unset($d['organization']);
         }
         
         // Facility section.
+        $d['facility']['dateUpdated'] = $now;
         // For updates.
         if ($isUpdate) {
-            // Before updating the facility, insert the new facility
-            // repository id.
-            $d['facility']['facilityRepositoryId'] = $fr->id;
-            $f = Facility::find($d['facility']['id']);
-            $f->update($d['facility']);
-            $d['facility'] = $f->toArray();
-            
-            // For updates, we're going to delete all existing disciplines,
-            // sectors, contacts, primary contact, and equipment data.
-            $f->disciplines()->detach();
-            $f->sectors()->detach();
-            $f->primaryContact()->delete();
-            $f->contacts()->delete();
-            $f->equipment()->delete();                
+            $d['facility']['id'] = $fr->facility()->first()->id;
+            $d['facility']['datePublished'] = $fr->facility()->first()
+                ->datePublished->toDateTimeString();
+                
+            $fr->facility()->delete();
         // For new records.
         } else {
-            // This line automatically inserts the facility repository's ID
-            // into the newly created record.
-            $f = $fr->publishedFacility()->create($d['facility']);
-            $d['facility'] = $f->toArray();
+            $d['facility']['datePublished'] = $now;
         }
-        
-        // Strip the HTML tags for the search function. We're not including it
-        // in '$d' because we don't need the stripped text stored in facility
-        // repository.
-        $f = $fr->publishedFacility()->first();
+        $f = $fr->publishedFacility()->create($d['facility']);
+        $d['facility'] = $f->toArray();
+        // We don't need this key in facility repository.
+        if (array_key_exists('descriptionNoHtml', $d['facility'])) {
+            unset($d['facility']['descriptionNoHtml']);
+        }
+        // Strip the HTML tags for the search function.
         $f->descriptionNoHtml = strip_tags($f->description);
         $f->update();
         
@@ -324,29 +384,35 @@ class FacilityRepositoryController extends Controller
         $f->sectors()->attach($d['sectors']);
         
         // Primary contact section.
-        $d['primaryContact'] =
-            $f->primaryContact()->create($d['primaryContact']);
+        $d['primaryContact'] = $f->primaryContact()
+            ->create($d['primaryContact'])->toArray();
         
         // Contacts section.
-        // Contacts are optional, so we first have to check if it exists.
+        // Contacts are optional so we have to check if the key exists.
         if (array_key_exists('contacts', $d)) {
             foreach($d['contacts'] as $i => $c) {
                 $d['contacts'][$i] = $f->contacts()->create($c)->toArray();          
             }                       
-        }
+        }           
         
         // Equipment section.
         foreach($d['equipment'] as $i => $e) {
-            $d['equipment'][$i] = $f->equipment()->create($e)->toArray();
-            $e = $f->equipment()->find($d['equipment'][$i]['id']);
-            
-            // Strip HTML tags for the search function. Same thing as
-            // 'description' for facilities.
+            $e = $f->equipment()->create($e);
+            $d['equipment'][$i] = $e->toArray();
+            // The following keys do not have to be in facility repository.
+            if (array_key_exists('purposeNoHtml', $d['equipment'][$i])) {
+                unset($d['equipment'][$i]['purposeNoHtml']);
+            }
+            if (array_key_exists('specificationsNoHtml', $d['equipment'][$i])) {
+                unset($d['equipment'][$i]['specificationsNoHtml']);
+            }
+            // Strip HTML tags for the search function.
             $e->purposeNoHtml = strip_tags($e->purpose);
             $e->specificationsNoHtml = strip_tags($e->specifications);
             $e->update();
         }
         
-        return $d;
+        // Sort and return data.
+        return $this->ksortFrData($d);
     }
 }

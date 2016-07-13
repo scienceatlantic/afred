@@ -1,14 +1,14 @@
 @extends('layouts.emails.master')
 
 @section('content')
-Hello {{ $recipientName }},
+Hello {!! $recipientName !!},
 
 @if ($recipientName == $reviewerName)
-This is a confirmation email that you have rejected '{{ $facilityName }}'.
+This is a confirmation email that you have rejected '{!! $facilityName !!}'.
 @else
-'{{ $facilityName }}' has been rejected by {{ $reviewerName }}.
+'{!! $facilityName !!}' has been rejected by {!! $reviewerName !!}.
 @endif
 
 The rejected facility can be found here:
-{{ $settings['appAddress'] }}/#/admin/facilities/show?facilityRepositoryId={{ $frId }}
+{!! $settings['appAddress'] !!}/#/admin/facilities/show?facilityRepositoryId={!! $frId !!}
 @stop

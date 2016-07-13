@@ -23,9 +23,7 @@ class Organization extends Model
      */
     protected $fillable = [
         'name',
-        'isHidden',
-        'dateCreated',
-        'dateUpdated'
+        'isHidden'
     ];
     
     public function ilo()

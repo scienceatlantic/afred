@@ -30,13 +30,11 @@ class FacilityRepository extends Model
      * @var array
      */
     protected $fillable = [
-        'facilityId',
         'reviewerId',
+        'facilityId',
         'state',
-        'data',
         'reviewerMessage',
-        'dateSubmitted',
-        'dateReviewed'
+        'data'
     ];
     
 /**

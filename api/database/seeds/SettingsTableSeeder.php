@@ -30,11 +30,6 @@ class SettingsTableSeeder extends Seeder
             'dateCreated' => $now,
             'dateUpdated' => $now
         ], [
-            'name'        => 'apiAddress',
-            'value'       => 'http://localhost:8000',
-            'dateCreated' => $now,
-            'dateUpdated' => $now
-        ], [
             'name'        => 'appAddress',
             'value'       => 'http://localhost:9000',
             'dateCreated' => $now,
@@ -42,16 +37,6 @@ class SettingsTableSeeder extends Seeder
         ], [
             'name'        => 'organizationName',
             'value'       => 'Science Atlantic',
-            'dateCreated' => $now,
-            'dateUpdated' => $now
-        ], [
-            'name'        => 'emailName',
-            'value'       => 'AFRED',
-            'dateCreated' => $now,
-            'dateUpdated' => $now
-        ], [
-            'name'        => 'emailAddress',
-            'value'       => 'afred@scienceatlantic.ca',
             'dateCreated' => $now,
             'dateUpdated' => $now
         ], [

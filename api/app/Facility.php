@@ -31,6 +31,7 @@ class Facility extends Model
      * @var array
      */
     protected $fillable = [
+        'id',
         'facilityRepositoryId',
         'organizationId',
         'provinceId',

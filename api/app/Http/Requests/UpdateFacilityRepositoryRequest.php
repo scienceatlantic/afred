@@ -34,8 +34,7 @@ class UpdateFacilityRepositoryRequest extends Request
         switch ($state) {
             // No check necessary, a new record is being submitted.
             case 'PENDING_APPROVAL':
-                return true;
-            
+                return true;  
             // An update is being submitted, check the current state and token
             // submitted with the request.
             case 'PENDING_EDIT_APPROVAL':
@@ -44,8 +43,7 @@ class UpdateFacilityRepositoryRequest extends Request
                     $token = $this->instance()->input('token', null);
                     return FacilityUpdateLink::verifyToken($id, $token);                    
                 }
-                break;
-            
+                return false;
             // Approve/reject requests can only be performed by (at least) an
             // admin.
             case 'PUBLISHED':
@@ -53,16 +51,17 @@ class UpdateFacilityRepositoryRequest extends Request
                 if ($currentState == 'PENDING_APPROVAL') {
                     return $this->isAtLeastAdmin();
                 }
-                break;
-            
-            // Like the above, can only be performed by an admin.
+                return false;
+            // Like the above, can only be performed by at least an admin.
             case 'PUBLISHED_EDIT':
             case 'REJECTED_EDIT':
                 if ($currentState == 'PENDING_EDIT_APPROVAL') {
                     return $this->isAtLeastAdmin();
                 }
+                return false;
+            default:
+                return false;
         }
-        return false;
     }
 
     /**
@@ -85,8 +84,39 @@ class UpdateFacilityRepositoryRequest extends Request
         
         switch ($this->instance()->input('state')) {
             case 'PENDING_EDIT_APPROVAL':
-                $r["$f.id"] = 'required|exists:facilities,id';
+                // Get the facility repository ID for the rule below.
+                $frId = Route::input('facility_repository');
                 
+                // Validate facility ID.
+                $r["$f.id"] = 'required|exists:facilities,id,'
+                    . 'facilityRepositoryId,' . $frId;
+                
+                // Get the facility ID for the rules below.
+                $fId = $this->instance()->input("$f.id");
+                
+                // If a primary contact ID is provided, make sure it's valid
+                // (i.e. belongs to the facility being updated).
+                $primaryContact = $this->instance()->input($p);
+                $r["$p.id"] = 'exists:primary_contacts,id,facilityId,'. $fId;
+                
+                // If a contact ID is provided, make sure it's valid (i.e.
+                // belongs to the facility being updated).
+                $contacts = $this->instance()->input($c);
+                if (is_array($contacts)) {
+                    $length = count($contacts);              
+                    for ($i = 0; $i < $length; $i++) {
+                        $r["$c.$i.id"] = 'exists:contacts,id,facilityId,'. $fId;
+                    }
+                }
+                
+                // If an equipment ID is provided, make sure it's valid (i.e.
+                // belongs to the facility being updated).
+                $equipment = $this->instance()->input($e);
+                $length = count($equipment);              
+                for ($i = 0; $i < $length; $i++) {
+                    $r["$e.$i.id"] = 'exists:equipment,id,facilityId,'. $fId;
+                }     
+                // No break.
             case 'PENDING_APPROVAL':
                 // Facility section.
                 $r["$f.organizationId"] = 'exists:organizations,id';
@@ -96,8 +126,6 @@ class UpdateFacilityRepositoryRequest extends Request
                 $r["$f.website"] = '';
                 $r["$f.description"] = 'required';
                 $r["$f.isPublic"] = '';
-                $r["$f.datePublished"] = 'date';
-                $r["$f.dateUpdated"] = 'date';
                 
                 // Organization section (new organization is being submitted).
                 $r["$o.name"] = "required_if:$f.organizationId,null";
@@ -157,8 +185,7 @@ class UpdateFacilityRepositoryRequest extends Request
                     $r["$e.$i.yearManufactured"] = 'date_format:Y';
                     $r["$e.$i.keywords"] = '';
                 }            
-                break;
-            
+                break; 
             case 'PUBLISHED':
             case 'REJECTED':
             case 'PUBLISHED_EDIT':

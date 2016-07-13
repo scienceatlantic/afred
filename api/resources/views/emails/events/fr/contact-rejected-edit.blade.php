@@ -1,19 +1,19 @@
 @extends('layouts.emails.master')
 
 @section('content')
-Hello {{ $recipientName }},
+Hello {!! $recipientName !!},
 
-Thank you for your submission to the {{ $settings['appName'] }}
-({{ $settings['appShortName'] }}). Your information has not yet been posted because we need additional
+Thank you for your submission to the {!! $settings['appName'] !!}
+({!! $settings['appShortName'] !!}). Your information has not yet been posted because we need additional
 information.
 
 @if ($reviewerName && $reviewerMessage)
 --
-A message from {{ $reviewerName }}:
+A message from {!! $reviewerName !!}:
 {!! $reviewerMessage !!}
 --
 @endif
 
 To complete your edit, or if you have any questions or comments, please contact
-{{ $settings['personalContactName'] }}, {{ $settings['personalContactTitle'] }}, at {{ $settings['personalContactEmail'] }}.
+{!! $settings['personalContactName'] !!}, {!! $settings['personalContactTitle'] !!}, at {!! $settings['personalContactEmail'] !!}.
 @stop

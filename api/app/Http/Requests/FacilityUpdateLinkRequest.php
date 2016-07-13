@@ -24,18 +24,15 @@ class FacilityUpdateLinkRequest extends Request
             // A new token is being opened.
             case 'POST':
                 return true;
-            
             case 'PUT':            
             case 'DELETE':
                 // Only allowed to update/delete a record that is 'OPEN'.
                 $id = Route::input('facility_update_links');
                 $ful = FacilityUpdateLink::findOrFail($id);
                 return $ful->status == 'OPEN' && $this->isAtLeastAdmin();
-
             default:
                 return $this->isAtLeastAdmin();            
         }
-        return false;
     }
 
     /**

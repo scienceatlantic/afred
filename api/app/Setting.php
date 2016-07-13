@@ -13,6 +13,15 @@ class Setting extends Model
      */
     protected $dates = ['dateCreated',
                         'dateUpdated'];
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'value'
+    ];
     
     protected $primaryKey = 'name';
 }

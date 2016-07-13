@@ -16,12 +16,9 @@ class FacilityRequest extends Request
         switch ($this->method()) {
             case 'GET':
                 return true;
-            
-            case 'PUT':
-            case 'DELETE':
+            default:
                 return $this->isAtLeastAdmin();
         }
-        return false;
     }
 
     /**
@@ -34,6 +31,7 @@ class FacilityRequest extends Request
         $r = [];
         switch ($this->method()) {
             case 'PUT':
+                $r['id'] = 'required|exists:facilities,id';
                 $r['isPublic'] = 'required|digits_between:{0,1}';
                 break;
         }

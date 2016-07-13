@@ -17,6 +17,22 @@ class FacilityUpdateLink extends Model
                         'created_at',
                         'updated_at'];
     
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'id',
+        'frIdBefore',
+        'frIdAfter',
+        'editorFirstName',
+        'editorLastName',
+        'editorEmail',
+        'token',
+        'status'
+    ];
+    
     public function frA()
     {
         return $this->belongsTo('App\FacilityRepository', 'frIdAfter');
