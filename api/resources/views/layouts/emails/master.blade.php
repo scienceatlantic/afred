@@ -2,7 +2,7 @@
 
 --
 {!! $settings['appName'] !!} ({!! $settings['appShortName'] !!})
-{!! $settings['emailAddress'] !!} | {!! $settings['generalContactTelephone'] !!}
+{!! $settings['generalContactEmail'] !!} | {!! $settings['generalContactTelephone'] !!}
 {!! $settings['appAddress'] !!} | Twitter: {!! $settings['twitterHandle'] !!}
 
 
