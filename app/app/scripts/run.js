@@ -27,31 +27,31 @@ angular.module('afredApp').run(['$rootScope',
      * for an explanation of the differences between log, info, warn, and error.
      * --------------------------------------------------------------------- */
     $rootScope._log = function(msg) {
-      if ($rootScope._config.log.log) {
+      if ($rootScope._env.log.log) {
         $log.log(msg);
       }
     };
     
     $rootScope._info = function(msg) {
-      if ($rootScope._config.log.info) {
+      if ($rootScope._env.log.info) {
         $log.info(msg);
       }
     };
     
     $rootScope._warn = function(msg) {
-      if ($rootScope._config.log.warn) {
+      if ($rootScope._env.log.warn) {
         $log.warn(msg);
       }
     };
     
     $rootScope._error = function(msg) {
-      if ($rootScope._config.log.error) {
+      if ($rootScope._env.log.error) {
         $log.error(msg);
       }
     };
     
     $rootScope._debug = function(msg) {
-      if ($rootScope._config.log.debug) {
+      if ($rootScope._env.log.debug) {
         $log.debug(msg);
       }
     };
@@ -93,7 +93,7 @@ angular.module('afredApp').run(['$rootScope',
        *     'password' property.
        */
       login: function(credentials) {
-        return $http.post($rootScope._config.api.address + '/auth/login',
+        return $http.post($rootScope._env.api.address + '/auth/login',
           credentials);
       },
       
@@ -106,14 +106,14 @@ angular.module('afredApp').run(['$rootScope',
        *     complete.
        *
        * Calls/uses/requires:
-       * $rootScope._config.api.address
+       * $rootScope._env.api.address
        * $rootScope._auth.destroy()
        * $http
        */
       logout: function() {
         $rootScope._auth.loading.logout = true;
         
-        $http.get($rootScope._config.api.address + '/auth/logout').then(
+        $http.get($rootScope._env.api.address + '/auth/logout').then(
           function() {
             $rootScope._auth.loading.logout = false;
             $rootScope._auth.destroy(true);
@@ -130,7 +130,7 @@ angular.module('afredApp').run(['$rootScope',
        * @return {promise}
        */
       ping: function() {
-        return $http.get($rootScope._config.api.address + '/auth/ping');
+        return $http.get($rootScope._env.api.address + '/auth/ping');
       },
       
       /**

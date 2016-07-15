@@ -10,7 +10,7 @@ angular.module('afredApp').controller('AdminDashboardController',
      * --------------------------------------------------------------------- */
     
     // Get the data.
-    $scope.stats = $http.get($scope._config.api.address + '/dashboard');
+    $scope.stats = $http.get($scope._env.api.address + '/dashboard');
     $scope.stats.then(function(response) {
       $scope.stats.data = response.data;
       $scope.loading.stats = false;

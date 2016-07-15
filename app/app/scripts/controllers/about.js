@@ -9,7 +9,7 @@ angular.module('afredApp').controller('AboutController',
      * Initialisation code.
      * --------------------------------------------------------------------- */
     
-    $scope.wp = wpResource.getPage($scope._config.wp.pages['about']);
+    $scope.wp = wpResource.getPage($scope._env.wp.pages['about']);
     $scope.wp.$promise.then(null, function(response) {
       $scope._httpError(response);
     });
