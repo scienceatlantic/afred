@@ -8,8 +8,8 @@
  * a blank string (i.e. '').
  */
 
-angular.module('afredApp').run(['$rootScope', function($rootScope) {
-  $rootScope._config = {
+angular.module('afredApp').run(['$rootScope', function($rootScope) {  
+  $rootScope._env = {
     /* ---------------------------------------------------------------------
      * API settings.
      * --------------------------------------------------------------------- */
@@ -37,7 +37,7 @@ angular.module('afredApp').run(['$rootScope', function($rootScope) {
         password: 'R0KU jxX7 KjOR vDvX yPCQ 3DR0',
       },
       
-      address: 'http://afred.ca/api/wp/wp-json/wp/v2',
+      address: '//afred.ca/api/wp/wp-json/wp/v2',
       
       // Location of specific pages on WordPress. 
       pages: {
