@@ -8,7 +8,7 @@
 angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
   function($stateProvider, $urlRouterProvider) {
     // If page (state) not found, show 404.
-    // See: http://stackoverflow.com/questions/26181141/angularjs-ui-router-otherwise-to-state-instead-of-url
+    // @see http://stackoverflow.com/questions/26181141/angularjs-ui-router-otherwise-to-state-instead-of-url
     $urlRouterProvider.otherwise(function($injector) {
       $injector.invoke(['$state', function($state) {
         $state.go('error.404');
@@ -29,7 +29,6 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         }
       }).
       state('search.all', {
-        // This line is passed 80 chars, but I'm not breaking it up.
         url: '/all?type&provinceId[]&organizationId[]&disciplineId[]&sectorId[]',
         templateUrl: 'views/search.results.html',
         controller: 'SearchResultsController'

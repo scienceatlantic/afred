@@ -10,20 +10,20 @@ angular.module('afredApp').factory('facilityResource',
    '$resource',
    function($rootScope,
             $resource) {
+    // Alias to shorten code.
     var root = $rootScope._env.api.address;
     
     return $resource(root + '/facilities/:facilityId', {
-        facilityId: '@id'
-      }, {
-        query: {
-          method: 'GET',
-          isArray: false
-        },
-        update: {
-          method: 'PUT'
-        }
+      facilityId: '@id'
+    }, {
+      query: {
+        method: 'GET',
+        isArray: false
+      },
+      update: {
+        method: 'PUT'
       }
-    );
+    });
   }
 ]);
 
@@ -32,6 +32,7 @@ angular.module('afredApp').factory('facilityRepositoryResource',
    '$resource',
    function($rootScope,
             $resource) {
+    // Alias to shorten code.
     var root = $rootScope._env.api.address;
     
     return $resource(root + '/facility-repository/:facilityRepositoryId', {
@@ -111,6 +112,7 @@ angular.module('afredApp').factory('searchResource',
    '$resource',
    function($rootScope,
             $resource) {
+    // Alias to shorten code.
     var root = $rootScope._env.api.address;
     
     return $resource(root + '/search', null, {
@@ -127,6 +129,7 @@ angular.module('afredApp').factory('organizationResource',
    '$resource',
    function($rootScope,
             $resource) {
+    // Alias to shorten code.
     var root = $rootScope._env.api.address;
     
     return $resource(root + '/organizations/:organizationId', {
@@ -155,6 +158,7 @@ angular.module('afredApp').factory('iloResource',
    '$resource',
    function($rootScope,
             $resource) {
+    // Alias to shorten code.
     var root = $rootScope._env.api.address;
     
     return $resource(root + '/ilos/:iloId', {
@@ -183,6 +187,7 @@ angular.module('afredApp').factory('provinceResource',
    '$resource',
    function($rootScope,
             $resource) {
+    // Alias to shorten code.              
     var root = $rootScope._env.api.address;
     
     return $resource(root + '/provinces/:provinceId', {
@@ -211,6 +216,7 @@ angular.module('afredApp').factory('disciplineResource',
    '$resource',
    function($rootScope,
             $resource) {
+    // Alias to shorten code.
     var root = $rootScope._env.api.address;
     
     return $resource(root + '/disciplines/:disciplineId', {
@@ -238,6 +244,7 @@ angular.module('afredApp').factory('sectorResource',
    '$resource',
    function($rootScope,
             $resource) {
+    // Alias to shorten code.
     var root = $rootScope._env.api.address;
     
     return $resource(root + '/sectors/:sectorId', {
@@ -266,6 +273,7 @@ angular.module('afredApp').factory('emailResource',
    '$resource',
    function($rootScope,
             $resource) {
+    // Alias to shorten code.
     var root = $rootScope._env.api.address;
     
     return $resource(root + '/email', null, {
@@ -290,14 +298,15 @@ angular.module('afredApp').factory('wpResource',
    '$resource',
    function($rootScope,
             $resource) {
+    // Aliases to shorten code.
     var root = $rootScope._env.wp.address;
+    var username = $rootScope._env.wp.appAuth.username;
+    var password = $rootScope._env.wp.appAuth.password;
     
     var headers = {
-      'Authorization': 'Basic ' +
-        btoa($rootScope._env.wp.appAuth.username + ':' +
-        $rootScope._env.wp.appAuth.password),
+      'Authorization': 'Basic ' + btoa(username + ':' + password),
       'X-CSRF-TOKEN': undefined // Override the global default headers.
-                                // WordPress does not need this.
+                                 // WordPress does not need this.
     };
     
     return $resource(root, null, {
