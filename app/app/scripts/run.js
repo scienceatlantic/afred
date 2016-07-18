@@ -13,19 +13,31 @@ angular.module('afredApp').run(['$rootScope',
                                 '$log',
                                 '$state',
                                 '$stateParams',
+                                '$location',
                                 '$http',
   function($rootScope,
            $log,
            $state,
            $stateParams,
+           $location,
            $http) {
     
     /* ---------------------------------------------------------------------
-     * Log functions. Making it globally accessble.
-     * See this:
-     * https://docs.angularjs.org/api/ng/service/$log
-     * for an explanation of the differences between log, info, warn, and error.
+     * Google Analytics.
+     * @see http://jasonwatmore.com/post/2015/11/07/AngularJS-Google-Analytics-with-the-UI-Router.aspx
      * --------------------------------------------------------------------- */
+
+    window.ga('create', $rootScope._env.google.analytics.id, 'auto');
+    
+    $rootScope.$on('$stateChangeSuccess', function () {
+      window.ga('send', 'pageview', $location.path());
+    });
+    
+    /* ---------------------------------------------------------------------
+     * Log functions. Making it globally accessble.
+     * @see https://docs.angularjs.org/api/ng/service/$log
+     * --------------------------------------------------------------------- */
+
     $rootScope._log = function(msg) {
       if ($rootScope._env.log.log) {
         $log.log(msg);
@@ -66,7 +78,7 @@ angular.module('afredApp').run(['$rootScope',
     $rootScope._stateParams = $stateParams;
     
     /* ---------------------------------------------------------------------
-     * Authentication functions
+     * Authentication functions.
      * --------------------------------------------------------------------- */
 
     $rootScope._auth = {
@@ -194,7 +206,7 @@ angular.module('afredApp').run(['$rootScope',
     /* ---------------------------------------------------------------------
      * Error state function.
      * --------------------------------------------------------------------- */
-    
+
     /**
      * Redirect the user to an error state. Currently, only two error states are
      * supported, 404s and 500s. The default is 500.
@@ -227,6 +239,7 @@ angular.module('afredApp').run(['$rootScope',
     /* ---------------------------------------------------------------------
      * Helper functions
      * --------------------------------------------------------------------- */
+
     $rootScope._helper = {
       // Credit for the first two functions, see:
       // http://stackoverflow.com/questions/1038727/how-to-get-browser-width-using-javascript-code
@@ -275,6 +288,7 @@ angular.module('afredApp').run(['$rootScope',
      * '$rootScope'. Also making angular run a digest loop if the window is
      * resized (to keep width and height properties up-to-date).
      * --------------------------------------------------------------------- */
+
     window.onresize = function() {
       $rootScope.$apply();
     };
@@ -285,12 +299,14 @@ angular.module('afredApp').run(['$rootScope',
     /* ---------------------------------------------------------------------
      * Add the Math class to the global scope.
      * --------------------------------------------------------------------- */
+
     $rootScope._math = Math;
     
     /* ---------------------------------------------------------------------
      * Boostrap contstants.
-     * See: http://getbootstrap.com
+     * @see http://getbootstrap.com
      * --------------------------------------------------------------------- */
+
     $rootScope._bootstrap = {
       /**
        * These are Bootstrap's grid's breakpoints (in pixels) (useful for responsive
@@ -309,7 +325,9 @@ angular.module('afredApp').run(['$rootScope',
      * Page titles.
      *
      * Will update the page titles to match the current state if the current
-     * state has a 'pageTitle' property. See 'routes.js'.
+     * state has a 'pageTitle' property. 
+     * 
+     * @see routes.js ('data.pageTitle' properties).
      * --------------------------------------------------------------------- */
     
     // Save the unmodified page title first before making any changes.
