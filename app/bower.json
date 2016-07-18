@@ -11,9 +11,9 @@
     "angular-sanitize": "~1.4.9",
     "angular-animate": "~1.4.9",
     "angular-touch": "~1.4.9",
-    "angular-ui-router": "~0.2.15",
+    "angular-ui-router": "~0.3.1",
     "angular-bootstrap": "~0.14.3",
-    "angularUtils-pagination": "angular-utils-pagination#~0.9.2",
+    "angularUtils-pagination": "angular-utils-pagination#~0.11.1",
     "textAngular": "~1.5.0",
     "font-awesome": "fontawesome#~4.5.0",
     "components-font-awesome": "~4.5.0",
@@ -39,8 +39,8 @@
     "angular": ">=1.4.x",
     "angular-animate": "~1.4.9"
   },
-  "__comments": [
-    "--- This key is for comments ---",
+  "_comments": [
+    "--- This key is for comments. ---",
     "BOOTSTRAP FIX:",
     "Bootstrap version >= 3.3.5 caused conflicts with yeoman",
     "See this: https://github.com/yeoman/generator-angular/issues/1116#issuecomment-154395390",
