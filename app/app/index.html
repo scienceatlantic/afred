@@ -28,14 +28,13 @@
     <title>Atlantic Facilities and Research Equipment Database</title>
   </head>
   <body data-ng-cloak>
-    <!-- JavaScript disabled warning message -->
+    <!-- JavaScript disabled warning message. -->
     <noscript class="h1">
       The Atlantic Facilities and Research Equipment Database requires
       JavaScript in order to function. Instructions on how to enable JavaScript
       can be found <a href="http://enable-javascript.com/" target="_blank">here</a>.
     </noscript>
     
-    <div>
     <!-- Error pages container. -->
     <div data-ng-if="_state.includes('error')">
       <div data-ui-view></div>
@@ -45,7 +44,11 @@
     <div data-ng-if="!_state.includes('error')">
       <!-- Outdated browser warning message. -->
       <!--[if lt IE 10]>
-        <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <p class="browsehappy">
+          You are using an <strong>outdated</strong> browser. Please
+          <a href="http://browsehappy.com/">upgrade your browser</a> to improve
+          your experience.
+        </p>
       <![endif]-->
   
       <!-- App content -->
@@ -82,15 +85,12 @@
       </div><!-- End of content container -->
     </div>
     
-    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
+    <!-- Google Analytics. -->
     <script>
-       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-       })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-       ga('create', 'UA-XXXXX-X');
-       ga('send', 'pageview');
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
     </script>
 
     <!-- JavaScript -->
