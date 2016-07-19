@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-ng-app="afredApp" data-ng-controller="MainController" data-ng-cloak>
+<html lang="en" data-ng-app="afredApp" data-ng-controller="MainController" data-ng-cloak itemscope itemtype="http://schema.org/WebPage">
   <head>
     <!-- Meta details -->
     <meta charset="utf-8">
@@ -50,42 +50,26 @@
           your experience.
         </p>
       <![endif]-->
-  
-      <!-- App content -->
-      <div>      
-        <!-- Header -->
-        <header style="background-color: #f8f8f8;">
-          <!-- Beta version note. -->
-          <div class="container">
-            <p class="text-center text-warning" style="padding-top: 10px;">
-              Please note that this is a beta version of AFRED. If you
-              experience any difficulties using the software, or have any
-              questions or comments, please email
-              <a href="mailto: afred@scienceatlantic.ca">afred@scienceatlantic.ca</a>.
-            </p>
-          </div>
-          
-          <div data-ng-include="'views/includes/header.html'"></div>
-        </header>
-        
-        <!-- Main Navigation -->
-        <nav class="navbar navbar-default" role="navigation">
-          <div data-ng-include="'views/includes/nav.html'" onload="main.navbar.toggle()"></div>
-        </nav>
-  
-        <!-- View -->
-        <div class="container" style="min-height: 300px;">
-          <div data-ui-view></div>
-        </div>
-        
-        <!-- Footer -->
-        <footer class="footer">
-          <div data-ng-include="'views/includes/footer.html'"></div>
-        </footer>
-      </div><!-- End of content container -->
+    
+      <!-- Header --> 
+      <div data-ng-include="'views/includes/header.html'"></div>  
+      
+      <!-- Main Navigation -->
+      <div data-ng-include="'views/includes/nav.html'" onload="main.navbar.toggle()"></div>
+      
+      <!-- View -->
+      <div class="container" style="min-height: 300px;">
+        <div data-ui-view></div>
+      </div>
+      
+      <!-- Footer -->
+      <div data-ng-include="'views/includes/footer.html'"></div>
     </div>
     
-    <!-- Google Analytics. -->
+    <!-- 
+      -- Google Analytics.
+      -- Check the 'scripts/run.js' file for more information.
+      --> 
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
