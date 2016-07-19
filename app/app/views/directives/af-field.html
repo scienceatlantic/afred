@@ -3,7 +3,7 @@
   <label class="control-label" data-ng-class="{ 'col-sm-4': !isVertical }">{{ label }}</label>
   
   <div data-ng-class="{ 'col-sm-8': !isVertical }">
-    <!-- Input field goes here. -->
+    <!-- Input element gets transcluded here. -->
     <div data-ng-transclude></div>
     
     <!-- Field length count goes here. -->
@@ -15,12 +15,14 @@
     </p>
     
     <!-- Validation error text. -->
-    <p>
+    <p data-ng-if="form[name]">
       <small>
-        <span class="text-danger" data-ng-show="form[name].$error.required && form[name].$dirty">This is required</span>
-        <span class="text-danger" data-ng-show="form[name].$error.url && form[name].$dirty">That's not a valid URL</span>
-        <span class="text-danger" data-ng-show="form[name].$error.email && form[name].$dirty">That's not a valid email</span>
-        <span class="text-danger" data-ng-show="form[name].$error.pattern && form[name].$dirty">That's not quite right</span>
+        <span data-ng-show="form[name].$dirty">
+          <span class="text-danger" data-ng-show="form[name].$error.required">This is required.</span>
+          <span class="text-danger" data-ng-show="form[name].$error.url">That's not a valid URL.</span>
+          <span class="text-danger" data-ng-show="form[name].$error.email">That's not a valid email.</span>
+          <span class="text-danger" data-ng-show="form[name].$error.pattern">That's not quite right.</span>
+        </span>
       </small>
     </p>
   </div>
