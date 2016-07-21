@@ -1,5 +1,12 @@
 'use strict';
 
+/**
+ * @fileoverview Admin/Disciplines abstract class.
+ * 
+ * @see https://docs.angularjs.org/guide/controller
+ * @see /scripts/routes.js (for route info)
+ */
+
 angular.module('afredApp').controller('AdminDisciplinesController', [
   '$scope',
   'disciplineResource',
@@ -10,7 +17,7 @@ angular.module('afredApp').controller('AdminDisciplinesController', [
      * --------------------------------------------------------------------- */
     
     /**
-     * State class.
+     * State object.
      */
     $scope.disciplines = {
       /**
@@ -50,7 +57,8 @@ angular.module('afredApp').controller('AdminDisciplinesController', [
           page = 1;
         }
         $scope.disciplines.form.data.page = page;
-      },
+      },
+
       /**
        * Query discipline data.
        *
@@ -69,4 +77,4 @@ angular.module('afredApp').controller('AdminDisciplinesController', [
       }
     }; 
   }
-]);
+]);

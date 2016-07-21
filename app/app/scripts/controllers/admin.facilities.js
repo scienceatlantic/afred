@@ -1,5 +1,12 @@
 'use strict';
 
+/**
+ * @fileoverview Admin/Facilities page.
+ * 
+ * @see https://docs.angularjs.org/guide/controller
+ * @see /scripts/routes.js (for route info)
+ */
+
 angular.module('afredApp').controller('AdminFacilitiesController',
   ['$scope',
    'facilityRepositoryResource',

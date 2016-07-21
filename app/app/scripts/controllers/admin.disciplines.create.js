@@ -1,5 +1,12 @@
 'use strict';
 
+/**
+ * @fileoverview Admin/Disciplines/Create page.
+ * 
+ * @see https://docs.angularjs.org/guide/controller
+ * @see /scripts/routes.js (for route info)
+ */
+
 angular.module('afredApp').controller('AdminDisciplinesCreateController', [
   '$scope',
   'confirmModal',

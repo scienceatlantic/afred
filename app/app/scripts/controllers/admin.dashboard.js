@@ -1,5 +1,12 @@
 'use strict';
 
+/**
+ * @fileoverview Admin/Dashboard page.
+ * 
+ * @see https://docs.angularjs.org/guide/controller
+ * @see /scripts/routes.js
+ */
+
 angular.module('afredApp').controller('AdminDashboardController',
   ['$scope',
    '$http',
