@@ -83,6 +83,7 @@ angular.module('afredApp').directive('afFacility', [
         // need.
         $scope._window = $rootScope._window;
         $scope._bootstrap = $rootScope._bootstrap;
+        $scope._state = $rootScope._state;
       }
     };
   }
