@@ -15,6 +15,19 @@ angular.module('afredApp').config(['$httpProvider', function($httpProvider) {
 ]);
 
 /**
+ * $httpProvider config - Use HTML5 mode.
+ * 
+ * @see https://docs.angularjs.org/guide/$location (part about HTML5 mode)
+ * @see https://docs.angularjs.org/api/ng/provider/$locationProvider (part about HTML5 mode)
+ */
+angular.module('afredApp').config(
+  ['$locationProvider', 
+   function($locationProvider) {
+    $locationProvider.html5Mode(true).hashPrefix('!');
+  }
+]);
+
+/**
  * TextAngular config.
  * @see https://github.com/fraywing/textAngular/wiki/Setting-Defaults
  */

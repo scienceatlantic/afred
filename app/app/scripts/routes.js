@@ -16,7 +16,7 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
     });
     
     // Redirect to search if user is on root. Otherwise the user will see 404.
-    $urlRouterProvider.when('', 'search');
+    $urlRouterProvider.when('/', 'search');
     
     // Routes.
     $stateProvider

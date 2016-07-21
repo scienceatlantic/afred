@@ -17,7 +17,27 @@
     <link rel="stylesheet" href="bower_components/components-font-awesome/css/font-awesome.css" />
     <!-- endbower -->
     <!-- endbuild -->
-    
+      
+    <!-- 
+      -- Base tag.
+      -- Required for HTML 5 mode.
+      -->
+    <script>
+      var subfolder = location.pathname.split('/')[1];
+      var basePath = location.host;
+      
+      // Switch below automatically appends the subfolder to the path if the
+      // program is stored in a subfolder. Add more cases to the switch if you 
+      // need to use more folders.
+      switch (subfolder) {
+        case 'beta':
+        case 'dev':
+          basePath += '/' + subfolder;          
+      }
+  
+      document.write('<base href="//' + basePath + '/">');
+    </script>
+
     <!-- Place your own CSS files here -->
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">

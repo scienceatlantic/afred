@@ -27,7 +27,7 @@ angular.module('afredApp').run(['$rootScope', function($rootScope) {
     app: {
       name: 'Atlantic Facilities and Research Equipment Database',
       shortname: 'AFRED',
-      address: '//localhost:9000/#'
+      address: '//localhost:9000'
     },
     
     /* ---------------------------------------------------------------------
