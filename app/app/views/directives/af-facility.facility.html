@@ -1,49 +1,69 @@
 <p class="text-muted">Research Facility</p>
 <hr>
 
+<!-- Facility. -->
 <div class="row">
   <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Facility</label></div>
   <div class="col-sm-9">{{ facility.name }}</div>
+
+  <br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
 </div>
 
-<br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
-
+<!-- Organization. -->
 <div class="row">
   <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Organization</label></div>
-  <div class="col-sm-9">{{ facility.organization.name }} <span class="label label-default" data-ng-show="isPreview && facility.isNewOrganization">New organization</span></div>
+  <div class="col-sm-9" itemscope itemtype="http://schema.org/Organization">
+    <span itemprop="name">{{ facility.organization.name }}</span>
+    <!-- "New Organization" label. -->
+    <span class="label label-default" data-ng-show="isPreview && facility.isNewOrganization">New organization</span>
+  </div>
+
+  <br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
 </div>
 
-<br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
-
+<!-- City. -->
 <div class="row">
   <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>City</label></div>
-  <div class="col-sm-9">{{ facility.city }}</div>
+  <div class="col-sm-9" itemscope itemtype="http://schema.org/City">
+    <span itemprop="name">{{ facility.city }}</span>
+  </div>
+
+  <br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
 </div>
 
-<br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
 
+
+<!-- Province -->
 <div class="row">
   <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Province</label></div>
-  <div class="col-sm-9">{{ facility.province.name }}</div>
+  <div class="col-sm-9" itemscope itemtype="http://schema.org/State">
+    <span itemprop="name">{{ facility.province.name }}</span>
+  </div>
+
+  <br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
 </div>
 
-<br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
-
+<!-- Website. -->
 <div class="row" data-ng-show="facility.website || isPreview">
   <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Website</label></div>
   <div class="col-sm-9">
     <a data-ng-href="{{ facility.website }}" target="_blank">{{ facility.website }}</a>
+    <!-- "Blank" label. -->
     <span class="label label-default" data-ng-show="!facility.website">Blank</span>
   </div>
+
+  <br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
 </div>
 
-<br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
-
+<!-- Description. -->
 <div class="row">
   <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Description</label></div>
   <div class="col-sm-9" data-ng-bind-html="facility.description"></div>
+
+  <br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
 </div>
 
+<!-- Disciplines -->
 <div class="row">
   <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Disciplines</label></div>
   <div class="col-sm-9">
@@ -51,8 +71,11 @@
       <li data-ng-repeat="d in facility.disciplines">{{ d.name }}</li> 
     </ul>
   </div>
+
+  <br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
 </div>
 
+<!-- Sectors. -->
 <div class="row">
   <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Sectors</label></div>
   <div class="col-sm-9">
