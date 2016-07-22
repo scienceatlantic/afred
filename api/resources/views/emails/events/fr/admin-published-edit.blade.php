@@ -11,5 +11,5 @@ An edit of '{!! $facilityName !!}' has been approved by {!! $reviewerName !!}.
 @endif
 
 The facility can be found here:
-{!! $settings['appAddress'] !!}/#/facilities/{!! $facilityId !!}
+{!! $settings['appAddress'] !!}/facilities/{!! $facilityId !!}
 @stop

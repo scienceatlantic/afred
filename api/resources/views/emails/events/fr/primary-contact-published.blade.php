@@ -16,12 +16,12 @@ A message from {!! $reviewerName !!}:
 @endif
 
 Please check your listing here
-{!! $settings['appAddress'] !!}/#/facilities/{!! $facilityId !!}.
+{!! $settings['appAddress'] !!}/facilities/{!! $facilityId !!}.
 
 You will receive an annual reminder to check your listing for accuracy. If you
 wish to make edits to your listing at any time, please follow the instructions
 on this page.
-{!! $settings['appAddress'] !!}/#/facilities/update.
+{!! $settings['appAddress'] !!}/facilities/update.
 
 @if ($iloName && $iloEmail)
 A copy of this email has also been sent to your organization's industry liaison

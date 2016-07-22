@@ -7,5 +7,5 @@ A new facility, '{!! $facilityName !!}', has been submitted into {!! $settings['
 and is pending review.
 
 To view it, please follow the link below:
-{!! $settings['appAddress'] !!}/#/admin/facilities/show?facilityRepositoryId={!! $frId !!}
+{!! $settings['appAddress'] !!}/admin/facilities/show?facilityRepositoryId={!! $frId !!}
 @stop

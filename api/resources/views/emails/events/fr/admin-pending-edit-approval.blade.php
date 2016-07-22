@@ -7,5 +7,5 @@ An edit of '{!! $facilityName !!}' has been submitted into {!! $settings['appSho
 and is pending review.
 
 To view it, please follow this link:
-{!! $settings['appAddress'] !!}/#/admin/facilities/show?facilityRepositoryId={!! $frId !!}
+{!! $settings['appAddress'] !!}/admin/facilities/show?facilityRepositoryId={!! $frId !!}
 @stop

@@ -10,5 +10,5 @@ This is a confirmation email that you have approved '{!! $facilityName !!}'.
 @endif
 
 The facility can be found here:
-{!! $settings['appAddress'] !!}/#/facilities/{!! $facilityId !!}
+{!! $settings['appAddress'] !!}/facilities/{!! $facilityId !!}
 @stop

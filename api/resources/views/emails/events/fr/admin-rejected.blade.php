@@ -10,5 +10,5 @@ This is a confirmation email that you have rejected '{!! $facilityName !!}'.
 @endif
 
 The rejected facility can be found here:
-{!! $settings['appAddress'] !!}/#/admin/facilities/show?facilityRepositoryId={!! $frId !!}
+{!! $settings['appAddress'] !!}/admin/facilities/show?facilityRepositoryId={!! $frId !!}
 @stop
