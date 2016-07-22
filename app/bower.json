@@ -37,7 +37,8 @@
   "appPath": "app",
   "resolutions": {
     "angular": ">=1.4.x",
-    "angular-animate": "~1.4.9"
+    "angular-animate": "~1.4.9",
+    "jquery": "^2.2"
   },
   "_comments": [
     "--- This key is for comments. ---",
