@@ -1,11 +1,7 @@
 'use strict';
+
 /**
- * @fileoverview Environment variables. Update these settings to match your
- * environment.
- * 
- * !IMPORTANT NOTE!: Please do not commit any sensitive information to GitHub.
- * When committing any changes to the structure of the file, replace values with
- * a blank string (i.e. '').
+ * @fileoverview Local environment variables.
  */
 
 angular.module('afredApp').run(['$rootScope', function($rootScope) {  
