@@ -23,7 +23,7 @@ angular.module('afredApp').config(['$httpProvider', function($httpProvider) {
 angular.module('afredApp').config(
   ['$locationProvider', 
    function($locationProvider) {
-    $locationProvider.html5Mode(true).hashPrefix('!');
+    $locationProvider.html5Mode(true);
   }
 ]);
 
