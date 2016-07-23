@@ -213,15 +213,17 @@ AddDefaultCharset utf-8
   # Options +SymLinksIfOwnerMatch
     RewriteEngine On
 
+    # Force SSL.
+    RewriteCond %{HTTPS} !=on
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
     # Don't rewrite files or directories
     RewriteCond %{REQUEST_FILENAME} -f [OR]
     RewriteCond %{REQUEST_FILENAME} -d
     RewriteRule ^ - [L]
 
-    # Rewrite everything else to index.html to allow html5 state links. Do not
-    # use `[L]` flag because there's a rule below (in the SSL section) to force
-    # SSL on all routes. 
-    RewriteRule ^ index.html
+    # Rewrite everything else to index.html to allow html5 state links.
+    RewriteRule ^ index.html [L]
 </IfModule>
 
 # ------------------------------------------------------------------------------
@@ -340,13 +342,6 @@ AddDefaultCharset utf-8
 #    RewriteCond %{SERVER_PORT} !^443
 #    RewriteRule ^ https://example-domain-please-change-me.com%{REQUEST_URI} [R=301,L]
 # </IfModule>
-
-# Force SSL for all routes.
-
-<IfModule mod_rewrite.c>
-    RewriteCond %{HTTPS} !=on
-    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-</IfModule>
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # Force client-side SSL redirection.
