@@ -1,25 +1,27 @@
 'use strict';
 
 /**
- * @fileoverview Formats a datetime string into a JavaScript Date object.
+ * @fileoverview Formats a datetime string into a schema.org friendly date.
  * 
  * The filter expects a string in this format: YYYY-MM-DD HH:MM:SS. The time
  * portion is optional.
  * 
  * Examples of valid strings:
- * '2016-01'
  * '2016-01-28'
- * '2016-01-28 13:15'
- * '2016-01-28 16:15:30'
+ * '2016-01-28 12:15:30'
+ * 
+ * @requires https://docs.angularjs.org/api/ng/filter/date
  * 
  * @see https://docs.angularjs.org/api/ng/filter/filter
  * @see https://docs.angularjs.org/guide/filter
- * @see https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Date
+ * @see http://schema.org/Date
+ * @see https://schema.org/docs/gs.html#advanced_dates
  */
 
-angular.module('afredApp').filter('afStrToDate',
-  function() {
-    return function(datetimeString, returnParsedStr) {
+angular.module('afredApp').filter('afSchemaDate', [
+  'dateFilter',
+  function(dateFilter) {
+    return function(datetimeString) {
       // If falsy, return empty string.
       if (!datetimeString) {
         return '';  
@@ -44,21 +46,25 @@ angular.module('afredApp').filter('afStrToDate',
       
       // Full datetime.
       if (d.length == 3 && t.length == 3) {
-        return new Date(d[0], d[1], d[2], t[0], t[1], t[2]);  
+        var d = new Date(d[0], d[1], d[2], t[0], t[1], t[2]); 
+        return dateFilter(d, 'yyyy-MM-dd\'T\'HH:mm:ss');
       }
 
       // Datetime (without seconds). 
       if (d.length == 3 && t.length == 2) {
-        return new Date(d[0], d[1], d[2], t[0], t[1]);
+        var d = new Date(d[0], d[1], d[2], t[0], t[1]);
+        return dateFilter(d, 'yyyy-MM-dd\'T\'HH:mm');
       } 
       
       // Full date
       if (d.length == 3) {
-        return new Date(d[0], d[1], d[2]);
+        var d = new Date(d[0], d[1], d[2]);
+        return dateFilter(d, 'yyyy-MM-dd');
       }
 
       // Date (year and month only).
-      return new Date(d[0], d[1]);
+      var d = new Date(d[0], d[1]);      
+      return dateFilter(d, 'yyyy-MM');
     };
   }
-);
+]);

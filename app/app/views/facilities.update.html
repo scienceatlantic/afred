@@ -54,7 +54,7 @@
       <div class="panel-body">
         <div data-ng-repeat="facility in facilities">
           <p>
-            <a href="{{ _config.app.address }}/facilities/{{ facility.id }}" target="_blank">{{ facility.name }}</a> | {{ facility.city }}
+            <a data-ui-sref="facilities.show({ facilityId: facility.id })" target="_blank">{{ facility.name }}</a> | {{ facility.city }}
           </p>
           
           <p data-ng-show="facility.status == 'OPEN' || facility.status == 'PENDING'">

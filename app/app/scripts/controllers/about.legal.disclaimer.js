@@ -1,5 +1,12 @@
 'use strict';
 
+/**
+ * @fileoverview Disclaimer page. Content is retrieved from WordPress.
+ * 
+ * @see https://docs.angularjs.org/guide/controller
+ * @see /scripts/routes.js (for route info)
+ */
+
 angular.module('afredApp').controller('AboutLegalDisclaimerController',
   ['$scope',
    'wpResource',
@@ -9,7 +16,7 @@ angular.module('afredApp').controller('AboutLegalDisclaimerController',
      * Initialisation code.
      * --------------------------------------------------------------------- */
     
-    $scope.wp = wpResource.getPage($scope._config.wp.pages['disclaimer']);
+    $scope.wp = wpResource.getPage($scope._env.wp.pages['disclaimer']);
     $scope.wp.$promise.then(null, function(response) {
       $scope._httpError(response);
     });

@@ -31,7 +31,7 @@ class SettingsTableSeeder extends Seeder
             'dateUpdated' => $now
         ], [
             'name'        => 'appAddress',
-            'value'       => 'http://localhost:9000',
+            'value'       => 'https://afred.ca',
             'dateCreated' => $now,
             'dateUpdated' => $now
         ], [

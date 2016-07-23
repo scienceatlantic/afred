@@ -1,12 +1,33 @@
 <!DOCTYPE html>
-<html lang="en" data-ng-app="afredApp" data-ng-controller="MainController" data-ng-cloak>
+<html lang="en" data-ng-app="afredApp" data-ng-controller="MainController" data-ng-cloak itemscope itemtype="http://schema.org/WebPage">
   <head>
     <!-- Meta details -->
     <meta charset="utf-8">
     <meta name="author" content="Science Atlantic">
     <meta name="description" content="Atlantic Facilities and Research Equipment Database (AFRED)">
     <meta name="viewport" content="width=device-width">
-    
+    <meta name="google-site-verification" content="UBWPswIFqdAHg8YMVvboHM_iSavE9yt6Uq8E_0f0Buk">
+
+    <!-- 
+      -- Base tag.
+      -- Required for HTML 5 mode.
+      -->
+    <script>
+      var subfolder = location.pathname.split('/')[1];
+      var basePath = location.host;
+      
+      // Switch below automatically appends the subfolder to the path if the
+      // program is stored in a subfolder. Add more cases to the switch if you 
+      // need to use more folders.
+      switch (subfolder) {
+        case 'beta':
+        case 'dev':
+          basePath += '/' + subfolder;          
+      }
+  
+      document.write('<base href="//' + basePath + '/">');
+    </script>
+
     <!-- CSS -->
     <!-- Place third-party CSS files here -->
     <!-- build:css(.) styles/vendor.css -->
@@ -16,7 +37,7 @@
     <link rel="stylesheet" href="bower_components/components-font-awesome/css/font-awesome.css" />
     <!-- endbower -->
     <!-- endbuild -->
-    
+
     <!-- Place your own CSS files here -->
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
@@ -28,14 +49,13 @@
     <title>Atlantic Facilities and Research Equipment Database</title>
   </head>
   <body data-ng-cloak>
-    <!-- JavaScript disabled warning message -->
+    <!-- JavaScript disabled warning message. -->
     <noscript class="h1">
       The Atlantic Facilities and Research Equipment Database requires
       JavaScript in order to function. Instructions on how to enable JavaScript
       can be found <a href="http://enable-javascript.com/" target="_blank">here</a>.
     </noscript>
     
-    <div>
     <!-- Error pages container. -->
     <div data-ng-if="_state.includes('error')">
       <div data-ui-view></div>
@@ -45,52 +65,37 @@
     <div data-ng-if="!_state.includes('error')">
       <!-- Outdated browser warning message. -->
       <!--[if lt IE 10]>
-        <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <p class="browsehappy">
+          You are using an <strong>outdated</strong> browser. Please
+          <a href="http://browsehappy.com/">upgrade your browser</a> to improve
+          your experience.
+        </p>
       <![endif]-->
-  
-      <!-- App content -->
-      <div>      
-        <!-- Header -->
-        <header style="background-color: #f8f8f8;">
-          <!-- Beta version note. -->
-          <div class="container">
-            <p class="text-center text-warning" style="padding-top: 10px;">
-              Please note that this is a beta version of AFRED. If you
-              experience any difficulties using the software, or have any
-              questions or comments, please email
-              <a href="mailto: afred@scienceatlantic.ca">afred@scienceatlantic.ca</a>.
-            </p>
-          </div>
-          
-          <div data-ng-include="'views/includes/header.html'"></div>
-        </header>
-        
-        <!-- Main Navigation -->
-        <nav class="navbar navbar-default" role="navigation">
-          <div data-ng-include="'views/includes/nav.html'" onload="main.navbar.toggle()"></div>
-        </nav>
-  
-        <!-- View -->
-        <div class="container" style="min-height: 300px;">
-          <div data-ui-view></div>
-        </div>
-        
-        <!-- Footer -->
-        <footer class="footer">
-          <div data-ng-include="'views/includes/footer.html'"></div>
-        </footer>
-      </div><!-- End of content container -->
+    
+      <!-- Header --> 
+      <div data-ng-include="'views/includes/header.html'"></div>
+
+      <!-- Main Navigation -->
+      <div data-ng-include="'views/includes/nav.html'" onload="main.navbar.toggle()"></div>
+      
+      <!-- View -->
+      <div class="container" style="min-height: 300px;">
+        <div data-ui-view></div>
+      </div>
+      
+      <!-- Footer -->
+      <div data-ng-include="'views/includes/footer.html'"></div>
     </div>
     
-    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
+    <!-- 
+      -- Google Analytics.
+      -- Check the 'scripts/run.js' file for more information.
+      --> 
     <script>
-       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-       })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-       ga('create', 'UA-XXXXX-X');
-       ga('send', 'pageview');
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
     </script>
 
     <!-- JavaScript -->
@@ -149,6 +154,7 @@
     <script src="scripts/filters/af-trust-as-html.js"></script>
     <script src="scripts/filters/af-format-telephone.js"></script>
     <script src="scripts/filters/af-str-to-date.js"></script>
+    <script src="scripts/filters/af-schema-date.js"></script>
     <script src="scripts/controllers/main.js"></script>
     <script src="scripts/controllers/search.js"></script>
     <script src="scripts/controllers/search.results.js"></script>

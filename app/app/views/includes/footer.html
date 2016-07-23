@@ -1,66 +1,68 @@
-<div class="container">
-  <div class="row">
-    <div class="col-md-3">
-      <p><b>Resources</b></p>
-      
-      <p><a data-ui-sref="about.legal.termsOfService">Terms of Service</a></p>
-      
-      <p><a data-ui-sref="about.legal.privacyPolicy">Privacy Policy</a></p>
-      
-      <p><a data-ui-sref="about.legal.disclaimer">Disclaimer</a></p>
-    </div>
-    
-    <div class="col-md-3">
-      <p><b>What is AFRED?</b></p>
-      
-      <p><a href="//afred.ca/coming-soon/" target="_blank">Find out what AFRED can do for you!</a></p>
-      
-      <p><a href="//afred.ca/coming-soon/#partners-and-supporters" target="_blank">All Partners and Supporters</a></p>
-    </div>
-    
-    <div class="col-md-3">
-      <p><b>Connect with us!</b></p>
-      
-      <p><a href="//twitter.com/AFREDatabase" target="_blank"><span class="fa fa-twitter"></span> @AFREDatabase</a></p>
-      
-      <p><b>Sign up for updates!</b></p>
-      
-      <p><a href="//afred.ca/coming-soon" target="_blank"><button class="btn btn-default"><span class="fa fa-envelope-o"></span> Sign up</button></a></p>
-    </div>
-    
-    <div class="col-md-3">
-      <p>
-        <!-- Heading for Science Atlantic. -->
-        <b data-ng-show="main.footer.slider.currentImgIndex == 0">A project of</b>
+<footer class="footer">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3">
+        <p><b>Resources</b></p>
         
-        <!-- Heading for the rest. -->
-        <b data-ng-show="main.footer.slider.currentImgIndex > 0">Supported in part by</b>
-      </p>
+        <p><a data-ui-sref="about.legal.termsOfService">Terms of Service</a></p>
+        
+        <p><a data-ui-sref="about.legal.privacyPolicy">Privacy Policy</a></p>
+        
+        <p><a data-ui-sref="about.legal.disclaimer">Disclaimer</a></p>
+      </div>
       
-      <!-- Slider. -->
-      <div style="min-height: 90px;">
-        <!-- Science Atlantic. -->
-        <a data-ng-href="https://scienceatlantic.ca" target="_blank" data-ng-show="main.footer.slider.currentImgIndex == 0">
-          <img data-ng-src="images/sa-main-logo-200x80.png" alt="Science Atlantic Logo">
-        </a>
+      <div class="col-md-3">
+        <p><b>What is AFRED?</b></p>
         
-        <!-- Springboard Atlantic. -->
-        <a data-ng-href="http://springboardatlantic.ca" target="_blank" data-ng-show="main.footer.slider.currentImgIndex == 1">
-          <img data-ng-src="images/springboard-200x80.png" alt="Springboard Atlantic Logo">
-        </a>
+        <p><a href="//afred.ca/coming-soon/" target="_blank">Find out what AFRED can do for you!</a></p>
         
-        <!-- NSERC. -->
-        <a data-ng-href="http://www.nserc-crsng.gc.ca" target="_blank" data-ng-show="main.footer.slider.currentImgIndex == 2">
-          <img data-ng-src="images/nserc-200x80.png" alt="NSERC Logo">
-        </a>
+        <p><a href="//afred.ca/coming-soon/#partners-and-supporters" target="_blank">All Partners and Supporters</a></p>
+      </div>
+      
+      <div class="col-md-3">
+        <p><b>Connect with us!</b></p>
         
-        <!-- ACOA. -->
-        <a data-ng-href="http://www.acoa-apeca.gc.ca" target="_blank" data-ng-show="main.footer.slider.currentImgIndex == 3">
-          <img data-ng-src="images/acoa-200x80.png" alt="ACOA Logo">
-        </a>
+        <p><a href="//twitter.com/AFREDatabase" target="_blank"><span class="fa fa-twitter"></span> @AFREDatabase</a></p>
+        
+        <p><b>Sign up for updates!</b></p>
+        
+        <p><a href="//afred.ca/coming-soon" target="_blank"><button class="btn btn-default"><span class="fa fa-envelope-o"></span> Sign up</button></a></p>
+      </div>
+      
+      <div class="col-md-3">
+        <p>
+          <!-- Heading for Science Atlantic. -->
+          <b data-ng-show="main.footer.slider.currentImgIndex == 0">A project of</b>
+          
+          <!-- Heading for the rest. -->
+          <b data-ng-show="main.footer.slider.currentImgIndex > 0">Supported in part by</b>
+        </p>
+        
+        <!-- Slider. -->
+        <div style="min-height: 90px;">
+          <!-- Science Atlantic. -->
+          <a data-ng-href="https://scienceatlantic.ca" target="_blank" data-ng-show="main.footer.slider.currentImgIndex == 0">
+            <img data-ng-src="images/sa-main-logo-200x80.png" alt="Science Atlantic Logo">
+          </a>
+          
+          <!-- Springboard Atlantic. -->
+          <a data-ng-href="http://springboardatlantic.ca" target="_blank" data-ng-show="main.footer.slider.currentImgIndex == 1">
+            <img data-ng-src="images/springboard-200x80.png" alt="Springboard Atlantic Logo">
+          </a>
+          
+          <!-- NSERC. -->
+          <a data-ng-href="http://www.nserc-crsng.gc.ca" target="_blank" data-ng-show="main.footer.slider.currentImgIndex == 2">
+            <img data-ng-src="images/nserc-200x80.png" alt="NSERC Logo">
+          </a>
+          
+          <!-- ACOA. -->
+          <a data-ng-href="http://www.acoa-apeca.gc.ca" target="_blank" data-ng-show="main.footer.slider.currentImgIndex == 3">
+            <img data-ng-src="images/acoa-200x80.png" alt="ACOA Logo">
+          </a>
+        </div>
       </div>
     </div>
+    
+    <p class="text-center text-muted">Copyright &copy; 2004 - {{ main.footer.copyrightEndYear }} Science Atlantic. All Rights Reserved.</p>
   </div>
-  
-  <p class="text-center text-muted">Copyright &copy; 2004 - {{ main.footer.copyrightEndYear }} Science Atlantic. All Rights Reserved.</p>
-</div>
+</footer>

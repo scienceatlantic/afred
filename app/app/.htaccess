@@ -212,7 +212,18 @@ AddDefaultCharset utf-8
     Options +FollowSymlinks
   # Options +SymLinksIfOwnerMatch
     RewriteEngine On
-  # RewriteBase /
+
+    # Force SSL.
+    RewriteCond %{HTTPS} !=on
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Don't rewrite files or directories
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Rewrite everything else to index.html to allow html5 state links.
+    RewriteRule ^ index.html [L]
 </IfModule>
 
 # ------------------------------------------------------------------------------
@@ -331,7 +342,6 @@ AddDefaultCharset utf-8
 #    RewriteCond %{SERVER_PORT} !^443
 #    RewriteRule ^ https://example-domain-please-change-me.com%{REQUEST_URI} [R=301,L]
 # </IfModule>
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # Force client-side SSL redirection.
@@ -357,7 +367,6 @@ AddDefaultCharset utf-8
 # ADD THIS DIRECTIVE IN THE `httpd.conf` AS IT WILL NOT WORK IN THE `.htaccess`!
 
 # ServerTokens Prod
-
 
 # ##############################################################################
 # # WEB PERFORMANCE                                                            #
@@ -401,7 +410,6 @@ AddDefaultCharset utf-8
                                       text/x-component \
                                       text/xml
     </IfModule>
-
 </IfModule>
 
 # ------------------------------------------------------------------------------

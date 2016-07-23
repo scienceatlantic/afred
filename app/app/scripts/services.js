@@ -6,6 +6,11 @@
  * @see https://docs.angularjs.org/guide/services
  */
 
+/* ---------------------------------------------------------------------
+ * Generic injectable modals.
+ * @see https://angular-ui.github.io/bootstrap/#/modal
+ * --------------------------------------------------------------------- */
+
 angular.module('afredApp').service('confirmModal', [
   '$uibModal',
   function($uibModal) {    

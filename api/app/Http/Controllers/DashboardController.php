@@ -17,7 +17,6 @@ use App\FacilityRepository as FR;
 use App\Http\Requests;
 use App\Http\Requests\DashboardRequest;
 
-
 class DashboardController extends Controller
 {
     /**

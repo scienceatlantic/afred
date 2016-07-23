@@ -1,5 +1,12 @@
 'use strict';
 
+/**
+ * @fileoverview Angular controller for the contact Springboard Atlantic modal.
+ *  
+ * @see https://docs.angularjs.org/guide/controller
+ * @see https://angular-ui.github.io/bootstrap/#/modal
+ */
+
 angular.module('afredApp').controller('ContactSpringboardAtlanticModalController', [
   '$scope',
   'emailResource',

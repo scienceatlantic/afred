@@ -1,5 +1,12 @@
 'use strict';
 
+/**
+ * @fileoverview Admin/Dashboard page.
+ * 
+ * @see https://docs.angularjs.org/guide/controller
+ * @see /scripts/routes.js
+ */
+
 angular.module('afredApp').controller('AdminDashboardController',
   ['$scope',
    '$http',
@@ -10,7 +17,7 @@ angular.module('afredApp').controller('AdminDashboardController',
      * --------------------------------------------------------------------- */
     
     // Get the data.
-    $scope.stats = $http.get($scope._config.api.address + '/dashboard');
+    $scope.stats = $http.get($scope._env.api.address + '/dashboard');
     $scope.stats.then(function(response) {
       $scope.stats.data = response.data;
       $scope.loading.stats = false;
