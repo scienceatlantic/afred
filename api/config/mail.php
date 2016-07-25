@@ -122,4 +122,19 @@ return [
 
     'pretend' => false,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Universal "To"
+    |--------------------------------------------------------------------------
+    | 
+    | For development. This becomes the universal recipient for all emails sent
+    | out by the framework.
+    | 
+    */
+
+    'to' => [
+        'address' => env('MAIL_UNIVERSAL_TO_ADDRESS', null),
+        'name' => env('MAIL_UNIVERSAL_TO_NAME', null)
+    ],
+
 ];
