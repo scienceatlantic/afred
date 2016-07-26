@@ -35,13 +35,17 @@ class FacilityController extends Controller
     public function index(FacilityRequest $request)
     {
         if (!($email = $request->email)) {
-            $f = Facility::with('province',
-                                'organization.ilo',
-                                'disciplines',
-                                'sectors',
-                                'primaryContact',
-                                'contacts',
-                                'equipment');
+            $f = Facility::with([
+                'province',
+                'organization.ilo',
+                'disciplines',
+                'sectors',
+                'primaryContact',
+                'contacts',
+                'equipment' => function($query) {
+                    $query->notHidden();
+                }
+            ])->notHidden();
             return $this->pageOrGet($f);            
         }
         return $this->indexMatchingFacilities($email);
@@ -55,20 +59,25 @@ class FacilityController extends Controller
      */
     public function show(FacilityRequest $request, $id)
     {
-        // If an equipment ID is also provided, check that the facility has
-        // that piece of equipment.
-        if ($equipmentId = $request->equipmentId) {
-            Facility::find($id)->equipment()->findOrFail($equipmentId);
-        }
+        $f = Facility::with([
+            'province',
+            'organization.ilo',
+            'disciplines',
+            'sectors',
+            'primaryContact',
+            'contacts',
+            'equipment' => function($query) {
+                $query->notHidden();
+            }          
+        ])->notHidden()->findOrFail($id);
         
-        $f = Facility::with('province',
-                            'organization.ilo',
-                            'disciplines',
-                            'sectors',
-                            'primaryContact',
-                            'contacts',
-                            'equipment')->findOrFail($id)->toArray();        
-        return $this->toCcArray($f);   
+        // If an equipment ID is provided with the request, check that the
+        // equipment exists and it's not hidden.
+        if ($eId = $request->equipmentId) {
+            $f->equipment()->notHidden()->findOrFail($eId);
+        }
+                
+        return $this->toCcArray($f->toArray());   
     }
     
     /**
