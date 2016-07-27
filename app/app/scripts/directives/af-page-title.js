@@ -46,6 +46,10 @@ angular.module('afredApp').directive('afPageTitle', [
           var separator = titleElement.getAttribute('data-separator');
 
           attrs.$observe('afPageTitle', function(pageTitle) {
+            if (!pageTitle) {
+              return;
+            }
+
             titleElement.innerHTML = pageTitle;
             if (baseTitle) {
                 if (separator) {
