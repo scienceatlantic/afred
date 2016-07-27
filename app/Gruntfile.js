@@ -16,7 +16,7 @@ module.exports = function (grunt) {
   require('time-grunt')(grunt);
 
   // Modrewrite module so that Grunt works with HTML5 pushstate.
-  // @see http://stackoverflow.com/questions/25401114/livereload-html5-pushstate-with-angularjs-ui-router-and-yeoman
+  // @see https://gist.github.com/nnarhinen/7719157
   // @see https://docs.angularjs.org/guide/$location (part about Hashbang and HTML5 Modes)
   var modRewrite = require('connect-modrewrite');
 
@@ -82,7 +82,7 @@ module.exports = function (grunt) {
           middleware: function (connect) {
             return [
               // This line was taken from:
-              // http://stackoverflow.com/questions/25401114/livereload-html5-pushstate-with-angularjs-ui-router-and-yeoman
+              // https://gist.github.com/nnarhinen/7719157
               modRewrite(['^[^\\.]*$ /index.html [L]']),
 
               connect.static('.tmp'),
