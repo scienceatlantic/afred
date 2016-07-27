@@ -320,23 +320,5 @@ angular.module('afredApp').run(['$rootScope',
         }
       }
     };
-
-    /* ---------------------------------------------------------------------
-     * Page titles.
-     *
-     * Will update the page titles to match the current state if the current
-     * state has a 'pageTitle' property. 
-     * 
-     * @see routes.js ('data.pageTitle' properties).
-     * --------------------------------------------------------------------- */
-    
-    // Save the unmodified page title first before making any changes.
-    var upt = angular.element('title').text();
-    
-    // Update the page title on every successful state change.
-    $rootScope.$on('$stateChangeSuccess', function() {
-      var pt = $rootScope._state.current.data.pageTitle;
-      angular.element('title').html(pt ? pt + ' | ' + upt : upt);
-    });
   }
 ]);
