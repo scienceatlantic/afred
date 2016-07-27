@@ -41,24 +41,42 @@ angular.module('afredApp').directive('afPageTitle', [
        * title + separator + data-base-title
        */
       link: function($scope, element, attrs) {
-          var titleElement = document.getElementsByTagName('title')[0];
-          var baseTitle = titleElement.getAttribute('data-base-title');
-          var separator = titleElement.getAttribute('data-separator');
+        var titleElement = document.getElementsByTagName('title')[0];
+        var baseTitle = titleElement.getAttribute('data-base-title');
+        var separator = titleElement.getAttribute('data-separator');
 
-          attrs.$observe('afPageTitle', function(pageTitle) {
-            if (!pageTitle) {
-              return;
-            }
+        // First method for updating the page title checks if the 'afPageTitle'
+        // property has changed.
+        attrs.$observe('afPageTitle', function(pageTitle) {
+          if (pageTitle) {
+            $scope.updateTitle(pageTitle);
+          }
+        });
 
-            titleElement.innerHTML = pageTitle;
-            if (baseTitle) {
-                if (separator) {
-                    titleElement.innerHTML += separator + baseTitle;
-                } else {
-                    titleElement.innerHTML += ' | ' + baseTitle;
-                }
-            }
-          })
+        // Second method for updating the page title checks if the state has
+        // has changed (this is required when we are moving back and forth
+        // between child states).
+        $scope.$on('$stateChangeSuccess', function() {
+          if ($scope.title) {
+            $scope.updateTitle($scope.title);
+          }
+        });
+
+        /**
+         * Updates the 'title' HTML element.
+         * 
+         * @param {string} pageTitle Title
+         */
+        $scope.updateTitle = function(pageTitle) {
+          titleElement.innerHTML = pageTitle;
+          if (baseTitle) {
+              if (separator) {
+                  titleElement.innerHTML += separator + baseTitle;
+              } else {
+                  titleElement.innerHTML += ' | ' + baseTitle;
+              }
+          }
+        };
       }
     };
   }
