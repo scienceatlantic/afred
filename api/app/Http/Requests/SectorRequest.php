@@ -31,7 +31,6 @@ class SectorRequest extends Request
         $r = [];
         switch ($this->method()) {            
             case 'PUT':
-                $r['id'] = 'required|exists:sectors,id';
                 // No break.
             case 'POST':
                 $r['name'] = 'required';

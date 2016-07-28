@@ -31,7 +31,6 @@ class IloRequest extends Request
         $r = [];
         switch ($this->method()) {
             case 'PUT':
-                $r['id'] = 'required|exists:ilos,id';
                 // No break.
             case 'POST':
                 $r['organizationId'] = 'required|exists:organizations,id';

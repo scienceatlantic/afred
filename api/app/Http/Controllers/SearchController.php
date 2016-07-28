@@ -51,10 +51,12 @@ class SearchController extends Controller
         
         // Load required relationships.
         if ($type == 'facility') {
-            $results = Facility::with('organization', 'province');
+            $results = Facility::with('organization', 'province')->notHidden();
         } else {
+            $facilityIds = Facility::hidden()->select('id')->get();
             $results = Equipment::with('facility.organization',
-                                       'facility.province');
+                'facility.province')->notHidden()
+                ->whereNotIn('facilityId', $facilityIds);
         }
         
         // Search.
@@ -77,7 +79,8 @@ class SearchController extends Controller
                 'equipment.manufacturer'          => 20,
                 'equipment.model'                 => 20,
                 'equipment.purposeNoHtml'         => 20,
-                'equipment.specificationsNoHtml'  => 20
+                'equipment.specificationsNoHtml'  => 20,
+                'equipment.keywords'              => 20
             ]);
         } else if ($type == 'equipment' && $q) {
             $results->search($q, [
@@ -86,6 +89,7 @@ class SearchController extends Controller
                 'model'                      => 15,
                 'purposeNoHtml'              => 25,
                 'specificationsNoHtml'       => 20,
+                'keywords'                   => 20,
                 
                 'facility.name'              => 25,
                 'facility.city'              => 1,

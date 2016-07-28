@@ -31,7 +31,6 @@ class DisciplineRequest extends Request
         $r = [];
         switch ($this->method()) {            
             case 'PUT':
-                $r['id'] = 'required|exists:disciplines,id';
                 // No break.
             case 'POST':
                 $r['name'] = 'required';

@@ -31,7 +31,6 @@ class FacilityRequest extends Request
         $r = [];
         switch ($this->method()) {
             case 'PUT':
-                $r['id'] = 'required|exists:facilities,id';
                 $r['isPublic'] = 'required|digits_between:{0,1}';
                 break;
         }

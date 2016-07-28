@@ -31,7 +31,6 @@ class OrganizationRequest extends Request
         $r = [];
         switch ($this->method()) {            
             case 'PUT':
-                $r['id'] = 'required|exists:organizations,id';
                 // No break.
             case 'POST':
                 $r['name'] = 'required';
