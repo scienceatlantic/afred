@@ -4,14 +4,17 @@
  * @fileoverview Updates the 'title' HTML element of a page.
  * 
  * Example usage:
- * <p data-af-page-title="about"></p>
+ * In the "head" section:
+ * <title data-af-page-title-base="AFRED" data-af-page-title-separator=" | ">AFRED</title>
+ * 
+ * And somewhere in the "body":
+ * <p data-af-page-title="About"></p>
  * 
  * @see https://docs.angularjs.org/guide/directive
  */
 
 angular.module('afredApp').directive('afPageTitle', [
-  '$rootScope',
-  function($rootScope) {
+  function() {
     return {
       restrict: 'A',
       replace: true,
@@ -28,22 +31,31 @@ angular.module('afredApp').directive('afPageTitle', [
        * 'title' HTML element must exist.
        * 
        * Optionally:
-       * 'data-base-title' - Attribute on the 'title' element.
+       * 'af-page-title-base' - Attribute on the 'title' element.
        * 
        * If found, the title will be updated like this:
-       * title + ' | ' + data-base-title
+       * title + ' | ' + af-page-title-base
        * 
-       * 'data-separator' - Attribute on the 'title' element. Default is ' | '.
-       * This attribute requires that the 'data-base-title' attribute be set 
-       * otherwise this attribute is ignored.
+       * 'af-page-title-separator' - Attribute on the 'title' element. Default 
+       * is ' | '. This attribute requires that the 'af-page-title-base' 
+       * attribute be set otherwise this attribute is ignored.
        * 
        * If found, the title will be updated like this:
-       * title + separator + data-base-title
+       * title + af-page-title-separator + af-page-title-base
        */
       link: function($scope, element, attrs) {
+        var p = 'af-page-title';
         var titleElement = document.getElementsByTagName('title')[0];
-        var baseTitle = titleElement.getAttribute('data-base-title');
-        var separator = titleElement.getAttribute('data-separator');
+        var base = titleElement.getAttribute('data-' + p + '-base');
+        var separator = titleElement.getAttribute('data-' + p + '-separator');
+
+        // The attributes can also be retrieved without the 'data-' prefix.
+        if (!base) {
+          base = titleElement.getAttribute(p + '-base'); 
+        }
+        if (!separator) {
+          separator = titleElement.getAttribute(p + '-separator');
+        }
 
         // First method for updating the page title checks if the 'afPageTitle'
         // property has changed.
@@ -69,11 +81,11 @@ angular.module('afredApp').directive('afPageTitle', [
          */
         $scope.updateTitle = function(pageTitle) {
           titleElement.innerHTML = pageTitle;
-          if (baseTitle) {
+          if (base) {
               if (separator) {
-                  titleElement.innerHTML += separator + baseTitle;
+                  titleElement.innerHTML += separator + base;
               } else {
-                  titleElement.innerHTML += ' | ' + baseTitle;
+                  titleElement.innerHTML += ' | ' + base;
               }
           }
         };
