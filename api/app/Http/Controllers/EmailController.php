@@ -37,7 +37,7 @@ class EmailController extends Controller
             'template' => 'emails.events.email.message',
             
             // Email subject.
-            'subject'  => Setting::find('emailSubjectPrefix')->value,
+            'subject'  => Setting::lookup('emailSubjectPrefix'),
             
             // Email template data.
             'data'     => [
@@ -72,8 +72,8 @@ class EmailController extends Controller
                 $e['data']['subject'] = $r->subject;
                 $e['data']['from'] = $r->name . ' (' . $r->email . ')';
                 array_push($e['to'], [
-                    'name'  => Setting::find('contactFormName')->value,
-                    'email' => Setting::find('contactFormEmail')->value
+                    'name'  => Setting::lookup('contactFormName'),
+                    'email' => Setting::lookup('contactFormEmail')
                 ]);
                 $e['replyTo']['email'] = $r->email;
                 $e['replyTo']['name'] = $r->name;
@@ -90,8 +90,8 @@ class EmailController extends Controller
                 
                 // To Springboard Atlantic.
                 array_push($e['to'], [
-                    'name'  => Setting::find('springboardFormName')->value,
-                    'email' => Setting::find('springboardFormEmail')->value
+                    'name'  => Setting::lookup('springboardFormName'),
+                    'email' => Setting::lookup('springboardFormEmail')
                 ]);
                 
                 // Bcc all admins.

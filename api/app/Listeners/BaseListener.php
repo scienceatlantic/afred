@@ -15,18 +15,18 @@ abstract class BaseListener
     
     public function __construct()
     {
-        $this->settings = [
-            'appName'                 => Setting::find('appName')->value,
-            'appShortName'            => Setting::find('appShortName')->value,
-            'appAddress'              => Setting::find('appAddress')->value,
-            'emailSubjectPrefix'      => Setting::find('emailSubjectPrefix')->value,
-            'generalContactEmail'     => Setting::find('generalContactEmail')->value,
-            'generalContactTelephone' => Setting::find('generalContactTelephone')->value,
-            'personalContactName'     => Setting::find('personalContactName')->value,
-            'personalContactTitle'    => Setting::find('personalContactTitle')->value,
-            'personalContactEmail'    => Setting::find('personalContactEmail')->value,
-            'twitterHandle'           => Setting::find('twitterHandle')->value
-        ];
+        $this->settings = Setting::lookup([
+            'appName',
+            'appShortName',
+            'appAddress',
+            'emailSubjectPrefix',
+            'generalContactEmail',
+            'generalContactTelephone',
+            'personalContactName',
+            'personalContactTitle',
+            'personalContactEmail',
+            'twitterHandle'
+        ]);
     }
     
     protected function mail($template,
@@ -38,7 +38,7 @@ abstract class BaseListener
                              $replyTo = null)
     {
         try {
-            Mail::send(['text' => $template], $data, function($message)
+            Mail::queue(['text' => $template], $data, function($message)
                 use ($subject, $to, $cc, $bcc, $replyTo) {
                     $recipients = [
                         'to'  => $to,
