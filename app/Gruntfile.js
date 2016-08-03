@@ -15,7 +15,7 @@ module.exports = function (grunt) {
   // Time how long tasks take. Can help when optimizing build times
   require('time-grunt')(grunt);
 
-  // Modrewrite module so that Grunt works with HTML5 pushstate.
+  // Modrewrite module so that Grunt (`grunt serve`) works with HTML5 pushstate.
   // @see https://gist.github.com/nnarhinen/7719157
   // @see https://docs.angularjs.org/guide/$location (part about Hashbang and HTML5 Modes)
   var modRewrite = require('connect-modrewrite');
