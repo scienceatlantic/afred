@@ -13,8 +13,20 @@ class CreateSettingsTable extends Migration
     public function up()
     {
         Schema::create('settings', function (Blueprint $table) {
-            $table->string('name')->primary();
-            $table->string('value');
+            $table->increments('id');
+            $table->string('name')->unique();
+            $table->enum('type', ['INT',
+                                  'BOOLEAN',
+                                  'DOUBLE',
+                                  'DATE',
+                                  'DATETIME',
+                                  'EMAIL',
+                                  'URL',
+                                  'STRING',
+                                  'TEXT',
+                                  'JSON',
+                                  'JSONTEXT']);
+            $table->string('value', 255)->nullable();
             $table->dateTime('dateCreated');
             $table->dateTime('dateUpdated');
         });
