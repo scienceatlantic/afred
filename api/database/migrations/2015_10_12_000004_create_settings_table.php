@@ -14,7 +14,7 @@ class CreateSettingsTable extends Migration
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name')->unique();
+            $table->string('name', 255)->unique();
             $table->enum('type', ['INT',
                                   'BOOLEAN',
                                   'DOUBLE',

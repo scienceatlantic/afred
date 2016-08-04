@@ -34,7 +34,7 @@ class SettingsTableSeeder extends Seeder
         ], [
             'name'        => 'appAddress',
             'type'        => 'URL',
-            'value'       => 'https://afred.ca/app',
+            'value'       => 'https://afred.ca',
             'dateCreated' => $now,
             'dateUpdated' => $now
         ], [
@@ -109,6 +109,59 @@ class SettingsTableSeeder extends Seeder
             'value'       => 'Springboard Atlantic',
             'dateCreated' => $now,
             'dateUpdated' => $now
+        ], [
+            'name'        => 'sitemapFilename',
+            'type'        => 'STRING',
+            'value'       => 'D:\Prasad\Documents\Files\Workspace\sitemap.xml',
+            'dateCreated' => $now,
+            'dateUpdated' => $now
+        ], [
+            'name'        => 'sitemapFixedUrls',
+            'type'        => 'JSONTEXT',
+            'value'       => null,
+            'dateCreated' => $now,
+            'dateUpdated' => $now
+        ], [
+            'name'        => 'sitemapPing',
+            'type'        => 'STRING',
+            'value'       => '/sitemap.xml',
+            'dateCreated' => $now,
+            'dateUpdated' => $now
+        ], [
+            'name'        => 'sitemapPingServices',
+            'type'        => 'JSONTEXT',
+            'value'       => null,
+            'dateCreated' => $now,
+            'dateUpdated' => $now
         ]]);
+
+        // Sitemap fixed Urls.
+        $id = DB::table('settings')->where('name', 'sitemapFixedUrls')
+            ->pluck('id');
+        DB::table('settings_text')->insert([
+            'settingId' => $id,
+            'value'     => json_encode([
+                '/search',
+                '/facilities/form/create',
+                '/facilities/form/guide',
+                '/facilities/update',
+                '/about',
+                '/about/legal/privacy-policy',
+                '/about/legal/terms-of-service',
+                '/about/legal/disclaimer',
+                '/contact'
+            ])
+        ]);
+
+        // Sitemap ping services.
+        $id = DB::table('settings')->where('name', 'sitemapPingServices')
+            ->pluck('id');
+        DB::table('settings_text')->insert([
+            'settingId' => $id,
+            'value'     => json_encode([
+                'http://google.com/ping?sitemap=',
+                'http://bing.com/ping?sitemap=',
+            ])
+        ]);      
     }
 }
