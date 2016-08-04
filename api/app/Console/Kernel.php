@@ -6,9 +6,6 @@ namespace App\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
-// Misc.
-//use Artisan;
-
 class Kernel extends ConsoleKernel
 {
     /**
@@ -19,6 +16,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         \App\Console\Commands\Inspire::class,
         \App\Console\Commands\GenerateSitemap::class,
+        \App\Console\Commands\JobCron::class,
     ];
 
     /**
@@ -29,8 +27,6 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // Run the queued jobs.
-        //Artisan::call('queue:restart');
-        //Artisan::call('queue:listen');
+        //
     }
 }
