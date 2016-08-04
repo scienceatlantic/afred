@@ -104,6 +104,15 @@ Route::resource('facility-repository', 'FacilityRepositoryController', [
 
                
 /******************************************************************************
+ * Setting routes.
+ *****************************************************************************/
+ Route::resource('settings', 'SettingController', [
+	'only' => ['index',
+			   'show',
+               'update']]);
+
+
+/******************************************************************************
  * Facility update link routes.
  *****************************************************************************/
  Route::resource('facility-update-links', 'FacilityUpdateLinkController', [
