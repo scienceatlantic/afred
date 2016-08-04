@@ -32,8 +32,13 @@ angular.module('afredApp').controller('MainController',
          * Credit: https://github.com/twbs/bootstrap/issues/12852#issuecomment-36163121
          */
         toggle: function() {
-          angular.element('.navbar-nav li a').click(function() {
-            angular.element('.navbar-collapse').collapse('hide');
+          angular.element('.navbar-nav li a').click(function(e) {
+            // Do not hide the navbar if the element that was clicked is a 
+            // dropdown element that contains more nav options.
+            var eClass = e.target.className;
+            if (eClass != 'caret' && eClass != 'dropdown-toggle') {
+              angular.element('.navbar-collapse').collapse('hide');
+            }
           });
         }
       },
