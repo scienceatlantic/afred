@@ -131,7 +131,7 @@ class GenerateSitemap extends Command
             if ($this->areFilesDiff($smFilename, $smFilename . '-new')) {
                 rename($smFilename . '-new', $smFilename);
                 $this->info('Sitemap generated.');
-                $this->ping($ping);
+                $this->ping($base, $ping);
             } else {
                 unlink($smFilename . '-new');
                 $this->info('No change to sitemap.');
@@ -182,13 +182,15 @@ class GenerateSitemap extends Command
                 $ch = curl_init($service . $base . $sitemap);
                 curl_exec($ch);
                 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-                curl_close($ch);
-
+                
                 if ($httpCode >= 200 && $httpCode < 300) {
                     Log::debug('Sitemap: pinged!');
                 } else {
+                    Log::debug(curl_error($ch));
                     Log::debug('Sitemap: failed to ping!');
                 }
+
+                curl_close($ch);
             }
         }
     }
