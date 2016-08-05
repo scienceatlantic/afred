@@ -160,7 +160,7 @@ class SettingsTableSeeder extends Seeder
             'settingId' => $id,
             'value'     => json_encode([
                 'http://google.com/ping?sitemap=',
-                'http://bing.com/ping?sitemap=',
+                'http://www.bing.com/ping?sitemap=',
             ])
         ]);      
     }
