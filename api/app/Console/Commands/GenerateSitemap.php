@@ -46,39 +46,25 @@ class GenerateSitemap extends Command
      */
     public function handle()
     {
-        // Flags.
-        // Add 'lastmod' tags to sitemap. Default is false.
-        $addLastmod = false;
+        // Parameters.
+        $addFacilityLastMod     = false;
+        $addFacilityPriority    = false;
+        $addFacilityChangeFreq  = false;
+        $addEquipmentLastMod    = false;
+        $addEquipmentPriority   = false;
+        $addEquipmentChangeFreq = false;
 
-        // Hard-coded (i.e. not from database) URLs.
-        $fixedUrls = [
-            '/search',
-            '/facilities/form/create',
-            '/facilities/update',
-            '/about',
-            '/about/legal/privacy-policy',
-            '/about/legal/terms-of-service',
-            '/about/legal/disclaimer',
-            '/contact'
-        ];
-
-        // If sitemap filename is not set in .env, quit.
-        if (!($smFilename = env('_SITEMAP_FILENAME'))) {
-            $msg = '"_SITEMAP_FILENAME" key not found in ".env". Exiting...';
-            $this->error($msg);
-            return;
-        }
-
-        // Get app address (base of all URLs).
-        try {
-            $base = Setting::find('appAddress')->value;
-        } catch (Exception $e) {
-            $msg = 'Failed to retrieve "appAddress" from Settings table.'
-                 . 'Exiting...';
-            Log::error($msg);
-            $this->error($msg);
-            return;
-        }
+        // Sitemap settings from database.
+        $smDbSettings = Setting::lookup([
+            'appAddress',
+            'sitemapFilename',
+            'sitemapFixedUrls',
+            'sitemapPing'
+        ]);
+        $base = $smDbSettings['appAddress'];
+        $smFilename = $smDbSettings['sitemapFilename'];
+        $fixedUrls = $smDbSettings['sitemapFixedUrls'];
+        $ping = $smDbSettings['sitemapPing'];
 
         // Create XML object.
         $sm = '<?xml version="1.0" encoding="UTF-8"?>';
@@ -88,47 +74,124 @@ class GenerateSitemap extends Command
 
         // Insert fixed URLs.
         foreach($fixedUrls as $url) {
-            $urlElement = $sm->addChild('url');
-            $locElement = $urlElement->addChild('loc', $base . $url);
+            $urlElmt = $sm->addChild('url');
+            $urlElmt->addChild('loc', $base . $url);
         }
 
         // Insert dynamic (public facilities and equipment) URLs.
-        foreach(Facility::notHidden()->with('equipment')->get() as $f) {
+        $facilities = Facility::notHidden()->with([
+            'equipment' => function($query) {
+                $query->notHidden();
+            }
+        ])->get();
+        foreach($facilities as $f) {
             // Insert public facility URL and lastmod.
-            // I.e. https://server/facilities{f-id}.
+            // I.e. https://appAddress/facilities/{f-id}.
             $fUrl = $base . '/facilities/' . $f->id;
-            $urlElement = $sm->addChild('url');
-            $urlElement->addChild('loc', $fUrl);
-            if ($addLastmod) {
+            $urlElmt = $sm->addChild('url');
+            $urlElmt->addChild('loc', $fUrl);
+            if ($addFacilityLastMod) {
                 $lastMod = $f->dateUpdated->toIso8601String();
-                $urlElement->addChild('lastmod', $lastMod);
+                $urlElmt->addChild('lastmod', $lastMod);
+            }
+            if ($addFacilityChangeFreq) {
+                $urlElmt->addChild('changefreq', $addEquipmentChangeFreq);
+            }
+            if ($addFacilityPriority) {
+                $urlElmt->addChild('priority', $addFacilityPriority);
             }
 
             // Insert public equipment URLs lastmods.
-            // I.e. https://server/facilities/{f-id}/equipment/{e-id}.
+            // I.e. https://appAddress/facilities/{f-id}/equipment/{e-id}.
             foreach($f->equipment as $e) {
-                if ($e->isPublic) {
-                    $eUrl = $fUrl . '/equipment/' . $e->id;
-                    $urlElement = $sm->addChild('url');
-                    $urlElement->addChild('loc', $eUrl);
-                    if ($addLastmod) {
-                        $urlElement->addChild('lastmod', $lastMod);
-                    }
+                $eUrl = $fUrl . '/equipment/' . $e->id;
+                $urlElmt = $sm->addChild('url');
+                $urlElmt->addChild('loc', $eUrl);
+                if ($addEquipmentLastMod) {
+                    $urlElmt->addChild('lastmod', $lastMod);
+                }
+                if ($addEquipmentChangeFreq) {
+                    $urlElmt->addChild('changefreq', $addEquipmentChangeFreq);
+                }
+                if ($addEquipmentPriority) {
+                    $urlElmt->addChild('priority', $addEquipmentPriority);
                 }
             }
         }
 
         // Create sitemap file.
         try {
-            $handle = fopen($smFilename, 'w');
+            $handle = fopen($smFilename . '-new', 'w');
             fwrite($handle, $sm->asXML());
             fclose($handle);
+
+            // Check if the files are different, if they are, override the 
+            // existing sitemap, if they are not, discard the sitemap that was
+            // just generated.
+            if ($this->areFilesDiff($smFilename, $smFilename . '-new')) {
+                rename($smFilename . '-new', $smFilename);
+                $this->info('Sitemap generated.');
+                $this->ping($base, $ping);
+            } else {
+                unlink($smFilename . '-new');
+                $this->info('No change to sitemap.');
+            }
+
+            Log::debug('sitemap:generate');
         } catch (Exception $e) {
-            $msg = 'Failed to write:' . $smFileName . '. Exiting...';
-            $this->error($msg);
+            $this->error($e->getMessage());
             return;
         }
+    }
 
-        $this->info('Sitemap generated.');
+    private static function areFilesDiff($f1, $f2) 
+    {
+        if (file_exists($f1) && file_exists($f2)) {
+            $f1Size = filesize($f1);
+            $f2Size = filesize($f2);
+
+            // Filesize check.
+            if ($f1Size != $f2Size) {
+                return true;
+            }
+
+            // If the filesizes are the same, then go through the the files byte
+            // by byte.
+            $f1Handle = fopen($f1, 'r');
+            $f2Handle = fopen($f2, 'r');
+            while (!feof($f1Handle)) {
+                if (fread($f1Handle, $f1Size) != fread($f2Handle, $f2Size)) {                    
+                    return true; // Files are not the same.
+                }
+            }
+            fclose($f1Handle);
+            fclose($f2Handle);
+
+            return false; // Files are the same.
+        }
+
+        // If any of the files do not exist, assume they are different.
+        return true;
+    }
+
+    private static function ping($base, $sitemap = null)
+    {
+        if ($sitemap) {
+            $services = Setting::lookup('sitemapPingServices');
+            foreach($services as $service) {
+                $ch = curl_init($service . $base . $sitemap);
+                curl_exec($ch);
+                $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                
+                if ($httpCode >= 200 && $httpCode < 300) {
+                    Log::debug('Sitemap: pinged!');
+                } else {
+                    Log::debug(curl_error($ch));
+                    Log::debug('Sitemap: failed to ping!');
+                }
+
+                curl_close($ch);
+            }
+        }
     }
 }

@@ -10,7 +10,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 // Models.
-use App\Setting;
 use App\Role;
 
 // Misc.

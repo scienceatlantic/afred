@@ -11,7 +11,6 @@ use Log;
 use Mail;
 
 // Models.
-use App\Setting;
 use App\Role;
 use App\Events\FacilityRepositoryEvent;
 
