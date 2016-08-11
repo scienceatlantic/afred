@@ -766,6 +766,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
        * 
        * Uses/calls/requires:
        * $scope.form.data
+       * $scope.form.removeEmptyElements()
        * 
        * @return {object} Facility data in this format:
        *     {
@@ -798,28 +799,35 @@ angular.module('afredApp').controller('FacilitiesFormController',
        *     }
        */
       formatForPreview: function() {
-        var facility = angular.copy($scope.form.data.facility);
-        facility.disciplines = $scope.form.getSelectedDisciplines();
-        facility.sectors = $scope.form.getSelectedSectors();
-        facility.primaryContact = angular.copy($scope.form.data.primaryContact);
-        facility.contacts = angular.copy($scope.form.data.contacts);
-        facility.equipment = angular.copy($scope.form.data.equipment);
+        var f = angular.copy($scope.form.data.facility);
+        f.disciplines = $scope.form.getSelectedDisciplines();
+        f.sectors = $scope.form.getSelectedSectors();
+        f.primaryContact = angular.copy($scope.form.data.primaryContact);
+        f.contacts = angular.copy($scope.form.data.contacts);
+        f.equipment = angular.copy($scope.form.data.equipment);
         
         // Organization section. Grabs the selected organization's data if 
         // an existing organization was selected, otherwise the name of the new
         // organization is copied.
         if ($scope.form.data.facility.organizationId > 0) {
           var e = document.getElementById('facility-organization');
-          facility.organization = $scope.form.organizations[e.selectedIndex];
+          f.organization = $scope.form.organizations[e.selectedIndex];
         } else if ($scope.form.data.facility.organizationId == -1) {
-          facility.organization = $scope.form.data.organization;
+          f.organization = $scope.form.data.organization;
         }
         
         // Province section. Grabs the selected province's data.
         var e = document.getElementById('facility-province');
-        facility.province = $scope.form.provinces[e.selectedIndex];
+        f.province = $scope.form.provinces[e.selectedIndex];
           
-        return facility;
+        // Remove any empty HTML elements from the TextAngular fields.
+        f.description = $scope.form.removeEmptyElements(f.description);
+        angular.forEach(f.equipment, function(e) {
+          e.purpose = $scope.form.removeEmptyElements(e.purpose);
+          e.specifications = $scope.form.removeEmptyElements(e.specifications);
+        });
+
+        return f;
       },
       
       /**
@@ -851,8 +859,36 @@ angular.module('afredApp').controller('FacilitiesFormController',
         
         // The first contact is the primary contact.
         data.primaryContact = (data.contacts.splice(0, 1))[0];
+
+        // Remove any empty HTML elements.
+        data.facility.description = $scope.form.removeEmptyElements(
+          data.facility.description);
+        angular.forEach(data.equipment, function(e) {
+          e.purpose = $scope.form.removeEmptyElements(e.purpose);
+          e.specifications = $scope.form.removeEmptyElements(e.specifications);
+        });
         
         return data;
+      },
+
+      /**
+       * Removes any empty HTML elements.
+       * 
+       * Credit: http://stackoverflow.com/a/19951411
+       * 
+       * @param {string} html
+       * 
+       * @return {string|null} Formatted HTML string if the results of the
+       *     processing returned a non-empty string, null otherwise.
+       */
+      removeEmptyElements: function(html) {
+        var e = angular.element(document.createElement('div'));
+        e.append(html).children().each(function() {
+          if (angular.element(this).text().trim() == '') {
+            angular.element(this).remove();
+          }
+        });      
+        return e.children().length > 0 ? e.html() : null;
       },
       
       /**
