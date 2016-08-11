@@ -73,7 +73,7 @@ class JobCron extends Command
                 'cronJobNumCycles' => $num
             ]);
             return 1;
-        } else if ($num >= 6) {
+        } else if ($num > 6) {
             Log::warning('Number of cycles more than 6.', [
                 'cronJobNumCycles' => $num
             ]);
@@ -90,7 +90,7 @@ class JobCron extends Command
                 'cronJobSleepDuration' => $num
             ]);
             return 1;
-        } else if ($num >= 150) {
+        } else if ($num > 150) {
             Log::warning('Sleep duration more than 150.', [
                 'cronJobSleepDuration' => $num
             ]);
