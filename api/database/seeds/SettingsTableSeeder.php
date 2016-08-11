@@ -133,6 +133,18 @@ class SettingsTableSeeder extends Seeder
             'value'       => null,
             'dateCreated' => $now,
             'dateUpdated' => $now
+        ], [
+            'name'        => 'cronJobNumCycles',
+            'type'        => 'INT',
+            'value'       => 6,
+            'dateCreated' => $now,
+            'dateUpdated' => $now
+        ], [
+            'name'        => 'cronJobSleepDuration',
+            'type'        => 'INT',
+            'value'       => 150,
+            'dateCreated' => $now,
+            'dateUpdated' => $now
         ]]);
 
         // Sitemap fixed Urls.
