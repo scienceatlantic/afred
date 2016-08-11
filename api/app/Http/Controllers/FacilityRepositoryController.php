@@ -63,7 +63,7 @@ class FacilityRepositoryController extends Controller
                 $fr->rejected(true);
                 break;
             case 'DELETED':
-                $fr->deleted();
+                $fr->removed();
                 break;
         }
         
