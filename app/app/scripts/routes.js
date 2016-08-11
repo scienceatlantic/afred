@@ -287,6 +287,9 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
       }).
       state('error.500', {
         templateUrl: 'views/error.500.html'
+      }).
+      state('error.503', {
+        templateUrl: 'views/error.503.html'
       });
   }
 ]);

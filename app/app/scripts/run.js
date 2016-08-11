@@ -225,6 +225,7 @@ angular.module('afredApp').run(['$rootScope',
         case '403':
         case '404':
         case '500':
+        case '503':
           $rootScope._state.go('error.' + statusCode);
           break;
         
