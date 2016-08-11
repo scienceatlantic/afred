@@ -34,7 +34,7 @@ class DashboardController extends Controller
                     'private' => FR::published(false)->count(),
                 ],
                 'pendingApproval'     => FR::pendingApproval(false)->count(),
-                'pendingEditApproval' => FR::pendingApproval(true)->count(),
+                'pendingEditApproval' => FR::pendingEditApproval()->count(),
                 'rejected'            => FR::rejected(false)->count(),
                 'rejectedEdit'        => FR::rejected(true)->count(),
                 'deleted'             => FR::removed()->count()
