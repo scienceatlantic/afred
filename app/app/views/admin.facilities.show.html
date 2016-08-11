@@ -33,13 +33,15 @@
             </span>
             
             <!-- Rejected edit. -->
-            <span class="text-danger" data-ng-show="facility.state == 'REJECTED_EDIT'">
+            <span class="text-danger" data-ng-show="facility.state == 'REJECTED_EDIT' && fr.facility.id">
               REJECTED EDIT
             </span>
             
             <!-- Deleted. -->
             <span class="text-danger" data-ng-show="(facility.state != 'PENDING' && facility.state != 'PENDING_APPROVAL' && facility.state != 'REJECTED') && !fr.facility.id">
-              DELETED
+              DELETED 
+              <span class="label label-default" data-ng-show="facility.state == 'PUBLISHED_EDIT'">Edit</span>
+              <span class="label label-default" data-ng-show="facility.state == 'REJECTED_EDIT'">Rejected edit</span>
             </span>
           </b>
         </p>
@@ -99,7 +101,14 @@
       </div>
     
       <div class="col-sm-9">
-        {{ fr.reviewerMessage }}
+        <!-- 
+          -- The 'ngShow' directive prevents the reviewer message from being
+          -- displayed as the admin is typing out the message (since it's 
+          -- updating the actual `$scope.fr` object and not a copy of it) below 
+          -- unless it has already been reviewed.
+          -->
+        <span data-ng-show="fr.reviewer.firstName">{{ fr.reviewerMessage }}</span>
+
         <span class="label label-default" data-ng-show="!fr.reviewer.firstName">N/A</span>
         <span class="label label-default" data-ng-show="fr.reviewer.firstName && !fr.reviewerMessage">No message was provided</span>        
       </div>
