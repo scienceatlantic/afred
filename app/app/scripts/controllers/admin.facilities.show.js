@@ -466,7 +466,7 @@ angular.module('afredApp').controller('AdminFacilitiesShowController', [
     $scope.fr = {};
     
     /**
-     * Facility data.
+     * Formatted facility data.
      *
      * @type {object}
      */
