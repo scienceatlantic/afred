@@ -1,7 +1,10 @@
-<div data-af-facility="facility" data-af-facility-model="facility" data-af-facility-is-preview="true"></div>
+<!-- Facility. -->
+<div data-af-facility="facility" data-af-facility-model="facility" data-af-facility-is-preview="true" data-af-facility-is-new-organization="!(facility.organization.id > 0)"></div>
 
+<!-- Contacts. -->
 <div data-af-facility="contacts" data-af-facility-model="facility" data-af-facility-is-preview="true"></div>
 
+<!-- ILO (if applicable). -->
 <div data-ng-show="facility.organization.ilo.firstName">
   <p>
     Your organization has an office that supports the development of research
@@ -14,25 +17,28 @@
   <div data-af-facility="ilo" data-af-facility-model="facility" data-af-facility-is-preview="true"></div>
 </div>
     
+<!-- Equipment. -->
 <div data-af-facility="equipment" data-af-facility-model="facility" data-af-facility-is-preview="true"></div>
 
+<!-- Legal. -->
 <form name="legalForm" novalidate>
   <br>
-  
   <p>Please confirm that you have read and agreed to the following:</p>
   
+  <!-- Terms of service checkbox. -->
   <div class="checkbox">
     <label>
       <input type="checkbox" name="termsOfService" data-ng-model="legal.termsOfService" required> Terms of Service (<a data-ui-sref="about.legal.termsOfService" target="_blank">here</a>)
     </label>
   </div>
   
+  <!-- Privacy policy checkbox. -->
   <div class="checkbox">
     <label>
       <input type="checkbox" name="privacyPolicy" data-ng-model="legal.privacyPolicy" required> Privacy Policy (<a data-ui-sref="about.legal.privacyPolicy" target="_blank">here</a>)
     </label>
   </div>
-  
+
   <br>
   
   <p>

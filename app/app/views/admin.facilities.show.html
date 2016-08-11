@@ -130,15 +130,15 @@
   <br>
   <br>
   
-  <!-- Facility information -->
-  <div data-af-facility="all" data-af-facility-model="facility" data-af-facility-is-preview="true"></div>
+  <!-- Facility information. -->
+  <div data-af-facility="all" data-af-facility-model="facility" data-af-facility-is-preview="true" data-af-facility-is-new-organization="!(facility.organization.id > 0)"></div>
   
   <!-- Code for 'PENDING' and 'PENDING_EDIT_APPROVAL' records. -->
   <div style="padding: 3px;" data-ng-show="facility.state == 'PENDING_APPROVAL' || facility.state == 'PENDING_EDIT_APPROVAL'">
     <hr>
     <br>
     
-    <!-- Reviewer message textbox -->
+    <!-- Reviewer message textbox. -->
     <div class="row">
       <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
         <label>Reviewer message</label>
