@@ -26,15 +26,18 @@ class DashboardController extends Controller
      */
     public function index(DashboardRequest $request)
     {   
-        $data = [
+        return [
             'facilities' => [
                 'published' => [
                     'total'   => FR::published()->count(),
                     'public'  => FR::published(true)->count(),
                     'private' => FR::published(false)->count(),
                 ],
-                'pendingApproval' => FR::pendingApproval(true)->count(),
-                'rejected'        => FR::rejected()->count(),
+                'pendingApproval'     => FR::pendingApproval(false)->count(),
+                'pendingEditApproval' => FR::pendingApproval(true)->count(),
+                'rejected'            => FR::rejected(false)->count(),
+                'rejectedEdit'        => FR::rejected(true)->count(),
+                'deleted'             => FR::removed()->count()
             ],
             'equipment' => [
                 'total'             => E::count(),
@@ -44,7 +47,5 @@ class DashboardController extends Controller
                 'noExcessCapacity'  => E::excessCapacity(false)->count()
             ]
         ];
-        
-        return $data;
     }
 }
