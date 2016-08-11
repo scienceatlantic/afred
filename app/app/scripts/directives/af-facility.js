@@ -26,6 +26,14 @@ angular.module('afredApp').directive('afFacility', [
          *     name: '',
          *     organizationId: #,
          *     ...
+         *     disciplines: [{
+         *       id: #,
+         *       name: ''
+         *     },...],
+         *     sectors: [{
+         *       id: #,
+         *       name: ''
+         *     },...],
          *     contacts: [{
          *       firstName: '',
          *       ...
@@ -39,9 +47,7 @@ angular.module('afredApp').directive('afFacility', [
          *     equipment: [{
          *       type: '',
          *       ...
-         *     }, {
-         *       ...
-         *     }]
+         *     },...]
          *   }
          */
         facility: '=afFacilityModel',
@@ -75,7 +81,16 @@ angular.module('afredApp').directive('afFacility', [
          * 
          * @type {boolean} True - preview mode is enabled.
          */
-        isPreview: '=afFacilityIsPreview'
+        isPreview: '=afFacilityIsPreview',
+        /**
+         * (Optional) A label/tag is added next to the organization's name
+         * indicating that it is a new organization (not in the drop down list).
+         * The `isPreview` property (above) also has to be set to true for this
+         * to apply. 
+         * 
+         * @type {boolean} True - label is shown.
+         */
+        isNewOrganization: '=afFacilityIsNewOrganization'
       },
       link: function($scope, element, attrs) {
         // Since we're using an isolate scope, the directive no longer inherits

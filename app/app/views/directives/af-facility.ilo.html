@@ -4,7 +4,10 @@
 <div itemscope itemtype="http://schema.org/Person">
   <!-- Name. -->
   <div class="row">
-    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Name</label></div>
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
+      <label>Name</label>
+    </div>
+
     <div class="col-sm-9">
       <span itemprop="givenName">{{ facility.organization.ilo.firstName }}</span>
       <span itemprop="familyName">{{ facility.organization.ilo.lastName }}</span>
@@ -15,9 +18,12 @@
 
   <!-- Email. -->
   <div class="row">
-    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Email</label></div>
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
+      <label>Email</label>
+    </div>
+
     <div class="col-sm-9">
-      <a data-ng-href="mailto:{{ facility.organization.ilo.email }}" itemprop="email">{{facility.organization.ilo.email}}</a>
+      <a data-ng-href="mailto:{{ facility.organization.ilo.email }}" itemprop="email">{{ facility.organization.ilo.email }}</a>
     </div>
 
     <br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
@@ -25,7 +31,10 @@
 
   <!-- Telephone. -->
   <div class="row">
-    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Telephone</label></div>
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
+      <label>Telephone</label>
+    </div>
+
     <div class="col-sm-9">
       <span itemprop="telephone">{{ facility.organization.ilo.telephone | afFormatTelephone }}</span>
     </div>
@@ -35,7 +44,10 @@
 
   <!-- Position. -->
   <div class="row">
-    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Position</label></div>
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
+      <label>Position</label>
+    </div>
+
     <div class="col-sm-9">
       <span itemprop="jobTitle">{{ facility.organization.ilo.position }}<span>
     </div>
@@ -45,7 +57,10 @@
 
   <!-- Website. -->
   <div class="row" data-ng-show="facility.organization.ilo.website">
-    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Website</label></div>
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
+      <label>Website</label>
+    </div>
+    
     <div class="col-sm-9">
       <a href="{{ facility.organization.ilo.website }}" target="_blank" itemprop="url">{{ facility.organization.ilo.website }}</a>
     </div>
