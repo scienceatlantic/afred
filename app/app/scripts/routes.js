@@ -276,7 +276,8 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
       }).
       state('error', {
         'abstract': true,
-        templateUrl: 'views/error.html'
+        templateUrl: 'views/error.html',
+        controller: 'ErrorController'
       }).
       state('error.403', {
         templateUrl: 'views/error.403.html'
