@@ -122,6 +122,7 @@ class FacilityRepository extends Model
         return $query;
     }
     
+    // This might include records that have been deleted.
     public function scopeRejectedEdit($query)
     {
         return $query->where('state', 'REJECTED_EDIT');
@@ -134,6 +135,8 @@ class FacilityRepository extends Model
         return $query->whereNotIn('facilityId', Facility::select('id')->get())
             ->where('state', '!=', 'PENDING_APPROVAL')
             ->where('state', '!=', 'PENDING_EDIT_APPROVAL')
-            ->where('state', '!=', 'REJECTED_EDIT');
+            ->where('state', '!=', 'REJECTED')
+            ->where('state', '!=', 'REJECTED_EDIT')
+            ->groupBy('facilityId');
     }
 }
