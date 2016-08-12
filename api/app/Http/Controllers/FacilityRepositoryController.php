@@ -59,8 +59,10 @@ class FacilityRepositoryController extends Controller
                 $fr->published((bool) $request->input('visibility', true));
                 break;
             case 'REJECTED':
+                $fr->rejected();
+                break;
             case 'REJECTED_EDIT':
-                $fr->rejected(true);
+                $fr->rejectedEdit();
                 break;
             case 'DELETED':
                 $fr->removed();
