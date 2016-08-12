@@ -36,8 +36,7 @@ class DashboardController extends Controller
                 'pendingApproval'     => FR::pendingApproval(false)->count(),
                 'pendingEditApproval' => FR::pendingEditApproval()->count(),
                 'rejected'            => FR::rejected(false)->count(),
-                'rejectedEdit'        => FR::rejected(true)->count(),
-                'deleted'             => FR::removed()->count()
+                'deleted'             => FR::removed()->get()->count()
             ],
             'equipment' => [
                 'total'             => E::count(),
