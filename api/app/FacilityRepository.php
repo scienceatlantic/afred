@@ -102,13 +102,13 @@ class FacilityRepository extends Model
     
     public function scopePublished($query, $isPublic = -1)
     {
-        $f = Facility::query();
+        $f = Facility::select('facilityRepositoryId');
         
-        if ($isPublic != -1) {
+        if ($isPublic !== -1) {
             $f->where('isPublic', $isPublic);
         }
         
-        $query->whereIn('id', $f->select('facilityRepositoryId')->get());        
+        $query->whereIn('id', $f->get());        
     }
     
     public function scopeRejected($query, $includeEdits = false)
@@ -122,16 +122,21 @@ class FacilityRepository extends Model
         return $query;
     }
     
+    // This might include records that have been deleted.
     public function scopeRejectedEdit($query)
     {
         return $query->where('state', 'REJECTED_EDIT');
     }
     
-    public function scopeDeleted($query)
+    // 'Deleted' must be a reserved word in Laravel because using that as a 
+    // function name causes issues.
+    public function scopeRemoved($query)
     {
-        $query->whereNotIn('facilityId', Facility::select('id')->get())
+        return $query->whereNotIn('facilityId', Facility::select('id')->get())
             ->where('state', '!=', 'PENDING_APPROVAL')
             ->where('state', '!=', 'PENDING_EDIT_APPROVAL')
+            ->where('state', '!=', 'REJECTED')
+            ->where('state', '!=', 'REJECTED_EDIT')
             ->groupBy('facilityId');
     }
 }

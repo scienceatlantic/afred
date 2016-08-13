@@ -14,9 +14,17 @@
   </div>
   
   <div class="row">
-    <div data-af-dashboard-value="stats.data.facilities.pendingApproval" data-af-dashboard-value-label="PENDING APPROVAL" data-af-dashboard-value-sref="admin.facilities.index({ state: 'PENDING_APPROVAL' })"></div>
+    <div data-af-dashboard-value="stats.data.facilities.pendingApproval + stats.data.facilities.pendingEditApproval" data-af-dashboard-value-label="PENDING - TOTAL" data-af-dashboard-value-sref="admin.facilities.index({ state: 'PENDING_APPROVAL' })"></div>
     
+    <div data-af-dashboard-value="stats.data.facilities.pendingApproval" data-af-dashboard-value-label="PENDING"></div>
+
+    <div data-af-dashboard-value="stats.data.facilities.pendingEditApproval" data-af-dashboard-value-label="PENDING EDITS"></div>
+  </div>
+
+  <div class="row">
     <div data-af-dashboard-value="stats.data.facilities.rejected" data-af-dashboard-value-label="REJECTED" data-af-dashboard-value-sref="admin.facilities.index({ state: 'REJECTED' })"></div>
+    
+    <div data-af-dashboard-value="stats.data.facilities.deleted" data-af-dashboard-value-label="DELETED" data-af-dashboard-value-sref="admin.facilities.index({ state: 'DELETED' })"></div>
   </div>
   
   <p class="lead">Equipment</p>

@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\Inspire::class,
         \App\Console\Commands\GenerateSitemap::class,
         \App\Console\Commands\JobCron::class,
+        \App\Console\Commands\TrimLogs::class,
     ];
 
     /**

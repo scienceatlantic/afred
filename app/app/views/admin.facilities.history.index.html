@@ -35,6 +35,8 @@
             <!-- Deleted. -->
             <span class="text-danger" data-ng-show="!f.facility.id">
               DELETED
+              <span class="label label-default" data-ng-show="f.state == 'PUBLISHED_EDIT'">Edit</span>
+              <span class="label label-default" data-ng-show="f.state == 'REJECTED_EDIT'">Rejected edit</span>
             </span>
           </b>
         </p>

@@ -33,13 +33,15 @@
             </span>
             
             <!-- Rejected edit. -->
-            <span class="text-danger" data-ng-show="facility.state == 'REJECTED_EDIT'">
+            <span class="text-danger" data-ng-show="facility.state == 'REJECTED_EDIT' && fr.facility.id">
               REJECTED EDIT
             </span>
             
             <!-- Deleted. -->
             <span class="text-danger" data-ng-show="(facility.state != 'PENDING' && facility.state != 'PENDING_APPROVAL' && facility.state != 'REJECTED') && !fr.facility.id">
-              DELETED
+              DELETED 
+              <span class="label label-default" data-ng-show="facility.state == 'PUBLISHED_EDIT'">Edit</span>
+              <span class="label label-default" data-ng-show="facility.state == 'REJECTED_EDIT'">Rejected edit</span>
             </span>
           </b>
         </p>
@@ -99,7 +101,14 @@
       </div>
     
       <div class="col-sm-9">
-        {{ fr.reviewerMessage }}
+        <!-- 
+          -- The 'ngShow' directive prevents the reviewer message from being
+          -- displayed as the admin is typing out the message (since it's 
+          -- updating the actual `$scope.fr` object and not a copy of it) below 
+          -- unless it has already been reviewed.
+          -->
+        <span data-ng-show="fr.reviewer.firstName">{{ fr.reviewerMessage }}</span>
+
         <span class="label label-default" data-ng-show="!fr.reviewer.firstName">N/A</span>
         <span class="label label-default" data-ng-show="fr.reviewer.firstName && !fr.reviewerMessage">No message was provided</span>        
       </div>
@@ -130,15 +139,15 @@
   <br>
   <br>
   
-  <!-- Facility information -->
-  <div data-af-facility="all" data-af-facility-model="facility" data-af-facility-is-preview="true"></div>
+  <!-- Facility information. -->
+  <div data-af-facility="all" data-af-facility-model="facility" data-af-facility-is-preview="true" data-af-facility-is-new-organization="!(facility.organization.id > 0)"></div>
   
   <!-- Code for 'PENDING' and 'PENDING_EDIT_APPROVAL' records. -->
   <div style="padding: 3px;" data-ng-show="facility.state == 'PENDING_APPROVAL' || facility.state == 'PENDING_EDIT_APPROVAL'">
     <hr>
     <br>
     
-    <!-- Reviewer message textbox -->
+    <!-- Reviewer message textbox. -->
     <div class="row">
       <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
         <label>Reviewer message</label>

@@ -4,7 +4,10 @@
 <div data-ng-repeat="c in facility.contacts" itemscope itemtype="http://schema.org/Person">
   <!-- Name. -->
   <div class="row">
-    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Name</label></div>
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
+      <label>Name</label>
+    </div>
+
     <div class="col-sm-9">
       <span itemprop="givenName">{{ c.firstName }}</span>
       <span itemprop="familyName">{{ c.lastName }}</span> 
@@ -17,9 +20,12 @@
   
   <!-- Email. -->
   <div class="row">
-    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Email</label></div>
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
+      <label>Email</label>
+    </div>
+
     <div class="col-sm-9">
-      <a data-ng-href="mailto:{{c.email}}" itemprop="email">{{ c.email }}</a>
+      <a data-ng-href="mailto:{{ c.email }}" itemprop="email">{{ c.email }}</a>
     </div>
 
     <br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
@@ -27,13 +33,23 @@
   
   <!-- Telephone. -->
   <div class="row" data-ng-show="c.telephone || isPreview">
-    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Telephone</label></div>
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
+      <label>Telephone</label>
+    </div>
+
     <div class="col-sm-9">
-      <span itemprop="telephone">{{ c.telephone | afFormatTelephone }}</span>
+      <span itemprop="telephone">
+        {{ c.telephone | afFormatTelephone }} 
+        <!-- Extension. 
+          -- Use "ngIf" so that the "Extension" label isn't crawled and included
+          -- as part of the schema object if it's empty.
+          -->
+        <span data-ng-if="c.extension">
+          <span class="label label-default">Extension:</span> {{ c.extension }}
+        </span>
+      </span>
       <!-- "Blank" label. -->
       <span class="label label-default" data-ng-show="isPreview && !c.telephone">Blank</span>
-      <!-- Extension. -->
-      <span data-ng-show="c.extension"><span class="label label-default">Extension:</span> {{ c.extension }}</span>
     </div>
 
     <br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
@@ -41,7 +57,10 @@
   
   <!-- Position. -->
   <div class="row" data-ng-show="c.position || isPreview">
-    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Position</label></div>
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
+      <label>Position</label>
+    </div>
+
     <div class="col-sm-9">
       <span itemprop="jobTitle">{{ c.position }}</span>
       <!-- "Blank" label. -->
@@ -53,9 +72,12 @@
   
   <!-- Website. -->
   <div class="row" data-ng-show="c.website || isPreview">
-    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }"><label>Website</label></div>
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
+      <label>Website</label>
+    </div>
+    
     <div class="col-sm-9">
-      <a href="{{c.website}}" target="_blank" itemprop="url">{{ c.website }}</a>
+      <a href="{{ c.website }}" target="_blank" itemprop="url">{{ c.website }}</a>
       <!-- "Blank" label. -->
       <span class="label label-default" data-ng-show="isPreview && !c.website">Blank</span>
     </div>

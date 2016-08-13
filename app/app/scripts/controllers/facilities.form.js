@@ -762,37 +762,64 @@ angular.module('afredApp').controller('FacilitiesFormController',
       },
       
       /**
-       * Formats the data for the preview. It gets the names of the selected
-       * organization and province.
-       *
+       * Formats the data for the preview. 
+       * 
        * Uses/calls/requires:
        * $scope.form.data
+       * 
+       * @return {object} Facility data in this format:
+       *     {
+       *       name: '',
+       *       city: '',
+       *       ...
+       *       sectors: [{
+       *         id: #,
+       *         name: ''
+       *       },...],
+       *       disciplines: [{
+       *         id: #,
+       *         name: ''
+       *       },...],
+       *       primaryContact: {
+       *         firstName: '',
+       *         lastName: '',
+       *         ... 
+       *       },
+       *       contacts: [{
+       *         firstName: '',
+       *         lastName: '',
+       *         ...
+       *       },...]
+       *       equipment: [{
+       *         type: '',
+       *         model: '',
+       *         ...
+       *       },...]
+       *     }
        */
       formatForPreview: function() {
-        var facility = angular.copy($scope.form.data.facility);
-        facility.disciplines = $scope.form.getSelectedDisciplines();
-        facility.sectors = $scope.form.getSelectedSectors();
-        facility.primaryContact = angular.copy($scope.form.data.primaryContact);
-        facility.contacts = angular.copy($scope.form.data.contacts);
-        facility.equipment = angular.copy($scope.form.data.equipment);
+        var f = angular.copy($scope.form.data.facility);
+        f.disciplines = $scope.form.getSelectedDisciplines();
+        f.sectors = $scope.form.getSelectedSectors();
+        f.primaryContact = angular.copy($scope.form.data.primaryContact);
+        f.contacts = angular.copy($scope.form.data.contacts);
+        f.equipment = angular.copy($scope.form.data.equipment);
         
-        // Organization section.
+        // Organization section. Grabs the selected organization's data if 
+        // an existing organization was selected, otherwise the name of the new
+        // organization is copied.
         if ($scope.form.data.facility.organizationId > 0) {
           var e = document.getElementById('facility-organization');
-          facility.organization = $scope.form.organizations[e.selectedIndex];
+          f.organization = $scope.form.organizations[e.selectedIndex];
         } else if ($scope.form.data.facility.organizationId == -1) {
-          facility.organization = $scope.form.data.organization;
+          f.organization = $scope.form.data.organization;
         }
         
-        // Province section.
+        // Province section. Grabs the selected province's data.
         var e = document.getElementById('facility-province');
-        facility.province = $scope.form.provinces[e.selectedIndex];
-        
-        facility.isPreview = true;
-        facility.isNewOrganization =
-          !($scope.form.data.facility.organizationId > 0);
-          
-        return facility;
+        f.province = $scope.form.provinces[e.selectedIndex];
+
+        return f;
       },
       
       /**

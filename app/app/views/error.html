@@ -8,6 +8,9 @@
     
     <div data-ui-view></div>
     
-    <p data-ng-show="!_state.is('error.500')">Click <a data-ui-sref="search">here</a> to get back to the homepage.</p>
+    <!-- Don't show a link to the home page if status >= 500. -->
+    <div data-ng-if="httpStatusCode <= 500">
+      <p>Click <a data-ui-sref="search">here</a> to get back to the homepage.</p>
+    </div>
   </div>
 </div>

@@ -46,6 +46,8 @@ class GenerateSitemap extends Command
      */
     public function handle()
     {
+        Log::info('Console: `sitemap:generate` called.');
+
         // Parameters.
         $addFacilityLastMod     = false;
         $addFacilityPriority    = false;
@@ -55,16 +57,16 @@ class GenerateSitemap extends Command
         $addEquipmentChangeFreq = false;
 
         // Sitemap settings from database.
-        $smDbSettings = Setting::lookup([
+        $db = Setting::lookup([
             'appAddress',
             'sitemapFilename',
             'sitemapFixedUrls',
             'sitemapPing'
         ]);
-        $base = $smDbSettings['appAddress'];
-        $smFilename = $smDbSettings['sitemapFilename'];
-        $fixedUrls = $smDbSettings['sitemapFixedUrls'];
-        $ping = $smDbSettings['sitemapPing'];
+        $base = $db['appAddress'];
+        $smFilename = $db['sitemapFilename'];
+        $fixedUrls = $db['sitemapFixedUrls'];
+        $ping = $db['sitemapPing'];
 
         // Create XML object.
         $sm = '<?xml version="1.0" encoding="UTF-8"?>';
@@ -120,37 +122,29 @@ class GenerateSitemap extends Command
         }
 
         // Create sitemap file.
-        try {
-            $handle = fopen($smFilename . '-new', 'w');
-            fwrite($handle, $sm->asXML());
-            fclose($handle);
+        $handle = fopen($smFilename . '-new', 'w');
+        fwrite($handle, $sm->asXML());
+        fclose($handle);
 
-            // Check if the files are different, if they are, override the 
-            // existing sitemap, if they are not, discard the sitemap that was
-            // just generated.
-            if ($this->areFilesDiff($smFilename, $smFilename . '-new')) {
-                rename($smFilename . '-new', $smFilename);
-                $this->info('Sitemap generated.');
-                $this->ping($base, $ping);
-            } else {
-                unlink($smFilename . '-new');
-                $this->info('No change to sitemap.');
-            }
-
-            Log::debug('sitemap:generate');
-        } catch (Exception $e) {
-            $this->error($e->getMessage());
-            return;
+        // Check if the files are different, if they are, override the existing
+        // sitemap, if they are not, discard the sitemap that was just
+        // generated.
+        if ($this->areFilesDiff($smFilename, $smFilename . '-new')) {
+            rename($smFilename . '-new', $smFilename);
+            $this->ping($base, $ping);
+            Log::info('Sitemap generated.');
+        } else {
+            unlink($smFilename . '-new');
+            Log::info('No change to sitemap.');
         }
     }
 
     private static function areFilesDiff($f1, $f2) 
     {
         if (file_exists($f1) && file_exists($f2)) {
+            // Filesize check.
             $f1Size = filesize($f1);
             $f2Size = filesize($f2);
-
-            // Filesize check.
             if ($f1Size != $f2Size) {
                 return true;
             }
@@ -169,7 +163,6 @@ class GenerateSitemap extends Command
 
             return false; // Files are the same.
         }
-
         // If any of the files do not exist, assume they are different.
         return true;
     }
@@ -177,19 +170,16 @@ class GenerateSitemap extends Command
     private static function ping($base, $sitemap = null)
     {
         if ($sitemap) {
-            $services = Setting::lookup('sitemapPingServices');
-            foreach($services as $service) {
+            foreach(Setting::lookup('sitemapPingServices') as $service) {
                 $ch = curl_init($service . $base . $sitemap);
                 curl_exec($ch);
                 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-                
-                if ($httpCode >= 200 && $httpCode < 300) {
-                    Log::debug('Sitemap: pinged!');
-                } else {
-                    Log::debug(curl_error($ch));
-                    Log::debug('Sitemap: failed to ping!');
+                if ($httpCode < 200 || $httpCode >= 300) {
+                    Log::error('Error pinging service.', [
+                        'curlError' => curl_error($ch),
+                        'service'   => $service
+                    ]);
                 }
-
                 curl_close($ch);
             }
         }
