@@ -32,11 +32,19 @@ class Ilo extends Model
         'website'
     ];
     
+    /**
+     * Relationship between an ILO and the organization it belongs to.
+     */
     public function organization()
     {
         return $this->belongsTo('App\Organization', 'organizationId');
     }
     
+    /**
+     * Returns the ILO's full name.
+     * 
+     * Note: This method can only be used on a single instance of an ILO.
+     */
     public function getFullName()
     {
         return $this->firstName . ' ' . $this->lastName;

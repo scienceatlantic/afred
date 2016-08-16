@@ -25,6 +25,9 @@ class Sector extends Model
         'name'
     ];
     
+    /**
+     * Relationship between sectors and its facilities.
+     */
     public function facilities()
     {
         return $this->belongsToMany('App\Facility', 'facility_sector',

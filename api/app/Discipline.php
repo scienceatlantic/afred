@@ -25,6 +25,9 @@ class Discipline extends Model
         'name'
     ];
     
+    /**
+     * Relationship between a discipline and all its facilities.
+     */
     public function facilities()
     {
         return $this->belongsToMany('App\Facility', 'discipline_facility',

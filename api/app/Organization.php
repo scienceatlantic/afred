@@ -26,20 +26,32 @@ class Organization extends Model
         'isHidden'
     ];
     
+    /**
+     * Relationship between an organization and its ILO.
+     */
     public function ilo()
     {
         return $this->hasOne('App\Ilo', 'organizationId');
     }
     
+    /**
+     * Relationship between an organization and its facilities.
+     */
     public function facilities() {
         return $this->hasMany('App\Facility', 'organizationId');
     }
     
+    /**
+     * Scope for public organizations.
+     */
     public function scopeNotHidden($query)
     {
         $query->where('isHidden', false);
     }
     
+    /**
+     * Scope for hidden organizations.
+     */
     public function scopeHidden($query)
     {
         $query->where('isHidden', true);
