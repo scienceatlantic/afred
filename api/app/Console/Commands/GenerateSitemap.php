@@ -170,7 +170,11 @@ class GenerateSitemap extends Command
                 $ch = curl_init($service . $base . $sitemap);
                 curl_exec($ch);
                 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-                if ($httpCode < 200 || $httpCode >= 300) {
+                if ($httpCode >= 200 && $httpCode < 300) {
+                    Log::info('Sitemap pinged.', [
+                        'service' => $service
+                    ]);
+                } else {
                     Log::error('Error pinging service.', [
                         'curlError' => curl_error($ch),
                         'service'   => $service
