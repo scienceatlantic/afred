@@ -21,14 +21,17 @@ class RolesTableSeeder extends Seeder
         // Delete existing roles.
         DB::table('roles')->delete();
         
-        $roles = [
-            [
-                'name'        => 'Admin',
-                'permission'  => 10, // Arbitrary value, since we only have one
-                                     // role at the moment.
-                'dateCreated' => $now
-            ],
-        ];
+        // Use this to add more roles. We've set the maximum permission level at
+        // 10. So that means that we can have a maximum of 10 roles.
+        $roles = [[
+            'name'        => 'SUPER_ADMIN',
+            'permission'  => 10,
+            'dateCreated' => $now
+        ], [
+            'name'        => 'ADMIN',
+            'permission'  => 9,
+            'dateCreated' => $now
+        ]];
         
         foreach($roles as $role) {
             Role::create($role);
