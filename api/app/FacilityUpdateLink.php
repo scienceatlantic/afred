@@ -13,9 +13,7 @@ class FacilityUpdateLink extends Model
      */
     protected $dates = ['dateOpened',
                         'datePending',
-                        'dateClosed',
-                        'created_at',
-                        'updated_at'];
+                        'dateClosed'];
     
     /**
      * The attributes that are mass assignable.

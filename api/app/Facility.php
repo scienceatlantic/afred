@@ -21,9 +21,7 @@ class Facility extends Model
      * @var array
      */
     protected $dates = ['datePublished',
-                        'dateUpdated',
-                        'created_at',
-                        'updated_at'];
+                        'dateUpdated'];
     
     /**
      * The attributes that are mass assignable.

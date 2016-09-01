@@ -12,9 +12,7 @@ class Discipline extends Model
      * @var array
      */
     protected $dates = ['dateCreated',
-                        'dateUpdated',
-                        'created_at',
-                        'updated_at'];
+                        'dateUpdated'];
     
     /**
      * The attributes that are mass assignable.

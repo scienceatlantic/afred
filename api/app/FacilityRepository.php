@@ -13,9 +13,7 @@ class FacilityRepository extends Model
      * @var array
      */
     protected $dates = ['dateSubmitted',
-                        'dateReviewed',
-                        'created_at',
-                        'updated_at'];
+                        'dateReviewed'];
     
     /**
      * Name of the database table. An exception had to be made here since
