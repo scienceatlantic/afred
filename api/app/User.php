@@ -16,6 +16,7 @@ use Log;
 
 // Models.
 use App\Role;
+use App\UserSetting;
 
 class User extends Model implements AuthenticatableContract,
                                     AuthorizableContract,
@@ -37,9 +38,14 @@ class User extends Model implements AuthenticatableContract,
      */
     protected $dates = ['dateLastLogin',
                         'dateCreated',
-                        'dateUpdated',
-                        'created_at',
-                        'updated_at'];
+                        'dateUpdated'];
+
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
     
     /**
      * The attributes that are mass assignable.
@@ -60,28 +66,86 @@ class User extends Model implements AuthenticatableContract,
      */
     protected $hidden = ['password', 'remember_token'];
     
-    public function scopeAdmins($query)
-    {
-        return $query->roles()->admins;
-    }
-    
+    /**
+     * Relationship between a user and its roles.
+     */
     public function roles()
     {
         return $this->belongsToMany('App\Role', 'role_user', 'userId',
             'roleId');
     }
-    
-    public function isAtLeastAdmin()
+
+    /**
+     * Relationship between a user and its settings.
+     */
+    public function settings()
     {
-        $rolePermission = Role::where('name', 'Admin')->value('permission');
-        $userPermission = $this->roles()->orderBy('permission', 'desc')
-            ->first()->value('permission');
-            
-        return $userPermission >= $rolePermission;
+        return $this->hasMany('App\UserSetting', 'userId');
+    }
+
+    /**
+     * Active users scope.
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('isActive', true);
+    }
+
+    /**
+     * Inactive users scope.
+     */
+    public function scopeNotActive($query)
+    {
+        return $query->where('isActive', false);
+    }
+
+    /**
+     * Check if user is at least a SUPER ADMIN.
+     *
+     * @return boolean True is user is at least a SUPER ADMIN.
+     */
+    public function isAtLeastSuperAdmin()
+    {
+        return $this->getMaxPermission() >= Role::lookup('SUPER_ADMIN');
+    }
+
+    /**
+     * Check if user is at least an ADMIN.
+     *
+     * @return boolean True if user is at least an ADMIN.
+     */
+    public function isAtLeastAdmin()
+    {    
+        return $this->getMaxPermission() >= Role::lookup('ADMIN');
     }
     
+    /**
+     * Gets a concatenated string of the user's first name and last name with a
+     * space in between.
+     *
+     * @return string 
+     */
     public function getFullName()
     {
         return $this->firstName . ' ' . $this->lastName;
+    }
+
+    /**
+     * Get the user's max permission level.
+     */
+    public function getMaxPermission()
+    {
+         return $this->roles()->orderBy('permission', 'desc')->first()
+            ->value('permission');       
+    }
+
+    /**
+     * Retrieves a setting value.
+     * 
+     * @see UserSetting:lookup() for how this works.
+     */
+    public function lookup($name, $default = null)
+    {
+        return UserSetting::lookup($this->id, $name, $default);
     }
 }
