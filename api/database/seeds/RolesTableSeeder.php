@@ -26,11 +26,13 @@ class RolesTableSeeder extends Seeder
         $roles = [[
             'name'        => 'SUPER_ADMIN',
             'permission'  => 10,
-            'dateCreated' => $now
+            'dateCreated' => $now,
+            'dateUpdated' => $now
         ], [
             'name'        => 'ADMIN',
             'permission'  => 9,
-            'dateCreated' => $now
+            'dateCreated' => $now,
+            'dateUpdated' => $now
         ]];
         
         foreach($roles as $role) {
