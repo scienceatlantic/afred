@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 class Discipline extends Model
-{
+{    
     /**
      * The attributes that should be mutated to dates.
      *
@@ -13,6 +13,13 @@ class Discipline extends Model
      */
     protected $dates = ['dateCreated',
                         'dateUpdated'];
+
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
     
     /**
      * The attributes that are mass assignable.

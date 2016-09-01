@@ -14,6 +14,13 @@ class FacilityUpdateLink extends Model
     protected $dates = ['dateOpened',
                         'datePending',
                         'dateClosed'];
+
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
     
     /**
      * The attributes that are mass assignable.

@@ -14,6 +14,13 @@ class FacilityRepository extends Model
      */
     protected $dates = ['dateSubmitted',
                         'dateReviewed'];
+
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
     
     /**
      * Name of the database table. An exception had to be made here since
