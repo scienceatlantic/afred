@@ -19,6 +19,7 @@ class CreateRolesTable extends Migration
             $table->integer('permission')
                   ->unsigned();
             $table->dateTime('dateCreated');
+            $table->dateTime('dateUpdated');
         });
     }
 
