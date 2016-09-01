@@ -6,7 +6,6 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 // Misc.
-use Carbon\Carbon;
 use DB;
 use Log;
 
@@ -21,10 +20,17 @@ class Setting extends Model
                         'dateUpdated'];
 
     /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+    
+    /**
      * Value attribute accessor.
      *
-     * The value column is retrieved and is cast into the appropriate type
-     * base on the type column.
+     * The value column is retrieved and is cast into the appropriate type based
+     * on the 'type' column.
      */
     public function getValueAttribute($v)
     {
@@ -158,7 +164,7 @@ class Setting extends Model
                     Setting::logError($n);
                 }
             }
-           return $values;
+            return $values;
         } 
         // Get just a single setting value.
         else {
@@ -180,7 +186,7 @@ class Setting extends Model
     
     private static function logWarning($name, $default) 
     {
-        Log::notice('Setting not found, using default instead.', [
+        Log::warning('Setting not found, using default instead.', [
             'name'    => $name,
             'default' => $default
         ]);
