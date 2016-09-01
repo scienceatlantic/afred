@@ -16,8 +16,7 @@ class Role extends Model
      * @var array
      */
     protected $dates = ['dateCreated',
-                        'created_at',
-                        'updated_at'];
+                        'dateUpdated'];
     
     /**
      * The attributes that are mass assignable.
