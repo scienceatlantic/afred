@@ -14,21 +14,30 @@ class CreateFacilityRepositoryTable extends Migration
     {
         Schema::create('facility_repository', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('reviewerId')->unsigned()->nullable();
-            $table->foreign('reviewerId')->references('id')->on('users')
-                ->onDelete('restrict');
-            $table->integer('facilityId')->unsigned()->nullable();
+            $table->integer('reviewerId')
+                  ->unsigned()
+                  ->nullable();
+            $table->foreign('reviewerId')
+                  ->references('id')
+                  ->on('users')
+                  ->onDelete('restrict')
+                  ->onUpdate('cascade');
+            $table->integer('facilityId') // Do not make this a foreign key.
+                  ->unsigned()            // Otherwise we won't be able to
+                  ->nullable()            // delete anything in 'facilities'.
+                  ->index();
             $table->enum('state', ['PENDING_APPROVAL',
                                    'PUBLISHED',
                                    'REJECTED',
                                    'PENDING_EDIT_APPROVAL',
                                    'PUBLISHED_EDIT',
                                    'REJECTED_EDIT']);
-            $table->text('reviewerMessage')->nullable();
+            $table->text('reviewerMessage')
+                  ->nullable();
             $table->longText('data'); // Data stored in JSON
             $table->dateTime('dateSubmitted');
-            $table->dateTime('dateReviewed')->nullable();
-            $table->timestamps();
+            $table->dateTime('dateReviewed')
+                  ->nullable();
         });
     }
 

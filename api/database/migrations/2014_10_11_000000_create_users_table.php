@@ -16,14 +16,16 @@ class CreateUsersTable extends Migration
             $table->increments('id');
             $table->string('firstName', 50);
             $table->string('lastName', 50);
-            $table->string('email', 254)->unique();
+            $table->string('email', 254)
+                  ->unique();
             $table->string('password', 60);
             $table->rememberToken();
-            $table->boolean('isActive')->default(true);
-            $table->dateTime('dateLastLogin')->nullable();
+            $table->boolean('isActive')
+                  ->default(true);
+            $table->dateTime('dateLastLogin')
+                  ->nullable();
             $table->dateTime('dateCreated');
-            $table->dateTime('dateUpdated');       
-            $table->timestamps();
+            $table->dateTime('dateUpdated');
         });
     }
 

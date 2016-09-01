@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSettingsTextTable extends Migration
+class CreateUserSettingsTextTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,14 +12,14 @@ class CreateSettingsTextTable extends Migration
      */
     public function up()
     {
-        Schema::create('settings_text', function (Blueprint $table) {
+        Schema::create('user_settings_text', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('settingId')
+            $table->integer('userSettingId')
                   ->unsigned()
                   ->unique();
-            $table->foreign('settingId')
+            $table->foreign('userSettingId')
                   ->references('id')
-                  ->on('settings')
+                  ->on('user_settings')
                   ->onDelete('cascade')
                   ->onUpdate('cascade');
             $table->text('value');
@@ -33,6 +33,6 @@ class CreateSettingsTextTable extends Migration
      */
     public function down()
     {
-        Schema::drop('settings_text');
+        Schema::drop('user_settings_text');
     }
 }

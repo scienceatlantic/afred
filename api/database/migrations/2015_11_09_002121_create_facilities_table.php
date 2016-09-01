@@ -14,25 +14,45 @@ class CreateFacilitiesTable extends Migration
     {
         Schema::create('facilities', function($table) {
             $table->increments('id');
-            $table->integer('facilityRepositoryId')->unsigned();
-            $table->foreign('facilityRepositoryId')->references('id')
-                ->on('facility_repository')->onDelete('restrict');
-            $table->integer('organizationId')->unsigned();
-            $table->foreign('organizationId')->references('id')
-                ->on('organizations')->onDelete('restrict');
-            $table->integer('provinceId')->unsigned();
-            $table->foreign('provinceId')->references('id')->on('provinces')
-                ->onDelete('restrict');
-            $table->string('name', 200);
-            $table->string('city', 150)->nullable();
-            $table->string('website', 2083)->nullable();
+            $table->integer('facilityRepositoryId')
+                  ->unsigned();
+            $table->foreign('facilityRepositoryId')
+                   ->references('id')
+                   ->on('facility_repository')
+                   ->onDelete('restrict')
+                   ->onUpdate('cascade');
+            $table->integer('organizationId')
+                  ->unsigned();
+            $table->foreign('organizationId')
+                  ->references('id')
+                  ->on('organizations')
+                  ->onDelete('restrict')
+                  ->onUpdate('cascade');
+            $table->integer('provinceId')
+                  ->unsigned();
+            $table->foreign('provinceId')
+                  ->references('id')
+                  ->on('provinces')
+                  ->onDelete('restrict')
+                  ->onUpdate('cascade');
+            $table->string('name', 200)
+                  ->index();
+            $table->string('city', 150)
+                  ->nullable()
+                  ->index();
+            $table->string('website', 2083)
+                  ->nullable()
+                  ->index();
             $table->text('description');
             $table->text('descriptionNoHtml');
-            $table->boolean('isPublic')->default(true);
+            $table->boolean('isPublic')
+                  ->default(true);
             $table->dateTime('datePublished');
             $table->dateTime('dateUpdated');
-            $table->timestamps();
         });
+
+        // Add FULLTEXT index to 'descriptionNoHtml' column.
+        DB::statement('ALTER TABLE `facilities` ADD FULLTEXT facilities_descriptionnohtml_index(`descriptionNoHtml`)');      
     }
 
     /**
