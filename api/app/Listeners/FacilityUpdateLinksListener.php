@@ -10,7 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 // Models.
-use App\Role;
+use App\User;
 
 // Misc.
 use Log;
@@ -56,9 +56,9 @@ class FacilityUpdateLinksListener extends BaseListener
             'email' => $event->ful->editorEmail
         ];
         
-        // Blind copy all admins.
+        // Blind copy all admins and up.
         $bcc = [];
-        foreach(Role::admin()->users()->get() as $admin) {
+        foreach(User::active()->admins(false)->get() as $admin) {
             array_push($bcc, [
                 'name'  => $admin->getFullName(),
                 'email' => $admin->email

@@ -45,22 +45,6 @@ class Role extends Model
     }
 
     /**
-     * Scope for the SUPER_ADMIN record.
-     */
-    public function scopeSuperAdmin($query)
-    {
-        return $query->where('name', 'SUPER_ADMIN')->first();
-    }
-    
-    /**
-     * Scope for the ADMIN record.
-     */
-    public function scopeAdmin($query)
-    {
-        return $query->where('name', 'ADMIN')->first();
-    }
-
-    /**
      * Returns a particular role's permission level.
      * 
      * @param string Name of the role. If an invalid role is provided, it will

@@ -11,7 +11,7 @@ use Log;
 use Mail;
 
 // Models.
-use App\Role;
+use App\User;
 use App\Events\FacilityRepositoryEvent;
 
 class FacilityRepositoryListener extends BaseListener
@@ -165,8 +165,8 @@ class FacilityRepositoryListener extends BaseListener
                 break;
         }
         
-        // Email all admins.
-        foreach(Role::admin()->users()->get() as $admin) {
+        // Email all admins and up.
+        foreach(User::active()->admins(false)->get() as $admin) {
             $data['recipientName'] = $admin->getFullName();
             $this->mail($adminT, $adminS, $data, [
                 'name'  => $admin->getFullName(),

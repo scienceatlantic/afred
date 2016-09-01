@@ -12,6 +12,7 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 // Misc.
+use DB;
 use Log;
 
 // Models.
@@ -100,6 +101,30 @@ class User extends Model implements AuthenticatableContract,
     }
 
     /**
+     * Super admin users scope.
+     *
+     * @uses User::role()
+     *
+     * @param $strict Default is true. False = Super admin and up are returned.
+     */
+    public function scopeSuperAdmins($query, $strict = true)
+    {
+        return $this->role($query, 'SUPER_ADMIN');
+    }
+
+    /**
+     * Admin users scope.
+     *
+     * @uses User::role()
+     *
+     * @param $strict Default is true. False = Admin and up are returned.
+     */
+    public function scopeAdmins($query, $strict = true)
+    {
+        return $this->role($query, 'ADMIN', $strict);
+    }
+
+    /**
      * Check if user is at least a SUPER ADMIN.
      *
      * @return boolean True is user is at least a SUPER ADMIN.
@@ -147,5 +172,20 @@ class User extends Model implements AuthenticatableContract,
     public function lookup($name, $default = null)
     {
         return UserSetting::lookup($this->id, $name, $default);
+    }
+
+    private function role($query, $role, $strict = true)
+    {
+        // Get permission level.
+        $roleIds = Role::where('permission', $strict ? '=' : '>=', 
+            Role::lookup($role))->get()->pluck('id');
+
+        // Search bridge table for matching users and return if matches found.
+        if ($ru = DB::table('role_user')->whereIn('roleId', $roleIds)->get()) {
+            return $query->whereIn('id', collect($ru)->pluck('userId'));
+        }
+
+        // Otherwise, return empty collection.
+        return $query->whereIn('id', [-1]);
     }
 }
