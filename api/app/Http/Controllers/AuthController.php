@@ -28,14 +28,17 @@ class AuthController extends Controller
         ];
         
         if (Auth::attempt($credentials)) {
-            // Update date last logged in.
-            Auth::user()->dateLastLogin = $this->now();
-            Auth::user()->save();
-            
-            // Lazy load user roles.
-            Auth::user()->roles;
-            
-            return $this->toCcArray(Auth::user()->toArray());
+            // Check if user is active, otherwise logout.
+            if (Auth::user()->isActive || Auth::logout()) {
+                // Update date last logged in.
+                Auth::user()->dateLastLogin = $this->now();
+                Auth::user()->save();
+                
+                // Lazy load user roles.
+                Auth::user()->roles;
+                
+                return $this->toCcArray(Auth::user()->toArray());               
+            }
         }
         
         return 'Not authorised';
