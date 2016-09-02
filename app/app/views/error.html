@@ -9,7 +9,7 @@
     <div data-ui-view></div>
     
     <!-- Don't show a link to the home page if status >= 500. -->
-    <div data-ng-if="httpStatusCode <= 500">
+    <div data-ng-if="httpStatusCode < 500">
       <p>Click <a data-ui-sref="search">here</a> to get back to the homepage.</p>
     </div>
   </div>
