@@ -166,7 +166,7 @@ class FacilityRepositoryListener extends BaseListener
         }
         
         // Email all admins and up.
-        foreach(User::active()->admins(false)->get() as $admin) {
+        foreach(User::active()->admins()->get() as $admin) {
             $data['recipientName'] = $admin->getFullName();
             $this->mail($adminT, $adminS, $data, [
                 'name'  => $admin->getFullName(),

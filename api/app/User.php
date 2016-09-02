@@ -105,9 +105,10 @@ class User extends Model implements AuthenticatableContract,
      *
      * @uses User::role()
      *
-     * @param $strict Default is true. False = Super admin and up are returned.
+     * @param boolean $strict Default is false. False = Super admin and up are 
+     *     returned, true = only super admins are returned.
      */
-    public function scopeSuperAdmins($query, $strict = true)
+    public function scopeSuperAdmins($query, $strict = false)
     {
         return $this->role($query, 'SUPER_ADMIN');
     }
@@ -117,31 +118,46 @@ class User extends Model implements AuthenticatableContract,
      *
      * @uses User::role()
      *
-     * @param $strict Default is true. False = Admin and up are returned.
+     * @param boolean $strict Default is false. False = Admin and up are 
+     *     returned, false = only admins are returned.
      */
-    public function scopeAdmins($query, $strict = true)
+    public function scopeAdmins($query, $strict = false)
     {
         return $this->role($query, 'ADMIN', $strict);
     }
 
     /**
-     * Check if user is at least a SUPER ADMIN.
+     * Check if user is a SUPER ADMIN
      *
-     * @return boolean True is user is at least a SUPER ADMIN.
+     * @uses User::isRole()
+     *
+     * @param boolean $strict Default is false. True = user must be assigned the
+     *     SUPER ADMIN role explicitly for a true value to be returned, false = 
+     *     a true value is returned even if the user is not an SUPER ADMIN 
+     *     explicitly but is assigned a role with a higher permission level.
+     *
+     * @return boolean True is user a SUPER ADMIN.
      */
-    public function isAtLeastSuperAdmin()
+    public function isSuperAdmin($strict = false)
     {
-        return $this->getMaxPermission() >= Role::lookup('SUPER_ADMIN');
+        return $this->isRole('SUPER_ADMIN', $strict);
     }
 
     /**
-     * Check if user is at least an ADMIN.
+     * Check if user is an ADMIN.
      *
-     * @return boolean True if user is at least an ADMIN.
+     * @uses User::isRole()
+     *
+     * @param boolean $strict Default is false. True = user must be assigned the
+     *     ADMIN role explicitly for a true value to be returned, false = a true
+     *     value is returned even if the user is not an ADMIN explicitly but is
+     *     assigned a role with a higher permission level.
+     *
+     * @return boolean True if user is an ADMIN.
      */
-    public function isAtLeastAdmin()
+    public function isAdmin($strict = false)
     {    
-        return $this->getMaxPermission() >= Role::lookup('ADMIN');
+        return $this->isRole('ADMIN', $strict);
     }
     
     /**
@@ -153,15 +169,6 @@ class User extends Model implements AuthenticatableContract,
     public function getFullName()
     {
         return $this->firstName . ' ' . $this->lastName;
-    }
-
-    /**
-     * Get the user's max permission level.
-     */
-    public function getMaxPermission()
-    {
-         return $this->roles()->orderBy('permission', 'desc')->first()
-            ->value('permission');       
     }
 
     /**
@@ -187,5 +194,27 @@ class User extends Model implements AuthenticatableContract,
 
         // Otherwise, return empty collection.
         return $query->whereIn('id', [-1]);
+    }
+
+    private function isRole($role, $strict = true)
+    {
+        if ($strict) {
+            return $this->getPermission($role) === Role::lookup($role);
+        }
+        return $this->getMaxPermission($role) >= Role::lookup($role);
+    }
+
+    private function getPermission($role)
+    {
+        if ($role = $this->roles()->where('name', $role)->first()) {
+            return $role->permission;
+        }
+        return -1;
+    }
+
+    private function getMaxPermission()
+    {
+         return $this->roles()->orderBy('permission', 'desc')->first()
+            ->permission;     
     }
 }

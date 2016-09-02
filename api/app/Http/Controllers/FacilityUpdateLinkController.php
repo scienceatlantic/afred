@@ -78,7 +78,7 @@ class FacilityUpdateLinkController extends Controller
         $f = Facility::findOrFail($id);
         
         if ($request->isAdmin) {
-            if (!(Auth::check() && Auth::user()->isAtLeastAdmin())) {
+            if (!(Auth::check() && Auth::user()->isAdmin())) {
                 abort(403);
             }
             
@@ -105,7 +105,7 @@ class FacilityUpdateLinkController extends Controller
             
             event(new FacilityUpdateLinksEvent($ful));
             
-            if (Auth::check() && Auth::user()->isAtLeastAdmin()) {
+            if (Auth::check() && Auth::user()->isAdmin()) {
                 return $ful;   
             }
         } 

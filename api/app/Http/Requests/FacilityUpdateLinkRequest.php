@@ -29,9 +29,9 @@ class FacilityUpdateLinkRequest extends Request
                 // Only allowed to update/delete a record that is 'OPEN'.
                 $id = Route::input('facility_update_links');
                 $ful = FacilityUpdateLink::findOrFail($id);
-                return $ful->status == 'OPEN' && $this->isAtLeastAdmin();
+                return $ful->status == 'OPEN' && $this->isAdmin();
             default:
-                return $this->isAtLeastAdmin();            
+                return $this->isAdmin();            
         }
     }
 

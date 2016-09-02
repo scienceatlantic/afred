@@ -10,8 +10,13 @@ use Illuminate\Foundation\Http\FormRequest;
 
 abstract class Request extends FormRequest
 {
-    protected function isAtLeastAdmin()
+    protected function isSuperAdmin()
     {
-        return Auth::check() && Auth::user()->isAtLeastAdmin();
+        return Auth::check() && Auth::user()->isSuperAdmin();
+    }
+    
+    protected function isAdmin()
+    {
+        return Auth::check() && Auth::user()->isAdmin();
     }
 }

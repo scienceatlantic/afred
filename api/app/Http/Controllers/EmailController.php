@@ -95,7 +95,7 @@ class EmailController extends Controller
                 ]);
                 
                 // Bcc all admins and up.
-                foreach(User::active()->admins(false)->get() as $admin) {
+                foreach(User::active()->admins()->get() as $admin) {
                     array_push($e['bcc'] , [
                         'name'  => $admin->getFullName(),
                         'email' => $admin->email

@@ -31,7 +31,7 @@ class ShowFacilityRepositoryRequest extends Request
             $id = Route::input('facility_repository');
             return FacilityUpdateLink::verifyToken($id, $token);
         }
-        return $this->isAtLeastAdmin();
+        return $this->isAdmin();
     }
 
     /**

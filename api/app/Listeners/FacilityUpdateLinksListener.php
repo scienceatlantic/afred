@@ -58,7 +58,7 @@ class FacilityUpdateLinksListener extends BaseListener
         
         // Blind copy all admins and up.
         $bcc = [];
-        foreach(User::active()->admins(false)->get() as $admin) {
+        foreach(User::active()->admins()->get() as $admin) {
             array_push($bcc, [
                 'name'  => $admin->getFullName(),
                 'email' => $admin->email
