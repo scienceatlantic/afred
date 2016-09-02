@@ -51,8 +51,8 @@ class CreateEquipmentTable extends Migration
 
         // Add FULLTEXT indices to 'purposeNoHtml' and 'speficationsNoHtml'
         // columns.
-        DB::statement('ALTER TABLE `equipment` ADD FULLTEXT equipment_purposenohtml_index(`purposeNoHtml`)');
-        DB::statement('ALTER TABLE `equipment` ADD FULLTEXT equipment_specificationsnohtml_index(`specificationsNoHtml`)');
+        //DB::statement('ALTER TABLE `equipment` ADD FULLTEXT equipment_purposenohtml_index(`purposeNoHtml`)');
+        //DB::statement('ALTER TABLE `equipment` ADD FULLTEXT equipment_specificationsnohtml_index(`specificationsNoHtml`)');
     }
 
     /**

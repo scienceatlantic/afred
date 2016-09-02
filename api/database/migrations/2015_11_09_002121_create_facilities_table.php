@@ -52,7 +52,7 @@ class CreateFacilitiesTable extends Migration
         });
 
         // Add FULLTEXT index to 'descriptionNoHtml' column.
-        DB::statement('ALTER TABLE `facilities` ADD FULLTEXT facilities_descriptionnohtml_index(`descriptionNoHtml`)');      
+        //DB::statement('ALTER TABLE `facilities` ADD FULLTEXT facilities_descriptionnohtml_index(`descriptionNoHtml`)');      
     }
 
     /**
