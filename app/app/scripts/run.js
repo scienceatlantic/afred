@@ -165,13 +165,6 @@ angular.module('afredApp').run(['$rootScope',
         // user successfully logged in.
         if (resp.firstName) {
           $rootScope._auth.user = resp;
-          
-          angular.forEach(resp.roles, function(role) {
-            if (role.name == 'Admin') {
-              $rootScope._auth.user.isAdmin = true;
-            }
-          });
-          
           return true;
         }
         
@@ -200,7 +193,7 @@ angular.module('afredApp').run(['$rootScope',
     $rootScope._auth.ping().then(function(response) {
       $rootScope._auth.save(response);
     }, function() {
-      // If the ping fails, redirect to 500?
+      // If the ping fails, do nothing.
     });
     
     /* ---------------------------------------------------------------------
@@ -208,8 +201,7 @@ angular.module('afredApp').run(['$rootScope',
      * --------------------------------------------------------------------- */
 
     /**
-     * Redirect the user to an error state. Currently, only two error states are
-     * supported, 404s and 500s. The default is 500.
+     * Redirect the user to an error state. The default is 500.
      *
      * Calls/uses/requires:
      * $rootScope._state.go()
@@ -307,8 +299,8 @@ angular.module('afredApp').run(['$rootScope',
 
     $rootScope._bootstrap = {
       /**
-       * These are Bootstrap's grid's breakpoints (in pixels) (useful for responsive
-       * design).
+       * These are Bootstrap's grid's breakpoints (in pixels) (useful for 
+       * responsive design).
        */
       grid: {
         breakpoints: {

@@ -12,9 +12,14 @@ class Province extends Model
      * @var array
      */
     protected $dates = ['dateCreated',
-                        'dateUpdated',
-                        'created_at',
-                        'updated_at'];
+                        'dateUpdated'];
+
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
     
     /**
      * The attributes that are mass assignable.
@@ -26,15 +31,24 @@ class Province extends Model
         'isHidden'
     ];
     
+    /**
+     * Relationship between a province and its facilities.
+     */
     public function facilities() {
         return $this->hasMany('App\Facility', 'provinceId');
     }
     
+    /**
+     * Scope for public provinces.
+     */
     public function scopeNotHidden($query)
     {
         return $query->where('isHidden', false);
     }
     
+    /**
+     * Scope for hidden provinces.
+     */
     public function scopeHidden($query)
     {
         return $query->where('isHidden', true);

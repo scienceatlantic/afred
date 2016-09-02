@@ -49,12 +49,12 @@ class JobCron extends Command
     {
         Log::info('Command: `cron:job` called.');
 
-        $db = Setting::lookup([
+        $s = Setting::lookup([
             'cronJobNumCycles',
             'cronJobSleepDuration'
         ]); 
-        $numCycles = $this->filterNumCycles($db['cronJobNumCycles']);
-        $sleepDur = $this->filterSleepDuration($db['cronJobSleepDuration']);
+        $numCycles = $this->filterNumCycles($s['cronJobNumCycles']);
+        $sleepDur = $this->filterSleepDuration($s['cronJobSleepDuration']);
         
         for ($cycle = 1; $cycle <= $numCycles; $cycle++) {   
             $numJobs = DB::table('jobs')->count();

@@ -13,12 +13,11 @@ class Equipment extends Model
     use Eloquence;
     
     /**
-     * The attributes that should be mutated to dates.
+     * Indicates if the model should be timestamped.
      *
-     * @var array
+     * @var bool
      */
-    protected $dates = ['created_at',
-                        'updated_at'];
+    public $timestamps = false;
     
     /**
      * The attributes that are mass assignable.
@@ -42,21 +41,35 @@ class Equipment extends Model
         'keywords'
     ];
     
+    /**
+     * Relationship between an equipment and the facility it belongs to.
+     */
     public function facility()
     {
         return $this->belongsTo('App\Facility', 'facilityId');
     }
     
+    /**
+     * Scope for hidden equipment.
+     */
     public function scopeHidden($query)
     {
         return $query->where('isPublic', false);
     }
     
+    /**
+     * Scope for public equipent.
+     */
     public function scopeNotHidden($query)
     {
         return $query->where('isPublic', true);
     }
     
+    /**
+     * Scope for excess capacity.
+     *
+     * @param bool $condition The default is true.
+     */
     public function scopeExcessCapacity($query, $condition = true)
     {
         return $query->where('hasExcessCapacity', $condition);

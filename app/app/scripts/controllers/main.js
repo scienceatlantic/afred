@@ -60,41 +60,54 @@ angular.module('afredApp').controller('MainController',
         slider: {
           
           /**
-           * Current index of image to show. See 'footer.html'.
+           * Current index of image to show.
+           * 
+           * @see 'footer.html' for the index values corresponding to each 
+           *     image.
            *
-           * @type float
+           * @type float See '$scope.main.footer.slider.run()' for why this is 
+           *     a float instead of an int.
            */
           currentImgIndex: 0.0,
           
           /**
-           * Interval in milliseconds for the '$scope.main.footer.slider.run'
-           * method.
+           * Interval in milliseconds for '$scope.main.footer.slider.run()'.
            *
            * @type integer
            */
           interval: 2500,
+
+          /**
+           * Total number of images in the slider. 
+           * 
+           * Used to reset the counter.
+           * 
+           * @type integer
+           */
+          numImages: 6,
           
           /**
            * Executes the slider.
            *
            * Side effects:
-           * currentImgIndex Increments the index every 'interval' milliseconds.
-           *     The index is reset to 0 when it's more than 3.
+           * currentImgIndex Is incremente
            */
           run: function() {
             // Alias to shorten code.
             var s = $scope.main.footer.slider;
             
             $interval(function() {
-              // Hack fix. Some browsers don't properly render the change if
-              // the images are loaded one after the other immediately. There's
-              // a little bit of a flicker because for a split second both
-              // images are shown at the same time. So we have to introduce a
-              // tiny delay in between.
+              // Hack fix. Some browsers don't properly render the change if the
+              // images are loaded one after the other immediately. There's a
+              // little bit of a flicker because for a split second both images
+              // are shown at the same time. So instead of incrementing the 
+              // index by 1, we're going to increase it by 0.1 (i.e. no images 
+              // are shown) and then use the timeout function (with a delay of
+              // 100ms) to increment it by 1 and then floor it back to an int.
               s.currentImgIndex += 0.1;
               $timeout(function() {
                 s.currentImgIndex = Math.floor(++s.currentImgIndex);
-                if (s.currentImgIndex === 4) {
+                if (s.currentImgIndex === s.numImages) {
                   s.currentImgIndex = 0;
                 }
               }, 100);        

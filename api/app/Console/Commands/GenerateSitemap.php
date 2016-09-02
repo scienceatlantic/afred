@@ -57,16 +57,12 @@ class GenerateSitemap extends Command
         $addEquipmentChangeFreq = false;
 
         // Sitemap settings from database.
-        $db = Setting::lookup([
-            'appAddress',
-            'sitemapFilename',
-            'sitemapFixedUrls',
-            'sitemapPing'
+        $s = Setting::lookup([
+            'appAddress'       => 'base',
+            'sitemapFilename'  => 'filename',
+            'sitemapFixedUrls' => 'fixedUrls',
+            'sitemapPing'      => 'ping'
         ]);
-        $base = $db['appAddress'];
-        $smFilename = $db['sitemapFilename'];
-        $fixedUrls = $db['sitemapFixedUrls'];
-        $ping = $db['sitemapPing'];
 
         // Create XML object.
         $sm = '<?xml version="1.0" encoding="UTF-8"?>';
@@ -75,9 +71,9 @@ class GenerateSitemap extends Command
         $sm = new SimpleXMLElement($sm);
 
         // Insert fixed URLs.
-        foreach($fixedUrls as $url) {
+        foreach($s['fixedUrls'] as $url) {
             $urlElmt = $sm->addChild('url');
-            $urlElmt->addChild('loc', $base . $url);
+            $urlElmt->addChild('loc', $s['base'] . $url);
         }
 
         // Insert dynamic (public facilities and equipment) URLs.
@@ -89,7 +85,7 @@ class GenerateSitemap extends Command
         foreach($facilities as $f) {
             // Insert public facility URL and lastmod.
             // I.e. https://appAddress/facilities/{f-id}.
-            $fUrl = $base . '/facilities/' . $f->id;
+            $fUrl = $s['base'] . '/facilities/' . $f->id;
             $urlElmt = $sm->addChild('url');
             $urlElmt->addChild('loc', $fUrl);
             if ($addFacilityLastMod) {
@@ -122,19 +118,19 @@ class GenerateSitemap extends Command
         }
 
         // Create sitemap file.
-        $handle = fopen($smFilename . '-new', 'w');
+        $handle = fopen($s['filename'] . '-new', 'w');
         fwrite($handle, $sm->asXML());
         fclose($handle);
 
         // Check if the files are different, if they are, override the existing
         // sitemap, if they are not, discard the sitemap that was just
         // generated.
-        if ($this->areFilesDiff($smFilename, $smFilename . '-new')) {
-            rename($smFilename . '-new', $smFilename);
-            $this->ping($base, $ping);
+        if ($this->areFilesDiff($s['filename'], $s['filename'] . '-new')) {
+            rename($s['filename'] . '-new', $s['filename']);
+            $this->ping($s['base'], $s['ping']);
             Log::info('Sitemap generated.');
         } else {
-            unlink($smFilename . '-new');
+            unlink($s['filename'] . '-new');
             Log::info('No change to sitemap.');
         }
     }
@@ -174,7 +170,11 @@ class GenerateSitemap extends Command
                 $ch = curl_init($service . $base . $sitemap);
                 curl_exec($ch);
                 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-                if ($httpCode < 200 || $httpCode >= 300) {
+                if ($httpCode >= 200 && $httpCode < 300) {
+                    Log::info('Sitemap pinged.', [
+                        'service' => $service
+                    ]);
+                } else {
                     Log::error('Error pinging service.', [
                         'curlError' => curl_error($ch),
                         'service'   => $service

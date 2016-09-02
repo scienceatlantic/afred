@@ -36,3 +36,4 @@ grunt-prod:
 
 	rm ./dist/index.dev.html
 	rm ./dist/robots.txt
+	rm ./dist/.htaccess

@@ -49,14 +49,14 @@ class UpdateFacilityRepositoryRequest extends Request
             case 'PUBLISHED':
             case 'REJECTED':
                 if ($currentState == 'PENDING_APPROVAL') {
-                    return $this->isAtLeastAdmin();
+                    return $this->isAdmin();
                 }
                 return false;
             // Like the above, can only be performed by at least an admin.
             case 'PUBLISHED_EDIT':
             case 'REJECTED_EDIT':
                 if ($currentState == 'PENDING_EDIT_APPROVAL') {
-                    return $this->isAtLeastAdmin();
+                    return $this->isAdmin();
                 }
                 return false;
             default:

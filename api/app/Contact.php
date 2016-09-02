@@ -7,13 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class Contact extends Model
 {
     /**
-     * The attributes that should be mutated to dates.
+     * Indicates if the model should be timestamped.
      *
-     * @var array
+     * @var bool
      */
-    protected $dates = ['created_at',
-                        'updated_at'];
-    
+    public $timestamps = false;
+        
     /**
      * The attributes that are mass assignable.
      *
@@ -31,11 +30,19 @@ class Contact extends Model
         'website'
     ];
     
+    /**
+     * Relationship between a contact and the facility it belongs to.
+     */
     public function facility()
     {
         return $this->belongsTo('App\Facility', 'facilityId');
     }
     
+    /**
+     * Returns a contact's full name.
+     *
+     * Note: This method can only be called on a single instance of a contact.
+     */
     public function getFullName()
     {
         return $this->firstName . ' ' . $this->lastName;

@@ -12,10 +12,12 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 // Misc.
+use DB;
 use Log;
 
 // Models.
 use App\Role;
+use App\UserSetting;
 
 class User extends Model implements AuthenticatableContract,
                                     AuthorizableContract,
@@ -37,9 +39,14 @@ class User extends Model implements AuthenticatableContract,
      */
     protected $dates = ['dateLastLogin',
                         'dateCreated',
-                        'dateUpdated',
-                        'created_at',
-                        'updated_at'];
+                        'dateUpdated'];
+
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
     
     /**
      * The attributes that are mass assignable.
@@ -60,28 +67,154 @@ class User extends Model implements AuthenticatableContract,
      */
     protected $hidden = ['password', 'remember_token'];
     
-    public function scopeAdmins($query)
-    {
-        return $query->roles()->admins;
-    }
-    
+    /**
+     * Relationship between a user and its roles.
+     */
     public function roles()
     {
         return $this->belongsToMany('App\Role', 'role_user', 'userId',
             'roleId');
     }
-    
-    public function isAtLeastAdmin()
+
+    /**
+     * Relationship between a user and its settings.
+     */
+    public function settings()
     {
-        $rolePermission = Role::where('name', 'Admin')->value('permission');
-        $userPermission = $this->roles()->orderBy('permission', 'desc')
-            ->first()->value('permission');
-            
-        return $userPermission >= $rolePermission;
+        return $this->hasMany('App\UserSetting', 'userId');
+    }
+
+    /**
+     * Active users scope.
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('isActive', true);
+    }
+
+    /**
+     * Inactive users scope.
+     */
+    public function scopeNotActive($query)
+    {
+        return $query->where('isActive', false);
+    }
+
+    /**
+     * Super admin users scope.
+     *
+     * @uses User::role()
+     *
+     * @param boolean $strict Default is false. False = Super admin and up are 
+     *     returned, true = only super admins are returned.
+     */
+    public function scopeSuperAdmins($query, $strict = false)
+    {
+        return $this->role($query, 'SUPER_ADMIN');
+    }
+
+    /**
+     * Admin users scope.
+     *
+     * @uses User::role()
+     *
+     * @param boolean $strict Default is false. False = Admin and up are 
+     *     returned, false = only admins are returned.
+     */
+    public function scopeAdmins($query, $strict = false)
+    {
+        return $this->role($query, 'ADMIN', $strict);
+    }
+
+    /**
+     * Check if user is a SUPER ADMIN
+     *
+     * @uses User::isRole()
+     *
+     * @param boolean $strict Default is false. True = user must be assigned the
+     *     SUPER ADMIN role explicitly for a true value to be returned, false = 
+     *     a true value is returned even if the user is not an SUPER ADMIN 
+     *     explicitly but is assigned a role with a higher permission level.
+     *
+     * @return boolean True is user a SUPER ADMIN.
+     */
+    public function isSuperAdmin($strict = false)
+    {
+        return $this->isRole('SUPER_ADMIN', $strict);
+    }
+
+    /**
+     * Check if user is an ADMIN.
+     *
+     * @uses User::isRole()
+     *
+     * @param boolean $strict Default is false. True = user must be assigned the
+     *     ADMIN role explicitly for a true value to be returned, false = a true
+     *     value is returned even if the user is not an ADMIN explicitly but is
+     *     assigned a role with a higher permission level.
+     *
+     * @return boolean True if user is an ADMIN.
+     */
+    public function isAdmin($strict = false)
+    {    
+        return $this->isRole('ADMIN', $strict);
     }
     
+    /**
+     * Gets a concatenated string of the user's first name and last name with a
+     * space in between.
+     *
+     * @return string 
+     */
     public function getFullName()
     {
         return $this->firstName . ' ' . $this->lastName;
+    }
+
+    /**
+     * Retrieves a setting value.
+     * 
+     * @see UserSetting:lookup() for how this works.
+     */
+    public function lookup($name, $default = null)
+    {
+        return UserSetting::lookup($this->id, $name, $default);
+    }
+
+    private function role($query, $role, $strict = true)
+    {
+        // Get permission level.
+        $roleIds = Role::where('permission', $strict ? '=' : '>=', 
+            Role::lookup($role))->get()->pluck('id');
+
+        // Search bridge table for matching users and return if matches found.
+        if ($ru = DB::table('role_user')->whereIn('roleId', $roleIds)->get()) {
+            return $query->whereIn('id', collect($ru)->pluck('userId'));
+        }
+
+        // Otherwise, return empty collection.
+        return $query->whereIn('id', [-1]);
+    }
+
+    private function isRole($role, $strict = true)
+    {
+        if ($strict) {
+            return $this->getPermission($role) === Role::lookup($role);
+        }
+        return $this->getMaxPermission($role) >= Role::lookup($role);
+    }
+
+    private function getPermission($role)
+    {
+        if ($role = $this->roles()->where('name', $role)->first()) {
+            return $role->permission;
+        }
+        return -1;
+    }
+
+    public function getMaxPermission()
+    {
+         return $this->roles()->orderBy('permission', 'desc')->first()
+            ->permission;     
     }
 }

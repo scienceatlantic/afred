@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 use Log;
 
 // Models.
-use App\Role;
+use App\User;
 use App\Setting;
 
 // Requests.
@@ -94,8 +94,8 @@ class EmailController extends Controller
                     'email' => Setting::lookup('springboardFormEmail')
                 ]);
                 
-                // Bcc all admins.
-                foreach(Role::admin()->users()->get() as $admin) {
+                // Bcc all admins and up.
+                foreach(User::active()->admins()->get() as $admin) {
                     array_push($e['bcc'] , [
                         'name'  => $admin->getFullName(),
                         'email' => $admin->email

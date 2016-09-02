@@ -17,7 +17,7 @@ class FacilityRequest extends Request
             case 'GET':
                 return true;
             default:
-                return $this->isAtLeastAdmin();
+                return $this->isAdmin();
         }
     }
 

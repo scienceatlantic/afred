@@ -14,11 +14,12 @@ class CreateOrganizationsTable extends Migration
     {
         Schema::create('organizations', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 150)->unique();
-            $table->boolean('isHidden')->default(false);
+            $table->string('name', 150)
+                  ->unique();
+            $table->boolean('isHidden')
+                  ->default(false);
             $table->dateTime('dateCreated');
             $table->dateTime('dateUpdated');
-            $table->timestamps();
         });
     }
 

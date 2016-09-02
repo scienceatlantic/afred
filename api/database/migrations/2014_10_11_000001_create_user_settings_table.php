@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSettingsTable extends Migration
+class CreateUserSettingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,10 +12,16 @@ class CreateSettingsTable extends Migration
      */
     public function up()
     {
-        Schema::create('settings', function (Blueprint $table) {
+        Schema::create('user_settings', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 255)
-                  ->unique();
+            $table->integer('userId')
+                  ->unsigned();
+            $table->foreign('userId')
+                  ->references('id')
+                  ->on('users')
+                  ->onDelete('cascade')
+                  ->onUpdate('cascade');
+            $table->string('name', 255);
             $table->enum('type', ['INT',
                                   'BOOLEAN',
                                   'DOUBLE',
@@ -31,6 +37,7 @@ class CreateSettingsTable extends Migration
                   ->nullable();
             $table->dateTime('dateCreated');
             $table->dateTime('dateUpdated');
+            $table->unique(['userId','name']);
         });
     }
 
@@ -41,6 +48,6 @@ class CreateSettingsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('settings');
+        Schema::drop('user_settings');
     }
 }

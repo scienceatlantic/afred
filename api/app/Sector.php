@@ -12,9 +12,14 @@ class Sector extends Model
      * @var array
      */
     protected $dates = ['dateCreated',
-                        'dateUpdated',
-                        'created_at',
-                        'updated_at'];
+                        'dateUpdated'];
+
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
     
     /**
      * The attributes that are mass assignable.
@@ -25,6 +30,9 @@ class Sector extends Model
         'name'
     ];
     
+    /**
+     * Relationship between sectors and its facilities.
+     */
     public function facilities()
     {
         return $this->belongsToMany('App\Facility', 'facility_sector',

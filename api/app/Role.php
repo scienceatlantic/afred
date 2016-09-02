@@ -2,7 +2,11 @@
 
 namespace App;
 
+// Laravel.
 use Illuminate\Database\Eloquent\Model;
+
+// Misc.
+use Log;
 
 class Role extends Model
 {
@@ -12,8 +16,14 @@ class Role extends Model
      * @var array
      */
     protected $dates = ['dateCreated',
-                        'created_at',
-                        'updated_at'];
+                        'dateUpdated'];
+
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
     
     /**
      * The attributes that are mass assignable.
@@ -22,17 +32,34 @@ class Role extends Model
      */
     protected $fillable = [
         'name',
-        'permisssion'
+        'permission'
     ];
     
+    /**
+     * Relationship between roles and users.
+     */
     public function users()
     {
         return $this->belongsToMany('App\User', 'role_user', 'roleId',
             'userId');
     }
-    
-    public function scopeAdmin($query)
+
+    /**
+     * Returns a particular role's permission level.
+     * 
+     * @param string Name of the role. If an invalid role is provided, it will
+     * be logged and the application will be aborted with an HTTP 500.
+     *
+     * @return integer
+     */
+    public function scopeLookup($query, $role)
     {
-        return $query->where('name', 'Admin')->first();
+        if (!$role = $query->where('name', $role)->first()) {
+            Log::error('Role not found. Aborting!', [
+                'role' => $role
+            ]);
+            abort(500);
+        }
+        return $role->permission;
     }
 }
