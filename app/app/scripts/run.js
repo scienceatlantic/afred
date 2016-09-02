@@ -201,8 +201,7 @@ angular.module('afredApp').run(['$rootScope',
      * --------------------------------------------------------------------- */
 
     /**
-     * Redirect the user to an error state. Currently, only two error states are
-     * supported, 404s and 500s. The default is 500.
+     * Redirect the user to an error state. The default is 500.
      *
      * Calls/uses/requires:
      * $rootScope._state.go()
