@@ -212,7 +212,7 @@ class User extends Model implements AuthenticatableContract,
         return -1;
     }
 
-    private function getMaxPermission()
+    public function getMaxPermission()
     {
          return $this->roles()->orderBy('permission', 'desc')->first()
             ->permission;     
