@@ -16,7 +16,7 @@ class CreateRolesTable extends Migration
             $table->increments('id');
             $table->string('name')
                   ->unique();
-            $table->integer('permission')
+            $table->smallInteger('permission')
                   ->unsigned();
             $table->dateTime('dateCreated');
             $table->dateTime('dateUpdated');
