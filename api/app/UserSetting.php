@@ -43,13 +43,13 @@ class UserSetting extends Model
                 return (double) $v;
             case 'JSONTEXT':
                 $v = DB::table('user_settings_text')
-                    ->where('userSettingId', $this->id)->value('value');
+                    ->where('userSettingId', $this->id)->first()->value;
                 // No break.
             case 'JSON':
                 return json_decode($v, true);
             case 'TEXT':
                 return DB::table('user_settings_text')
-                    ->where('userSettingId', $this->id)->value('value');
+                    ->where('userSettingId', $this->id)->first()->value;
             case 'EMAIL':
             case 'URL':
             case 'DATE':
