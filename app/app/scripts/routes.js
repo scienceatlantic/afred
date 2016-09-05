@@ -117,17 +117,7 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         'abstract': true,
         url: '/admin',
         templateUrl: 'views/admin.html',
-        resolve: {
-          ping: ['$rootScope', function($rootScope) {
-            return $rootScope._auth.ping().then(function(response) {
-              if (!$rootScope._auth.save(response)) {
-                $rootScope._state.go('login', { redirect: location.href }); 
-              }
-            }, function(response) {
-              $rootScope._httpError(response);
-            });
-          }]
-        }
+        controller: 'AdminController'
       }).
       state('admin.account', {
         url: '/account',
@@ -259,20 +249,9 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         controller: 'AdminDisciplinesShowController'
       }).
       state('login', {
-        url: '/login?redirect',
+        url: '/login',
         templateUrl: 'views/login.html',
-        controller: 'LoginController',
-        resolve: {
-          ping: ['$rootScope', function($rootScope) {
-            return $rootScope._auth.ping().then(function(response) {
-              if ($rootScope._auth.save(response)) {  
-                $rootScope._state.go('admin.dashboard');
-              }
-            }, function(response) {
-              $rootScope._httpError(response);
-            });
-          }]
-        }
+        controller: 'LoginController'
       }).
       state('error', {
         'abstract': true,
