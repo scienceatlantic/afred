@@ -280,7 +280,16 @@ angular.module('afredApp').run(['$rootScope',
           // not authorised (permission level) to view the content, if we didn't
           // do that, this would create an infinite redirect.
           if (!$rootScope._auth.user.id && fromState) {
-            $rootScope._state.fromState = fromState;
+            // Do not update the '$rootScope._state.fromState' property if it's
+            // a redirect to the login page. If there are multiple identical 
+            // AJAX requests to redirect to the login page and one (or more)
+            // calls are made after the app has already redirected to the login
+            // page, this condition prevents the more recent calls from
+            // overwriting the '$rootScope._state.fromState' property to 
+            // 'login' (i.e. losing the actual state the app was in). 
+            if (!fromState.includes('login')) {
+              $rootScope._state.fromState = fromState;
+            }
             $rootScope._state.go('login');
             break;
           }
