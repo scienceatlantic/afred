@@ -21,7 +21,9 @@ angular.module('afredApp').controller('LoginController',
         // '$scope._state.fromState' was not set).
         if ($scope._auth.save(response)) {
           if ($scope._state.fromState) {
-            location.href = $scope._state.fromState;
+            var fromState = $scope._state.fromState;
+            $scope._state.fromState = null;
+            location.href = fromState;
           } else {
             $scope._state.go('admin.dashboard');
           }
