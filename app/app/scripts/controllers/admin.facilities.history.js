@@ -63,12 +63,17 @@ angular.module('afredApp').controller('AdminFacilitiesHistoryController', [
        * Uses/calls/requires:
        * facilityRepositoryResource
        * $scope.history.form.data.page
+       * $scope._httpError403()
        */
       query: function() {
         $scope.history.resource = facilityRepositoryResource.query({
           facilityId: $scope._stateParams.facilityId,
           page: $scope.history.form.data.page,
           itemsPerPage: 5
+        }, function() {
+          // Do nothing if successful.
+        }, function(response) {
+          $scope._httpError403(response);
         });
       }
     }; 

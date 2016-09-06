@@ -17,14 +17,14 @@ angular.module('afredApp').controller('AdminController',
     // Check if the user is logged in and if not, redirect to login. This code
     // is being run in the abstract 'admin' state so that all states requiring
     // authenticated access are covered.
-    $scope._auth.ping('promise').then(function(resp) {
+    $scope._auth.ping('promise').then(function(response) {
       // We're assuming that if the response doesn't contain the user's details
       // (id in this case), the user is not authenticated.
-      if (!resp.data.id) {
+      if (!response.data.id) {
         $scope._httpError403('403');
       }
-    }, function() {
-      // If the call fails, do nothing.
+    }, function(response) {
+      $scope._httpError(response);
     });
   }
 ]);

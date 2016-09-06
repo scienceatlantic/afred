@@ -22,7 +22,7 @@ angular.module('afredApp').controller('AdminDashboardController',
       $scope.stats.data = response.data;
       $scope.loading.stats = false;
     }, function(response) {
-      $scope._httpError(response);
+      $scope._httpError403(response);
     });
     
     /**

@@ -124,7 +124,7 @@ angular.module('afredApp').controller('AdminProvincesShowController', [
      * 
      * Uses/calls/requires:
      * angular.copy()
-     * $scope._httpError()
+     * $scope._httpError403()
      * 
      * @type {Angular resource}
      */
@@ -133,7 +133,7 @@ angular.module('afredApp').controller('AdminProvincesShowController', [
         $scope.provinceCopy = angular.copy($scope.province);
       },
       function(response) {
-        $scope._httpError(response);
+        $scope._httpError403(response);
       }
     );
     

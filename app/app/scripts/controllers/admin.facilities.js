@@ -157,6 +157,7 @@ angular.module('afredApp').controller('AdminFacilitiesController',
        * facilityRepositoryResource
        * $scope.facility.form.data.page
        * $scope.facility.form.data.state
+       * $scope._httpError403()
        */
       query: function() {
         $scope.facilities.fr = facilityRepositoryResource.query({
@@ -164,6 +165,10 @@ angular.module('afredApp').controller('AdminFacilitiesController',
           itemsPerPage: 10,
           state: $scope.facilities.form.data.state,
           visibility: $scope.facilities.form.data.visibility
+        }, function() {
+          // Do nothing if successful.
+        }, function(response) {
+          $scope._httpError403(response);
         });
       }
     };

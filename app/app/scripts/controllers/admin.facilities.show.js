@@ -38,6 +38,7 @@ angular.module('afredApp').controller('AdminFacilitiesShowController', [
      * isFinite()
      * $scope._httpError() Called when either an AJAX call fails or when
      *     the URL contains invalid parameters.
+     * $scope._httpError403()
      */
     $scope.getFacilityRepository = function() {
       if (isFinite($scope._stateParams.facilityRepositoryId)) {
@@ -46,7 +47,7 @@ angular.module('afredApp').controller('AdminFacilitiesShowController', [
         }, function() {
           $scope.formatForApp();
         }, function(response) {
-          $scope._httpError(response);
+          $scope._httpError403(response);
         });        
       } else {
         // Called if the '$scope._stateParams.facilityId' contains an invalid
