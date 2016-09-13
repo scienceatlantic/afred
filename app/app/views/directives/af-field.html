@@ -7,7 +7,7 @@
     <div data-ng-transclude></div>
     
     <!-- Field length count goes here. -->
-    <p class="text-muted" data-ng-show="model.length">
+    <p class="text-muted" data-ng-if="model.length">
       <small>
         <span data-ng-if="!isTextAngular">{{ model.length }}</span><!--
      --><span data-ng-if="isTextAngular">{{ getTextAngularContentLength(model) }}</span>/{{ maxLength }} characters remaining.
@@ -17,11 +17,12 @@
     <!-- Validation error text. -->
     <p data-ng-if="form[name]">
       <small>
-        <span data-ng-show="form[name].$dirty">
-          <span class="text-danger" data-ng-show="form[name].$error.required">This is required.</span>
-          <span class="text-danger" data-ng-show="form[name].$error.url">That's not a valid URL.</span>
-          <span class="text-danger" data-ng-show="form[name].$error.email">That's not a valid email.</span>
-          <span class="text-danger" data-ng-show="form[name].$error.pattern">That's not quite right.</span>
+        <span data-ng-if="form[name].$dirty">
+          <span class="text-danger" data-ng-if="form[name].$error.required">This is required.</span>
+          <span class="text-danger" data-ng-if="form[name].$error.url">That's not a valid URL.</span>
+          <span class="text-danger" data-ng-if="form[name].$error.email">That's not a valid email.</span>
+          <span class="text-danger" data-ng-if="form[name].$error.pattern">That's not quite right.</span>
+          <span class="text-danger" data-ng-if="form[name].$error.minlength || form[name].$error.maxlength">Must be between {{ minLength }} to {{ maxLength }} characters in length.</span>
         </span>
       </small>
     </p>
