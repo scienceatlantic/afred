@@ -24,6 +24,8 @@ class CreateUsersTable extends Migration
                   ->default(true);
             $table->dateTime('dateLastLogin')
                   ->nullable();
+            $table->dateTime('dateLastPinged')
+                  ->nullable();
             $table->dateTime('dateCreated');
             $table->dateTime('dateUpdated');
         });
