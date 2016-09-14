@@ -78,7 +78,7 @@ class Role extends Model
         if ($len = count($roleIds)) {
             $found = false;
             for ($i = 0; $i < $len; $i++) {
-                if (Role::find($roleIds[$i])) {
+                if (is_numeric($roleIds[$i]) && Role::find($roleIds[$i])) {
                     $query->whereIn('id', $roleIds);
                     $found = true;
                     break;
