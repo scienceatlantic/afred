@@ -47,28 +47,26 @@ class AuthController extends Controller
         Auth::logout();
     }
 
-    private function format($updateDateLast = 'pinged')
+    public static function format($updateDateLast = 'pinged', $user = false)
     {
-        // Update date last login and date last pinged.
-        $now = $this->now();
-        switch ($updateDateLast) {
-            case 'login':
-                Auth::user()->dateLastLogin = $now;
-                // No break.
-            case 'pinged':
-                Auth::user()->dateLastPinged = $now;
+        // Set default.
+        $user = $user ?: Auth::user();
+        
+        // Update dates.
+        if ($updateDateLast) {
+            self::updateDates($updateDateLast);
         }
-        Auth::user()->save();
-
-        $array = Auth::user()->toArray();
+        
+        // Get array.
+        $array = $user->toArray();
 
         // Add max permission level.
-        $maxPermission = Auth::user()->getMaxPermission();
+        $maxPermission = $user->getMaxPermission();
         $array['maxPermissionLevel'] = $maxPermission;
 
         $roles = [];
         // Add "Strict" (i.e. have been explicitly assigned) roles.
-        foreach (Auth::user()->roles()->get() as $r) {
+        foreach ($user->roles()->get() as $r) {
             $roles[$r->id] = [
                 'name'       => $r->name,
                 'permission' => $r->permission
@@ -88,5 +86,23 @@ class AuthController extends Controller
         $array['roles'] = (object) $roles;
 
         return $array;
+    }
+
+    private static function updateDates($dateLast = 'pinged', $user = false)
+    {
+        // Get default.
+        $user = $user ?: Auth::user();
+
+        // Get current time.
+        $now = Controller::now();
+
+        switch ($dateLast) {
+            case 'login':
+                $user->dateLastLogin = $now;
+                // No break.
+            case 'pinged':
+                $user->dateLastPinged = $now;
+        }
+        $user->save();
     }
 }
