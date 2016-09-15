@@ -50,12 +50,12 @@ class UserController extends Controller
         $user->lastName = $request->lastName;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
-        $user->isActive = true;
+        $user->isActive = $request->isActive;
         $user->dateCreated = $now;
         $user->dateUpdated = $now;
         $user->save();
         $user->roles()->attach($request->roles);
-        return $user;
+        return AuthController::format(false, $user);
     }
 
     /**
@@ -66,7 +66,7 @@ class UserController extends Controller
      */
     public function show(UserRequest $request, $id)
     {
-        return User::with('roles')->findOrFail($id);
+        return AuthController::format(false, User::findOrFail($id));
     }
 
     /**
@@ -86,11 +86,12 @@ class UserController extends Controller
         if ($request->password) {
             $user->password = Hash::make($request->password);
         }
-        $user->isActive = true;
+        $user->isActive = $request->isActive;
         $user->dateCreated = $now;
         $user->dateUpdated = $now;
         $user->save();
-        return $user;
+        $user->roles()->sync($request->roles);
+        return AuthController::format(false, $user);
     }
 
     /**
@@ -101,7 +102,7 @@ class UserController extends Controller
      */
     public function destroy(UserRequest $request, $id)
     {
-        $u = User::with('roles')->findOrFail($id);
+        $u = User::findOrFail($id);
         $deletedUser = $u->toArray();
         $u->delete();
         return $this->toCcArray($deletedUser);

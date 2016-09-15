@@ -41,6 +41,11 @@ class UserRequest extends Request
                 return false;
             case 'DELETE':
                 if ($this->isAdmin()) {
+                    // Not allowed to delete yourself.
+                    if (Auth::user()->id == Route::input('users')) {
+                        return false;
+                    }
+
                     $maxAuthRole = Auth::user()->getMaxPermission();
                     $maxAssignRole = User::findOrFail(Route::input('users'))
                         ->getMaxPermission();
@@ -71,7 +76,7 @@ class UserRequest extends Request
                 if ($this->method() == 'POST') {
                     $r['password'] .= '|required';
                 }
-                $r['isActive'] = 'digits_between:0,1';
+                $r['isActive'] = 'required|digits_between:0,1';
                 $r['roles'] = 'required|array';
                 $roles = $this->instance()->input('roles', []);
                 $length = count($roles);
