@@ -97,11 +97,11 @@ abstract class Controller extends BaseController
      * @param {array} $array Associative array.
      * @return {array}
      */
-    protected function toCcArray($array)
+    protected static function toCcArray($array)
     { 
         $a = [];
         foreach($array as $k => $v) {
-            $a[camel_case($k)] = is_array($v) ? $this->toCcArray($v) : $v;
+            $a[camel_case($k)] = is_array($v) ? self::toCcArray($v) : $v;
         }
         return $a;
     }
@@ -120,7 +120,6 @@ abstract class Controller extends BaseController
         } else {
             $model = $model->get();
         }
-        
         return $toCcArray ? $this->toCcArray($model->toArray()) : $model;
     }
     
@@ -128,7 +127,7 @@ abstract class Controller extends BaseController
      * Returns the current datetime.
      * @return {string} Current datetime.
      */
-    public function now($toDateTimeString = true)
+    public static function now($toDateTimeString = true)
     {
         $now = Carbon::now();
         return $toDateTimeString ? $now->toDateTimeString() : $now;
