@@ -46,6 +46,12 @@ class UserRequest extends Request
                         return false;
                     }
 
+                    // Not allowed to delete a user that has reviewed facility
+                    // repository records.
+                    if (User::find(Route::input('users'))->frs()->count()) {
+                        return false;
+                    }
+
                     $maxAuthRole = Auth::user()->getMaxPermission();
                     $maxAssignRole = User::findOrFail(Route::input('users'))
                         ->getMaxPermission();
