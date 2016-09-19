@@ -64,12 +64,12 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         controller: 'FacilitiesFormCreateController'
       }).
       state('facilities.form.edit', {
-        url: '/:facilityRepositoryId/edit?token',
+        url: '/{facilityRepositoryId:int}/edit?token',
         templateUrl: 'views/facilities.form.edit.html',
         controller: 'FacilitiesFormEditController'
       }).
       state('facilities.show', {
-        url: '/:facilityId',
+        url: '/{facilityId:int}',
         templateUrl: 'views/facilities.show.html',
         controller: 'FacilitiesShowController'
       }).
@@ -79,7 +79,7 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         template: '<div data-ui-view></div>'
       }).
       state('facilities.show.equipment.show', {
-        url: '/:equipmentId',
+        url: '/{equipmentId:int}',
         templateUrl: 'views/facilities.show.equipment.show.html',
         controller: 'FacilitiesShowEquipmentShowController'
       }).
@@ -181,7 +181,7 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         controller: 'AdminOrganizationsCreateController'
       }).
       state('admin.organizations.show', {
-        url: '/:organizationId',
+        url: '/{organizationId:int}',
         templateUrl: 'views/admin.organizations.show.html',
         controller: 'AdminOrganizationsShowController'
       }).
@@ -202,7 +202,7 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         controller: 'AdminProvincesCreateController'
       }).
       state('admin.provinces.show', {
-        url: '/:provinceId',
+        url: '/{provinceId:int}',
         templateUrl: 'views/admin.provinces.show.html',
         controller: 'AdminProvincesShowController'
       }).
@@ -223,7 +223,7 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         controller: 'AdminSectorsCreateController'
       }).
       state('admin.sectors.show', {
-        url: '/:sectorId',
+        url: '/{sectorId:int}',
         templateUrl: 'views/admin.sectors.show.html',
         controller: 'AdminSectorsShowController'
       }).
@@ -244,7 +244,7 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         controller: 'AdminDisciplinesCreateController'
       }).
       state('admin.disciplines.show', {
-        url: '/:disciplineId',
+        url: '/{disciplineId:int}',
         templateUrl: 'views/admin.disciplines.show.html',
         controller: 'AdminDisciplinesShowController'
       }).
@@ -265,7 +265,7 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         controller: 'AdminUsersCreateController'
       }).
       state('admin.users.show', {
-        url: '/:userId',
+        url: '/{userId:int}',
         templateUrl: 'views/admin.users.show.html',
         controller: 'AdminUsersShowController'
       }).
