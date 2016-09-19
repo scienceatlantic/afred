@@ -75,10 +75,10 @@ class Role extends Model
     {
         // If an array of role IDs were provided, check that at least one of the
         // IDs are valid. If none of the IDs are valid, return -1.
-        if ($len = count($roleIds)) {
+        if (count($roleIds)) {
             $found = false;
-            for ($i = 0; $i < $len; $i++) {
-                if (is_numeric($roleIds[$i]) && Role::find($roleIds[$i])) {
+            foreach ($roleIds as $roleId) {
+                if (is_numeric($roleId) && Role::find($roleId)) {
                     $query->whereIn('id', $roleIds);
                     $found = true;
                     break;
