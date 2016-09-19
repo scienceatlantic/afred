@@ -62,4 +62,32 @@ class Role extends Model
         }
         return $role->permission;
     }
+
+    /**
+     * Returns the maximum permission level.
+     *
+     * @param array $roleIds (Optional) If provided, query will narrow down by 
+     *     the role IDs in this array.
+     * @return integer Permission level or -1 if $roleIds doesn't contain any
+     *     valid role IDs.
+     */
+    public function scopeMaxPermission($query, $roleIds = [])
+    {
+        // If an array of role IDs were provided, check that at least one of the
+        // IDs are valid. If none of the IDs are valid, return -1.
+        if (count($roleIds)) {
+            $found = false;
+            foreach ($roleIds as $roleId) {
+                if (is_numeric($roleId) && Role::find($roleId)) {
+                    $query->whereIn('id', $roleIds);
+                    $found = true;
+                    break;
+                }
+            }
+            if (!$found) {
+                return -1;
+            }
+        }
+        return $query->max('permission');
+    }
 }

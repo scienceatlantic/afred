@@ -64,12 +64,12 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         controller: 'FacilitiesFormCreateController'
       }).
       state('facilities.form.edit', {
-        url: '/:facilityRepositoryId/edit?token',
+        url: '/{facilityRepositoryId:int}/edit?token',
         templateUrl: 'views/facilities.form.edit.html',
         controller: 'FacilitiesFormEditController'
       }).
       state('facilities.show', {
-        url: '/:facilityId',
+        url: '/{facilityId:int}',
         templateUrl: 'views/facilities.show.html',
         controller: 'FacilitiesShowController'
       }).
@@ -79,7 +79,7 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         template: '<div data-ui-view></div>'
       }).
       state('facilities.show.equipment.show', {
-        url: '/:equipmentId',
+        url: '/{equipmentId:int}',
         templateUrl: 'views/facilities.show.equipment.show.html',
         controller: 'FacilitiesShowEquipmentShowController'
       }).
@@ -117,17 +117,7 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         'abstract': true,
         url: '/admin',
         templateUrl: 'views/admin.html',
-        resolve: {
-          ping: ['$rootScope', function($rootScope) {
-            return $rootScope._auth.ping().then(function(response) {
-              if (!$rootScope._auth.save(response)) {
-                $rootScope._state.go('login', { redirect: location.href }); 
-              }
-            }, function(response) {
-              $rootScope._httpError(response);
-            });
-          }]
-        }
+        controller: 'AdminController'
       }).
       state('admin.account', {
         url: '/account',
@@ -191,7 +181,7 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         controller: 'AdminOrganizationsCreateController'
       }).
       state('admin.organizations.show', {
-        url: '/:organizationId',
+        url: '/{organizationId:int}',
         templateUrl: 'views/admin.organizations.show.html',
         controller: 'AdminOrganizationsShowController'
       }).
@@ -212,7 +202,7 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         controller: 'AdminProvincesCreateController'
       }).
       state('admin.provinces.show', {
-        url: '/:provinceId',
+        url: '/{provinceId:int}',
         templateUrl: 'views/admin.provinces.show.html',
         controller: 'AdminProvincesShowController'
       }).
@@ -233,7 +223,7 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         controller: 'AdminSectorsCreateController'
       }).
       state('admin.sectors.show', {
-        url: '/:sectorId',
+        url: '/{sectorId:int}',
         templateUrl: 'views/admin.sectors.show.html',
         controller: 'AdminSectorsShowController'
       }).
@@ -254,25 +244,35 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         controller: 'AdminDisciplinesCreateController'
       }).
       state('admin.disciplines.show', {
-        url: '/:disciplineId',
+        url: '/{disciplineId:int}',
         templateUrl: 'views/admin.disciplines.show.html',
         controller: 'AdminDisciplinesShowController'
       }).
+      state('admin.users', {
+        'abstract': true,
+        url: '/users',
+        templateUrl: 'views/admin.users.html',
+        controller: 'AdminUsersController'
+      }).
+      state('admin.users.index', {
+        url: '/index?page',
+        templateUrl: 'views/admin.users.index.html',
+        controller: 'AdminUsersIndexController'
+      }).
+      state('admin.users.create', {
+        url: '/create',
+        templateUrl: 'views/admin.users.create.html',
+        controller: 'AdminUsersCreateController'
+      }).
+      state('admin.users.show', {
+        url: '/{userId:int}',
+        templateUrl: 'views/admin.users.show.html',
+        controller: 'AdminUsersShowController'
+      }).
       state('login', {
-        url: '/login?redirect',
+        url: '/login',
         templateUrl: 'views/login.html',
-        controller: 'LoginController',
-        resolve: {
-          ping: ['$rootScope', function($rootScope) {
-            return $rootScope._auth.ping().then(function(response) {
-              if ($rootScope._auth.save(response)) {  
-                $rootScope._state.go('admin.dashboard');
-              }
-            }, function(response) {
-              $rootScope._httpError(response);
-            });
-          }]
-        }
+        controller: 'LoginController'
       }).
       state('error', {
         'abstract': true,

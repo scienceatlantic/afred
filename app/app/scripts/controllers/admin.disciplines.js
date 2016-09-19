@@ -68,11 +68,16 @@ angular.module('afredApp').controller('AdminDisciplinesController', [
        * Uses/calls/requires:
        * disciplineResource
        * $scope.disciplines.form.data.page
+       * $scope._httpError403()
        */
       query: function() {
         $scope.disciplines.resource = disciplineResource.query({
           page: $scope.disciplines.form.data.page,
           itemsPerPage: 10
+        }, function() {
+          // Do nothing if successful.
+        }, function(response) {
+          $scope._httpError403(response);
         });
       }
     }; 

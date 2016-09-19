@@ -61,11 +61,16 @@ angular.module('afredApp').controller('AdminSectorsController', [
        * Uses/calls/requires:
        * sectorResource
        * $scope.sectors.form.data.page
+       * $scope._httpError403()
        */
       query: function() {
         $scope.sectors.resource = sectorResource.query({
           page: $scope.sectors.form.data.page,
           itemsPerPage: 10
+        }, function() {
+          // Do nothing if successful.
+        }, function(response) {
+          $scope._httpError403(response);
         });
       }
     }; 

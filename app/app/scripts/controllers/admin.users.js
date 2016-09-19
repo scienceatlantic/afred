@@ -1,10 +1,12 @@
 'use strict';
 
-angular.module('afredApp').controller('AdminOrganizationsController', [
+angular.module('afredApp').controller('AdminUsersController', [
   '$scope',
-  'organizationResource',
+  'userResource',
+  'roleResource',
   function($scope,
-           organizationResource) {
+           userResource,
+           roleResource) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
@@ -12,7 +14,7 @@ angular.module('afredApp').controller('AdminOrganizationsController', [
     /**
      * State class.
      */
-    $scope.organizations = {
+    $scope.users = {
       /**
        * All form related functions/data. In this case only the page number.
        * @type {object}
@@ -24,7 +26,7 @@ angular.module('afredApp').controller('AdminOrganizationsController', [
       },
       
       /**
-       * Holds the data returned from 'organizationResource'.
+       * Holds the data returned from 'userResource'.
        * @type {resource}
        */
       resource: {},
@@ -33,11 +35,12 @@ angular.module('afredApp').controller('AdminOrganizationsController', [
        * Parses the URL parameters.
        *
        * Side effects:
-       * $scope.organizations.form.data.page Parsed page number data is attached
+       * $scope.users.form.data.page Parsed page number data is attached
        *     to this.
        * 
        * Uses/calls/requires:
-       * $scope.organizations.form.data.page
+       * $scope.users.form.data.page
+       * 
        */
       parseParams: function() {
         var page = null;
@@ -48,23 +51,23 @@ angular.module('afredApp').controller('AdminOrganizationsController', [
         } catch (e) {
           page = 1;
         }
-        $scope.organizations.form.data.page = page;
+        $scope.users.form.data.page = page;
       },
       
       /**
-       * Query organization data.
+       * Query user data.
        *
        * Side effects:
-       * $scope.organization.resource Data returned is attached to this.
+       * $scope.user.resource Data returned is attached to this.
        *
        * Uses/calls/requires:
-       * organizationResource
-       * $scope.organizations.form.data.page
+       * userResource
+       * $scope.users.form.data.page
        * $scope._httpError403()
        */
       query: function() {
-        $scope.organizations.resource = organizationResource.query({
-          page: $scope.organizations.form.data.page,
+        $scope.users.resource = userResource.query({
+          page: $scope.users.form.data.page,
           itemsPerPage: 10
         }, function() {
           // Do nothing if successful.

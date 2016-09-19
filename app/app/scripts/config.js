@@ -10,9 +10,8 @@
  * @see https://docs.angularjs.org/api/ng/provider/$httpProvider
  */
 angular.module('afredApp').config(['$httpProvider', function($httpProvider) {
-    $httpProvider.defaults.withCredentials = true;
-  }
-]);
+  $httpProvider.defaults.withCredentials = true;
+}]);
 
 /**
  * $httpProvider config - Use HTML5 mode.
@@ -20,9 +19,8 @@ angular.module('afredApp').config(['$httpProvider', function($httpProvider) {
  * @see https://docs.angularjs.org/guide/$location (part about HTML5 mode)
  * @see https://docs.angularjs.org/api/ng/provider/$locationProvider (part about HTML5 mode)
  */
-angular.module('afredApp').config(
-  ['$locationProvider', 
-   function($locationProvider) {
+angular.module('afredApp').config(['$locationProvider', 
+  function($locationProvider) {
     $locationProvider.html5Mode(true);
   }
 ]);

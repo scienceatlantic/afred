@@ -79,8 +79,21 @@ angular.module('afredApp').directive('afField', [
             $scope.name = field.attr('name');
           });
         }
+
+        // Parse the 'minlength' property if available.
+        try {
+          $scope.minLength = parseInt(field.attr('minlength'));
+          if (!$scope.minLength) {
+            $scope.minLength = parseInt(field.attr('data-ta-minlength'));
+          }
+          if (!$scope.minLength) {
+            $scope.minLength = parseInt(field.attr('ta-minlength'));
+          }
+        } catch(e) {
+          // Do nothing.
+        }
         
-        // Parse the 'maxLength' property if available.
+        // Parse the 'maxlength' property if available.
         try {
           $scope.maxLength = parseInt(field.attr('maxlength'));
           if (!$scope.maxLength) {

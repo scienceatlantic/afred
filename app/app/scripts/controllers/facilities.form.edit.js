@@ -74,11 +74,15 @@ angular.module('afredApp').controller('FacilitiesFormEditController',
     // Initialise the form. True is passed because we're in edit mode.
     $scope.form.initialise(true);
     
-    // Get the facility data to edit. 
-    $scope.form.getFacilityRepositoryData(
-      $scope._stateParams.facilityRepositoryId,
-      $scope._stateParams.token
-    );
+    // Get the facility data to edit.
+    if ($scope._stateParams.facilityRepositoryId && $scope._stateParams.token) {
+      $scope.form.getFacilityRepositoryData(
+        $scope._stateParams.facilityRepositoryId,
+        $scope._stateParams.token
+      );
+    } else {
+      $scope._httpError('403');
+    }
     
     // Holds the promised returned from '$scope.submit()'.
     $scope.fr = null;

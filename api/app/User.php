@@ -68,7 +68,7 @@ class User extends Model implements AuthenticatableContract,
     protected $hidden = ['password', 'remember_token'];
     
     /**
-     * Relationship between a user and its roles.
+     * Relationship between a user and their roles.
      */
     public function roles()
     {
@@ -77,7 +77,16 @@ class User extends Model implements AuthenticatableContract,
     }
 
     /**
-     * Relationship between a user and its settings.
+     * Relationship between a user and their reviewed facility repository
+     * records. 
+     */
+    public function frs()
+    {
+        return $this->hasMany('App\FacilityRepository', 'reviewerId');
+    }
+
+    /**
+     * Relationship between a user and their settings.
      */
     public function settings()
     {

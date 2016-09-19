@@ -3,6 +3,7 @@
 angular.module('afredApp').controller('LoginController',
   ['$scope',
   function($scope) {
+
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
@@ -16,11 +17,13 @@ angular.module('afredApp').controller('LoginController',
       
       $scope.auth = $scope._auth.login($scope.credentials).then(function(response) {
         // If login was successful, save the authenticated user's details
-        // and redirect the user to the dashboard (if a redirect param was not
-        // provided).
+        // and redirect the user to the dashboard (if the 
+        // '$scope._state.fromState' was not set).
         if ($scope._auth.save(response)) {
-          if ($scope._stateParams.redirect) {
-            location.href = $scope._stateParams.redirect;
+          if ($scope._state.fromState) {
+            var fromState = $scope._state.fromState;
+            $scope._state.fromState = null;
+            location.href = fromState;
           } else {
             $scope._state.go('admin.dashboard');
           }
@@ -38,6 +41,9 @@ angular.module('afredApp').controller('LoginController',
     /* ---------------------------------------------------------------------
      * Initialisation code.
      * --------------------------------------------------------------------- */
+    
+    // Before doing anything else, check that the user is not already logged in.
+    $scope._auth.ping('redirect');
     
     /**
      * Stores the form data that will be passed to the API.

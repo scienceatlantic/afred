@@ -268,6 +268,61 @@ angular.module('afredApp').factory('sectorResource',
   }
 ]);
 
+angular.module('afredApp').factory('userResource',
+  ['$rootScope',
+   '$resource',
+   function($rootScope,
+            $resource) {
+    // Alias to shorten code.
+    var root = $rootScope._env.api.address;
+    
+    return $resource(root + '/users/:userId', {
+      userId: '@id'
+    }, {
+      query: {
+        method: 'GET',
+        isArray: false
+      },
+      queryNoPaginate: {
+        method: 'GET',
+        isArray: true,
+        params: {
+          paginate: 0
+        }
+      },
+      update: {
+        method: 'PUT'
+      }
+    });
+  }
+]);
+
+angular.module('afredApp').factory('roleResource',
+  ['$rootScope',
+   '$resource',
+   function($rootScope,
+            $resource) {
+    // Alias to shorten code.
+    var root = $rootScope._env.api.address;
+    
+    return $resource(root + '/roles/:roleId', {
+      roleId: '@id'
+    }, {
+      query: {
+        method: 'GET',
+        isArray: false
+      },
+      queryNoPaginate: {
+        method: 'GET',
+        isArray: true,
+        params: {
+          paginate: 0
+        }
+      }
+    });
+  }
+]);
+
 angular.module('afredApp').factory('emailResource',
   ['$rootScope',
    '$resource',

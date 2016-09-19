@@ -1,0 +1,25 @@
+<div data-af-loading="!users.resource.$resolved">
+  <hr>
+  
+  <div data-ng-hide="users.resource.data.length">
+    <p>Nothing found.</p>
+  </div>
+  
+  <div data-ng-show="users.resource.data.length">
+    <ol start="{{ (users.resource.perPage * (users.resource.currentPage - 1) + 1)  }}">
+      <li data-dir-paginate="u in users.resource.data | itemsPerPage: users.resource.perPage" data-total-items="users.resource.total" data-current-page="users.form.data.page">
+        <p>
+          <a data-ui-sref="admin.users.show({ userId: u.id })">{{ u.firstName }} {{ u.lastName }}</a>
+          <span class="label label-warning" data-ng-if="!u.isActive">Disabled</span>
+          <span class="label label-info" data-ng-if="u.id == _auth.user.id">You</span>
+        </p>
+      </li>
+    </ol>
+
+    <div data-dir-pagination-controls data-on-page-change="_state.go('admin.users.index', { page: users.form.data.page })" data-auto-hide="false"></div>
+  </div>
+  
+  <p>
+    <button class="btn btn-default btn-sm" data-ui-sref="admin.users.create">Add <span class=" fa fa-plus"></span></button>
+  </p>
+</div>

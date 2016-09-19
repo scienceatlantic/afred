@@ -129,12 +129,17 @@ angular.module('afredApp').controller('AdminFacilitiesUpdatesController', [
        * facilityRepositoryResource
        * $scope.facility.form.data.page
        * $scope.facility.form.data.status
+       * $scope._httpError403()
        */
       query: function() {
         $scope.facilities.updates.fr = facilityRepositoryResource.queryTokens({
           page: $scope.facilities.updates.form.data.page,
           itemsPerPage: 5,
           status: $scope.facilities.updates.form.data.status
+        }, function() {
+          // Do nothing if call was successful.
+        }, function(response) {
+          $scope._httpError403(response);
         });
       },
       

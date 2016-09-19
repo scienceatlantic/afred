@@ -124,16 +124,15 @@ angular.module('afredApp').controller('AdminSectorsShowController', [
      * 
      * Uses/calls/requires:
      * angular.copy()
-     * $scope._httpError()
+     * $scope._httpError403()
      * 
      * @type {Angular resource}
      */
     $scope.sector = sectorResource.get($scope._stateParams,
       function() {
         $scope.sectorCopy = angular.copy($scope.sector);
-      },
-      function(response) {
-        $scope._httpError(response);
+      }, function(response) {
+        $scope._httpError403(response);
       }
     );
     

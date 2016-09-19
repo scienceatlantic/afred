@@ -137,12 +137,65 @@ angular.module('afredApp').run(['$rootScope',
       
       /**
        * Can be used to 'ping' the API's auth controller to check if a user is
-       * already authenticated.
+       * already authenticated or redirect the user if they're not.
+       * 
+       * @uses $rootScope._auth.save()
+       * @uses $rootScope._state.go()
+       * @uses $rootScope._state.is()
+       * @uses $http.get()
        *
-       * @return {promise}
+       * @param {string} action
+       *     Acceptable values are (default is 'save'):
+       *     (1) 'redirect': What happens here depends on what state the user is
+       *                     in. If the user is at the login page and this is
+       *                     value is passed, the user will be redirected to the
+       *                     admin dashboard if the ping returned user data 
+       *                     (i.e. not logged in), otherwise nothing will 
+       *                     happen. If the user is at any other page and this 
+       *                     value is used, the user will be redirected to the 
+       *                     login page if the ping did not return user data,
+       *                     otherwise nothing will happen.
+       * 
+       *     (2) 'save': If the ping was successful (in the sense that it
+       *                 returned data signifying that the user is logged in),
+       *                 save the login info (uses the '$rootScope._auth.save()' 
+       *                 to do so).
+       * 
+       *     (3) 'promise': After pinging the API, the promise is returned
+       *                    directly.
+       * 
+       * @return {promise} 
        */
-      ping: function() {
-        return $http.get($rootScope._env.api.address + '/auth/ping');
+      ping: function(action) {
+        var promise = $http.get($rootScope._env.api.address + '/auth/ping');
+
+        promise.then(function(resp) {
+          switch (action) {
+            case 'promise':
+              break;
+            case 'redirect':
+              // User is not logged and not at the login page, redirect to the
+              // login page.
+              if (!resp.data.id && !$rootScope._state.is('login')) {
+                $rootScope._state.go('login');
+              } 
+              // User is logged in and at the login page, redirect to the admin 
+              // dashboard.
+              else if (resp.data.id && $rootScope._state.is('login')) {
+                $rootScope._state.go('admin.dashboard');
+              }
+              break;
+            case 'save':
+            default:
+              promise.then(function(resp) {
+                $rootScope._auth.save(resp);
+              });  
+          }
+        }, function() {
+          // If call fails, do nothing.
+        });
+
+        return promise;
       },
       
       /**
@@ -157,13 +210,13 @@ angular.module('afredApp').run(['$rootScope',
        */
       save: function(response) {
         // Depending on the angular function used ($http or $resource) the data
-        // returned from the API could either be stored in 'response' or in a
-        // property 'response.data'.
+        // returned from the API could either be stored in 'response' or in
+        // 'response.data'.
         var resp = response.data ? response.data : response;
         
-        // We're going to assume that if the 'firstName' propery is set, the
-        // user successfully logged in.
-        if (resp.firstName) {
+        // We're going to assume that if the 'id' propery is set, the user
+        // successfully logged in.
+        if (resp.id) {
           $rootScope._auth.user = resp;
           return true;
         }
@@ -189,12 +242,8 @@ angular.module('afredApp').run(['$rootScope',
       }
     };
     
-    // Try pinging on app load to check if user is already logged in.
-    $rootScope._auth.ping().then(function(response) {
-      $rootScope._auth.save(response);
-    }, function() {
-      // If the ping fails, do nothing.
-    });
+    // Try pinging API on app load to check if user is already logged in.
+    $rootScope._auth.ping();
     
     /* ---------------------------------------------------------------------
      * Error state function.
@@ -209,12 +258,40 @@ angular.module('afredApp').run(['$rootScope',
      * @param {object|string} response If using a string, state the error code
      *     (e.g. response='404', response='500', etc). If it's an object, use
      *     the response from the API.
+     * @param {string} toState Note: this param has no purpose right now.
+     * @param {string} fromState (Optional) A URL the user will be redirected to 
+     *     if login was successful (only applies to the 403 case). This param is
+     *     useful for cases where instead of showing the usual 403 unauthorised
+     *     page we could instead redirect the user to the login page (if the
+     *     reason why they can't view it is because they have not logged in).
      */
-    $rootScope._httpError = function(response) {
+    $rootScope._httpError = function(response, toState, fromState) {
       var statusCode = angular.isObject(response) ? response.status : response;
 
       switch (String(statusCode)) {
         case '403':
+          // If the user is not already logged in and the 'fromState' param
+          // is set, redirect the user to the login page instead and the set
+          // '$scope._state.fromState' property to 'fromState' so that they can
+          // be redirected back to it after login. We need to check that the
+          // user has already logged in (first condition in the if statement)
+          // because it could be that they have already logged in but are simply
+          // not authorised (permission level) to view the content, if we didn't
+          // do that, this would create an infinite redirect.
+          if (!$rootScope._auth.user.id && fromState) {
+            // Do not update the '$rootScope._state.fromState' property if it's
+            // a redirect to the login page. If there are multiple identical 
+            // AJAX requests to redirect to the login page and one (or more)
+            // calls are made after the app has already redirected to the login
+            // page, this condition prevents the more recent calls from
+            // overwriting the '$rootScope._state.fromState' property to 
+            // 'login' (i.e. losing the actual state the app was in). 
+            if (!fromState.includes('login')) {
+              $rootScope._state.fromState = fromState;
+            }
+            $rootScope._state.go('login');
+            break;
+          }
         case '404':
         case '500':
         case '503':
@@ -224,6 +301,18 @@ angular.module('afredApp').run(['$rootScope',
         default:
           $rootScope._state.go('error.500');
       }
+    };
+
+    /**
+     * A shortcut method for '$rootScope._httpError()' method's 403 case. It
+     * will call the '$rootScope._httpError()' method passing the response
+     * param with the second and third params set to null and location.href
+     * respectively.
+     * 
+     * @param {object|string} Either a '403' string or response from the API.
+     */
+    $rootScope._httpError403 = function(response) {
+      $rootScope._httpError(response, null, location.href);
     };
     
     /* ---------------------------------------------------------------------
@@ -271,6 +360,53 @@ angular.module('afredApp').run(['$rootScope',
           return document.body.clientHeight;
         }
       }
+    };
+
+    /* ---------------------------------------------------------------------
+     * Form helper functions.
+     * --------------------------------------------------------------------- */
+
+    $rootScope._form = {
+      /**
+       * Checkbox class.
+       */
+      cb: {
+        /**
+         * 
+         * 
+         * @param {array} items
+         * @param {Angular FormController} formElement (Optional) 
+         * @param {string} selectProp (Optional)
+         */
+        isRequired: function(items, formElement, selectProp) {
+          selectProp = selectProp ? selectProp : 'isSelected'; // Set default.
+          formElement = formElement ? formElement : {}; // Set default.
+
+          for (var i = 0; i < items.length; i++) {
+            if (items[i][selectProp]) {
+              formElement.$dirty = true;
+              return false;
+            }
+          }
+          return true;
+        },
+
+        /**
+         * 
+         */
+        getSelected: function(items, idOnly, idProp, selectProp) {
+          idProp = idProp ? idProp : 'id'; // Set default.
+          selectProp = selectProp ? selectProp : 'isSelected'; // Set default.
+
+          var selected = [];
+          angular.forEach(items, function(item) {
+            if (item[selectProp]) {
+              selected.push(idOnly ? item[idProp] : item);
+            }
+          });
+          return selected;          
+        }
+      } 
     };
     
     /* ---------------------------------------------------------------------

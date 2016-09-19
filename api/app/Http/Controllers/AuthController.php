@@ -19,7 +19,7 @@ use App\User;
 use App\Http\Requests;
 
 class AuthController extends Controller
-{
+{    
     public function login(Request $request)
     {
         $credentials = [
@@ -28,9 +28,9 @@ class AuthController extends Controller
         ];
 
         if (Auth::attempt($credentials)) {
-            // Check if user is active, otherwise logout.
+            // Check if user is active, otherwise logout (short circuit 'OR').
             if (Auth::user()->isActive || Auth::logout()) {
-                return $this->format(true);              
+                return $this->format('login');              
             }
         }
 
@@ -47,30 +47,62 @@ class AuthController extends Controller
         Auth::logout();
     }
 
-    private function format($updateDateLastLogin = false)
+    public static function format($updateDateLast = 'pinged', $user = false)
     {
-        // Update date last login.
-        if ($updateDateLastLogin) {
-            Auth::user()->dateLastLogin = $this->now();
-            Auth::user()->save();
+        // Set default.
+        $user = $user ?: Auth::user();
+        
+        // Update dates.
+        if ($updateDateLast) {
+            self::updateDates($updateDateLast);
         }
+        
+        // Get array.
+        $array = $user->toArray();
 
-        $user = Auth::user()->toArray();
-        $maxPermission = Auth::user()->getMaxPermission();
+        // Add max permission level.
+        $maxPermission = $user->getMaxPermission();
+        $array['maxPermissionLevel'] = $maxPermission;
 
+        $roles = [];
         // Add "Strict" (i.e. have been explicitly assigned) roles.
-        foreach (Auth::user()->roles()->get() as $r) {
-            $user['is' . studly_case(strtolower($r->name)) . 'Strict'] = true;
+        foreach ($user->roles()->get() as $r) {
+            $roles[$r->id] = [
+                'name'       => $r->name,
+                'permission' => $r->permission
+            ];
+            $key = 'is' . studly_case(strtolower($r->name)) . 'Strict';
+            $array[$key] = true;
         }
 
         // Add roles below maximum (i.e. highest permission level) explicitly 
         // assigned role (without "Strict" suffix).
         foreach (Role::all() as $r) {
             if ($maxPermission >= $r->permission) {
-                $user['is' . studly_case(strtolower($r->name))] = true;
+                $key = 'is' . studly_case(strtolower($r->name));
+                $array[$key] = true;
             }
         }
-        
-        return $user;
+        $array['roles'] = (object) $roles;
+
+        return $array;
+    }
+
+    private static function updateDates($dateLast = 'pinged', $user = false)
+    {
+        // Get default.
+        $user = $user ?: Auth::user();
+
+        // Get current time.
+        $now = Controller::now();
+
+        switch ($dateLast) {
+            case 'login':
+                $user->dateLastLogin = $now;
+                // No break.
+            case 'pinged':
+                $user->dateLastPinged = $now;
+        }
+        $user->save();
     }
 }

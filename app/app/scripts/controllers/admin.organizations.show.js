@@ -302,6 +302,7 @@ angular.module('afredApp').controller('AdminOrganizationsShowController', [
      *     have an ILO.
      * $scope.newIlo() Called if the organization instance returned already has
      *     have an ILO.
+     $scope._httpError403()
      * 
      * @type {Angular resource}
      */
@@ -314,9 +315,8 @@ angular.module('afredApp').controller('AdminOrganizationsShowController', [
         } else {
           $scope.newIlo();
         }
-      },
-      function(response) {
-        $scope._httpError(response);
+      }, function(response) {
+        $scope._httpError403(response);
       }
     );
     

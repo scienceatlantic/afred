@@ -131,16 +131,15 @@ angular.module('afredApp').controller('AdminDisciplinesShowController', [
      * 
      * Uses/calls/requires:
      * angular.copy()
-     * $scope._httpError()
+     * $scope._httpError403()
      * 
      * @type {Angular resource}
      */
     $scope.discipline = disciplineResource.get($scope._stateParams,
       function() {
         $scope.disciplineCopy = angular.copy($scope.discipline);
-      },
-      function(response) {
-        $scope._httpError(response);
+      }, function(response) {
+        $scope._httpError403(response);
       }
     );
     
