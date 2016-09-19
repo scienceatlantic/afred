@@ -145,7 +145,7 @@ angular.module('afredApp').run(['$rootScope',
        * @uses $http.get()
        *
        * @param {string} action
-       *     Acceptable values are:
+       *     Acceptable values are (default is 'save'):
        *     (1) 'redirect': What happens here depends on what state the user is
        *                     in. If the user is at the login page and this is
        *                     value is passed, the user will be redirected to the
@@ -164,18 +164,15 @@ angular.module('afredApp').run(['$rootScope',
        *     (3) 'promise': After pinging the API, the promise is returned
        *                    directly.
        * 
-       * @return {promise|null} For cases (1) and (2) null is returned, for (3)
-       *     a promise is returned.
+       * @return {promise} 
        */
       ping: function(action) {
         var promise = $http.get($rootScope._env.api.address + '/auth/ping');
 
-        if (action == 'promise') {
-          return promise;
-        }
-
         promise.then(function(resp) {
           switch (action) {
+            case 'promise':
+              break;
             case 'redirect':
               // User is not logged and not at the login page, redirect to the
               // login page.
@@ -197,6 +194,8 @@ angular.module('afredApp').run(['$rootScope',
         }, function() {
           // If call fails, do nothing.
         });
+
+        return promise;
       },
       
       /**
@@ -361,6 +360,53 @@ angular.module('afredApp').run(['$rootScope',
           return document.body.clientHeight;
         }
       }
+    };
+
+    /* ---------------------------------------------------------------------
+     * Form helper functions.
+     * --------------------------------------------------------------------- */
+
+    $rootScope._form = {
+      /**
+       * Checkbox class.
+       */
+      cb: {
+        /**
+         * 
+         * 
+         * @param {array} items
+         * @param {Angular FormController} formElement (Optional) 
+         * @param {string} selectProp (Optional)
+         */
+        isRequired: function(items, formElement, selectProp) {
+          selectProp = selectProp ? selectProp : 'isSelected'; // Set default.
+          formElement = formElement ? formElement : {}; // Set default.
+
+          for (var i = 0; i < items.length; i++) {
+            if (items[i][selectProp]) {
+              formElement.$dirty = true;
+              return false;
+            }
+          }
+          return true;
+        },
+
+        /**
+         * 
+         */
+        getSelected: function(items, idOnly, idProp, selectProp) {
+          idProp = idProp ? idProp : 'id'; // Set default.
+          selectProp = selectProp ? selectProp : 'isSelected'; // Set default.
+
+          var selected = [];
+          angular.forEach(items, function(item) {
+            if (item[selectProp]) {
+              selected.push(idOnly ? item[idProp] : item);
+            }
+          });
+          return selected;          
+        }
+      } 
     };
     
     /* ---------------------------------------------------------------------
