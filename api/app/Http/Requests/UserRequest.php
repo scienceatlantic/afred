@@ -31,6 +31,14 @@ class UserRequest extends Request
             case 'POST':
             case 'PUT':
                 if ($this->isAdmin()) {
+                    // If updating user password.
+                    if ($this->instance()->input('password', false)) {
+                        $maxAuthRole = Auth::user()->getMaxPermission();
+                        $maxUserRole = User::findOrFail(Route::input('users'))
+                            ->getMaxPermission();
+                        return $maxAuthRole >= $maxUserRole;
+                    }
+                    // If updating other user data.
                     $roleIds = $this->instance()->input('roles', [-1]);
                     $maxAuthRole = Auth::user()->getMaxPermission();
                     $maxAssignRole = Role::maxPermission($roleIds);
@@ -53,9 +61,9 @@ class UserRequest extends Request
                     }
 
                     $maxAuthRole = Auth::user()->getMaxPermission();
-                    $maxAssignRole = User::findOrFail(Route::input('users'))
+                    $maxUserRole = User::findOrFail(Route::input('users'))
                         ->getMaxPermission();
-                    return $maxAuthRole >= $maxAssignRole;
+                    return $maxAuthRole >= $maxUserRole;
                 }
                 return false;
             default:
@@ -73,14 +81,19 @@ class UserRequest extends Request
         $r = [];
         switch ($this->method()) {            
             case 'PUT':
+                // If we're updating the user's password, that's all we need to 
+                // check for.
+                if ($this->instance()->input('password', false)) {
+                    $r['password'] = 'required|between:8,16';
+                    break;
+                }
                 // No break.
             case 'POST':
                 $r['firstName'] = 'required';
                 $r['lastName'] = 'required';
                 $r['email'] = 'required|email';
-                $r['password'] = 'between:8,16';
                 if ($this->method() == 'POST') {
-                    $r['password'] .= '|required';
+                    $r['password'] = 'required|between:8,16';
                 }
                 $r['isActive'] = 'required|digits_between:0,1';
                 $r['roles'] = 'required|array';

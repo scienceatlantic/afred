@@ -78,19 +78,21 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, $id)
     {
-        $now = $this->now();
         $user = User::findOrFail($id);
-        $user->firstName = $request->firstName;
-        $user->lastName = $request->lastName;
-        $user->email = $request->email;
+        // If updating user password.
         if ($request->password) {
             $user->password = Hash::make($request->password);
+        } 
+        // If updating everything else.
+        else {
+            $user->firstName = $request->firstName;
+            $user->lastName = $request->lastName;
+            $user->email = $request->email;
+            $user->isActive = $request->isActive;
+            $user->roles()->sync($request->roles);
         }
-        $user->isActive = $request->isActive;
-        $user->dateCreated = $now;
-        $user->dateUpdated = $now;
+        $user->dateUpdated = $this->now();
         $user->save();
-        $user->roles()->sync($request->roles);
         return AuthController::format(false, $user);
     }
 
