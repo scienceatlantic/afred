@@ -42,6 +42,7 @@ angular.module('afredApp').run(['$rootScope', function($rootScope) {
       
       // Location of specific pages on WordPress. 
       pages: {
+        'what\'s new': { pageId: 93 },
         'about': { pageId: 5 },
         'terms of service': { pageId: 38 },
         'privacy policy': { pageId: 36 },
