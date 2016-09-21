@@ -382,3 +382,15 @@ angular.module('afredApp').factory('wpResource',
     });
   }
 ]);
+
+angular.module('afredApp').factory('homeResource',
+  ['$rootScope',
+   '$resource',
+   function($rootScope,
+            $resource) {
+    // Alias to shorten code.
+    var root = $rootScope._env.api.address;
+    
+    return $resource(root + '/home');
+  }
+]);
