@@ -1,0 +1,35 @@
+/* Vertically align content.
+ * Credit: http://stackoverflow.com/a/20548578
+-------------------------------------------------- */
+.vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}
+
+/* Set width of home page's search bar
+-------------------------------------------------- */
+@media (min-width: 768px) {
+  .home-search-bar {
+    width: 420px !important;
+  }
+}
+
+.home-header {
+  min-height: 330px;
+}
+
+/* Adjust top margin of the '
+-------------------------------------------------- */
+.home-submit-your-facility-bar {
+  background-color: rgb(29, 189, 193);
+  padding-top: 25px;
+  padding-bottom: 25px;
+  color: #fff;
+}
+
+@media (min-width: 992px) {
+  .home-what-can-afred-do-for-you-description {
+    padding-top: 8px;
+  }
+}

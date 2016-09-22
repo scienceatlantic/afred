@@ -3,6 +3,12 @@ html {
   overflow-y: scroll;
 }
 
+/* Static navbar styles
+-------------------------------------------------- */
+body {
+  margin-top: 50px; /* Margin top by navbar height */
+}
+
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
