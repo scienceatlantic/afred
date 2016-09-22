@@ -314,53 +314,6 @@ angular.module('afredApp').run(['$rootScope',
     $rootScope._httpError403 = function(response) {
       $rootScope._httpError(response, null, location.href);
     };
-    
-    /* ---------------------------------------------------------------------
-     * Helper functions
-     * --------------------------------------------------------------------- */
-
-    $rootScope._helper = {
-      // Credit for the first two functions, see:
-      // http://stackoverflow.com/questions/1038727/how-to-get-browser-width-using-javascript-code
-      
-      /**
-       * Get window width.
-       *
-       * @return {integer}
-       */
-      getWidth: function () {
-        if (self.innerHeight) {
-          return self.innerWidth;
-        }
-      
-        if (document.documentElement && document.documentElement.clientWidth) {
-          return document.documentElement.clientWidth;
-        }
-      
-        if (document.body) {
-          return document.body.clientWidth;
-        }
-      },
-      
-      /**
-       * Get window height.
-       *
-       * @return {integer}
-       */
-      getHeight: function() {
-        if (self.innerHeight) {
-          return self.innerHeight;
-        }
-      
-        if (document.documentElement && document.documentElement.clientHeight) {
-          return document.documentElement.clientHeight;
-        }
-      
-        if (document.body) {
-          return document.body.clientHeight;
-        }
-      }
-    };
 
     /* ---------------------------------------------------------------------
      * Form helper functions.
@@ -427,6 +380,51 @@ angular.module('afredApp').run(['$rootScope',
      * --------------------------------------------------------------------- */
 
     $rootScope._math = Math;
+
+    /* ---------------------------------------------------------------------
+     * Helper functions
+     * --------------------------------------------------------------------- */
+
+    // Credit for the first two functions, see:
+    // http://stackoverflow.com/a/1038781
+
+    /**
+     * Get window width.
+     *
+     * @return {integer}
+     */
+    $rootScope._getWidth = function () {
+      if (self.innerHeight) {
+        return self.innerWidth;
+      }
+    
+      if (document.documentElement && document.documentElement.clientWidth) {
+        return document.documentElement.clientWidth;
+      }
+    
+      if (document.body) {
+        return document.body.clientWidth;
+      }
+    };
+      
+    /**
+     * Get window height.
+     *
+     * @return {integer}
+     */
+    $rootScope._getHeight = function() {
+      if (self.innerHeight) {
+        return self.innerHeight;
+      }
+  
+      if (document.documentElement && document.documentElement.clientHeight) {
+        return document.documentElement.clientHeight;
+      }
+
+      if (document.body) {
+        return document.body.clientHeight;
+      }
+    };
     
     /* ---------------------------------------------------------------------
      * Boostrap contstants.
