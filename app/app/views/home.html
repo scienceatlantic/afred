@@ -4,7 +4,7 @@
 <div class="container-fluid home-header" style="background-image: url('images/home-header.png');">
   <div class="text-center">
     <!-- AFRED Logo for desktop screens. -->
-    <div data-ng-if="_window.innerWidth > 500">
+    <div data-ng-if="_getWidth() > 500">
       <div style="margin: 50px 0;">
         <a data-ui-sref="home">
           <img src="images/afred-logo-colour-gradient-bottom-tagline-470x125.png" alt="AFRED logo">
@@ -13,7 +13,7 @@
     </div>
     
     <!-- AFRED Logo for small screens. -->
-    <div data-ng-if="_window.innerWidth <= 500">
+    <div data-ng-if="_getWidth() <= 500">
       <div class="text-center" style="margin: 20px 0;">
         <a data-ui-sref="home">
           <img src="images/afred-symbol-bottom-text 200x170.png" alt="AFRED logo">
@@ -46,7 +46,7 @@
       <div class="col-xs-12">
         <span class="pull-left">
           <span class="h1">
-            <span class="fa fa-gears fa-3x" style="padding-right: 20px;" data-ng-if="_window.innerWidth > 500"></span>
+            <span class="fa fa-gears fa-3x" style="padding-right: 20px;" data-ng-if="_getWidth() > 500"></span>
           </span>
         </span>
         <span class="pull-left">
@@ -72,13 +72,13 @@
     <div class="col-md-3">
       <p>
         <div class="row">
-          <div data-ng-class="{'col-xs-3': _window.innerWidth >= _bootstrap.grid.breakpoints.md, 'col-xs-1': _window.innerWidth < _bootstrap.grid.breakpoints.md}">
+          <div data-ng-class="{'col-xs-3': _getWidth() >= _bootstrap.grid.breakpoints.md, 'col-xs-1': _getWidth() < _bootstrap.grid.breakpoints.md}">
             <span class="h1">
               <span class="fa fa-star"></span>
             </span>
           </div>
 
-          <div data-ng-class="{'col-xs-9': _window.innerWidth >= _bootstrap.grid.breakpoints.md, 'col-xs-11': _window.innerWidth < _bootstrap.grid.breakpoints.md}">
+          <div data-ng-class="{'col-xs-9': _getWidth() >= _bootstrap.grid.breakpoints.md, 'col-xs-11': _getWidth() < _bootstrap.grid.breakpoints.md}">
             <span class="h4">Research Intensification</span>
           </div>
         </div> 
@@ -88,19 +88,19 @@
         Drive research intensification and strengthen the research community in 
         Atlantic Canada.
       </p>
-      <br data-ng-if="_window.innerWidth < _bootstrap.grid.breakpoints.md">
+      <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.md">
     </div>
 
     <div class="col-md-3">
       <p>
         <div class="row">
-          <div data-ng-class="{'col-xs-3': _window.innerWidth >= _bootstrap.grid.breakpoints.md, 'col-xs-1': _window.innerWidth < _bootstrap.grid.breakpoints.md}">
+          <div data-ng-class="{'col-xs-3': _getWidth() >= _bootstrap.grid.breakpoints.md, 'col-xs-1': _getWidth() < _bootstrap.grid.breakpoints.md}">
             <span class="h1">
               <span class="fa fa-puzzle-piece"></span>
             </span>
           </div>
 
-          <div data-ng-class="{'col-xs-9': _window.innerWidth >= _bootstrap.grid.breakpoints.md, 'col-xs-11': _window.innerWidth < _bootstrap.grid.breakpoints.md}">
+          <div data-ng-class="{'col-xs-9': _getWidth() >= _bootstrap.grid.breakpoints.md, 'col-xs-11': _getWidth() < _bootstrap.grid.breakpoints.md}">
             <span class="h4">Partnerships & Collaborations</span>
           </div>
         </div> 
@@ -110,19 +110,19 @@
         Foster new partnerships and collaborations between researchers, industry,
         and government.
       </p>
-      <br data-ng-if="_window.innerWidth < _bootstrap.grid.breakpoints.md">
+      <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.md">
     </div>
 
     <div class="col-md-3">
       <p>
         <div class="row">
-          <div data-ng-class="{'col-xs-3': _window.innerWidth >= _bootstrap.grid.breakpoints.md, 'col-xs-1': _window.innerWidth < _bootstrap.grid.breakpoints.md}">
+          <div data-ng-class="{'col-xs-3': _getWidth() >= _bootstrap.grid.breakpoints.md, 'col-xs-1': _getWidth() < _bootstrap.grid.breakpoints.md}">
             <span class="h1">
               <span class="fa fa-usd"></span>
             </span>
           </div>
 
-          <div data-ng-class="{'col-xs-9': _window.innerWidth >= _bootstrap.grid.breakpoints.md, 'col-xs-11': _window.innerWidth < _bootstrap.grid.breakpoints.md}">
+          <div data-ng-class="{'col-xs-9': _getWidth() >= _bootstrap.grid.breakpoints.md, 'col-xs-11': _getWidth() < _bootstrap.grid.breakpoints.md}">
             <span class="h4">Cost Savings</span>
           </div>
         </div> 
@@ -132,19 +132,19 @@
         Facilitate cost savings and speed to solutions through access to 
         sophisticated technical infrastructure and expertise.
       </p>
-      <br data-ng-if="_window.innerWidth < _bootstrap.grid.breakpoints.md">
+      <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.md">
     </div>
 
     <div class="col-md-3">
       <p>
         <div class="row">
-          <div data-ng-class="{'col-xs-3': _window.innerWidth >= _bootstrap.grid.breakpoints.md, 'col-xs-1': _window.innerWidth < _bootstrap.grid.breakpoints.md}">
+          <div data-ng-class="{'col-xs-3': _getWidth() >= _bootstrap.grid.breakpoints.md, 'col-xs-1': _getWidth() < _bootstrap.grid.breakpoints.md}">
             <span class="h1">
               <span class="fa fa-line-chart"></span>
             </span>
           </div>
 
-          <div data-ng-class="{'col-xs-9': _window.innerWidth >= _bootstrap.grid.breakpoints.md, 'col-xs-11': _window.innerWidth < _bootstrap.grid.breakpoints.md}">
+          <div data-ng-class="{'col-xs-9': _getWidth() >= _bootstrap.grid.breakpoints.md, 'col-xs-11': _getWidth() < _bootstrap.grid.breakpoints.md}">
             <span class="h4">Revenue Generation</span>
           </div>
         </div> 
@@ -169,12 +169,12 @@
           <p style="padding-bottom: 3px;">
             <a data-ui-sref="facilities.show.equipment.show({ facilityId: e.facilityId, equipmentId: e.id })" target="_blank">
               <!-- For large screens. -->
-              <span data-ng-if="_window.innerWidth >= _bootstrap.grid.breakpoints.md">
+              <span data-ng-if="_getWidth() >= _bootstrap.grid.breakpoints.md">
                 {{ e.type | limitTo: 35 }}<span data-ng-if="e.type.length > 35">...</span><br>
                 <small class="text-muted">{{ e.purposeNoHtml | limitTo: 100 }}<span data-ng-if="e.purposeNoHtml.length > 100">...</span></small>
               </span>
               <!-- For smaller screens. -->
-              <span data-ng-if="_window.innerWidth < _bootstrap.grid.breakpoints.md">
+              <span data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.md">
                 {{ e.type }}<br>
                 <small class="text-muted">{{ e.purposeNoHtml }}</small>
               </span>

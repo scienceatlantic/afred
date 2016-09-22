@@ -4,7 +4,7 @@
 <div data-ng-repeat="c in facility.contacts" itemscope itemtype="http://schema.org/Person">
   <!-- Name. -->
   <div class="row">
-    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
       <label>Name</label>
     </div>
 
@@ -15,12 +15,12 @@
       <span data-ng-show="$index == 0" class="label label-default">Primary Contact</span>
     </div>
 
-    <br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
+    <br data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.sm">
   </div>
   
   <!-- Email. -->
   <div class="row">
-    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
       <label>Email</label>
     </div>
 
@@ -28,12 +28,12 @@
       <a data-ng-href="mailto:{{ c.email }}" itemprop="email">{{ c.email }}</a>
     </div>
 
-    <br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
+    <br data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.sm">
   </div>
   
   <!-- Telephone. -->
   <div class="row" data-ng-show="c.telephone || isPreview">
-    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
       <label>Telephone</label>
     </div>
 
@@ -52,12 +52,12 @@
       <span class="label label-default" data-ng-show="isPreview && !c.telephone">Blank</span>
     </div>
 
-    <br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
+    <br data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.sm">
   </div>
   
   <!-- Position. -->
   <div class="row" data-ng-show="c.position || isPreview">
-    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
       <label>Position</label>
     </div>
 
@@ -67,12 +67,12 @@
       <span class="label label-default" data-ng-show="isPreview && !c.position">Blank</span>
     </div>
       
-    <br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
+    <br data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.sm">
   </div>
   
   <!-- Website. -->
   <div class="row" data-ng-show="c.website || isPreview">
-    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
       <label>Website</label>
     </div>
     

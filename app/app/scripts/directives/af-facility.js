@@ -96,7 +96,7 @@ angular.module('afredApp').directive('afFacility', [
         // Since we're using an isolate scope, the directive no longer inherits
         // from the $rootScope. So we have to manually copy the properties we
         // need.
-        $scope._window = $rootScope._window;
+        $scope._getWidth = $rootScope._getWidth;
         $scope._bootstrap = $rootScope._bootstrap;
         $scope._state = $rootScope._state;
       }
