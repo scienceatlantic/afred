@@ -45,8 +45,8 @@
     -- has a unique name so we're not able to provide the directive with the names of all the checkboxes so we're
     -- only giving it the name of the first checkbox. Technically the directive should be repeated for each checkbox
     -- but then we'll end up losing the layout and each checkbox will end up up with its own label. Since we're only
-    -- providing the name of the first checkbox, validation is a problem.  Please have a look at the
-    -- '$scope.form.validateDisciplines()' function for how this was dealt with.
+    -- providing the name of the first checkbox, validation is a problem. We're using the 
+    -- '$rootScope._form.cb.isRequired()' for validation.
     -->
   <div data-af-field data-af-field-label="Research disciplines*" data-af-field-name="facilityDisciplinesC10">
     <div class="row">
@@ -54,7 +54,7 @@
         <div data-ng-repeat="d in form.disciplines | limitTo: form.disciplines.length / 2">
           <div class="checkbox">
             <label>
-              <input type="checkbox" name="facilityDisciplinesC1{{ $index }}" data-ng-model="d.isSelected" data-ng-change="form.validateDisciplines(disciplinesForm)" data-ng-required="form.disciplines[0].isRequired"> {{d.name}}
+              <input type="checkbox" name="facilityDisciplinesC1{{ $index }}" data-ng-model="d.isSelected" data-ng-required="_form.cb.isRequired(form.disciplines, disciplinesForm['facilityDisciplinesC10'])"> {{d.name}}
             </label>
           </div>
         </div>
@@ -64,7 +64,7 @@
         <div data-ng-repeat="d in form.disciplines | limitTo: form.disciplines.length:(form.disciplines.length / 2)">
           <div class="checkbox">
             <label>
-              <input type="checkbox" name="facilityDisciplinesC2{{ $index }}" data-ng-model="d.isSelected" data-ng-change="form.validateDisciplines(disciplinesForm)" data-ng-required="form.disciplines[0].isRequired"> {{d.name}}
+              <input type="checkbox" name="facilityDisciplinesC2{{ $index }}" data-ng-model="d.isSelected" data-ng-required="_form.cb.isRequired(form.disciplines, disciplinesForm['facilityDisciplinesC10'])"> {{d.name}}
             </label>
           </div>
         </div>
@@ -86,7 +86,7 @@
         <div data-ng-repeat="s in form.sectors | limitTo: form.sectors.length / 2">
           <div class="checkbox">
             <label>
-              <input type="checkbox" name="facilitySectorsC1{{ $index }}" data-ng-model="s.isSelected" data-ng-change="form.validateSectors(sectorsForm)" data-ng-required="form.sectors[0].isRequired"> {{s.name}}
+              <input type="checkbox" name="facilitySectorsC1{{ $index }}" data-ng-model="s.isSelected" data-ng-required="_form.cb.isRequired(form.sectors, sectorsForm['facilitySectorsC10'])"> {{s.name}}
             </label>
           </div>
         </div>
@@ -96,7 +96,7 @@
         <div data-ng-repeat="s in form.sectors | limitTo: form.sectors.length:(form.sectors.length / 2)">
           <div class="checkbox">
             <label>
-              <input type="checkbox" name="facilitySectorsC2{{ $index }}" data-ng-model="s.isSelected" data-ng-change="form.validateSectors(sectorsForm)" data-ng-required="form.sectors[0].isRequired"> {{s.name}}
+              <input type="checkbox" name="facilitySectorsC2{{ $index }}" data-ng-model="s.isSelected" data-ng-required="_form.cb.isRequired(form.sectors, sectorsForm['facilitySectorsC10'])"> {{s.name}}
             </label>
           </div>
         </div> 

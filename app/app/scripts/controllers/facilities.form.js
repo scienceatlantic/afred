@@ -391,8 +391,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
        * $scope.form.disciplines Array of disciplines is attached to this. Will
        *    add a property called 'isSelected' to each array element.
        * $scope.form.loading Set to true at the beginning of the function and
-       *     then set to false at the end. 'isRequired' is added to the first
-       *     element in the array.
+       *     then set to false at the end.
        *
        * Uses/calls/requires:
        * disciplineResource
@@ -412,12 +411,6 @@ angular.module('afredApp').controller('FacilitiesFormController',
               discipline.isSelected = false;
             });
             
-            // For the form validation. We're only attaching it to the first
-            // element in the array.
-            if ($scope.form.disciplines.length) {
-              $scope.form.disciplines[0].isRequired = true;
-            }
-            
             // This part will check all the selected checkboxes from the data in
             // 'disciplines'.
             if (disciplines) {
@@ -429,10 +422,6 @@ angular.module('afredApp').controller('FacilitiesFormController',
                 var id = $scope.form.disciplines[i].id;
                 if (disciplines.indexOf(id) != -1) {
                   $scope.form.disciplines[i].isSelected = true;
-                  
-                  // This line ensures that the form doesn't complain that
-                  // the mandatory fields have not been filled.
-                  $scope.form.disciplines[0].isRequired = false;
                   
                   // Keep count of the number of items we've processed. If
                   // we've gone through the entire array from the API, there's
@@ -477,10 +466,6 @@ angular.module('afredApp').controller('FacilitiesFormController',
               sector.isSelected = false;
             });
             
-            if ($scope.form.sectors.length) {
-              $scope.form.sectors[0].isRequired = true;
-            }
-            
             // This part will check all the selected checkboxes from the data in
             // 'sectors'.
             if (sectors) {
@@ -494,7 +479,6 @@ angular.module('afredApp').controller('FacilitiesFormController',
                 var id = $scope.form.sectors[i].id;
                 if (sectors.indexOf(id) != -1) {
                   $scope.form.sectors[i].isSelected = true;
-                  $scope.form.sectors[0].isRequired = false;
                   
                   if (++countSelected >= secLength) {
                     break;
@@ -567,58 +551,6 @@ angular.module('afredApp').controller('FacilitiesFormController',
         }, function(response) {
           $scope._httpError(response);
         });        
-      },
-      
-      /**
-       * Makes sure that the user has selected at least one discipline. Makes
-       * use of '$scope.form.discipline[0].isRequired'.
-       *
-       * Side effects:
-       * $scope.form.disciplines[0].isRequired Set to false if any of the
-       *     elements in the array is selected. Otherwise it is set to true.
-       * 
-       * @var {object} disciplinesForm Instance of the 'disciplinesForm'.
-       */
-      validateDisciplines: function(disciplinesForm) {
-        // Have a look at the comments in the HTML template for more context.
-        // If any of the checkboxes are selected, we need to set the first
-        // checkboxes's $dirty property to true in order for the validation
-        // to work because the directive used in the template is only given
-        // the first checkboxes's name. If we don't set this property to true,
-        // then validation (visually speaking - the red text) for the checkboxes
-        // will only start working if the first checkbox is ticked.
-        disciplinesForm.facilityDisciplinesC10.$dirty = true;
-        
-        $scope.form.disciplines[0].isRequired = true;
-        
-        // Loop through the disciplines until we find one that has been
-        // selected. If none of them have been selected, then the 'isRequired'
-        // property of '$scope.form.disciplines[0]' will remain true. Hence
-        // form validation will fail.
-        var length = $scope.form.disciplines.length;
-        for (var i = 0; i < length; i++) {
-          if ($scope.form.disciplines[i].isSelected) {
-            $scope.form.disciplines[0].isRequired = false;
-            break;
-          }
-        }
-      },
-      
-      /**
-       * Same deal as '$scope.form.validateDisciplines()'.
-       */
-      validateSectors: function(sectorsForm) {
-        sectorsForm.facilitySectorsC10.$dirty = true;
-        
-        $scope.form.sectors[0].isRequired = true;
-        
-        var length = $scope.form.sectors.length;
-        for (var i = 0; i < length; i++) {
-          if ($scope.form.sectors[i].isSelected) {
-            $scope.form.sectors[0].isRequired = false;
-            break;
-          }
-        }
       },
       
       /**
@@ -697,8 +629,10 @@ angular.module('afredApp').controller('FacilitiesFormController',
             if (!$scope.form.isAutosaving) {
               try {
                 $scope.form.isAutosaving = $interval(function() {
-                  var dData = $scope.form.getSelectedDisciplines(true);
-                  var sData = $scope.form.getSelectedSectors(true);
+                  var dData = 
+                    $scope._form.cb.getSelected($scope.form.disciplines, true);
+                  var sData = 
+                    $scope._form.cb.getSelected($scope.form.sectors, true);
             
                   localStorage.setItem(f, angular.toJson($scope.form.data));
                   localStorage.setItem(d, angular.toJson(dData));
@@ -799,8 +733,8 @@ angular.module('afredApp').controller('FacilitiesFormController',
        */
       formatForPreview: function() {
         var f = angular.copy($scope.form.data.facility);
-        f.disciplines = $scope.form.getSelectedDisciplines();
-        f.sectors = $scope.form.getSelectedSectors();
+        f.disciplines = $scope._form.cb.getSelected($scope.form.disciplines);
+        f.sectors = $scope._form.cb.getSelected($scope.form.sectors);
         f.primaryContact = angular.copy($scope.form.data.primaryContact);
         f.contacts = angular.copy($scope.form.data.contacts);
         f.equipment = angular.copy($scope.form.data.equipment);
@@ -829,72 +763,30 @@ angular.module('afredApp').controller('FacilitiesFormController',
        *
        * Calls/uses/requires:
        * $scope.form.data
-       * $scope.form.getSelectedDisciplines()
-       * $scope.forn.getSelectedSectors()
+       * $scope._form.cb.getSelected()
+       * $scope._form.cb.getSelected()
        * 
        * @return {object} Facility object.
        */
       formatForApi: function() {
-        var data = angular.copy($scope.form.data);
-        data.disciplines = $scope.form.getSelectedDisciplines(true);
-        data.sectors = $scope.form.getSelectedSectors(true);
+        var d = angular.copy($scope.form.data);
+        d.disciplines = $scope._form.cb.getSelected($scope.form.disciplines, true);
+        d.sectors = $scope._form.cb.getSelected($scope.form.sectors, true);
         
         // If 'Other' was selected, clear the ID since it's not a valid
         // ID and the API will reject that.
-        if (data.facility.organizationId == -1) {
-          data.facility.organizationId = null;
-        // Otherise (meaning an existing organization was selected), clear
+        if (d.facility.organizationId == -1) {
+          d.facility.organizationId = null;
+        // Otherwise (meaning an existing organization was selected), clear
         // the organization object since we're not creating a new organization.
         } else {
-          data.organization = null;
+          d.organization = null;
         }
         
         // The first contact is the primary contact.
-        data.primaryContact = (data.contacts.splice(0, 1))[0];
+        d.primaryContact = (d.contacts.splice(0, 1))[0];
         
-        return data;
-      },
-      
-      /**
-       * Returns an array of selected disciplines.
-       *
-       * Uses/calls/requires:
-       * $scope.form.disciplines
-       * 
-       * @param {boolean} idOnly If true, the function will only return an
-       *     array of selected IDs instead of an array of selected discipline
-       *     objects.
-       * @return {array} Selected disciplines.
-       */
-      getSelectedDisciplines: function(idOnly) {
-        var selectedDisciplines = [];
-        angular.forEach($scope.form.disciplines, function(discipline) {
-          if (discipline.isSelected) {  
-            selectedDisciplines.push(idOnly ? discipline.id : discipline);
-          }
-        });
-        return selectedDisciplines;
-      },
-      
-      /**
-       * Returns an array of selected sectors.
-       *
-       * Uses/calls/requires:
-       * $scope.form.sectors
-       * 
-       * @param {boolean} idOnly If true, the function will only return an
-       *     array of selected IDs instead of an array of selected sector
-       *     objects.
-       * @return {array} Selected sectors.
-       */
-      getSelectedSectors: function(idOnly) {
-        var selectedSectors = [];
-        angular.forEach($scope.form.sectors, function(sector) {
-          if (sector.isSelected) {
-            selectedSectors.push(idOnly ? sector.id : sector);
-          }
-        });
-        return selectedSectors;
+        return d;
       }
     };
   }
