@@ -2,9 +2,11 @@
 
 angular.module('afredApp').controller('FacilitiesFormCreateController',
   ['$scope',
+   '$timeout',
    '$interval',
    'facilityRepositoryResource',
   function($scope,
+           $timeout,
            $interval,
            facilityRepositoryResource) {
     // See explanation at the bottom ($stateChangeStart) for why this is needed.
@@ -21,16 +23,24 @@ angular.module('afredApp').controller('FacilitiesFormCreateController',
      *
      * Side effects:
      * $scope.view.show Set to 'PREVIEW'.
+     * $scope.loading.preview Set to true at the start of the function and then
+     *     set to false at the end.
      * $scope.facility Data returned from '$scope.form.formatForPreview()'
      *     is attached to this.
      *
      * Uses/calls/requires:
      * $scope.form.formatForPreview();
+     * $timeout()
      */
     $scope.preview = function() {
+      $scope.loading.preview = true;
       $scope.facility = $scope.form.formatForPreview();
       $scope.view.show = 'PREVIEW';
-      scrollTo(0, 300);
+      // Introduce an articial delay (1s).
+      $timeout(function() {
+        $scope.loading.preview = false;
+        scrollTo(0, 300);
+      }, 1000);
     };
     
     /**
@@ -83,6 +93,15 @@ angular.module('afredApp').controller('FacilitiesFormCreateController',
      */
     $scope.view = {
       show: 'FORM'
+    };
+
+    /**
+     * Loading flags.
+     * 
+     * @type {object}
+     */
+    $scope.loading = {
+      preview: false // Preview form.
     };
     
     /**

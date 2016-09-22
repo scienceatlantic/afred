@@ -9,7 +9,9 @@
 
 <!-- Preview. -->
 <div data-ng-show="view.show == 'PREVIEW'">
-  <div data-ng-include="'views/includes/facilities.form.preview.html'"></div>
+  <div data-af-loading="loading.preview">
+    <div data-ng-include="'views/includes/facilities.form.preview.html'"></div>
+  </div>
 </div>
 
 <!-- Successful submission message. -->
