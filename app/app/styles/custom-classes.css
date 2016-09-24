@@ -4,32 +4,148 @@
 .vcenter {
     display: inline-block;
     vertical-align: middle;
-    float: none;
 }
 
-/* Set width of home page's search bar
+/* Bold text style.
 -------------------------------------------------- */
-@media (min-width: 768px) {
-  .home-search-bar {
-    width: 420px !important;
+.af-bold {
+  font-weight: bold;
+}
+
+/* Beta note styles.
+-------------------------------------------------- */
+.af-beta-note {
+  padding: 5px 0;
+}
+
+.af-beta-note p {
+  margin: 0;
+}
+
+/* Logged-in bar styles.
+-------------------------------------------------- */
+.af-logged-in-bar .navbar-text {
+  margin: 0;
+}
+
+.af-logged-in-bar .navbar-text p {
+  margin: 0;
+  padding: 5px 0;
+}
+
+/* Content while logged in styles.
+-------------------------------------------------- */
+.af-content-while-logged-in {
+  padding-top: 30px; /* Padding by logged-in-bar height */
+}
+
+/* Copyright text styles
+-------------------------------------------------- */
+.af-copyright {
+  padding-top: 10px;
+  margin-bottom: 0;
+}
+
+/* Main site footer styles
+-------------------------------------------------- */
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: auto;
+  background-color: #f5f5f5;
+}
+
+@media (max-width: 991px) {
+  .footer div p.af-bold {
+    padding-top: 10px;
   }
 }
 
-.home-header {
-  min-height: 330px;
+.footer div.col-md-3:first-child p.af-bold {
+  padding: 0px;
 }
 
-/* Adjust top margin of the '
+/* Main site footer slider styles
 -------------------------------------------------- */
-.home-submit-your-facility-bar {
+.af-footer-slider {
+  min-height: 90px;
+}
+
+/* Home header styles
+-------------------------------------------------- */
+.af-home-header {
+  min-height: 320px;
+}
+
+@media (min-width: 768px) {
+  .af-home-header input {
+    width: 420px !important; /* Search bar width by AFRED logo width */
+  }
+}
+
+/* Home 'Submit your facility' bar styles
+-------------------------------------------------- */
+.af-home-submit-your-facility-bar {
   background-color: rgb(29, 189, 193);
   padding-top: 25px;
-  padding-bottom: 25px;
   color: #fff;
 }
 
-@media (min-width: 992px) {
-  .home-what-can-afred-do-for-you-description {
-    padding-top: 8px;
+.af-home-submit-your-facility-bar a {
+  color: white;
+  text-decoration: underline;
+}
+
+/* Home 'Here's what AFRED can do for you!' styles
+-------------------------------------------------- */
+.af-home-what-can-afred-do-for-you .col-sm-9 p {
+  padding-top: 4px;
+}
+
+.af-home-what-can-afred-do-for-you div.col-md-3:nth-child(3) .col-sm-9 p {
+  padding-top: 12px;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .af-home-what-can-afred-do-for-you .col-sm-11 p {
+    padding-top: 13px;
   }
+}
+
+/* Outline button styles
+ * Credit: http://bootsnipp.com/snippets/featured/bootstrap-outline-buttons
+-------------------------------------------------- */
+.btn-outline {
+  background-color: transparent;
+  color: inherit;
+  transition: all .1s;
+}
+
+.btn-primary.btn-outline {
+  color: #428bca;
+}
+
+.btn-success.btn-outline {
+  color: #5cb85c;
+}
+
+.btn-info.btn-outline {
+  color: #5bc0de;
+}
+
+.btn-warning.btn-outline {
+  color: #f0ad4e;
+}
+
+.btn-danger.btn-outline {
+  color: #d9534f;
+}
+
+.btn-primary.btn-outline:hover,
+.btn-success.btn-outline:hover,
+.btn-info.btn-outline:hover,
+.btn-warning.btn-outline:hover,
+.btn-danger.btn-outline:hover {
+  color: #fff;
 }

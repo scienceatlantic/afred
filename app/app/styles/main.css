@@ -20,15 +20,7 @@ body {
   margin-bottom: 210px; /* Margin bottom by footer height */
 }
 
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: auto;
-  background-color: #f5f5f5;
-}
-
-/* Footer padding
+/* Footer styles
 -------------------------------------------------- */
 footer {
   padding: 20px 0;
@@ -38,12 +30,6 @@ footer {
 -------------------------------------------------- */
 nav.navbar {
   border: 0;
-}
-
-/* Reduce left margin of main navbar
--------------------------------------------------- */
-#main-navbar {
-  margin-left: -18px;
 }
 
 /* Side list for the facility submission/edit form
