@@ -1,7 +1,7 @@
 <p data-af-page-title="Home"></p>
 
 <!-- Header (logo and search bar). -->
-<div class="container-fluid home-header" style="background-image: url('images/home-header.png');">
+<div class="container-fluid af-home-header" style="background-image: url('images/home-header.png');">
   <div class="text-center">
     <!-- AFRED Logo for desktop screens. -->
     <div data-ng-if="_getWidth() > 500">
@@ -22,12 +22,12 @@
     </div>
   </div>
 
-  <!-- Search form. -->
+  <!-- Search bar. -->
   <div class="text-center">
     <form class="form-inline" role="form" data-ng-submit="search.q && search.run()">
       <div class="form-group">
         <div class="input-group">
-          <input class="form-control input-lg home-search-bar" data-ng-model="search.q" placeholder="E.g. electron microscope">
+          <input class="form-control input-lg" data-ng-model="search.q" placeholder="E.g. electron microscope">
           <span class="input-group-btn">
             <button type="submit" class="btn btn-default btn-lg">
               <span class="fa fa-search"></span>
@@ -40,126 +40,136 @@
 </div>
 
 <!-- Submit your facility bar. -->
-<div class="container-fluid home-submit-your-facility-bar">
-  <div class="container"> 
+<div class="af-home-submit-your-facility-bar">
+  <div class="container">
     <div class="row">
-      <div class="col-xs-12">
-        <span class="pull-left">
-          <span class="h1">
-            <span class="fa fa-gears fa-3x" style="padding-right: 20px;" data-ng-if="_getWidth() > 500"></span>
-          </span>
+      <div class="col-md-2">
+        <span class="h1">
+          <span class="fa fa-gears fa-3x"></span>
         </span>
-        <span class="pull-left">
-          <span class="h3">
-            Do you have research <br>facilities or equipment?
-          </span>
+      </div>
+
+      <div class="col-md-6">
+        <br>
+        <span class="h3">
+          Do you have research <br data-ng-show="_getWidth() >= _bootstrap.grid.breakpoints.md">facilities or equipment?
         </span>
-        <span class="pull-right">
-          <button class="btn btn-default btn-lg" data-ui-sref="facilities.form.create">
+      </div>
+
+      <div class="col-md-4">
+        <br>
+        <span data-ng-class="{ 'pull-right': _getWidth() >= _bootstrap.grid.breakpoints.md }">
+          <button class="btn btn-default btn-lg btn-outline" data-ui-sref="facilities.form.create">
             Submit your facility <span class="fa fa-arrow-right"></span>
           </button>
         </span>
       </div>
     </div>
+
+    <br data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.md">
+    <p data-ng-class="{ 'pull-right': _getWidth() >= _bootstrap.grid.breakpoints.md }">Already submitted? <a data-ui-sref="facilities.update">Edit your facility here</a>.</p>
   </div>
 </div>
 
 <div class="container">
   <!-- Here's what AFRED can do you for. -->
-  <p class="h3">Here's what AFRED can do for you!</p>
-  <br>
-  <div class="row">
-    <div class="col-md-3">
-      <p>
+  <div class="af-home-what-can-afred-do-for-you">
+    <p class="h3">Here's what AFRED can do for you!</p>
+    
+    <div class="row">
+      <div class="col-md-3">
         <div class="row">
-          <div data-ng-class="{'col-xs-3': _getWidth() >= _bootstrap.grid.breakpoints.md, 'col-xs-1': _getWidth() < _bootstrap.grid.breakpoints.md}">
-            <span class="h1">
-              <span class="fa fa-star"></span>
-            </span>
+          <div data-ng-class="{ 'col-sm-3': _getWidth() >= _bootstrap.grid.breakpoints.md, 'col-sm-1': _getWidth() < _bootstrap.grid.breakpoints.md }">
+            <p class="h4">
+              <span class="fa-stack fa-lg">
+                <span class="fa fa-circle fa-stack-2x"></span>
+                <span class="fa fa-star fa-stack-1x fa-inverse"></span>
+              </span>
+            </p>
           </div>
 
-          <div data-ng-class="{'col-xs-9': _getWidth() >= _bootstrap.grid.breakpoints.md, 'col-xs-11': _getWidth() < _bootstrap.grid.breakpoints.md}">
-            <span class="h4">Research Intensification</span>
+          <div data-ng-class="{ 'col-sm-9': _getWidth() >= _bootstrap.grid.breakpoints.md, 'col-sm-11': _getWidth() < _bootstrap.grid.breakpoints.md }">
+            <p class="h4">Research Intensification</p>
           </div>
-        </div> 
-      </p>
+        </div>
+        
+        <p>
+          Drive research intensification and strengthen the research community
+          in Atlantic Canada.
+        </p>
+      </div>
 
-      <p class="home-what-can-afred-do-for-you-description">
-        Drive research intensification and strengthen the research community in 
-        Atlantic Canada.
-      </p>
-      <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.md">
-    </div>
-
-    <div class="col-md-3">
-      <p>
+      <div class="col-md-3">
         <div class="row">
-          <div data-ng-class="{'col-xs-3': _getWidth() >= _bootstrap.grid.breakpoints.md, 'col-xs-1': _getWidth() < _bootstrap.grid.breakpoints.md}">
-            <span class="h1">
-              <span class="fa fa-puzzle-piece"></span>
-            </span>
+          <div data-ng-class="{ 'col-sm-3': _getWidth() >= _bootstrap.grid.breakpoints.md, 'col-sm-1': _getWidth() < _bootstrap.grid.breakpoints.md }">
+            <p class="h4">
+              <span class="fa-stack fa-lg">
+                <span class="fa fa-circle fa-stack-2x"></span>
+                <span class="fa fa-puzzle-piece fa-stack-1x fa-inverse"></span>
+              </span>
+            </p>
           </div>
 
-          <div data-ng-class="{'col-xs-9': _getWidth() >= _bootstrap.grid.breakpoints.md, 'col-xs-11': _getWidth() < _bootstrap.grid.breakpoints.md}">
-            <span class="h4">Partnerships & Collaborations</span>
+          <div data-ng-class="{ 'col-sm-9': _getWidth() >= _bootstrap.grid.breakpoints.md, 'col-sm-11': _getWidth() < _bootstrap.grid.breakpoints.md }">
+            <p class="h4">Partnerships & Collaborations</p>
           </div>
-        </div> 
-      </p>
+        </div>
 
-      <p class="home-what-can-afred-do-for-you-description">
-        Foster new partnerships and collaborations between researchers, industry,
-        and government.
-      </p>
-      <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.md">
-    </div>
+        <p>
+          Foster new partnerships and collaborations between researchers, industry,
+          and government.
+        </p>
+      </div>
 
-    <div class="col-md-3">
-      <p>
+      <div class="col-md-3">
         <div class="row">
-          <div data-ng-class="{'col-xs-3': _getWidth() >= _bootstrap.grid.breakpoints.md, 'col-xs-1': _getWidth() < _bootstrap.grid.breakpoints.md}">
-            <span class="h1">
-              <span class="fa fa-usd"></span>
-            </span>
+          <div data-ng-class="{ 'col-sm-3': _getWidth() >= _bootstrap.grid.breakpoints.md, 'col-sm-1': _getWidth() < _bootstrap.grid.breakpoints.md }">
+            <p class="h4">
+              <span class="fa-stack fa-lg">
+                <span class="fa fa-circle fa-stack-2x"></span>
+                <span class="fa fa-usd fa-stack-1x fa-inverse"></span>
+              </span>
+            </p>
           </div>
 
-          <div data-ng-class="{'col-xs-9': _getWidth() >= _bootstrap.grid.breakpoints.md, 'col-xs-11': _getWidth() < _bootstrap.grid.breakpoints.md}">
-            <span class="h4">Cost Savings</span>
+          <div data-ng-class="{ 'col-sm-9': _getWidth() >= _bootstrap.grid.breakpoints.md, 'col-sm-11': _getWidth() < _bootstrap.grid.breakpoints.md }">
+            <p class="h4">Cost Savings</p>
           </div>
-        </div> 
-      </p>
+        </div>
 
-      <p class="home-what-can-afred-do-for-you-description">
-        Facilitate cost savings and speed to solutions through access to 
-        sophisticated technical infrastructure and expertise.
-      </p>
-      <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.md">
-    </div>
+        <p>
+          Facilitate cost savings and speed to solutions through access to 
+          sophisticated technical infrastructure and expertise.
+        </p>
+      </div>
 
-    <div class="col-md-3">
-      <p>
+      <div class="col-md-3">
         <div class="row">
-          <div data-ng-class="{'col-xs-3': _getWidth() >= _bootstrap.grid.breakpoints.md, 'col-xs-1': _getWidth() < _bootstrap.grid.breakpoints.md}">
-            <span class="h1">
-              <span class="fa fa-line-chart"></span>
-            </span>
+          <div data-ng-class="{ 'col-sm-3': _getWidth() >= _bootstrap.grid.breakpoints.md, 'col-sm-1': _getWidth() < _bootstrap.grid.breakpoints.md }">
+            <p class="h4">
+              <span class="fa-stack fa-lg">
+                <span class="fa fa-circle fa-stack-2x"></span>
+                <span class="fa fa-line-chart fa-stack-1x fa-inverse"></span>
+              </span>
+            </p>
           </div>
 
-          <div data-ng-class="{'col-xs-9': _getWidth() >= _bootstrap.grid.breakpoints.md, 'col-xs-11': _getWidth() < _bootstrap.grid.breakpoints.md}">
-            <span class="h4">Revenue Generation</span>
+          <div data-ng-class="{ 'col-sm-9': _getWidth() >= _bootstrap.grid.breakpoints.md, 'col-sm-11': _getWidth() < _bootstrap.grid.breakpoints.md }">
+            <p class="h4">Revenue Generation</p>
           </div>
-        </div> 
-      </p>
+        </div>
 
-      <p class="home-what-can-afred-do-for-you-description">
-        Create new income opportunities for infrastructure owners by listing 
-        equipment and facilities available for use.
-      </p>
+        <p>
+          Create new income opportunities for infrastructure owners by listing 
+          equipment and facilities available for use.
+        </p>
+      </div>
     </div>
-  </div>
+  </div><!-- End of .home-what-can-afred-do-for-you -->
 
   <hr>
 
-  <!-- Have a Look, What's New, Recent Tweets. -->
+  <!-- 'Have a Look', 'What's New', 'Recent Tweets'. -->
   <div class="row">
     <div class="col-md-4">
       <p class="h3">Have a Look</p>
@@ -176,7 +186,7 @@
               <!-- For smaller screens. -->
               <span data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.md">
                 {{ e.type }}<br>
-                <small class="text-muted">{{ e.purposeNoHtml }}</small>
+                <small class="text-muted">{{ e.purposeNoHtml | limitTo: 200 }}<span data-ng-if="e.purposeNoHtml.length > 200">...</span></small>
               </span>
             </a>
           </p>
