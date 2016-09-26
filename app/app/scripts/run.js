@@ -325,11 +325,21 @@ angular.module('afredApp').run(['$rootScope',
        */
       cb: {
         /**
+         * Use together with the 'ngRequired' directive to ensure that the user
+         * selects at least one checkbox in a form.
          * 
+         * Goes through an entire array checking each element's 'isSelected' 
+         * property. If at least one is selected, false is returned (i.e. the
+         * user has selected at least one checkbox, validation should pass).
          * 
-         * @param {array} items
-         * @param {Angular FormController} formElement (Optional) 
-         * @param {string} selectProp (Optional)
+         * @param {array} items Array of elements to check.
+         * @param {Angular FormController} formElement (Optional) Will set the
+         *     '$dirty' property to true if at least one checkbox was selected.
+         * @param {string} selectProp (Optional) The default is to look for the
+         *     'isSelected' property of each array element, you can change that
+         *     using this.
+         * 
+         * @return {boolean}
          */
         isRequired: function(items, formElement, selectProp) {
           selectProp = selectProp ? selectProp : 'isSelected'; // Set default.
@@ -345,7 +355,24 @@ angular.module('afredApp').run(['$rootScope',
         },
 
         /**
+         * Returns array of selected elements
          * 
+         * Goes through an array checking the 'isSelected' property of each 
+         * element. If the property is true, that element is added to an array
+         * that is returned once it has checked all elements.
+         * 
+         * @param {array} items Array of elements to check.
+         * @param {boolean} idOnly (Optional) Default is false. If set to true,
+         *     will only add the array element's ID to the array that will
+         *     eventually be returned.
+         * @param {string} idProp (Optional) If the 'idOnly' property is set to
+         *     true, by default it will look for an 'id' property in each array
+         *     element, you can use this to change that.
+         * @param {string} selectProp (Optional) The default is to look for the
+         *     'isSelected' property of each array element, you can change that
+         *     using this.
+         * 
+         * @return {array}
          */
         getSelected: function(items, idOnly, idProp, selectProp) {
           idProp = idProp ? idProp : 'id'; // Set default.
@@ -363,30 +390,17 @@ angular.module('afredApp').run(['$rootScope',
     };
     
     /* ---------------------------------------------------------------------
-     * Window properties. Making 'window' and 'location' accessible via
-     * '$rootScope'. Also making angular run a digest loop if the window is
-     * resized (to keep width and height properties up-to-date).
+     * Make 'location' accessible to all scopes.
      * --------------------------------------------------------------------- */
 
-    window.onresize = function() {
-      $rootScope.$apply();
-    };
-    
-    $rootScope._window = window;
     $rootScope._location = location;
-    
-    /* ---------------------------------------------------------------------
-     * Add the Math class to the global scope.
-     * --------------------------------------------------------------------- */
-
-    $rootScope._math = Math;
 
     /* ---------------------------------------------------------------------
      * Helper functions
      * --------------------------------------------------------------------- */
 
-    // Credit for the first two functions, see:
-    // http://stackoverflow.com/a/1038781
+    // Credit for the first two functions:
+    // @see http://stackoverflow.com/a/1038781
 
     /**
      * Get window width.
