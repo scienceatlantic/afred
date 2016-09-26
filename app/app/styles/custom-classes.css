@@ -1,121 +1,24 @@
-/* Vertically align content.
- * Credit: http://stackoverflow.com/a/20548578
+/* File contains CSS custom classes. All classes are prefixed with 'af-'
+ * except for the special Bootstrap add on classes.
+----------------------------------------------------------------------------- */
+
+/* Vertically align content class.
+ * @see: http://stackoverflow.com/a/20548578
 -------------------------------------------------- */
-.vcenter {
+.af-vcenter {
     display: inline-block;
     vertical-align: middle;
 }
 
-/* Bold text style.
--------------------------------------------------- */
+/* Bold text style class.
+----------------------------------------------------------------------------- */
 .af-bold {
   font-weight: bold;
 }
 
-/* Beta note styles.
--------------------------------------------------- */
-.af-beta-note {
-  padding: 5px 0;
-}
-
-.af-beta-note p {
-  margin: 0;
-}
-
-/* Logged-in bar styles.
--------------------------------------------------- */
-.af-logged-in-bar .navbar-text {
-  margin: 0;
-}
-
-.af-logged-in-bar .navbar-text p {
-  margin: 0;
-  padding: 5px 0;
-}
-
-/* Content while logged in styles.
--------------------------------------------------- */
-.af-content-while-logged-in {
-  padding-top: 30px; /* Padding by logged-in-bar height */
-}
-
-/* Copyright text styles
--------------------------------------------------- */
-.af-copyright {
-  padding-top: 10px;
-  margin-bottom: 0;
-}
-
-/* Main site footer styles
--------------------------------------------------- */
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: auto;
-  background-color: #f5f5f5;
-}
-
-@media (max-width: 991px) {
-  .footer div p.af-bold {
-    padding-top: 10px;
-  }
-}
-
-.footer div.col-md-3:first-child p.af-bold {
-  padding: 0px;
-}
-
-/* Main site footer slider styles
--------------------------------------------------- */
-.af-footer-slider {
-  min-height: 90px;
-}
-
-/* Home header styles
--------------------------------------------------- */
-.af-home-header {
-  min-height: 320px;
-}
-
-@media (min-width: 768px) {
-  .af-home-header input {
-    width: 420px !important; /* Search bar width by AFRED logo width */
-  }
-}
-
-/* Home 'Submit your facility' bar styles
--------------------------------------------------- */
-.af-home-submit-your-facility-bar {
-  background-color: rgb(29, 189, 193);
-  padding-top: 25px;
-  color: #fff;
-}
-
-.af-home-submit-your-facility-bar a {
-  color: white;
-  text-decoration: underline;
-}
-
-/* Home 'Here's what AFRED can do for you!' styles
--------------------------------------------------- */
-.af-home-what-can-afred-do-for-you .col-sm-9 p {
-  padding-top: 4px;
-}
-
-.af-home-what-can-afred-do-for-you div.col-md-3:nth-child(3) .col-sm-9 p {
-  padding-top: 12px;
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  .af-home-what-can-afred-do-for-you .col-sm-11 p {
-    padding-top: 13px;
-  }
-}
-
-/* Outline button styles
- * Credit: http://bootsnipp.com/snippets/featured/bootstrap-outline-buttons
--------------------------------------------------- */
+/* Outline Bootstrap button styles.
+ * @see: http://bootsnipp.com/snippets/featured/bootstrap-outline-buttons
+----------------------------------------------------------------------------- */
 .btn-outline {
   background-color: transparent;
   color: inherit;
