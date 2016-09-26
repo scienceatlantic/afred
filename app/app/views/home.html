@@ -44,25 +44,23 @@
   <div class="container">
     <div class="row">
       <div class="col-md-2">
-        <span class="h1">
+        <p class="h1">
           <span class="fa fa-gears fa-3x"></span>
-        </span>
+        </p>
       </div>
 
       <div class="col-md-6">
-        <br>
-        <span class="h3">
+        <p class="h3">
           Do you have research <br data-ng-show="_getWidth() >= _bootstrap.grid.breakpoints.md">facilities or equipment?
-        </span>
+        </p>
       </div>
 
       <div class="col-md-4">
-        <br>
-        <span data-ng-class="{ 'pull-right': _getWidth() >= _bootstrap.grid.breakpoints.md }">
-          <button class="btn btn-default btn-lg btn-outline" data-ui-sref="facilities.form.create">
+        <p>
+          <button class="btn btn-default btn-lg btn-outline" data-ng-class="{ 'pull-right': _getWidth() >= _bootstrap.grid.breakpoints.md }" data-ui-sref="facilities.form.create">
             Submit your facility <span class="fa fa-arrow-right"></span>
           </button>
-        </span>
+        </p>
       </div>
     </div>
 

@@ -163,8 +163,23 @@ nav.navbar {
 ----------------------------------------------------------------------------- */
 .af-home-submit-your-facility-bar {
   background-color: rgb(29, 189, 193);
-  padding-top: 25px;
+  padding: 30px 0 5px 0;
   color: #fff;
+}
+
+.af-home-submit-your-facility-bar p {
+  margin: 0;
+  padding: 0;
+}
+
+/* Vertically centerise text. */
+.af-home-submit-your-facility-bar div.col-md-6 p {
+  padding-top: 23px;
+}
+
+/* Vertically centerise button. */
+.af-home-submit-your-facility-bar div.col-md-4 p {
+  padding-top: 29px;
 }
 
 .af-home-submit-your-facility-bar a {
