@@ -19,7 +19,8 @@
     "components-font-awesome": "~4.6.3",
     "ta-maxlength": "~0.0.1",
     "ngFx": "ng-fx#^1.1.0",
-    "angular-bind-html-compile": "^1.2.1"
+    "angular-bind-html-compile": "^1.2.1",
+    "algoliasearch": "^3.18.1"
   },
   "overrides": {
     "bootstrap": {
