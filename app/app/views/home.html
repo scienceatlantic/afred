@@ -3,23 +3,13 @@
 <!-- Header (logo and search bar). -->
 <div class="container-fluid af-home-header">
   <div class="text-center">
-    <!-- AFRED Logo for desktop screens. -->
-    <div data-ng-if="_getWidth() > 500">
-      <div style="margin: 50px 0;">
-        <a data-ui-sref="home">
-          <img src="images/afred-logo-colour-gradient-bottom-tagline-470x125.png" alt="AFRED logo">
-        </a>
-      </div>
-    </div>
-    
-    <!-- AFRED Logo for small screens. -->
-    <div data-ng-if="_getWidth() <= 500">
-      <div class="text-center" style="margin: 20px 0;">
-        <a data-ui-sref="home">
-          <img src="images/afred-symbol-bottom-text 200x170.png" alt="AFRED logo">
-        </a>
-      </div> 
-    </div>
+    <a data-ui-sref="home">
+      <!-- AFRED Logo for desktop screens. -->
+      <img src="images/afred-logo-colour-gradient-bottom-tagline-470x125.png" alt="AFRED logo" data-ng-if="_getWidth() > 500">
+
+      <!-- AFRED Logo for small screens. -->
+      <img src="images/afred-symbol-bottom-text 200x170.png" alt="AFRED logo" data-ng-if="_getWidth() <= 500">
+    </a>
   </div>
 
   <!-- Search bar. -->
@@ -40,23 +30,23 @@
 </div>
 
 <!-- Submit your facility bar. -->
-<div class="af-home-submit-your-facility-bar">
+<div class="af-home-submit-your-facility-bar" data-ng-class="{ 'text-center': _getWidth() < _bootstrap.grid.breakpoints.md }">
   <div class="container">
     <div class="row">
       <div class="col-md-2">
-        <p class="h1">
+        <p class="h2">
           <span class="fa fa-gears fa-3x"></span>
         </p>
       </div>
 
       <div class="col-md-6">
-        <p class="h3">
+        <p class="h2">
           Do you have research <br data-ng-show="_getWidth() >= _bootstrap.grid.breakpoints.md">facilities or equipment?
         </p>
       </div>
 
       <div class="col-md-4">
-        <p>
+        <p class="af-heading">
           <button class="btn btn-default btn-lg btn-outline" data-ng-class="{ 'pull-right': _getWidth() >= _bootstrap.grid.breakpoints.md }" data-ui-sref="facilities.form.create">
             Submit your facility <span class="fa fa-arrow-right"></span>
           </button>
@@ -64,7 +54,6 @@
       </div>
     </div>
 
-    <br data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.md">
     <p data-ng-class="{ 'pull-right': _getWidth() >= _bootstrap.grid.breakpoints.md }">Already submitted? <a data-ui-sref="facilities.update">Edit your facility here</a>.</p>
   </div>
 </div>
@@ -205,10 +194,9 @@
     <div class="col-md-4">
       <p class="h3">Recent Tweets</p>
 
-      <p>
-        <a class="twitter-timeline" data-height="285" data-chrome="noheader nofooter noborders" href="https://twitter.com/AFREDatabase">Tweets by AFREDatabase</a>
+      <p> 
+        <a class="twitter-timeline" data-chrome="noheader nofooter noborders" data-tweet-limit="2" href="https://twitter.com/AFREDatabase">Tweets by AFREDatabase</a>
       </p>
-      <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
     </div>
   </div>
 </div> <!-- End of .container -->
