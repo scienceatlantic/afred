@@ -35,5 +35,16 @@ angular.module('afredApp').controller('HomeController',
 
     // Get "Have a Look" content.
     $scope.haveALook = homeResource.get();
+
+    // Load Twitter timeline and hide any images.
+    // @see https://dev.twitter.com/web/javascript/initialization
+    // @see https://dev.twitter.com/web/javascript/events
+    twttr.widgets.load();
+    twttr.events.bind('loaded', function(event) {
+      event.widgets.forEach(function(widget) {
+        angular.element('#' + widget.id).contents()
+          .find('.timeline-Tweet-media').hide();
+      });
+    });
   }
 ]);
