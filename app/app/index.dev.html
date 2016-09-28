@@ -94,6 +94,26 @@
       })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
     </script>
 
+    <!--
+      -- Twitter.
+      -- @see: https://dev.twitter.com/web/javascript/loading
+      -->
+    <script>
+      window.twttr = (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {};
+        if (d.getElementById(id)) return t;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "https://platform.twitter.com/widgets.js";
+        fjs.parentNode.insertBefore(js, fjs);
+        t._e = [];
+        t.ready = function(f) {
+          t._e.push(f);
+        };
+        return t;
+      }(document, "script", "twitter-wjs"));
+    </script>
+
     <!-- JavaScript -->
     <!-- Third-party JavaScript files -->
     <!-- build:js(.) scripts/oldieshim.js -->
