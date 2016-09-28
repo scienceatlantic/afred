@@ -65,3 +65,24 @@ angular.module('afredApp').service('warningModal', [
     };
   }
 ]);
+
+/* ---------------------------------------------------------------------
+ * Algolia Search.
+ * @see https://www.algolia.com/doc/api-client/javascript/getting-started#install
+ * --------------------------------------------------------------------- */
+
+angular.module('afredApp').service('algolia', [
+  '$rootScope',
+  function($rootScope) {
+    var env = $rootScope._env.algolia;
+    var client = algoliasearch(env.api.applicationId, env.api.key);
+    var service = this; // Preserve context for forEach function below.
+
+    // Expose each index as a function.
+    angular.forEach(env.indices, function(index) {
+      service[index] = function() {
+        return client.initIndex(index);
+      }
+    });
+  }
+]);
