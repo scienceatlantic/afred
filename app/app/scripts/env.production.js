@@ -69,6 +69,21 @@ angular.module('afredApp').run(['$rootScope', function($rootScope) {
       analytics: {
         id: 'UA-80861919-1'
       }
+    },
+
+    /* ---------------------------------------------------------------------
+     * Algolia settings.
+     * --------------------------------------------------------------------- */
+    algolia: {
+      api: {
+        applicationId: 'C8MSUIO9J3',
+        key: 'edfa4d5152caa311a0fdbcf0fd6d002e'
+      },
+      
+      indices: [
+        'facilities',
+        'equipment'
+      ]
     }
   };
 }]);
