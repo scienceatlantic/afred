@@ -2,6 +2,12 @@
  * except for the special Bootstrap add on classes.
 ----------------------------------------------------------------------------- */
 
+/* Generic heading class (for cases when we don't want to use .h1, .h2,...).
+----------------------------------------------------------------------------- */
+.af-heading {
+  font-family: 'Rubik', sans-serif;
+}
+
 /* Vertically align content class.
  * @see: http://stackoverflow.com/a/20548578
 -------------------------------------------------- */
@@ -22,6 +28,7 @@
 .btn-outline {
   background-color: transparent;
   color: inherit;
+  border: 2px solid #fff;
   transition: all .1s;
 }
 
