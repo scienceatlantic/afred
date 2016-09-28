@@ -1,36 +1,45 @@
 <div class="row">
-  <div class="col-lg-2">
-    <table class="table table-condensed table-list">
-      <tbody>
-        <tr data-ng-repeat="e in form.data.equipment" data-ng-class="{active: form.equipmentIndex === $index}" data-ng-click="form.equipmentIndex = $index">
-          <td>
-            <a href="">
-              <span data-ng-class="{ 'text-danger': facilityForm['equipmentForm' + $index].$invalid && facilityForm['equipmentForm' + $index].$dirty }">
-                <span data-ng-hide="e.type">Equipment #{{ $index + 1 }}</span>
-                <span data-ng-show="e.type">{{ e.type }} <span data-ng-show="e.manufacturer">({{ e.manufacturer }})</span></span>
+  <!-- List of equipment. -->
+  <div class="col-md-3">
+    <ul class="list-unstyled">
+      <li data-ng-repeat="e in form.data.equipment">
+        <a href="" data-ng-class="{ 'af-bold': form.equipmentIndex === $index }" data-ng-click="form.equipmentIndex = $index">
+          <span class="active" data-ng-class="{ 'text-danger': facilityForm['equipmentForm' + $index].$invalid && facilityForm['equipmentForm' + $index].$dirty }">
+            <span data-ng-hide="e.type">Equipment #{{ $index + 1 }}</span>
+
+            <span data-ng-show="e.type">
+              <span data-ng-show="_getWidth() >= _bootstrap.grid.breakpoints.md">
+                <span data-ng-show="e.type">{{ e.type | limitTo:18 }}<span data-ng-show="e.type.length > 18">...</span></span>
               </span>
-            </a>
-          </td>
-          <td>
-            <a href="" data-ng-show="$index !== 0" data-ng-click="form.removeEquipment($index)">
-              <span class="text-danger">
-                <span class="glyphicon glyphicon-remove"></span>
-              </span>
-            </a>                         
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    
-    <button type="button" class="btn btn-default btn-sm" data-ng-click="form.addEquipment()" data-ng-disabled="form.data.equipment.length > 49">Equipment <span class="fa fa-plus"></span></button>
+              <span data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.md">
+                <span data-ng-show="e.type">{{ e.type | limitTo:25 }}<span data-ng-show="e.type.length > 25">...</span></span>
+              </span>            
+            </span>
+          </span>
+        </a>
+
+        <span data-ng-class="{ 'pull-right': _getWidth() >= _bootstrap.grid.breakpoints.md }">
+          <a href="" data-ng-show="$index !== 0" data-ng-click="form.removeEquipment($index)">
+            <span class="text-danger">
+              <span class="glyphicon glyphicon-remove"></span>
+            </span>
+          </a>
+        </span> 
+      </li>
+    </ul>
+
+    <button type="button" class="btn btn-default btn-sm" data-ng-click="form.addEquipment()" data-ng-disabled="form.data.equipment.length > 49">Add equipment <span class="fa fa-plus"></span></button>
   </div><!-- End of .col-x-x -->
   
-  <div class="col-lg-10">
+  <hr data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.md">
+
+  <!-- Form fields. -->
+  <div class="col-md-9">
     <div data-ng-repeat="e in form.data.equipment">
       <div data-ng-form name="equipmentForm{{ $index }}">
         <div class="row" data-ng-show="form.equipmentIndex === $index">
           <div class="col-lg-12">
-            <div data-af-field data-af-field-label="Type*" data-af-field-model="e.type">
+            <div data-af-field data-af-field-label="Type*" data-af-field-model="e.type" data-af-field-tooltip="'The full name of the piece of equipment.'">
               <input type="text" class="form-control" name="equipmentType{{ $index }}" data-ng-model="e.type" placeholder="E.g. Magnetic resonance imaging (MRI)" maxlength="200" required>
             </div>
             
@@ -46,11 +55,11 @@
               -- For this part, we have to use $index to make the names unique otherwise textAngular will complain. The same
               -- goes for equipment specifications.
               -->
-            <div data-af-field data-af-field-label="Equipment purpose*" data-af-field-model="e.purpose">
+            <div data-af-field data-af-field-label="Equipment purpose*" data-af-field-model="e.purpose" data-af-field-tooltip="'Provide a brief description of the piece of equipment, its functions, possible uses, special features, etc.'">
               <div data-text-angular name="equipmentPurpose{{ $index }}" data-ng-model="e.purpose" data-ta-maxlength="2000" placeholder="E.g. Magnetic resonance imaging (MRI) is a medical imaging technique used in radiology..." required></div>
             </div>
             
-            <div data-af-field data-af-field-label="Equipment specifications" data-af-field-model="e.specifications">
+            <div data-af-field data-af-field-label="Equipment specifications" data-af-field-model="e.specifications" data-af-field-tooltip="'Include information such as dimensions, weight, power supply, battery life, software, resolution, range, etc. Please include units of measurement.'">
               <div data-text-angular name="equipmentSpecifications{{ $index }}" data-ng-model="e.specifications" placeholder="E.g. - 50 x 50 x 50 cm FOV..." data-ta-maxlength="2000"></div>
             </div>
             
@@ -62,7 +71,7 @@
               <input type="text" class="form-control" name="equipmentYearManufactured{{ $index }}" data-ng-model="e.yearManufactured" data-ng-model-options="{ debounce: 500 }" pattern="(?:19|20)[0-9]{2}" placeholder="E.g. 1990">
             </div>
             
-            <div data-af-field data-af-field-label="Excess capacity*">
+            <div data-af-field data-af-field-label="Excess capacity*" data-af-field-tooltip="'Excess capacity means that the piece of equipment is not being fully utilized, that there is time available for it to be used by others or on other projects.<br>Please note: this field will not be publicly viewable.'">
               <div class="radio">
                 <label>
                   <input type="radio" name="equipmentExcessCapacity{{ $index }}" data-ng-model="e.hasExcessCapacity" data-ng-value="true" required> Yes 
@@ -73,7 +82,7 @@
               </div>
             </div>
             
-            <div data-af-field data-af-field-label="Search visibility*">
+            <div data-af-field data-af-field-label="Search visibility*" data-af-field-tooltip="'To ensure that we have a complete listing of everything within your facility, please include all equipment, even that which you do not want publicly viewable. If you do not want the piece of equipment to be publicly viewable, check ‘Private’.'">
               <div class="radio">
                 <label>
                   <input type="radio" name="equipmentIsPublic{{ $index }}" data-ng-model="e.isPublic" data-ng-value="true" selected required> Public 
@@ -84,7 +93,7 @@
               </div>
             </div>
             
-            <div data-af-field data-af-field-label="Keywords" data-af-field-model="e.keywords">
+            <div data-af-field data-af-field-label="Keywords" data-af-field-model="e.keywords" data-af-field-tooltip="'Please include any common terms, acronyms, and/or associated words that apply to this piece of equipment. This improves the likelihood that it will appear in search results.'">
               <input type="text" class="form-control" name="equipmentKeywords{{ $index }}" data-ng-model="e.keywords" placeholder="NMRI, MRT, etc" maxlength="500">
             </div>
           </div><!-- End of .col-x-x -->
