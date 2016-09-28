@@ -1,7 +1,14 @@
 <div class="form-group" data-ng-class="{ 'has-error': form[name].$invalid && form[name].$dirty, 'form-group-sm': !isMd }">
   <!-- Field label. -->
-  <label class="control-label" data-ng-class="{ 'col-sm-4': !isVertical }">{{ label }}</label>
-  
+  <label class="control-label" data-ng-class="{ 'col-sm-4': !isVertical }">
+    {{ label }}
+
+    <!-- Tooltip. -->
+    <span data-ng-if="tooltip">
+      <span class="fa fa-question-circle" data-uib-tooltip-html="tooltip" data-tooltip-append-to-body="true" data-tooltip-placement="auto" data-tooltip-trigger="'mouseenter click'"></span>
+    </span>
+  </label>
+
   <div data-ng-class="{ 'col-sm-8': !isVertical }">
     <!-- Input element gets transcluded here. -->
     <div data-ng-transclude></div>
