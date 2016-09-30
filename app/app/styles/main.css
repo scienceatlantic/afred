@@ -174,7 +174,7 @@ nav.navbar {
 ----------------------------------------------------------------------------- */
 .af-home-header {
   min-height: 400px;
-  background-image: url('/images/homepage-banner.jpg');
+  background-image: url('../images/homepage-banner.jpg');
   background-size: cover;
   background-position: center;
 }
