@@ -19,7 +19,7 @@
       <input type="text" class="form-control" name="facilityCity" data-ng-model="form.data.facility.city" maxlength="150">
     </div>
     
-    <div data-af-field data-af-field-label="Province/Region*" data-af-field-tooltip="'If your facility/lab has locations in multiple provinces, please select region. If your province/region is not listed, please contact afred@scienceatlantic.ca.'">          
+    <div data-af-field data-af-field-label="Province/Region*" data-af-field-tooltip="'If your facility/lab has locations in multiple provinces, please select region. If your province/region is not listed, please contact <a href=\'mailto:afred@scienceatlantic.ca\'>afred@scienceatlantic.ca</a>.'">          
       <select class="form-control" name="facilityProvince" id="facility-province" data-ng-model="form.data.facility.provinceId" data-ng-options="p.id as p.name for p in form.provinces" required>
       </select>
     </div>
@@ -48,7 +48,7 @@
     -- providing the name of the first checkbox, validation is a problem. We're using the 
     -- '$rootScope._form.cb.isRequired()' for validation.
     -->
-  <div data-af-field data-af-field-label="Research disciplines*" data-af-field-name="facilityDisciplinesC10" data-af-field-tooltip="'Please check all research disciplines for which your facility/lab could be relevant. You must select at least one research discipline. If none apply, please contact afred@scienceatlantic.ca.'">
+  <div data-af-field data-af-field-label="Research disciplines*" data-af-field-name="facilityDisciplinesC10" data-af-field-tooltip="'Please check all research disciplines for which your facility/lab could be relevant. You must select at least one research discipline. If none apply, please contact <a href=\'mailto:afred@scienceatlantic.ca\'>afred@scienceatlantic.ca</a>.'">
     <div class="row">
       <div class="col-md-6">
         <div data-ng-repeat="d in form.disciplines | limitTo: form.disciplines.length / 2">
@@ -80,7 +80,7 @@
     -- Please have a look at the comments for 'disciplinesForm' above for how we're using the 'af-field' directive.
     -- Exact same scenario here.
     -->
-  <div data-af-field data-af-field-label="Sectors of application*" data-af-field-name="facilitySectorsC10" data-af-field-tooltip="'Please check all sectors of application for which your facility/lab could be relevant. You must select at least one sector of application. If none apply, please contact afred@scienceatlantic.ca.'">
+  <div data-af-field data-af-field-label="Sectors of application*" data-af-field-name="facilitySectorsC10" data-af-field-tooltip="'Please check all sectors of application for which your facility/lab could be relevant. You must select at least one sector of application. If none apply, please contact <a href=\'mailto:afred@scienceatlantic.ca\'>afred@scienceatlantic.ca</a>.'">
     <div class="row">
       <div class="col-md-6">
         <div data-ng-repeat="s in form.sectors | limitTo: form.sectors.length / 2">
