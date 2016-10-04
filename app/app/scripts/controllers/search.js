@@ -8,185 +8,261 @@ angular.module('afredApp').controller('SearchController',
             searchResource,
             $uibModal) {
     /* ---------------------------------------------------------------------
-     * Functions.
+     * Function/Object declarations.
      * --------------------------------------------------------------------- */
     
     /**
-     * Search class/object.
+     * Holds all search state related code.
      */
     $scope.search = {
       /**
-       * Holds the entire search query including any disciplines, sectors,
-       * organizations, provinces, and the search type.
+       * Holds all search query data.
        * 
-       * @type {object}
+       * @type {Object} query - All query related data.
+       * @type {?string} query.q - Search query.
+       * @type {!string} query.type - Search type. Valid values are 'equipment'
+       *     or 'facility'.
+       * @type {number} query.page
+       * @type {number} query.itemsPerPage
+       * @type {Array.<number>} disciplineId[]
+       * @type {Array.<number>} organizationId[]
+       * @type {Array.<number>} provinceId[]
+       * @type {Array.<number>} sectorId[]
        */
       query: {
         q: null,
         type: 'equipment',
-        'disciplineId[]': null,
-        'sectorId[]': null,
-        'organizationId[]': null,
-        'provinceId[]': null
+        page: 1,
+        itemsPerPage: 10,
+        'disciplineId[]': [],
+        'organizationId[]': [],
+        'provinceId[]': [],
+        'sectorId[]': []
       },
+
+      /**
+       * Flag to signify if this is the first time we're running the search.
+       * 
+       * @type {boolean}
+       */
+      firstTime: true,
+
+      /**
+       * Flag to signify if the query has changed since the last time search was
+       * run.
+       * 
+       * @type {boolean}
+       */
+      hasQueryChanged: false,
+
+      /**
+       * Flag to signify if the filters have changed since the last time search
+       * was run.
+       * 
+       * @type {boolean}
+       */
+      hasFiltersChanged: false,
       
       /**
-       * Advanced search radio buttons.
-       * @type {object}
+       * Filters subobject.
        */
-      advanced: {
+      filters: {
         /**
-         *
+         * Show/Hide filter panel flag.
+         * 
+         * @type {!boolean}
          */
         show: false,
         
+        /**
+         * Toggle (show (true)/hide (false)) filter panel.
+         * 
+         * @sideeffect $scope.search.filters.show - If true, set to false and
+         *     vice versa.
+         */
         toggle: function() {
-          $scope.search.advanced.show = !$scope.search.advanced.show;
+          $scope.search.filters.show = !$scope.search.filters.show;
         },
         
+        /**
+         * Holds resource returned from `$scope.search.filters.get()`.
+         * 
+         * @type {Angular $resource}
+         */
         resource: {},
+
+        /**
+         * All or selected disciplines radio button flag.
+         * 
+         * @type {boolean}
+         */
+        allDisciplines: true,
+
+        /**
+         * All or selected organizations radio button flag.
+         * 
+         * @type {boolean}
+         */
+        allOrganizations: true,
+
+        /**
+         * All or selected provinces radio button flag.
+         * 
+         * @type {boolean}
+         */
+        allProvinces: true,
+
+        /**
+         * All or selected sectors radio button flag.
+         * 
+         * @type {boolean}
+         */
+        allSectors: true,
+
+        /**
+         * Holds discipline data returned from `$scope.search.filters.get()`.
+         * 
+         * @type {Array}
+         */
+        disciplines: [],
+
+        /**
+         * Holds organization data returned from `$scope.search.filters.get()`.
+         * 
+         * @type {Array}
+         */
+        organizations: [],
+
+        /**
+         * Holds provinces data returned from `$scope.search.filters.get()`.
+         * 
+         * @type {Array}
+         */
+        provinces: [],
         
-        radios: {
-          // True = all, false = select.
-          provinces: true,
-          organizations: true,
-          disciplines: true,
-          sectors: true,
-          
-          /**
-           * Call this function every time the user switches between 'all' and
-           * 'select'. It basically clears the arrays when 'all' is selected.
-           *
-           * Side effects:
-           * $scope.search.query Object properties (the arrays) are cleared if
-           *     the corresponding radio buttons are true (='All').
-           *
-           * Uses/requres:
-           * $scope.search.advanced.radios
-           */
-          update: function() {
-            if ($scope.search.advanced.radios.provinces) {
-              $scope.search.query['provinceId[]'] = [];
-            }
-            
-            if ($scope.search.advanced.radios.organizations) {
-              $scope.search.query['organizationId[]'] = [];
-            }
-            
-            if ($scope.search.advanced.radios.disciplines) {
-              $scope.search.query['disciplineId[]'] = [];
-            }
-            
-            if ($scope.search.advanced.radios.sectors) {
-              $scope.search.query['sectorId[]'] = [];
-            }
+        /**
+         * Holds sectors data returned from `$scope.search.filters.get()`.
+         * 
+         * @type {Array}
+         */
+        sectors: [],
+        
+        /**
+         * If the user selects 'All' for any one of the filter radio buttons, 
+         * clear corresponding array.
+         * 
+         * @sideeffect $scope.search.query['disciplineId[]'] - Array cleared if 
+         *     `$scope.search.filters.radios.AllDisciplines` is true.
+         * @sideeffect $scope.search.query['sectorId[]'] - Array cleared if 
+         *     `$scope.search.filters.radios.AllSectors` is true.
+         * @sideeffect $scope.search.query['organizationId[]'] - Array cleared 
+         *     if `$scope.search.filters.radios.allOrganizations` is true.
+         * @sideeffect $scope.search.query['provinceId[]'] - Array cleared if 
+         *     `$scope.search.filters.radios.AllProvinces` is true.
+         * @requires $scope.search.filters.allDisciplines
+         * @requires $scope.search.filters.allOrganizations
+         * @requires $scope.search.filters.allProvinces
+         * @requires $scope.search.filters.allSectors
+         */
+        update: function() {
+          if ($scope.search.filters.allProvinces) {
+            $scope.search.query['provinceId[]'] = [];
+          }
+          if ($scope.search.filters.allOrganizations) {
+            $scope.search.query['organizationId[]'] = [];
+          }          
+          if ($scope.search.filters.allDisciplines) {
+            $scope.search.query['disciplineId[]'] = [];
+          }          
+          if ($scope.search.filters.allSectors) {
+            $scope.search.query['sectorId[]'] = [];
           }
         },
         
         /**
-         * Reset function, clears all selections (including params).
+         * Clears all filters.
          *
-         * Side effects:
-         * $scope.search.query Arrays are cleared and 'type' is set to
-         *     'equipment'.
-         * $scope.search.advanced.radios All radio buttons are set to true.
+         * @sideeffect $scope.search.filters.allProvinces Set to true.
+         * @sideeffect $scope.search.filters.allOrganizations Set to true.
+         * @sideeffect $scope.search.filters.allDisciplines Set to true.
+         * @sideeffect $scope.search.filters.allSectors Set to true.
+         * @sideeffect $scope.search.query.type Set to 'equipment'
+         * @sideeffect $scope.search.query['disciplineId[]'] Array cleared.
+         * @sideeffect $scope.search.query['sectorId[]'] Array cleared.
+         * @sideeffect $scope.search.query['organizationId[]'] Array cleared.
+         * @sideeffect $scope.search.query['provinceId[]'] Array cleared.
          */
         reset: function() {
-          $scope.search.advanced.radios = {
-            provinces: true,
-            organizations: true,
-            disciplines: true,
-            sectors: true
-          };
-          
           $scope.search.query.type = 'equipment';
-          $scope.search.query['provinceId[]'] = null;
-          $scope.search.query['organizationId[]'] = null;
-          $scope.search.query['disciplineId[]'] = null;
-          $scope.search.query['sectorId[]'] = null;
+          $scope.search.filters.allDisciplines = true;
+          $scope.search.filters.allOrganizations = true;
+          $scope.search.filters.allProvinces = true;
+          $scope.search.filters.allSectors = true;
+          $scope.search.query['provinceId[]'] = [];
+          $scope.search.query['organizationId[]'] = [];
+          $scope.search.query['disciplineId[]'] = [];
+          $scope.search.query['sectorId[]'] = [];
         },
         
+        /**
+         * Gets all filter related data.
+         * 
+         * @sideeffect $scope.search.filters.disciplines Discipline data (array)
+         *     is assigned to this.
+         * @sideeffect $scope.search.filters.organizations Organization data 
+         *     (array) is assigned to this.
+         * @sideeffect $scope.search.filters.provinces Province data (array)
+         *     is assigned to this.
+         * @sideeffect $scope.search.filters.sectors Sector data (array) is
+         *     assigned to this.
+         * @requires $scope._httpError() - Called if the AJAX request fails.
+         * @requires searchResource - To query the API.
+         */
         get: function() {
-          $scope.search.advanced.resource = searchResource.query({
+          $scope.search.filters.resource = searchResource.query({
             advancedSearchOptions: true
           }, function(data) {
-            $scope.search.disciplines = data.disciplines;
-            $scope.search.sectors = data.sectors;
-            $scope.search.provinces = data.provinces;
-            $scope.search.organizations = data.organizations;
-          }, function() {
-            // If it fails...
+            $scope.search.filters.disciplines = data.disciplines;
+            $scope.search.filters.organizations = data.organizations;
+            $scope.search.filters.provinces = data.provinces;
+            $scope.search.filters.sectors = data.sectors;
+          }, function(response) {
+            $scope._httpError(response);
           });
         }  
       },
       
       /**
-       * Search results.
+       * Search results stored here.
        * 
-       * @type {array}
+       * @type {Array}
        */
       results: [],
       
       /**
-       * Holds the 'searchResource' promise.
+       * Holds Angular $resource returned from `$scope.search.get()`.
        * 
-       * @type {object}
+       * @type {Angular $resource}
        */
       resource: {},
-      
-      /**
-       * Array of disciplines.
-       * 
-       * @type {array}
-       */
-      disciplines: [],
-      
-      /**
-       * Array of sectors.
-       * 
-       * @type {array}
-       */
-      sectors: [],
-      
-      /**
-       * Array of sectors.
-       * 
-       * @type {array}
-       */
-      organizations: [],
-      
-      /**
-       * Array of provinces.
-       * 
-       * @type {array}
-       */
-      provinces: [],
       
       /**
        * Redirects to the search results page. The search results are shown in
        * a separate state so that the search parameters can be attached to the
        * URL.
        *
-       * Side effects:
-       * $scope.search.results Cleared if redirected back to 'search'.
-       * 
-       * Uses/requires:
-       * $scope.search.query
-       * $scope._state
-       * 
-       * @param {boolean} showAll true = show everything, false = regular
-       *     search.
+       * @requires $scope._state.go()
+       * @requires $scope.search.query
+       * @param {boolean} showAll - If true, redirect to search.all state, if
+       *     false, redirect to search.q state.
        */
-      goToResultsPage: function(showAll) {        
+      index: function(showAll) {        
         if (!showAll) {
-          // Search only if the query is not empty.
+          // Search only if the query is not empty, otherwise return to parent
+          // state.
           if ($scope.search.query.q) {
             $scope._state.go('search.q', $scope.search.query);
-          // Otherwise return to the main search page
           } else {
-            // Clear search results if going back to main search page.
-            $scope.search.results = [];
-            
             $scope._state.go('search');
           }   
         } else {
@@ -197,43 +273,59 @@ angular.module('afredApp').controller('SearchController',
       /**
        * Parse the search parameters from the URL.
        *
-       * Side effects:
-       * $scope.search.query All properties are modified based on values
-       *     retrieved from the URL.
-       * 
-       * Uses/requires:
-       * $scope._stateParams
-       * $scope.search.advanced.radios
-       * $scope.search.toInt()
+       * @sideeffect $scope.search.query.q - Query grabbed from URL.
+       * @sideeffect $scope.search.query.type - Type grabbed from URL. If not
+       *     either 'equipment' or 'facility', set to 'equipment'.
+       * @sideeffect $scope.search.query['disciplinesId[]'] - Valid values are
+       *     inserted into array.
+       * @sideeffect $scope.search.query['organizationsId[]'] - Valid values
+       *     are inserted into array.
+       * @sideeffect $scope.search.query['provincesId[]'] - Valid values are
+       *     inserted into array.
+       * @sideeffect $scope.search.query['sectorsId[]'] - Valid values are
+       *     inserted into array.
+       * @requires $scope._state.is()
+       * @requires $scope._stateParams.q
+       * @requires $scope._stateParams.type - If found.
+       * @requires $scope._stateParams['disciplineId[]'] - If found.
+       * @requires $scope._stateParams['organizationId[]'] - If found.
+       * @requires $scope._stateParams['provinceId[]'] - If found.
+       * @requires $scope._stateParams['sectorId[]'] - If found.
+       * @requires $scope.search.filters.allDisciplines
+       * @requires $scope.search.filters.allOrganizations
+       * @requires $scope.search.filters.allProvinces
+       * @requires $scope.search.filters.allSectors
+       * @requires $scope.search.toInt()
        */
       parseParams: function() {
         // Aliases to shorten code.
         var s = $scope.search;
         var p = $scope._stateParams;
-        var r = $scope.search.advanced.radios;
+        var f = $scope.search.filters;
         
-        s.query.q = p.q;
+        s.query.q = $scope._state.is('search.q') ? p.q : null;
         s.query.type = p.type == 'facility' ? 'facility' : 'equipment';
         s.query['provinceId[]'] = s.toInt(p['provinceId[]']);
         s.query['organizationId[]'] = s.toInt(p['organizationId[]']);
         s.query['disciplineId[]'] = s.toInt(p['disciplineId[]']);
         s.query['sectorId[]'] = s.toInt(p['sectorId[]']);
         
-        // Update the radio buttons. If a (or more) province, organization,
-        // discipline, or sector was selected, set the radio button to false
-        // (i.e. 'Select').
-        r.provinces = s.query['provinceId[]'].length == 0;
-        r.organizations = s.query['organizationId[]'].length == 0;
-        r.disciplines = s.query['disciplineId[]'].length == 0;
-        r.sectors = s.query['sectorId[]'].length == 0;
+        // Update the radio buttons. If one or more disciplines, organizations,
+        // provinces, or sectors were selected, set the corresponding flags to 
+        // false.
+        f.allProvinces = s.query['provinceId[]'].length == 0;
+        f.allOrganizations = s.query['organizationId[]'].length == 0;
+        f.allDisciplines = s.query['disciplineId[]'].length == 0;
+        f.allSectors = s.query['sectorId[]'].length == 0;
       },
       
       /**
        * Accepts an array of values and attempts to parse the values into
-       * integers and stores them into a new array. Values that fail to get
-       * parse are ignored.
-       * @param {array} arr Array of values.
-       * @return {array} Array of integers.
+       * integers. Values that are successfully parsed are added into an array
+       * that is returned after all values have been parsed.
+       * 
+       * @param {Array} arr Array of values to parse.
+       * @return {Array.<number>}
        */
       toInt: function(arr) {
         var values = [];
@@ -250,24 +342,30 @@ angular.module('afredApp').controller('SearchController',
       /**
        * Retrieves the search results.
        *
-       * Side effects:
-       * $scope.search.query 'page' and 'itemsPerPage' are added.
-       * $scope.search.results Stores search results.
-       * $scope.search.resource Stores promise returned from 'searchResource'.
-       *
-       * Uses/requires:
-       * $scope.search.resource
-       * searchResource
-       *
-       * @param {integer} page Page number of pagination.
+       * @sideeffect $scope.search.query.page - Set to 1 if `page` param not
+       *     provided.
+       * @sideeffect $scope.search.hasQueryChanged Set to false after query has
+       *     completed.
+       * @sideeffect $scope.search.hasFiltersChanged Set to false after query
+       *     has completed.
+       * @sideeffect $scope.search.resource - Angular $resource returned from
+       *     `searchResource` is assigned to this.
+       * @sideeffect $scope.search.results - Results returned after querying the
+       *     API are concatenated into this array.
+       * @requires $scope._httpError() Called if the query fails.
+       * @requires searchResource
+       * @param {integer=1} page
        */
-      getResults: function(page) {
-        $scope.search.query.page = page ? page : 1;
-        $scope.search.query.itemsPerPage = 10;
+      get: function(page) {
+        $scope.search.query.page = page ? page : 1; // Set default.
 
         $scope.search.resource = searchResource.query($scope.search.query,
           function(results) {
             $scope.search.results = $scope.search.results.concat(results.data);
+            $scope.search.hasQueryChanged = false;
+            $scope.search.hasFiltersChanged = false;
+          }, function (response) {
+            $scope._httpError(response);
           }
         );
       },
@@ -276,8 +374,7 @@ angular.module('afredApp').controller('SearchController',
        * Instantiates a modal that allows the user to contact Springboard
        * Atlantic.
        *
-       * Uses/calls/requires:
-       * $uibModal
+       * @requires $uibModal
        */
       contactSpringboardAtlantic: function() {        
         var modalInstance = $uibModal.open({
@@ -285,83 +382,50 @@ angular.module('afredApp').controller('SearchController',
           controller: 'ContactSpringboardAtlanticModalController',
           backdrop: false
         });
-      },
-      
-      /**
-       * Retrieves an array of disciplines from the API.
-       *
-       * Side effects:
-       * $scope.search.disciplines Array stored here.
-       *
-       * Uses/requires:
-       * disciplineResource
-       */
-      getDisciplines: function() {
-        $scope.search.disciplines = disciplineResource.queryNoPaginate();
-      },
-      
-      /**
-       * Retrieves an array of sectors from the API.
-       *
-       * Side effects:
-       * $scope.search.sectors Array stored here.
-       *
-       * Uses/requires:
-       * sectorResource
-       */
-      getSectors: function() {
-        $scope.search.sectors = sectorResource.queryNoPaginate();   
-      },
-      
-      /**
-       * Retrieves an array of organizations from the API. 'N/A' is removed.
-       *
-       * Side effects:
-       * $scope.search.organizations Array stored here.
-       *
-       * Uses/requires:
-       * organizationResource
-       */
-      getOrganizations: function() {
-        $scope.search.organizations = organizationResource.queryNoPaginate(null,
-          function() {
-            for (var i = 0; i < $scope.search.organizations.length; i++) {
-              if ($scope.search.organizations[i].name == 'N/A') {
-                $scope.search.organizations.splice(i, 1);
-                break;
-              }
-            }
-          }
-        );          
-      },
-      
-      /**
-       * Retrieves an array of provinces from the API. 'N/A' is removed.
-       *
-       * Side effects:
-       * $scope.search.provinces Array stored here.
-       *
-       * Uses/requires:
-       * provinceResource
-       */
-      getProvinces: function() {
-        $scope.search.provinces = provinceResource.queryNoPaginate(null,
-          function () {
-            for (var i = 0; i < $scope.search.provinces.length; i++) {
-              if ($scope.search.provinces[i].name == 'N/A') {
-                $scope.search.provinces.splice(i, 1);
-                break;
-              }
-            }
-          }
-        );        
-      },
+      }
     };
     
     /* ---------------------------------------------------------------------
      * Initialisation code.
      * --------------------------------------------------------------------- */
     
-    $scope.search.advanced.get();
+    // Get filters.
+    $scope.search.filters.get();
+
+    // Ensures that the search results are cleared every time this state is
+    // loaded and every time a new search is performed.
+    $scope.$on('$stateChangeStart', function() {
+      $scope.search.results = [];
+    });
+
+    // Watch the `$scope.search.query` object for changes so that we can update
+    // the HTML to notfy the user to update their search results.
+    $scope.$watch('search.query', function(newQuery, oldQuery) {
+      // Don't update the flags if it's the first time the search is being run.
+      if (!$scope.search.firstTime) {
+        // Before updating the flags, check to make sure that the user has made
+        // changes that will result in a different set of results (i.e. by 
+        // checking the URLs). Skip this check if we're on the 'search' state.
+        // If the URL stays the same, update both flags to false.
+        if ($scope._state.current.name != 'search') {
+          var oldUrl = $scope._state.href('search.q', $scope._stateParams);
+          var newUrl = $scope._state.href('search.q', newQuery);
+          if (newUrl == oldUrl) {
+            $scope.search.hasQueryChanged = false;
+            $scope.search.hasFiltersChanged = false;
+            return;
+          }
+        }
+        
+        // Determine if either the query or the filters have changed.
+        if (newQuery.q == oldQuery.q) {
+          $scope.search.hasFiltersChanged = true;
+        } else {
+          $scope.search.hasQueryChanged = true;
+        }
+      } else {
+        $scope.search.firstTime = false;
+      }
+    }, true);
   }
 ]);

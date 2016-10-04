@@ -1,0 +1,116 @@
+<div class="panel panel-default">
+  <div class="panel-body">
+    <p class="h4">
+      Filters
+      <span class="pull-right">
+        <button type="button" class="btn btn-default btn-xs" data-ng-click="search.filters.reset()">Reset <span class="fa fa-refresh"></span></button>
+      </span>
+    </p>
+
+    <hr>
+    
+    <form class="form-horizontal" name="filtersSearchForm" role="form" data-af-loading="!search.filters.resource.$resolved">    
+      <!-- Equipment or Facilities? -->
+      <div>
+        <div class="row">
+          <div class="col-md-5">
+            <p class="small af-bold">Search by</p>
+          </div>
+
+          <div class="col-md-7">
+            <p class="btn-group">
+              <label class="btn btn-default btn-xs" data-ng-model="search.query.type" data-uib-btn-radio="'equipment'">Equipment</label>
+              <label class="btn btn-default btn-xs" data-ng-model="search.query.type" data-uib-btn-radio="'facility'">Facility</label>
+            </p>
+          </div>
+        </div>
+      </div>
+      <br>
+
+      <!-- Provinces. -->
+      <div>
+        <div class="row">
+          <div class="col-md-5">
+            <p class="small af-bold">Provinces</p>
+          </div>
+
+          <div class="col-md-7">
+            <div class="">
+              <p class="btn-group">
+                <label class="btn btn-default btn-xs" data-ng-model="search.filters.allProvinces" data-uib-btn-radio="true" data-ng-change="search.filters.update()">All</label>
+                <label class="btn btn-default btn-xs" data-ng-model="search.filters.allProvinces" data-uib-btn-radio="false" data-ng-change="search.filters.update()">Select</label>
+              </p>
+            </div>
+          </div>          
+        </div>
+
+        <div data-ng-hide="search.filters.allProvinces">
+          <select class="form-control input-sm" data-ng-model="search.query['provinceId[]']" data-ng-options="p.id as p.name for p in search.filters.provinces" multiple size="10"></select>
+        </div>
+      </div>  
+      <br>
+      
+      <!-- Organizations. -->
+      <div>
+        <div class="row">
+          <div class="col-md-5">
+            <p class="small af-bold">Organizations</p>
+          </div>
+
+          <div class="col-md-7">
+            <p class="btn-group">
+              <label class="btn btn-default btn-xs" data-ng-model="search.filters.allOrganizations" data-uib-btn-radio="true" data-ng-change="search.filters.update()">All</label>
+              <label class="btn btn-default btn-xs" data-ng-model="search.filters.allOrganizations" data-uib-btn-radio="false" data-ng-change="search.filters.update()">Select</label>
+            </p>
+          </div>
+        </div>
+
+        <div data-ng-hide="search.filters.allOrganizations">
+          <select class="form-control input-sm" data-ng-model="search.query['organizationId[]']" data-ng-options="o.id as o.name for o in search.filters.organizations" multiple size="10"></select>
+        </div>        
+      </div>           
+      <br>
+
+      <!-- Disciplines. -->
+      <div>
+        <div class="row">
+          <div class="col-md-5">
+            <p class="small af-bold">Disciplines</p>
+          </div>
+
+          <div class="col-md-7">
+            <p class="btn-group">
+              <label class="btn btn-default btn-xs" data-ng-model="search.filters.allDisciplines" data-uib-btn-radio="true" data-ng-change="search.filters.update()">All</label>
+              <label class="btn btn-default btn-xs" data-ng-model="search.filters.allDisciplines" data-uib-btn-radio="false" data-ng-change="search.filters.update()">Select</label>
+            </p>
+          </div>
+        </div>
+
+        <div data-ng-hide="search.filters.allDisciplines">
+          <select class="form-control input-sm" data-ng-model="search.query['disciplineId[]']" data-ng-options="d.id as d.name for d in search.filters.disciplines" multiple size="10"></select>
+        </div>
+      </div>
+      <br>
+
+      <!-- Sectors. -->
+      <div>
+        <div class="row">
+          <div class="col-md-5">
+            <p class="small af-bold">Sectors</p>
+          </div>
+
+          <div class="col-md-7">
+            <p class="btn-group">
+              <label class="btn btn-default btn-xs" data-ng-model="search.filters.allSectors" data-uib-btn-radio="true" data-ng-change="search.filters.update()">All</label>
+              <label class="btn btn-default btn-xs" data-ng-model="search.filters.allSectors" data-uib-btn-radio="false" data-ng-change="search.filters.update()">Select</label>
+            </p>
+          </div>
+        </div>
+
+        <div data-ng-hide="search.filters.allSectors">
+          <select class="form-control input-sm" data-ng-model="search.query['sectorId[]']" data-ng-options="s.id as s.name for s in search.filters.sectors" multiple size="10"></select>
+        </div>
+      </div>      
+    </form>
+  </div>
+</div><!-- End of .panel -->

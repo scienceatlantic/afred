@@ -2,34 +2,55 @@
 
 <h1>Search</h1>
 
-<!-- Advanced search options -->
-<div data-ng-show="search.advanced.show" class="fx-fade-normal">
-  <div data-ng-include="'views/includes/search.advanced.html'"></div>
-</div>
-  
-<form role="form" data-ng-submit="search.goToResultsPage()">
-  <div class="form-group">
-    <div class="input-group">
-      <span class="input-group-btn">
-        <button type="button" data-ng-click="search.advanced.toggle()" data-ng-class="{ active: search.advanced.show }" style="height: 46px;" class="btn btn-default btn-lg"><span class="fa fa-gear"></span></button>
-      </span>
-      <input class="form-control input-lg" data-ng-model="search.query.q" placeholder="E.g. MRI">
-      <span class="input-group-btn">
-        <button type="submit" style="height: 46px;" class="btn btn-default btn-lg"><span class="fa fa-search"></span></button>
-      </span>
-    </div>
+<div class="row">
+  <!-- Filters. -->
+  <div data-ng-show="_getWidth() >= _bootstrap.grid.breakpoints.md || search.filters.show" class="col-md-4">
+    <div data-ng-include="'views/includes/search.filters.html'"></div>
   </div>
-  
-  <p>
-    <a href="" data-ng-click="search.contactSpringboardAtlantic()">Can't find what you're looking for?</a>
-  </p>
-</form>
-<br>
 
-<!-- Search results go here -->
-<div data-ui-view></div>
+  <div class="col-md-8">
+    <form role="form" data-ng-submit="search.index()">
+      <!-- Search bar. -->
+      <div class="form-group">
+        <input class="form-control input-lg" data-ng-model="search.query.q" placeholder="E.g. electron microscope">
+      </div>
+    
+      <!-- 'Search' and 'Show all' buttons. -->
+      <p>
+        <button type="submit" class="btn btn-default">
+          <span class="label label-warning" data-ng-show="search.query.q && (search.hasQueryChanged || (search.hasFiltersChanged && !_state.is('search.all')))">Update</span>
+          Search
+          <span class="fa fa-search"></span>
+        </button>
 
-<!-- Show more button -->
-<p data-ng-show="search.results.length">
-  <button type="button" class="btn btn-default" data-ng-click="search.getResults(search.query.page + 1)" data-af-loading-btn="!search.resource.$resolved" data-ng-disabled="(search.resource.total == search.results.length) || !search.resource.$resolved">Show me more results</button>
-</p>
+        <button type="button" class="btn btn-default" data-ng-click="search.index(true)">
+          <span class="label label-warning" data-ng-show="search.hasFiltersChanged && _state.is('search.all')">Update</span>
+          Show all (filters included)
+          <span class="fa fa-list"></span>
+        </button>     
+      </p>
+    </form>
+
+    <!-- Show/Hide filters button. -->
+    <p data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.md">
+      <button class="btn btn-default" data-ng-click="search.filters.toggle()">
+        <span data-ng-show="!search.filters.show">Show filters</span>
+        <span data-ng-show="search.filters.show">Hide filters</span>
+        <span class="fa fa-filter"></span>
+      </button>
+    </p>
+
+    <!-- Contact Springboard Atlantic. -->
+    <p class="small">
+      <a href="" data-ng-click="search.contactSpringboardAtlantic()">Can't find what you're looking for?</a>
+    </p>
+
+    <!-- Search results go here. -->
+    <div data-ui-view></div>
+
+    <!-- 'Show more' button. -->
+    <p data-ng-show="search.results.length && !_state.is('search')">
+      <button type="button" class="btn btn-default" data-ng-click="search.get(search.query.page + 1)" data-af-loading-btn="!search.resource.$resolved" data-ng-disabled="(search.resource.total == search.results.length) || !search.resource.$resolved">Show me more results</button>
+    </p>
+  </div>
+</div><!-- End of .row -->
