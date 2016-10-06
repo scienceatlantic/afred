@@ -81,8 +81,8 @@ angular.module('afredApp').run(['$rootScope', function($rootScope) {
       },
       
       indices: [
-        'facilities',
-        'equipment'
+        'facilities', // Warning: changing this might break code. See 'search.js'.
+        'equipment' // Warning: changing this might break code.  See 'search.js'.
       ]
     }    
   };
