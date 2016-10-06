@@ -388,7 +388,32 @@ angular.module('afredApp').run(['$rootScope',
         }
       } 
     };
-    
+
+    /* ---------------------------------------------------------------------
+     * URL parameter parsing helper functions.
+     * --------------------------------------------------------------------- */
+    $rootScope._param = {
+      /**
+       * Runs `val` through `parseInt()` and then passes the parsed value into
+       * `Number.isFinite()` and if that passes, `parseInt(val)` is returned,
+       * otherwise `defaultVal` is returned.
+       * 
+       * @param {} val
+       * @param {} defaultVal
+       * @returns {number|}
+       */
+      toInt: function(val, defaultVal) {
+        try {
+          if (Number.isFinite(parseInt(val))) {
+            return parseInt(val);
+          }
+        } catch(e) {
+          // Do nothing.
+        }
+        return defaultVal;
+      }
+    };
+
     /* ---------------------------------------------------------------------
      * Make 'location' accessible to all scopes.
      * --------------------------------------------------------------------- */
