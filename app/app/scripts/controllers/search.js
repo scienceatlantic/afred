@@ -3,9 +3,11 @@
 angular.module('afredApp').controller('SearchController',
   ['$scope',
    'searchResource',
+   'algolia',
    '$uibModal',
    function($scope,
             searchResource,
+            algolia,
             $uibModal) {
     /* ---------------------------------------------------------------------
      * Function/Object declarations.
@@ -21,7 +23,7 @@ angular.module('afredApp').controller('SearchController',
        * @type {Object} query - All query related data.
        * @type {?string} query.q - Search query.
        * @type {!string} query.type - Search type. Valid values are 'equipment'
-       *     or 'facility'.
+       *     or 'facilities'.
        * @type {number} query.page
        * @type {number} query.itemsPerPage
        * @type {Array.<number>} disciplineId[]
@@ -41,7 +43,8 @@ angular.module('afredApp').controller('SearchController',
       },
 
       /**
-       * Flag to signify if this is the first time we're running the search.
+       * Flag to signify if this is the first time we're running the search. 
+       * This is for the `$watch` code below (initialisation section).
        * 
        * @type {boolean}
        */
@@ -240,11 +243,28 @@ angular.module('afredApp').controller('SearchController',
       results: [],
       
       /**
-       * Holds Angular $resource returned from `$scope.search.get()`.
+       * Holds Algolia promise returned from AJAX call in `$scope.search.get()`.
        * 
-       * @type {Angular $resource}
+       * @see https://www.algolia.com/doc/api-client/javascript/search#fields
+       * @type {Algolia search results promise}
        */
       resource: {},
+
+      /**
+       * 'facilities' index Algolia instance.
+       * 
+       * @see https://www.algolia.com/doc/api-client/javascript/getting-started#init-index
+       * @type {Algolia index instance}
+       */
+      facilities: algolia.facilities(),
+
+      /**
+       * 'equipment' index Algolia instance.
+       * 
+       * @see https://www.algolia.com/doc/api-client/javascript/getting-started#init-index
+       * @type {Algolia index instance}
+       */
+      equipment: algolia.equipment(),
       
       /**
        * Redirects to the search results page. The search results are shown in
@@ -252,21 +272,33 @@ angular.module('afredApp').controller('SearchController',
        * URL.
        *
        * @requires $scope._state.go()
+       * @requires angular.copy()
        * @requires $scope.search.query
-       * @param {boolean} showAll - If true, redirect to search.all state, if
-       *     false, redirect to search.q state.
+       * @param {boolean=false} resetPage - Reset the page number to 1.
+       * @param {boolean=false} indexState - True = go to 'state.all', false =
+       *     'state.q'.
        */
-      index: function(showAll) {        
-        if (!showAll) {
-          // Search only if the query is not empty, otherwise return to parent
-          // state.
-          if ($scope.search.query.q) {
-            $scope._state.go('search.q', $scope.search.query);
-          } else {
-            $scope._state.go('search');
-          }   
+      index: function(resetPage, indexState) {
+        // We have to make a copy of the params instead of changing the actual
+        // object when resetting a page because if we did that, the pagination 
+        // directive will notice that change and run a search.
+        if (resetPage) {
+          var p = angular.copy($scope.search.query);
+          p.page = 1;
+        }
+
+        // Go to 'search.all'.
+        if (indexState) {
+          $scope._state.go('search.all', resetPage ? p : $scope.search.query);
+          return;
+        }
+
+        // Search only if the query is not empty, otherwise return to parent
+        // state.
+        if ($scope.search.query.q) {
+          $scope._state.go('search.q', resetPage ? p : $scope.search.query);
         } else {
-          $scope._state.go('search.all', $scope.search.query);
+          $scope._state.go('search');
         }
       },
       
@@ -275,7 +307,7 @@ angular.module('afredApp').controller('SearchController',
        *
        * @sideeffect $scope.search.query.q - Query grabbed from URL.
        * @sideeffect $scope.search.query.type - Type grabbed from URL. If not
-       *     either 'equipment' or 'facility', set to 'equipment'.
+       *     either 'equipment' or 'facilities', set to 'equipment'.
        * @sideeffect $scope.search.query['disciplinesId[]'] - Valid values are
        *     inserted into array.
        * @sideeffect $scope.search.query['organizationsId[]'] - Valid values
@@ -304,7 +336,8 @@ angular.module('afredApp').controller('SearchController',
         var f = $scope.search.filters;
         
         s.query.q = $scope._state.is('search.q') ? p.q : null;
-        s.query.type = p.type == 'facility' ? 'facility' : 'equipment';
+        s.query.page = $scope._param.toInt(p.page, 1);
+        s.query.type = p.type == 'facilities' ? 'facilities' : 'equipment';
         s.query['provinceId[]'] = s.toInt(p['provinceId[]']);
         s.query['organizationId[]'] = s.toInt(p['organizationId[]']);
         s.query['disciplineId[]'] = s.toInt(p['disciplineId[]']);
@@ -342,32 +375,100 @@ angular.module('afredApp').controller('SearchController',
       /**
        * Retrieves the search results.
        *
-       * @sideeffect $scope.search.query.page - Set to 1 if `page` param not
-       *     provided.
        * @sideeffect $scope.search.hasQueryChanged Set to false after query has
        *     completed.
        * @sideeffect $scope.search.hasFiltersChanged Set to false after query
        *     has completed.
-       * @sideeffect $scope.search.resource - Angular $resource returned from
-       *     `searchResource` is assigned to this.
+       * @sideeffect $scope.search.resource - Holds promise returned from
+       *     AJAX call to Algolia API.
        * @sideeffect $scope.search.results - Results returned after querying the
        *     API are concatenated into this array.
        * @requires $scope._httpError() Called if the query fails.
+       * @requires $scope.search.parseParams()
        * @requires searchResource
-       * @param {integer=1} page
        */
-      get: function(page) {
-        $scope.search.query.page = page ? page : 1; // Set default.
+      get: function() {
+        // Loading flag.
+        $scope.loading.search = true;
 
-        $scope.search.resource = searchResource.query($scope.search.query,
-          function(results) {
-            $scope.search.results = $scope.search.results.concat(results.data);
-            $scope.search.hasQueryChanged = false;
-            $scope.search.hasFiltersChanged = false;
-          }, function (response) {
-            $scope._httpError(response);
+        // Parse URL params.
+        $scope.search.parseParams();
+
+        // Alias to shorten code.
+        var s = $scope.search;
+
+        // Search type flag.
+        var byEquipment = s.query.type != 'facilities';
+        
+        // Search params.
+        var filterParamPrefix = byEquipment ? 'facility.' : '';
+        var params = {
+          filters: createFilters(s.query, [
+            'disciplineId[]',
+            'organizationId[]', 
+            'provinceId[]', 
+            'sectorId[]'
+          ], [
+            filterParamPrefix + 'disciplines.id:', 
+            filterParamPrefix + 'organization.id:', 
+            filterParamPrefix + 'province.id:', 
+            filterParamPrefix + 'sectors.id:'
+          ]),
+          page: s.query.page - 1, // Starts from 0.
+          hitsPerPage: s.query.itemsPerPage,
+          attributesToSnippet: byEquipment ? [
+            'purposeNoHtml:5',
+            'specificationsNoHtml:5'
+          ] : [
+            'descriptionNoHtml:5'
+          ],
+          snippetEllipsisText: '...'
+        };
+
+        // Run the search.
+        if (byEquipment) {
+          s.equipment.search(s.query.q, params).then(success, failure);
+        } else {
+          s.facilities.search(s.query.q, params).then(success, failure);
+        }
+
+        // Helper function (generates filter query string).
+        function createFilters(items, properties, labels) {
+          var str = '';
+          angular.forEach(properties, function(p, index) {
+            if (items[p].length) {
+              str += '(';
+              angular.forEach(items[p], function(id) {
+                str += labels[index] + id + ' OR '; 
+              });
+              str = str.substring(0, str.length - 4) + ') AND ';
+            }
+          });
+          return str.substring(0, str.length - 5); 
+        }
+
+        // Success callback.
+        function success(data) {
+          // If the search returned no results and we're not on the first page,
+          // try running the search again after resetting the page. This also
+          // prevents the user from re-writing the URL with an invalid page
+          // number.
+          if (!data.hits.length && s.query.page > 1) {
+            s.index(true, $scope._state.is('search.all'));
           }
-        );
+
+          s.resource = data;
+          s.results = data.hits;
+          s.hasQueryChanged = false;
+          s.hasFiltersChanged = false;
+          $scope.loading.search = false;
+        }
+
+        // Failure callback.
+        function failure(response) {
+          $scope._httpError(response.statusCode);
+          $scope.loading.search = false;
+        }
       },
       
       /**
@@ -384,6 +485,15 @@ angular.module('afredApp').controller('SearchController',
         });
       }
     };
+
+    /**
+     * Loading flags.
+     * 
+     * @type {Object.<string, boolean>}
+     */
+    $scope.loading = {
+      search: false // For `$scope.search.get()`.
+    };
     
     /* ---------------------------------------------------------------------
      * Initialisation code.
@@ -391,12 +501,6 @@ angular.module('afredApp').controller('SearchController',
     
     // Get filters.
     $scope.search.filters.get();
-
-    // Ensures that the search results are cleared every time this state is
-    // loaded and every time a new search is performed.
-    $scope.$on('$stateChangeStart', function() {
-      $scope.search.results = [];
-    });
 
     // Watch the `$scope.search.query` object for changes so that we can update
     // the HTML to notfy the user to update their search results.

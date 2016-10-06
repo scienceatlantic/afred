@@ -22,6 +22,12 @@
   font-weight: bold;
 }
 
+/* Inline-block style class.
+----------------------------------------------------------------------------- */
+.af-inline-block {
+  display: inline-block;
+}
+
 /* Outline Bootstrap button styles.
  * @see: http://bootsnipp.com/snippets/featured/bootstrap-outline-buttons
 ----------------------------------------------------------------------------- */

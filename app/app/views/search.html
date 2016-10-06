@@ -9,22 +9,25 @@
   </div>
 
   <div class="col-md-8">
-    <form role="form" data-ng-submit="search.index()">
+    <form role="form" data-ng-submit="search.index(true)">
       <!-- Search bar. -->
       <div class="form-group">
         <input class="form-control input-lg" data-ng-model="search.query.q" placeholder="E.g. electron microscope">
       </div>
     
-      <!-- 'Search' and 'Show all' buttons. -->
-      <p>
-        <button type="submit" class="btn btn-default">
-          <span class="label label-warning" data-ng-show="search.query.q && (search.hasQueryChanged || (search.hasFiltersChanged && !_state.is('search.all')))">Update</span>
+      <!-- 'Search' button. -->
+      <p  data-ng-class="{'af-inline-block': _getWidth() > _bootstrap.grid.breakpoints.md}">
+        <button type="submit" class="btn btn-default" data-ng-disabled="loading.search || !(search.hasQueryChanged || search.hasFiltersChanged)">
+          <span class="label label-warning" data-ng-show="!loading.search && search.query.q && (search.hasQueryChanged || (search.hasFiltersChanged && !_state.is('search.all')))">Update</span>
           Search
           <span class="fa fa-search"></span>
         </button>
+      </p>
 
-        <button type="button" class="btn btn-default" data-ng-click="search.index(true)">
-          <span class="label label-warning" data-ng-show="search.hasFiltersChanged && _state.is('search.all')">Update</span>
+      <!-- 'Show all' button. -->
+      <p data-ng-class="{'af-inline-block': _getWidth() > _bootstrap.grid.breakpoints.md}">
+        <button type="button" class="btn btn-default" data-ng-click="search.index(true, true)" data-ng-disabled="loading.search || !search.hasFiltersChanged">
+          <span class="label label-warning" data-ng-show="!loading.search && search.hasFiltersChanged && _state.is('search.all')">Update</span>
           Show all (filters included)
           <span class="fa fa-list"></span>
         </button>     
@@ -47,10 +50,5 @@
 
     <!-- Search results go here. -->
     <div data-ui-view></div>
-
-    <!-- 'Show more' button. -->
-    <p data-ng-show="search.results.length && !_state.is('search')">
-      <button type="button" class="btn btn-default" data-ng-click="search.get(search.query.page + 1)" data-af-loading-btn="!search.resource.$resolved" data-ng-disabled="(search.resource.total == search.results.length) || !search.resource.$resolved">Show me more results</button>
-    </p>
   </div>
 </div><!-- End of .row -->

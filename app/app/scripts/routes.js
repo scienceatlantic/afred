@@ -33,12 +33,12 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         controller: 'SearchController'
       }).
       state('search.all', {
-        url: '/all?type&provinceId[]&organizationId[]&disciplineId[]&sectorId[]',
+        url: '/all?page&type&provinceId[]&organizationId[]&disciplineId[]&sectorId[]',
         templateUrl: 'views/search.results.html',
         controller: 'SearchResultsController'
       }).
       state('search.q', {
-        url: '/?q&type&provinceId[]&organizationId[]&disciplineId[]&sectorId[]',
+        url: '/?q&page&type&provinceId[]&organizationId[]&disciplineId[]&sectorId[]',
         templateUrl: 'views/search.results.html',
         controller: 'SearchResultsController'
       }).

@@ -1,25 +1,25 @@
-<div data-ng-repeat="e in search.results" data-ng-show="e.type">
-  <p>
-    <a data-ui-sref="facilities.show.equipment.show({ facilityId: e.facility.id, equipmentId: e.id })" style="text-decoration: none !important;" target="_blank">
+<div data-dir-paginate="e in search.results | itemsPerPage: search.resource.hitsPerPage" data-total-items="search.resource.nbHits" data-pagination-id="equipmentResults" data-current-page="search.query.page">
+  <a data-ui-sref="facilities.show.equipment.show({ facilityId: e.facility.id, equipmentId: e.id })" style="text-decoration: none !important;" target="_self">
     <div class="panel panel-default">
       <div class="panel-body">
         <p class="h4">{{ e.type }} | {{ e.facility.name }}</p>
         
         <div style="color: #333;">
-          <p class="text-muted"><span data-ng-show="e.facility.organization.name">{{ e.facility.organization.name }},</span> {{ e.facility.city }}, {{ e.facility.province.name }}</p>
+          <p class="small text-muted">
+            <span data-ng-show="e.facility.organization.name">{{ e.facility.organization.name }},</span>
+            <span data-ng-show="e.facility.city">{{ e.facility.city }},</span> 
+            {{ e.facility.province.name }}
+          </p>
           
-          <div>
-            <hr>
-            <p data-ng-show="e.model"><span class="label label-default">Model:</span> {{ e.model }}</p>
-            <p data-ng-show="e.manufacturer"><span class="label label-default">Manufacturer:</span> {{ e.manufacturer }}</p>
-            
-            <div>
-              <span>{{ e.purposeNoHtml | limitTo: 170 }}</span><span data-ng-show="e.purposeNoHtml.length > 170">...</span>
-            </div>
-          </div>
+          <p>
+            <span>{{ e.purposeNoHtml | limitTo: 170 }}</span><span data-ng-show="e.purposeNoHtml.length > 170">...</span>
+          </p>
         </div>
       </div>
     </div>
-    </a>
-  </p>
-</div><!-- End of ng-repeat -->
+  </a>
+</div><!-- End of dir-paginate -->
+
+<div data-ng-hide="search.hasQueryChanged || search.hasFiltersChanged">
+  <div data-dir-pagination-controls data-pagination-id="equipmentResults" data-on-page-change="_state.is('search.q') ? search.index() : search.index(false, true)" data-ng-disabled="true" data-max-size="_getWidth() < 400 ? 5 : 9"></div>
+</div>
