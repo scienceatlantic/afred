@@ -80,10 +80,11 @@ angular.module('afredApp').run(['$rootScope', function($rootScope) {
         key: 'edfa4d5152caa311a0fdbcf0fd6d002e'
       },
       
-      indices: [
-        'facilities', // Warning: changing this might break code. See 'search.js'.
-        'equipment' // Warning: changing this might break code.  See 'search.js'.
-      ]
+      // Index names for facilities and equipment searches.
+      indices: {
+        facilities: 'facilities',
+        equipment: 'equipment' 
+      }
     }
   };
 }]);
