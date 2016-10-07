@@ -279,3 +279,13 @@ nav.navbar {
     padding-top: 13px;
   }
 }
+
+/* Search page result panels
+----------------------------------------------------------------------------- */
+.af-search-page-results a {
+  text-decoration: none;
+}
+
+.af-search-page-results p:not(.h4) {
+  color: #333;
+}

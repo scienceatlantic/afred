@@ -1,21 +1,28 @@
-<div data-dir-paginate="f in search.results | itemsPerPage: search.resource.hitsPerPage" data-total-items="search.resource.nbHits" data-pagination-id="facilityResults" data-current-page="search.query.page">
-  <a data-ui-sref="facilities.show({ facilityId: f.id })" style="text-decoration: none !important;" target="_self">
+<div class="af-search-page-results" data-dir-paginate="f in search.results | itemsPerPage: search.resource.hitsPerPage" data-total-items="search.resource.nbHits" data-pagination-id="facilityResults" data-current-page="search.query.page">
+  <a data-ui-sref="facilities.show({ facilityId: f.id })" target="_self">
     <div class="panel panel-default">
       <div class="panel-body">
         <p class="h4">
-          {{ f.name }}
-          <span data-ng-show="f.organization.name">| {{ f.organization.name }}</span>
+          <span data-ng-bind-html="f._highlightResult.name.value || f.name"></span>
+          <span data-ng-show="f.organization.name">
+            | <span data-ng-bind-html="f._highlightResult.organization.name.value || f.organization.name"></span>
+          </span>
         </p>
         
-        <div style="color: #333;">
-          <p class="small text-muted">
-              <span data-ng-show="f.city">{{ f.city }}, </span>{{ f.province.name }}
-          </p>
-          
-          <p data-ng-show="f.descriptionNoHtml">
-            <span>{{ f.descriptionNoHtml | limitTo: 170 }}</span><span data-ng-show="f.descriptionNoHtml.length > 170">...</span>
-          </p>
-        </div>
+        <p class="small text-muted">
+            <span data-ng-show="f.city">
+              <span data-ng-bind-html="f._highlightResult.city.value || f.city"></span>,
+            </span>
+            <span data-ng-bind-html="f._highlightResult.province.name.value || f.province.name"></span>
+        </p>
+        
+        <p data-ng-if="f.descriptionNoHtml && !f._snippetResult.descriptionNoHtml.value">
+          <span>{{ f.descriptionNoHtml | limitTo: 170 }}</span><span data-ng-show="f.descriptionNoHtml.length > 170">...</span>
+        </p>
+        
+        <p data-ng-show="f._snippetResult.descriptionNoHtml.value">
+          <span data-ng-bind-html="f._snippetResult.descriptionNoHtml.value"></span>
+        </p>
       </div>
     </div>
   </a>
