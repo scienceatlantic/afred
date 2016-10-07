@@ -6,7 +6,7 @@
     <!-- Tooltip. -->
     <span data-ng-if="tooltip">
       <a href="" style="color: inherit;">
-        <span class="fa fa-info-circle" data-uib-tooltip-html="tooltip" data-tooltip-append-to-body="true" data-tooltip-trigger="'click'"></span>
+        <span class="fa fa-info-circle" data-uib-tooltip-html="tooltip" data-tooltip-append-to-body="true" data-tooltip-trigger="'outsideClick'"></span>
       </a>
     </span>
   </label>
@@ -18,8 +18,7 @@
     <!-- Field length count goes here. -->
     <p class="text-muted" data-ng-if="model.length">
       <small>
-        <span data-ng-if="!isTextAngular">{{ model.length }}</span><!--
-     --><span data-ng-if="isTextAngular">{{ getTextAngularContentLength(model) }}</span>/{{ maxLength }} characters remaining.
+        {{ isTextAngular ? getTextAngularContentLength(model) : model.length }}/{{ maxLength }} characters remaining.
       </small>
     </p>
     
