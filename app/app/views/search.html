@@ -17,7 +17,7 @@
     
       <!-- 'Search' button. -->
       <p  data-ng-class="{'af-inline-block': _getWidth() > _bootstrap.grid.breakpoints.md}">
-        <button type="submit" class="btn btn-default" data-ng-disabled="loading.search || !(search.hasQueryChanged || search.hasFiltersChanged)">
+        <button type="submit" class="btn btn-default" data-ng-disabled="loading.search">
           <span class="label label-warning" data-ng-show="!loading.search && search.query.q && (search.hasQueryChanged || (search.hasFiltersChanged && !_state.is('search.all')))">Update</span>
           Search
           <span class="fa fa-search"></span>
@@ -26,7 +26,7 @@
 
       <!-- 'Show all' button. -->
       <p data-ng-class="{'af-inline-block': _getWidth() > _bootstrap.grid.breakpoints.md}">
-        <button type="button" class="btn btn-default" data-ng-click="search.index(true)" data-ng-disabled="loading.search || (!search.hasFiltersChanged && _state.is('search.all'))">
+        <button type="button" class="btn btn-default" data-ng-click="search.index(true)" data-ng-disabled="loading.search">
           <span class="label label-warning" data-ng-show="!loading.search && search.hasFiltersChanged && _state.is('search.all')">Update</span>
           Show all (filters included)
           <span class="fa fa-globe"></span>
