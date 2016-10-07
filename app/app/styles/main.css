@@ -79,6 +79,12 @@ body {
   margin-top: 50px; /* Margin top by navbar height */
 }
 
+/* Navbar styles.
+----------------------------------------------------------------------------- */
+.navbar-brand > img {
+  padding-top: 2.3px;
+}
+
 /* Sticky footer styles.
 ----------------------------------------------------------------------------- */
 html {
