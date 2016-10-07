@@ -32,15 +32,6 @@
       
       <!-- Facilities. -->
       <div data-ng-include="'views/includes/search.results.facilities.html'" data-ng-if="_stateParams.type == 'facilities'"></div>
-
-      <!-- Pagination controls hidden warning message. -->
-      <p data-ng-show="search.resource.nbPages > 1 && (search.hasQueryChanged || search.hasFiltersChanged)">
-        <span class="fa fa-exclamation-circle"></span>
-        <span class="text-warning">
-          Pagination controls have been hidden since you made changes to your 
-          search query and/or filters. Please update your search first.
-        </span>
-      </p>
     </div>
   </div>
 </div>

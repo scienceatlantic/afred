@@ -25,7 +25,6 @@ angular.module('afredApp').controller('SearchController',
        * @type {!string} query.type - Search type. Valid values are 'equipment'
        *     or 'facilities'.
        * @type {number} query.page
-       * @type {number} query.itemsPerPage
        * @type {Array.<number>} disciplineId[]
        * @type {Array.<number>} organizationId[]
        * @type {Array.<number>} provinceId[]
@@ -35,7 +34,6 @@ angular.module('afredApp').controller('SearchController',
         q: null,
         type: 'equipment',
         page: 1,
-        itemsPerPage: 10,
         'disciplineId[]': [],
         'organizationId[]': [],
         'provinceId[]': [],
@@ -272,31 +270,42 @@ angular.module('afredApp').controller('SearchController',
        * URL.
        *
        * @requires $scope._state.go()
-       * @requires angular.copy()
+       * @requires $scope._stateParams
        * @requires $scope.search.query
-       * @param {boolean=false} resetPage - Reset the page number to 1.
        * @param {boolean=false} indexState - True = go to 'state.all', false =
        *     'state.q'.
+       * @param {number=1} page - Set page number.
+       * @param {boolean=false} useStateParams - Use `$scope._stateParams`
+       *     instead of `$scope.search.query` when transitioning states. If the
+       *     user has made changes to the query or filters, but has not updated
+       *     their search then the pagination directive should use 
+       *     `$scope._stateParams` instead of `$scope.search.query`.
        */
-      index: function(resetPage, indexState) {
-        // We have to make a copy of the params instead of changing the actual
-        // object when resetting a page because if we did that, the pagination 
-        // directive will notice that change and run a search.
-        if (resetPage) {
-          var p = angular.copy($scope.search.query);
-          p.page = 1;
+      index: function(indexState, page, useStateParams) {
+        var params = null;
+        if (useStateParams) {
+          params = $scope._stateParams;
+        } else {
+          // We have to make a copy of the params because if we modified the 
+          // actual object (i.e page number), the pagination directive will 
+          // notice that change ($scope.$watch()) and run 
+          // `$scope.search.index()` again.
+          params = angular.copy($scope.search.query);
         }
+
+        // Set page number.
+        params.page = page > 1 ? page : 1
 
         // Go to 'search.all'.
         if (indexState) {
-          $scope._state.go('search.all', resetPage ? p : $scope.search.query);
+          $scope._state.go('search.all', params);
           return;
         }
 
         // Search only if the query is not empty, otherwise return to parent
         // state.
         if ($scope.search.query.q) {
-          $scope._state.go('search.q', resetPage ? p : $scope.search.query);
+          $scope._state.go('search.q', params);
         } else {
           $scope._state.go('search');
         }
@@ -415,13 +424,6 @@ angular.module('afredApp').controller('SearchController',
             filterParamPrefix + 'sectors.id:'
           ]),
           page: s.query.page - 1, // Starts from 0.
-          hitsPerPage: s.query.itemsPerPage,
-          attributesToSnippet: byEquipment ? [
-            'purposeNoHtml:5',
-            'specificationsNoHtml:5'
-          ] : [
-            'descriptionNoHtml:5'
-          ],
           snippetEllipsisText: '...'
         };
 

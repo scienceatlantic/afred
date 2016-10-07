@@ -21,6 +21,4 @@
   </a>
 </div><!-- End of dir-paginate -->
 
-<div data-ng-hide="search.hasQueryChanged || search.hasFiltersChanged">
-  <div data-dir-pagination-controls data-pagination-id="facilityResults" data-on-page-change="_state.is('search.q') ? search.index() : search.index(false, true)" data-ng-disabled="true" data-max-size="_getWidth() < 400 ? 5 : 9"></div>
-</div>
+<div data-dir-pagination-controls data-pagination-id="facilityResults" data-on-page-change="_state.is('search.q') ? search.index(false, search.query.page, true) : search.index(true, search.query.page, true)" data-ng-disabled="true" data-max-size="_getWidth() < 400 ? 5 : 9"></div>
