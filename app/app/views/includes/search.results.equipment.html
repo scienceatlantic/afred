@@ -17,12 +17,22 @@
           <span data-ng-bind-html="e._highlightResult.facility.province.name.value || e.facility.province.name"></span>
         </p>
 
-        <p data-ng-if="e.purposeNoHtml && !e._snippetResult.purposeNoHtml.value">
-          <span>{{ e.purposeNoHtml | limitTo: 170 }}</span><span data-ng-show="e.purposeNoHtml.length > 170">...</span>
+        <p data-ng-if="e._highlightResult.manufacturer.value && e._highlightResult.manufacturer.matchLevel != 'none'">
+          <span class="label label-default">Manufacturer</span> 
+          <span data-ng-bind-html="e._highlightResult.manufacturer.value"></span>
         </p>
 
-        <p data-ng-show="e._snippetResult.purposeNoHtml.value">
-          <span data-ng-bind-html="e._snippetResult.purposeNoHtml.value"></span>
+        <p data-ng-if="e._highlightResult.model.value && e._highlightResult.model.matchLevel != 'none'">
+          <span class="label label-default">Model</span> 
+          <span data-ng-bind-html="e._highlightResult.model.value"></span>
+        </p>
+
+        <p data-ng-if="e.purpose">
+          <span data-ng-bind-html="e._snippetResult.purpose.value || e.purposeNoHtml | afEllipses:(e._snippetResult.purpose.value ? null : 170)">
+        </p>
+        
+        <p data-ng-if="e._snippetResult.specifications.value && e._snippetResult.specifications.matchLevel != 'none'">
+          <span data-ng-bind-html="e._snippetResult.specifications.value"></span>
         </p>
       </div>
     </div>

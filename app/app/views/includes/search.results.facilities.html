@@ -15,13 +15,40 @@
             </span>
             <span data-ng-bind-html="f._highlightResult.province.name.value || f.province.name"></span>
         </p>
-        
-        <p data-ng-if="f.descriptionNoHtml && !f._snippetResult.descriptionNoHtml.value">
-          <span>{{ f.descriptionNoHtml | limitTo: 170 }}</span><span data-ng-show="f.descriptionNoHtml.length > 170">...</span>
+
+        <p data-ng-if="f._highlightResult.primaryContact
+                       && (f._highlightResult.primaryContact.firstName.matchLevel != 'none' 
+                       || f._highlightResult.primaryContact.lastName.matchLevel != 'none' 
+                       || f._highlightResult.primaryContact.position.matchLevel != 'none')">
+          <span class="label label-default">Primary Contact</span>
+          <span data-ng-bind-html="f._highlightResult.primaryContact.firstName.value"></span>
+          <span data-ng-bind-html="f._highlightResult.primaryContact.lastName.value"></span>
+          (<span data-ng-bind-html="f._highlightResult.primaryContact.position.value"></span>)
         </p>
-        
-        <p data-ng-show="f._snippetResult.descriptionNoHtml.value">
-          <span data-ng-bind-html="f._snippetResult.descriptionNoHtml.value"></span>
+
+        <div data-ng-repeat="c in f._highlightResult.contacts">
+          <p data-ng-if="c.firstName.matchLevel != 'none' || c.lastName.matchLevel != 'none' || c.position.matchLevel != 'none'">
+            <span class="label label-default">Contact #{{ $index + 1 }}</span>
+            <span data-ng-bind-html="c.firstName.value"></span>
+            <span data-ng-bind-html="c.lastName.value"></span>
+            <span data-ng-if="c.position.value">
+              (<span data-ng-bind-html="c.position.value"></span>)
+            </span>
+          </p>
+        </div>
+
+        <p data-ng-if="f._highlightResult.organization.ilo
+                       && (f._highlightResult.organization.ilo.firstName.matchLevel != 'none' 
+                       || f._highlightResult.organization.ilo.lastName.matchLevel != 'none' 
+                       || f._highlightResult.organization.ilo.position.matchLevel != 'none')">
+          <span class="label label-default">ILO</span>
+          <span data-ng-bind-html="f._highlightResult.organization.ilo.firstName.value"></span>
+          <span data-ng-bind-html="f._highlightResult.organization.ilo.lastName.value"></span>
+          (<span data-ng-bind-html="f._highlightResult.organization.ilo.position.value"></span>)
+        </p>
+
+        <p data-ng-if="f.description">
+          <span data-ng-bind-html="f._snippetResult.description.value || f.descriptionNoHtml | afEllipses:(f._snippetResult.description.value ? null : 170)"></span>
         </p>
       </div>
     </div>
