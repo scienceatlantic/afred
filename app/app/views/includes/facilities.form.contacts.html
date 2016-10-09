@@ -8,8 +8,7 @@
             <span data-ng-hide="c.firstName || c.lastName">Contact #{{ $index + 1 }}</span>
 
             <span data-ng-show="c.firstName || c.lastName">
-              {{ (c.firstName ? c.firstName : '')  + ' ' + (c.lastName ? c.lastName : '') | limitTo:(_getWidth() >= _bootstrap.grid.breakpoints.md ? 18 : 25) }}<!--
-            --><span data-ng-show="c.firstName.length + c.lastName.length + 1 > (_getWidth() >= _bootstrap.grid.breakpoints.md ? 18 : 25)">...</span>       
+              {{ (c.firstName ? c.firstName : '')  + ' ' + (c.lastName ? c.lastName : '') | afEllipses:(_getWidth() >= _bootstrap.grid.breakpoints.md ? 18 : 25) }}      
             </span>
           </span>
         </a>

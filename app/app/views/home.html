@@ -165,16 +165,8 @@
         <div data-ng-repeat="e in haveALook.equipment">
           <p style="padding-bottom: 3px;">
             <a data-ui-sref="facilities.show.equipment.show({ facilityId: e.facilityId, equipmentId: e.id })" target="_blank">
-              <!-- For large screens. -->
-              <span data-ng-if="_getWidth() >= _bootstrap.grid.breakpoints.md">
-                {{ e.type | limitTo: 35 }}<span data-ng-if="e.type.length > 35">...</span><br>
-                <small class="text-muted">{{ e.purposeNoHtml | limitTo: 100 }}<span data-ng-if="e.purposeNoHtml.length > 100">...</span></small>
-              </span>
-              <!-- For smaller screens. -->
-              <span data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.md">
-                {{ e.type }}<br>
-                <small class="text-muted">{{ e.purposeNoHtml | limitTo: 200 }}<span data-ng-if="e.purposeNoHtml.length > 200">...</span></small>
-              </span>
+              {{ e.type | afEllipses:(_getWidth() >= _bootstrap.grid.breakpoints.md ? 35 : null) }}<br>
+              <small class="text-muted">{{ e.purposeNoHtml | afEllipses:(_getWidth() >= _bootstrap.grid.breakpoints.md ? 100 : 200) }}</small>
             </a>
           </p>
         </div>

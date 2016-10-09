@@ -8,8 +8,7 @@
             <span data-ng-hide="e.type">Equipment #{{ $index + 1 }}</span>
 
             <span data-ng-show="e.type">
-              {{ e.type | limitTo:(_getWidth() >= _bootstrap.grid.breakpoints.md ? 18 : 25) }}<!--
-            --><span data-ng-show="e.type.length > (_getWidth() >= _bootstrap.grid.breakpoints.md ? 18 : 25)">...</span>
+              {{ e.type | afEllipses:(_getWidth() >= _bootstrap.grid.breakpoints.md ? 18 : 25) }}
             </span>
           </span>
         </a>
