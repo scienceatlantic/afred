@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-ng-app="afredApp" data-ng-controller="MainController" data-ng-cloak itemscope itemtype="http://schema.org/WebPage">
+<html lang="en-CA" data-ng-app="afredApp" data-ng-controller="MainController" itemscope itemtype="http://schema.org/WebPage">
   <head>
     <!-- Meta details -->
     <meta charset="utf-8">
@@ -22,10 +22,15 @@
     <!-- endbower -->
     <!-- endbuild -->
 
+    <!-- Google Fonts. -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rubik">
+
     <!-- Place your own CSS files here -->
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
-    <link rel="stylesheet" href="styles/mobile.css">
+    <link rel="stylesheet" href="styles/custom-classes.css">
+    <link rel="stylesheet" href="styles/bootstrap-fixes.css">
     <link rel="stylesheet" href="styles/text-angular.css">
     <!-- endbuild -->
     
@@ -55,20 +60,27 @@
           your experience.
         </p>
       <![endif]-->
-    
-      <!-- Header --> 
-      <div data-ng-include="'views/includes/header.html'"></div>
 
       <!-- Main Navigation -->
       <div data-ng-include="'views/includes/nav.html'" onload="main.navbar.toggle()"></div>
       
-      <!-- View -->
-      <div class="container" style="min-height: 300px;">
-        <div data-ui-view></div>
+      <div data-ng-class="{ 'af-content-while-logged-in': _auth.user.id }">
+        <!-- Beta version note. -->
+        <div data-ng-include="'views/includes/beta-note.html'"></div>
+        
+        <!-- View (for homepage only). -->
+        <div data-ng-if="_state.is('home')">
+          <div data-ui-view></div>
+        </div>
+
+        <!-- View (for all other pages). -->
+        <div class="container" style="min-height: 300px;" data-ng-if="!_state.is('home')">
+          <div data-ui-view></div>
+        </div>
+        
+        <!-- Footer -->
+        <div data-ng-include="'views/includes/footer.html'"></div>
       </div>
-      
-      <!-- Footer -->
-      <div data-ng-include="'views/includes/footer.html'"></div>
     </div>
     
     <!-- 
@@ -80,6 +92,26 @@
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
       })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    </script>
+
+    <!--
+      -- Twitter.
+      -- @see: https://dev.twitter.com/web/javascript/loading
+      -->
+    <script>
+      window.twttr = (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {};
+        if (d.getElementById(id)) return t;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "https://platform.twitter.com/widgets.js";
+        fjs.parentNode.insertBefore(js, fjs);
+        t._e = [];
+        t.ready = function(f) {
+          t._e.push(f);
+        };
+        return t;
+      }(document, "script", "twitter-wjs"));
     </script>
 
     <!-- JavaScript -->
@@ -95,6 +127,8 @@
     <!-- bower:js -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/json3/lib/json3.js"></script>
+    <script src="bower_components/es5-shim/es5-shim.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="bower_components/angular-resource/angular-resource.js"></script>
     <script src="bower_components/angular-cookies/angular-cookies.js"></script>
@@ -118,6 +152,7 @@
     <script src="bower_components/gsap/src/uncompressed/TweenMax.js"></script>
     <script src="bower_components/ngFx/dist/ngFx.js"></script>
     <script src="bower_components/angular-bind-html-compile/angular-bind-html-compile.js"></script>
+    <script src="bower_components/algoliasearch/dist/algoliasearch.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -140,7 +175,9 @@
     <script src="scripts/filters/af-format-telephone.js"></script>
     <script src="scripts/filters/af-str-to-date.js"></script>
     <script src="scripts/filters/af-schema-date.js"></script>
+    <script src="scripts/filters/af-ellipses.js"></script>
     <script src="scripts/controllers/main.js"></script>
+    <script src="scripts/controllers/home.js"></script>
     <script src="scripts/controllers/search.js"></script>
     <script src="scripts/controllers/search.results.js"></script>
     <script src="scripts/controllers/facilities.update.js"></script>

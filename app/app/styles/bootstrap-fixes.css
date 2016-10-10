@@ -1,0 +1,8 @@
+/* File contains CSS styles to correct any Bootstrap mistakes.
+----------------------------------------------------------------------------- */
+
+/* Button height for 'input-group-btn' buttons.
+----------------------------------------------------------------------------- */
+.input-group-btn > button.btn.btn-lg {
+  height: 46px;
+}

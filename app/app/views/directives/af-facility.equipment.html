@@ -10,7 +10,7 @@
 <div data-ng-repeat="e in facility.equipment" itemscope itemtype="http://schema.org/Product">
   <!-- Type. -->
   <div class="row">
-    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
       <label>Type</label>
     </div>
 
@@ -18,12 +18,12 @@
       <span itemprop="name">{{ e.type }}</span>
     </div>
 
-    <br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
+    <br data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.sm">
   </div>
   
   <!-- Manufacturer. -->
   <div class="row" data-ng-show="e.manufacturer || isPreview">
-    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
       <label>Manufacturer</label>
     </div>
 
@@ -35,12 +35,12 @@
       <span class="label label-default" data-ng-show="isPreview && !e.manufacturer">Blank</span>
     </div>
 
-    <br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
+    <br data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.sm">
   </div>
   
   <!-- Model. -->
   <div class="row" data-ng-show="e.model || isPreview">
-    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
       <label>Model</label>
     </div>
 
@@ -50,23 +50,23 @@
       <span class="label label-default" data-ng-show="isPreview && !e.model">Blank</span>
     </div>
 
-    <br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
+    <br data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.sm">
   </div>
   
   <!-- Purpose. -->
   <div class="row">
-    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
       <label>Purpose</label>
     </div>
 
     <div class="col-sm-9" data-ng-bind-html="e.purpose" itemprop="description"></div>
 
-    <br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
+    <br data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.sm">
   </div>
   
   <!-- Specifications. -->
   <div class="row" data-ng-show="e.specifications || isPreview">
-    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
       <label>Specifications</label>
     </div>
 
@@ -77,12 +77,12 @@
       <span class="label label-default" data-ng-show="isPreview && !e.specifications">Blank</span>      
     </div>
 
-    <br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
+    <br data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.sm">
   </div>  
 
   <!-- Year purchased. -->
   <div class="row" data-ng-show="e.yearPurchased || isPreview">
-    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
       <label>Year purchased</label>
     </div>
 
@@ -92,12 +92,12 @@
       <span class="label label-default" data-ng-show="isPreview && !e.yearPurchased">Blank</span>      
     </div>
 
-    <br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
+    <br data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.sm">
   </div>  
 
   <!-- Year manufactured. -->
   <div class="row" data-ng-show="e.yearManufactured || isPreview">
-    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
       <label>Year manufactured</label>
     </div>
 
@@ -107,12 +107,12 @@
       <span class="label label-default" data-ng-show="isPreview && !e.yearManufactured">Blank</span>      
     </div>
 
-    <br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
+    <br data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.sm">
   </div>
   
   <!-- Search visibility. -->
   <div class="row" data-ng-show="isPreview">
-    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
       <label>Search visibility</label>
     </div>
 
@@ -121,12 +121,12 @@
       <span data-ng-hide="e.isPublic">Hidden</span>
     </div>
 
-    <br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
+    <br data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.sm">
   </div>
   
   <!-- Excess capacity. -->
   <div class="row" data-ng-show="isPreview">
-    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
       <label>Excess capacity</label>
     </div>
 
@@ -135,12 +135,12 @@
       <span data-ng-hide="e.hasExcessCapacity">No</span>
     </div>
 
-    <br data-ng-show="_window.innerWidth < _bootstrap.grid.breakpoints.sm">
+    <br data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.sm">
   </div>
   
   <!-- Keywords. -->
   <div class="row" data-ng-show="e.keywords || isPreview" itemprop="additionalProperty" itemscope itemtype="http://schema.org/PropertyValue">
-    <div class="col-sm-3" data-ng-class="{ 'text-right': _window.innerWidth >= _bootstrap.grid.breakpoints.sm }">
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
       <label itemprop="name">Keywords</label>
     </div>
     

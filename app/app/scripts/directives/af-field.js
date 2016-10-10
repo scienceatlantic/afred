@@ -45,6 +45,13 @@ angular.module('afredApp').directive('afField', [
          */
         model: '=afFieldModel',
         /**
+         * (Optional) Helpful tooltip text.
+         * 
+         * @type {string} Can also include HTML (though it will not be 
+         *     compiled).
+         */
+        tooltip: '=afFieldTooltip',
+        /**
          * (Optional) By default the 'form-group-sm' Bootstrap CSS class is 
          * applied to the form group. We can disable this by setting this 
          * property to true.

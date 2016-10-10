@@ -42,6 +42,7 @@ angular.module('afredApp').run(['$rootScope', function($rootScope) {
       
       // Location of specific pages on WordPress. 
       pages: {
+        'what\'s new': { pageId: 93 },
         'about': { pageId: 5 },
         'terms of service': { pageId: 38 },
         'privacy policy': { pageId: 36 },
@@ -68,6 +69,22 @@ angular.module('afredApp').run(['$rootScope', function($rootScope) {
       analytics: {
         id: 'UA-80861919-1'
       }
-    }
+    },
+
+    /* ---------------------------------------------------------------------
+     * Algolia settings.
+     * --------------------------------------------------------------------- */
+    algolia: {
+      api: {
+        applicationId: 'C8MSUIO9J3',
+        key: 'edfa4d5152caa311a0fdbcf0fd6d002e'
+      },
+      
+      // Index names for facilities and equipment searches.
+      indices: {
+        facilities: 'dev_facilities',
+        equipment: 'dev_equipment' 
+      }
+    }    
   };
 }]);

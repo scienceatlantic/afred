@@ -1,20 +1,111 @@
-/* Show vertical scroll bar on all pages for consistency */
+/* File contains CSS styles, tweaks, etc that apply to either:
+ * (1) The entire site.
+ * (2) Individual pages.
+ *
+ * Notes:
+ * Bootstrap grid breakpoints (v3)
+ * @see http://getbootstrap.com/css/#grid-options
+ * 
+ * xs = <  768px
+ * sm = >= 768px
+ * md = >= 992px
+ * lg = >= 1200px
+ *
+----------------------------------------------------------------------------- */
+
+/* --------------------------------------------------------------------------
+ * Case (1)
+ * -------------------------------------------------------------------------- */
+
+/* Fonts. 
+ * Only overrides font-family (from Bootstrap). Font-size, etc left unchanged.
+----------------------------------------------------------------------------- */
+body {
+  font-family: 'Open Sans', sans-serif;
+}
+
+h1, 
+h2, 
+h3, 
+h4, 
+h5, 
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+  font-family: 'Rubik', sans-serif;
+}
+
+/* Show vertical scroll bar on all pages for consistency.
+----------------------------------------------------------------------------- */
+
 html {
   overflow-y: scroll;
 }
 
-/* Sticky footer styles
+/* Word wrap for long URLs, emails, etc
+ * Credit: https://css-tricks.com/snippets/css/prevent-long-urls-from-breaking-out-of-container/
 -------------------------------------------------- */
+body {
+  /* These are technically the same, but use both */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  -ms-word-break: break-all;
+  /* This is the dangerous one in WebKit, as it breaks things wherever */
+  word-break: break-all;
+  /* Instead use this non-standard one: */
+  word-break: break-word;
+
+  /* Adds a hyphen where the word breaks, if supported (No Blink) */
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+/* Set maximum size of content container.
+----------------------------------------------------------------------------- */
+.container {
+  max-width: 945px;
+}
+
+/* Static navbar styles.
+----------------------------------------------------------------------------- */
+body {
+  margin-top: 50px; /* Margin top by navbar height */
+}
+
+/* Navbar styles.
+----------------------------------------------------------------------------- */
+.navbar-brand > img {
+  padding-top: 2.3px;
+}
+
+/* Sticky footer styles.
+----------------------------------------------------------------------------- */
 html {
   position: relative;
   min-height: 100%;
 }
 
 body {
-  margin-bottom: 210px; /* Margin bottom by footer height */
+  margin-bottom: 210px; /* Margin bottom by footer height. */
 }
 
+@media (max-width: 991px) {
+  body {
+    margin-bottom: 590px; /* Margin bottom by footer height (mobile). */
+  }
+}
+
+/* Footer class styles.
+----------------------------------------------------------------------------- */
 .footer {
+  padding: 20px 0;
   position: absolute;
   bottom: 0;
   width: 100%;
@@ -22,45 +113,179 @@ body {
   background-color: #f5f5f5;
 }
 
-/* Footer padding
--------------------------------------------------- */
-footer {
-  padding: 20px 0;
+@media (max-width: 991px) {
+  /* Add top padding to each footer heading (bold text) for smaller screens. */
+  .footer div p.af-bold { 
+    padding-top: 10px;
+  }
 }
 
-/* Remove rounded borders of main navbar
--------------------------------------------------- */
+/* The first heading in the footer does not need padding (for all screen 
+   sizes). */
+.footer div.col-md-3:first-child p.af-bold {
+  padding: 0px;
+}
+
+/* Main site footer slider class styles.
+----------------------------------------------------------------------------- */
+.af-footer-slider {
+  min-height: 90px;
+}
+
+/* Copyright text styles.
+----------------------------------------------------------------------------- */
+.af-copyright {
+  padding-top: 10px;
+  margin-bottom: 0;
+}
+
+/* Remove rounded borders of main navbar.
+----------------------------------------------------------------------------- */
 nav.navbar {
   border: 0;
 }
 
-/* Reduce left margin of main navbar
--------------------------------------------------- */
-#main-navbar {
-  margin-left: -18px;
+/* Logged-in bar styles.
+----------------------------------------------------------------------------- */
+.af-logged-in-bar .navbar-text {
+  margin: 0; /* Reduces the overall height of the bar. */
 }
 
-/* Side list for the facility submission/edit form
- * (contacts, equipment)
--------------------------------------------------- */
-table.table-list {
-  table-layout: fixed;
-  font-size: 0.9em;
+.af-logged-in-bar .navbar-text p {
+  margin: 0;
+  padding: 5px 0;
 }
 
-table.table-list td:first-child {
-  width: 80%;
-  white-space: nowrap;
-  overflow: hidden;
+/* Page content while logged in class.
+----------------------------------------------------------------------------- */
+.af-content-while-logged-in {
+  padding-top: 30px; /* Padding by logged-in-bar height */
 }
 
-table.table-list td:last-child {
-  width: 20%;
-  text-align: left;
+/* Beta note message styles.
+----------------------------------------------------------------------------- */
+.af-beta-note {
+  padding: 5px 0;
 }
 
-/* Set maximum size of content container
--------------------------------------------------- */
-.container {
-  max-width: 945px;
+.af-beta-note p {
+  margin: 0;
+}
+
+/* --------------------------------------------------------------------------
+ * Case (2)
+ * -------------------------------------------------------------------------- */
+
+/* Home page header class styles.
+----------------------------------------------------------------------------- */
+.af-home-header {
+  min-height: 400px;
+  background-image: url('../images/homepage-banner.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.af-home-header > div:first-child {
+  padding: 85px 0 20px 0;
+}
+
+@media (max-width: 500px) {
+  .af-home-header {
+    min-height: 345px;
+  }
+
+  .af-home-header > div:first-child {
+    padding: 40px 0 20px 0;
+  }
+}
+
+@media (min-width: 768px) {
+  .af-home-header input {
+    width: 420px !important; /* Search bar width by AFRED logo width */
+  }
+}
+
+/* Home page 'Submit your facility' styles.
+----------------------------------------------------------------------------- */
+.af-home-submit-your-facility-bar {
+  background-color: rgb(29, 189, 193);
+  padding: 40px 0 10px 0;
+  color: #fff;
+}
+
+/* Vertically centerise gears. */
+.af-home-submit-your-facility-bar .fa-gears {
+  margin-top: -8px;
+}
+
+/* Vertically centerise text. */
+.af-home-submit-your-facility-bar div.col-md-6 p {
+  padding-top: 6px;
+}
+
+/* Vertically centerise button. */
+.af-home-submit-your-facility-bar div.col-md-4 p {
+  padding-top: 16px;
+}
+
+@media (max-width: 991px) {
+  .af-home-submit-your-facility-bar {
+    padding: 20px 0 18px 0;
+  }
+
+   /* Hide gears for smaller screens. */
+  .af-home-submit-your-facility-bar .fa-gears {
+    display: none;
+  }
+
+  .af-home-submit-your-facility-bar div.col-md-6 p {
+    padding: 0;
+  }
+
+  .af-home-submit-your-facility-bar div.col-md-4 p {
+    padding: 15px 0 13px 0;
+  }  
+}
+
+.af-home-submit-your-facility-bar p {
+  margin: 0;
+  padding: 4px 0 0 0;
+}
+
+.af-home-submit-your-facility-bar a {
+  color: white;
+  text-decoration: underline;
+}
+
+/* Home page 'Here's what AFRED can do for you!' styles.
+----------------------------------------------------------------------------- */
+.af-home-what-can-afred-do-for-you > p:first-child {
+  padding-top: 10px;
+}
+
+/* Vertically centerise all headings. */
+.af-home-what-can-afred-do-for-you .col-sm-9 p {
+  padding-top: 4px;
+}
+
+/* Increase top padding to vertically centerise the third heading. */
+.af-home-what-can-afred-do-for-you div.col-md-3:nth-child(3) .col-sm-9 p {
+  padding-top: 12px;
+}
+
+/* Vertically centerise all headings for smaller screens. */
+@media (min-width: 768px) and (max-width: 991px) {
+  .af-home-what-can-afred-do-for-you .col-sm-11 p {
+    padding-top: 13px;
+  }
+}
+
+/* Search page result panels
+----------------------------------------------------------------------------- */
+.af-search-page-results a {
+  text-decoration: none;
+}
+
+.af-search-page-results p:not(.h4) {
+  color: #333;
 }

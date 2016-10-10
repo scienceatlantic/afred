@@ -154,3 +154,8 @@ Route::post('email/', 'EmailController@store');
  * Dashboard routes.
  *****************************************************************************/
 Route::get('dashboard/', 'DashboardController@index');
+
+/******************************************************************************
+ * Home routes.
+ *****************************************************************************/
+Route::get('home/', 'HomeController@index');

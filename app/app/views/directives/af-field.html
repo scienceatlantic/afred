@@ -1,7 +1,16 @@
 <div class="form-group" data-ng-class="{ 'has-error': form[name].$invalid && form[name].$dirty, 'form-group-sm': !isMd }">
   <!-- Field label. -->
-  <label class="control-label" data-ng-class="{ 'col-sm-4': !isVertical }">{{ label }}</label>
-  
+  <label class="control-label" data-ng-class="{ 'col-sm-4': !isVertical }">
+    {{ label }}
+
+    <!-- Tooltip. -->
+    <span data-ng-if="tooltip">
+      <a href="" style="color: inherit;">
+        <span class="fa fa-info-circle" data-uib-tooltip-html="tooltip" data-tooltip-append-to-body="true" data-tooltip-trigger="'outsideClick'"></span>
+      </a>
+    </span>
+  </label>
+
   <div data-ng-class="{ 'col-sm-8': !isVertical }">
     <!-- Input element gets transcluded here. -->
     <div data-ng-transclude></div>
@@ -9,8 +18,7 @@
     <!-- Field length count goes here. -->
     <p class="text-muted" data-ng-if="model.length">
       <small>
-        <span data-ng-if="!isTextAngular">{{ model.length }}</span><!--
-     --><span data-ng-if="isTextAngular">{{ getTextAngularContentLength(model) }}</span>/{{ maxLength }} characters remaining.
+        {{ isTextAngular ? getTextAngularContentLength(model) : model.length }}/{{ maxLength }} characters remaining.
       </small>
     </p>
     

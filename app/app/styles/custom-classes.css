@@ -1,0 +1,67 @@
+/* File contains CSS custom classes. All classes are prefixed with 'af-'
+ * except for the special Bootstrap add on classes.
+----------------------------------------------------------------------------- */
+
+/* Generic heading class (for cases when we don't want to use .h1, .h2,...).
+----------------------------------------------------------------------------- */
+.af-heading {
+  font-family: 'Rubik', sans-serif;
+}
+
+/* Vertically align content class.
+ * @see: http://stackoverflow.com/a/20548578
+-------------------------------------------------- */
+.af-vcenter {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* Bold text style class.
+----------------------------------------------------------------------------- */
+.af-bold {
+  font-weight: bold;
+}
+
+/* Inline-block style class.
+----------------------------------------------------------------------------- */
+.af-inline-block {
+  display: inline-block;
+}
+
+/* Outline Bootstrap button styles.
+ * @see: http://bootsnipp.com/snippets/featured/bootstrap-outline-buttons
+----------------------------------------------------------------------------- */
+.btn-outline {
+  background-color: transparent;
+  color: inherit;
+  border: 2px solid #fff;
+  transition: all .1s;
+}
+
+.btn-primary.btn-outline {
+  color: #428bca;
+}
+
+.btn-success.btn-outline {
+  color: #5cb85c;
+}
+
+.btn-info.btn-outline {
+  color: #5bc0de;
+}
+
+.btn-warning.btn-outline {
+  color: #f0ad4e;
+}
+
+.btn-danger.btn-outline {
+  color: #d9534f;
+}
+
+.btn-primary.btn-outline:hover,
+.btn-success.btn-outline:hover,
+.btn-info.btn-outline:hover,
+.btn-warning.btn-outline:hover,
+.btn-danger.btn-outline:hover {
+  color: #fff;
+}

@@ -1,31 +1,35 @@
 <div class="row">
-  <div class="col-lg-2">
-    <table class="table table-condensed table-list">
-      <tbody>
-        <tr data-ng-repeat="c in form.data.contacts" data-ng-class="{active: form.contactIndex === $index}" data-ng-click="form.contactIndex = $index">
-          <td>
-            <a href="">
-              <span data-ng-class="{ 'text-danger': facilityForm['contactForm' + $index].$invalid && facilityForm['contactForm' + $index].$dirty }">
-                <span data-ng-hide="c.firstName || c.lastName">Contact #{{ $index + 1 }}</span>
-                <span data-ng-show="c.firstName || c.lastName">{{ c.firstName }} {{ c.lastName }}</span>
-              </span>
-            </a>
-          </td>
-          <td>
-            <a href="" data-ng-show="$index !== 0" data-ng-click="form.removeContact($index)">
-              <span class="text-danger">
-                <span class="glyphicon glyphicon-remove"></span>
-              </span>
-            </a>                         
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    
-    <button type="button" class="btn btn-default btn-sm" data-ng-click="form.addContact()" data-ng-disabled="form.data.contacts.length > 9">Contacts <span class="fa fa-plus"></span></button>
+  <!-- List of contacts. -->
+  <div class="col-md-3">
+    <ul class="list-unstyled">
+      <li data-ng-repeat="c in form.data.contacts">
+        <a href="" data-ng-class="{ 'af-bold': form.contactIndex === $index }" data-ng-click="form.contactIndex = $index">
+          <span class="active" data-ng-class="{ 'text-danger': facilityForm['contactForm' + $index].$invalid && facilityForm['contactForm' + $index].$dirty }">
+            <span data-ng-hide="c.firstName || c.lastName">Contact #{{ $index + 1 }}</span>
+
+            <span data-ng-show="c.firstName || c.lastName">
+              {{ (c.firstName ? c.firstName : '')  + ' ' + (c.lastName ? c.lastName : '') | afEllipses:(_getWidth() >= _bootstrap.grid.breakpoints.md ? 18 : 25) }}      
+            </span>
+          </span>
+        </a>
+
+        <span data-ng-class="{ 'pull-right': _getWidth() >= _bootstrap.grid.breakpoints.md }">
+          <a href="" data-ng-show="$index !== 0" data-ng-click="form.removeContact($index)">
+            <span class="text-danger">
+              <span class="glyphicon glyphicon-remove"></span>
+            </span>
+          </a>
+        </span> 
+      </li>
+    </ul>
+
+    <button type="button" class="btn btn-default btn-sm" data-ng-click="form.addContact()" data-ng-disabled="form.data.contacts.length > 9">Add contact <span class="fa fa-plus"></span></button>
   </div><!-- End of .col-x-x -->
   
-  <div class="col-lg-10">                    
+  <hr data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.md">
+
+  <!-- Form fields. -->
+  <div class="col-md-9">                    
     <div data-ng-repeat="c in form.data.contacts">
       <div data-ng-form name="contactForm{{ $index }}">
         <div class="row" data-ng-show="form.contactIndex === $index">
@@ -64,7 +68,7 @@
               <input type="text" class="form-control" name="contactPosition{{ $index }}" data-ng-model="c.position" maxlength="100">
             </div>
             
-            <div data-af-field data-af-field-label="Website" data-af-field-model="c.website">
+            <div data-af-field data-af-field-label="Website" data-af-field-model="c.website" data-af-field-tooltip="'If you have your own website, separate from the facility website, enter it here.'">
               <input type="url" class="form-control" name="contactWebsite{{ $index }}" data-ng-model="c.website" data-ng-model-options="{ debounce: 500 }" maxlength="2083" placeholder="http://example.com">
             </div>
             

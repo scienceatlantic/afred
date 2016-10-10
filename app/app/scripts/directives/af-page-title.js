@@ -18,6 +18,7 @@ angular.module('afredApp').directive('afPageTitle', [
     return {
       restrict: 'A',
       replace: true,
+      template: '<span></span>',
       scope: {
         /**
          * Page title.

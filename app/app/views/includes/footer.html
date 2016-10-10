@@ -1,45 +1,60 @@
 <footer class="footer">
   <div class="container">
     <div class="row">
+      <!-- First column. -->
       <div class="col-md-3">
-        <p><b>Resources</b></p>
+        <p class="af-bold">Resources</p>
         
-        <p><a data-ui-sref="about.legal.termsOfService">Terms of Service</a></p>
+        <p><a data-ui-sref="about.legal.termsOfService" target="_blank">Terms of Service</a></p>
         
-        <p><a data-ui-sref="about.legal.privacyPolicy">Privacy Policy</a></p>
+        <p><a data-ui-sref="about.legal.privacyPolicy" target="_blank">Privacy Policy</a></p>
         
-        <p><a data-ui-sref="about.legal.disclaimer">Disclaimer</a></p>
+        <p><a data-ui-sref="about.legal.disclaimer" target="_blank">Disclaimer</a></p>
       </div>
       
+      <!-- Second column. -->
       <div class="col-md-3">
-        <p><b>What is AFRED?</b></p>
+        <p class="af-bold">What is AFRED</p>
         
         <p><a href="//afred.ca/coming-soon/" target="_blank">Find out what AFRED can do for you!</a></p>
         
         <p><a href="//afred.ca/coming-soon/#partners-and-supporters" target="_blank">All Partners and Supporters</a></p>
       </div>
       
+      <!-- Third column. -->
       <div class="col-md-3">
-        <p><b>Connect with us!</b></p>
+        <p class="af-bold">Connect with us!</p>
         
-        <p><a href="//twitter.com/AFREDatabase" target="_blank"><span class="fa fa-twitter"></span> @AFREDatabase</a></p>
+        <p>
+          <span class="fa fa-twitter"></span> 
+          <a href="//twitter.com/AFREDatabase" target="_blank">
+            @AFREDatabase
+          </a>
+        </p>
         
-        <p><b>Sign up for updates!</b></p>
+        <p class="af-bold">Sign up for updates!</p>
         
-        <p><a href="//afred.ca/coming-soon" target="_blank"><button class="btn btn-default"><span class="fa fa-envelope-o"></span> Sign up</button></a></p>
+        <p>
+          <a href="http://afred.us1.list-manage1.com/subscribe?u=dd9438e5241a969b149838940&id=d636f71d3d" target="_blank">
+            <button class="btn btn-default">
+              <span class="fa fa-envelope-o"></span> Sign up
+            </button>
+          </a>
+        </p>
       </div>
       
+      <!-- Fourth column. -->
       <div class="col-md-3">
-        <p>
+        <p class="af-bold">
           <!-- Heading for Science Atlantic. -->
-          <b data-ng-show="main.footer.slider.currentImgIndex == 0">A project of</b>
+          <span data-ng-if="main.footer.slider.currentImgIndex == 0">A project of</span>
           
           <!-- Heading for the rest. -->
-          <b data-ng-show="main.footer.slider.currentImgIndex > 0">Supported in part by</b>
+          <span data-ng-if="main.footer.slider.currentImgIndex > 0">Supported in part by</span>
         </p>
         
         <!-- Slider. -->
-        <div style="min-height: 90px;">
+        <div class="af-footer-slider">
           <!-- Science Atlantic. -->
           <a data-ng-href="https://scienceatlantic.ca" target="_blank" data-ng-show="main.footer.slider.currentImgIndex == 0">
             <img data-ng-src="images/sa-main-logo-200x80.png" alt="Science Atlantic Logo">
@@ -73,6 +88,9 @@
       </div>
     </div>
     
-    <p class="text-center text-muted">Copyright &copy; 2004 - {{ main.footer.copyrightEndYear }} Science Atlantic. All Rights Reserved.</p>
+    <!-- Copyright text. -->
+    <p class="text-center text-muted af-copyright">
+      Copyright &copy; 2004 - {{ main.footer.copyrightEndYear }} Science Atlantic. All Rights Reserved.
+    </p>
   </div>
 </footer>

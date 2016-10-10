@@ -15,25 +15,30 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
       }]);
     });
     
-    // Redirect to search if user is on root. Otherwise the user will see 404.
+    // Redirect to home if user is on root. Otherwise the user will see 404.
     // Commenting this line out because we're moving the app to the root and the
     // root still has to redirect to the landing page.
-    //$urlRouterProvider.when('/', 'search');
+    //$urlRouterProvider.when('/', 'home');
     
     // Routes.
     $stateProvider
-      .state('search', {
+      .state('home', {
+        url: '/home',
+        templateUrl: 'views/home.html',
+        controller: 'HomeController'
+      }).
+      state('search', {
         url: '/search',
         templateUrl: 'views/search.html',
         controller: 'SearchController'
       }).
       state('search.all', {
-        url: '/all?type&provinceId[]&organizationId[]&disciplineId[]&sectorId[]',
+        url: '/all?page&type&provinceId[]&organizationId[]&disciplineId[]&sectorId[]',
         templateUrl: 'views/search.results.html',
         controller: 'SearchResultsController'
       }).
       state('search.q', {
-        url: '/?q&type&provinceId[]&organizationId[]&disciplineId[]&sectorId[]',
+        url: '/?q&page&type&provinceId[]&organizationId[]&disciplineId[]&sectorId[]',
         templateUrl: 'views/search.results.html',
         controller: 'SearchResultsController'
       }).

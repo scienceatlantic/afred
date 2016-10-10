@@ -20,6 +20,9 @@ module.exports = function (grunt) {
   // @see https://docs.angularjs.org/guide/$location (part about Hashbang and HTML5 Modes)
   var modRewrite = require('connect-modrewrite');
 
+  // @see http://stackoverflow.com/a/33113395
+  var serveStatic = require('serve-static');
+
   // Configurable paths for the application
   var appConfig = {
     app: require('./bower.json').appPath || 'app',
@@ -85,12 +88,12 @@ module.exports = function (grunt) {
               // https://gist.github.com/nnarhinen/7719157
               modRewrite(['^[^\\.]*$ /index.html [L]']),
 
-              connect.static('.tmp'),
+              serveStatic('.tmp'),
               connect().use(
                 '/bower_components',
-                connect.static('./bower_components')
+                serveStatic('./bower_components')
               ),
-              connect.static(appConfig.app)
+              serveStatic(appConfig.app)
             ];
           }
         }
@@ -100,13 +103,13 @@ module.exports = function (grunt) {
           port: 9001,
           middleware: function (connect) {
             return [
-              connect.static('.tmp'),
-              connect.static('test'),
+              serveStatic('.tmp'),
+              serveStatic('test'),
               connect().use(
                 '/bower_components',
-                connect.static('./bower_components')
+                serveStatic('./bower_components')
               ),
-              connect.static(appConfig.app)
+              serveStatic(appConfig.app)
             ];
           }
         }
@@ -416,7 +419,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('default', [
     'newer:jshint',
-    //'test',
+    'test',
     'build'
   ]);
 };

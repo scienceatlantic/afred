@@ -1,32 +1,37 @@
 <div>
-  <div data-af-loading="!search.resource.$resolved && !search.results.length" data-af-loading-text="Searching..."></div>
-  
-  <p class="h4" data-ng-show="search.results.length">
-      We found a total of {{ search.resource.total }}
-      <span data-ng-show="search.results.length == 1">
-        <span data-ng-show="_stateParams.type == 'facility'">facility<span data-ng-show="_state.current.name == 'search.all'">.</span></span>
-        <span data-ng-show="_stateParams.type != 'facility'">piece of equipment<span data-ng-show="_state.current.name == 'search.all'">.</span></span>
-      </span>
-      <span data-ng-show="search.results.length > 1">
-        <span data-ng-show="_stateParams.type == 'facility'">facilities<span data-ng-show="_state.current.name == 'search.all'">.</span></span>
-        <span data-ng-show="_stateParams.type != 'facility'">pieces of equipment<span data-ng-show="_state.current.name == 'search.all'">.</span></span>
-      </span>
-      <span data-ng-show="_state.current.name == 'search.q'">matching '{{ _stateParams.q }}'.</span>
-  </p>
-  
-  <div data-ng-show="!search.results.length && search.resource.$resolved">
-    <span class="h1">:(</span>
-    <br>
-    
-    <p class="h4">
-      Sorry we couldn't find anything<span data-ng-show="_state.current.name == 'search.all'">.</span>
-      <span data-ng-show="_state.current.name == 'search.q'">matching '{{ _stateParams.q }}'.</span>
+  <hr>
+  <div data-af-loading="loading.search" data-af-loading-text="Searching...">
+    <!-- Results found text. -->
+    <p class="h4" data-ng-if="search.results.length">
+        We found a total of {{ search.resource.nbHits }}
+        <span data-ng-show="search.results.length == 1">
+          <span data-ng-show="_stateParams.type == 'facilities'">facility<span data-ng-show="_state.current.name == 'search.all'">.</span></span>
+          <span data-ng-show="_stateParams.type != 'facilities'">piece of equipment<span data-ng-show="_state.current.name == 'search.all'">.</span></span>
+        </span>
+        <span data-ng-show="search.results.length > 1">
+          <span data-ng-show="_stateParams.type == 'facilities'">facilities<span data-ng-show="_state.current.name == 'search.all'">.</span></span>
+          <span data-ng-show="_stateParams.type != 'facilities'">pieces of equipment<span data-ng-show="_state.current.name == 'search.all'">.</span></span>
+        </span>
+        <span data-ng-show="_state.current.name == 'search.q'">for '{{ _stateParams.q }}'.</span>
     </p>
-  </div>
-  
-  <div data-ng-show="search.results.length">    
-    <div data-ng-include="'views/includes/search.results.equipment.html'"></div>
     
-    <div data-ng-include="'views/includes/search.results.facilities.html'"></div>
+    <!-- Nothing found text. -->
+    <div data-ng-if="!search.results.length">
+      <p class="h1">:(</p>
+      
+      <p class="h4">
+        Sorry we couldn't find anything<span data-ng-show="_state.current.name == 'search.all'">.</span>
+        <span data-ng-show="_state.current.name == 'search.q'">for '{{ _stateParams.q }}'.</span>
+      </p>
+    </div>
+    
+    <!-- Results. -->
+    <div data-ng-if="search.results.length">
+      <!-- Equipment. -->    
+      <div data-ng-include="'views/includes/search.results.equipment.html'" data-ng-if="_stateParams.type != 'facilities'"></div>
+      
+      <!-- Facilities. -->
+      <div data-ng-include="'views/includes/search.results.facilities.html'" data-ng-if="_stateParams.type == 'facilities'"></div>
+    </div>
   </div>
 </div>

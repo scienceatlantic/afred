@@ -1,25 +1,25 @@
 <div class="row">
   <div class="col-lg-6">
-    <div data-af-field data-af-field-label="Facility/Lab*" data-af-field-model="form.data.facility.name">
+    <div data-af-field data-af-field-label="Facility/Lab*" data-af-field-model="form.data.facility.name" data-af-field-tooltip="'This is the name of the facility/lab hosting the equipment. You should create a separate record for each facility/lab you have.'">
       <input class="form-control" name="facilityName" data-ng-model="form.data.facility.name" maxlength="200" required>
     </div>
     
-    <div data-af-field data-af-field-label="Organization*">
+    <div data-af-field data-af-field-label="Organization*" data-af-field-tooltip="'Refers to the name of the institute/company/association/etc with which your facility/lab is affiliated. Please select organization from drop down list or select ‘Other’ and enter name manually. If the organization name does not differ from the facility/lab name, please select ‘N/A’.'">
       <select class="form-control" name="facilityOrganization" id="facility-organization" data-ng-model="form.data.facility.organizationId" data-ng-options="i.id as i.name for i in form.organizations" required>
       </select>
     </div>
     
-    <div data-af-field data-af-field-label="Organization name*" data-ng-if="form.data.facility.organizationId == -1" data-af-field-model="form.data.organization.name">
+    <div data-af-field data-af-field-label="Org name*" data-ng-if="form.data.facility.organizationId == -1" data-af-field-model="form.data.organization.name" data-af-field-tooltip="'This will be added to the permanent list of organizations if your facility/lab is approved.'">
       <input type="text" class="form-control" name="facilityOrganizationName" data-ng-model="form.data.organization.name" maxlength="50" required>
     </div>
   </div><!-- End of .col-x-x -->
 
   <div class="col-lg-6">
-    <div data-af-field data-af-field-label="City" data-af-field-model="form.data.facility.city">
+    <div data-af-field data-af-field-label="City" data-af-field-model="form.data.facility.city" data-af-field-tooltip="'If your facility/lab has locations in multiple cities, please list all cities separated by commas (or leave blank).'">
       <input type="text" class="form-control" name="facilityCity" data-ng-model="form.data.facility.city" maxlength="150">
     </div>
     
-    <div data-af-field data-af-field-label="Province/Region*">          
+    <div data-af-field data-af-field-label="Province/Region*" data-af-field-tooltip="'If your facility/lab has locations in multiple provinces, please select region. If your province/region is not listed, please contact <a href=\'mailto:afred@scienceatlantic.ca\'>afred@scienceatlantic.ca</a>.'">          
       <select class="form-control" name="facilityProvince" id="facility-province" data-ng-model="form.data.facility.provinceId" data-ng-options="p.id as p.name for p in form.provinces" required>
       </select>
     </div>
@@ -31,7 +31,7 @@
 </div><!-- End of .row -->
 
 
-<div data-af-field data-af-field-label="What the facility does*" data-af-field-model="form.data.facility.description">
+<div data-af-field data-af-field-label="What the facility does*" data-af-field-model="form.data.facility.description" data-af-field-tooltip="'Describe what your facility/lab does, such as type of research, services offered, etc.'">
   <div data-text-angular data-ng-model="form.data.facility.description" name="facilityDescription" data-ta-maxlength="2000" required></div>
 </div>
 
@@ -45,16 +45,16 @@
     -- has a unique name so we're not able to provide the directive with the names of all the checkboxes so we're
     -- only giving it the name of the first checkbox. Technically the directive should be repeated for each checkbox
     -- but then we'll end up losing the layout and each checkbox will end up up with its own label. Since we're only
-    -- providing the name of the first checkbox, validation is a problem.  Please have a look at the
-    -- '$scope.form.validateDisciplines()' function for how this was dealt with.
+    -- providing the name of the first checkbox, validation is a problem. We're using the 
+    -- '$rootScope._form.cb.isRequired()' for validation.
     -->
-  <div data-af-field data-af-field-label="Research disciplines*" data-af-field-name="facilityDisciplinesC10">
+  <div data-af-field data-af-field-label="Research disciplines*" data-af-field-name="facilityDisciplinesC10" data-af-field-tooltip="'Please check all research disciplines for which your facility/lab could be relevant. You must select at least one research discipline. If none apply, please contact <a href=\'mailto:afred@scienceatlantic.ca\'>afred@scienceatlantic.ca</a>.'">
     <div class="row">
       <div class="col-md-6">
         <div data-ng-repeat="d in form.disciplines | limitTo: form.disciplines.length / 2">
           <div class="checkbox">
             <label>
-              <input type="checkbox" name="facilityDisciplinesC1{{ $index }}" data-ng-model="d.isSelected" data-ng-change="form.validateDisciplines(disciplinesForm)" data-ng-required="form.disciplines[0].isRequired"> {{d.name}}
+              <input type="checkbox" name="facilityDisciplinesC1{{ $index }}" data-ng-model="d.isSelected" data-ng-required="_form.cb.isRequired(form.disciplines, disciplinesForm['facilityDisciplinesC10'])"> {{d.name}}
             </label>
           </div>
         </div>
@@ -64,7 +64,7 @@
         <div data-ng-repeat="d in form.disciplines | limitTo: form.disciplines.length:(form.disciplines.length / 2)">
           <div class="checkbox">
             <label>
-              <input type="checkbox" name="facilityDisciplinesC2{{ $index }}" data-ng-model="d.isSelected" data-ng-change="form.validateDisciplines(disciplinesForm)" data-ng-required="form.disciplines[0].isRequired"> {{d.name}}
+              <input type="checkbox" name="facilityDisciplinesC2{{ $index }}" data-ng-model="d.isSelected" data-ng-required="_form.cb.isRequired(form.disciplines, disciplinesForm['facilityDisciplinesC10'])"> {{d.name}}
             </label>
           </div>
         </div>
@@ -80,13 +80,13 @@
     -- Please have a look at the comments for 'disciplinesForm' above for how we're using the 'af-field' directive.
     -- Exact same scenario here.
     -->
-  <div data-af-field data-af-field-label="Sectors of application*" data-af-field-name="facilitySectorsC10">
+  <div data-af-field data-af-field-label="Sectors of application*" data-af-field-name="facilitySectorsC10" data-af-field-tooltip="'Please check all sectors of application for which your facility/lab could be relevant. You must select at least one sector of application. If none apply, please contact <a href=\'mailto:afred@scienceatlantic.ca\'>afred@scienceatlantic.ca</a>.'">
     <div class="row">
       <div class="col-md-6">
         <div data-ng-repeat="s in form.sectors | limitTo: form.sectors.length / 2">
           <div class="checkbox">
             <label>
-              <input type="checkbox" name="facilitySectorsC1{{ $index }}" data-ng-model="s.isSelected" data-ng-change="form.validateSectors(sectorsForm)" data-ng-required="form.sectors[0].isRequired"> {{s.name}}
+              <input type="checkbox" name="facilitySectorsC1{{ $index }}" data-ng-model="s.isSelected" data-ng-required="_form.cb.isRequired(form.sectors, sectorsForm['facilitySectorsC10'])"> {{s.name}}
             </label>
           </div>
         </div>
@@ -96,7 +96,7 @@
         <div data-ng-repeat="s in form.sectors | limitTo: form.sectors.length:(form.sectors.length / 2)">
           <div class="checkbox">
             <label>
-              <input type="checkbox" name="facilitySectorsC2{{ $index }}" data-ng-model="s.isSelected" data-ng-change="form.validateSectors(sectorsForm)" data-ng-required="form.sectors[0].isRequired"> {{s.name}}
+              <input type="checkbox" name="facilitySectorsC2{{ $index }}" data-ng-model="s.isSelected" data-ng-required="_form.cb.isRequired(form.sectors, sectorsForm['facilitySectorsC10'])"> {{s.name}}
             </label>
           </div>
         </div> 

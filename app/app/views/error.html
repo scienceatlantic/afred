@@ -1,4 +1,12 @@
-<div style="margin: {{ _math.max(0, (_window.innerHeight / 2) - (356 / 2)) }}px auto"> 
+<!-- Reset CSS. -->
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+  }
+</style>
+ 
+<div style="{{ margins() }}"> 
   <div class="text-center">    
     <img src="images/afred-symbol-bottom-text 200x170.png" alt="AFRED Logo">
     
@@ -10,7 +18,7 @@
     
     <!-- Don't show a link to the home page if status >= 500. -->
     <div data-ng-if="httpStatusCode < 500">
-      <p>Click <a data-ui-sref="search">here</a> to get back to the homepage.</p>
+      <p>Click <a data-ui-sref="home">here</a> to get back to the homepage.</p>
     </div>
   </div>
 </div>

@@ -1,50 +1,117 @@
-<nav class="navbar navbar-default" role="navigation">
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
+      <!-- Mobile menu button toggle. -->
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-navbar">
         <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
+
+      <!-- Brand. -->
+      <a class="navbar-brand" data-ui-sref="home">
+        <img alt="AFRED Logo" src="images/afred-logo-no-tagline-90x16.png"> 
+      </a>
     </div><!-- End of .navbar-header -->
       
     <div class="collapse navbar-collapse" id="main-navbar">
+      <!-- Usual nav items. -->
       <ul class="nav navbar-nav">
-        <li data-ui-sref-active="active"><a data-ui-sref="search">Search</a></li>
-        <li data-ui-sref-active="active"><a data-ui-sref="facilities.form.create">Submit Facility</a></li>
-        <li data-ui-sref-active="active"><a data-ui-sref="facilities.update">Edit Facility</a></li>
-        <li data-ui-sref-active="active"><a data-ui-sref="about">About</a></li>
-        <li data-ui-sref-active="active"><a data-ui-sref="contact">Contact</a></li>
+        <li data-ui-sref-active="active">
+          <a data-ui-sref="home">Home</a>
+        </li>
+        <li data-ui-sref-active="active">
+          <a data-ui-sref="search">Search</a>
+        </li>
+        <li data-ui-sref-active="active">
+          <a data-ui-sref="facilities.form.create">Submit Facility</a>
+        </li>
+        <li data-ui-sref-active="active">
+          <a data-ui-sref="facilities.update">Edit Facility</a>
+        </li>
+        <li data-ui-sref-active="active">
+          <a data-ui-sref="about">About</a>
+        </li>
+        <li data-ui-sref-active="active">
+          <a data-ui-sref="contact">Contact</a>
+        </li>
       </ul>
       
+      <!-- Logged in user items. -->
       <ul class="nav navbar-nav navbar-right">
-        <li role="presentation" class="dropdown" data-ng-show="_auth.user.email">
+        <!-- Logged in user dropdown menu. -->
+        <li role="presentation" class="dropdown" data-ng-show="_auth.user.id">
+          <!-- Dropdown button. -->
           <a class="dropdown-toggle" data-toggle="dropdown" href="" role="button" aria-haspopup="true" aria-expanded="false">
             Admin <span class="caret"></span>
           </a>
+
+          <!-- Dropdown items. -->
           <ul class="dropdown-menu">
-            <li><a data-ui-sref="admin.dashboard">Dashboard</a></li>
-            <li><a data-ui-sref="admin.account">Account</a></li>
-            <li><a data-ui-sref="admin.facilities">Facilities</a></li>
-            <li><a data-ui-sref="admin.organizations.index">Organizations</a></li>
-            <li><a data-ui-sref="admin.provinces.index">Provinces</a></li>
-            <li><a data-ui-sref="admin.sectors.index">Sectors</a></li>
-            <li><a data-ui-sref="admin.disciplines.index">Disciplines</a></li>
-            <li><a data-ui-sref="admin.reports">Reports</a></li>
-            <li><a data-ui-sref="admin.users.index">Users</a></li>
+            <li data-ui-sref-active="active">
+              <a data-ui-sref="admin.dashboard">Dashboard</a>
+            </li>
+            <li data-ui-sref-active="active">
+              <a data-ui-sref="admin.account">Account</a>
+            </li>
+            <li data-ui-sref-active="active">
+              <a data-ui-sref="admin.facilities">Facilities</a>
+            </li>
+            <li data-ui-sref-active="active">
+              <a data-ui-sref="admin.organizations.index">Organizations</a>
+            </li>
+            <li data-ui-sref-active="active">
+              <a data-ui-sref="admin.provinces.index">Provinces</a>
+            </li>
+            <li data-ui-sref-active="active">
+              <a data-ui-sref="admin.sectors.index">Sectors</a>
+            </li>
+            <li data-ui-sref-active="active">
+              <a data-ui-sref="admin.disciplines.index">Disciplines</a>
+            </li>
+            <li data-ui-sref-active="active">
+              <a data-ui-sref="admin.reports">Reports</a>
+            </li>
+            <li data-ui-sref-active="active">
+              <a data-ui-sref="admin.users.index">Users</a>
+            </li>
           </ul>
         </li>
-        <li data-ui-sref-active="active" data-ng-hide="_auth.user.email"><a data-ui-sref="login">Administrator Login</a></li>
-        <li><a data-ui-sref="login" data-ng-show="_auth.user.email" data-ng-click="_auth.logout()" data-af-loading-btn="_auth.loading.logout" data-af-loading-btn-text="Logging out...">Logout</a></li>
+
+        <!-- Do not use ngIf for the following items, otherwise 
+          -- $scope.main.navbar.toggle() (in main controller) will not attach
+          -- to them.
+          -->
+
+        <!-- Login button. -->
+        <li data-ui-sref-active="active" data-ng-show="!_auth.user.id">
+          <a data-ui-sref="login">Admin Login</a>
+        </li>
+
+        <!-- Logout button. -->
+        <li data-ng-show="_auth.user.id">
+          <a data-ui-sref="login" data-ng-click="_auth.logout()" data-af-loading-btn="_auth.loading.logout" data-af-loading-btn-text="Logging out...">
+            Logout
+          </a>
+        </li>
       </ul>
     </div><!-- End of .collapse -->
-    
-    <div style="padding-right: 13px;" data-ng-show="_auth.user.firstName">
-      <div class="pull-right">
-        <p>Logged in as <b>{{ _auth.user.firstName }} {{ _auth.user.lastName }}</b></p>
+  </div><!-- End of .container -->
+
+  <!-- Logged in bar. -->
+  <div class="af-logged-in-bar" data-ng-if="_auth.user.id">
+    <div class="container">
+      <div class="navbar-right navbar-text">
+        <p>
+          <span class="fa fa-user"></span>
+          <a data-ui-sref="admin.account">
+            {{ _auth.user.firstName }} {{ _auth.user.lastName }} 
+          </a>
+          <span>({{ _auth.user.email }})</span>
+        </p>
       </div>
     </div>
-  </div><!-- End of .container -->
+  </div>
 </nav>
