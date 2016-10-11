@@ -22,4 +22,20 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
 
         return $app;
     }
+
+    protected function getSuperAdmin()
+    {
+        $role = App\Role::where('name', 'SUPER_ADMIN')->first();
+        $user = factory(App\User::class)->create();
+        $user->roles()->attach([$role->id]);
+        return $user;
+    }
+
+    protected function getAdmin()
+    {
+        $role = App\Role::where('name', 'ADMIN')->first();
+        $user = factory(App\User::class)->create();
+        $user->roles()->attach([$role->id]);
+        return $user;
+    }
 }
