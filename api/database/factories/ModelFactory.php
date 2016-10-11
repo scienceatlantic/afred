@@ -11,6 +11,12 @@
 |
 */
 
+$factory->define(App\Discipline::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->name
+    ];
+});
+
 $factory->define(App\Organization::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->name,
