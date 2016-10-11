@@ -17,6 +17,19 @@ $factory->define(App\Discipline::class, function (Faker\Generator $faker) {
     ];
 });
 
+$factory->define(App\Ilo::class, function (Faker\Generator $faker) {
+    return [
+        'organizationId' => null,
+        'firstName' => $faker->firstName,
+        'lastName' => $faker->lastName,
+        'email' => $faker->email,
+        'telephone' => $faker->numerify('##########'),
+        'extension' => null,
+        'position' => $faker->name,
+        'website' => null
+    ];
+});
+
 $factory->define(App\Organization::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->name,

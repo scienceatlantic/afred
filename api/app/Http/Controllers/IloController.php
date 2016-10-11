@@ -77,7 +77,7 @@ class IloController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(IloRequest $request, $id)
     {
         $ilo = Ilo::findOrFail($id);
         $ilo->organizationId = $request->organizationId;
