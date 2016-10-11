@@ -9,7 +9,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 // Models.
-use App\Facility;
 use App\Organization;
 
 // Requests.
@@ -105,7 +104,7 @@ class OrganizationController extends Controller
         $o = Organization::findOrFail($id);
 
         // Make sure that the organization does not have any facilities.
-        if (Facility::where('organizationId', $o->id)->first()) {
+        if ($o->facilities()->first()) {
             abort(400);
         }
 

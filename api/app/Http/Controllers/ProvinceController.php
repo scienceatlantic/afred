@@ -9,7 +9,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 // Models.
-use App\Facility;
 use App\Province;
 
 // Requests.
@@ -104,7 +103,7 @@ class ProvinceController extends Controller
         $p = Province::findOrFail($id);
 
         // Make sure that the province does not have any facilities.
-        if (Facility::where('provinceId', $p->id)->first()) {
+        if ($p->facilities()->first()) {
             abort(400);
         }
 
