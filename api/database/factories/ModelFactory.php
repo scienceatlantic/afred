@@ -25,6 +25,12 @@ $factory->define(App\Province::class, function (Faker\Generator $faker) {
     ];
 });
 
+$factory->define(App\Sector::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->name
+    ];
+});
+
 $factory->define(App\User::class, function (Faker\Generator $faker) {
     return [
         'firstName' => $faker->firstName,
