@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 // Models.
+use App\Facility;
 use App\Organization;
 
 // Requests.
@@ -102,6 +103,12 @@ class OrganizationController extends Controller
     public function destroy(OrganizationRequest $request, $id)
     {
         $o = Organization::findOrFail($id);
+
+        // Make sure that the organization does not have any facilities.
+        if (Facility::where('organizationId', $o->id)->first()) {
+            abort(400);
+        }
+
         $deletedOrg = $this->toCcArray($o->toArray());
         $o->delete();
         return $deletedOrg;
