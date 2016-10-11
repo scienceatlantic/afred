@@ -186,16 +186,23 @@ nav.navbar {
 }
 
 .af-home-header > div:first-child {
-  padding: 85px 0 20px 0;
+  background-image: url('../images/afred-logo-colour-gradient-bottom-tagline-470x125.png');
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  padding: 200px 0 0 0;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 550px) {
+  .af-home-header > div:first-child {
+    background-image: url('../images/afred-symbol-bottom-text 200x170.png');
+    padding: 205px 0 0 0;
+  }
 }
 
 @media (max-width: 500px) {
   .af-home-header {
     min-height: 345px;
-  }
-
-  .af-home-header > div:first-child {
-    padding: 40px 0 20px 0;
   }
 }
 
