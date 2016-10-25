@@ -10,13 +10,13 @@ use Illuminate\Foundation\Http\FormRequest;
 
 abstract class Request extends FormRequest
 {
-    protected function isSuperAdmin()
+    protected function isSuperAdmin($strict = false)
     {
-        return Auth::check() && Auth::user()->isSuperAdmin();
+        return Auth::check() && Auth::user()->isSuperAdmin($strict);
     }
     
-    protected function isAdmin()
+    protected function isAdmin($strict = false)
     {
-        return Auth::check() && Auth::user()->isAdmin();
+        return Auth::check() && Auth::user()->isAdmin($strict);
     }
 }
