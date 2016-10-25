@@ -51,10 +51,10 @@ Route::resource('ilos', 'IloController', [
  *****************************************************************************/
 Route::resource('provinces', 'ProvinceController', [
 	'only' => ['index',
-			   'store',
-               'show',
-               'update',
-               'destroy']]);
+			   		 'store',
+             'show',
+             'update',
+             'destroy']]);
 
                
 /******************************************************************************
@@ -62,10 +62,10 @@ Route::resource('provinces', 'ProvinceController', [
  *****************************************************************************/
 Route::resource('disciplines', 'DisciplineController', [
 	'only' => ['index',
-			   'store',
-               'show',
-               'update',
-               'destroy']]);
+			   		 'store',
+             'show',
+             'update',
+             'destroy']]);
 
     
 /******************************************************************************
@@ -73,10 +73,10 @@ Route::resource('disciplines', 'DisciplineController', [
  *****************************************************************************/
 Route::resource('sectors', 'SectorController', [
 	'only' => ['index',
-			   'store',
-               'show',
-               'update',
-               'destroy']]);
+			   		 'store',
+             'show',
+             'update',
+             'destroy']]);
 
 			   
 /******************************************************************************
@@ -84,9 +84,9 @@ Route::resource('sectors', 'SectorController', [
  *****************************************************************************/	  
 Route::resource('facilities', 'FacilityController', [
 	'only' => ['index',
-			   'show',
-			   'update',
-			   'destroy']]);
+			   		 'show',
+			       'update',
+			       'destroy']]);
 
 
 /******************************************************************************
@@ -94,10 +94,10 @@ Route::resource('facilities', 'FacilityController', [
  *****************************************************************************/	  
 Route::resource('users', 'UserController', [
 	'only' => ['index',
-			   'show',
-			   'store',
-			   'update',
-			   'destroy']]);
+			   		 'show',
+			   		 'store',
+			   		 'update',
+			   		 'destroy']]);
 
 /******************************************************************************
  * Role routes.
@@ -115,9 +115,8 @@ Route::post('facility-repository', 'FacilityRepositoryController@update');
 
 Route::resource('facility-repository', 'FacilityRepositoryController', [
 	'only' => ['index',
-			   'show',
-			   'update',
-			   'destroy']]);
+			   		 'show',
+			   		 'update']]);
 
                
 /******************************************************************************
@@ -125,8 +124,8 @@ Route::resource('facility-repository', 'FacilityRepositoryController', [
  *****************************************************************************/
  Route::resource('settings', 'SettingController', [
 	'only' => ['index',
-			   'show',
-               'update']]);
+			   		 'show',
+             'update']]);
 
 
 /******************************************************************************
@@ -134,9 +133,9 @@ Route::resource('facility-repository', 'FacilityRepositoryController', [
  *****************************************************************************/
  Route::resource('facility-update-links', 'FacilityUpdateLinkController', [
 	'only' => ['index',
-               'store',
-               'update',
-               'destroy']]);
+             'store',
+             'update',
+             'destroy']]);
 
 
 /******************************************************************************
