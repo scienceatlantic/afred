@@ -13,7 +13,6 @@ use Illuminate\Http\Request;
 
 // Misc.
 use Auth;
-use Log;
 
 // Models.
 use App\Facility;
@@ -37,7 +36,7 @@ class FacilityUpdateLinkController extends Controller
      */
     public function index(FacilityUpdateLinkRequest $request)
     {
-        $ful = FacilityUpdateLink::with('frB', 'frA');
+        $ful = FacilityUpdateLink::with('originalFr', 'updatedFr');
         
         if ($request->status) {
             $ful->where('status', $request->status);
@@ -46,6 +45,62 @@ class FacilityUpdateLinkController extends Controller
         return $this->pageOrGet($ful);
     }
     
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(FacilityUpdateLinkRequest $request)
+    {
+        // Aliases to shorten code.
+        $id = $request->input('facilityId', null);
+        $e = $request->input('email', null);
+        
+        // Find the facility.
+        $f = Facility::findOrFail($id);
+        
+        // Get editor details.
+        if ($request->isAdmin) {
+            if (!$this->isAdmin()) {
+                abort(403);
+            }
+            $c = Auth::user();
+        } else {
+            // Find the matching primary contact or (regular) contact.
+            if (!$c = $f->primaryContact()->where('email', $e)->first()) {
+                $c = $f->contacts()->where('email', $e)->firstOrFail();
+            }           
+        }
+        
+        // Only create a new facility update link record if the facility doesn't
+        // already have an open/pending facility update link record.
+        $fr = $f->currentRevision()->first();
+        if (!$fr->updateRequests()->notClosed()->count()) {
+            $ful = new FacilityUpdateLink();
+            $ful->frIdBefore = $f->currentRevision->id;
+            $ful->editorFirstName = $c->firstName;
+            $ful->editorLastName = $c->lastName;
+            $ful->editorEmail = $c->email;
+            $ful->token = $this->generateUniqueToken();
+            $ful->status = 'OPEN';
+            $ful->dateOpened = $this->now();
+            $ful->save();
+            
+            // Generate event.
+            event(new FacilityUpdateLinksEvent($ful));
+
+            // Before returning the record, remove the 'token' if the request
+            // was made by an unauthenticated used.
+            $ful = $ful->toArray();
+            if (!$this->isAdmin()) {
+                $ful['token'] = null;  
+            }
+            return $ful;
+        } 
+        abort(400);
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -60,56 +115,6 @@ class FacilityUpdateLinkController extends Controller
         $ful->dateClosed = $this->now();
         $ful->save();
         return $ful;
-    }
-    
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(FacilityUpdateLinkRequest $request)
-    {
-        // Local variables to shorten code.
-        $id = $request->input('facilityId', null);
-        $e = $request->input('email', null);
-        
-        // Find the facility.
-        $f = Facility::findOrFail($id);
-        
-        if ($request->isAdmin) {
-            if (!(Auth::check() && Auth::user()->isAdmin())) {
-                abort(403);
-            }
-            
-            $c = Auth::user();
-        } else {
-            // Find the matching primary contact or (regular) contact.
-            if (!$c = $f->primaryContact()->where('email', $e)->first()) {
-                $c = $f->contacts()->where('email', $e)->firstOrFail();
-            }           
-        }
-        
-        // Only create a new facility update link record if the facility doesn't
-        // already have an open/pending facility update link record.
-        if (!$f->currentRevision()->first()->fulB()->notClosed()->count()) {
-            $ful = new FacilityUpdateLink();
-            $ful->frIdBefore = $f->currentRevision->id;
-            $ful->editorFirstName = $c->firstName;
-            $ful->editorLastName = $c->lastName;
-            $ful->editorEmail = $c->email;
-            $ful->token = $this->generateUniqueToken();
-            $ful->status = 'OPEN';
-            $ful->dateOpened = $this->now();
-            $ful->save();
-            
-            event(new FacilityUpdateLinksEvent($ful));
-            
-            if (Auth::check() && Auth::user()->isAdmin()) {
-                return $ful;   
-            }
-        } 
-        abort(400);
     }
 
     /**

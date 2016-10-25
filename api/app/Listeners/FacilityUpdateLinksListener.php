@@ -44,7 +44,7 @@ class FacilityUpdateLinksListener extends BaseListener
         // Template data.
         $data = [
             'recipientName' => $event->ful->getFullName(),
-            'facilityName'  => $event->ful->frB()->first()->data['facility']['name'],
+            'facilityName'  => $event->ful->originalFr()->first()->data['facility']['name'],
             'frIdBefore'    => $event->ful->frIdBefore,
             'token'         => $event->ful->token,
             'settings'      => $this->settings  

@@ -84,8 +84,7 @@ class FacilityRepository extends Model
     }
     
     /**
-     * Relationship between a facility repository and its facility update links
-     * (before).
+     * Relationship between a facility repository and its facility update links.
      *
      * Each facility repository record can have zero or more facility update
      * link records in the 'before' field. This is because the update request
@@ -93,21 +92,21 @@ class FacilityRepository extends Model
      * facility repository record (frIdBefore) is still the most recent
      * version of the facility.
      */
-    public function fulB()
+    public function updateRequests()
     {
         return $this->hasMany('App\FacilityUpdateLink', 'frIdBefore');
     }
     
     /**
-     * Relationship between a facility repository and its facility update link
-     * (after).
+     * Relationship between a facility repository and the facility update link
+     * record that created it.
      *
      * Each facility repository record can only have one facility update link
      * record in the 'after' field. The update is either approved or rejected.
      * If it was rejected, the previous facility repository record (frIdBefore)
      * is still the most recent version of the facility.
      */
-    public function fulA()
+    public function originRequest()
     {
         return $this->hasOne('App\FacilityUpdateLink', 'frIdAfter');
     }

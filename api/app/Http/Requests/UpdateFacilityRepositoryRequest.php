@@ -32,9 +32,11 @@ class UpdateFacilityRepositoryRequest extends Request
         $currentState = $fr ? $fr->state : null;
     
         switch ($state) {
-            // No check necessary, a new record is being submitted.
+            // New record is being submitted. Make sure that it's actually a 
+            // new submission (i.e. 'POST' instead of 'PUT' since both 
+            // operations have been merged in the controller).
             case 'PENDING_APPROVAL':
-                return true;  
+                return $this->method() == 'POST';
             // An update is being submitted, check the current state and token
             // submitted with the request.
             case 'PENDING_EDIT_APPROVAL':
@@ -128,20 +130,21 @@ class UpdateFacilityRepositoryRequest extends Request
                 $r["$f.isPublic"] = '';
                 
                 // Organization section (new organization is being submitted).
-                $r["$o.name"] = "required_if:$f.organizationId,null";
+                // Note: comma after 'null' is intentional. Do not remove. It
+                // signifies that this rule should apply if 'organizationId'
+                // is null or not provided.
+                $r["$o.name"] = "required_if:$f.organizationId,null,";
                 
                 // Disciplines section.
                 $r[$d] = 'required|array';
-                $disciplines = $this->instance()->input($d);
-                $length = count($disciplines);
+                $length = count($this->instance()->input($d));
                 for ($i = 0; $i < $length; $i++) {
                     $r["$d.$i"] = 'exists:disciplines,id';
                 }
                 
                 // Sectors section.
                 $r[$s] = 'required|array';
-                $sectors = $this->instance()->input($s);
-                $length = count($sectors);
+                $length = count($this->instance()->input($s));
                 for ($i = 0; $i < $length; $i++) {
                     $r["$s.$i"] = 'exists:sectors,id';
                 }
@@ -155,7 +158,7 @@ class UpdateFacilityRepositoryRequest extends Request
                 $r["$p.website"] = '';
                 
                 // Contacts section. Contacts are optional.
-                $r[$c] = 'array';
+                $r[$c] = 'array|between:1,10';
                 $contacts = $this->instance()->input($c);
                 if (is_array($contacts)) {
                     $length = count($contacts);              
@@ -170,7 +173,7 @@ class UpdateFacilityRepositoryRequest extends Request
                 }
                 
                 // Equipment section
-                $r[$e] = 'required|array';
+                $r[$e] = 'required|array|between:1,50';
                 $equipment = $this->instance()->input($e);
                 $length = count($equipment);              
                 for ($i = 0; $i < $length; $i++) {
