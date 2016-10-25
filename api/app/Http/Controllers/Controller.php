@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Schema;
 
 // Misc.
+use Auth;
 use Carbon\Carbon;
 use Log;
 
@@ -71,13 +72,13 @@ abstract class Controller extends BaseController
     }
     
     /**
-     * Database order by operation.
+     * Database 'order by' operation.
      * @param {string} $table Name of table the operation should be performed
      *     on.
      * @param {Eloquent model} $model Model the operation will be performed on.
      */
     protected function orderBy($table, $model)
-    {        
+    {
         foreach($this->orderByAsc as $column) {
             if (Schema::hasColumn($table, $column)) {
                 $model->orderBy($column, 'asc');
@@ -110,11 +111,17 @@ abstract class Controller extends BaseController
      * Returns an Eloquent model after a paginate() or get() method is applied
      * to the model.
      * @param {Eloquent model} $model
-     * @toCcArray {bool} If set to true, a camel-cased array is returned.
-     *     Otherwise the Eloquent model is returned.
+     * @param {bool=true} $toCcArray  If set to true, a camel-cased array is 
+     *     returned. Otherwise the Eloquent model is returned.
+     * @param {string=null} $orderBy If set to the model's table name, it will
+     *     will call the `orderBy()` method.
      */
-    protected function pageOrGet($model, $toCcArray = true)
+    protected function pageOrGet($model, $toCcArray = true, $orderBy = null)
     {
+        if ($orderBy) {
+            $this->orderBy($orderBy, $model);
+        }
+
         if ($this->paginate) {
             $model = $model->paginate($this->itemsPerPage);
         } else {
@@ -131,5 +138,15 @@ abstract class Controller extends BaseController
     {
         $now = Carbon::now();
         return $toDateTimeString ? $now->toDateTimeString() : $now;
+    }
+
+    protected function isSuperAdmin($strict = false)
+    {
+        return Auth::check() && Auth::user()->isSuperAdmin($strict);
+    }
+    
+    protected function isAdmin($strict = false)
+    {
+        return Auth::check() && Auth::user()->isAdmin($strict);
     }
 }

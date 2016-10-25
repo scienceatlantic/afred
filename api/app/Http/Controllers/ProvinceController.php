@@ -101,6 +101,12 @@ class ProvinceController extends Controller
     public function destroy(ProvinceRequest $request, $id)
     {
         $p = Province::findOrFail($id);
+
+        // Make sure that the province does not have any facilities.
+        if ($p->facilities()->first()) {
+            abort(400);
+        }
+
         $deletedProvince = $p->toArray();
         $p->delete();
         return $this->toCcArray($deletedProvince);

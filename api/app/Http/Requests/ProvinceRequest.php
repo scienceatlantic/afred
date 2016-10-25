@@ -34,7 +34,7 @@ class ProvinceRequest extends Request
                 // No break.
             case 'POST':
                 $r['name'] = 'required';
-                $r['isHidden'] = 'digits_between:0,1';
+                $r['isHidden'] = 'required|numeric|between:0,1';
                 break;
         }
         return $r;

@@ -27,8 +27,7 @@ class UserRequest extends Request
                 return $this->isAdmin();
             // All other methods require that the authenticated user be at least 
             // an admin. The authenticated user is not allowed to 
-            // create/edit/delete a user of a higher permission level. 
-            case 'POST':
+            // create/edit/delete a user of a higher permission level.
             case 'PUT':
                 if ($this->isAdmin()) {
                     // If updating user password.
@@ -38,11 +37,14 @@ class UserRequest extends Request
                             ->getMaxPermission();
                         return $maxAuthRole >= $maxUserRole;
                     }
-                    // If updating other user data.
+                }
+                // No break.
+            case 'POST':
+                if ($this->isAdmin()) {
                     $roleIds = $this->instance()->input('roles', [-1]);
                     $maxAuthRole = Auth::user()->getMaxPermission();
                     $maxAssignRole = Role::maxPermission($roleIds);
-                    if ($maxAssignRole !== -1) {
+                    if ($maxAuthRole !== -1 && $maxAssignRole !== -1) {
                         return $maxAuthRole >= $maxAssignRole;
                     }
                 }
@@ -95,7 +97,7 @@ class UserRequest extends Request
                 if ($this->method() == 'POST') {
                     $r['password'] = 'required|between:8,16';
                 }
-                $r['isActive'] = 'required|digits_between:0,1';
+                $r['isActive'] = 'required|numeric|between:0,1';
                 $r['roles'] = 'required|array';
                 $roles = $this->instance()->input('roles', []);
                 $length = count($roles);

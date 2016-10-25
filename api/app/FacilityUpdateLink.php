@@ -42,7 +42,7 @@ class FacilityUpdateLink extends Model
      * Relationship between facility update link and its facility repository
      * after it has been reviewed.
      */
-    public function frA()
+    public function updatedFr()
     {
         return $this->belongsTo('App\FacilityRepository', 'frIdAfter');
     }    
@@ -51,7 +51,7 @@ class FacilityUpdateLink extends Model
      * Relationship between facility update link and its facility repository
      * before it has been reviewed.
      */
-    public function frB()
+    public function originalFr()
     {
         return $this->belongsTo('App\FacilityRepository', 'frIdBefore');
     }

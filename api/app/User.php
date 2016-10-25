@@ -218,12 +218,22 @@ class User extends Model implements AuthenticatableContract,
         if ($role = $this->roles()->where('name', $role)->first()) {
             return $role->permission;
         }
+        Log::warning('`User::getPermission()` returning -1.', [
+            'user'  => $this->toArray(),
+            'roles' => $this->roles()->get()->toArray()
+        ]);
         return -1;
     }
 
     public function getMaxPermission()
     {
-         return $this->roles()->orderBy('permission', 'desc')->first()
-            ->permission;     
+        if ($role = $this->roles()->orderBy('permission', 'desc')->first()) {
+            return $role->permission;
+        }
+        Log::warning('`User::getMaxPermission()` returning -1.', [
+            'user'  => $this->toArray(),
+            'roles' => $this->roles()->get()->toArray()
+        ]);
+        return -1;
     }
 }

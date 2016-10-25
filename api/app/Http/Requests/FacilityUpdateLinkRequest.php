@@ -21,17 +21,20 @@ class FacilityUpdateLinkRequest extends Request
     public function authorize()
     {
         switch($this->method()) {
+            case 'GET':
+                return $this->isAdmin();
             // A new token is being opened.
             case 'POST':
                 return true;
-            case 'PUT':            
-            case 'DELETE':
-                // Only allowed to update/delete a record that is 'OPEN'.
+            // Only allowed to close/delete a record that is 'OPEN'. 
+            case 'PUT':
+                // No break.              
+            case 'DELETE':                
                 $id = Route::input('facility_update_links');
                 $ful = FacilityUpdateLink::findOrFail($id);
                 return $ful->status == 'OPEN' && $this->isAdmin();
             default:
-                return $this->isAdmin();            
+                return false;           
         }
     }
 
@@ -49,9 +52,9 @@ class FacilityUpdateLinkRequest extends Request
                 $r['email'] = '';
                 $r['isAdmin'] = '';
                 break;
-            
             case 'PUT':
                 $r['status'] = 'regex:/CLOSED/';
+                break;
         }
         return $r;
     }

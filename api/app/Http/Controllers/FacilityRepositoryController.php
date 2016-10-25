@@ -86,10 +86,10 @@ class FacilityRepositoryController extends Controller
     public function show(ShowFacilityRepositoryRequest $request, $id)
     {
         $fr = FacilityRepository::with([
-            'fulB' => function($query) {
+            'updateRequests' => function($query) {
                 $query->notClosed();
             },
-            'fulA' => function($query) {
+            'originRequest' => function($query) {
                 $query->notClosed();
             },
             'reviewer',
@@ -111,11 +111,15 @@ class FacilityRepositoryController extends Controller
     { 
         // Grab the current datetime.
         $now = $this->now();
-        
+
         // Grab the existing Facility Repository record (ie. state !=
         // PENDING_APPROVAL) otherwise create a new one.
-        $fr = FacilityRepository::findOrNew($id);
-        
+        if ($request->input('state') == 'PENDING_APPROVAL') {
+            $fr = new FacilityRepository();
+        } else {
+            $fr = FacilityRepository::findOrFail($id);
+        }
+
         // Set/Update the Facility Repository's state.
         $fr->state = $request->input('state');
         
@@ -147,9 +151,9 @@ class FacilityRepositoryController extends Controller
                 // before we make a copy to store the edited data (we still
                 // need its facility id and link to the facility update link
                 // record).
-                $frBeforeUpdate = $fr;
+                $originalFr = $fr;
                 $fr = new FacilityRepository();
-                $fr->facilityId = $frBeforeUpdate->facilityId;
+                $fr->facilityId = $originalFr->facilityId;
                 $fr->state = 'PENDING_EDIT_APPROVAL';
                 $fr->data = $this->formatFrData($request, true);
                 $fr->dateSubmitted = $now;
@@ -158,7 +162,7 @@ class FacilityRepositoryController extends Controller
                 // Mark the facility update link record as pending and update
                 // its 'frIdAfter' column with the id of the new facility
                 // repository record.
-                $ful = $frBeforeUpdate->fulB()->open()->first();
+                $ful = $originalFr->updateRequests()->open()->first();
                 $ful->frIdAfter = $fr->id;
                 $ful->status = 'PENDING';
                 $ful->datePending = $now;
@@ -172,7 +176,7 @@ class FacilityRepositoryController extends Controller
                 $fr->update();
                 
                 // Admin has reviewed the record, close the token.
-                $ful = $fr->fulA()->pending()->first();
+                $ful = $fr->originRequest()->pending()->first();
                 $ful->status = 'CLOSED';
                 $ful->dateClosed = $now;
                 $ful->update();
@@ -185,7 +189,7 @@ class FacilityRepositoryController extends Controller
                 
                 // Like 'PUBLISHED_EDIT', the admin has reviewed the record,
                 // close it.
-                $ful = $fr->fulA()->pending()->first();
+                $ful = $fr->originRequest()->pending()->first();
                 $ful->status = 'CLOSED';
                 $ful->dateClosed = $now;
                 $ful->update();
@@ -196,8 +200,8 @@ class FacilityRepositoryController extends Controller
         event(new FacilityRepositoryEvent($fr, $ful));
         
         // Return the updated record.
-        $f = FacilityRepository::with('reviewer', 'facility')->find($fr->id);
-        return $this->toCcArray($f->toArray());
+        $fr = FacilityRepository::with('reviewer', 'facility')->find($fr->id);
+        return $this->toCcArray($fr->toArray());
     }
 
     private function formatFrData($r, $isUpdate = false)
@@ -209,7 +213,8 @@ class FacilityRepositoryController extends Controller
         // If an organizationId was provided, skip this part (meaning an
         // exising organization was selected). If an organizationId was not
         // provided, store the details (ie. name) in $d.
-        if (!$r->data['facility']['organizationId']) {
+        if (!array_key_exists('organizationId', $r->data['facility'])
+            || !$r->data['facility']['organizationId']) {
             $o = new Organization($r->data['organization']);
             $d['organization'] = $o->toArray();
         }

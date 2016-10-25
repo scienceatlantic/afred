@@ -384,7 +384,7 @@ angular.module('afredApp').controller('AdminFacilitiesShowController', [
       
       // If the facility has an open/pending update request, prevent the user
       // from opening a new one.
-      if ($scope.fr.fulB.length) {
+      if ($scope.fr.updateRequests.length) {
         warningModal.open(t + '-not-allowed');
         return;
       }
@@ -422,7 +422,7 @@ angular.module('afredApp').controller('AdminFacilitiesShowController', [
      * confirmModal
      * infoModal
      * warningModal
-     * $scope.fr.fulB.length
+     * $scope.fr.updateRequests.length
      * $scope.fr.facilityId
      * facilityResource
      * $scope.getFacilityRepository()
@@ -433,7 +433,7 @@ angular.module('afredApp').controller('AdminFacilitiesShowController', [
       
       // If the facility has an open/pending update request, prevent the user
       // from deleting the facility.
-      if ($scope.fr.fulB.length) {
+      if ($scope.fr.updateRequests.length) {
         warningModal.open(t + '-not-allowed');
         return;
       }

@@ -109,7 +109,7 @@ class FacilityController extends Controller
 
         // Not allowed to delete a facility if it has an open/pending update
         // request.
-        if ($f->currentRevision()->first()->fulB()->notClosed()->first()) {
+        if ($f->currentRevision()->first()->updateRequests()->notClosed()->first()) {
             abort(400);
         }
         
