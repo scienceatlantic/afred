@@ -146,56 +146,57 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
             default:
                 return (object) $ful;
         }
-    }     
+    }
 
     protected static function createFrDataAttr(
-        $numC = self::DEF_NUM_CONTACTS_IN_FR_DATA_ATTR, 
-        $numD = self::DEF_NUM_DISCIPLINES_IN_FR_DATA_ATTR, 
-        $numE = self::DEF_NUM_EQUIPMENT_IN_FR_DATA_ATTR, 
-        $numF = self::DEF_NUM_FACILITIES_IN_FR_DATA_ATTR, 
-        $numPC = self::DEF_NUM_PRIMARY_CONTACTS_IN_FR_DATA_ATTR, 
-        $numS = self::DEF_NUM_SECTORS_IN_FR_DATA_ATTR)
+        $numContacts = self::DEF_NUM_CONTACTS_IN_FR_DATA_ATTR, 
+        $numDisciplines = self::DEF_NUM_DISCIPLINES_IN_FR_DATA_ATTR, 
+        $numEquipment = self::DEF_NUM_EQUIPMENT_IN_FR_DATA_ATTR, 
+        $numFacilities = self::DEF_NUM_FACILITIES_IN_FR_DATA_ATTR, 
+        $numPrimaryContacts = self::DEF_NUM_PRIMARY_CONTACTS_IN_FR_DATA_ATTR, 
+        $numSectors = self::DEF_NUM_SECTORS_IN_FR_DATA_ATTR)
     {
         $data = [];
 
-        // Aliases to shorten code.
-        $c = App\Contact::class;
-        $d = App\Discipline::class;
-        $e = App\Equipment::class;
-        $f = App\Facility::class;
-        $o = App\Organization::class;
-        $pc = App\PrimaryContact::class;
-        $p = App\Province::class;
-        $s = App\Sector::class;
-
-        if ($numC == 1) {
-            $data['contacts'] = [factory($c, $numC)->make()->toArray()];
+        if ($numContacts == 1) {
+            $data['contacts'] = [
+                factory(App\Contact::class, $numContacts)->make()->toArray()
+            ];
         }
-        else if ($numC) {
-            $data['contacts'] = factory($c, $numC)->make()->toArray();
-        }
-        if ($numD) {
-            $data['disciplines'] = factory($d, $numD)->create()->pluck('id')
-                ->toArray();         
-        }
-        if ($numE == 1) {
-            $data['equipment'] = [factory($e, $numE)->make()->toArray()];
-        }
-        else if ($numE) {
-            $data['equipment'] = factory($e, $numE)->make()->toArray();
-        }
-        if ($numF) {
-            $data['facility'] = factory($f, $numF)->make([
-                'organizationId' => factory($o)->create()->id,
-                'provinceId' => factory($p)->create()->id
-            ])->toArray();
-        }
-        if ($numPC) {
-            $data['primaryContact'] = factory($pc, $numPC)->make()->toArray();
-        }
-        if ($numS) {
-            $data['sectors'] = factory($s, $numS)->create()->pluck('id')
+        else if ($numContacts) {
+            $data['contacts'] = factory(App\Contact::class, $numContacts)->make()
                 ->toArray();
+        }
+        if ($numDisciplines) {
+            $data['disciplines'] = factory(App\Discipline::class, 'withDates', 
+                $numDisciplines)->create()->pluck('id')->toArray();         
+        }
+        if ($numEquipment == 1) {
+            $data['equipment'] = [
+                factory(App\Equipment::class, $numEquipment)->make()->toArray()
+            ];
+        }
+        else if ($numEquipment) {
+            $data['equipment'] = factory(App\Equipment::class, $numEquipment)
+                ->make()->toArray();
+        }
+        if ($numFacilities) {
+            $data['facility'] = factory(App\Facility::class, $numFacilities)
+                ->make([
+                    'organizationId' => factory(App\Organization::class,
+                        'withDates')->create()->id,
+                    'provinceId' => factory(App\Province::class,
+                        'withDates')->create()->id
+                ]
+            )->toArray();
+        }
+        if ($numPrimaryContacts) {
+            $data['primaryContact'] = factory(App\PrimaryContact::class, 
+                $numPrimaryContacts)->make()->toArray();
+        }
+        if ($numSectors) {
+            $data['sectors'] = factory(App\Sector::class, 'withDates', 
+                $numSectors)->create()->pluck('id')->toArray();
         }
 
         return $data;
