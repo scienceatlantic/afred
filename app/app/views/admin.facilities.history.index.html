@@ -5,38 +5,42 @@
     <p>Nothing found.</p>
   </div>
   
-  <div data-ng-show="history.resource.data.length">    
+  <div data-ng-if="history.resource.data.length">    
     <ol start="{{ (history.resource.perPage * (history.resource.currentPage - 1) + 1)  }}">
-      <li data-dir-paginate="f in history.resource.data | itemsPerPage: history.resource.perPage" data-total-items="history.resource.total" data-current-page="history.form.data.page">
-        <p><a data-ui-sref="admin.facilities.show({ facilityRepositoryId: f.id })">{{ f.data.facility.name }}</a></p>
+      <li data-dir-paginate="f in history.resource.data | itemsPerPage: history.resource.perPage" 
+          data-total-items="history.resource.total" 
+          data-current-page="history.form.data.page">
+        <p>
+          <a data-ui-sref="admin.facilities.show({ facilityRepositoryId: f.id })">{{ f.data.facility.name }}</a>
+        </p>
   
         <p>
           <b>
             <!-- Current published revision. -->
-            <span class="text-success" data-ng-show="f.publishedFacility.id">
+            <span class="text-success" data-ng-if="f.publishedFacility.id">
               CURRENT PUBLISHED REVISION
             </span>
 
             <!-- Previous published revision. -->
-            <span class="text-warning" data-ng-show="!f.publishedFacility.id && f.state != 'PENDING_EDIT_APPROVAL' && f.facility.id && f.state != 'REJECTED_EDIT'">
+            <span class="text-warning" data-ng-if="!f.publishedFacility.id && f.state != 'PENDING_EDIT_APPROVAL' && f.facility.id && f.state != 'REJECTED_EDIT'">
               PREVIOUS PUBLISHED REVISION
             </span>
 
             <!-- Pending edit approval. -->
-            <span class="text-info" data-ng-show="f.state == 'PENDING_EDIT_APPROVAL'">
+            <span class="text-info" data-ng-if="f.state == 'PENDING_EDIT_APPROVAL'">
               PENDING EDIT APPROVAL
             </span>
 
             <!-- Rejected edit. -->
-            <span class="text-danger" data-ng-show="f.facility.id && f.state == 'REJECTED_EDIT'">
+            <span class="text-danger" data-ng-if="f.facility.id && f.state == 'REJECTED_EDIT'">
               REJECTED EDIT
             </span>
 
             <!-- Deleted. -->
-            <span class="text-danger" data-ng-show="!f.facility.id">
+            <span class="text-danger" data-ng-if="!f.facility.id">
               DELETED
-              <span class="label label-default" data-ng-show="f.state == 'PUBLISHED_EDIT'">Edit</span>
-              <span class="label label-default" data-ng-show="f.state == 'REJECTED_EDIT'">Rejected edit</span>
+              <span class="label label-default" data-ng-if="f.state == 'PUBLISHED_EDIT'">Edit</span>
+              <span class="label label-default" data-ng-if="f.state == 'REJECTED_EDIT'">Rejected edit</span>
             </span>
           </b>
         </p>
@@ -46,6 +50,9 @@
       </li>
     </ol>
 
-    <div data-dir-pagination-controls data-on-page-change="_state.go('admin.facilities.history.index', { page: history.form.data.page })" data-auto-hide="false"></div>
+    <div data-dir-pagination-controls 
+         data-on-page-change="_state.go('admin.facilities.history.index', { page: history.form.data.page })" 
+         data-auto-hide="false">
+    </div>
   </div>
 </div>

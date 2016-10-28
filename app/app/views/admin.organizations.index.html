@@ -1,22 +1,27 @@
 <div data-af-loading="!organizations.resource.$resolved">
   <hr>
   
-  <div data-ng-hide="organizations.resource.data.length">
+  <div data-ng-if="!organizations.resource.data.length">
     <p>Nothing found.</p>
   </div>
   
-  <div data-ng-show="organizations.resource.data.length">
+  <div data-ng-if="organizations.resource.data.length">
     <ol start="{{ (organizations.resource.perPage * (organizations.resource.currentPage - 1) + 1)  }}">
-      <li data-dir-paginate="o in organizations.resource.data | itemsPerPage: organizations.resource.perPage" data-total-items="organizations.resource.total" data-current-page="organizations.form.data.page">
+      <li data-dir-paginate="o in organizations.resource.data | itemsPerPage: organizations.resource.perPage" 
+          data-total-items="organizations.resource.total" 
+          data-current-page="organizations.form.data.page">
         <p>
           <a data-ui-sref="admin.organizations.show({ organizationId: o.id })">{{ o.name }}</a>
-          <span data-ng-show="o.ilo.firstName" class="label label-info">{{ o.ilo.firstName }} {{ o.ilo.lastName }}</span>
-          <span data-ng-show="o.isHidden" class="label label-warning">Hidden</span>
+          <span data-ng-if="o.ilo.firstName" class="label label-info">{{ o.ilo.firstName }} {{ o.ilo.lastName }}</span>
+          <span data-ng-if="o.isHidden" class="label label-warning">Hidden</span>
         </p>
       </li>
     </ol>
 
-    <div data-dir-pagination-controls data-on-page-change="_state.go('admin.organizations.index', { page: organizations.form.data.page })" data-auto-hide="false"></div>
+    <div data-dir-pagination-controls 
+         data-on-page-change="_state.go('admin.organizations.index', { page: organizations.form.data.page })" 
+         data-auto-hide="false">
+    </div>
   </div>
   
   <p>

@@ -10,7 +10,11 @@
     </div>
     
     <div data-af-field data-af-field-label="Is hidden*">
-      <select class="form-control" name="organizationVisibility" data-ng-model="organization.isHidden" data-ng-options="i.value as i.key for i in [{ key: 'Yes', value: 1 }, { key: 'No', value: 0 }]" required>
+      <select class="form-control" 
+              name="organizationVisibility" 
+              data-ng-model="organization.isHidden" 
+              data-ng-options="i.value as i.key for i in [{ key: 'Yes', value: 1 }, { key: 'No', value: 0 }]" 
+              required>
       </select>
     </div>
     
@@ -23,14 +27,33 @@
     </div>
     
     <p>
-      <button class="btn btn-default btn-sm" data-ng-disabled="organizationForm.$pristine || organizationForm.$invalid || loading.update || loading.remove || loading.createIlo || loading.updateIlo || loading.removeIlo" data-ng-click="update(organizationForm)">Update <span class="fa fa-check"></span></button>
-      <button class="btn btn-default btn-sm" data-ng-click="remove()" data-ng-disabled="loading.update || loading.remove || loading.createIlo || loading.updateIlo || loading.removeIlo">Delete <span class="fa fa-close"></span></button>
+      <button class="btn btn-default btn-sm" 
+              data-ng-disabled="organizationForm.$pristine 
+                                || organizationForm.$invalid 
+                                || loading.update 
+                                || loading.remove 
+                                || loading.createIlo 
+                                || loading.updateIlo 
+                                || loading.removeIlo" 
+              data-ng-click="update(organizationForm)">
+        Update <span class="fa fa-check"></span>
+      </button>
+
+      <button class="btn btn-default btn-sm" 
+              data-ng-click="remove()" 
+              data-ng-disabled="loading.update 
+                                || loading.remove 
+                                || loading.createIlo 
+                                || loading.updateIlo 
+                                || loading.removeIlo">
+        Delete <span class="fa fa-close"></span>
+      </button>
     </p>
   </form>
   
   <hr>
   
-  <h3>Industry Liaison Officer</h3>
+  <h2 class="h3">Industry Liaison Officer</h2>
   <br>
   <form name="iloForm" class="form-horizontal" role="form" novalidate>
     <div data-af-field data-af-field-label="ID*" data-ng-if="ilo.id">
@@ -78,9 +101,42 @@
     </div>
     
     <p>
-      <button class="btn btn-default btn-sm" data-ng-disabled="iloForm.$pristine || iloForm.$invalid || loading.update || loading.remove || loading.createIlo || loading.updateIlo || loading.removeIlo" data-ng-click="createIlo(iloForm)" data-ng-show="!ilo.id">Add <span class="fa fa-plus"></span></button>
-      <button class="btn btn-default btn-sm" data-ng-disabled="iloForm.$pristine || iloForm.$invalid || loading.update || loading.remove || loading.createIlo || loading.updateIlo || loading.removeIlo" data-ng-click="updateIlo(iloForm)" data-ng-show="ilo.id">Update <span class="fa fa-check"></span></button>
-      <button class="btn btn-default btn-sm" data-ng-click="removeIlo()" data-ng-disabled="loading.update || loading.remove || loading.createIlo || loading.updateIlo || loading.removeIlo" data-ng-show="ilo.id">Remove ILO <span class="fa fa-close"></span></button>
+      <button class="btn btn-default btn-sm" 
+              data-ng-disabled="iloForm.$pristine 
+                                || iloForm.$invalid 
+                                || loading.update 
+                                || loading.remove 
+                                || loading.createIlo 
+                                || loading.updateIlo 
+                                || loading.removeIlo" 
+              data-ng-click="createIlo(iloForm)" 
+              data-ng-if="!ilo.id">
+        Add <span class="fa fa-plus"></span>
+      </button>
+
+      <button class="btn btn-default btn-sm" 
+              data-ng-disabled="iloForm.$pristine 
+                                || iloForm.$invalid 
+                                || loading.update 
+                                || loading.remove 
+                                || loading.createIlo 
+                                || loading.updateIlo 
+                                || loading.removeIlo" 
+              data-ng-click="updateIlo(iloForm)" 
+              data-ng-if="ilo.id">
+        Update <span class="fa fa-check"></span>
+      </button>
+
+      <button class="btn btn-default btn-sm" 
+              data-ng-click="removeIlo()" 
+              data-ng-disabled="loading.update 
+                                || loading.remove 
+                                || loading.createIlo 
+                                || loading.updateIlo 
+                                || loading.removeIlo" 
+              data-ng-if="ilo.id">
+        Remove ILO <span class="fa fa-close"></span>
+      </button>
     </p>
   </form>
 </div>

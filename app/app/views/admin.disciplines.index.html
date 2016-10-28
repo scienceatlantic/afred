@@ -1,20 +1,26 @@
 <div data-af-loading="!disciplines.resource.$resolved">
   <hr>
   
-  <div data-ng-hide="disciplines.resource.data.length">
+  <div data-ng-if="!disciplines.resource.data.length">
     <p>Nothing found.</p>
   </div>
   
-  <div data-ng-show="disciplines.resource.data.length">
+  <div data-ng-if="disciplines.resource.data.length">
     <ol start="{{ (disciplines.resource.perPage * (disciplines.resource.currentPage - 1) + 1)  }}">
-      <li data-dir-paginate="d in disciplines.resource.data | itemsPerPage: disciplines.resource.perPage" data-total-items="disciplines.resource.total" data-current-page="disciplines.form.data.page">
+      <li data-dir-paginate="d in disciplines.resource.data | itemsPerPage: disciplines.resource.perPage" 
+          data-total-items="disciplines.resource.total" 
+          data-current-page="disciplines.form.data.page">
+
         <p>
           <a data-ui-sref="admin.disciplines.show({ disciplineId: d.id })">{{ d.name }}</a>
         </p>
       </li>
     </ol>
 
-    <div data-dir-pagination-controls data-on-page-change="_state.go('admin.disciplines.index', { page: disciplines.form.data.page })" data-auto-hide="false"></div>
+    <div data-dir-pagination-controls 
+         data-on-page-change="_state.go('admin.disciplines.index', { page: disciplines.form.data.page })" 
+         data-auto-hide="false">
+    </div>
   </div>
   
   <p>

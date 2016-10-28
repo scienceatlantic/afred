@@ -1,59 +1,78 @@
 <p data-af-page-title="Admin / Facilities"></p>
 
-<h1>
+<h1 class="h3">
   <!-- Breadcrumbs. -->
   Admin / Facilities
+
   <!-- Facility state. -->
-  <span data-ng-show="_stateParams.state">
+  <span data-ng-if="_stateParams.state">
     /
-    <span data-ng-show="_stateParams.state == 'PUBLISHED'">Published
+    <span data-ng-if="_stateParams.state == 'PUBLISHED'">Published
       <span>-
-        <span data-ng-show="_stateParams.visibility == 1">Public</span>
-        <span data-ng-show="_stateParams.visibility == 0">Private</span>
+        <span data-ng-if="_stateParams.visibility == 1">Public</span>
+        <span data-ng-if="_stateParams.visibility == 0">Private</span>
       </span>
     </span>
-    <span data-ng-show="_stateParams.state == 'PENDING_APPROVAL'">Pending Approval</span>
-    <span data-ng-show="_stateParams.state == 'REJECTED'">Rejected</span>
-    <span data-ng-show="_stateParams.state == 'DELETED'">Deleted</span>
+
+    <span data-ng-if="_stateParams.state == 'PENDING_APPROVAL'">Pending Approval</span>
+    <span data-ng-if="_stateParams.state == 'REJECTED'">Rejected</span>
+    <span data-ng-if="_stateParams.state == 'DELETED'">Deleted</span>
   </span>
-  <span data-ng-show="_stateParams.facilityRepositoryId">
+
+  <!-- Facility Repository ID. -->
+  <span data-ng-if="_stateParams.facilityRepositoryId">
     / Facility Repository ID: {{ _stateParams.facilityRepositoryId }}
   </span>
-  <span data-ng-show="_state.current.name == 'admin.facilities.updates' || _state.current.name == 'admin.'">
+
+  <!-- Facility Update Requests. -->
+  <span data-ng-if="_state.includes('admin.facilities.updates')">
     / Update Requests
-    <span data-ng-show="_stateParams.status == 'OPEN'">/ Open</span>
-    <span data-ng-show="_stateParams.status == 'PENDING'">/ Pending</span>
-    <span data-ng-show="_stateParams.status == 'CLOSED'">/ Closed</span>
+    <span data-ng-if="_stateParams.status == 'OPEN'">/ Open</span>
+    <span data-ng-if="_stateParams.status == 'PENDING'">/ Pending</span>
+    <span data-ng-if="_stateParams.status == 'CLOSED'">/ Closed</span>
   </span>
   
   <!-- Facility history -->
-  <span data-ng-show="_stateParams.facilityId">
+  <span data-ng-if="_stateParams.facilityId">
     / Facility ID: {{ _stateParams.facilityId }} / History
   </span>
+
+  <!-- Compare. -->
+  <span data-ng-if="_state.is('admin.facilities.compare')">
+    / Compare / ({{ _stateParams.editedFrId }}, {{ _stateParams.originalFrId }})
+  </span>  
 </h1>
 
 <!-- Only show this portion if we're in admin.facilities or admin.facilities.index -->
-<div class="row" data-ng-show="_state.current.name == 'admin.facilities' || _state.current.name == 'admin.facilities.index'"> 
-  <div class="col-md-5">
-    <div class="form-group">
-      <label for="state">State:</label>
-      <select class="form-control input-sm" name="state" id="state" data-ng-model="facilities.form.data.state" data-ng-change="facilities.index(true)">
-        <option value="PENDING_APPROVAL">Pending Approval</option>
-        <option value="PUBLISHED">Published</option>
-        <option value="REJECTED">Rejected</option>
-        <option value="DELETED">Deleted</option>
-      </select>
-    </div>
-    
-    <div class="form-group" data-ng-show="facilities.form.data.state == 'PUBLISHED'">
-      <label for="state">Visibility:</label>
-      <select class="form-control input-sm" name="visibility" id="visibility" data-ng-model="facilities.form.data.visibility" data-ng-options="v.value as v.label for v in [{ value: 1, label: 'Public' }, { value: 0, label: 'Private' }]" data-ng-change="facilities.index()"></select>
+<div data-ng-if="_state.current.name == 'admin.facilities' || _state.current.name == 'admin.facilities.index'">
+  <div class="row"> 
+    <div class="col-md-5">
+      <div class="form-group">
+        <label for="state">State:</label>
+        <select class="form-control input-sm" name="state" id="state" data-ng-model="facilities.form.data.state" data-ng-change="facilities.index(true)">
+          <option value="PENDING_APPROVAL">Pending Approval</option>
+          <option value="PUBLISHED">Published</option>
+          <option value="REJECTED">Rejected</option>
+          <option value="DELETED">Deleted</option>
+        </select>
+      </div>
+      
+      <div class="form-group" data-ng-if="facilities.form.data.state == 'PUBLISHED'">
+        <label for="state">Visibility:</label>
+        <select class="form-control input-sm" 
+                name="visibility" 
+                id="visibility" 
+                data-ng-model="facilities.form.data.visibility" 
+                data-ng-options="v.value as v.label for v in [{ value: 1, label: 'Public' }, { value: 0, label: 'Private' }]" 
+                data-ng-change="facilities.index()">
+        </select>
+      </div>
     </div>
   </div>
-</div>
 
-<div data-ng-show="_state.current.name == 'admin.facilities' || _state.current.name == 'admin.facilities.index'">
-  <p><a data-ui-sref="admin.facilities.updates">View update requests</a></p>
+  <p>
+    <a data-ui-sref="admin.facilities.updates">View update requests</a>
+  </p>
 </div>
 
 <!-- Child state container -->

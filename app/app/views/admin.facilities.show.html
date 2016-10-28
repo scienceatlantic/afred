@@ -1,4 +1,8 @@
-<div data-af-loading="!fr.$resolved || (!facility.organization.$resolved && !facility.organization.name) || !facility.province.$resolved || loading.disciplines || loading.sectors">
+<div data-af-loading="!fr.$resolved 
+                      || (!facility.organization.$resolved && !facility.organization.name) 
+                      || !facility.province.$resolved 
+                      || loading.disciplines 
+                      || loading.sectors">
   <hr>
   <!-- Record information. -->
   <div>
@@ -14,60 +18,76 @@
         <p>
           <b>
             <!-- Pending. -->
-            <span class="text-info" data-ng-show="facility.state == 'PENDING_APPROVAL'">PENDING APPROVAL</span>
-            <span class="text-info" data-ng-show="facility.state == 'PENDING_EDIT_APPROVAL'">PENDING EDIT APPROVAL</span>
+            <span class="text-info" 
+                  data-ng-if="facility.state == 'PENDING_APPROVAL'">
+              PENDING APPROVAL
+            </span>
+            <span class="text-info" 
+                  data-ng-if="facility.state == 'PENDING_EDIT_APPROVAL'">
+              PENDING EDIT APPROVAL
+            </span>
             
             <!-- Published and current. -->
-            <span class="text-success" data-ng-show="(facility.state == 'PUBLISHED' || facility.state == 'PUBLISHED_EDIT') && fr.publishedFacility.id && fr.facility.id">
+            <span class="text-success" 
+                  data-ng-if="(facility.state == 'PUBLISHED' || facility.state == 'PUBLISHED_EDIT') && fr.publishedFacility.id && fr.facility.id">
               CURRENT PUBLISHED REVISION
             </span>
             
             <!-- Published but old. -->
-            <span class="text-warning" data-ng-show="(facility.state == 'PUBLISHED' || facility.state == 'PUBLISHED_EDIT') && !fr.publishedFacility.id && fr.facility.id">
+            <span class="text-warning" 
+                  data-ng-if="(facility.state == 'PUBLISHED' || facility.state == 'PUBLISHED_EDIT') && !fr.publishedFacility.id && fr.facility.id">
               PREVIOUS PUBLISHED REVISION
             </span>
             
             <!-- Rejected. -->
-            <span class="text-danger" data-ng-show="facility.state == 'REJECTED'">
+            <span class="text-danger" 
+                  data-ng-if="facility.state == 'REJECTED'">
               REJECTED
             </span>
             
             <!-- Rejected edit. -->
-            <span class="text-danger" data-ng-show="facility.state == 'REJECTED_EDIT' && fr.facility.id">
+            <span class="text-danger" 
+                  data-ng-if="facility.state == 'REJECTED_EDIT' && fr.facility.id">
               REJECTED EDIT
             </span>
             
             <!-- Deleted. -->
-            <span class="text-danger" data-ng-show="(facility.state != 'PENDING' && facility.state != 'PENDING_APPROVAL' && facility.state != 'REJECTED') && !fr.facility.id">
+            <span class="text-danger" 
+                  data-ng-if="(facility.state != 'PENDING' && facility.state != 'PENDING_APPROVAL' && facility.state != 'REJECTED') && !fr.facility.id">
               DELETED 
-              <span class="label label-default" data-ng-show="facility.state == 'PUBLISHED_EDIT'">Edit</span>
-              <span class="label label-default" data-ng-show="facility.state == 'REJECTED_EDIT'">Rejected edit</span>
+              <span class="label label-default" data-ng-if="facility.state == 'PUBLISHED_EDIT'">Edit</span>
+              <span class="label label-default" data-ng-if="facility.state == 'REJECTED_EDIT'">Rejected edit</span>
             </span>
           </b>
         </p>
         
         <!-- Current revision anchor (only shown if not already viewing current revision). -->
         <p>
-          <span data-ng-show="!fr.publishedFacility.id && fr.facility.id">
-            <a data-ui-sref="admin.facilities.show({ facilityRepositoryId: fr.facility.facilityRepositoryId })">Current published revision</a>
+          <span data-ng-if="!fr.publishedFacility.id && fr.facility.id">
+            <a data-ui-sref="admin.facilities.show({ facilityRepositoryId: fr.facility.facilityRepositoryId })">
+              Current published revision
+            </a>
+            (<a data-ui-sref="admin.facilities.compare({ editedFrId: fr.id, originalFrId: fr.facility.facilityRepositoryId })">Compare</a>)
           </span>
         </p>
         
         <!-- Revision history anchor. -->
         <p>
-          <span data-ng-show="fr.facilityId">
+          <span data-ng-if="fr.facilityId">
             <a data-ui-sref="admin.facilities.history.index({ facilityId: fr.facilityId })">Revision history</a>
           </span>
         </p>
         
         <!-- Published link anchor. -->
         <p>
-          <span data-ng-show="fr.publishedFacility.id">
-            <a data-ui-sref="facilities.show({ facilityId: fr.publishedFacility.id })">Public view</a>
+          <span data-ng-if="fr.publishedFacility.id">
+            <a data-ui-sref="facilities.show({ facilityId: fr.publishedFacility.id })">View public record</a>
           </span>
         </p>
       </div>
     </div>
+
+    <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.sm">
 
     <!-- Search visiblity -->
     <div class="row">
@@ -76,11 +96,13 @@
       </div>
     
       <div class="col-sm-9">
-        <span data-ng-show="(facility.state == 'PUBLISHED' || facility.state == 'PUBLISHED_EDIT') && facility.isPublic">Public</span>
-        <span data-ng-show="(facility.state == 'PUBLISHED' || facility.state == 'PUBLISHED_EDIT') && !facility.isPublic">Private</span>
-        <span class="label label-default" data-ng-show="facility.state != 'PUBLISHED' && facility.state != 'PUBLISHED_EDIT'">N/A</span>        
+        <span data-ng-if="(facility.state == 'PUBLISHED' || facility.state == 'PUBLISHED_EDIT') && facility.isPublic">Public</span>
+        <span data-ng-if="(facility.state == 'PUBLISHED' || facility.state == 'PUBLISHED_EDIT') && !facility.isPublic">Private</span>
+        <span class="label label-default" data-ng-if="facility.state != 'PUBLISHED' && facility.state != 'PUBLISHED_EDIT'">N/A</span>        
       </div>
     </div>
+
+    <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.sm">
     
     <!-- Reviewed by. -->
     <div class="row">
@@ -90,10 +112,12 @@
     
       <div class="col-sm-9">
         {{ fr.reviewer.firstName }} {{ fr.reviewer.lastName }}
-        <span class="label label-default" data-ng-show="!fr.reviewer.firstName">N/A</span>        
+        <span class="label label-default" data-ng-if="!fr.reviewer.firstName">N/A</span>        
       </div>
     </div>
     
+    <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.sm">
+
     <!-- Reviewer message. -->
     <div class="row">
       <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
@@ -102,18 +126,22 @@
     
       <div class="col-sm-9">
         <!-- 
-          -- The 'ngShow' directive prevents the reviewer message from being
-          -- displayed as the admin is typing out the message (since it's 
-          -- updating the actual `$scope.fr` object and not a copy of it) below 
-          -- unless it has already been reviewed.
+             The 'ngShow' directive prevents the reviewer message from being
+             displayed as the admin is typing out the message (since it's 
+             updating the actual `$scope.fr` object and not a copy of it) below 
+             unless it has already been reviewed.
           -->
-        <span data-ng-show="fr.reviewer.firstName">{{ fr.reviewerMessage }}</span>
+        <span data-ng-if="fr.reviewer.firstName">{{ fr.reviewerMessage }}</span>
 
-        <span class="label label-default" data-ng-show="!fr.reviewer.firstName">N/A</span>
-        <span class="label label-default" data-ng-show="fr.reviewer.firstName && !fr.reviewerMessage">No message was provided</span>        
+        <span class="label label-default" data-ng-if="!fr.reviewer.firstName">N/A</span>
+        <span class="label label-default" data-ng-if="fr.reviewer.firstName && !fr.reviewerMessage">
+          No message was provided
+        </span>        
       </div>
     </div>
     
+    <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.sm">
+
     <!-- Date submitted. -->
     <div class="row">
       <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
@@ -125,6 +153,8 @@
       </div>
     </div>
     
+    <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.sm">
+
     <!-- Date reviewed. -->
     <div class="row">
       <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
@@ -132,18 +162,23 @@
       </div>
     
       <div class="col-sm-9">
-        <span data-ng-if="fr.reviewer.firstName">{{ fr.dateReviewed | afStrToDate | date:'medium' }}</span>
-        <span class="label label-default" data-ng-show="!fr.reviewer.firstName">N/A</span>
+        <span data-ng-if="fr.reviewer.firstName">
+          {{ fr.dateReviewed | afStrToDate | date:'medium' }}
+        </span>
+
+        <span class="label label-default" data-ng-if="!fr.reviewer.firstName">N/A</span>
       </div>
   </div> 
-  <br>
-  <br>
   
   <!-- Facility information. -->
-  <div data-af-facility="all" data-af-facility-model="facility" data-af-facility-is-preview="true" data-af-facility-is-new-organization="!(facility.organization.id > 0)"></div>
+  <div data-af-facility="all" 
+      data-af-facility-model="facility" 
+      data-af-facility-is-preview="true" 
+      data-af-facility-is-new-organization="!(facility.organization.id > 0)">
+  </div>
   
   <!-- Code for 'PENDING' and 'PENDING_EDIT_APPROVAL' records. -->
-  <div style="padding: 3px;" data-ng-show="facility.state == 'PENDING_APPROVAL' || facility.state == 'PENDING_EDIT_APPROVAL'">
+  <div style="padding: 3px;" data-ng-if="facility.state == 'PENDING_APPROVAL' || facility.state == 'PENDING_EDIT_APPROVAL'">
     <hr>
     <br>
     
@@ -163,18 +198,134 @@
     
     <!-- Approve/Reject/Approve edit/Reject edit buttons. -->
     <p>
-      <button type="button" class="btn btn-default" data-ng-click="approve();" data-ng-show="facility.state == 'PENDING_APPROVAL'" data-af-loading-btn="loading.approve" data-ng-disabled="loading.approve || loading.reject || loading.approveEdit || loading.rejectEdit || loading.unhide || loading.hide || loading.edit || loading.remove">Approve <span class="fa fa-check"></span></button>
-      <button type="button" class="btn btn-default" data-ng-click="reject();" data-ng-show="facility.state == 'PENDING_APPROVAL'" data-af-loading-btn="loading.reject" data-ng-disabled="loading.approve || loading.reject || loading.approveEdit || loading.rejectEdit || loading.unhide || loading.hide || loading.edit || loading.remove">Reject <span class="fa fa-remove"></span></button>
-      <button type="button" class="btn btn-default" data-ng-click="approveEdit();" data-ng-show="facility.state == 'PENDING_EDIT_APPROVAL'" data-af-loading-btn="loading.approveEdit" data-ng-disabled="loading.approve || loading.reject || loading.approveEdit || loading.rejectEdit || loading.unhide || loading.hide || loading.edit || loading.remove">Approve edit <span class="fa fa-check"></span></button>
-      <button type="button" class="btn btn-default" data-ng-click="rejectEdit();" data-ng-show="facility.state == 'PENDING_EDIT_APPROVAL'" data-af-loading-btn="loading.rejectEdit" data-ng-disabled="loading.approve || loading.reject || loading.approveEdit || loading.rejectEdit || loading.unhide || loading.hide || loading.edit || loading.remove">Reject edit <span class="fa fa-remove"></span></button>    
+      <button type="button" 
+              class="btn btn-default" 
+              data-ng-click="approve();" 
+              data-ng-if="facility.state == 'PENDING_APPROVAL'" 
+              data-af-loading-btn="loading.approve" 
+              data-ng-disabled="loading.approve 
+                                || loading.reject 
+                                || loading.approveEdit 
+                                || loading.rejectEdit 
+                                || loading.unhide 
+                                || loading.hide 
+                                || loading.edit 
+                                || loading.remove">
+        Approve <span class="fa fa-check"></span>
+      </button>
+
+      <button type="button" 
+              class="btn btn-default" 
+              data-ng-click="reject();" 
+              data-ng-if="facility.state == 'PENDING_APPROVAL'" 
+              data-af-loading-btn="loading.reject" 
+              data-ng-disabled="loading.approve 
+                                || loading.reject 
+                                || loading.approveEdit 
+                                || loading.rejectEdit 
+                                || loading.unhide 
+                                || loading.hide 
+                                || loading.edit 
+                                || loading.remove">
+        Reject <span class="fa fa-remove"></span>
+      </button>
+
+      <button type="button" 
+              class="btn btn-default" 
+              data-ng-click="approveEdit();" 
+              data-ng-if="facility.state == 'PENDING_EDIT_APPROVAL'" 
+              data-af-loading-btn="loading.approveEdit"
+              data-ng-disabled="loading.approve 
+                                || loading.reject 
+                                || loading.approveEdit 
+                                || loading.rejectEdit 
+                                || loading.unhide 
+                                || loading.hide 
+                                || loading.edit 
+                                || loading.remove">
+        Approve edit <span class="fa fa-check"></span>
+      </button>
+
+      <button type="button" 
+              class="btn btn-default" 
+              data-ng-click="rejectEdit();" 
+              data-ng-if="facility.state == 'PENDING_EDIT_APPROVAL'" 
+              data-af-loading-btn="loading.rejectEdit" 
+              data-ng-disabled="loading.approve 
+                                || loading.reject 
+                                || loading.approveEdit 
+                                || loading.rejectEdit 
+                                || loading.unhide 
+                                || loading.hide 
+                                || loading.edit 
+                                || loading.remove">
+        Reject edit <span class="fa fa-remove"></span>
+      </button>    
     </p>
   </div>
   
   <!-- Code for current 'PUBLISHED' or 'PUBLISHED_EDIT' records. -->
-  <div data-ng-show="(facility.state == 'PUBLISHED' || facility.state == 'PUBLISHED_EDIT') && fr.publishedFacility.id">
-    <button type="button" class="btn btn-default" data-ng-click="unhide();" data-ng-show="!fr.publishedFacility.isPublic" data-af-loading-btn="loading.unhide" data-ng-disabled="loading.approve || loading.reject || loading.approveEdit || loading.rejectEdit || loading.unhide || loading.hide || loading.edit || loading.remove">Unhide <span class="fa fa-eye"></span></button>
-    <button type="button" class="btn btn-default" data-ng-click="hide();" data-ng-show="fr.publishedFacility.isPublic" data-af-loading-btn="loading.hide" data-ng-disabled="loading.approve || loading.reject || loading.approveEdit || loading.rejectEdit || loading.unhide || loading.hide || loading.edit || loading.remove">Hide <span class="fa fa-eye-slash"></span></button>
-    <button type="button" class="btn btn-default" data-ng-click="edit();" data-af-loading-btn="loading.edit" data-ng-disabled="loading.approve || loading.reject || loading.approveEdit || loading.rejectEdit || loading.unhide || loading.hide || loading.edit || loading.remove">Edit <span class="fa fa-edit"></span></button>
-    <button type="button" class="btn btn-default" data-ng-click="remove();" data-af-loading-btn="loading.remove" data-ng-disabled="loading.approve || loading.reject || loading.approveEdit || loading.rejectEdit || loading.unhide || loading.hide || loading.edit || loading.remove">Delete <span class="fa fa-remove"></span></button>
+  <div data-ng-if="(facility.state == 'PUBLISHED' || facility.state == 'PUBLISHED_EDIT') && fr.publishedFacility.id">
+    <button type="button" 
+            class="btn btn-default" 
+            data-ng-click="unhide()" 
+            data-ng-if="!fr.publishedFacility.isPublic" 
+            data-af-loading-btn="loading.unhide" 
+            data-ng-disabled="loading.approve 
+                              || loading.reject 
+                              || loading.approveEdit 
+                              || loading.rejectEdit 
+                              || loading.unhide 
+                              || loading.hide 
+                              || loading.edit 
+                              || loading.remove">
+      Unhide <span class="fa fa-eye"></span>
+    </button>
+
+    <button type="button" 
+            class="btn btn-default" 
+            data-ng-click="hide()" 
+            data-ng-if="fr.publishedFacility.isPublic" 
+            data-af-loading-btn="loading.hide" 
+            data-ng-disabled="loading.approve 
+                              || loading.reject 
+                              || loading.approveEdit 
+                              || loading.rejectEdit 
+                              || loading.unhide 
+                              || loading.hide 
+                              || loading.edit 
+                              || loading.remove">
+      Hide <span class="fa fa-eye-slash"></span>
+    </button>
+
+    <button type="button" 
+            class="btn btn-default" 
+            data-ng-click="edit()" 
+            data-af-loading-btn="loading.edit" 
+            data-ng-disabled="loading.approve 
+                              || loading.reject 
+                              || loading.approveEdit 
+                              || loading.rejectEdit 
+                              || loading.unhide 
+                              || loading.hide 
+                              || loading.edit 
+                              || loading.remove">
+      Edit <span class="fa fa-edit"></span>
+    </button>
+
+    <button type="button" 
+            class="btn btn-default" 
+            data-ng-click="remove()" 
+            data-af-loading-btn="loading.remove" 
+            data-ng-disabled="loading.approve 
+                              || loading.reject 
+                              || loading.approveEdit 
+                              || loading.rejectEdit 
+                              || loading.unhide 
+                              || loading.hide 
+                              || loading.edit 
+                              || loading.remove">
+      Delete <span class="fa fa-remove"></span>
+    </button>
   </div>
 </div>
