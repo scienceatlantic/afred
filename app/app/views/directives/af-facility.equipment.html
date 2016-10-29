@@ -1,8 +1,10 @@
 <p class="text-muted">
   Equipment
   <!-- Total number of equipment count. -->
-  <span data-ng-hide="_state.is('facilities.show.equipment.show')">
-    <span class="pull-right">Total: <span class="badge">{{ facility.equipment.length }}</span></span>
+  <span data-ng-if="!_state.is('facilities.show.equipment.show')">
+    <span class="pull-right">
+      Total: <span class="badge">{{ facility.equipment.length }}</span>
+    </span>
   </span>
 </p>
 <hr>
@@ -15,42 +17,62 @@
     </div>
 
     <div class="col-sm-9">
-      <span itemprop="name">{{ e.type }}</span>
+      <div itemprop="name">
+        <div data-ng-if="useBindHtml">
+          <div data-ng-bind-html="e.type"></div>
+        </div>
+
+        <div data-ng-if="!useBindHtml">{{ e.type }}</div>
+      </div>
     </div>
 
-    <br data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.sm">
+    <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.sm">
   </div>
   
   <!-- Manufacturer. -->
-  <div class="row" data-ng-show="e.manufacturer || isPreview">
+  <div class="row" data-ng-if="e.manufacturer || isPreview">
     <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
       <label>Manufacturer</label>
     </div>
 
     <div class="col-sm-9">
-      <span itemprop="manufacturer" itemscope itemtype="http://schema.org/Organization">
-        <span itemprop="name">{{ e.manufacturer }}</span>
-      </span> 
+      <div itemprop="manufacturer" itemscope itemtype="http://schema.org/Organization">
+        <div itemprop="name">
+          <div data-ng-if="useBindHtml">
+            <div data-ng-bind-html="e.manufacturer"></div>
+          </div>
+          
+          <div data-ng-if="!useBindHtml">{{ e.manufacturer }}</div>
+        </div>
+      </div> 
+
       <!-- "Blank" label. -->
-      <span class="label label-default" data-ng-show="isPreview && !e.manufacturer">Blank</span>
+      <span class="label label-default" data-ng-if="isPreview && !e.manufacturer">Blank</span>
     </div>
 
-    <br data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.sm">
+    <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.sm">
   </div>
   
   <!-- Model. -->
-  <div class="row" data-ng-show="e.model || isPreview">
+  <div class="row" data-ng-if="e.model || isPreview">
     <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
       <label>Model</label>
     </div>
 
     <div class="col-sm-9">
-      <span itemprop="model">{{ e.model }}</span>
+      <div itemprop="model">
+        <div data-ng-if="useBindHtml">
+          <div data-ng-bind-html="e.model"></div>
+        </div>
+        
+        <div data-ng-if="!useBindHtml">{{ e.model }}</div>
+      </div>
+
       <!-- "Blank" label. -->
-      <span class="label label-default" data-ng-show="isPreview && !e.model">Blank</span>
+      <span class="label label-default" data-ng-if="isPreview && !e.model">Blank</span>
     </div>
 
-    <br data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.sm">
+    <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.sm">
   </div>
   
   <!-- Purpose. -->
@@ -61,11 +83,11 @@
 
     <div class="col-sm-9" data-ng-bind-html="e.purpose" itemprop="description"></div>
 
-    <br data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.sm">
+    <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.sm">
   </div>
   
   <!-- Specifications. -->
-  <div class="row" data-ng-show="e.specifications || isPreview">
+  <div class="row" data-ng-if="e.specifications || isPreview">
     <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
       <label>Specifications</label>
     </div>
@@ -74,82 +96,115 @@
       <div class="display: inline-block;" data-ng-bind-html="e.specifications" itemprop="description"></div>
       
       <!-- Blank label. -->
-      <span class="label label-default" data-ng-show="isPreview && !e.specifications">Blank</span>      
+      <span class="label label-default" data-ng-if="isPreview && !e.specifications">Blank</span>      
     </div>
 
-    <br data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.sm">
+    <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.sm">
   </div>  
 
   <!-- Year purchased. -->
-  <div class="row" data-ng-show="e.yearPurchased || isPreview">
+  <div class="row" data-ng-if="e.yearPurchased || isPreview">
     <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
       <label>Year purchased</label>
     </div>
 
     <div class="col-sm-9">
-      <time itemprop="purchaseDate" datetime="{{ e.yearPurchased }}">{{ e.yearPurchased }}</time>
+      <time itemprop="purchaseDate" datetime="{{ e.yearPurchased }}">
+        <span data-ng-if="useBindHtml">
+          <span data-ng-bind-html="e.yearPurchased"></span>
+        </span>
+        
+        <span data-ng-if="!useBindHtml">{{ e.yearPurchased }}</span>
+      </time>
+
       <!-- "Blank" label. -->
-      <span class="label label-default" data-ng-show="isPreview && !e.yearPurchased">Blank</span>      
+      <span class="label label-default" data-ng-if="isPreview && !e.yearPurchased">Blank</span>      
     </div>
 
-    <br data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.sm">
+    <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.sm">
   </div>  
 
   <!-- Year manufactured. -->
-  <div class="row" data-ng-show="e.yearManufactured || isPreview">
+  <div class="row" data-ng-if="e.yearManufactured || isPreview">
     <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
       <label>Year manufactured</label>
     </div>
 
     <div class="col-sm-9">
-      <time itemprop="productionDate" datetime="{{ e.yearManufactured }}">{{ e.yearManufactured }}</time>
+      <time itemprop="productionDate" datetime="{{ e.yearManufactured }}">
+        <span data-ng-if="useBindHtml">
+          <span data-ng-bind-html="e.yearManufactured"></span>
+        </span>
+        
+        <span data-ng-if="!useBindHtml">{{ e.yearManufactured }}</span>
+        </time>
+
       <!-- "Blank" label. -->
-      <span class="label label-default" data-ng-show="isPreview && !e.yearManufactured">Blank</span>      
+      <span class="label label-default" data-ng-if="isPreview && !e.yearManufactured">Blank</span>      
     </div>
 
-    <br data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.sm">
+    <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.sm">
   </div>
   
   <!-- Search visibility. -->
-  <div class="row" data-ng-show="isPreview">
+  <div class="row" data-ng-if="isPreview">
     <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
       <label>Search visibility</label>
     </div>
 
     <div class="col-sm-9">
-      <span data-ng-show="e.isPublic">Public</span>
-      <span data-ng-hide="e.isPublic">Hidden</span>
+      <div data-ng-if="useBindHtml">
+        <div data-ng-bind-html="e.isPublic"></div>
+      </div>
+      
+      <div data-ng-if="!useBindHtml">
+        <span data-ng-if="e.isPublic">Public</span>
+        <span data-ng-if="!e.isPublic">Hidden</span>
+      </div>
     </div>
 
-    <br data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.sm">
+    <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.sm">
   </div>
   
   <!-- Excess capacity. -->
-  <div class="row" data-ng-show="isPreview">
+  <div class="row" data-ng-if="isPreview">
     <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
       <label>Excess capacity</label>
     </div>
 
     <div class="col-sm-9">
-      <span data-ng-show="e.hasExcessCapacity">Yes</span>
-      <span data-ng-hide="e.hasExcessCapacity">No</span>
+      <div data-ng-if="useBindHtml">
+        <div data-ng-bind-html="e.hasExcessCapacity"></div>
+      </div>
+      
+      <div data-ng-if="!useBindHtml">
+        <span data-ng-if="e.hasExcessCapacity">Yes</span>
+        <span data-ng-if="!e.hasExcessCapacity">No</span>
+      </div>
     </div>
 
-    <br data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.sm">
+    <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.sm">
   </div>
   
   <!-- Keywords. -->
-  <div class="row" data-ng-show="e.keywords || isPreview" itemprop="additionalProperty" itemscope itemtype="http://schema.org/PropertyValue">
+  <div class="row" data-ng-if="e.keywords || isPreview" itemprop="additionalProperty" itemscope itemtype="http://schema.org/PropertyValue">
     <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
       <label itemprop="name">Keywords</label>
     </div>
     
     <div class="col-sm-9">
-      <span itemprop="value">{{ e.keywords }}</span>
+      <span itemprop="value">
+        <div data-ng-if="useBindHtml">
+          <div data-ng-bind-html="e.keywords"></div>
+        </div>
+        
+        <div data-ng-if="!useBindHtml">{{ e.keywords }}</div>
+      </span>
+
       <!-- "Blank" label. -->
-      <span class="label label-default" data-ng-show="isPreview && !e.keywords">Blank</span>
+      <span class="label label-default" data-ng-if="isPreview && !e.keywords">Blank</span>
     </div>
   </div>
   
-  <hr data-ng-show="$index !== (facility.equipment.length - 1)">
+  <hr data-ng-if="$index !== (facility.equipment.length - 1)">
 </div><!-- End of ng-repeat -->

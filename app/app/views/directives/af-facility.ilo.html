@@ -13,7 +13,7 @@
       <span itemprop="familyName">{{ facility.organization.ilo.lastName }}</span>
     </div>
 
-    <br data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.sm">
+    <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.sm">
   </div>
 
   <!-- Email. -->
@@ -26,7 +26,7 @@
       <a data-ng-href="mailto:{{ facility.organization.ilo.email }}" itemprop="email">{{ facility.organization.ilo.email }}</a>
     </div>
 
-    <br data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.sm">
+    <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.sm">
   </div>
 
   <!-- Telephone. -->
@@ -39,7 +39,7 @@
       <span itemprop="telephone">{{ facility.organization.ilo.telephone | afFormatTelephone }}</span>
     </div>
 
-    <br data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.sm">
+    <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.sm">
   </div>
 
   <!-- Position. -->
@@ -52,11 +52,11 @@
       <span itemprop="jobTitle">{{ facility.organization.ilo.position }}<span>
     </div>
 
-    <br data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.sm">
+    <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.sm">
   </div>
 
   <!-- Website. -->
-  <div class="row" data-ng-show="facility.organization.ilo.website">
+  <div class="row" data-ng-if="facility.organization.ilo.website">
     <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
       <label>Website</label>
     </div>

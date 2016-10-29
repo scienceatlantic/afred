@@ -9,13 +9,26 @@
     </div>
 
     <div class="col-sm-9">
-      <span itemprop="givenName">{{ c.firstName }}</span>
-      <span itemprop="familyName">{{ c.lastName }}</span> 
+      <span itemprop="givenName">
+        <span data-ng-if="useBindHtml">
+          <span data-ng-bind-html="c.firstName"></span>
+        </span>
+
+        <span data-ng-if="!useBindHtml">{{ c.firstName }}</span>
+      </span>
+      <span itemprop="familyName">
+        <span data-ng-if="useBindHtml">
+          <span data-ng-bind-html="c.lastName"></span>
+        </span>
+
+        <span data-ng-if="!useBindHtml">{{ c.lastName }}</span>
+      </span> 
+
       <!-- "Primary contact" label. -->
-      <span data-ng-show="$index == 0" class="label label-default">Primary Contact</span>
+      <span data-ng-if="$index == 0" class="label label-default">Primary Contact</span>
     </div>
 
-    <br data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.sm">
+    <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.sm">
   </div>
   
   <!-- Email. -->
@@ -25,63 +38,93 @@
     </div>
 
     <div class="col-sm-9">
-      <a data-ng-href="mailto:{{ c.email }}" itemprop="email">{{ c.email }}</a>
+      <div data-ng-if="useBindHtml">
+        <div data-ng-bind-html="c.email"></div>
+      </div>  
+
+      <a data-ng-href="mailto:{{ c.email }}" itemprop="email" data-ng-if="!useBindHtml">
+        {{ c.email }}
+      </a>
     </div>
 
-    <br data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.sm">
+    <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.sm">
   </div>
   
   <!-- Telephone. -->
-  <div class="row" data-ng-show="c.telephone || isPreview">
+  <div class="row" data-ng-if="c.telephone || isPreview">
     <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
       <label>Telephone</label>
     </div>
 
     <div class="col-sm-9">
       <span itemprop="telephone">
-        {{ c.telephone | afFormatTelephone }} 
-        <!-- Extension. 
-          -- Use "ngIf" so that the "Extension" label isn't crawled and included
-          -- as part of the schema object if it's empty.
-          -->
+        <span data-ng-if="useBindHtml">
+          <span data-ng-bind-html="c.telephone"></span>
+        </span>
+
+        <span data-ng-if="!useBindHtml">
+          {{ c.telephone | afFormatTelephone }}
+        </span>        
+        
+        <!-- Extension. -->
         <span data-ng-if="c.extension">
-          <span class="label label-default">Extension:</span> {{ c.extension }}
+          <span class="label label-default">Extension:</span> 
+          <span data-ng-if="useBindHtml">
+            <span data-ng-bind-html="c.extension"></span>
+          </span>
+
+          <span data-ng-if="!extension">{{ c.extension }}</span>             
         </span>
       </span>
+
       <!-- "Blank" label. -->
-      <span class="label label-default" data-ng-show="isPreview && !c.telephone">Blank</span>
+      <span class="label label-default" data-ng-if="isPreview && !c.telephone">Blank</span>
     </div>
 
-    <br data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.sm">
+    <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.sm">
   </div>
   
   <!-- Position. -->
-  <div class="row" data-ng-show="c.position || isPreview">
+  <div class="row" data-ng-if="c.position || isPreview">
     <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
       <label>Position</label>
     </div>
 
     <div class="col-sm-9">
-      <span itemprop="jobTitle">{{ c.position }}</span>
+      <span itemprop="jobTitle">
+        <span data-ng-if="useBindHtml">
+          <span data-ng-bind-html="c.position"></span>
+        </span>
+
+        <span data-ng-if="!useBindHtml">{{ c.position }}</span>
+      </span>
+
       <!-- "Blank" label. -->
-      <span class="label label-default" data-ng-show="isPreview && !c.position">Blank</span>
+      <span class="label label-default" data-ng-if="isPreview && !c.position">Blank</span>
     </div>
       
-    <br data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.sm">
+    <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.sm">
   </div>
   
   <!-- Website. -->
-  <div class="row" data-ng-show="c.website || isPreview">
+  <div class="row" data-ng-if="c.website || isPreview">
     <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
       <label>Website</label>
     </div>
     
     <div class="col-sm-9">
-      <a href="{{ c.website }}" target="_blank" itemprop="url">{{ c.website }}</a>
+      <span data-ng-if="useBindHtml">
+        <span data-ng-bind-html="c.website"></span>
+      </span>
+
+      <a href="{{ c.website }}" target="_blank" itemprop="url" data-ng-if="!useBindHtml">
+        {{ c.website }}
+      </a>
+
       <!-- "Blank" label. -->
-      <span class="label label-default" data-ng-show="isPreview && !c.website">Blank</span>
+      <span class="label label-default" data-ng-if="isPreview && !c.website">Blank</span>
     </div>
   </div>
   
-  <hr data-ng-show="$index !== (facility.contacts.length - 1)">
+  <hr data-ng-if="$index !== (facility.contacts.length - 1)">
 </div><!-- End of ng-repeat -->
