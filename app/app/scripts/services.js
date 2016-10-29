@@ -86,3 +86,65 @@ angular.module('afredApp').service('algolia', [
     };
   }
 ]);
+
+angular.module('afredApp').service('JsDiff', [
+  function() {
+    function formatter(original, edit, isHtml, diffType) {
+      original = (original ? String(original) : '');
+      edit = (edit ? String(edit) : '');
+
+      if (isHtml) {
+        original = angular.element('<div>' + original + '</div>').text();
+        edit = angular.element('<div>' + edit + '</div>').text();
+      }
+
+      if (!original.trim() && !edit.trim()) {
+        return '';
+      }
+
+      var diff = null;
+      switch (diffType) {
+        case 'chars':
+          diff = JsDiff.diffChars(original, edit);
+          break;
+        case 'words':
+          diff = JsDiff.diffWords(original, edit);
+          break;
+        case 'lines':
+          diff = JsDiff.diffLines(original, edit);
+          break;              
+      }
+
+      var span = '';
+      diff.forEach(function(part) {
+        // green for additions, red for deletions
+        // grey for common parts
+        span += '<span style="color:';
+
+        if (part.added) {
+          span += 'green; font-weight: bold';
+        } else if (part.removed) {
+          span += 'red; text-decoration: line-through';
+        } else {
+          span += 'inherit';
+        }
+
+        span += ';">' + part.value + '</span>';
+      });
+
+      return span;     
+    }
+
+    this.chars = function(original, edit, isHtml) {
+      return formatter(original, edit, isHtml, 'chars');
+    };
+
+    this.words = function(original, edit, isHtml) {
+      return formatter(original, edit, isHtml, 'words');
+    };
+
+    this.lines = function(original, edit, isHtml) {
+      return formatter(original, edit, isHtml, 'lines');
+    };
+  }
+]);
