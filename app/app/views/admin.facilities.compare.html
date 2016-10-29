@@ -1,0 +1,14 @@
+<p>
+  <button class="btn btn-default" data-ng-click="_state.go('admin.facilities.show', { facilityRepositoryId: _stateParams.editedFrId })">
+    Go back <span class="fa fa-arrow-left"></span>
+  </button>
+</p>
+
+<div data-af-loading="facility.$resolved !== true">
+  <div data-af-facility="all" 
+       data-af-facility-model="facility" 
+       data-af-facility-is-preview="true" 
+       data-af-facility-is-new-organization="!(facility.organization.id > 0)" 
+       data-af-facility-use-bind-html="true">
+  </div>
+</div>
