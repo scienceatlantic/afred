@@ -280,15 +280,6 @@ angular.module('afredApp').controller('AdminFacilitiesShowController', [
       }, function(response) {
         $scope._httpError(response); 
       });
-      
-      // This is for the HTML template. Setting the 'isPreview' property to true
-      // will show additional facility data (e.g. excess capacity, etc).
-      $scope.facility.isPreview = true;
-      
-      // If the facility contains a new organization, set this property to true.
-      // This affects the HTML template.
-      $scope.facility.isNewOrganization =
-        !$scope.fr.data.facility.organizationId;
     };
     
     /**
