@@ -9,9 +9,19 @@
 
 angular.module('afredApp').controller('AdminFacilitiesController',
   ['$scope',
+   'organizationResource',
+   'provinceResource',
+   'disciplineResource',
+   'sectorResource',
    'facilityRepositoryResource',
+   '$q',
   function($scope,
-           facilityRepositoryResource) {
+           organizationResource,
+           provinceResource,
+           disciplineResource,
+           sectorResource,
+           facilityRepositoryResource,
+           $q) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
@@ -170,6 +180,118 @@ angular.module('afredApp').controller('AdminFacilitiesController',
         }, function(response) {
           $scope._httpError403(response);
         });
+      },
+
+      /**
+       * TODO: comments
+       */
+      getFromRevisionData: function(fr) {
+        var facility = angular.copy(fr.data.facility);
+        facility.organization = angular.copy(fr.data.organization);
+        facility.contacts = angular.copy(fr.data.contacts);
+        facility.equipment = angular.copy(fr.data.equipment);
+        facility.state = fr.state;
+        
+        try {
+          facility.isPublic = fr.publishedFacility.isPublic;
+        } catch (e) {
+          // Do nothing if it fails.
+        }
+              
+        // Primary contact & contacts section. In the DB primary contacts and
+        // regular contacts are stored in separate tables, however, when the user
+        // is viewing it, it's stored in a single array (where the first element
+        // is the primary contact).
+        if (!fr.data.contacts || !angular.isArray(fr.data.contacts)) {
+          facility.contacts = [];
+          facility.contacts.push(fr.data.primaryContact);
+        } else {
+          facility.contacts.unshift(fr.data.primaryContact);
+        }
+        
+        // Organization section. Check if the facility belongs to an existing
+        // organization or a new organization. If it belongs to an existing
+        // organization, grab the details from the API.
+        if (fr.data.facility.organizationId) {
+          facility.organization = organizationResource.get({
+            organizationId: fr.data.facility.organizationId
+          }, function() {
+            // Do nothing if successful.
+          }, function(response) {
+            $scope._httpError(response);
+          });
+        }
+        
+        // Province section.
+        facility.province = provinceResource.get({
+          provinceId: fr.data.facility.provinceId
+        }, function() {
+          // Do nothing if successful.
+        }, function(response) {
+          $scope._httpError(response);
+        });
+        
+        // Disciplines section. Grab the complete list of disciplines from the API
+        // so that we can get the names (the facility repository record only
+        // contains the IDs of the disciplines).
+        facility.disciplines = [];
+        var isDisciplineReady = $q.defer();
+        var disciplines = disciplineResource.queryNoPaginate(function() {
+          angular.forEach(disciplines, function(d) {
+            if (fr.data.disciplines.indexOf(d.id) >= 0) {
+              facility.disciplines.push(d);
+            }
+          });
+          isDisciplineReady.resolve();
+        }, function(response) {
+          $scope._httpError(response); 
+        });
+        
+        // Sectors section. (Same as disciplines).
+        facility.sectors = [];
+        var isSectorReady = $q.defer();
+        var sectors = sectorResource.queryNoPaginate(function() {
+          angular.forEach(sectors, function(s) {
+            if (fr.data.sectors.indexOf(s.id) >= 0) {
+              facility.sectors.push(s);
+            }
+          });
+          isSectorReady.resolve();
+        }, function(response) {
+          $scope._httpError(response); 
+        });
+
+        facility.$promise = $q.all([
+          facility.organization.$promise,
+          facility.province.$promise,
+          facility.disciplines.$promise,
+          facility.sectors.$promise,
+          isDisciplineReady.promise,
+          isSectorReady.promise
+        ]);
+
+        facility.$promise.then(function() {
+          facility.$resolved = true;
+        });
+
+        return facility;
+      },
+
+      /**
+       * TODO: comments.
+       */
+      getRevision: function(revisionId) {
+        if (isFinite(revisionId)) {
+          return facilityRepositoryResource.get({
+            facilityRepositoryId: revisionId
+          }, function() {
+            // Do nothing if successful.
+          }, function(response) {
+            $scope._httpError403(response);
+          });        
+        } else {
+          $scope._httpError('404');
+        }
       }
     };
     
