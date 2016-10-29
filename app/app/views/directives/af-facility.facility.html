@@ -12,6 +12,7 @@
       <div data-ng-if="useBindHtml">
         <div data-ng-bind-html="facility.name"></div>
       </div>
+
       <div data-ng-if="!useBindHtml">{{ facility.name }}</div>
     </div>
 
@@ -25,12 +26,14 @@
     </div>
 
     <div class="col-sm-9" itemscope itemtype="http://schema.org/Organization">
-      <span itemprop="name">
+      <div itemprop="name">
         <div data-ng-if="useBindHtml">
           <div data-ng-bind-html="facility.organization.name"></div>
         </div>
+
         <div data-ng-if="!useBindHtml">{{ facility.organization.name }}</div>
-      </span>
+      </div>
+
       <!-- "New Organization" label. -->
       <span class="label label-default" data-ng-if="isPreview && isNewOrganization">New organization</span>
     </div>
@@ -45,12 +48,13 @@
     </div>
 
     <div class="col-sm-9" itemscope itemtype="http://schema.org/City">
-      <span itemprop="name">
+      <div itemprop="name">
         <div data-ng-if="useBindHtml">
           <div data-ng-bind-html="facility.city"></div>
         </div>
+
         <div data-ng-if="!useBindHtml">{{ facility.city }}</div>
-      </span>
+      </div>
     </div>
 
     <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.sm">
@@ -63,12 +67,13 @@
     </div>
 
     <div class="col-sm-9" itemscope itemtype="http://schema.org/State">
-      <span itemprop="name">
+      <div itemprop="name">
         <div data-ng-if="useBindHtml">
           <div data-ng-bind-html="facility.province.name"></div>
         </div>
+
         <div data-ng-if="!useBindHtml">{{ facility.province.name }}</div>
-      </span>
+      </div>
     </div>
 
     <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.sm">

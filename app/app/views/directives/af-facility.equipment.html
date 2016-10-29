@@ -193,13 +193,13 @@
     </div>
     
     <div class="col-sm-9">
-      <span itemprop="value">
+      <div itemprop="value">
         <div data-ng-if="useBindHtml">
           <div data-ng-bind-html="e.keywords"></div>
         </div>
         
         <div data-ng-if="!useBindHtml">{{ e.keywords }}</div>
-      </span>
+      </div>
 
       <!-- "Blank" label. -->
       <span class="label label-default" data-ng-if="isPreview && !e.keywords">Blank</span>
