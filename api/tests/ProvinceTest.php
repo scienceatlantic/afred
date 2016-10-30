@@ -29,7 +29,8 @@ class ProvinceTest extends TestCase
 
     public function testGetProvince()
     {
-        $p = factory(App\Province::class)->create();
+        $p = factory(App\Province::class, 'withDates')->create();
+
         $this->get('/provinces/' . $p->id)->seeJson([
             'id' => $p->id
         ]);
@@ -37,106 +38,139 @@ class ProvinceTest extends TestCase
 
     public function testPostProvince()
     {
-        $this->actingAs($this->getAdmin())
-             ->post('/provinces', [
-                 'name' => 'test',
-                 'isHidden' => 1
-             ])
-             ->assertResponseOk();   
+        $payload = factory(App\Province::class)->make()->toArray();
+
+        $resp = $this->actingAs($this->getAdmin())
+                     ->post('/provinces', $payload)
+                     ->seeStatusCode(200)
+                     ->response
+                     ->getContent();
+        $p = json_decode($resp);
+
+        $this->seeInTable('provinces', $payload, null, [
+            'id' => $p->id
+        ]);   
     }
 
     public function testPostProvinceNameAttrMissing()
     {
+        $payload = factory(App\Province::class)->make([
+            'name' => null
+        ])->toArray();
+
         $this->actingAs($this->getAdmin())
-             ->post('/provinces', [
-                 'isHidden' => 1
-             ])
-             ->assertResponseStatus('302');   
+             ->post('/provinces', $payload)
+             ->assertResponseStatus(302);   
     }
 
     public function testPostProvinceIsHiddenAttrMissing()
     {
+        $payload = factory(App\Province::class)->make([
+            'isHidden' => null
+        ])->toArray();
+
         $this->actingAs($this->getAdmin())
-             ->post('/provinces', [
-                 'name' => 'test'
-             ])
-             ->assertResponseStatus('302');   
+             ->post('/provinces', $payload)
+             ->assertResponseStatus(302);    
     }
 
     public function testPostProvinceIsHiddenAttrInvalid()
     {
+        $payload = factory(App\Province::class)->make([
+            'isHidden' => 3 // Should be either 1 or 0.
+        ])->toArray();
+
         $this->actingAs($this->getAdmin())
-             ->post('/provinces', [
-                 'name' => 'test',
-                 'isHidden' => 3 // Should be either 0 or 1.
-             ])
-             ->assertResponseStatus('302');   
+             ->post('/provinces', $payload)
+             ->assertResponseStatus(302); 
+    }
+
+    public function testPostProvinceWithIdenticalNameAttr()
+    {
+        $p = factory(App\Province::class, 'withDates')->create();
+        $payload = factory(App\Province::class)->make([
+            'name' => $p->name
+        ])->toArray();
+
+        $this->actingAs($this->getAdmin())
+             ->post('/provinces', $payload)
+             ->assertResponseStatus(302);
     }
 
     public function testPostProvinceWithoutAuth()
     {
-        $this->post('/provinces')->assertResponseStatus('403');
-    }
-
-    public function testPostProvinceInvalidPath()
-    {
-        $this->post('/provinces/1')->assertResponseStatus('405');
+        $this->post('/provinces')->assertResponseStatus(403);
     }
 
     public function testPutProvince()
     {
-        $p = factory(App\Province::class)->create();
-        $this->actingAs($this->getAdmin())
-             ->put('/provinces/' . $p->id, [
-                 'name' => 'new_test',
-                 'isHidden' => 0
-             ])
-             ->assertResponseOk();
+        $p = factory(App\Province::class, 'withDates')->create();
+        $payload = factory(App\Province::class)->make([
+            'id' => $p->id    
+        ])->toArray();
+
+        $resp = $this->actingAs($this->getAdmin())
+                     ->put('/provinces/' . $p->id, $payload)
+                     ->seeStatusCode(200)
+                     ->response
+                     ->getContent();
+        $updP = json_decode($resp);
+
+        $this->seeInTable('provinces', $payload, null, [
+            'id' => $p->id
+        ]);
     }
 
      public function testPutProvinceDoesNotExist()
     {
+        $payload = factory(App\Province::class)->make()->toArray();
+
         $this->actingAs($this->getAdmin())
-             ->put('/provinces/0', [
-                 'name' => 'new_test',
-                 'isHidden' => 0
-             ])
+             ->put('/provinces/0', $payload)
              ->assertResponseStatus(404);
     }   
 
     public function testPutProvinceWithoutAuth()
     {
-        $this->put('/provinces/1')->assertResponseStatus('403');
-    }
+        $p = factory(App\Province::class, 'withDates')->create();
+        $payload = factory(App\Province::class)->make([
+            'id' => $p->id
+        ])->toArray();
 
-    public function testPutProvinceInvalidPath()
-    {
-        $this->put('/provinces')->assertResponseStatus('405');
+        $this->put('/provinces/' . $p->id)
+             ->assertResponseStatus(403);
     }
 
     public function testDeleteProvince()
     {
-        $p = factory(App\Province::class)->create();
+        $p = factory(App\Province::class, 'withDates')->create();
+
         $this->actingAs($this->getAdmin())
              ->delete('/provinces/' . $p->id)
-             ->assertResponseOk();
+             ->assertResponseStatus(200);
+
+        $this->notSeeInTable('provinces', ['id' => $p->id]);
     }
 
     public function testDeleteProvinceWithForeignKeyRestraint()
     {
-        $f = App\Facility::first();
+        $fr = $this->getPublishedFr('model');
+        $f = $fr->publishedFacility;
+
         $this->actingAs($this->getAdmin())
              ->delete('/provinces/' . $f->provinceId)
-             ->assertResponseStatus('400');
+             ->assertResponseStatus(403);
+
+        $this->seeInTable('provinces', ['id' => $f->provinceId]);             
     }
 
     public function testDeleteProvincesWithoutAuth()
     {
-        $this->delete('/provinces/1')->assertResponseStatus('403');   
-    }
+        $p = factory(App\Province::class, 'withDates')->create();
 
-    public function testDeleteProvincesInvalidPath()
-    {
-        $this->delete('/provinces')->assertResponseStatus('405');   
+        $this->delete('/provinces/' . $p->id)
+             ->assertResponseStatus(403);   
+
+        $this->seeInTable('provinces', ['id' => $p->id]);
     }
 }

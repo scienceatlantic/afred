@@ -29,7 +29,8 @@ class DisciplineTest extends TestCase
 
     public function testGetDiscipline()
     {
-        $d = factory(App\Discipline::class)->create();
+        $d = factory(App\Discipline::class, 'withDates')->create();
+
         $this->get('/disciplines/' . $d->id)->seeJson([
             'id' => $d->id
         ]);
@@ -37,82 +38,116 @@ class DisciplineTest extends TestCase
 
     public function testPostDiscipline()
     {
-        $this->actingAs($this->getAdmin())
-             ->post('/disciplines', [
-                 'name' => 'test'
-             ])
-             ->assertResponseOk();   
+        $payload = factory(App\Discipline::class)->make()->toArray();
+
+        $resp = $this->actingAs($this->getAdmin())
+                     ->post('/disciplines', $payload)
+                     ->seeStatusCode(200)
+                     ->response
+                     ->getContent();
+        $d = json_decode($resp);
+
+        $this->seeInTable('disciplines', $payload, [
+            'id' => $d->id
+        ]);
     }
 
     public function testPostDisciplineNameAttrMissing()
     {
         $this->actingAs($this->getAdmin())
              ->post('/disciplines')
-             ->assertResponseStatus('302');   
+             ->assertResponseStatus(302);   
+    }
+
+    public function testPostDisciplineWithIdenticalName()
+    {
+        $d = factory(App\Discipline::class, 'withDates')->create();
+        $payload = factory(App\Discipline::class)->make([
+            'name' => $d->name
+        ])->toArray();
+
+        $this->actingAs($this->getAdmin())
+             ->post('/disciplines', $payload)
+             ->assertResponseStatus(302);
     }
 
     public function testPostDisciplineWithoutAuth()
     {
-        $this->post('/disciplines')->assertResponseStatus('403');
-    }
+        $payload = factory(App\Discipline::class)->make()->toArray();
 
-    public function testPostDisciplineInvalidPath()
-    {
-        $this->post('/disciplines/1')->assertResponseStatus('405');
+        $this->post('/disciplines', $payload)
+             ->assertResponseStatus(403);
     }
 
     public function testPutDiscipline()
     {
-        $d = factory(App\Discipline::class)->create();
-        $this->actingAs($this->getAdmin())
-             ->put('/disciplines/' . $d->id, [
-                 'name' => 'new_test'
-             ])
-             ->assertResponseOk();
+        $d = factory(App\Discipline::class, 'withDates')->create();
+        $payload = factory(App\Discipline::class)->make([
+            'id' => $d->id
+        ])->toArray();
+
+        $resp = $this->actingAs($this->getAdmin())
+                     ->put('/disciplines/' . $d->id, $payload)
+                     ->seeStatusCode(200)
+                     ->response
+                     ->getContent();
+        $updD = json_decode($resp);
+
+        $this->seeInTable('disciplines', $payload, [
+            'id' => $d->id
+        ]);
     }
 
      public function testPutDisciplineDoesNotExist()
     {
+        $payload = factory(App\Discipline::class)->make()->toArray();
+
         $this->actingAs($this->getAdmin())
-             ->put('/disciplines/0', [
-                 'name' => 'new_test'
-             ])
+             ->put('/disciplines/0', $payload)
              ->assertResponseStatus(404);
     }   
 
     public function testPutDisciplineWithoutAuth()
     {
-        $this->put('/disciplines/1')->assertResponseStatus('403');
-    }
+        $d = factory(App\Discipline::class, 'withDates')->create();
+        $payload = factory(App\Discipline::class)->make([
+            'id' => $d->id
+        ])->toArray();
 
-    public function testPutDisciplineInvalidPath()
-    {
-        $this->put('/disciplines')->assertResponseStatus('405');
+        $this->put('/disciplines/' . $d->id, $payload)
+             ->assertResponseStatus(403);
     }
 
     public function testDeleteDiscipline()
     {
-        $d = factory(App\Discipline::class)->create();
+        $d = factory(App\Discipline::class, 'withDates')->create();
+
         $this->actingAs($this->getAdmin())
              ->delete('/disciplines/' . $d->id)
-             ->assertResponseOk();
+             ->assertResponseStatus(200);
+
+        $this->notSeeInTable('disciplines', ['id' => $d->id]);
     }
 
     public function testDeleteDisciplineWithForeignKeyRestraint()
     {
-        $f = App\Facility::with('disciplines')->first();
+        $fr = $this->getPublishedFr('model');
+        $f = $fr->publishedFacility;
+
         $this->actingAs($this->getAdmin())
              ->delete('/disciplines/' . $f->disciplines[0]->id)
-             ->assertResponseStatus('400');
+             ->assertResponseStatus(403);
+
+        $this->seeInTable('disciplines', ['id' => $f->disciplines[0]->id]);
     }
 
     public function testDeleteDisciplinesWithoutAuth()
     {
-        $this->delete('/disciplines/1')->assertResponseStatus('403');   
-    }
+        $d = factory(App\Discipline::class, 'withDates')->create();
 
-    public function testDeleteDisciplinesInvalidPath()
-    {
-        $this->delete('/disciplines')->assertResponseStatus('405');   
+        $this->delete('/disciplines/' . $d->id)
+             ->assertResponseStatus(403);
+
+        $this->seeInTable('disciplines', ['id' => $d->id]);
     }
 }

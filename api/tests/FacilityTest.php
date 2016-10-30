@@ -13,7 +13,6 @@ class FacilityTest extends TestCase
         $this->get('/facilities')->assertResponseOk();
     }
 
-    
     public function testGetFacilitiesWithPagination()
     {
         $this->get('/facilities')->seeJson([
@@ -40,14 +39,14 @@ class FacilityTest extends TestCase
     public function testPostFacility()
     {
         $this->post('/facilities')
-             ->assertResponseStatus('405');   
+             ->assertResponseStatus(405);   
     }
 
     public function testPostFacilityWithAuth()
     {
         $this->actingAs($this->getAdmin())
              ->post('/facilities')
-             ->assertResponseStatus('405');  
+             ->assertResponseStatus(405);  
     }
 
     public function testPutHideFacility()
@@ -118,7 +117,7 @@ class FacilityTest extends TestCase
              ->assertResponseStatus(403);
     }
 
-    public function testPutShowFacilityWithoutIsPublicParam()
+    public function testPutShowFacilityWithoutIsPublicAttr()
     {
         $fr = $this->getPublishedFr('model');
 
@@ -127,7 +126,7 @@ class FacilityTest extends TestCase
              ->assertResponseStatus(302);        
     }
 
-    public function testPutHideFacilityWithInvalidIsPublicValue()
+    public function testPutHideFacilityWithInvalidIsPublicAttr()
     {
         $fr = $this->getPublishedFr('model');
         $payload = ['isPublic' => 2];
