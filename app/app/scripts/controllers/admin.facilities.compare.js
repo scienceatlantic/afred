@@ -5,10 +5,12 @@ angular.module('afredApp').controller('AdminFacilitiesCompareController', [
   'JsDiff',
   '$q',
   '$filter',
+  'Repository',
   function($scope,
            JsDiff,
            $q,
-           $filter) {
+           $filter,
+           Repository) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
@@ -16,9 +18,12 @@ angular.module('afredApp').controller('AdminFacilitiesCompareController', [
     /**
      * TODO: comments
      */
-    $scope.compare = function(original, edit) {  
+    $scope.compare = function(original, edit) {
       // Aliases to shorten code.
       var o = original, e = edit, dW = JsDiff.words, dL = JsDiff.lines;
+
+      // Set flag.
+      e.$resolved = false;
 
       // Facility section.
       e.name = dW(o.name, e.name);
@@ -29,8 +34,8 @@ angular.module('afredApp').controller('AdminFacilitiesCompareController', [
       e.description = dW(o.description, e.description, true);
 
       // Disciplines section.
-      e.disciplines = $filter('orderBy')(e.disciplines, 'id');
-      o.disciplines = $filter('orderBy')(o.disciplines, 'id');
+      e.disciplines = $filter('orderBy')(e.disciplines, 'name');
+      o.disciplines = $filter('orderBy')(o.disciplines, 'name');
       var numDisciplines;
       if (e.disciplines.length >= o.disciplines) {
         numDisciplines = e.disciplines.length;
@@ -45,8 +50,8 @@ angular.module('afredApp').controller('AdminFacilitiesCompareController', [
       }
 
       // Sectors section.
-      e.sectors = $filter('orderBy')(e.sectors, 'id');
-      o.sectors = $filter('orderBy')(o.sectors, 'id');
+      e.sectors = $filter('orderBy')(e.sectors, 'name');
+      o.sectors = $filter('orderBy')(o.sectors, 'name');
       var numDisciplines;
       if (e.sectors.length >= o.sectors) {
         numDisciplines = e.sectors.length;
@@ -61,6 +66,7 @@ angular.module('afredApp').controller('AdminFacilitiesCompareController', [
       }
 
       // Contacts section.
+      // TODO: needs to be fixed: primary contact id...
       e.contacts = $filter('orderBy')(e.contacts, 'id');
       o.contacts = $filter('orderBy')(o.contacts, 'id');
       var numEquipment = null;
@@ -109,7 +115,13 @@ angular.module('afredApp').controller('AdminFacilitiesCompareController', [
         eE.hasExcessCapacity = dW(oE.hasExcessCapacity, eE.hasExcessCapacity);
         eE.keywords = dW(oE.keywords, eE.keywords);
         e.equipment[i] = eE;
-      }      
+      }
+
+      // Set up promise.
+      e.$promise = $q.resolve(e);
+      e.$promise.then(function() {
+        e.$resolved = true;
+      });
 
       return e;
     };
@@ -119,34 +131,31 @@ angular.module('afredApp').controller('AdminFacilitiesCompareController', [
      * --------------------------------------------------------------------- */
     
     /**
-     * TODO: comments.
+     * Holds facility data.
+     * 
+     * @type {object}
      */
     $scope.facility = {};
 
     // Get facility repository records.
-    var originalFr = $scope.facilities.getRevision(
-        $scope._stateParams.originalFrId);
-    var editedFr = $scope.facilities.getRevision(
-        $scope._stateParams.editedFrId);
+    var originalFr = Repository.get($scope._stateParams.originalFrId);
+    var editedFr = Repository.get($scope._stateParams.editedFrId);
 
     $q.all([originalFr.$promise, editedFr.$promise]).then(function() {
-      if (editedFr.state != 'PENDING_EDIT_APPROVAL') {
-        $scope._httpError(404);
-        return;
-      } else if (originalFr.state != 'PUBLISHED' 
-                 && originalFr.state != 'PUBLISHED_EDIT') {
-        $scope._httpError(404);
-        return;
-      } else if (editedFr.facilityId != originalFr.facilityId) {
+      // Check that records are valid for comparison.
+      if (editedFr.state != 'PENDING_EDIT_APPROVAL'
+          || editedFr.facilityId != originalFr.facilityId
+          || (originalFr.state != 'PUBLISHED' 
+          && originalFr.state != 'PUBLISHED_EDIT')) {
         $scope._httpError(404);
         return;
       }
 
-      var originalF = $scope.facilities.getFromRevisionData(originalFr);
-      var editedF = $scope.facilities.getFromRevisionData(editedFr);
+      var originalF = Repository.getFacility(originalFr);
+      var editedF = Repository.getFacility(editedFr);
 
       $q.all([editedF.$promise, originalF.$promise]).then(function() {
-        $scope.facility = $scope.compare(originalF, editedF);
+        $scope.facility = $scope.compare(originalF, editedF);        
       });
     });
   }
