@@ -2,6 +2,13 @@
 
 namespace App\Http\Requests;
 
+// Misc.
+use Route;
+
+// Models.
+use App\Province;
+
+// Requests.
 use App\Http\Requests\Request;
 
 class ProvinceRequest extends Request
@@ -15,9 +22,23 @@ class ProvinceRequest extends Request
     {
         switch ($this->method()) {
             case 'GET':
-                return true;            
+                return true;
+            case 'POST':
+                // No break.
+            case 'PUT':
+                return $this->isAdmin();
+            case 'DELETE':
+                $id = Route::input('provinces');
+                $p = Province::findOrFail($id);
+
+                // Make sure province has no facilities.
+                if ($p->facilities()->count()) {
+                    return false;
+                }
+
+                return $this->isAdmin();            
             default:
-                return $this->isAdmin(); 
+                return false; 
         }
     }
 
@@ -33,7 +54,7 @@ class ProvinceRequest extends Request
             case 'PUT':
                 // No break.
             case 'POST':
-                $r['name'] = 'required';
+                $r['name'] = 'required|unique:provinces';
                 $r['isHidden'] = 'required|numeric|between:0,1';
                 break;
         }

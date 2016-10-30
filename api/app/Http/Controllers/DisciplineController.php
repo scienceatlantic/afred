@@ -87,12 +87,6 @@ class DisciplineController extends Controller
     public function destroy(DisciplineRequest $request, $id)
     {
         $d = Discipline::findOrFail($id);
-
-        // Make sure that the discipline does not have any facilities.
-        if ($d->facilities()->first()) {
-            abort(400);
-        }
-
         $deletedDiscipline = $d->toArray();
         $d->delete();
         return $this->toCcArray($deletedDiscipline);

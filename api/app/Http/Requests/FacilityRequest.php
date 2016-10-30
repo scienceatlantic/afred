@@ -28,9 +28,13 @@ class FacilityRequest extends Request
             case 'DELETE':
                 $f = Facility::findOrFail(Route::input('facilities'));
                 $fr = $f->currentRevision;
+                
+                // Make sure facility does not have any open/pending update 
+                // requests.
                 if ($fr->updateRequests()->notClosed()->count()) {
                     return false;
                 }
+
                 return $this->isAdmin();
             default:
                 return false;

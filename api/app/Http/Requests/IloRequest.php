@@ -2,6 +2,10 @@
 
 namespace App\Http\Requests;
 
+// Models.
+use App\Ilo;
+
+// Requests.
 use App\Http\Requests\Request;
 
 class IloRequest extends Request
@@ -15,9 +19,21 @@ class IloRequest extends Request
     {
         switch ($this->method()) {
             case 'GET':
-                return true;            
-            default:
+                return true;
+            case 'POST':
+                $organizationId = $this->instance()->input('organizationId');
+
+                // Make sure organization doesn't already have an ILO. 
+                if (Ilo::where('organizationId', $organizationId)->count()) {
+                    return false;
+                }
+
+                // No break.
+            case 'PUT':
+            case 'DELETE':            
                 return $this->isAdmin();
+            default:
+                return false;
         }
     }
 
