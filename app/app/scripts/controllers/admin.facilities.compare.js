@@ -17,6 +17,7 @@ angular.module('afredApp').controller('AdminFacilitiesCompareController', [
     
     /**
      * TODO: comments
+     * TODO: use `for in` loop instead?
      */
     $scope.compare = function(original, edit) {
       // Aliases to shorten code.
@@ -105,7 +106,7 @@ angular.module('afredApp').controller('AdminFacilitiesCompareController', [
         eE.model = dW(oE.model, eE.model);
         eE.purpose = dW(oE.purpose, eE.purpose, true);
         eE.specifications = dW(oE.specifications, eE.specifications, true);
-        eE.yearPurchase = dW(oE.yearPurchase, eE.yearPurchase);
+        eE.yearPurchased = dW(oE.yearPurchased, eE.yearPurchased);
         eE.yearManufactured = dW(oE.yearManufactured, eE.yearManufactured);
         eE.isPublic = eE.isPublic ? 'Public' : 'Hidden';
         oE.isPublic = oE.isPublic ? 'Public' : 'Hidden';
