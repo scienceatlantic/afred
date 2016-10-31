@@ -29,44 +29,69 @@ class UserRequest extends Request
             // an admin. The authenticated user is not allowed to 
             // create/edit/delete a user of a higher permission level.
             case 'PUT':
-                if ($this->isAdmin()) {
-                    // If updating user password.
-                    if ($this->instance()->input('password', false)) {
-                        $maxAuthRole = Auth::user()->getMaxPermission();
-                        $maxUserRole = User::findOrFail(Route::input('users'))
-                            ->getMaxPermission();
-                        return $maxAuthRole >= $maxUserRole;
-                    }
+                if (!$this->isAdmin()) {
+                    return false;
                 }
-                // No break.
-            case 'POST':
-                if ($this->isAdmin()) {
-                    $roleIds = $this->instance()->input('roles', [-1]);
-                    $maxAuthRole = Auth::user()->getMaxPermission();
-                    $maxAssignRole = Role::maxPermission($roleIds);
-                    if ($maxAuthRole !== -1 && $maxAssignRole !== -1) {
-                        return $maxAuthRole >= $maxAssignRole;
-                    }
-                }
-                return false;
-            case 'DELETE':
-                if ($this->isAdmin()) {
-                    // Not allowed to delete yourself.
-                    if (Auth::user()->id == Route::input('users')) {
-                        return false;
-                    }
 
-                    // Not allowed to delete a user that has reviewed facility
-                    // repository records.
-                    if (User::find(Route::input('users'))->frs()->count()) {
-                        return false;
-                    }
-
+                // If updating user password.
+                if ($this->instance()->input('password', false)) {
                     $maxAuthRole = Auth::user()->getMaxPermission();
                     $maxUserRole = User::findOrFail(Route::input('users'))
                         ->getMaxPermission();
                     return $maxAuthRole >= $maxUserRole;
                 }
+                
+                // No break.
+            case 'POST':
+                if (!$this->isAdmin()) {
+                    return false;
+                }
+
+                // Make sure email does not already exist.
+                if ($this->method() == 'POST') {
+                    $email = $this->instance()->input('email');
+                    if (User::where('email', $email)->count()) {
+                        return false;
+                    }
+                }
+                
+                // Make sure that the roles being assigned do not have
+                // a higher permission level than the user making the request.
+                $roleIds = $this->instance()->input('roles', [-1]);
+                $maxAuthRole = Auth::user()->getMaxPermission();
+                $maxAssignRole = Role::maxPermission($roleIds);
+
+                if ($maxAuthRole !== -1 && $maxAssignRole !== -1) {
+                    return $maxAuthRole >= $maxAssignRole;
+                }
+
+                return false;
+            case 'DELETE':
+                if (!$this->isAdmin()) {
+                    return false;
+                }
+
+                // Not allowed to delete yourself.
+                if (Auth::user()->id == Route::input('users')) {
+                    return false;
+                }
+
+                // Not allowed to delete a user that has reviewed facility
+                // repository records.
+                if (User::find(Route::input('users'))->frs()->count()) {
+                    return false;
+                }
+
+                // Make making the request is not of a lower permission level
+                // than the user being deleted.
+                $maxAuthRole = Auth::user()->getMaxPermission();
+                $maxUserRole = User::findOrFail(Route::input('users'))
+                    ->getMaxPermission();
+
+                if ($maxAuthRole !== -1 && $maxUserRole !== -1) {
+                    return $maxAuthRole >= $maxUserRole;
+                }
+
                 return false;
             default:
                 return false;

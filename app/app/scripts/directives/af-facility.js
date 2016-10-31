@@ -67,6 +67,18 @@ angular.module('afredApp').directive('afFacility', [
          */
         view: '@afFacility',
         /**
+         * (Optional) By default only the:
+         * 
+         * `facility.description`
+         * `facility.equipment.purpose`
+         * `facility.equipment.specification`
+         * 
+         * properties are injected using the `ngBindHtml` directive. Set this to
+         * true if you want all properties to be injected via the `ngBindHtml`
+         * directive.
+         */
+        useBindHtml: '=afFacilityUseBindHtml',
+        /**
          * (Optional) By default the data is displayed in Bootstrap panels.
          * 
          * @type {boolean} True - will displayed the data without Bootstrap

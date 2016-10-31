@@ -29,10 +29,11 @@ class IloTest extends TestCase
 
     public function testGetIlo()
     {
-        $o = factory(App\Organization::class)->create();
-        $i = factory(App\Ilo::class)->create([
+        $o = factory(App\Organization::class, 'withDates')->create();
+        $i = factory(App\Ilo::class, 'withDates')->create([
             'organizationId' => $o->id
         ]);
+
         $this->get('/ilos/' . $i->id)->seeJson([
             'id' => $i->id
         ]);
@@ -40,93 +41,138 @@ class IloTest extends TestCase
 
     public function testPostIlo()
     {
-        $o = factory(App\Organization::class)->create();
-        $i = factory(App\Ilo::class)->make([
+        $o = factory(App\Organization::class, 'withDates')->create();
+        $payload = factory(App\Ilo::class)->make([
             'organizationId' => $o->id
+        ])->toArray();
+
+        $resp = $this->actingAs($this->getAdmin())
+                     ->post('/ilos', $payload)
+                     ->seeStatusCode(200)
+                     ->response
+                     ->getContent();
+        $i = json_decode($resp);
+
+        $this->seeInTable('ilos', $payload, null, [
+            'id' => $i->id
         ]);
-        $this->actingAs($this->getAdmin())
-             ->post('/ilos', $i->toArray())
-             ->assertResponseOk();   
     }
     
-    public function testPostIloOrganizationIdAttrInvalid()
+    public function testPostIloWithInvalidOrganizationIdAttr()
     {
-        $i = factory(App\Ilo::class)->make([
+        $payload = factory(App\Ilo::class)->make([
             'organizationId' => 0
-        ]);
+        ])->toArray();
+
         $this->actingAs($this->getAdmin())
-             ->post('/ilos', $i->toArray())
-             ->assertResponseStatus('302'); 
+             ->post('/ilos', $payload)
+             ->assertResponseStatus(302); 
+    }
+
+    public function testPostIloWithIdenticalOrganizationIdAttr()
+    {
+        $o = factory(App\Organization::class, 'withDates')->create();
+        $i = factory(App\Ilo::class, 'withDates')->create([
+            'organizationId' => $o->id
+        ]);
+        $payload = factory(App\Ilo::class)->make([
+            'organizationId' => $o->id
+        ])->toArray();
+
+        $this->actingAs($this->getAdmin())
+             ->post('/ilos', $payload)
+             ->assertResponseStatus(403); 
     }
 
     public function testPostIloWithoutAuth()
     {
-        $this->post('/ilos')->assertResponseStatus('403');
-    }
-    
-    public function testPostIloInvalidPath()
-    {
-        $this->post('/ilos/1')->assertResponseStatus('405');
+        $o = factory(App\Organization::class, 'withDates')->create();
+        $payload = factory(App\Ilo::class)->make([
+            'organizationId' => $o->id
+        ])->toArray();
+
+        $this->post('/ilos', $payload)
+             ->assertResponseStatus(403);
     }
 
     public function testPutIlo()
     {
-        $o = factory(App\Organization::class)->create();
-        $i = factory(App\Ilo::class)->create([
+        $o = factory(App\Organization::class, 'withDates')->create();
+        $i = factory(App\Ilo::class, 'withDates')->create([
             'organizationId' => $o->id
         ]);
-        $i2 = factory(App\Ilo::class)->make([
+        $payload = factory(App\Ilo::class)->make([
             'id' => $i->id,
             'organizationId' => $i->organizationId
+        ])->toArray();
+
+        $resp = $this->actingAs($this->getAdmin())
+                     ->put('/ilos/' . $i->id, $payload)
+                     ->seeStatusCode(200)
+                     ->response
+                     ->getContent();
+        $updI = json_decode($resp);
+
+        $this->seeInTable('ilos', $payload, null, [
+            'id' => $updI->id
         ]);
-        $this->actingAs($this->getAdmin())
-             ->put('/ilos/' . $i->id, $i2->toArray())
-             ->assertResponseOk();
     }
 
-    public function testPutIloDoesNotExist()
+    public function testPutIloWithInvalidOrganizationIdAttr()
     {
-        $o = factory(App\Organization::class)->create();
-        $i = factory(App\Ilo::class)->create([
+        $o = factory(App\Organization::class, 'withDates')->create();
+        $i = factory(App\Ilo::class, 'withDates')->create([
             'organizationId' => $o->id
         ]);
-        $i2 = factory(App\Ilo::class)->make([
+        $payload = factory(App\Ilo::class)->make([
             'id' => $i->id,
-            'organizationId' => $i->organizationId
-        ]);
+            'organizationId' => 0
+        ])->toArray();
+
         $this->actingAs($this->getAdmin())
-             ->put('/ilos/0', $i2->toArray())
-             ->assertResponseStatus(404);
-    }   
+             ->put('/ilos/' . $i->id, $payload)
+             ->assertResponseStatus(302);
+    }  
 
     public function testPutIloWithoutAuth()
     {
-        $this->put('/ilos/1')->assertResponseStatus('403');
-    }
+        $o = factory(App\Organization::class, 'withDates')->create();
+        $i = factory(App\Ilo::class, 'withDates')->create([
+            'organizationId' => $o->id
+        ]);
+        $payload = factory(App\Ilo::class)->make([
+            'id' => $i->id,
+            'organizationId' => $i->organizationId
+        ])->toArray();
 
-    public function testPutIloInvalidPath()
-    {
-        $this->put('/ilos')->assertResponseStatus('405');
+        $this->put('/ilos/' . $i->id, $payload)
+             ->assertResponseStatus(403);
     }
 
     public function testDeleteIlo()
     {
-        $o = factory(App\Organization::class)->create();
-        $i = factory(App\Ilo::class)->create([
+        $o = factory(App\Organization::class, 'withDates')->create();
+        $i = factory(App\Ilo::class, 'withDates')->create([
             'organizationId' => $o->id
         ]);
+
         $this->actingAs($this->getAdmin())
              ->delete('/ilos/' . $i->id)
              ->assertResponseOk();
+
+        $this->notSeeInTable('ilos', ['id' => $i->id]);
     }
 
-    public function testDeleteIlosWithoutAuth()
+    public function testDeleteIloWithoutAuth()
     {
-        $this->delete('/ilos/1')->assertResponseStatus('403');   
-    }
+        $o = factory(App\Organization::class, 'withDates')->create();
+        $i = factory(App\Ilo::class, 'withDates')->create([
+            'organizationId' => $o->id
+        ]);
 
-    public function testDeleteIlosInvalidPath()
-    {
-        $this->delete('/ilos')->assertResponseStatus('405');   
+        $this->delete('/ilos/' . $i->id)
+             ->assertResponseStatus(403);
+
+        $this->seeInTable('ilos', ['id' => $i->id]); 
     }
 }

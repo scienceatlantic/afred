@@ -1,20 +1,25 @@
 <div data-af-loading="!sectors.resource.$resolved">
   <hr>
   
-  <div data-ng-hide="sectors.resource.data.length">
+  <div data-ng-if="!sectors.resource.data.length">
     <p>Nothing found.</p>
   </div>
   
-  <div data-ng-show="sectors.resource.data.length">
+  <div data-ng-if="sectors.resource.data.length">
     <ol start="{{ (sectors.resource.perPage * (sectors.resource.currentPage - 1) + 1)  }}">
-      <li data-dir-paginate="s in sectors.resource.data | itemsPerPage: sectors.resource.perPage" data-total-items="sectors.resource.total" data-current-page="sectors.form.data.page">
+      <li data-dir-paginate="s in sectors.resource.data | itemsPerPage: sectors.resource.perPage" 
+          data-total-items="sectors.resource.total" 
+          data-current-page="sectors.form.data.page">
         <p>
           <a data-ui-sref="admin.sectors.show({ sectorId: s.id })">{{ s.name }}</a>
         </p>
       </li>
     </ol>
 
-    <div data-dir-pagination-controls data-on-page-change="_state.go('admin.sectors.index', { page: sectors.form.data.page })" data-auto-hide="false"></div>
+    <div data-dir-pagination-controls 
+          data-on-page-change="_state.go('admin.sectors.index', { page: sectors.form.data.page })" 
+          data-auto-hide="false">
+    </div>
   </div>
   
   <p>

@@ -1,33 +1,41 @@
 <div class="row">
   <!-- Sidebar menu -->
-  <div class="col-md-3" data-ng-show="_getWidth() > _bootstrap.grid.breakpoints.md">
+  <div class="col-md-3" data-ng-if="_getWidth() > _bootstrap.grid.breakpoints.md">
     <div class="panel panel-default">
       <div class="panel-body">
         <ul class="nav nav-pills nav-stacked">
           <li role="presentation" data-ui-sref-active="active">
             <a data-ui-sref="admin.dashboard">Dashboard</a>
           </li>
+
           <li role="presentation" data-ui-sref-active="active">
             <a data-ui-sref="admin.account">Account</a>
           </li>
+          
           <li role="presentation" data-ui-sref-active="active">
             <a data-ui-sref="admin.facilities">Facilities</a>
           </li>
+
           <li role="presentation" data-ui-sref-active="active">
             <a data-ui-sref="admin.organizations.index">Organizations</a>
           </li>
+
           <li role="presentation" data-ui-sref-active="active">
             <a data-ui-sref="admin.provinces.index">Provinces</a>
           </li>
+
           <li role="presentation" data-ui-sref-active="active">
             <a data-ui-sref="admin.sectors.index">Sectors</a>
           </li>
+
           <li role="presentation" data-ui-sref-active="active">
             <a data-ui-sref="admin.disciplines.index">Disciplines</a>
           </li>
+
           <li role="presentation" data-ui-sref-active="active">
             <a data-ui-sref="admin.reports">Reports</a>
           </li>
+          
           <li role="presentation" data-ui-sref-active="active" data-ng-if="_auth.user.isAdmin">
             <a data-ui-sref="admin.users.index">Users</a>
           </li>

@@ -3,8 +3,8 @@
     <br>
     <span class="h4">
       <span class="fa fa-circle-o-notch fa-spin"></span>
-      <span data-ng-show="loadingText">{{ loadingText }}</span>
-      <span data-ng-hide="loadingText">Loading...</span>
+      <span data-ng-if="loadingText">{{ loadingText }}</span>
+      <span data-ng-if="!loadingText">Loading...</span>
     </span>
   </p>
   

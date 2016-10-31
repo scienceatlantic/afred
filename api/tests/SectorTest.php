@@ -29,7 +29,8 @@ class SectorTest extends TestCase
 
     public function testGetSector()
     {
-        $s = factory(App\Sector::class)->create();
+        $s = factory(App\Sector::class, 'withDates')->create();
+
         $this->get('/sectors/' . $s->id)->seeJson([
             'id' => $s->id
         ]);
@@ -37,82 +38,114 @@ class SectorTest extends TestCase
 
     public function testPostSector()
     {
-        $this->actingAs($this->getAdmin())
-             ->post('/sectors', [
-                 'name' => 'test'
-             ])
-             ->assertResponseOk();   
+        $payload = factory(App\Sector::class)->make()->toArray();
+
+        $resp = $this->actingAs($this->getAdmin())
+                     ->post('/sectors', $payload)
+                     ->seeStatusCode(200)
+                     ->response
+                     ->getContent();
+        $p = json_decode($resp);
+
+        $this->seeInTable('sectors', $payload, null, [
+            'id' => $p->id
+        ]);
     }
 
     public function testPostSectorNameAttrMissing()
     {
+        $payload = factory(App\Sector::class)->make([
+            'name' => null
+        ])->toArray();
+
         $this->actingAs($this->getAdmin())
-             ->post('/sectors')
-             ->assertResponseStatus('302');   
+             ->post('/sectors', $payload)
+             ->assertResponseStatus(302);   
+    }
+
+    public function testPostSectorWithIdenticalNameAttr()
+    {
+        $s = factory(App\Sector::class, 'withDates')->create();
+        $payload = factory(App\Sector::class)->make([
+            'name' => $s->name
+        ])->toArray();
+
+        $this->actingAs($this->getAdmin())
+             ->post('/sectors', $payload)
+             ->assertResponseStatus(302);
     }
 
     public function testPostSectorWithoutAuth()
     {
-        $this->post('/sectors')->assertResponseStatus('403');
-    }
+        $payload = factory(App\Sector::class)->make()->toArray();
 
-    public function testPostSectorInvalidPath()
-    {
-        $this->post('/sectors/1')->assertResponseStatus('405');
+        $this->post('/sectors', $payload)
+             ->assertResponseStatus(403);
     }
 
     public function testPutSector()
     {
-        $s = factory(App\Sector::class)->create();
-        $this->actingAs($this->getAdmin())
-             ->put('/sectors/' . $s->id, [
-                 'name' => 'new_test'
-             ])
-             ->assertResponseOk();
+        $s = factory(App\Sector::class, 'withDates')->create();
+        $payload = factory(App\Sector::class)->make([
+            'id' => $s->id
+        ])->toArray();
+
+        $resp = $this->actingAs($this->getAdmin())
+                     ->put('/sectors/' . $s->id, $payload)
+                     ->response
+                     ->getContent();
+        $updS = json_decode($resp);
+
+        $this->seeInTable('sectors', $payload, null, [
+            'id' => $s->id
+        ]);
     }
 
      public function testPutSectorDoesNotExist()
     {
+        $payload = factory(App\Sector::class)->make()->toArray();
+
         $this->actingAs($this->getAdmin())
-             ->put('/sectors/0', [
-                 'name' => 'new_test'
-             ])
+             ->put('/sectors/0', $payload)
              ->assertResponseStatus(404);
     }   
 
     public function testPutSectorWithoutAuth()
     {
-        $this->put('/sectors/1')->assertResponseStatus('403');
-    }
+        $payload = factory(App\Sector::class)->make()->toArray();
 
-    public function testPutSectorInvalidPath()
-    {
-        $this->put('/sectors')->assertResponseStatus('405');
+        $this->put('/sectors/1', $payload)
+             ->assertResponseStatus(403);
     }
 
     public function testDeleteSector()
     {
-        $s = factory(App\Sector::class)->create();
+        $s = factory(App\Sector::class, 'withDates')->create();
+
         $this->actingAs($this->getAdmin())
              ->delete('/sectors/' . $s->id)
-             ->assertResponseOk();
+             ->assertResponseStatus(200);
+    
+        $this->notSeeInTable('sectors', ['id' => $s->id]);
     }
 
     public function testDeleteSectorWithForeignKeyRestraint()
     {
-        $f = App\Facility::with('sectors')->first();
+        $fr = $this->getPublishedFr('model');
+        $f = $fr->publishedFacility;
+
         $this->actingAs($this->getAdmin())
              ->delete('/sectors/' . $f->sectors[0]->id)
-             ->assertResponseStatus('400');
+             ->assertResponseStatus(400);
+
+        $this->seeInTable('sectors', ['id' => $f->sectors[0]->id]);
     }
 
     public function testDeleteSectorsWithoutAuth()
     {
-        $this->delete('/sectors/1')->assertResponseStatus('403');   
-    }
+        $s = factory(App\Sector::class, 'withDates')->create();
 
-    public function testDeleteSectorsInvalidPath()
-    {
-        $this->delete('/sectors')->assertResponseStatus('405');   
+        $this->delete('/sectors/' . $s->id)
+             ->assertResponseStatus(403);   
     }
 }

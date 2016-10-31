@@ -23,7 +23,11 @@
     
     <!-- Account status. -->
     <div data-af-field data-af-field-label="Account status*">
-      <select class="form-control" name="userStatus" data-ng-model="user.isActive" data-ng-options="i.value as i.key for i in [{ key: 'Active', value: 1 }, { key: 'Disabled', value: 0 }]" required>
+      <select class="form-control" 
+              name="userStatus" 
+              data-ng-model="user.isActive" 
+              data-ng-options="i.value as i.key for i in [{ key: 'Active', value: 1 }, { key: 'Disabled', value: 0 }]" 
+              required>
       </select>
     </div>
 
@@ -40,10 +44,15 @@
     
     <!-- Buttons. -->
     <p>
-      <button class="btn btn-default btn-sm" data-ng-disabled="userForm.$pristine || userForm.$invalid || loading.create" data-ng-click="create()">
+      <button class="btn btn-default btn-sm" 
+              data-ng-disabled="userForm.$pristine || userForm.$invalid || loading.create" 
+              data-ng-click="create()">
         Add <span class="fa fa-check"></span>
       </button>
-      <button class="btn btn-default btn-sm" data-ng-click="clear(userForm)" data-ng-disabled="userForm.$pristine || loading.create">
+
+      <button class="btn btn-default btn-sm" 
+              data-ng-click="clear(userForm)" 
+              data-ng-disabled="userForm.$pristine || loading.create">
         Clear <span class="fa fa-refresh"></span>
       </button>
     </p>

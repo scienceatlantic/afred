@@ -2,6 +2,13 @@
 
 namespace App\Http\Requests;
 
+// Misc.
+use Route;
+
+// Models.
+use App\Discipline;
+
+// Requests.
 use App\Http\Requests\Request;
 
 class DisciplineRequest extends Request
@@ -15,9 +22,23 @@ class DisciplineRequest extends Request
     {
         switch ($this->method()) {
             case 'GET':
-                return true;            
+                return true;
+            case 'POST':
+                // No break.
+            case 'PUT':
+                return $this->isAdmin();
+            case 'DELETE':
+                $id = Route::input('disciplines');
+                $d = Discipline::findOrFail($id);
+
+                // Make sure it does not have any facilities.
+                if ($d->facilities()->count()) {
+                    return false;
+                }
+
+                return $this->isAdmin();
             default:
-                return $this->isAdmin(); 
+                return false;
         }
     }
 
@@ -33,7 +54,7 @@ class DisciplineRequest extends Request
             case 'PUT':
                 // No break.
             case 'POST':
-                $r['name'] = 'required';
+                $r['name'] = 'required|unique:disciplines';
                 break;
         }
         return $r;

@@ -148,6 +148,11 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         templateUrl: 'views/admin.facilities.show.html',
         controller: 'AdminFacilitiesShowController'
       }).
+      state('admin.facilities.compare', {
+        url: '/compare?editedFrId&originalFrId',
+        templateUrl: 'views/admin.facilities.compare.html',
+        controller: 'AdminFacilitiesCompareController'
+      }).
       state('admin.facilities.history', {
         'abstract': true,
         url: '/history?facilityId',

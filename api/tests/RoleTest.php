@@ -33,6 +33,6 @@ class RoleTest extends TestCase
 
     public function testGetRolesWithoutAuth()
     {
-        $this->get('/roles')->assertResponseStatus('403');        
+        $this->get('/roles')->assertResponseStatus(403);        
     }
 }

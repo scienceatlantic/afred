@@ -89,7 +89,7 @@ class FacilityController extends Controller
      */
     public function update(FacilityRequest $request, $id)
     {
-        // We can on update a facility record my marking it as private or
+        // We can on update a facility record by marking it as private or
         // public.
         $f = Facility::findOrFail($id);
         $f->isPublic = $request->isPublic;
@@ -106,13 +106,6 @@ class FacilityController extends Controller
     public function destroy(FacilityRequest $request, $id)
     {
         $f = Facility::findOrFail($id);
-
-        // Not allowed to delete a facility if it has an open/pending update
-        // request.
-        if ($f->currentRevision()->first()->updateRequests()->notClosed()->first()) {
-            abort(400);
-        }
-        
         $deletedFacility = $this->toCcArray($f->toArray());
         $f->delete();
         return $deletedFacility;

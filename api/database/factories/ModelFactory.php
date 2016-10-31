@@ -29,7 +29,7 @@ $factory->define(App\Contact::class,
 );
 
 $factory->defineAs(App\Contact::class, 'complete', 
-    function (Faker\Generator $faker) {
+    function (Faker\Generator $faker) use ($factory) {
         $contact = $factory->raw(App\Contact::class);
 
         return array_merge($contact, [
@@ -45,6 +45,18 @@ $factory->define(App\Discipline::class, function (Faker\Generator $faker) {
         'name' => $faker->name
     ];
 });
+
+$factory->defineAs(App\Discipline::class, 'withDates', 
+    function (Faker\Generator $faker) use ($factory) {
+        $discipline = $factory->raw(App\Discipline::class);
+        $date = $faker->dateTimeThisMonth();
+
+        return array_merge($discipline, [
+            'dateCreated' => $date,
+            'dateUpdated' => $date
+        ]);
+    }
+);
 
 $factory->define(App\Equipment::class, function (Faker\Generator $faker) {
     $purposeNoHtml = $faker->text(1500);
@@ -62,7 +74,7 @@ $factory->define(App\Equipment::class, function (Faker\Generator $faker) {
 });
 
 $factory->defineAs(App\Equipment::class, 'complete', 
-    function (Faker\Generator $faker) {
+    function (Faker\Generator $faker) use ($factory) {
         $equipment = $factory->raw(App\User::class);
         $specificationsNoHtml = $faker->text(1500);
         $specifications = '<p>' . $specificationsNoHtml . '</p>';
@@ -144,12 +156,36 @@ $factory->define(App\Ilo::class,
     }
 );
 
+$factory->defineAs(App\Ilo::class, 'withDates', 
+    function (Faker\Generator $faker) use ($factory) {
+        $ilo = $factory->raw(App\Ilo::class);
+        $date = $faker->dateTimeThisMonth();
+
+        return array_merge($ilo, [
+            'dateCreated' => $date,
+            'dateUpdated' => $date
+        ]);
+    }
+);
+
 $factory->define(App\Organization::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->name,
         'isHidden' => 0
     ];
 });
+
+$factory->defineAs(App\Organization::class, 'withDates', 
+    function (Faker\Generator $faker) use ($factory) {
+        $organization = $factory->raw(App\Organization::class);
+        $date = $faker->dateTimeThisMonth();
+
+        return array_merge($organization, [
+            'dateCreated' => $date,
+            'dateUpdated' => $date
+        ]);
+    }
+);
 
 $factory->define(App\PrimaryContact::class, 
     function (Faker\Generator $faker) use ($dummyEmail) {
@@ -166,7 +202,7 @@ $factory->define(App\PrimaryContact::class,
 );
 
 $factory->defineAs(App\PrimaryContact::class, 'complete', 
-    function (Faker\Generator $faker) {
+    function (Faker\Generator $faker) use ($factory) {
         $primaryContact = $factory->raw(App\PrimaryContact::class);
 
         return array_merge($primaryContact, [
@@ -183,18 +219,59 @@ $factory->define(App\Province::class, function (Faker\Generator $faker) {
     ];
 });
 
+$factory->defineAs(App\Province::class, 'withDates', 
+    function (Faker\Generator $faker) use ($factory) {
+        $province = $factory->raw(App\Province::class);
+        $date = $faker->dateTimeThisMonth();
+
+        return array_merge($province, [
+            'dateCreated' => $date,
+            'dateUpdated' => $date
+        ]);
+    }
+);
+
 $factory->define(App\Sector::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->name
     ];
 });
 
-$factory->define(App\User::class, function (Faker\Generator $faker) {
-    return [
-        'firstName' => $faker->firstName,
-        'lastName' => $faker->lastName,
-        'email' => $faker->email,
-        'password' => str_random(10),
-        'isActive' => 1
-    ];
-});
+$factory->defineAs(App\Sector::class, 'withDates', 
+    function (Faker\Generator $faker) use ($factory) {
+        $sector = $factory->raw(App\Sector::class);
+        $date = $faker->dateTimeThisMonth();
+
+        return array_merge($sector, [
+            'dateCreated' => $date,
+            'dateUpdated' => $date
+        ]);
+    }
+);
+
+$factory->define(App\User::class, 
+    function (Faker\Generator $faker) use ($dummyEmail) {
+        $email = explode('@', $dummyEmail);
+        $email = $email[0] . str_random(10) . '@' . $email[1];
+
+        return [
+            'firstName' => $faker->firstName,
+            'lastName' => $faker->lastName,
+            'email' => $email,
+            'isActive' => 1
+        ];
+    }
+);
+
+$factory->defineAs(App\User::class, 'withPasswordAndDates', 
+    function (Faker\Generator $faker) use ($factory) {
+        $user = $factory->raw(App\User::class);
+        $date = $faker->dateTimeThisMonth();
+
+        return array_merge($user, [
+            'password' => Hash::make(str_random(10)),
+            'dateCreated' => $date,
+            'dateUpdated' => $date
+        ]);
+    }
+);

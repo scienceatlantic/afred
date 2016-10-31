@@ -15,9 +15,15 @@ class SectorRequest extends Request
     {
         switch ($this->method()) {
             case 'GET':
-                return true;            
+                return true;
+            case 'POST':
+                // No break.
+            case 'PUT':     
+                return $this->isAdmin();
+            case 'DELETE':
+                return $this->isAdmin();
             default:
-                return $this->isAdmin(); 
+                return false; 
         }
     }
 
@@ -33,7 +39,7 @@ class SectorRequest extends Request
             case 'PUT':
                 // No break.
             case 'POST':
-                $r['name'] = 'required';
+                $r['name'] = 'required|unique:sectors';
                 break;
         }
         return $r;

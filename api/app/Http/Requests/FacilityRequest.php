@@ -2,6 +2,13 @@
 
 namespace App\Http\Requests;
 
+// Misc.
+use Route;
+
+// Models.
+use App\Facility;
+
+// Requests.
 use App\Http\Requests\Request;
 
 class FacilityRequest extends Request
@@ -16,8 +23,21 @@ class FacilityRequest extends Request
         switch ($this->method()) {
             case 'GET':
                 return true;
-            default:
+            case 'PUT':
                 return $this->isAdmin();
+            case 'DELETE':
+                $f = Facility::findOrFail(Route::input('facilities'));
+                $fr = $f->currentRevision;
+                
+                // Make sure facility does not have any open/pending update 
+                // requests.
+                if ($fr->updateRequests()->notClosed()->count()) {
+                    return false;
+                }
+
+                return $this->isAdmin();
+            default:
+                return false;
         }
     }
 
@@ -31,7 +51,7 @@ class FacilityRequest extends Request
         $r = [];
         switch ($this->method()) {
             case 'PUT':
-                $r['isPublic'] = 'required|digits_between:{0,1}';
+                $r['isPublic'] = 'required|numeric|between:0,1';
                 break;
         }
         return $r;

@@ -2,7 +2,11 @@
   <div class="col-md-5">
     <div class="form-group">
       <label for="state">Status:</label>
-      <select class="form-control input-sm" name="tokenStatus" id="token-status" data-ng-model="facilities.updates.form.data.status" data-ng-change="facilities.updates.index(true)">
+      <select class="form-control input-sm" 
+              name="tokenStatus" 
+              id="token-status" 
+              data-ng-model="facilities.updates.form.data.status" 
+              data-ng-change="facilities.updates.index(true)">
         <option value="OPEN">Open</option>
         <option value="PENDING">Pending</option>
         <option value="CLOSED">Closed</option>
@@ -11,7 +15,7 @@
   </div>
 </div>
 
-<div data-ng-show="_state.current.name != 'admin.facilities' && _state.current.name != 'admin.facilities.index'">
+<div data-ng-if="_state.current.name != 'admin.facilities' && _state.current.name != 'admin.facilities.index'">
   <p><a data-ui-sref="admin.facilities">View facilities</a></p>
 </div>
 
