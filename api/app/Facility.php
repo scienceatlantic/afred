@@ -5,16 +5,11 @@ namespace App;
 // Laravel.
 use Illuminate\Database\Eloquent\Model;
 
-// Misc.
-use Sofa\Eloquence\Eloquence;
-
 // Models.
 use App\FacilityRepository;
 
 class Facility extends Model
-{
-    use Eloquence;
-    
+{   
     /**
      * The attributes that should be mutated to dates.
      *

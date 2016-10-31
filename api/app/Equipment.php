@@ -5,13 +5,8 @@ namespace App;
 // Laravel.
 use Illuminate\Database\Eloquent\Model;
 
-// Misc.
-use Sofa\Eloquence\Eloquence;
-
 class Equipment extends Model
-{
-    use Eloquence;
-    
+{   
     /**
      * Indicates if the model should be timestamped.
      *

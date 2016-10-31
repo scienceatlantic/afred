@@ -145,7 +145,6 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Eloquence\EloquenceServiceProvider::class,
-        Sofa\Eloquence\ServiceProvider::class,
         Barryvdh\Cors\ServiceProvider::class
         
     ],
