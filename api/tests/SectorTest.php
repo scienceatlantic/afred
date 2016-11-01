@@ -86,19 +86,50 @@ class SectorTest extends TestCase
     public function testPutSector()
     {
         $s = factory(App\Sector::class, 'withDates')->create();
-        $payload = factory(App\Sector::class)->make([
-            'id' => $s->id
-        ])->toArray();
+        $payload = factory(App\Sector::class)->make()->toArray();
 
         $resp = $this->actingAs($this->getAdmin())
                      ->put('/sectors/' . $s->id, $payload)
+                     ->seeStatusCode(200)
                      ->response
                      ->getContent();
         $updS = json_decode($resp);
 
         $this->seeInTable('sectors', $payload, null, [
-            'id' => $s->id
+            'id' => $updS->id
         ]);
+    }
+
+    public function testPutSectorWithoutUpdatingNameAttr()
+    {
+        $s = factory(App\Sector::class, 'withDates')->create();
+        $payload = factory(App\Sector::class)->make([
+            'name' => $s->name
+        ])->toArray();
+
+        $resp = $this->actingAs($this->getAdmin())
+                     ->put('/sectors/' . $s->id, $payload)
+                     ->seeStatusCode(200)
+                     ->response
+                     ->getContent();
+        $updS = json_decode($resp);                      
+
+        $this->seeInTable('sectors', $payload, [
+            'id' => $updS->id
+        ]);
+    }
+
+    public function testPuttSectorWithIdenticalNameAttr()
+    {
+        $s = factory(App\Sector::class, 'withDates')->create();
+        $s2 = factory(App\Sector::class, 'withDates')->create();
+        $payload = factory(App\Sector::class)->make([
+            'name' => $s2->name
+        ])->toArray();
+
+        $this->actingAs($this->getAdmin())
+             ->put('/sectors/' . $s->id, $payload)
+             ->assertResponseStatus(302);
     }
 
      public function testPutSectorDoesNotExist()
@@ -112,9 +143,10 @@ class SectorTest extends TestCase
 
     public function testPutSectorWithoutAuth()
     {
+        $s = factory(App\Sector::class, 'withDates')->create();
         $payload = factory(App\Sector::class)->make()->toArray();
 
-        $this->put('/sectors/1', $payload)
+        $this->put('/sectors/' . $s->id, $payload)
              ->assertResponseStatus(403);
     }
 

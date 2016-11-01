@@ -105,8 +105,25 @@ class ProvinceTest extends TestCase
     public function testPutProvince()
     {
         $p = factory(App\Province::class, 'withDates')->create();
+        $payload = factory(App\Province::class)->make()->toArray();
+
+        $resp = $this->actingAs($this->getAdmin())
+                     ->put('/provinces/' . $p->id, $payload)
+                     ->seeStatusCode(200)
+                     ->response
+                     ->getContent();
+        $updP = json_decode($resp);                     
+
+        $this->seeInTable('provinces', $payload, null, [
+            'id' => $updP->id
+        ]);
+    }
+
+    public function testPutProvinceWithoutUpdatingNameAttr()
+    {
+        $p = factory(App\Province::class, 'withDates')->create();
         $payload = factory(App\Province::class)->make([
-            'id' => $p->id    
+            'name' => $p->name    
         ])->toArray();
 
         $resp = $this->actingAs($this->getAdmin())
@@ -114,12 +131,25 @@ class ProvinceTest extends TestCase
                      ->seeStatusCode(200)
                      ->response
                      ->getContent();
-        $updP = json_decode($resp);
+        $updP = json_decode($resp);                     
 
         $this->seeInTable('provinces', $payload, null, [
-            'id' => $p->id
+            'id' => $updP->id
         ]);
     }
+
+    public function testPutProvinceWithIdenticalNameAttr()
+    {
+        $p = factory(App\Province::class, 'withDates')->create();
+        $p2 = factory(App\Province::class, 'withDates')->create();
+        $payload = factory(App\Province::class)->make([
+            'name' => $p2->name
+        ])->toArray();
+
+        $this->actingAs($this->getAdmin())
+             ->put('/provinces/' . $p->id, $payload)
+             ->assertResponseStatus(302);
+    }    
 
      public function testPutProvinceDoesNotExist()
     {
@@ -133,9 +163,7 @@ class ProvinceTest extends TestCase
     public function testPutProvinceWithoutAuth()
     {
         $p = factory(App\Province::class, 'withDates')->create();
-        $payload = factory(App\Province::class)->make([
-            'id' => $p->id
-        ])->toArray();
+        $payload = factory(App\Province::class)->make()->toArray();
 
         $this->put('/provinces/' . $p->id)
              ->assertResponseStatus(403);

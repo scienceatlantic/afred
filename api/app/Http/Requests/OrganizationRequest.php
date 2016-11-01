@@ -24,14 +24,7 @@ class OrganizationRequest extends Request
             case 'GET':
                 return true;
             case 'POST':
-                $name = $this->instance()->input('name');
-
-                // Make sure organization with identical name doesn't exist.
-                if (Organization::where('name', $name)->count()) {
-                    return false;
-                }
-
-                return $this->isAdmin();
+                // No break.
             case 'PUT':
                 return $this->isAdmin();
             case 'DELETE':
@@ -63,6 +56,18 @@ class OrganizationRequest extends Request
             case 'POST':
                 $r['name'] = 'required';
                 $r['isHidden'] = 'required|numeric|between:0,1';
+
+                // Make sure `name` attribute is unique, unless it's an update
+                // request where the attribute has not changed.
+                $addCondition = true;
+                if ($this->method() == 'PUT') {
+                    $id = Route::input('organizations');
+                    $o = Organization::findOrFail($id);
+                    $name = $this->instance()->input('name');
+                    $addCondition = $o->name != $name;
+                }
+                $r['name'] .= $addCondition ? '|unique:organizations' : '';
+
                 break;
         }
         return $r;

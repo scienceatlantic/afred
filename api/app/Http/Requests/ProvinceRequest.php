@@ -54,8 +54,20 @@ class ProvinceRequest extends Request
             case 'PUT':
                 // No break.
             case 'POST':
-                $r['name'] = 'required|unique:provinces';
+                $r['name'] = 'required';
                 $r['isHidden'] = 'required|numeric|between:0,1';
+
+                // Make sure `name` attribute is unique, unless it's an update
+                // request where the attribute has not changed.
+                $addCondition = true;
+                if ($this->method() == 'PUT') {
+                    $id = Route::input('provinces');
+                    $p = Province::findOrFail($id);
+                    $name = $this->instance()->input('name');
+                    $addCondition = $p->name != $name;
+                }
+                $r['name'] .= $addCondition ? '|unique:provinces' : '';
+
                 break;
         }
         return $r;

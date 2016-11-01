@@ -46,14 +46,6 @@ class UserRequest extends Request
                 if (!$this->isAdmin()) {
                     return false;
                 }
-
-                // Make sure email does not already exist.
-                if ($this->method() == 'POST') {
-                    $email = $this->instance()->input('email');
-                    if (User::where('email', $email)->count()) {
-                        return false;
-                    }
-                }
                 
                 // Make sure that the roles being assigned do not have
                 // a higher permission level than the user making the request.
@@ -129,6 +121,17 @@ class UserRequest extends Request
                 for ($i = 0; $i < $length; $i++) {
                     $r["roles.$i"] = 'exists:roles,id';
                 }
+
+                // Make sure `name` attribute is unique, unless it's an update
+                // request where the attribute has not changed.
+                $addCondition = true;
+                if ($this->method() == 'PUT') {
+                    $id = Route::input('users');
+                    $u = User::findOrFail($id);
+                    $email = $this->instance()->input('email');
+                    $addCondition = $u->email != $email;
+                }
+                $r['email'] .= $addCondition ? '|unique:users' : '';                
                 break;
         }
         return $r;
