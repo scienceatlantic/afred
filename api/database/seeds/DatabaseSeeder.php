@@ -12,9 +12,7 @@ class DatabaseSeeder extends Seeder
      * @return void
      */
     public function run()
-    {
-        Model::unguard();
-        
+    {   
         // Contains real data.
         $this->call(ProvincesTableSeeder::class);
         $this->call(OrganizationsTableSeeder::class);
@@ -31,7 +29,5 @@ class DatabaseSeeder extends Seeder
         
         // Import data from AFRED v1.0.
         //$this->call(ImportAfredV1DataSeeder::class);
-
-        Model::reguard();
     }
 }
