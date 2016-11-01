@@ -37,18 +37,18 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         return $app;
     }
 
-    protected static function getSuperAdmin()
+    protected static function getSuperAdmin($attr = [])
     {
         $role = App\Role::where('name', 'SUPER_ADMIN')->first();
-        $user = factory(App\User::class, 'withPasswordAndDates')->create();
+        $user = factory(App\User::class, 'withPasswordAndDates')->create($attr);
         $user->roles()->attach([$role->id]);
         return $user;
     }
 
-    protected static function getAdmin()
+    protected static function getAdmin($attr = [])
     {
         $role = App\Role::where('name', 'ADMIN')->first();
-        $user = factory(App\User::class, 'withPasswordAndDates')->create();
+        $user = factory(App\User::class, 'withPasswordAndDates')->create($attr);
         $user->roles()->attach([$role->id]);
         return $user;
     }

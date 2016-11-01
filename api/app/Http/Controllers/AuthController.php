@@ -34,7 +34,7 @@ class AuthController extends Controller
             }
         }
 
-        return 'Not authorised';
+        return 'Not authorized';
     }
     
     public function ping()
