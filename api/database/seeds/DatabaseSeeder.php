@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
         
         // Contains dummy data.
         if (env('APP_ENV') == 'local') {
-            //$this->call(DummyUsersTableSeeder::class);
+            $this->call(DummyUsersTableSeeder::class);
         }
         
         // Import data from AFRED v1.0.
