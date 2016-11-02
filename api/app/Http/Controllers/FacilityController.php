@@ -93,7 +93,19 @@ class FacilityController extends Controller
         // public.
         $f = Facility::findOrFail($id);
         $f->isPublic = $request->isPublic;
-        $f->update();
+
+        // Update without updating search index.
+        Facility::withoutSyncingToSearch(function() use (&$f) {
+            $f->update();
+        });
+
+        // Update/remove facility from search index depending on visibility. 
+        if ($f->isPublic) {
+            $f->searchable();
+        } else {
+            $f->unsearchable();
+        }
+
         return $this->toCcArray($f->toArray());
     }
 

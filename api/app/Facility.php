@@ -3,6 +3,7 @@
 namespace App;
 
 // Laravel.
+use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
 
 // Models.
@@ -10,6 +11,8 @@ use App\FacilityRepository;
 
 class Facility extends Model
 {   
+    use Searchable;
+    
     /**
      * The attributes that should be mutated to dates.
      *
@@ -44,6 +47,39 @@ class Facility extends Model
         'datePublished',
         'dateUpdated'
     ];
+
+    /**
+     * Get the index name for the model.
+     *
+     * @return string
+     */
+    public function searchableAs()
+    {
+        return env('SCOUT_PREFIX', '') . 'facilities';
+    }
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        // Get a fresh copy instead of lazy loading on the actual model 
+        // instance.
+        $f = Facility::find($this->id);
+
+        $f->contacts;
+        $f->equipment;
+        $f->disciplines;
+        $f->organization;
+        $f->organization->ilo;
+        $f->primaryContact;
+        $f->province;        
+        $f->sectors;
+
+        return $f->toArray();
+    }
     
     /**
      * Relationship between a facility the revision (facility repository record) 

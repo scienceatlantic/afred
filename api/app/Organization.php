@@ -38,11 +38,12 @@ class Organization extends Model
     {
         return $this->hasOne('App\Ilo', 'organizationId');
     }
-    
+
     /**
      * Relationship between an organization and its facilities.
      */
-    public function facilities() {
+    public function facilities()
+    {
         return $this->hasMany('App\Facility', 'organizationId');
     }
     

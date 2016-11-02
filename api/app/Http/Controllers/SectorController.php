@@ -75,6 +75,12 @@ class SectorController extends Controller
         $s->name = $request->name;
         $s->dateUpdated = $this->now();
         $s->save();
+
+        // Update search index.
+        if ($f = $s->facilities()->get()) {
+            $f->searchable();
+        }
+
         return $this->toCcArray($s->toArray());
     }
 
