@@ -28,7 +28,7 @@ class ProvinceRequest extends Request
             case 'PUT':
                 return $this->isAdmin();
             case 'DELETE':
-                $id = Route::input('provinces');
+                $id = Route::input('province');
                 $p = Province::findOrFail($id);
 
                 // Make sure province has no facilities.
@@ -61,7 +61,7 @@ class ProvinceRequest extends Request
                 // request where the attribute has not changed.
                 $addCondition = true;
                 if ($this->method() == 'PUT') {
-                    $id = Route::input('provinces');
+                    $id = Route::input('province');
                     $p = Province::findOrFail($id);
                     $name = $this->instance()->input('name');
                     $addCondition = $p->name != $name;

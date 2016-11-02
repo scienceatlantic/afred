@@ -28,7 +28,11 @@ class UpdateFacilityRepositoryRequest extends Request
         // being updated to 'REJECTED').
         $state = $this->instance()->input('state');        
         $id = Route::input('facility_repository');
-        $fr = FacilityRepository::find($id);
+        if ($this->method() != 'POST') {
+            $fr = FacilityRepository::findOrFail($id);
+        } else {
+            $fr = FacilityRepository::find($id);
+        }
         $currentState = $fr ? $fr->state : null;
     
         switch ($state) {
@@ -99,7 +103,7 @@ class UpdateFacilityRepositoryRequest extends Request
                 // If a primary contact ID is provided, make sure it's valid
                 // (i.e. belongs to the facility being updated).
                 $primaryContact = $this->instance()->input($p);
-                $r["$p.id"] = 'exists:primary_contacts,id,facilityId,'. $fId;
+                $r["$p.id"] = 'nullable|exists:primary_contacts,id,facilityId,'. $fId;
                 
                 // If a contact ID is provided, make sure it's valid (i.e.
                 // belongs to the facility being updated).
@@ -107,7 +111,7 @@ class UpdateFacilityRepositoryRequest extends Request
                 if (is_array($contacts)) {
                     $length = count($contacts);              
                     for ($i = 0; $i < $length; $i++) {
-                        $r["$c.$i.id"] = 'exists:contacts,id,facilityId,'. $fId;
+                        $r["$c.$i.id"] = 'nullable|exists:contacts,id,facilityId,'. $fId;
                     }
                 }
                 
@@ -116,12 +120,12 @@ class UpdateFacilityRepositoryRequest extends Request
                 $equipment = $this->instance()->input($e);
                 $length = count($equipment);              
                 for ($i = 0; $i < $length; $i++) {
-                    $r["$e.$i.id"] = 'exists:equipment,id,facilityId,'. $fId;
+                    $r["$e.$i.id"] = 'nullable|exists:equipment,id,facilityId,'. $fId;
                 }     
                 // No break.
             case 'PENDING_APPROVAL':
                 // Facility section.
-                $r["$f.organizationId"] = 'exists:organizations,id';
+                $r["$f.organizationId"] = 'nullable|exists:organizations,id';
                 $r["$f.provinceId"] = 'required|exists:provinces,id';
                 $r["$f.name"] = 'required';
                 $r["$f.city"] = '';
@@ -154,11 +158,12 @@ class UpdateFacilityRepositoryRequest extends Request
                 $r["$p.lastName"] = 'required';
                 $r["$p.email"] = 'required';
                 $r["$p.telephone"] = 'required';
+                $r["$p.extension"] = '';
                 $r["$p.position"] = 'required';
                 $r["$p.website"] = '';
                 
                 // Contacts section. Contacts are optional.
-                $r[$c] = 'array|between:1,10';
+                $r[$c] = 'nullable|array|between:1,10';
                 $contacts = $this->instance()->input($c);
                 if (is_array($contacts)) {
                     $length = count($contacts);              
@@ -167,6 +172,7 @@ class UpdateFacilityRepositoryRequest extends Request
                         $r["$c.$i.lastName"] = 'required';
                         $r["$c.$i.email"] = 'required';
                         $r["$c.$i.telephone"] = '';
+                        $r["$c.$i.extension"] = '';
                         $r["$c.$i.position"] = '';
                         $r["$c.$i.website"] = '';
                     }
@@ -182,8 +188,8 @@ class UpdateFacilityRepositoryRequest extends Request
                     $r["$e.$i.manufacturer"] = '';
                     $r["$e.$i.purpose"] = 'required';
                     $r["$e.$i.specifications"] = '';
-                    $r["$e.$i.isPublic"] = 'boolean';
-                    $r["$e.$i.hasExcessCapacity"] = 'boolean';
+                    $r["$e.$i.isPublic"] = 'required|boolean';
+                    $r["$e.$i.hasExcessCapacity"] = 'required|boolean';
                     $r["$e.$i.yearPurchased"] = 'date_format:Y';
                     $r["$e.$i.yearManufactured"] = 'date_format:Y';
                     $r["$e.$i.keywords"] = '';

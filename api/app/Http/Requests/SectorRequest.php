@@ -52,7 +52,7 @@ class SectorRequest extends Request
                 // request where the attribute has not changed.
                 $addCondition = true;
                 if ($this->method() == 'PUT') {
-                    $id = Route::input('sectors');
+                    $id = Route::input('sector');
                     $s = Sector::findOrFail($id);
                     $name = $this->instance()->input('name');
                     $addCondition = $s->name != $name;

@@ -359,14 +359,14 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
 
     protected function unnullify($arr, $strict = true, $deep = false)
     {
-        return array_where($arr, function($key, $value) use ($strict, $deep) {
+        return array_where($arr, function($value, $key) use ($strict, $deep) {
             if (is_array($value) && $deep) {
                 return $this->unnullify($value, $strict, $deep);
             } else {
                 if ($strict) {
                     return $value !== null;
                 } else {
-                    return !is_empty($value);
+                    return !empty($value);
                 }
             }
         });

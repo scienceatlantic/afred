@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
@@ -28,6 +29,6 @@ class CreateDisciplinesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('disciplines');
+        Schema::dropIfExists('disciplines');
     }
 }

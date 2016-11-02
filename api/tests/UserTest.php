@@ -52,7 +52,7 @@ class UserTest extends TestCase
     {
         // We're testing a scenario that shouldn't happen (where a user is 
         // created with no roles, i.e. should always have at least one role).
-        $u = factory(App\User::class)->create();
+        $u = factory(App\User::class, 'withPasswordAndDates')->create();
 
         $this->actingAs($this->getAdmin())
              ->get('/users/' . $u->id)->seeJson([

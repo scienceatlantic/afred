@@ -92,12 +92,11 @@ class PutFacilityRepositoryTest extends TestCase
         $pdnFr = $this->getPendingApprovalFr('model');
         $params = $pdnFr->id . '?state=PUBLISHED';
 
-        $o = factory(App\Organization::class)->create([
-            'name' => 'some new organization'
-        ]);
+        $name = ['name' => str_random(30)];
+        $o = factory(App\Organization::class, 'withDates')->create($name);
         $pData = $pdnFr->data;
         $pData['facility']['organizationId'] = null;
-        $pData['organization'] = ['name' => 'some new organization'];
+        $pData['organization'] = $name;
         $pdnFr->data = $pData;
         $pdnFr->save();
 
@@ -523,12 +522,11 @@ class PutFacilityRepositoryTest extends TestCase
         $pdnFr = $this->getPendingEditApprovalFr('model');
         $params = $pdnFr->id. '?state=PUBLISHED_EDIT';
 
-        $o = factory(App\Organization::class)->create([
-            'name' => 'some new organization'
-        ]);
+        $name = ['name' => str_random(30)];
+        $o = factory(App\Organization::class, 'withDates')->create($name);
         $pData = $pdnFr->data;
         $pData['facility']['organizationId'] = null;
-        $pData['organization'] = ['name' => 'some new organization'];
+        $pData['organization'] = $name;
         $pdnFr->data = $pData;
         $pdnFr->save();
 

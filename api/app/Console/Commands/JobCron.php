@@ -59,7 +59,7 @@ class JobCron extends Command
         for ($cycle = 1; $cycle <= $numCycles; $cycle++) {   
             $numJobs = DB::table('jobs')->count();
             for ($job = 1; $job <= $numJobs; $job++) {
-                Artisan::call('queue:work');
+                Artisan::call('queue:work --once');
             }
             Log::info('Processed ' . $numJobs . ' job(s).');
             sleep($sleepDur);

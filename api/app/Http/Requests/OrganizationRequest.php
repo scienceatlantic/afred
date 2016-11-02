@@ -28,7 +28,7 @@ class OrganizationRequest extends Request
             case 'PUT':
                 return $this->isAdmin();
             case 'DELETE':
-                $id = Route::input('organizations');
+                $id = Route::input('organization');
                 $o = Organization::findOrFail($id);
 
                 // Make sure organization does not have any facilities.
@@ -61,7 +61,7 @@ class OrganizationRequest extends Request
                 // request where the attribute has not changed.
                 $addCondition = true;
                 if ($this->method() == 'PUT') {
-                    $id = Route::input('organizations');
+                    $id = Route::input('organization');
                     $o = Organization::findOrFail($id);
                     $name = $this->instance()->input('name');
                     $addCondition = $o->name != $name;

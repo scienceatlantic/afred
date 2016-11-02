@@ -349,10 +349,11 @@ class FacilityRepositoryController extends Controller
                 ->first();
             // If the organization is unique, then we create it.
             if (!$o) {
-                $o = Organization::create($d['organization']);
+                $o = new Organization($d['organization']);
+                $o->isHidden = false;
                 $o->dateCreated = $now;
                 $o->dateUpdated = $now;
-                $o->update();
+                $o->save();
             }
             $d['facility']['organizationId'] = $o->id;     
             // Delete the organization key since we no longer need it (we don't

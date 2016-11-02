@@ -29,7 +29,7 @@ class OrganizationTest extends TestCase
 
     public function testGetOrganization()
     {
-        $o = factory(App\Organization::class)->create();
+        $o = factory(App\Organization::class, 'withDates')->create();
         
         $this->get('/organizations/' . $o->id)->seeJson([
             'id' => $o->id

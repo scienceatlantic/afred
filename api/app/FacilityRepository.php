@@ -153,9 +153,11 @@ class FacilityRepository extends Model
     public function scopePublished($query, $isPublic = -1)
     {
         $f = Facility::select('facilityRepositoryId');
+
         if ($isPublic !== -1) {
             $f->where('isPublic', $isPublic);
         }
+
         $query->whereIn('id', $f->get());        
     }
     
@@ -170,9 +172,11 @@ class FacilityRepository extends Model
     public function scopeRejected($query, $includeEdits = false)
     {
         $query->where('state', 'REJECTED');
+
         if ($includeEdits) {
             $query->orWhere('state', 'REJECTED_EDIT');
         }
+        
         return $query;
     }
     

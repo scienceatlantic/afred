@@ -11,8 +11,6 @@
 |
 */
 
-/* ADD DATES!!*/
-
 $dummyEmail = env('MAIL_UNIVERSAL_TO_ADDRESS', 'afred.dev@scienceatlantic.ca');
 
 $factory->define(App\Contact::class, 
@@ -68,8 +66,8 @@ $factory->define(App\Equipment::class, function (Faker\Generator $faker) {
         'type' => $faker->text(150),
         'purpose' => $purpose,
         'purposeNoHtml' => $purposeNoHtml,
-        'isPublic' => 1,
-        'hasExcessCapacity' => 0,
+        'isPublic' => true,
+        'hasExcessCapacity' => false,
     ];
 });
 

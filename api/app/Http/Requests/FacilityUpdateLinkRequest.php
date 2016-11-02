@@ -30,7 +30,7 @@ class FacilityUpdateLinkRequest extends Request
             case 'PUT':
                 // No break.              
             case 'DELETE':                
-                $id = Route::input('facility_update_links');
+                $id = Route::input('facility_update_link');
                 $ful = FacilityUpdateLink::findOrFail($id);
                 return $ful->status == 'OPEN' && $this->isAdmin();
             default:

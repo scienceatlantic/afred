@@ -78,7 +78,13 @@ class UserSetting extends Model
             // Get an array of settings values.
             if (is_array($name)) {
                 // Grab the data from the database.
+                $count = 0;
                 foreach($name as $k => $v) {
+                    $count++;
+                    if ($count === 1) {
+                        $query->where('name', is_string($k) ? $k : $v);
+                        continue;    
+                    }
                     $query->orWhere('name', is_string($k) ? $k : $v);
                 }
                 $query = $query->get()->pluck('value', 'name');

@@ -36,7 +36,7 @@ class UserRequest extends Request
                 // If updating user password.
                 if ($this->instance()->input('password', false)) {
                     $maxAuthRole = Auth::user()->getMaxPermission();
-                    $maxUserRole = User::findOrFail(Route::input('users'))
+                    $maxUserRole = User::findOrFail(Route::input('user'))
                         ->getMaxPermission();
                     return $maxAuthRole >= $maxUserRole;
                 }
@@ -64,20 +64,20 @@ class UserRequest extends Request
                 }
 
                 // Not allowed to delete yourself.
-                if (Auth::user()->id == Route::input('users')) {
+                if (Auth::user()->id == Route::input('user')) {
                     return false;
                 }
 
                 // Not allowed to delete a user that has reviewed facility
                 // repository records.
-                if (User::find(Route::input('users'))->frs()->count()) {
+                if (User::find(Route::input('user'))->frs()->count()) {
                     return false;
                 }
 
                 // Make making the request is not of a lower permission level
                 // than the user being deleted.
                 $maxAuthRole = Auth::user()->getMaxPermission();
-                $maxUserRole = User::findOrFail(Route::input('users'))
+                $maxUserRole = User::findOrFail(Route::input('user'))
                     ->getMaxPermission();
 
                 if ($maxAuthRole !== -1 && $maxUserRole !== -1) {
@@ -126,7 +126,7 @@ class UserRequest extends Request
                 // request where the attribute has not changed.
                 $addCondition = true;
                 if ($this->method() == 'PUT') {
-                    $id = Route::input('users');
+                    $id = Route::input('user');
                     $u = User::findOrFail($id);
                     $email = $this->instance()->input('email');
                     $addCondition = $u->email != $email;
