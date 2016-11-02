@@ -102,26 +102,15 @@ class UpdateFacilityRepositoryRequest extends Request
                 
                 // If a primary contact ID is provided, make sure it's valid
                 // (i.e. belongs to the facility being updated).
-                $primaryContact = $this->instance()->input($p);
                 $r["$p.id"] = 'nullable|exists:primary_contacts,id,facilityId,'. $fId;
                 
                 // If a contact ID is provided, make sure it's valid (i.e.
                 // belongs to the facility being updated).
-                $contacts = $this->instance()->input($c);
-                if (is_array($contacts)) {
-                    $length = count($contacts);              
-                    for ($i = 0; $i < $length; $i++) {
-                        $r["$c.$i.id"] = 'nullable|exists:contacts,id,facilityId,'. $fId;
-                    }
-                }
+                $r["$c.*.id"] = 'nullable|exists:contacts,id,facilityId,'. $fId;
                 
                 // If an equipment ID is provided, make sure it's valid (i.e.
                 // belongs to the facility being updated).
-                $equipment = $this->instance()->input($e);
-                $length = count($equipment);              
-                for ($i = 0; $i < $length; $i++) {
-                    $r["$e.$i.id"] = 'nullable|exists:equipment,id,facilityId,'. $fId;
-                }     
+                $r["$e.*.id"] = 'nullable|exists:equipment,id,facilityId,'. $fId;   
                 // No break.
             case 'PENDING_APPROVAL':
                 // Facility section.
@@ -141,17 +130,11 @@ class UpdateFacilityRepositoryRequest extends Request
                 
                 // Disciplines section.
                 $r[$d] = 'required|array';
-                $length = count($this->instance()->input($d));
-                for ($i = 0; $i < $length; $i++) {
-                    $r["$d.$i"] = 'exists:disciplines,id';
-                }
+                $r["$d.*"] = 'exists:disciplines,id';
                 
                 // Sectors section.
                 $r[$s] = 'required|array';
-                $length = count($this->instance()->input($s));
-                for ($i = 0; $i < $length; $i++) {
-                    $r["$s.$i"] = 'exists:sectors,id';
-                }
+                $r["$s.*"] = 'exists:sectors,id';
                 
                 // Primary contact section.
                 $r["$p.firstName"] = 'required';
@@ -164,36 +147,26 @@ class UpdateFacilityRepositoryRequest extends Request
                 
                 // Contacts section. Contacts are optional.
                 $r[$c] = 'nullable|array|between:1,10';
-                $contacts = $this->instance()->input($c);
-                if (is_array($contacts)) {
-                    $length = count($contacts);              
-                    for ($i = 0; $i < $length; $i++) {
-                        $r["$c.$i.firstName"] = 'required';
-                        $r["$c.$i.lastName"] = 'required';
-                        $r["$c.$i.email"] = 'required';
-                        $r["$c.$i.telephone"] = '';
-                        $r["$c.$i.extension"] = '';
-                        $r["$c.$i.position"] = '';
-                        $r["$c.$i.website"] = '';
-                    }
-                }
+                $r["$c.*.firstName"] = 'required';
+                $r["$c.*.lastName"] = 'required';
+                $r["$c.*.email"] = 'required';
+                $r["$c.*.telephone"] = '';
+                $r["$c.*.extension"] = '';
+                $r["$c.*.position"] = '';
+                $r["$c.*.website"] = '';
                 
                 // Equipment section
                 $r[$e] = 'required|array|between:1,50';
-                $equipment = $this->instance()->input($e);
-                $length = count($equipment);              
-                for ($i = 0; $i < $length; $i++) {
-                    $r["$e.$i.type"] = 'required';
-                    $r["$e.$i.model"] = '';
-                    $r["$e.$i.manufacturer"] = '';
-                    $r["$e.$i.purpose"] = 'required';
-                    $r["$e.$i.specifications"] = '';
-                    $r["$e.$i.isPublic"] = 'required|boolean';
-                    $r["$e.$i.hasExcessCapacity"] = 'required|boolean';
-                    $r["$e.$i.yearPurchased"] = 'date_format:Y';
-                    $r["$e.$i.yearManufactured"] = 'date_format:Y';
-                    $r["$e.$i.keywords"] = '';
-                }            
+                $r["$e.*.type"] = 'required';
+                $r["$e.*.model"] = '';
+                $r["$e.*.manufacturer"] = '';
+                $r["$e.*.purpose"] = 'required';
+                $r["$e.*.specifications"] = '';
+                $r["$e.*.isPublic"] = 'required|boolean';
+                $r["$e.*.hasExcessCapacity"] = 'required|boolean';
+                $r["$e.*.yearPurchased"] = 'date_format:Y';
+                $r["$e.*.yearManufactured"] = 'date_format:Y';
+                $r["$e.*.keywords"] = '';           
                 break; 
             case 'PUBLISHED':
             case 'REJECTED':

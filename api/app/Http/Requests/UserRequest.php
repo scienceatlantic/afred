@@ -116,11 +116,7 @@ class UserRequest extends Request
                 }
                 $r['isActive'] = 'required|numeric|between:0,1';
                 $r['roles'] = 'required|array';
-                $roles = $this->instance()->input('roles', []);
-                $length = count($roles);
-                for ($i = 0; $i < $length; $i++) {
-                    $r["roles.$i"] = 'exists:roles,id';
-                }
+                $r["roles.*"] = 'exists:roles,id';
 
                 // Make sure `name` attribute is unique, unless it's an update
                 // request where the attribute has not changed.
