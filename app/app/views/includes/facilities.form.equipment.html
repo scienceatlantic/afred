@@ -69,10 +69,10 @@
             <div data-af-field data-af-field-label="Excess capacity*" data-af-field-tooltip="'Excess capacity means that the piece of equipment is not being fully utilized, that there is time available for it to be used by others or on other projects.<br><b><i>Please note: this field will not be publicly viewable</i></b>.'">
               <div class="radio">
                 <label>
-                  <input type="radio" name="equipmentExcessCapacity{{ $index }}" data-ng-model="e.hasExcessCapacity" data-ng-value="true" required> Yes 
+                  <input type="radio" name="equipmentExcessCapacity{{ $index }}" data-ng-model="e.hasExcessCapacity" data-ng-value="1" required> Yes 
                 </label>
                 <label>
-                  <input type="radio" name="equipmentExcessCapacity{{ $index }}" data-ng-model="e.hasExcessCapacity" data-ng-value="false" required> No
+                  <input type="radio" name="equipmentExcessCapacity{{ $index }}" data-ng-model="e.hasExcessCapacity" data-ng-value="0" required> No
                 </label>
               </div>
             </div>
@@ -80,10 +80,10 @@
             <div data-af-field data-af-field-label="Search visibility*" data-af-field-tooltip="'To ensure that we have a complete listing of everything within your facility, please include all equipment, even that which you do not want publicly viewable. If you do not want the piece of equipment to be publicly viewable, check ‘Private’.'">
               <div class="radio">
                 <label>
-                  <input type="radio" name="equipmentIsPublic{{ $index }}" data-ng-model="e.isPublic" data-ng-value="true" selected required> Public 
+                  <input type="radio" name="equipmentIsPublic{{ $index }}" data-ng-model="e.isPublic" data-ng-value="1" selected required> Public 
                 </label>
                 <label>
-                  <input type="radio" name="equipmentIsPublic{{ $index }}" data-ng-model="e.isPublic" data-ng-value="false" required> Hidden
+                  <input type="radio" name="equipmentIsPublic{{ $index }}" data-ng-model="e.isPublic" data-ng-value="0" required> Hidden
                 </label>
               </div>
             </div>
