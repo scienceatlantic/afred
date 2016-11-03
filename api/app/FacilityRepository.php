@@ -2,7 +2,13 @@
 
 namespace App;
 
+// Laravel.
 use Illuminate\Database\Eloquent\Model;
+
+// Misc.
+use DB;
+
+// Models.
 use App\Facility;
 
 class FacilityRepository extends Model
@@ -202,11 +208,16 @@ class FacilityRepository extends Model
      */
     public function scopeRemoved($query)
     {
-        return $query->whereNotIn('facilityId', Facility::select('id')->get())
+        $fr = FacilityRepository::select(DB::raw('MAX(id) as id, facilityId'))
+            ->whereNotIn('facilityId', Facility::all()->pluck('id')->toArray())
+            ->whereNotNull('facilityId')
             ->where('state', '!=', 'PENDING_APPROVAL')
             ->where('state', '!=', 'PENDING_EDIT_APPROVAL')
             ->where('state', '!=', 'REJECTED')
             ->where('state', '!=', 'REJECTED_EDIT')
-            ->groupBy('facilityId');
+            ->groupBy('facilityId')
+            ->get();
+
+        return $query->whereIn('id', $fr->pluck('id')->toArray());
     }
 }
