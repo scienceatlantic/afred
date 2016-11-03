@@ -247,13 +247,13 @@ class FacilityRepositoryController extends Controller
         }
         
         // Remove any unnecessary keys.
-        $d = $this->cleanFrData($d, $isUpdate);
+        $d = $this->cleanFrDataBeforeReview($d, $isUpdate);
         
         // Sort keys and return.
         return $this->ksortFrData($d);
     }
     
-    private function cleanFrData($d, $isUpdate = false)
+    private function cleanFrDataBeforeReview($d, $isUpdate = false)
     {
         // Facility section.
         if (!$isUpdate) {
@@ -366,16 +366,20 @@ class FacilityRepositoryController extends Controller
         $d['facility']['dateUpdated'] = $now;
         // For updates.
         if ($isUpdate) {
-            $d['facility']['id'] = $fr->facility()->first()->id;
-            $d['facility']['datePublished'] = $fr->facility()->first()
-                ->datePublished->toDateTimeString();
+            $d['facility']['id'] = $fr->facility->id;
+            $d['facility']['datePublished'] = $fr->facility->datePublished
+                ->toDateTimeString();
                 
             $fr->facility()->delete();
         // For new records.
         } else {
             $d['facility']['datePublished'] = $now;
         }
-        $f = $fr->publishedFacility()->create($d['facility']);
+        // Do not update the search index yet.
+        $f = null;
+        Facility::withoutSyncingToSearch(function () use (&$fr, &$d, &$f) {
+            $f = $fr->publishedFacility()->create($d['facility']);
+        });
         $d['facility'] = $f->toArray();
         // We don't need this key in facility repository.
         if (array_key_exists('descriptionNoHtml', $d['facility'])) {
@@ -405,7 +409,10 @@ class FacilityRepositoryController extends Controller
         
         // Equipment section.
         foreach($d['equipment'] as $i => $e) {
-            $e = $f->equipment()->create($e);
+            // Do not update the search index yet.
+            Equipment::withoutSyncingToSearch(function() use (&$f, &$e) {
+                $e = $f->equipment()->create($e);
+            });
             $d['equipment'][$i] = $e->toArray();
             // The following keys do not have to be in facility repository.
             if (array_key_exists('purposeNoHtml', $d['equipment'][$i])) {
@@ -419,6 +426,10 @@ class FacilityRepositoryController extends Controller
             $e->specificationsNoHtml = strip_tags($e->specifications);
             $e->update();
         }
+
+        // Safe to update the search index.
+        $f->searchable();
+        $f->equipment()->searchable();
         
         // Sort and return data.
         return $this->ksortFrData($d);
