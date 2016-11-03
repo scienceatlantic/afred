@@ -146,7 +146,7 @@ class UpdateFacilityRepositoryRequest extends Request
                 $r["$p.website"] = '';
                 
                 // Contacts section. Contacts are optional.
-                $r[$c] = 'nullable|array|between:1,10';
+                $r[$c] = 'nullable|array|between:0,10';
                 $r["$c.*.firstName"] = 'required';
                 $r["$c.*.lastName"] = 'required';
                 $r["$c.*.email"] = 'required';
@@ -162,10 +162,10 @@ class UpdateFacilityRepositoryRequest extends Request
                 $r["$e.*.manufacturer"] = '';
                 $r["$e.*.purpose"] = 'required';
                 $r["$e.*.specifications"] = '';
-                $r["$e.*.isPublic"] = 'required|boolean';
-                $r["$e.*.hasExcessCapacity"] = 'required|boolean';
-                $r["$e.*.yearPurchased"] = 'date_format:Y';
-                $r["$e.*.yearManufactured"] = 'date_format:Y';
+                $r["$e.*.isPublic"] = 'required|numeric|between:0,1';
+                $r["$e.*.hasExcessCapacity"] = 'required|numeric|between:0,1';
+                $r["$e.*.yearPurchased"] = 'nullable|date_format:Y';
+                $r["$e.*.yearManufactured"] = 'nullable|date_format:Y';
                 $r["$e.*.keywords"] = '';           
                 break; 
             case 'PUBLISHED':
