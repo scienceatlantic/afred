@@ -44,7 +44,8 @@ class CreateFacilitiesTable extends Migration
             $table->string('website', 2083)
                   ->nullable();
             $table->text('description');
-            $table->text('descriptionNoHtml');
+            $table->text('descriptionNoHtml')
+                  ->nullable();
             $table->boolean('isPublic')
                   ->default(true);
             $table->dateTime('datePublished');

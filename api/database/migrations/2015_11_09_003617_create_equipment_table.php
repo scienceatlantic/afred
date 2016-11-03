@@ -31,7 +31,8 @@ class CreateEquipmentTable extends Migration
                   ->nullable()
                   ->index();
             $table->text('purpose');
-            $table->text('purposeNoHtml');
+            $table->text('purposeNoHtml')
+                  ->nullable();
             $table->text('specifications')
                   ->nullable();
             $table->text('specificationsNoHtml')
