@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call(SettingsTableSeeder::class);
         
         // Contains dummy data.
-        if (env('APP_ENV') == 'local') {
+        if (App::environment('local')) {
             $this->call(DummyUsersTableSeeder::class);
         }
         
