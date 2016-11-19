@@ -28,7 +28,7 @@ class JobCron extends Command
      *
      * @var string
      */
-    protected $description = 'Runs `queue:work` over and over again';
+    protected $description = 'Runs `queue:work --once` repeatedly';
 
     /**
      * Create a new command instance.
@@ -56,12 +56,30 @@ class JobCron extends Command
         $numCycles = $this->filterNumCycles($s['cronJobNumCycles']);
         $sleepDur = $this->filterSleepDuration($s['cronJobSleepDuration']);
         
+        // Create raw command string.
+        // Calling `$this->call('queue:work', ['--once']);` does not seem to 
+        // work (i.e. argument `--once` is ignored and queue is run in daemon
+        // mode).
+        $command = ' ' . __DIR__ . '/../../../artisan queue:work --once';
+
         for ($cycle = 1; $cycle <= $numCycles; $cycle++) {   
             $numJobs = DB::table('jobs')->count();
+            $numJobsExecuted = 0;
             for ($job = 1; $job <= $numJobs; $job++) {
-                Artisan::call('queue:work --once');
+                $id = DB::table('jobs')->first()->id;
+
+                exec(PHP_BINARY . $command);
+                
+                if (!DB::table('jobs')->where('id', $id)->first()) {
+                    $numJobsExecuted++;
+                }
             }
-            Log::info('Processed ' . $numJobs . ' job(s).');
+            if ($numJobs === $numJobsExecuted) {
+                Log::info('Executed ' . $numJobs . ' job(s).');
+            } else {
+                Log::warning('Found ' . $numJobs . ' job(s) but only ' 
+                    . $numJobsExecuted . ' job(s) successfully executed.');
+            }
             sleep($sleepDur);
         }
     }
