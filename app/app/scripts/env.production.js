@@ -77,7 +77,7 @@ angular.module('afredApp').run(['$rootScope', function($rootScope) {
     algolia: {
       api: {
         applicationId: 'C8MSUIO9J3',
-        key: 'edfa4d5152caa311a0fdbcf0fd6d002e'
+        key: '576b55b1594fa147cb9266ce2572fdd4'
       },
       
       // Index names for facilities and equipment searches.
