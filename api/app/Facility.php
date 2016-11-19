@@ -69,6 +69,11 @@ class Facility extends Model
         // instance.
         $f = Facility::find($this->id);
 
+        // If it's not public, return empty array.
+        if (!$f->isPublic) {
+            return [];
+        }
+
         $f->contacts;
         $f->equipment;
         $f->disciplines;

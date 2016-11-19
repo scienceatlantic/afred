@@ -60,6 +60,15 @@ class Equipment extends Model
         // instance.
         $e = Equipment::find($this->id);
 
+        // If either the facility it belongs to or the equipment itself is 
+        // not public, return an empty array.
+        if (!$e->facility->isPublic) {
+            return [];
+        }
+        if (!$e->isPublic) {
+            return [];
+        }
+
         $e->facility->contacts;
         $e->facility->equipment;
         $e->facility->disciplines;
