@@ -29,7 +29,8 @@ class OrganizationTest extends TestCase
 
     public function testGetOrganization()
     {
-        $o = factory(App\Organization::class)->create();
+        $o = factory(App\Organization::class, 'withDates')->create();
+        
         $this->get('/organizations/' . $o->id)->seeJson([
             'id' => $o->id
         ]);
@@ -93,7 +94,7 @@ class OrganizationTest extends TestCase
 
         $this->actingAs($this->getAdmin())
              ->post('/organizations', $payload)
-             ->assertResponseStatus(403);        
+             ->assertResponseStatus(302);        
     }
 
     public function testPostOrganizationWithoutAuth()
@@ -108,6 +109,20 @@ class OrganizationTest extends TestCase
             'id' => $o->id
         ])->toArray();
 
+        $this->actingAs($this->getAdmin())
+             ->put('/organizations/' . $o->id, $payload)
+             ->assertResponseOk();
+        
+        $this->seeInTable('organizations', $payload);
+    }
+
+    public function testPutOrganizationWithoutUpdatingNameAttr()
+    {
+        $o = factory(App\Organization::class, 'withDates')->create();
+        $payload = factory(App\Organization::class)->make([
+            'name' => $o->name
+        ])->toArray();
+
         $resp = $this->actingAs($this->getAdmin())
                      ->put('/organizations/' . $o->id, $payload)
                      ->seeStatusCode(200)
@@ -120,12 +135,23 @@ class OrganizationTest extends TestCase
         ]);
     }
 
-     public function testPutOrganizationDoesNotExist()
+    public function testPutOrganizationWithIdenticalNameAttr()
     {
         $o = factory(App\Organization::class, 'withDates')->create();
+        $o2 = factory(App\Organization::class, 'withDates')->create();
         $payload = factory(App\Organization::class)->make([
-            'id' => $o->id
+            'name' => $o2->name
         ])->toArray();
+
+        $this->actingAs($this->getAdmin())
+             ->put('/organizations/' . $o->id, $payload)
+             ->assertResponseStatus(302);           
+    } 
+
+    public function testPutOrganizationDoesNotExist()
+    {
+        $o = factory(App\Organization::class, 'withDates')->create();
+        $payload = factory(App\Organization::class)->make()->toArray();
 
         $this->actingAs($this->getAdmin())
              ->put('/organizations/0', $payload)
@@ -135,9 +161,7 @@ class OrganizationTest extends TestCase
     public function testPutOrganizationWithoutAuth()
     {
         $o = factory(App\Organization::class, 'withDates')->create();
-        $payload = factory(App\Organization::class)->make([
-            'id' => $o->id
-        ])->toArray();
+        $payload = factory(App\Organization::class)->make()->toArray();
 
         $this->put('/organizations/' . $o->id, $payload)
              ->assertResponseStatus(403);

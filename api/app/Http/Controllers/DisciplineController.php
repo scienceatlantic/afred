@@ -75,6 +75,12 @@ class DisciplineController extends Controller
         $d->name = $request->name;
         $d->dateUpdated = $this->now();
         $d->save();
+
+        // Update search index.
+        if ($f = $d->facilities()->get()) {
+            $f->searchable();
+        }
+
         return $this->toCcArray($d->toArray());
     }
 

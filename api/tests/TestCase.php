@@ -18,7 +18,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     const DEF_NUM_FACILITIES_IN_FR_DATA_ATTR = 1;
     const DEF_NUM_PRIMARY_CONTACTS_IN_FR_DATA_ATTR = 1;
 
-    const MIN_NUM_CONTACTS_IN_FR_DATA_ATTR = 0;
+    const MIN_NUM_CONTACTS_IN_FR_DATA_ATTR = 1;
     const MAX_NUM_CONTACTS_IN_FR_DATA_ATTR = 10;
     const MIN_NUM_EQUIPMENT_IN_FR_DATA_ATTR = 1;
     const MAX_NUM_EQUIPMENT_IN_FR_DATA_ATTR = 50;
@@ -37,18 +37,18 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         return $app;
     }
 
-    protected static function getSuperAdmin()
+    protected static function getSuperAdmin($attr = [])
     {
         $role = App\Role::where('name', 'SUPER_ADMIN')->first();
-        $user = factory(App\User::class, 'withPasswordAndDates')->create();
+        $user = factory(App\User::class, 'withPasswordAndDates')->create($attr);
         $user->roles()->attach([$role->id]);
         return $user;
     }
 
-    protected static function getAdmin()
+    protected static function getAdmin($attr = [])
     {
         $role = App\Role::where('name', 'ADMIN')->first();
-        $user = factory(App\User::class, 'withPasswordAndDates')->create();
+        $user = factory(App\User::class, 'withPasswordAndDates')->create($attr);
         $user->roles()->attach([$role->id]);
         return $user;
     }
@@ -105,11 +105,11 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     protected function getPendingEditApprovalFr($outputType = 'stdClass', 
         $dataAttr = null, $dataAttrAfter = null)
     {
-        $updateRequest = $this->getOpenFul('model');
+        $updateRequest = $this->getOpenFul('model', $dataAttr);
         $oriFr = $updateRequest->originalFr;
         $payload = factory(App\FacilityRepository::class)->make([
             'state' => 'PENDING_EDIT_APPROVAL',
-            'data' => self::createFrDataAttr()
+            'data' => $dataAttrAfter ?: self::createFrDataAttr()
         ])->toArray();
         $payload['data']['facility']['id'] = $oriFr->data['facility']['id'];
         $params = $oriFr->id . '?token=' . $updateRequest->token;
@@ -120,6 +120,62 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
                      ->getContent();
 
         return self::outputFr($resp, $outputType);        
+    }
+
+    protected function getPublishedEditFr($outputType = 'stdClass', 
+        $dataAttr = null, $dataAttrAfter = null)
+    {
+        $fr = $this->getPendingEditApprovalFr('model', $dataAttr, 
+            $dataAttrAfter);
+        $params = $fr->id. '?state=PUBLISHED_EDIT';
+
+        $resp = $this->actingAs($this->getAdmin())
+                     ->put('/facility-repository/' . $params)
+                     ->seeStatusCode(200)
+                     ->response
+                     ->getContent();
+        Auth::logout();
+        
+        return self::outputFr($resp, $outputType);
+    }
+
+    protected function getRejectedEditFr($outputType = 'stdClass', 
+        $dataAttr = null, $dataAttrAfter = null)
+    {
+        $fr = $this->getPendingEditApprovalFr('model', $dataAttr, 
+            $dataAttrAfter);
+        $params = $fr->id. '?state=REJECTED_EDIT';
+
+        $resp = $this->actingAs($this->getAdmin())
+                     ->put('/facility-repository/' . $params)
+                     ->seeStatusCode(200)
+                     ->response
+                     ->getContent();
+        Auth::logout();
+        
+        return self::outputFr($resp, $outputType);
+    }
+
+    protected function getDeletedFr($outputType = 'stdClass')
+    {
+        $fr = $this->getPublishedFr($outputType);
+
+        $this->actingAs($this->getAdmin())
+             ->delete('/facilities/' . $fr->facilityId)
+             ->assertResponseOk();
+
+        return $fr;
+    }
+
+    protected function getDeletedFrWithEdit($outputType = 'stdClass')
+    {
+        $fr = $this->getPublishedEditFr($outputType);
+
+        $this->actingAs($this->getAdmin())
+             ->delete('/facilities/' . $fr->facilityId)
+             ->assertResponseOk();
+
+        return $fr;
     }
 
     protected function getOpenFul($outputType = 'stdClass', 
@@ -359,15 +415,11 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
 
     protected function unnullify($arr, $strict = true, $deep = false)
     {
-        return array_where($arr, function($key, $value) use ($strict, $deep) {
+        return array_where($arr, function($value, $key) use ($strict, $deep) {
             if (is_array($value) && $deep) {
                 return $this->unnullify($value, $strict, $deep);
             } else {
-                if ($strict) {
-                    return $value !== null;
-                } else {
-                    return !is_empty($value);
-                }
+                return $strict ? $value !== null : !empty($value);
             }
         });
     }

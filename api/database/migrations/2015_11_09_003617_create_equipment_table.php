@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
@@ -30,7 +31,8 @@ class CreateEquipmentTable extends Migration
                   ->nullable()
                   ->index();
             $table->text('purpose');
-            $table->text('purposeNoHtml');
+            $table->text('purposeNoHtml')
+                  ->nullable();
             $table->text('specifications')
                   ->nullable();
             $table->text('specificationsNoHtml')
@@ -45,8 +47,7 @@ class CreateEquipmentTable extends Migration
                   ->unsigned()
                   ->nullable();
             $table->string('keywords', 500)
-                  ->nullable()
-                  ->index();
+                  ->nullable();
         });
 
         // Add FULLTEXT indices to 'purposeNoHtml' and 'speficationsNoHtml'
@@ -62,6 +63,6 @@ class CreateEquipmentTable extends Migration
      */
     public function down()
     {
-        Schema::drop('equipment');
+        Schema::dropIfExists('equipment');
     }
 }

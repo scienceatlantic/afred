@@ -32,10 +32,42 @@ class PostFacilityRepositoryTest extends TestCase
         $this->assertEquals($fr->data['disciplines'], $data['disciplines']);
         $this->seeInArray($fr->data['facility'], $data['facility']);
         $this->seeInArray($fr->data['equipment'], $data['equipment']);
+        $this->seeInArray($fr->data['primaryContact'], $data['primaryContact']);
         $this->assertEquals($fr->data['sectors'], $data['sectors']);
     }
 
     public function testPostPendingApprovalFacilityRepositoryWithNoContactsAttr()
+    {
+        $payload = factory(App\FacilityRepository::class)->make([
+            'data' => self::createFrDataAttr(0)
+        ])->toArray();
+
+        $resp = $this->post('/facility-repository', $payload)
+                     ->seeStatusCode(200)
+                     ->response
+                     ->getContent();
+        $fr = App\FacilityRepository::find(json_decode($resp)->id);
+        
+        $this->assertArrayNotHasKey('contacts', $fr->data);
+    }
+
+    public function testPostPendingApprovalFacilityRepositoryWithEmptyContactsAttr()
+    {
+        $payload = factory(App\FacilityRepository::class)->make([
+            'data' => self::createFrDataAttr(0)
+        ])->toArray();
+        $payload['data']['contacts'] = [];
+
+        $resp = $this->post('/facility-repository', $payload)
+                     ->seeStatusCode(200)
+                     ->response
+                     ->getContent();
+        $fr = App\FacilityRepository::find(json_decode($resp)->id);
+        
+        $this->assertArrayNotHasKey('contacts', $fr->data);
+    }
+
+    public function testPostPendingApprovalFacilityRepositoryWithMinContactsAttr()
     {
         $payload = factory(App\FacilityRepository::class)->make([
             'data' => self::createFrDataAttr(
@@ -49,7 +81,8 @@ class PostFacilityRepositoryTest extends TestCase
                      ->getContent();
         $fr = App\FacilityRepository::find(json_decode($resp)->id);
         
-        $this->assertArrayNotHasKey('contacts', $fr->data);
+        $this->assertEquals(count($fr->data['contacts']), 
+            self::MIN_NUM_CONTACTS_IN_FR_DATA_ATTR);
     }
 
     public function testPostPendingApprovalFacilityRepositoryWithMaxNumContactsAttr()
@@ -95,13 +128,26 @@ class PostFacilityRepositoryTest extends TestCase
              ->assertResponseStatus(302);
     }
 
+    public function testPostPendingApprovalFacilityRepositoryWithEmptyDisciplinesAttr()
+    {
+        $payload = factory(App\FacilityRepository::class)->make([
+            'data' => self::createFrDataAttr(
+                self::DEF_NUM_CONTACTS_IN_FR_DATA_ATTR, 
+                0
+            )
+        ])->toArray();
+        $payload['data']['disciplines'] = [];
+
+        $this->post('/facility-repository', $payload)
+             ->assertResponseStatus(302);
+    }
+
     public function testPostPendingApprovalFacilityRepositoryWithInvalidDisciplineIds()
     {
-        $data = self::createFrDataAttr();
-        $data['disciplines'] = [0, -1, -2];
         $payload = factory(App\FacilityRepository::class)->make([
-            'data' => $data
+            'data' => self::createFrDataAttr()
         ])->toArray();
+        $payload['data']['disciplines'] = [0, -1, -2];
 
         $this->post('/facility-repository', $payload)
              ->assertResponseStatus(302);
@@ -116,6 +162,21 @@ class PostFacilityRepositoryTest extends TestCase
                 0
             )
         ])->toArray();
+
+        $this->post('/facility-repository', $payload)
+             ->assertResponseStatus(302);
+    }
+
+    public function testPostPendingApprovalFacilityRepositoryWithEmptyEquipmentAttr()
+    {
+        $payload = factory(App\FacilityRepository::class)->make([
+            'data' => self::createFrDataAttr(
+                self::DEF_NUM_CONTACTS_IN_FR_DATA_ATTR, 
+                self::DEF_NUM_DISCIPLINES_IN_FR_DATA_ATTR, 
+                0
+            )
+        ])->toArray();
+        $payload['data']['equipment'] = [];
 
         $this->post('/facility-repository', $payload)
              ->assertResponseStatus(302);
@@ -190,13 +251,28 @@ class PostFacilityRepositoryTest extends TestCase
              ->assertResponseStatus(302);
     }
 
+    public function testPostPendingApprovalFacilityRepositoryWithEmptyFacilityAttr()
+    {
+        $payload = factory(App\FacilityRepository::class)->make([
+            'data' => self::createFrDataAttr(
+                self::DEF_NUM_CONTACTS_IN_FR_DATA_ATTR, 
+                self::DEF_NUM_DISCIPLINES_IN_FR_DATA_ATTR, 
+                self::MAX_NUM_EQUIPMENT_IN_FR_DATA_ATTR + 1,
+                0
+            )
+        ])->toArray();
+        $payload['data']['facility'] = '';
+        
+        $this->post('/facility-repository', $payload)
+             ->assertResponseStatus(302);
+    }
+
     public function testPostPendingApprovalFacilityRepositoryWithInvalidFacilityOrganizationIdAttr()
     {
-        $data = self::createFrDataAttr();
-        $data['facility']['organizationId'] = 0;
         $payload = factory(App\FacilityRepository::class)->make([
-            'data' => $data
+            'data' => self::createFrDataAttr()
         ])->toArray();
+        $payload['data']['facility']['organizationId'] = 0;
 
         $this->post('/facility-repository', $payload)
              ->assertResponseStatus(302);
@@ -204,12 +280,11 @@ class PostFacilityRepositoryTest extends TestCase
 
     public function testPostPendingApprovalFacilityRepositoryWithNullOrganizationIdAndWithOrganizationNameAttr()
     {
-        $data = self::createFrDataAttr();
-        $data['facility']['organizationId'] = null;
-        $data['organization'] = ['name' => 'some new org name'];
         $payload = factory(App\FacilityRepository::class)->make([
-            'data' => $data
+            'data' => self::createFrDataAttr()
         ])->toArray();
+        $payload['data']['facility']['organizationId'] = null;
+        $payload['data']['organization'] = ['name' => 'something'];
 
         $resp = $this->post('/facility-repository', $payload)
                      ->seeStatusCode(200)
@@ -219,16 +294,16 @@ class PostFacilityRepositoryTest extends TestCase
 
         $this->assertEquals($fr->data['facility']['organizationId'], null);
         $this->assertArrayHasKey('organization', $fr->data);
-        $this->seeInArray($fr->data['organization'], $data['organization']);
+        $this->seeInArray($fr->data['organization'], 
+            $payload['data']['organization']);
     }
 
     public function testPostPendingApprovalFacilityRepositoryWithNullOrganizationIdAndNoOrganizationNameAttr()
     {
-        $data = self::createFrDataAttr();
-        $data['facility']['organizationId'] = null;
         $payload = factory(App\FacilityRepository::class)->make([
-            'data' => $data
+            'data' => self::createFrDataAttr()
         ])->toArray();
+        $payload['data']['facility']['organizationId'] = null;
 
         $this->post('/facility-repository', $payload)
              ->assertResponseStatus(302);
@@ -236,12 +311,11 @@ class PostFacilityRepositoryTest extends TestCase
 
     public function testPostPendingApprovalFacilityRepositoryWithNoOrganizationIdAndWithOrganizationNameAttr()
     {
-        $data = self::createFrDataAttr();
-        unset($data['facility']['organizationId']);
-        $data['organization'] = ['name' => 'some new org name'];
         $payload = factory(App\FacilityRepository::class)->make([
-            'data' => $data
+            'data' => self::createFrDataAttr()
         ])->toArray();
+        unset($payload['data']['facility']['organizationId']);
+        $payload['data']['organization'] = ['name' => 'something'];
 
         $resp = $this->post('/facility-repository', $payload)
                      ->seeStatusCode(200)
@@ -251,16 +325,16 @@ class PostFacilityRepositoryTest extends TestCase
 
         $this->assertArrayNotHasKey('organizationId', $fr->data['facility']);
         $this->assertArrayHasKey('organization', $fr->data);
-        $this->seeInArray($fr->data['organization'], $data['organization']);
+        $this->seeInArray($fr->data['organization'], 
+            $payload['data']['organization']);
     }
 
     public function testPostPendingApprovalFacilityRepositoryWithNoOrganizationIdAndNoOrganizationNameAttr()
     {
-        $data = self::createFrDataAttr();
-        unset($data['facility']['organizationId']);
         $payload = factory(App\FacilityRepository::class)->make([
-            'data' => $data
+            'data' => self::createFrDataAttr()
         ])->toArray();
+        unset($payload['data']['facility']['organizationId']);
 
         $this->post('/facility-repository', $payload)
              ->assertResponseStatus(302);
@@ -268,11 +342,10 @@ class PostFacilityRepositoryTest extends TestCase
 
     public function testPostPendingApprovalFacilityRepositoryWithInvalidFacilityProvinceIdAttr()
     {
-        $data = self::createFrDataAttr();
-        $data['facility']['provinceId'] = 0;
         $payload = factory(App\FacilityRepository::class)->make([
-            'data' => $data
+            'data' => self::createFrDataAttr()
         ])->toArray();
+        $payload['data']['facility']['provinceId'] = 0;
 
         $this->post('/facility-repository', $payload)
              ->assertResponseStatus(302);
@@ -289,6 +362,23 @@ class PostFacilityRepositoryTest extends TestCase
                 0
             )
         ])->toArray();
+
+        $this->post('/facility-repository', $payload)
+             ->assertResponseStatus(302);
+    }
+
+    public function testPostPendingApprovalFacilityRepositoryWithEmptyPrimaryContactAttr()
+    {
+        $payload = factory(App\FacilityRepository::class)->make([
+            'data' => self::createFrDataAttr(
+                self::DEF_NUM_CONTACTS_IN_FR_DATA_ATTR, 
+                self::DEF_NUM_DISCIPLINES_IN_FR_DATA_ATTR, 
+                self::DEF_NUM_EQUIPMENT_IN_FR_DATA_ATTR, 
+                self::DEF_NUM_FACILITIES_IN_FR_DATA_ATTR, 
+                0
+            )
+        ])->toArray();
+        $payload['data']['primaryContact'] = '';
 
         $this->post('/facility-repository', $payload)
              ->assertResponseStatus(302);

@@ -11,8 +11,6 @@
 |
 */
 
-/* ADD DATES!!*/
-
 $dummyEmail = env('MAIL_UNIVERSAL_TO_ADDRESS', 'afred.dev@scienceatlantic.ca');
 
 $factory->define(App\Contact::class, 
@@ -23,7 +21,10 @@ $factory->define(App\Contact::class,
             'firstName' => $faker->firstName,
             'lastName' => $faker->lastName,
             'email' => $dummyEmail,
-            'telephone' => $faker->numerify('##########')
+            'telephone' => $faker->numerify('##########'),
+            'extension' => null,
+            'position' => null,
+            'website' => null
         ];
     }
 );
@@ -42,7 +43,7 @@ $factory->defineAs(App\Contact::class, 'complete',
 
 $factory->define(App\Discipline::class, function (Faker\Generator $faker) {
     return [
-        'name' => $faker->name
+        'name' => $faker->sentence
     ];
 });
 
@@ -59,29 +60,37 @@ $factory->defineAs(App\Discipline::class, 'withDates',
 );
 
 $factory->define(App\Equipment::class, function (Faker\Generator $faker) {
-    $purposeNoHtml = $faker->text(1500);
-    $purpose = '<p>' . $purposeNoHtml . '</p>';
-
     return [
         'id' => null,
         'facilityId' => null,
         'type' => $faker->text(150),
-        'purpose' => $purpose,
-        'purposeNoHtml' => $purposeNoHtml,
+        'manufacturer' => null,
+        'model' => null,
+        'purpose' => '<p>' . $faker->text(1500) . '</p>',
+        'purposeNoHtml' => null,
+        'specifications' => null,
+        'specificationsNoHtml' => null,
         'isPublic' => 1,
         'hasExcessCapacity' => 0,
+        'yearPurchased' => null,
+        'yearManufactured' => null,
+        'keywords' => null
     ];
 });
 
 $factory->defineAs(App\Equipment::class, 'complete', 
     function (Faker\Generator $faker) use ($factory) {
         $equipment = $factory->raw(App\User::class);
+        $purposeNoHtml = $faker->text(1500);
+        $purpose = '<p>' . $specificationsNoHtml . '</p>';
         $specificationsNoHtml = $faker->text(1500);
         $specifications = '<p>' . $specificationsNoHtml . '</p>';
 
         return array_merge($equipment, [
             'manufacturer' => $faker->text(80),
             'model' => $faker->text(50),
+            'purpose' => $purpose,
+            'purposeNoHtml' => $purposeNoHtml,
             'specifications' => $specifications,
             'specificationsNoHtml' => $specificationsNoHtml,
             'yearPurchased' => $faker->year,
@@ -92,10 +101,6 @@ $factory->defineAs(App\Equipment::class, 'complete',
 );
 
 $factory->define(App\Facility::class, function (Faker\Generator $faker) {
-    $datetime = $faker->dateTimeThisYear();
-    $descriptionNoHtml = $faker->text(1500);
-    $description = '<p>' . $descriptionNoHtml . '</p>';
-
     return [
         'id' => null,
         'facilityRepositoryId' => null,
@@ -104,9 +109,8 @@ $factory->define(App\Facility::class, function (Faker\Generator $faker) {
         'name' => $faker->company,
         'city' => $faker->city,
         'website' => null,
-        'description' => $description,
-        'descriptionNoHtml' => $descriptionNoHtml,
-        'isPublic' => 1
+        'description' => '<p>' . $faker->text(1500) . '</p>',
+        'descriptionNoHtml' => null
     ];
 });
 
@@ -196,7 +200,9 @@ $factory->define(App\PrimaryContact::class,
             'lastName' => $faker->lastName,
             'email' => $dummyEmail,
             'telephone' => $faker->numerify('##########'),
-            'position' => $faker->text(80)
+            'extension' => null,
+            'position' => $faker->text(80),
+            'website' => null
         ];
     }
 );
@@ -214,7 +220,7 @@ $factory->defineAs(App\PrimaryContact::class, 'complete',
 
 $factory->define(App\Province::class, function (Faker\Generator $faker) {
     return [
-        'name' => $faker->name,
+        'name' => $faker->sentence(3),
         'isHidden' => 0
     ];
 });
@@ -233,7 +239,7 @@ $factory->defineAs(App\Province::class, 'withDates',
 
 $factory->define(App\Sector::class, function (Faker\Generator $faker) {
     return [
-        'name' => $faker->name
+        'name' => $faker->sentence
     ];
 });
 
@@ -258,6 +264,7 @@ $factory->define(App\User::class,
             'firstName' => $faker->firstName,
             'lastName' => $faker->lastName,
             'email' => $email,
+            'password' => null,
             'isActive' => 1
         ];
     }

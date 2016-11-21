@@ -149,7 +149,7 @@ class SettingsTableSeeder extends Seeder
 
         // Sitemap fixed Urls.
         $id = DB::table('settings')->where('name', 'sitemapFixedUrls')
-            ->pluck('id');
+            ->first()->id;
         DB::table('settings_text')->insert([
             'settingId' => $id,
             'value'     => json_encode([
@@ -167,7 +167,7 @@ class SettingsTableSeeder extends Seeder
 
         // Sitemap ping services.
         $id = DB::table('settings')->where('name', 'sitemapPingServices')
-            ->pluck('id');
+            ->first()->id;
         DB::table('settings_text')->insert([
             'settingId' => $id,
             'value'     => json_encode([

@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
@@ -41,10 +42,10 @@ class CreateFacilitiesTable extends Migration
                   ->nullable()
                   ->index();
             $table->string('website', 2083)
-                  ->nullable()
-                  ->index();
+                  ->nullable();
             $table->text('description');
-            $table->text('descriptionNoHtml');
+            $table->text('descriptionNoHtml')
+                  ->nullable();
             $table->boolean('isPublic')
                   ->default(true);
             $table->dateTime('datePublished');
@@ -62,6 +63,6 @@ class CreateFacilitiesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('facilities');
+        Schema::dropIfExists('facilities');
     }
 }

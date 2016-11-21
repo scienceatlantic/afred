@@ -24,17 +24,15 @@ class AuthController extends Controller
     {
         $credentials = [
             'email'    => $request->input('email', null),
-            'password' => $request->input('password', null)
+            'password' => $request->input('password', null),
+            'isActive' => 1
         ];
 
         if (Auth::attempt($credentials)) {
-            // Check if user is active, otherwise logout (short circuit 'OR').
-            if (Auth::user()->isActive || Auth::logout()) {
-                return $this->format('login');              
-            }
+            return $this->format('login');
         }
 
-        return 'Not authorised';
+        return 'Not authorized';
     }
     
     public function ping()

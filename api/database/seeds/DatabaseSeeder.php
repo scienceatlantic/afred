@@ -1,8 +1,6 @@
 <?php
 
-// Laravel.
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Eloquent\Model;
 
 class DatabaseSeeder extends Seeder
 {
@@ -12,9 +10,7 @@ class DatabaseSeeder extends Seeder
      * @return void
      */
     public function run()
-    {
-        Model::unguard();
-        
+    {   
         // Contains real data.
         $this->call(ProvincesTableSeeder::class);
         $this->call(OrganizationsTableSeeder::class);
@@ -25,13 +21,11 @@ class DatabaseSeeder extends Seeder
         $this->call(SettingsTableSeeder::class);
         
         // Contains dummy data.
-        if (env('APP_ENV') == 'local') {
+        if (App::environment('local')) {
             $this->call(DummyUsersTableSeeder::class);
         }
         
         // Import data from AFRED v1.0.
         //$this->call(ImportAfredV1DataSeeder::class);
-
-        Model::reguard();
     }
 }

@@ -30,11 +30,10 @@ class DummyUsersTableSeeder extends Seeder
             'dateUpdated' => $now
         ]];
         
+        $roleId = DB::table('roles')->where('name', 'SUPER_ADMIN')->first()->id;
         foreach($users as $user) {
             $u = User::create($user);
-            
-            // Attach the super admin role (we're assuming its ID is 1).
-            $u->roles()->attach(1, ['dateCreated' => $now]);
+            $u->roles()->attach($roleId);
         }
     }
 }

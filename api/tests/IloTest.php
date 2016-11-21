@@ -102,7 +102,6 @@ class IloTest extends TestCase
             'organizationId' => $o->id
         ]);
         $payload = factory(App\Ilo::class)->make([
-            'id' => $i->id,
             'organizationId' => $i->organizationId
         ])->toArray();
 
@@ -125,7 +124,6 @@ class IloTest extends TestCase
             'organizationId' => $o->id
         ]);
         $payload = factory(App\Ilo::class)->make([
-            'id' => $i->id,
             'organizationId' => 0
         ])->toArray();
 

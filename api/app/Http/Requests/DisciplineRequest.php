@@ -28,7 +28,7 @@ class DisciplineRequest extends Request
             case 'PUT':
                 return $this->isAdmin();
             case 'DELETE':
-                $id = Route::input('disciplines');
+                $id = Route::input('discipline');
                 $d = Discipline::findOrFail($id);
 
                 // Make sure it does not have any facilities.
@@ -54,7 +54,19 @@ class DisciplineRequest extends Request
             case 'PUT':
                 // No break.
             case 'POST':
-                $r['name'] = 'required|unique:disciplines';
+                $r['name'] = 'required';
+
+                // Make sure `name` attribute is unique, unless it's an update
+                // request where the attribute has not changed.
+                $addCondition = true;
+                if ($this->method() == 'PUT') {
+                    $id = Route::input('discipline');
+                    $d = Discipline::findOrFail($id);
+                    $name = $this->instance()->input('name');
+                    $addCondition = $d->name != $name;
+                }
+                $r['name'] .= $addCondition ? '|unique:disciplines' : '';
+
                 break;
         }
         return $r;

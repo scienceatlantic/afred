@@ -77,7 +77,13 @@ class OrganizationController extends Controller
         $o->name = $request->name;
         $o->isHidden = $request->isHidden;
         $o->dateUpdated = $this->now();
-        $o->save();        
+        $o->save();
+
+        // Update search index.
+        if ($f = $o->facilities()->get()) {
+            $f->searchable();
+        }
+
         return $this->toCcArray($o->toArray());
     }
 

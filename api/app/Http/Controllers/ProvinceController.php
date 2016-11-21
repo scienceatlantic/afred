@@ -89,6 +89,12 @@ class ProvinceController extends Controller
         $p->isHidden = $request->isHidden;
         $p->dateUpdated = $this->now();
         $p->save();
+
+        // Update search index.
+        if ($f = $p->facilities()->get()) {
+            $f->searchable();
+        }
+
         return $this->toCcArray($p->toArray());
     }
 

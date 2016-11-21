@@ -36,7 +36,7 @@ class UserRequest extends Request
                 // If updating user password.
                 if ($this->instance()->input('password', false)) {
                     $maxAuthRole = Auth::user()->getMaxPermission();
-                    $maxUserRole = User::findOrFail(Route::input('users'))
+                    $maxUserRole = User::findOrFail(Route::input('user'))
                         ->getMaxPermission();
                     return $maxAuthRole >= $maxUserRole;
                 }
@@ -45,14 +45,6 @@ class UserRequest extends Request
             case 'POST':
                 if (!$this->isAdmin()) {
                     return false;
-                }
-
-                // Make sure email does not already exist.
-                if ($this->method() == 'POST') {
-                    $email = $this->instance()->input('email');
-                    if (User::where('email', $email)->count()) {
-                        return false;
-                    }
                 }
                 
                 // Make sure that the roles being assigned do not have
@@ -72,20 +64,20 @@ class UserRequest extends Request
                 }
 
                 // Not allowed to delete yourself.
-                if (Auth::user()->id == Route::input('users')) {
+                if (Auth::user()->id == Route::input('user')) {
                     return false;
                 }
 
                 // Not allowed to delete a user that has reviewed facility
                 // repository records.
-                if (User::find(Route::input('users'))->frs()->count()) {
+                if (User::find(Route::input('user'))->frs()->count()) {
                     return false;
                 }
 
                 // Make making the request is not of a lower permission level
                 // than the user being deleted.
                 $maxAuthRole = Auth::user()->getMaxPermission();
-                $maxUserRole = User::findOrFail(Route::input('users'))
+                $maxUserRole = User::findOrFail(Route::input('user'))
                     ->getMaxPermission();
 
                 if ($maxAuthRole !== -1 && $maxUserRole !== -1) {
@@ -124,11 +116,18 @@ class UserRequest extends Request
                 }
                 $r['isActive'] = 'required|numeric|between:0,1';
                 $r['roles'] = 'required|array';
-                $roles = $this->instance()->input('roles', []);
-                $length = count($roles);
-                for ($i = 0; $i < $length; $i++) {
-                    $r["roles.$i"] = 'exists:roles,id';
+                $r["roles.*"] = 'exists:roles,id';
+
+                // Make sure `name` attribute is unique, unless it's an update
+                // request where the attribute has not changed.
+                $addCondition = true;
+                if ($this->method() == 'PUT') {
+                    $id = Route::input('user');
+                    $u = User::findOrFail($id);
+                    $email = $this->instance()->input('email');
+                    $addCondition = $u->email != $email;
                 }
+                $r['email'] .= $addCondition ? '|unique:users' : '';                
                 break;
         }
         return $r;

@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
@@ -42,6 +43,6 @@ class CreatePrimaryContactsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('primary_contacts');
+        Schema::dropIfExists('primary_contacts');
     }
 }

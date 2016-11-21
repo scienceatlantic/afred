@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
@@ -48,6 +49,6 @@ class CreateFacilityRepositoryTable extends Migration
      */
     public function down()
     {
-        Schema::drop('facility_repository');
+        Schema::dropIfExists('facility_repository');
     }
 }

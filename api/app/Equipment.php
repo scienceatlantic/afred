@@ -3,14 +3,12 @@
 namespace App;
 
 // Laravel.
+use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
 
-// Misc.
-use Sofa\Eloquence\Eloquence;
-
 class Equipment extends Model
-{
-    use Eloquence;
+{   
+    use Searchable;
     
     /**
      * Indicates if the model should be timestamped.
@@ -40,6 +38,48 @@ class Equipment extends Model
         'yearManufactured',
         'keywords'
     ];
+
+    /**
+     * Get the index name for the model.
+     *
+     * @return string
+     */
+    public function searchableAs()
+    {
+        return env('SCOUT_PREFIX', '') . 'equipment';
+    }
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        // Get a fresh copy instead of lazy loading on the actual model 
+        // instance.
+        $e = Equipment::find($this->id);
+
+        // If either the facility it belongs to or the equipment itself is 
+        // not public, return an empty array.
+        if (!$e->facility->isPublic) {
+            return [];
+        }
+        if (!$e->isPublic) {
+            return [];
+        }
+
+        $e->facility->contacts;
+        $e->facility->equipment;
+        $e->facility->disciplines;
+        $e->facility->organization;
+        $e->facility->organization->ilo;
+        $e->facility->primaryContact;
+        $e->facility->province;        
+        $e->facility->sectors;
+
+        return $e->toArray();
+    }
     
     /**
      * Relationship between an equipment and the facility it belongs to.

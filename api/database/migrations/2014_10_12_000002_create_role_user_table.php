@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
@@ -27,8 +28,6 @@ class CreateRoleUserTable extends Migration
                   ->on('users')
                   ->onDelete('cascade')
                   ->onUpdate('cascade');
-            $table->dateTime('dateCreated');
-            $table->dateTime('dateUpdated');
             $table->primary(['roleId', 'userId']);
         });
     }
@@ -40,6 +39,6 @@ class CreateRoleUserTable extends Migration
      */
     public function down()
     {
-        Schema::drop('role_user');
+        Schema::dropIfExists('role_user');
     }
 }

@@ -26,7 +26,7 @@ class FacilityRequest extends Request
             case 'PUT':
                 return $this->isAdmin();
             case 'DELETE':
-                $f = Facility::findOrFail(Route::input('facilities'));
+                $f = Facility::findOrFail(Route::input('facility'));
                 $fr = $f->currentRevision;
                 
                 // Make sure facility does not have any open/pending update 

@@ -38,6 +38,7 @@ class User extends Model implements AuthenticatableContract,
      * @var array
      */
     protected $dates = ['dateLastLogin',
+                        'dateLastPinged',
                         'dateCreated',
                         'dateUpdated'];
 

@@ -90,6 +90,12 @@ class IloController extends Controller
         $ilo->website = $request->website;
         $ilo->dateUpdated = $this->now();
         $ilo->update();
+
+        // Update search index.
+        if ($f = $ilo->organization->facilities()->get()) {
+            $f->searchable();
+        }
+
         return $ilo;
     }
 

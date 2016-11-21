@@ -82,8 +82,25 @@ class DisciplineTest extends TestCase
     public function testPutDiscipline()
     {
         $d = factory(App\Discipline::class, 'withDates')->create();
+        $payload = factory(App\Discipline::class)->make()->toArray();
+
+        $resp = $this->actingAs($this->getAdmin())
+                     ->put('/disciplines/' . $d->id, $payload)
+                     ->seeStatusCode(200)
+                     ->response
+                     ->getContent();
+        $updD = json_decode($resp);                      
+
+        $this->seeInTable('disciplines', $payload, null, [
+            'id' => $updD->id
+        ]);
+    }
+
+    public function testPutDisciplineWithoutUpdatingNameAttr()
+    {
+        $d = factory(App\Discipline::class, 'withDates')->create();
         $payload = factory(App\Discipline::class)->make([
-            'id' => $d->id
+            'name' => $d->name
         ])->toArray();
 
         $resp = $this->actingAs($this->getAdmin())
@@ -93,9 +110,22 @@ class DisciplineTest extends TestCase
                      ->getContent();
         $updD = json_decode($resp);
 
-        $this->seeInTable('disciplines', $payload, [
-            'id' => $d->id
+        $this->seeInTable('disciplines', $payload, null, [
+            'id' => $updD->id
         ]);
+    }
+
+    public function testPutDisciplineWithIdenticalNameAttr()
+    {
+        $d = factory(App\Discipline::class, 'withDates')->create();
+        $d2 = factory(App\Discipline::class, 'withDates')->create();
+        $payload = factory(App\Discipline::class)->make([
+            'name' => $d2->name
+        ])->toArray();
+
+        $this->actingAs($this->getAdmin())
+             ->put('/disciplines/' . $d->id, $payload)
+             ->assertResponseStatus(302);        
     }
 
      public function testPutDisciplineDoesNotExist()
@@ -110,9 +140,7 @@ class DisciplineTest extends TestCase
     public function testPutDisciplineWithoutAuth()
     {
         $d = factory(App\Discipline::class, 'withDates')->create();
-        $payload = factory(App\Discipline::class)->make([
-            'id' => $d->id
-        ])->toArray();
+        $payload = factory(App\Discipline::class)->make()->toArray();
 
         $this->put('/disciplines/' . $d->id, $payload)
              ->assertResponseStatus(403);
