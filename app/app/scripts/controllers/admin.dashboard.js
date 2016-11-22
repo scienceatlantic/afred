@@ -9,29 +9,19 @@
 
 angular.module('afredApp').controller('AdminDashboardController',
   ['$scope',
-   '$http',
+   'miscResource',
   function($scope,
-           $http) {
+           miscResource) {
     /* ---------------------------------------------------------------------
      * Initialisation code.
      * --------------------------------------------------------------------- */
     
     // Get the data.
-    $scope.stats = $http.get($scope._env.api.address + '/dashboard');
-    $scope.stats.then(function(response) {
-      $scope.stats.data = response.data;
-      $scope.loading.stats = false;
+    $scope.stats = miscResource.get({ item: 'facilityRepositoryBreakdown' });
+    $scope.stats.$promise.then(function() {
+      // Do nothing if successful.
     }, function(response) {
       $scope._httpError403(response);
     });
-    
-    /**
-     * AJAX loading flags.
-     *
-     * @type {object}
-     */
-    $scope.loading = {
-      stats: true
-    };
   }
 ]);

@@ -107,23 +107,6 @@ angular.module('afredApp').factory('facilityRepositoryResource',
   }
 ]);
 
-angular.module('afredApp').factory('searchResource',
-  ['$rootScope',
-   '$resource',
-   function($rootScope,
-            $resource) {
-    // Alias to shorten code.
-    var root = $rootScope._env.api.address;
-    
-    return $resource(root + '/search', null, {
-      query: {
-        method: 'GET',
-        isArray: false
-      }
-    });
-  }
-]);
-
 angular.module('afredApp').factory('organizationResource',
   ['$rootScope',
    '$resource',
@@ -383,7 +366,7 @@ angular.module('afredApp').factory('wpResource',
   }
 ]);
 
-angular.module('afredApp').factory('homeResource',
+angular.module('afredApp').factory('miscResource',
   ['$rootScope',
    '$resource',
    function($rootScope,
@@ -391,6 +374,6 @@ angular.module('afredApp').factory('homeResource',
     // Alias to shorten code.
     var root = $rootScope._env.api.address;
     
-    return $resource(root + '/home');
+    return $resource(root + '/misc');
   }
 ]);

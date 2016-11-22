@@ -2,11 +2,11 @@
 
 angular.module('afredApp').controller('SearchController',
   ['$scope',
-   'searchResource',
+   'miscResource',
    'algolia',
    '$uibModal',
    function($scope,
-            searchResource,
+            miscResource,
             algolia,
             $uibModal) {
     /* ---------------------------------------------------------------------
@@ -217,11 +217,11 @@ angular.module('afredApp').controller('SearchController',
          * @sideeffect $scope.search.filters.sectors Sector data (array) is
          *     assigned to this.
          * @requires $scope._httpError() - Called if the AJAX request fails.
-         * @requires searchResource - To query the API.
+         * @requires miscResource - To query the API.
          */
         get: function() {
-          $scope.search.filters.resource = searchResource.query({
-            advancedSearchOptions: true
+          $scope.search.filters.resource = miscResource.get({
+            item: 'searchFilters'
           }, function(data) {
             $scope.search.filters.disciplines = data.disciplines;
             $scope.search.filters.organizations = data.organizations;
@@ -394,7 +394,6 @@ angular.module('afredApp').controller('SearchController',
        *     API are concatenated into this array.
        * @requires $scope._httpError() Called if the query fails.
        * @requires $scope.search.parseParams()
-       * @requires searchResource
        */
       get: function() {
         // Loading flag.
