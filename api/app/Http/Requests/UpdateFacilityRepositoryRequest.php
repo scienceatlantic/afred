@@ -162,8 +162,8 @@ class UpdateFacilityRepositoryRequest extends Request
                 $r["$e.*.manufacturer"] = '';
                 $r["$e.*.purpose"] = 'required';
                 $r["$e.*.specifications"] = '';
-                $r["$e.*.isPublic"] = 'required|numeric|between:0,1';
-                $r["$e.*.hasExcessCapacity"] = 'required|numeric|between:0,1';
+                $r["$e.*.isPublic"] = 'required|between:0,1';
+                $r["$e.*.hasExcessCapacity"] = 'required|between:0,1';
                 $r["$e.*.yearPurchased"] = 'nullable|date_format:Y';
                 $r["$e.*.yearManufactured"] = 'nullable|date_format:Y';
                 $r["$e.*.keywords"] = '';           
