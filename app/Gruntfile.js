@@ -103,6 +103,10 @@ module.exports = function (grunt) {
           port: 9001,
           middleware: function (connect) {
             return [
+              // This line was taken from:
+              // https://gist.github.com/nnarhinen/7719157
+              modRewrite(['^[^\\.]*$ /index.html [L]']),
+
               serveStatic('.tmp'),
               serveStatic('test'),
               connect().use(
@@ -369,6 +373,13 @@ module.exports = function (grunt) {
         configFile: 'test/karma.conf.js',
         singleRun: true
       }
+    },
+    protractor: {
+      options: {
+        keepAlive: true,
+        configFile: "test/protractor.conf.js"
+      },
+      run: {}
     }
   });
 
@@ -397,7 +408,8 @@ module.exports = function (grunt) {
     'concurrent:test',
     'autoprefixer',
     'connect:test',
-    'karma'
+    //'karma', // Not using Karma
+    'protractor:run'
   ]);
 
   grunt.registerTask('build', [
