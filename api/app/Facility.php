@@ -55,7 +55,7 @@ class Facility extends Model
      */
     public function searchableAs()
     {
-        return env('SCOUT_PREFIX', '') . 'facilities';
+        return config('scout.prefix') . 'facilities';
     }
 
     /**

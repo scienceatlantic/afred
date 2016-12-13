@@ -46,7 +46,7 @@ class Equipment extends Model
      */
     public function searchableAs()
     {
-        return env('SCOUT_PREFIX', '') . 'equipment';
+        return config('scout.prefix') . 'equipment';
     }
 
     /**
