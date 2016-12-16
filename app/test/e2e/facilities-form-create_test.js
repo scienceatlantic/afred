@@ -52,20 +52,20 @@ describe('Facility Submission Form', function() {
     form.preview();
     form.submit();
   }, timeout);
-
+  
   timeout = 600000;
   it('should submit facility while testing out each field\'s maximum length', 
     function() {
       var form = new FacilityForm({
-        numContacts: chance.natural({ min: 1, max: 2 }),
-        numEquipment: chance.natural({ min: 1, max: 2 }),
+        numContacts: chance.natural({ min: 2, max: 3 }),
+        numEquipment: chance.natural({ min: 2, max: 3 }),
         facility: {
           name: 200,
           city: 150,
           organizationId: '',
           provinceId: '',
           website: 2083,
-          description: 2000
+          description: 1999
         },
         primaryContact: {
           firstName: 50,
@@ -89,8 +89,8 @@ describe('Facility Submission Form', function() {
           type: 200,
           manufacturer: 100,
           model: 100,
-          purpose: 2000,
-          specifications: 2000,
+          purpose: 1999,
+          specifications: 1999,
           yearPurchased: '',
           yearManufactured: '',
           excessCapacity: '',
@@ -105,12 +105,12 @@ describe('Facility Submission Form', function() {
       form.submit();
     }, 
   timeout);
-
+  
   timeout = 600000;
   it('should submit a new facility with a new organization', function() {
     var form = new FacilityForm({
-      numContacts: chance.natural({ min: 0, max: 2 }),
-      numEquipment: chance.natural({ min: 1, max: 3 }),
+      numContacts: chance.natural({ min: 1, max: 2 }),
+      numEquipment: chance.natural({ min: 2, max: 3 }),
       facility: {
         name: '',
         city: '',

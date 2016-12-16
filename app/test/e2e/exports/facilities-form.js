@@ -226,8 +226,8 @@ FacilityForm.prototype.inputEquipment = function() {
   var ignore = ['id', 'facilityId'].concat(rich).concat(radio);
   self.equipment.forEach(function(equipment, i) {
     input(equipment, 'equipment', i, 'input', null, ignore);
+    input(equipment, 'equipment', i, 'radio', radio);
     input(equipment, 'equipment', i, 'rich', rich);
-    input(equipment, 'equipment', i, 'radio', radio); 
 
     if (i < (self.numEquipment - 1)) {
       helper.click($('button[data-ng-click="form.addEquipment()"]'), 0, -400);
@@ -265,7 +265,7 @@ FacilityForm.prototype.preview = function() {
               text = obj[prop];
           }
 
-          expect(element.all(by.cssContainingText('div', text))
+          expect(element.all(by.cssContainingText('div', text.trim()))
             .count())
             .not
             .toBeLessThan(1);
@@ -329,7 +329,7 @@ function input(obj, prefix, index, type, only, ignore) {
     switch (type) {
       // For Text Angular fields.
       case 'rich':
-        selector = 'div[name="' + selector;
+        selector = 'text-angular[name="' + selector;
         $(selector).click().then(function() {
           browser.actions().sendKeys(val).perform().then(function() {
             expect($(selector).getText()).toEqual(val);
