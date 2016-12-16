@@ -126,4 +126,30 @@ describe('Facility Submission Form', function() {
     form.preview();
     form.submit();
   }, timeout);
+
+  timeout = 600000;
+  it('should submit a new facility with a new organization of maximum length', 
+    function() {
+      var form = new FacilityForm({
+        numContacts: chance.natural({ min: 1, max: 2 }),
+        numEquipment: chance.natural({ min: 2, max: 3 }),
+        organization: {
+          name: 150
+        },
+        facility: {
+          name: '',
+          city: '',
+          organizationId: -1,
+          provinceId: '',
+          website: '',
+          description: ''
+        },
+      });
+
+      form.get();
+      form.input();
+      form.preview();
+      form.submit();
+    }, 
+  timeout);
 });
