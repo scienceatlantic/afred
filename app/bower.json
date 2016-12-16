@@ -15,7 +15,7 @@
     "angular-ui-router": "~0.3.1",
     "angular-bootstrap": "~2.2.0",
     "angularUtils-pagination": "angular-utils-pagination#~0.11.1",
-    "textAngular": "~1.5.12",
+    "textAngular": "~1.5.16",
     "font-awesome": "fontawesome#~4.6.3",
     "components-font-awesome": "~4.6.3",
     "ta-maxlength": "~0.0.1",
