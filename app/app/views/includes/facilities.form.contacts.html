@@ -45,12 +45,12 @@
           <div class="col-lg-6">
             <div data-af-field data-af-field-label="First name*" data-af-field-model="c.firstName">
               <input type="text" class="form-control" name="contactFirstName{{ $index }}" 
-                     data-ng-model="c.firstName" maxlength="50" required>
+                     data-ng-model="c.firstName" data-ng-maxlength="50" required>
             </div>
             
             <div data-af-field data-af-field-label="Last name*" data-af-field-model="c.lastName">
               <input type="text" class="form-control" name="contactLastName{{ $index }}" 
-                     data-ng-model="c.lastName" maxlength="50" required>
+                     data-ng-model="c.lastName" data-ng-maxlength="50" required>
             </div>
             
             <div data-af-field data-af-field-label="Email*" data-af-field-model="c.email">
@@ -58,7 +58,7 @@
                      data-ng-model="c.email" 
                      data-ng-model-options="{ debounce: 500 }" 
                      data-ng-pattern="/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/" 
-                     placeholder="me@example.com" maxlength="254" required>
+                     placeholder="me@example.com" data-ng-maxlength="254" required>
             </div>
             
             <!-- Telephone field for the primary contact ($index == 0) is mandatory. -->
@@ -87,7 +87,7 @@
                  data-ng-if="$index === 0" 
                  data-af-field-model="c.position">
               <input type="text" class="form-control" name="contactPosition{{ $index }}" 
-                     data-ng-model="c.position" maxlength="100" required>
+                     data-ng-model="c.position" data-ng-maxlength="100" required>
             </div>
             
             <!-- Position field for contacts ($index > 0) is not mandatory -->
@@ -96,7 +96,7 @@
                  data-ng-if="$index !== 0" 
                  data-af-field-model="c.position">
               <input type="text" class="form-control" name="contactPosition{{ $index }}" 
-                     data-ng-model="c.position" maxlength="100">
+                     data-ng-model="c.position" data-ng-maxlength="100">
             </div>
             
             <div data-af-field 
@@ -107,13 +107,13 @@
               <input type="url" class="form-control" name="contactWebsite{{ $index }}" 
                      data-ng-model="c.website" 
                      data-ng-model-options="{ debounce: 500 }" 
-                     maxlength="2083" 
+                     data-ng-maxlength="2083" 
                      placeholder="http://example.com">
             </div>
             
             <div data-af-field data-af-field-label="Extension" data-af-field-model="c.extension">
               <input type="text" class="form-control" name="contactExtension{{ $index }}" 
-                     data-ng-model="c.extension" maxlength="10">
+                     data-ng-model="c.extension" data-ng-maxlength="10">
             </div>
           </div><!-- End of .col-x-x -->
         </div><!-- End of .row -->

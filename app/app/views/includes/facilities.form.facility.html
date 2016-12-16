@@ -6,7 +6,7 @@
          data-af-field-tooltip="'This is the name of the facility/lab hosting the equipment. You should create a 
                                  separate record for each facility/lab you have.'">
       <input class="form-control" name="facilityName" 
-             data-ng-model="form.data.facility.name" maxlength="200" required>
+             data-ng-model="form.data.facility.name" data-ng-maxlength="200" required>
     </div>
     
     <div data-af-field 
@@ -28,7 +28,7 @@
          data-af-field-tooltip="'This will be added to the permanent list of organizations if your facility/lab is 
                                  approved.'">
       <input type="text" class="form-control" name="facilityOrganizationName" 
-             data-ng-model="form.data.organization.name" maxlength="50" required>
+             data-ng-model="form.data.organization.name" data-ng-maxlength="50" required>
     </div>
   </div><!-- End of .col-x-x -->
 
@@ -39,7 +39,7 @@
          data-af-field-tooltip="'If your facility/lab has locations in multiple cities, please list all cities separated
                                  by commas (or leave blank).'">
       <input type="text" class="form-control" name="facilityCity" 
-             data-ng-model="form.data.facility.city" maxlength="150">
+             data-ng-model="form.data.facility.city" data-ng-maxlength="150">
     </div>
     
     <div data-af-field 
@@ -59,7 +59,7 @@
       <input type="url" class="form-control" name="facilityWebsite"
              data-ng-model="form.data.facility.website" 
              data-ng-model-options="{ debounce: 500 }" 
-             placeholder="http://example.com" maxlength="2083">
+             placeholder="http://example.com" data-ng-maxlength="2083">
     </div>
   </div><!-- End of .col-x-x -->
 </div><!-- End of .row -->
@@ -75,7 +75,7 @@
   <text-angular 
     data-ng-model="form.data.facility.description" 
     name="facilityDescription" 
-    data-ta-maxlength="2000" 
+    data-ta-max-text="2000" 
     required></text-angular>
 </div>
 

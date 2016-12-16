@@ -50,7 +50,7 @@
               <input type="text" class="form-control" name="equipmentType{{ $index }}" 
                      data-ng-model="e.type" 
                      placeholder="E.g. Magnetic resonance imaging (MRI)" 
-                     maxlength="200"
+                     data-ng-maxlength="200"
                      required>
             </div>
             
@@ -60,7 +60,7 @@
               <input type="text" class="form-control" name="equipmentManufacturer{{ $index }}" 
                      data-ng-model="e.manufacturer" 
                      placeholder="E.g. Hitachi Medical" 
-                     maxlength="100">
+                     data-ng-maxlength="100">
             </div>
 
             <div data-af-field
@@ -69,7 +69,7 @@
               <input type="text" class="form-control" name="equipmentModel{{ $index }}" 
                      data-ng-model="e.model" 
                      placeholder="E.g. Echelon Oval 1.5T Ultra-Wide MRI system" 
-                     maxlength="100">
+                     data-ng-maxlength="100">
             </div>
             
             <!--
@@ -83,7 +83,7 @@
                                          uses, special features, etc.'">
               <text-angular name="equipmentPurpose{{ $index }}" 
                             data-ng-model="e.purpose" 
-                            data-ta-maxlength="2000" 
+                            data-ta-max-text="2000" 
                             placeholder="E.g. Magnetic resonance imaging (MRI) is a medical imaging technique used in 
                                          radiology..." 
                             required></text-angular>
@@ -97,7 +97,7 @@
               <text-angular name="equipmentSpecifications{{ $index }}" 
                             data-ng-model="e.specifications" 
                             placeholder="E.g. - 50 x 50 x 50 cm FOV..." 
-                            data-ta-maxlength="2000"></text-angular>
+                            data-ta-max-text="2000"></text-angular>
             </div>
             
             <div data-af-field data-af-field-label="Year purchased">
@@ -158,7 +158,7 @@
                                          to this piece of equipment. This improves the likelihood that it will appear in
                                          search results.'">
               <input type="text" class="form-control" name="equipmentKeywords{{ $index }}"
-                     data-ng-model="e.keywords" placeholder="NMRI, MRT, etc" maxlength="500">
+                     data-ng-model="e.keywords" placeholder="NMRI, MRT, etc" data-ng-maxlength="500">
             </div>
           </div><!-- End of .col-x-x -->
         </div><!-- End of .row -->
