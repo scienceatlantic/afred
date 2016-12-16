@@ -1,12 +1,15 @@
-<div class="form-group" data-ng-class="{ 'has-error': form[name].$invalid && form[name].$dirty, 'form-group-sm': !isMd }">
+<div class="form-group" data-ng-class="{ 'has-error': form[name].$invalid && form[name].$dirty, 
+                                         'form-group-sm': !isMd }">
   <!-- Field label. -->
-  <label class="control-label" data-ng-class="{ 'col-sm-4': !isVertical }">
-    {{ label }}
-
+  <label class="control-label" data-ng-class="{ 'col-sm-4': !isVertical }">{{ label }}
     <!-- Tooltip. -->
     <span data-ng-if="tooltip">
       <a href="" style="color: inherit;">
-        <span class="fa fa-info-circle" data-uib-tooltip-html="tooltip" data-tooltip-append-to-body="true" data-tooltip-trigger="'outsideClick'"></span>
+        <span class="fa fa-info-circle" 
+              data-uib-tooltip-html="tooltip" 
+              data-tooltip-append-to-body="true" 
+              data-tooltip-trigger="'outsideClick'">
+        </span>
       </a>
     </span>
   </label>
@@ -16,21 +19,33 @@
     <div data-ng-transclude></div>
     
     <!-- Field length count goes here. -->
-    <p class="text-muted" data-ng-if="model.length">
-      <small>
-        {{ isTextAngular ? getTextAngularContentLength(model) : model.length }}/{{ maxLength }} characters remaining.
-      </small>
+    <p class="text-muted" data-ng-if="len() > 0 && maxLength > 0">
+      <small>{{ len() }}/{{ maxLength }} characters remaining.</small>
     </p>
     
     <!-- Validation error text. -->
-    <p data-ng-if="form[name]">
+    <p data-ng-if="form[name].$dirty">
       <small>
-        <span data-ng-if="form[name].$dirty">
-          <span class="text-danger" data-ng-if="form[name].$error.required">This is required.</span>
-          <span class="text-danger" data-ng-if="form[name].$error.url">That's not a valid URL.</span>
-          <span class="text-danger" data-ng-if="form[name].$error.email">That's not a valid email.</span>
-          <span class="text-danger" data-ng-if="form[name].$error.pattern">That's not quite right.</span>
-          <span class="text-danger" data-ng-if="form[name].$error.minlength || form[name].$error.maxlength">Must be between {{ minLength }} to {{ maxLength }} characters in length.</span>
+        <span class="text-danger" data-ng-if="form[name].$error.required">This is required.</span>
+        <span class="text-danger" data-ng-if="form[name].$error.url">That's not a valid URL.</span>
+        <span class="text-danger" data-ng-if="form[name].$error.email">That's not a valid email.</span>
+        <span class="text-danger" data-ng-if="form[name].$error.pattern">That's not quite right.</span>
+        <span data-ng-if="minLength > 0 && maxLength > 0">
+          <span class="text-danger" data-ng-if="form[name].$error.minlength 
+                                                || form[name].$error.maxlength 
+                                                || form[name].$error.taMaxText">
+            Must be between {{ minLength }} to {{ maxLength }} characters in length.
+          </span>
+        </span>
+        <span data-ng-if="minLength > 0 && !maxLength">
+          <span class="text-danger" data-ng-if="form[name].$error.minlength">
+            Must be at least {{ minLength }} characters in length.
+          </span>
+        </span>
+        <span data-ng-if="!minLength && maxLength > 0">
+          <span class="text-danger" data-ng-if="form[name].$error.maxlength || form[name].$error.taMaxText">
+            Must not be more than {{ maxLength }} characters in length.
+          </span>
         </span>
       </small>
     </p>
