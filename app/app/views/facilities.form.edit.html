@@ -3,24 +3,30 @@
 <h1>Edit Facility</h1>
 
 <!-- Form. -->
-<div data-af-loading="!(form.organizations.$resolved || form.provinces.$resolved || form.disciplines.$resolved || form.sectors.$resolved || form.fr.$resolved) || (form.loading.disciplines || form.loading.sectors)" data-ng-show="view.show == 'FORM'">
+<div data-af-loading="loading.form"
+     data-af-loading-text="Retrieving your facility..."
+     data-ng-show="view.show === 'FORM'">
   <div data-ng-include="'views/includes/facilities.form.html'"></div>
 </div>
 
 <!-- Preview. -->
-<div data-ng-show="view.show == 'PREVIEW'">
-  <div data-af-loading="loading.preview">
+<div data-ng-show="view.show === 'PREVIEW'">
+  <div data-af-loading="loading.preview" 
+       data-af-loading-text="Generating preview...">
     <div data-ng-include="'views/includes/facilities.form.preview.html'"></div>
   </div>
 </div>
 
 <!-- Success message. -->
-<div data-ng-show="view.show == 'SUCCESS_MESSAGE'">
+<div data-ng-show="view.show === 'SUCCESS_MESSAGE'">
   <p>Thank you!</p>
   
   <p>Your information has been successfully submitted.</p>
     
-  <p>The contact that received the unique link to this page will receive a follow-up email once the record has been reviewed.</p>
+  <p>
+    The contact that received the unique link to this page will receive a follow-up email once the record has been 
+    reviewed.
+  </p>
   
   <!-- Survey. -->
   <div data-ng-include="'views/includes/facilities.form.survey.html'"></div>
@@ -29,7 +35,7 @@
 </div>
 
 <!-- Failure message. -->
-<div data-ng-show="view.show =='FAILURE_MESSAGE'">
+<div data-ng-show="view.show === 'FAILURE_MESSAGE'">
   <p>Sorry! A technical difficulty was encountered and your information was not successfully submitted.</p>
 
   <p>Please contact <a href="mailto:afred@scienceatlantic.ca">afred@scienceatlantic.ca</a>.</p>

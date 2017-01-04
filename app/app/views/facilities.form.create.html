@@ -3,49 +3,41 @@
 <h1>Submit Facility</h1>
 
 <!-- Form. -->
-<div data-af-loading="!(form.organizations.$resolved || form.provinces.$resolved || form.disciplines.$resolved || form.sectors.$resolved) || (form.loading.disciplines || form.loading.sectors || form.loading.save)" data-af-loading-text="Preparing the form..." data-ng-show="view.show =='FORM'">  
+<div data-af-loading="loading.form" 
+     data-af-loading-text="Preparing the form..." 
+     data-ng-show="view.show ==='FORM'">  
   <div data-ng-include="'views/includes/facilities.form.html'"></div>
 </div>
 
 <!-- Preview. -->
-<div data-ng-show="view.show == 'PREVIEW'">
+<div data-ng-show="view.show === 'PREVIEW'">
   <div data-af-loading="loading.preview">
     <div data-ng-include="'views/includes/facilities.form.preview.html'"></div>
   </div>
 </div>
 
 <!-- Successful submission message. -->
-<div data-ng-show="view.show == 'SUCCESS_MESSAGE'">
-  <p>
-    Thank you! Your information has been successfully submitted. 
-  </p>
+<div data-ng-show="view.show === 'SUCCESS_MESSAGE'">
+  <p>Thank you!</p>
+  
+  <p>Your information has been successfully submitted.</p>
   
   <p>
-    The primary contact listed in your submission will receive an email with
-    next steps once the record has been reviewed.
+    The primary contact listed in your submission will receive an email with next steps once the record has been
+    reviewed.
   </p>
   
   <!-- Survey. -->
   <div data-ng-include="'views/includes/facilities.form.survey.html'"></div>
   
-  <p>
-    Would you like to <a href="" data-ng-click="_location.reload()">submit
-    another facility</a>?
-  </p>
+  <p>Would you like to <a href="" data-ng-click="_location.reload()">submit another facility</a>?</p>
   
-  <p>
-    Go to <a data-ui-sref="home">homepage</a>.
-  </p>
+  <p>Go to <a data-ui-sref="home">homepage</a>.</p>
 </div>
 
 <!-- Submission failed message. -->
-<div data-ng-show="view.show == 'FAILURE_MESSAGE'">
-  <p>
-    Sorry! A technical difficulty was encountered and your information was not
-    successfully submitted. 
-  </p>
+<div data-ng-show="view.show === 'FAILURE_MESSAGE'">
+  <p>Sorry! A technical difficulty was encountered and your information was not successfully submitted.</p>
 
-  <p>
-    Please contact <a href="mailto:afred@scienceatlantic.ca">afred@scienceatlantic.ca</a>.
-  </p>
+  <p>Please contact <a href="mailto:afred@scienceatlantic.ca">afred@scienceatlantic.ca</a>.</p>
 </div>

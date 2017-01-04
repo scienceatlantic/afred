@@ -1,22 +1,26 @@
 'use strict';
 
 angular.module('afredApp').controller('FacilitiesFormController',
-  ['$scope',
-   '$interval',
+  ['$interval',
+   '$scope',
+   '$timeout',
+   '$q',
+   'confirmModal',
+   'disciplineResource',
+   'facilityRepositoryResource',
    'organizationResource',
    'provinceResource',
-   'disciplineResource',
    'sectorResource',
-   'facilityRepositoryResource',
-   'confirmModal',
-  function($scope,
-           $interval,
+  function($interval,
+           $scope,
+           $timeout,
+           $q,
+           confirmModal,
+           disciplineResource,
+           facilityRepositoryResource,
            organizationResource,
            provinceResource,
-           disciplineResource,
-           sectorResource,
-           facilityRepositoryResource,
-           confirmModal) {
+           sectorResource) {
     /* ---------------------------------------------------------------------
      * Functions/Objects.
      * --------------------------------------------------------------------- */
@@ -91,42 +95,26 @@ angular.module('afredApp').controller('FacilitiesFormController',
       isAutosaving: 0,
       
       /**
-       * Loading flags for GIFs. The '$resolved' property from the Angular
-       * resource factories are insufficient because we're still doing some
-       * processing after the data has been retrieved from the API. These flags
-       * will be set to false after all processing has been completed.
-       *
-       * @type {object}
-       */
-      loading: {
-        disciplines: true,
-        sectors: true,
-        save: true // Has the saved data been retrieved. 'Create' mode only.
-      },
-      
-      /**
        * Initialises the form.
        *
-       * Side effects:
-       * $scope.form.data All form data is attached to this object.
+       * @sideeffect $scope.form.data All form data is attached to this object.
        *
-       * Uses/calls/requires:
-       * $scope.form.getDisciplines()
-       * $scope.form.getOrganizations()
-       * $scope.form.getSectors()
-       * $scope.form.getProvinces()
-       * $scope.form.addContacts()
-       * $scope.form.addEquipment()
+       * @requires $scope.form.addContacts()
+       * @requires $scope.form.addEquipment()
+       * @requires $scope.form.getDisciplines()
+       * @requires $scope.form.getOrganizations()
+       * @requires $scope.form.getProvinces()
+       * @requires $scope.form.getSectors()
        * 
-       * @param {boolean} isEdit If in edit mode, this will prevent the function
-       *     from calling:
-       *     '$scope.form.getOrganizations()',
-       *     '$scope.form.getProvinces()',
-       *     '$scope.form.getDisciplines()', and
-       *     '$scope.form.getSectors()' since
-       *     '$scope.form.getFacilityRepositoryData()' will call them.
+       * @param {number=undefined} frId If editing a facility, this is the 
+       *     facility repository ID of the facility.
+       * @param {string=undefined} token If editing a facility, this is the 
+       *     unique token that authorises the edit instance.
        */
-      initialise: function(isEdit) {       
+      initialise: function(frId, token) {
+        var deferred = $q.defer();
+        var promises = [];
+
         // Holds all facility data that will be passed to the API.
         $scope.form.data = {
           // Facility information.
@@ -148,25 +136,20 @@ angular.module('afredApp').controller('FacilitiesFormController',
           // Primary contact information.
           primaryContact: {},
           
-          // Contact(s) information.
+          // (Non-primary) Contact information.
           contacts: [],
           
           // Equipment information
           equipment: []
         };
        
-        if (!isEdit) {
-          // Get an array of all available organizations.
-          $scope.form.getOrganizations();
-          
-          // Get an array all available provinces.
-          $scope.form.getProvinces();
-        
-          // Get an array of all disciplines.
-          $scope.form.getDisciplines();
-          
-          // Get an array of all sectors.
-          $scope.form.getSectors();
+        if (!frId || !token) {
+          promises.push($scope.form.getOrganizations());
+          promises.push($scope.form.getProvinces());
+          promises.push($scope.form.getDisciplines());
+          promises.push($scope.form.getSectors());
+        } else {
+          promises.push($scope.form.getFacilityRepositoryData(frId, token));
         }
         
         // Add the first contact to the form.
@@ -174,14 +157,21 @@ angular.module('afredApp').controller('FacilitiesFormController',
         
         // Add the first equipment to the form.
         $scope.form.addEquipment();
+
+        // Resolve.
+        $q.all(promises).then(function() {
+          deferred.resolve();
+        });
+
+        return deferred.promise;
       },
       
       /**
        * Adds an additional contact object.
        *
-       * Side effects:
-       * $scope.form.data.contacts Contact object is pushed into this array.
-       * $scope.form.contactIndex Index is advanced.
+       * @sideeffect $scope.form.contactIndex Index is advanced.
+       * @sideeffect $scope.form.data.contacts Contact object is pushed into 
+       *     this array.
        */      
       addContact: function() {
         $scope.form.data.contacts.push({
@@ -202,12 +192,11 @@ angular.module('afredApp').controller('FacilitiesFormController',
       /**
        * Removes a contact object.
        *
-       * Side effects:
-       * $scope.form.data.contacts Contact object of index 'index' is removed
-       *     from this array.
-       * $scope.form.contactIndex Index is decreased.
+       * @sideeffect $scope.form.contactIndex Index might be reduced.
+       * @sideeffect $scope.form.data.contacts Contact object of index `index` 
+       *     is removed from this array.
        * 
-       * @param {integer} index Array index of '$scope.form.data.contacts' to
+       * @param {number} index Array index of `$scope.form.data.contacts` to
        *     delete.
        */
       removeContact: function(index) {
@@ -230,9 +219,9 @@ angular.module('afredApp').controller('FacilitiesFormController',
       /**
        * Adds additional equipment object.
        *
-       * Side effects:
-       * $scope.form.data.equipment Equipment object is pushed into this array.
-       * $scope.form.equipmentIndex Index is advanced.
+       * @sideeffect $scope.form.data.equipment Equipment object is pushed into 
+       *     this array.
+       * @sideeffect $scope.form.equipmentIndex Index is advanced.
        */      
       addEquipment: function() {
         $scope.form.data.equipment.push({
@@ -255,11 +244,11 @@ angular.module('afredApp').controller('FacilitiesFormController',
       /**
        * Removes an equipment object.
        *
-       * Side effects:
-       * $scope.form.data.equipment Equipment object is added to this array.
-       * $scope.form.equipmentIndex Index is decreased.
+       * @sideffect $scope.form.data.equipment Equipment object is added to this
+       *     array.
+       * @sideeffect $scope.form.equipmentIndex Index might be decreased.
        * 
-       * @param {number} index Array index of '$scope.form.data.equipment' to
+       * @param {number} index Array index of `$scope.form.data.equipment` to
        *     delete.
        */
       removeEquipment: function(index) {
@@ -281,416 +270,449 @@ angular.module('afredApp').controller('FacilitiesFormController',
       /**
        * Gets an array of all organizations.
        *
-       * Side effects:
-       * $scope.form.organizations Data retrieved is attached to this array.
+       * @sideeffect $scope.form.organizations Data retrieved is stored here.
        *     'N/A' (if found) is moved to them bottom of the array and an
        *     organization called 'Other' is added to the array (after 'N/A')
        *     with an id of -1.
        *
-       * Uses/calls/requires:
-       * organizationResource
+       * @requires $q
+       * @requires $scope._httpError This is called if any AJAX call fails.
+       * @requires organizationResource
        *
-       * @param (integer) organizationId If it edit mode, the facility being
-       *     edited could belong to an organization that is (or was recently
-       *     made) hidden. If it is hidden, the API wouldn't have returned it,
-       *     so we need to retrieve it and manually push it into the array.
+       * @param (number=undefined) organizationId If it edit mode, the facility
+       *     being edited could belong to an organization that is (or was 
+       *     recently made) hidden. If it is hidden, the API wouldn't have 
+       *     returned it, so we need to retrieve it and push it into the array.
+       * 
+       * @returns {promise} Promise that resolves to an array of organizations.
        */
       getOrganizations: function(organizationId) {
+        var getOrgDeferred = $q.defer();
+        var getHiddenOrgDeferred = $q.defer();
+        var isHidden;
+        
         $scope.form.organizations = organizationResource.queryNoPaginate({
           isHidden: 0
         }, function() {
           // Find the 'N/A' option and push it to the end of the array.
-          for (var i = 0; i < $scope.form.organizations.length; i++) {
-            if ($scope.form.organizations[i].name == 'N/A') {
+          $scope.form.organizations.some(function(o, i) {
+            if (o.name === 'N/A') {
               var na = ($scope.form.organizations.splice(i, 1))[0];
-              $scope.form.organizations.push(na);
-              break;
+              return $scope.form.organizations.push(na);
             }
-          }
+          });
           
-          // Hidden organization check.
+          // Check if organization is hidden, if it is, add it to array.
           if (organizationId) {
-            var isFound = false;
-            for (var i = 0; i < $scope.form.organizations.length; i++) {
-              if ($scope.form.organizations[i].id == organizationId) {
-                isFound = true;
-                break;
-              }
-            }
+            isHidden = !$scope.form.organizations.some(function(o, i) {
+              return o.id === organizationId;
+            });
             
-            if (!isFound) {
+            if (isHidden) {
               organizationResource.get({ organizationId: organizationId },
                 function(data) {                  
-                  $scope.form.organizations.push(data);  
+                  $scope.form.organizations.push(data);
+                  getHiddenOrgDeferred.resolve();  
+                }, function(response) {
+                  $scope._httpError(response);
                 }
               );              
             }
           }
-          
+          if (!organizationId || !isHidden) {
+            getHiddenOrgDeferred.resolve();
+          }
+
           // Add an option for 'Other'.
           $scope.form.organizations.push({ id: -1, name: 'Other' });
+
+          // Resolve.
+          getHiddenOrgDeferred.promise.then(function() {
+            getOrgDeferred.resolve($scope.form.organizations);
+          });
         }, function(response) {
           $scope._httpError(response);
         });
+
+        return getOrgDeferred.promise;
       },
       
       /**
        * Gets an array of all provinces.
        *
-       * Side effects:
-       * $scope.form.provinces Data retrieved is attached to this array.
+       * @sideeffect $scope.form.provinces Data retrieved is stored here.
        *     'N/A' (if found) is moved to them bottom of the array.
+       * 
+       * @requires $q
+       * @requires $scope._httpError This is called if any AJAX call fails.
+       * @requires provinceResource
        *
-       * Uses/calls/requires:
-       * provinceResource
-       *
-       * @param {integer} provinceId See reason in
-       *     '$scope.form.getOrganizations()'.
+       * @param {number=undefined} provinceId See description in
+       *     `$scope.form.getOrganization`.
+       * 
+       * @returns {promise} Promise that resolves to an array of provinces.
        */
       getProvinces: function(provinceId) {
+        var getProvinceDeferred = $q.defer();
+        var getHiddenProvinceDeferred = $q.defer();
+        var isHidden;
+
         $scope.form.provinces = provinceResource.queryNoPaginate({
           isHidden: 0
         }, function() {
           // Find the 'N/A' option and push it to the end of the array.
-          for (var i = 0; i < $scope.form.provinces.length; i++) {
-            if ($scope.form.provinces[i].name == 'N/A') {
+          $scope.form.provinces.some(function(p, i) {
+            if (p.name === 'N/A') {
               var na = ($scope.form.provinces.splice(i, 1))[0]; 
-              $scope.form.provinces.push(na);
-              break;
+              return $scope.form.provinces.push(na);
             }
-          }
+          });
           
-          // Hidden province check.
+          // Check if province is hidden, if it is, add it to array.
           if (provinceId) {
-            var isFound = false;
-            for (var i = 0; i < $scope.form.provinces.length; i++) {
-              if ($scope.form.provinces[i].id == provinceId) {
-                isFound = true;
-                break;
-              }
-            }
+            isHidden = $scope.form.provinces.some(function(p, i) {
+              return p.id === provinceId;
+            });
             
-            if (!isFound) {
+            if (isHidden) {
               provinceResource.get({ provinceId: provinceId },
                 function(data) {
                   $scope.form.provinces.push(data);
+                  getHiddenProvinceDeferred.resolve();
+                }, function(response) {
+                  $scope._httpError(response);
                 }
               );                
             }
           }
+          if (!provinceId || !isHidden) {
+            getHiddenProvinceDeferred.resolve();
+          }
+
+          // Resolve.
+          getHiddenProvinceDeferred.promise.then(function() {
+            getProvinceDeferred.resolve($scope.form.provinces);
+          });
         }, function (response) {
           $scope._httpError(response);
         });
+
+        return getProvinceDeferred.promise;
       },
       
       /**
-       * Gets an array of all disciplines and attaches it to
-       * '$scope.form.disciplines'.
+       * Gets an array of all disciplines.
        *
-       * Side effects:
-       * $scope.form.disciplines Array of disciplines is attached to this. Will
-       *    add a property called 'isSelected' to each array element.
-       * $scope.form.loading Set to true at the beginning of the function and
-       *     then set to false at the end.
+       * @sideeffect $scope.form.disciplines Array of disciplines is store here.
+       *     A property called `isSelected` will be added to each discipline
+       *     object in the array.
        *
-       * Uses/calls/requires:
-       * disciplineResource
+       * @requires $q
+       * @requires $scope._httpError This is called if any AJAX call fails.
+       * @requires disciplineResource
        * 
-       * @param {array} disciplines This will mark any already selected
-       *     checkboxes.
+       * @param {Array.<number>=undefined} disciplines Array of IDs. If
+       *     provided, the `isSelected` property of each matching discipline is
+       *     marked true.
+       * 
+       * @returns {promise} Promise that resolves to an array of disciplines.
        */
       getDisciplines: function(disciplines) {
-        // Set loading flag to true.
-        $scope.form.loading.disciplines = true;
-        
+        var deferred = $q.defer();
+
         $scope.form.disciplines = disciplineResource.queryNoPaginate(null,
           function() {
-            // Adds an 'isSelected' property for the checkboxes. It is used in
+            // Adds an `isSelected` property for the checkboxes. It is used in
             // the form.
-            angular.forEach($scope.form.disciplines, function (discipline) {
-              discipline.isSelected = false;
+            $scope.form.disciplines.forEach(function(d, i) {
+              $scope.form.disciplines[i].isSelected = false;
             });
             
             // This part will check all the selected checkboxes from the data in
-            // 'disciplines'.
+            // `disciplines`.
             if (disciplines) {
-              var formDislength = $scope.form.disciplines.length;
-              var disLength = disciplines.length;
-              var countSelected = 0;
-              
-              for (var i = 0; i < formDislength; i++) {
-                var id = $scope.form.disciplines[i].id;
-                if (disciplines.indexOf(id) != -1) {
-                  $scope.form.disciplines[i].isSelected = true;
-                  
-                  // Keep count of the number of items we've processed. If
-                  // we've gone through the entire array from the API, there's
-                  // no need to complete the loop.                  
-                  if (++countSelected >= disLength) {
-                    break;
-                  }
+              // Create an object where each property is the discipline's ID
+              // and it's value is the array's index.
+              var obj = {};
+              $scope.form.disciplines.forEach(function(d, i) {
+                obj[d.id] = i;
+              });
+
+              disciplines.forEach(function(id) {
+                if (obj.hasOwnProperty(id)) {
+                  $scope.form.disciplines[obj[id]].isSelected = true;
                 }
-              }
+              });
             }
             
-            // Set loading flag to false.
-            $scope.form.loading.disciplines = false;
+            // Resolve.
+            deferred.resolve($scope.form.disciplines);
           }, function(response) {
             $scope._httpError(response);
           }
         );
+
+        return deferred.promise;
       },
       
       /**
-       * Gets an array of all sectors and attaches it to '$scope.form.sectors'.
+       * Gets an array of all sectors.
        *
-       * Side effects:
-       * $scope.form.sectors Array of sectors is attached to this. See
-       *     '$scope.form.getDisciplines()' for more details.
-       * $scope.form.loading Set to true at the beginning of the function
-       *     and then set to false once all processing is complete.
+       * @sideeffect $scope.form.sectors Array of sectors is attached to this. 
+       *     See `$scope.form.getDisciplines()` for more details.
        *
-       * Uses/calls/requires:
-       * sectorResource
+       * @requires $q
+       * @requires $scope._httpError This is called if any AJAX call fails.
+       * @requires sectorResource
        * 
-       * @param {array} sectors This will mark any already selected checkboxes.
+       * @param {Array.<number>=undefined} sectors Array if IDs. If provided,
+       *     the `isSelected` property of each matching sector is marked true.
        */
       getSectors: function(sectors) {
-        // Set loading flag to true.
-        $scope.form.loading.sectors = true;
-        
+        var deferred = $q.defer();
+
         $scope.form.sectors = sectorResource.queryNoPaginate(null,
           function() {
-            // Same deal as '$scope.form.getDisciplines()'.
-            angular.forEach($scope.form.sectors, function(sector) {
-              sector.isSelected = false;
+            // Same deal as `$scope.form.getDisciplines()`.      
+            $scope.form.sectors.forEach(function(s, i) {
+              $scope.form.sectors[i].isSelected = false;
             });
-            
+
             // This part will check all the selected checkboxes from the data in
             // 'sectors'.
             if (sectors) {
-              var formSecLength = $scope.form.sectors.length;
-              var secLength = sectors.length;
-              var countSelected = 0;
-              
-              // For a more detailed explanation of this part see
-              // '$scope.form.getDisciplines()'.
-              for (var i = 0; i < formSecLength; i++) {
-                var id = $scope.form.sectors[i].id;
-                if (sectors.indexOf(id) != -1) {
-                  $scope.form.sectors[i].isSelected = true;
-                  
-                  if (++countSelected >= secLength) {
-                    break;
-                  }
+              var obj = {};
+              $scope.form.sectors.forEach(function(s, i) {
+                obj[s.id] = i;
+              });
+
+              sectors.forEach(function(id) {
+                if (obj.hasOwnProperty(id)) {
+                  $scope.form.sectors[obj[id]].isSelected = true;
                 }
-              }
+              });
             }
-            
-            // Set loading flag to false.
-            $scope.form.loading.sectors = false;
+
+            // Resolve.
+            deferred.resolve($scope.form.sectors);
           }, function(response) {
             $scope._httpError(response);
           }
         );
+
+        return deferred.promise;
       },
       
       /**
        * Retrieves a facility for editing.
        *
-       * Side effects:
-       * $scope.form.fr Promise is attached to this.
-       * $scope.form.data Facility data is attached to this.
+       * @sideeffect $scope.form.data Facility data retrieved is stored here.
+       * @sideeffect $scope.form.fr Data returned from 
+       *     `facilityRepositoryResource.get()` is stored here.
        *
-       * Calls/uses/requires:
-       * facilityRepositoryResource
-       * $scope.form.getDisciplines()
-       * $scope.form.getSectors()
-       * $scope._state.go()
+       * @requires $q
+       * @requires $scope._httpError This is called if any AJAX call fails.
+       * @requires $scope.form.getDisciplines()
+       * @requires $scope.form.getOrganizations()
+       * @requires $scope.form.getProvinces()
+       * @requires $scope.form.getSectors()
+       * @requires facilityRepositoryResource
        * 
-       * @param {integer} frId Id of the facility repository record to
+       * @param {number=undefined} frId Id of the facility repository record to
        *     retrieve.
-       * @param {string} token A string that authorises the user to retrieve
-       *     the facility repository record.
+       * @param {string=undefined} token A string that authorises the user to 
+       *     retrieve the facility repository record.
+       * 
+       * @returns {promise} Promise that resolves to facility data.
        */
       getFacilityRepositoryData: function(frId, token) {
+        var deferred = $q.defer();
+        var pr = []; // Holds promises.
+
         $scope.form.fr = facilityRepositoryResource.get({
           facilityRepositoryId: frId,
           token: token
-        }, function() {
-          $scope.form.data = angular.copy($scope.form.fr.data);
+        }, function(fr) {
+          $scope.form.data = angular.copy(fr.data);
+
+          // Alias
+          var data = $scope.form.data;
           
           // Since the form stores all contacts (primary or not) in the
           // '$scope.form.contacts' array, we need to format the data
           // retrieved from the API to match the form. The first part checks
-          // if there's any data in the contacts array (since non-primary)
-          // contacts are optional.
-          if (angular.isArray($scope.form.data.contacts)) {
-            $scope.form.data.contacts.unshift(
-              $scope.form.fr.data.primaryContact);
+          // if there's any data in the contacts array (since non-primary
+          // contacts are optional).
+          if (Array.isArray(data.contacts)) {
+            data.contacts.unshift(data.primaryContact);
           } else {
-            $scope.form.data.contacts = [];
-            $scope.form.data.contacts.push(
-              $scope.form.fr.data.primaryContact);
+            data.contacts = [];
+            data.contacts.push(data.primaryContact);
           }
           
           // Get the list of organizations and provinces. We're calling them
           // now because we need to check for hidden organizations and
           // provinces.
-          var organizationId = $scope.form.fr.data.facility.organizationId;
-          $scope.form.getOrganizations(organizationId);
-          var provinceId = $scope.form.fr.data.facility.provinceId;
-          $scope.form.getProvinces(provinceId);
+          pr.push($scope.form.getOrganizations(data.facility.organizationId));
+          pr.push($scope.form.getProvinces(data.facility.provinceId));
           
           // Get the disciplines and sectors for the form. We're calling
           // these methods now because we needed '$scope.form.fr.data'
           // to be able to mark all the selected disciplines and sectors.
-          $scope.form.getDisciplines($scope.form.fr.data.disciplines);
-          $scope.form.getSectors($scope.form.fr.data.sectors);
-          
+          pr.push($scope.form.getDisciplines(data.disciplines));
+          pr.push($scope.form.getSectors(data.sectors));
+
+          // Resolve.
+          $q.all(pr).then(function() {
+            deferred.resolve(data);
+          });
         }, function(response) {
           $scope._httpError(response);
-        });        
+        });
+
+        return deferred.promise;        
       },
       
       /**
-       * Note: If this function is not being used, set '$scope.loading.save'
-       * to false manually. Otherwise the form will not be displayed.
+       * Retrieves form data from local storage (if found) and then continuously
+       * save form data every `interval` milliseconds.
        *
-       * Retrieve existing data from locol storage then continuously save the
-       * form data to local storage every 'interval' milliseconds.
+       * @sideeffect $scope.form.isAutosaving ID returned from `$interval` is 
+       *     stored here if the operation is successful.
+       * @sideeffect $scope.form.data Data retrieved from local storage is 
+       *     stored here.
        *
-       * Side effects:
-       * $scope.form.isAutosaving ID returned from $interval is attached to this
-       *     if the operation is successful.
-       * $scope.form.data Data retrieved from local storage is attached to this.
-       * $scope.form.loading.save Is set to false once the data has been
-       *     retrieved or if the operation fails.
-       *
-       * Calls/uses/requires:
-       * $interval
-       * $scope._state.current.name
-       * $scope.form.organizations.$resolved
-       * $scope.form.provinces.$resolved
-       * $scope.form.disciplines.$resolved
-       * $scope.form.sectors.$resolved
-       * $scope.form.loading.disciplines
-       * $scope.form.loading.sectors
-       * $scope.form.getDisciplines()
-       * $scope.form.getSectors()
+       * @requires $interval
+       * @requires $q
+       * @requires $scope._form.cb.getSelected()
+       * @requires $scope._state.current.name
+       * @requires $scope._state.is()
+       * @requires $scope._info()
+       * @requires $scope._warn()
+       * @requires $scope.form.getDisciplines()
+       * @requires $scope.form.getSectors()
+       * @requires $timeout
+       * @requires angular.fromJson()
+       * @requires angular.toJson()
+       * @requires localStorage
        * 
-       * @param {integer} interval Number of milliseconds between each
-       *     interval. If not provided, a default of 500 milliseconds is used.
+       * @param {number=500} interval Number of milliseconds between each
+       *     interval.
+       * 
+       * @returns {promise} Promise that resolves when either the operation is
+       *     not supported or the first interval is run.
        */
       startAutosave: function(interval) {
-        // Local storage item names.
-        var f = $scope._state.current.name + '-' + 'facility';
-        var d = $scope._state.current.name + '-' + 'disciplines';
-        var s = $scope._state.current.name + '-' + 'sectors';
+        var deferred = $q.defer();
+        var promises = [];
 
-        // We're putting the code below inside an interval because we have to
-        // test if all the form data has fully loaded before attempting to
-        // retrieve and save data. Otherwise data might be overwritten with
-        // blank data.
-        var intervalId = $interval(function() {
-          if ($scope.form.organizations.$resolved
-            && $scope.form.provinces.$resolved
-            && $scope.form.disciplines.$resolved
-            && $scope.form.sectors.$resolved
-            && !$scope.form.loading.disciplines
-            && !$scope.form.loading.sectors) {
-            // Once the condition passes (i.e. the form has loaded), cancel the
-            // interval.
-            $interval.cancel(intervalId);
+        // Resolve and return if already autosaving.
+        if ($scope.form.isAutosaving) {
+          $scope._warn('Already autosaving. Interval ID: ' 
+            + $scope.form.isAutosaving);
+          deferred.resolve();
+          return deferred.promise;
+        }
 
-            // This is in a try/catch block because we want to test if
-            // local storage is supported by the browser. If it's not, quit.
-            try {
-              var data = angular.fromJson(localStorage.getItem(f));
+        // Aliases for local storage item names.
+        var facilityItem = $scope._state.current.name + '-facility';
+        var disciplinesItem = $scope._state.current.name + '-disciplines';
+        var sectorsItem = $scope._state.current.name + '-sectors';
 
-              if (data) {
-                $scope.form.data = data;
-                $scope.form.getDisciplines(angular.fromJson(localStorage.getItem(d)));
-                $scope.form.getSectors(angular.fromJson(localStorage.getItem(s)));
-              }              
-              
-              // Loading flag is set to true.
-              $scope.form.loading.save = false;
-            } catch(e) {
-              
-              // This means that local storage is (probably) not supported. So
-              // The loading flag still has to be set to true, otherwise the
-              // form will not be shown.
-              $scope.form.loading.save = false;
+        // This is in a try/catch block because we want to test if local storage
+        // is supported by the browser. If it's not, resolve immediately.
+        try {
+          // Aliases
+          var ls = localStorage;
+          var fromJson = angular.fromJson;
+          var toJson = angular.toJson;
+
+          var facility = fromJson(ls.getItem(facilityItem));
+          var disciplines = fromJson(ls.getItem(disciplinesItem));
+          var sectors = fromJson(ls.getItem(sectorsItem));
+
+          if (facility) {
+            $scope.form.data = facility;
+            promises.push($scope.form.getDisciplines(disciplines));
+            promises.push($scope.form.getSectors(sectors));
+          }              
+        } catch(err) {
+          $scope._warn('`localStorage` is not supported. ' + err);
+          deferred.resolve();
+          return deferred.promise;
+        }           
+        
+        // Continuously save form data.
+        $q.all(promises).then(function() {
+          $scope.form.isAutosaving = $interval(function() {
+            // Terminates the interval if we're no longer in the right state.
+            if (!$scope._state.is('facilities.form.create')) {
+              $interval.cancel($scope.form.isAutosaving);
+              $scope._info('Interval terminated. No longer saving form data.');
               return;
-            }           
-            
-            // Continuously save data (if it's not already doing so).
-            if (!$scope.form.isAutosaving) {
-              try {
-                $scope.form.isAutosaving = $interval(function() {
-                  var dData = 
-                    $scope._form.cb.getSelected($scope.form.disciplines, true);
-                  var sData = 
-                    $scope._form.cb.getSelected($scope.form.sectors, true);
-            
-                  localStorage.setItem(f, angular.toJson($scope.form.data));
-                  localStorage.setItem(d, angular.toJson(dData));
-                  localStorage.setItem(s, angular.toJson(sData));               
-                }, interval ? interval : 500);
-              } catch(e) {
-                $interval.cancel($scope.form.isAutosaving);
-              }          
             }
-          }
-        }, 500);
+
+            // Aliases.
+            var d = $scope.form.disciplines;
+            var s = $scope.form.sectors;
+
+            var selectedDisciplines = $scope._form.cb.getSelected(d, true);
+            var selectedSectors = $scope._form.cb.getSelected(s, true);
+
+            ls.setItem(facilityItem, toJson($scope.form.data));
+            ls.setItem(disciplinesItem, toJson(selectedDisciplines));
+            ls.setItem(sectorsItem, toJson(selectedSectors));
+
+            // Log.
+            $scope._info('Form data saved...');
+          }, interval ? interval : 500);
+
+          // Resolve.
+          $timeout(function() {
+            deferred.resolve();
+          }, interval ? interval : 500);
+        });
+
+        return deferred.promise;
       },
       
       /**
-       * Clears local storage of any saved form data.
-       *
-       * Side effects:
-       * localStorage 'facilities', 'disciplines', 'sectors' data deleted.
-       * $scope.form.isAutosaving Interval stored here is stopped.
-       * $scope.form.isStorageSupported Set to false if operation fails.
+       * Clears local storage of any saved form data and stops autosaving.
        * 
-       * Uses/calls/requires:
-       * $interval
-       * $scope.form.initialise()
-       * $scope._state.current.name
+       * @requires $interval
+       * @requires $scope._location.reload();
+       * @requires $scope._state.current.name
+       * @requires $scope._warn()
+       * @requires $scope.form.initialise()
        *
-       * @param dontConfirm If set to true, confirmation modal will not be shown
-       *     and localStorage will be cleared immediately and the form will be
-       *     reinitialised. If set to false, the confirmation modal will be 
-       *     shown and if confirmed, the page will be reloaded (instead of
-       *     being reinitialised).
+       * @param {boolean=false} dontConfirm If set to true, confirmation modal 
+       *     will not be shown and localStorage will be cleared immediately and 
+       *     the form will be reinitialised. If set to false, the confirmation 
+       *     modal will be shown and if confirmed, the page will be reloaded 
+       *     (instead of being reinitialised).
        */
       clearSave: function(dontConfirm) {
         if (dontConfirm) {
           remove();
           $scope.form.initialise();
-        } else {
-          var modalInstance = confirmModal.open('reset-create-facility-form');
-          modalInstance.result.then(function() {
-            remove();
-            $scope._location.reload();
-          });
+          return;
         }
+        confirmModal.open('reset-create-facility-form').result.then(function() {
+          remove();
+          $scope._location.reload();
+        });
         
         function remove() {
           try {
-            // We have to stop autosaving otherwise clearing the data won't
+            // We have to stop autosaving, otherwise clearing the data won't
             // work if the page is reloaded after this function is called.
             $interval.cancel($scope.form.isAutosaving);
-            
-            var f = $scope._state.current.name + '-' + 'facility';
-            var d = $scope._state.current.name + '-' + 'disciplines';
-            var s = $scope._state.current.name + '-' + 'sectors';
-            localStorage.removeItem(f);
-            localStorage.removeItem(d);
-            localStorage.removeItem(s);
+
+            ['-facility', '-disciplines', '-sectors'].forEach(function(item) {
+              localStorage.removeItem($scope._state.current.name + item);
+            });
           } catch(e) {
-            // Do nothing if local storage is not supported.
+            $scope._warn('`localStorage` is not supported');
           }
         }
       },
@@ -698,10 +720,10 @@ angular.module('afredApp').controller('FacilitiesFormController',
       /**
        * Formats the data for the preview. 
        * 
-       * Uses/calls/requires:
-       * $scope.form.data
+       * @requires $scope.form.data
+       * @requires angular.copy()
        * 
-       * @return {object} Facility data in this format:
+       * @returns {object} Facility data in this format:
        *     {
        *       name: '',
        *       city: '',
@@ -745,7 +767,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
         if ($scope.form.data.facility.organizationId > 0) {
           var e = document.getElementById('facility-organization');
           f.organization = $scope.form.organizations[e.selectedIndex];
-        } else if ($scope.form.data.facility.organizationId == -1) {
+        } else if ($scope.form.data.facility.organizationId === -1) {
           f.organization = $scope.form.data.organization;
         }
         
@@ -758,35 +780,34 @@ angular.module('afredApp').controller('FacilitiesFormController',
       
       /**
        * Formats the data to match what the API requires. The API expects a
-       * single primary contact and (optionally) regular contacts. In the form,
-       * the first contact is assumed to be the primary contact.
+       * single primary contact and (optionally) (non-primary) contacts. In the
+       * form, the first contact is assumed to be the primary contact.
        *
-       * Calls/uses/requires:
-       * $scope.form.data
-       * $scope._form.cb.getSelected()
-       * $scope._form.cb.getSelected()
+       * @requires $scope._form.cb.getSelected()
+       * @requires $scope.form.data
        * 
-       * @return {object} Facility object.
+       * @returns {object} Facility object.
        */
       formatForApi: function() {
-        var d = angular.copy($scope.form.data);
-        d.disciplines = $scope._form.cb.getSelected($scope.form.disciplines, true);
-        d.sectors = $scope._form.cb.getSelected($scope.form.sectors, true);
+        var data = angular.copy($scope.form.data);
+        data.disciplines = $scope._form.cb.getSelected($scope.form.disciplines, 
+          true);
+        data.sectors = $scope._form.cb.getSelected($scope.form.sectors, true);
         
         // If 'Other' was selected, clear the ID since it's not a valid
         // ID and the API will reject that.
-        if (d.facility.organizationId == -1) {
-          d.facility.organizationId = null;
+        if (data.facility.organizationId === -1) {
+          data.facility.organizationId = null;
         // Otherwise (meaning an existing organization was selected), clear
         // the organization object since we're not creating a new organization.
         } else {
-          d.organization = null;
+          data.organization = null;
         }
         
         // The first contact is the primary contact.
-        d.primaryContact = (d.contacts.splice(0, 1))[0];
+        data.primaryContact = (data.contacts.splice(0, 1))[0];
         
-        return d;
+        return data;
       }
     };
   }
