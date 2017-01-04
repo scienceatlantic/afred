@@ -33,23 +33,27 @@
           <b>Date opened:</b> {{ f.dateOpened | afStrToDate | date:'medium' }}
         </p>
         
-        <p data-ng-if="f.status != 'OPEN'">
+        <p data-ng-if="f.status !== 'OPEN'">
           <b>Date pending:</b> {{ f.datePending | afStrToDate | date:'medium' }}
         </p>
         
-        <p data-ng-if="f.status == 'CLOSED'">
+        <p data-ng-if="f.status === 'CLOSED'">
           <b>Date closed:</b> {{ f.dateClosed | afStrToDate | date:'medium'}}
         </p>
         
-        <p data-ng-if="f.status =='OPEN'">
+        <p data-ng-if="f.status === 'OPEN'">
           <b>Update URL:</b>
-          <a data-ui-sref="facilities.form.edit({ facilityRepositoryId: f.frIdBefore, token: f.token })" target="_blank">link</a>
+          <a data-ui-sref="facilities.form.edit({ facilityRepositoryId: f.frIdBefore, token: f.token })" 
+             target="_blank">
+            link
+          </a>
         </p>
         
-        <p data-ng-if="f.status == 'OPEN'">
+        <p data-ng-if="f.status === 'OPEN'">
           <button class="btn btn-default btn-sm" 
                   data-ng-click="facilities.updates.close($index, f)" 
-                  data-af-loading-btn="$index === facilities.updates.loading.selectedBtnIndex && facilities.updates.loading.close" 
+                  data-af-loading-btn="$index === facilities.updates.loading.selectedBtnIndex 
+                                       && facilities.updates.loading.close" 
                   data-ng-disabled="facilities.updates.loading.close">
             Close update request <span class="fa fa-close"></span>
           </button>

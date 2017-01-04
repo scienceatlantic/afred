@@ -4,15 +4,23 @@
     <!-- Results found text. -->
     <p class="h4" data-ng-if="search.results.length">
         We found a total of {{ search.resource.nbHits }}
-        <span data-ng-show="search.results.length == 1">
-          <span data-ng-show="_stateParams.type == 'facilities'">facility<span data-ng-show="_state.current.name == 'search.all'">.</span></span>
-          <span data-ng-show="_stateParams.type != 'facilities'">piece of equipment<span data-ng-show="_state.current.name == 'search.all'">.</span></span>
+        <span data-ng-show="search.results.length === 1">
+          <span data-ng-show="_stateParams.type === 'facilities'"><!--
+         -->facility<span data-ng-show="_state.current.name === 'search.all'">.</span>
+         </span>
+          <span data-ng-show="_stateParams.type !== 'facilities'"><!--
+         -->piece of equipment<span data-ng-show="_state.current.name === 'search.all'">.</span>
+          </span>
         </span>
         <span data-ng-show="search.results.length > 1">
-          <span data-ng-show="_stateParams.type == 'facilities'">facilities<span data-ng-show="_state.current.name == 'search.all'">.</span></span>
-          <span data-ng-show="_stateParams.type != 'facilities'">pieces of equipment<span data-ng-show="_state.current.name == 'search.all'">.</span></span>
+          <span data-ng-show="_stateParams.type === 'facilities'">
+            facilities<span data-ng-show="_state.current.name === 'search.all'">.</span>
+          </span>
+          <span data-ng-show="_stateParams.type !== 'facilities'"><!--
+          -->pieces of equipment<span data-ng-show="_state.current.name === 'search.all'">.</span>
+          </span>
         </span>
-        <span data-ng-show="_state.current.name == 'search.q'">for '{{ _stateParams.q }}'.</span>
+        <span data-ng-show="_state.current.name === 'search.q'">for '{{ _stateParams.q }}'.</span>
     </p>
     
     <!-- Nothing found text. -->
@@ -28,10 +36,12 @@
     <!-- Results. -->
     <div data-ng-if="search.results.length">
       <!-- Equipment. -->    
-      <div data-ng-include="'views/includes/search.results.equipment.html'" data-ng-if="_stateParams.type != 'facilities'"></div>
+      <div data-ng-include="'views/includes/search.results.equipment.html'"
+           data-ng-if="_stateParams.type !== 'facilities'"></div>
       
       <!-- Facilities. -->
-      <div data-ng-include="'views/includes/search.results.facilities.html'" data-ng-if="_stateParams.type == 'facilities'"></div>
+      <div data-ng-include="'views/includes/search.results.facilities.html'"
+           data-ng-if="_stateParams.type === 'facilities'"></div>
     </div>
   </div>
 </div>
