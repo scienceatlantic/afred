@@ -23,7 +23,9 @@
     </div>
 
     <div class="col-sm-9">
-      <a data-ng-href="mailto:{{ facility.organization.ilo.email }}" itemprop="email">{{ facility.organization.ilo.email }}</a>
+      <a data-ng-href="mailto:{{ facility.organization.ilo.email }}" itemprop="email">
+        {{ facility.organization.ilo.email }}
+      </a>
     </div>
 
     <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.sm">
@@ -62,7 +64,9 @@
     </div>
     
     <div class="col-sm-9">
-      <a href="{{ facility.organization.ilo.website }}" target="_blank" itemprop="url">{{ facility.organization.ilo.website }}</a>
+      <a href="{{ facility.organization.ilo.website }}" target="_blank" itemprop="url">
+        {{ facility.organization.ilo.website }}
+      </a>
     </div>
   </div>
 </div>

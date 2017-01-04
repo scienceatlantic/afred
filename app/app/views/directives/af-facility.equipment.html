@@ -187,7 +187,11 @@
   </div>
   
   <!-- Keywords. -->
-  <div class="row" data-ng-if="e.keywords || isPreview" itemprop="additionalProperty" itemscope itemtype="http://schema.org/PropertyValue">
+  <div class="row" 
+       data-ng-if="e.keywords || isPreview" 
+       itemprop="additionalProperty" 
+       itemscope 
+       itemtype="http://schema.org/PropertyValue">
     <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
       <label itemprop="name">Keywords</label>
     </div>

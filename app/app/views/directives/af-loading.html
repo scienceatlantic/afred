@@ -1,5 +1,5 @@
 <div>
-  <p data-ng-show="loading" class="text-center">
+  <p data-ng-if="loading" class="text-center">
     <br>
     <span class="h4">
       <span class="fa fa-circle-o-notch fa-spin"></span>
@@ -8,7 +8,5 @@
     </span>
   </p>
   
-  <div data-ng-hide="loading">
-    <div data-ng-transclude></div>
-  </div>
+  <div data-ng-hide="loading" data-ng-transclude></div>
 </div>
