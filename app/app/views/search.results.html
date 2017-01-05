@@ -25,10 +25,8 @@
     
     <!-- Nothing found text. -->
     <div data-ng-if="!search.results.length">
-      <p class="h1">:(</p>
-      
       <p class="h4">
-        Sorry we couldn't find anything<span data-ng-show="_state.current.name == 'search.all'">.</span>
+        Sorry, we couldn't find anything<span data-ng-show="_state.current.name == 'search.all'">.</span>
         <span data-ng-show="_state.current.name == 'search.q'">for '{{ _stateParams.q }}'.</span>
       </p>
     </div>
