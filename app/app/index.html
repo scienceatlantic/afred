@@ -70,10 +70,7 @@
       <!-- Main Navigation -->
       <div data-ng-include="'views/includes/nav.html'" onload="main.navbar.toggle()"></div>
       
-      <div data-ng-class="{ 'af-content-while-logged-in': _auth.user.id }">
-        <!-- Beta version note. -->
-        <div data-ng-include="'views/includes/beta-note.html'"></div>
-        
+      <div data-ng-class="{ 'af-content-while-logged-in': _auth.user.id }">        
         <!-- View (for homepage only). -->
         <div data-ng-if="_state.is('home')">
           <div data-ui-view></div>
@@ -110,14 +107,14 @@
         if (d.getElementById(id)) return t;
         js = d.createElement(s);
         js.id = id;
-        js.src = "https://platform.twitter.com/widgets.js";
+        js.src = 'https://platform.twitter.com/widgets.js';
         fjs.parentNode.insertBefore(js, fjs);
         t._e = [];
         t.ready = function(f) {
           t._e.push(f);
         };
         return t;
-      }(document, "script", "twitter-wjs"));
+      }(document, 'script', 'twitter-wjs'));
     </script>
 
     <!-- JavaScript -->
