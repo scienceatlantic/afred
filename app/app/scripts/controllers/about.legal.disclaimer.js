@@ -9,14 +9,14 @@
 
 angular.module('afredApp').controller('AboutLegalDisclaimerController',
   ['$scope',
-   'wpResource',
+   'WpResource',
   function($scope,
-           wpResource) {
+           WpResource) {
     /* ---------------------------------------------------------------------
      * Initialisation code.
      * --------------------------------------------------------------------- */
     
-    $scope.wp = wpResource.getPage($scope._env.wp.pages['disclaimer']);
+    $scope.wp = WpResource.getPage($scope._env.wp.pages['disclaimer']);
     $scope.wp.$promise.then(null, function(response) {
       $scope._httpError(response);
     });

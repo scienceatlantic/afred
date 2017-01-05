@@ -5,12 +5,12 @@ angular.module('afredApp').controller('AdminFacilitiesUpdatesController', [
   'confirmModal',
   'infoModal',
   'warningModal',
-  'facilityRepositoryResource',
+  'RepositoryResource',
   function($scope,
            confirmModal,
            infoModal,
            warningModal,
-           facilityRepositoryResource) {
+           RepositoryResource) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
@@ -126,13 +126,13 @@ angular.module('afredApp').controller('AdminFacilitiesUpdatesController', [
        * $scope.facilities.updates.fr Promise object is attached to this.
        *
        * Uses/calls/requires:
-       * facilityRepositoryResource
+       * RepositoryResource
        * $scope.facility.form.data.page
        * $scope.facility.form.data.status
        * $scope._httpError403()
        */
       query: function() {
-        $scope.facilities.updates.fr = facilityRepositoryResource.queryTokens({
+        $scope.facilities.updates.fr = RepositoryResource.queryTokens({
           page: $scope.facilities.updates.form.data.page,
           itemsPerPage: 5,
           status: $scope.facilities.updates.form.data.status
@@ -160,7 +160,7 @@ angular.module('afredApp').controller('AdminFacilitiesUpdatesController', [
        * confirmModal
        * infoModal
        * warningModal
-       * facilityRepositoryResource
+       * RepositoryResource
        *
        * @param {integer} index Index of the element in
        *     '$scope.facilities.updates.fr.data' that will be closed.
@@ -173,7 +173,7 @@ angular.module('afredApp').controller('AdminFacilitiesUpdatesController', [
         confirmModal.open(t).result.then(function() {
           $scope.facilities.updates.loading.selectedBtnIndex = index;
           $scope.facilities.updates.loading.close = true;
-          facilityRepositoryResource.updateToken({
+          RepositoryResource.updateToken({
             facilityUpdateLinkId: token.id
           }, {
             status: 'CLOSED'

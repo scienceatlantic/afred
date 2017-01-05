@@ -9,16 +9,16 @@
  */
 
 angular.module('afredApp').controller('HomeController',
-  ['$scope',
-   '$interval',
+  ['$interval',
+   '$scope',
    '$timeout',
-   'miscResource',
-   'wpResource',
-  function($scope,
-           $interval,
+   'MiscResource',
+   'WpResource',
+  function($interval,
+           $scope,
            $timeout,
-           miscResource,
-           wpResource) {
+           MiscResource,
+           WpResource) {
     /* ---------------------------------------------------------------------
      * Functions/Objects.
      * --------------------------------------------------------------------- */
@@ -49,10 +49,10 @@ angular.module('afredApp').controller('HomeController',
      * --------------------------------------------------------------------- */
     
     // Get "What's New" content.
-    $scope.whatsNew = wpResource.getPage($scope._env.wp.pages['what\'s new']);
+    $scope.whatsNew = WpResource.getPage($scope._env.wp.pages['what\'s new']);
 
     // Get "Have a Look" content.
-    $scope.haveALook = miscResource.get({ item: 'randomEquipment' });
+    $scope.haveALook = MiscResource.get({ item: 'randomEquipment' });
 
     // Get "Recent Tweets" content.
     // Load Twitter timeline and hide any images (check that it exists first). 

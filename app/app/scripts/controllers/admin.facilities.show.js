@@ -5,22 +5,22 @@ angular.module('afredApp').controller('AdminFacilitiesShowController', [
   'confirmModal',
   'infoModal',
   'warningModal',
-  'organizationResource',
-  'provinceResource',
-  'disciplineResource',
-  'sectorResource',
-  'facilityResource',
-  'facilityRepositoryResource',
+  'OrganizationResource',
+  'ProvinceResource',
+  'DisciplineResource',
+  'SectorResource',
+  'FacilityResource',
+  'RepositoryResource',
   function($scope,
            confirmModal,
            infoModal,
            warningModal,
-           organizationResource,
-           provinceResource,
-           disciplineResource,
-           sectorResource,
-           facilityResource,
-           facilityRepositoryResource) {
+           OrganizationResource,
+           ProvinceResource,
+           DisciplineResource,
+           SectorResource,
+           FacilityResource,
+           RepositoryResource) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
@@ -34,7 +34,7 @@ angular.module('afredApp').controller('AdminFacilitiesShowController', [
      * Uses/calls/requires:
      * $scope.formatForApp()
      * $scope._stateParams.facilityRepositoryId
-     * facilityRepositoryResource
+     * RepositoryResource
      * isFinite()
      * $scope._httpError() Called when either an AJAX call fails or when
      *     the URL contains invalid parameters.
@@ -42,7 +42,7 @@ angular.module('afredApp').controller('AdminFacilitiesShowController', [
      */
     $scope.getFacilityRepository = function() {
       if (isFinite($scope._stateParams.facilityRepositoryId)) {
-        $scope.fr = facilityRepositoryResource.get({
+        $scope.fr = RepositoryResource.get({
           facilityRepositoryId: $scope._stateParams.facilityRepositoryId
         }, function() {
           $scope.formatForApp();
@@ -199,10 +199,10 @@ angular.module('afredApp').controller('AdminFacilitiesShowController', [
      * Calls/uses/requires:
      * $scope.fr
      * $scope._httpError() Call whenever an AJAX call fails.
-     * provinceResource
-     * organizationResource
-     * disciplineResource
-     * sectorResource
+     * ProvinceResource
+     * OrganizationResource
+     * DisciplineResource
+     * SectorResource
      */
     $scope.formatForApp = function() {
       $scope.facility = angular.copy($scope.fr.data.facility);
@@ -233,7 +233,7 @@ angular.module('afredApp').controller('AdminFacilitiesShowController', [
       // organization or a new organization. If it belongs to an existing
       // organization, grab the details from the API.
       if ($scope.fr.data.facility.organizationId) {
-        $scope.facility.organization = organizationResource.get({
+        $scope.facility.organization = OrganizationResource.get({
           organizationId: $scope.fr.data.facility.organizationId
         }, function() {
           // Do nothing if successful.
@@ -243,7 +243,7 @@ angular.module('afredApp').controller('AdminFacilitiesShowController', [
       }
       
       // Province section.
-      $scope.facility.province = provinceResource.get({
+      $scope.facility.province = ProvinceResource.get({
         provinceId: $scope.fr.data.facility.provinceId
       }, function() {
         // Do nothing if successful.
@@ -255,7 +255,7 @@ angular.module('afredApp').controller('AdminFacilitiesShowController', [
       // so that we can get the names (the facility repository record only
       // contains the IDs of the disciplines).
       $scope.facility.disciplines = [];
-      $scope.disciplines = disciplineResource.queryNoPaginate(function() {
+      $scope.disciplines = DisciplineResource.queryNoPaginate(function() {
         angular.forEach($scope.disciplines, function(d) {
           if ($scope.fr.data.disciplines.indexOf(d.id) >= 0) {
             $scope.facility.disciplines.push(d);
@@ -269,7 +269,7 @@ angular.module('afredApp').controller('AdminFacilitiesShowController', [
       
       // Sectors section. (Same as disciplines).
       $scope.facility.sectors = [];
-      $scope.sectors = sectorResource.queryNoPaginate(function() {
+      $scope.sectors = SectorResource.queryNoPaginate(function() {
         angular.forEach($scope.sectors, function(s) {
           if ($scope.fr.data.sectors.indexOf(s.id) >= 0) {
             $scope.facility.sectors.push(s);
@@ -302,7 +302,7 @@ angular.module('afredApp').controller('AdminFacilitiesShowController', [
       var t = 'hide-facility';
       confirmModal.open(t).result.then(function() {
         $scope.loading.hide = true;
-        facilityResource.update({ facilityId: $scope.fr.facilityId }, {
+        FacilityResource.update({ facilityId: $scope.fr.facilityId }, {
           isPublic: 0
         }, function() {
           infoModal.open(t + '-success').result.then(function() {
@@ -337,7 +337,7 @@ angular.module('afredApp').controller('AdminFacilitiesShowController', [
       var t = 'unhide-facility';
       confirmModal.open(t).result.then(function() {
         $scope.loading.unhide = true;
-        facilityResource.update({
+        FacilityResource.update({
           facilityId: $scope.fr.facilityId
         }, {
           isPublic: 1
@@ -365,7 +365,7 @@ angular.module('afredApp').controller('AdminFacilitiesShowController', [
      * confirmModal
      * infoModal
      * warningModal
-     * facilityRepositoryResource
+     * RepositoryResource
      * $scope._auth.user.email
      * $scope.fr.id
      * $scope.fr.facilityId
@@ -382,7 +382,7 @@ angular.module('afredApp').controller('AdminFacilitiesShowController', [
       
       confirmModal.open(t).result.then(function() {
         $scope.loading.edit = true;
-        facilityRepositoryResource.createToken({
+        RepositoryResource.createToken({
           isAdmin: 1,
           email: $scope._auth.user.email,
           facilityId: $scope.fr.facilityId
@@ -415,7 +415,7 @@ angular.module('afredApp').controller('AdminFacilitiesShowController', [
      * warningModal
      * $scope.fr.updateRequests.length
      * $scope.fr.facilityId
-     * facilityResource
+     * FacilityResource
      * $scope.getFacilityRepository()
      *
      */
@@ -431,7 +431,7 @@ angular.module('afredApp').controller('AdminFacilitiesShowController', [
       
       confirmModal.open(t).result.then(function() {
         $scope.loading.remove = true;
-        facilityResource.remove({
+        FacilityResource.remove({
           facilityId: $scope.fr.facilityId
         }, null, function() {
           infoModal.open(t + '-success').result.then(function() {

@@ -5,14 +5,14 @@ angular.module('afredApp').controller('AdminUsersShowController', [
   'confirmModal',
   'infoModal',
   'warningModal',
-  'userResource',
-  'roleResource',
+  'UserResource',
+  'RoleResource',
   function($scope,
            confirmModal,
            infoModal,
            warningModal,
-           userResource,
-           roleResource) {
+           UserResource,
+           RoleResource) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
@@ -112,7 +112,7 @@ angular.module('afredApp').controller('AdminUsersShowController', [
      * Calls/uses/requires:
      * $scope.userPassword
      * $scope._stateParams.userId
-     * userResource
+     * UserResource
      * confirmModal
      * infoModal
      * warningModal
@@ -126,7 +126,7 @@ angular.module('afredApp').controller('AdminUsersShowController', [
       var t = 'reset-user-password'; // Template name (to shorten code).
       confirmModal.open(t).result.then(function() {
         $scope.loading.updatePassword = true;
-        userResource.update({
+        UserResource.update({
           userId: $scope._stateParams.userId
         }, $scope.userPassword, function(response) {
           infoModal.open(t + '-success').result.then(function() {
@@ -148,14 +148,14 @@ angular.module('afredApp').controller('AdminUsersShowController', [
      * $scope.user Data retrieved is stored here.
      * 
      * Requires/calls/uses:
-     * userResource
-     * roleResource
+     * UserResource
+     * RoleResource
      * $scope._httpError403() - Called if AJAX operation fails.
      */
     $scope.getUser = function() {
-      $scope.user = userResource.get($scope._stateParams, function() {
+      $scope.user = UserResource.get($scope._stateParams, function() {
         // Get and set roles.
-        $scope.roles = roleResource.queryNoPaginate(null, function(roles) {
+        $scope.roles = RoleResource.queryNoPaginate(null, function(roles) {
           angular.forEach(roles, function(role) {
             role.isSelected = Boolean($scope.user.roles[role.id]);
           });

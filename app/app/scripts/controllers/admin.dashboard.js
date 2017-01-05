@@ -9,15 +9,15 @@
 
 angular.module('afredApp').controller('AdminDashboardController',
   ['$scope',
-   'miscResource',
+   'MiscResource',
   function($scope,
-           miscResource) {
+           MiscResource) {
     /* ---------------------------------------------------------------------
      * Initialisation code.
      * --------------------------------------------------------------------- */
     
     // Get the data.
-    $scope.stats = miscResource.get({ item: 'facilityRepositoryBreakdown' });
+    $scope.stats = MiscResource.get({ item: 'facilityRepositoryBreakdown' });
     $scope.stats.$promise.then(function() {
       // Do nothing if successful.
     }, function(response) {

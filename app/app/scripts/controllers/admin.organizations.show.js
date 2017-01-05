@@ -5,14 +5,14 @@ angular.module('afredApp').controller('AdminOrganizationsShowController', [
   'confirmModal',
   'infoModal',
   'warningModal',
-  'organizationResource',
-  'iloResource',
+  'OrganizationResource',
+  'IloResource',
   function($scope,
            confirmModal,
            infoModal,
            warningModal,
-           organizationResource,
-           iloResource) {
+           OrganizationResource,
+           IloResource) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
@@ -114,14 +114,14 @@ angular.module('afredApp').controller('AdminOrganizationsShowController', [
     };
     
     /**
-     * Creates a new 'iloResource' instance.
+     * Creates a new 'IloResource' instance.
      *
      * Side effects:
      * $scope.ilo Instance is stored here.
      * $scope.ilo.organizationId Is set to '$scope.organization.id'.
      */
     $scope.newIlo = function() {
-      $scope.ilo = new iloResource();
+      $scope.ilo = new IloResource();
       $scope.ilo.organizationId = $scope.organization.id;
     };
     
@@ -133,14 +133,14 @@ angular.module('afredApp').controller('AdminOrganizationsShowController', [
      * $scope.iloCopy A copy of the resource is stored here.
      * 
      * Calls/uses/requires:
-     * iloResource
+     * IloResource
      * $scope.organization.ilo.id
      * $scope._httpError() If the operation fails, the response is passed to
      *     this.
      * angular.copy()
      */ 
     $scope.getIlo = function() {
-      $scope.ilo = iloResource.get({
+      $scope.ilo = IloResource.get({
         iloId: $scope.organization.ilo.id
       }, function() {
         $scope.iloCopy = angular.copy($scope.ilo);
@@ -306,7 +306,7 @@ angular.module('afredApp').controller('AdminOrganizationsShowController', [
      * 
      * @type {Angular resource}
      */
-    $scope.organization = organizationResource.get($scope._stateParams,
+    $scope.organization = OrganizationResource.get($scope._stateParams,
       function() {
         $scope.organizationCopy = angular.copy($scope.organization);
         

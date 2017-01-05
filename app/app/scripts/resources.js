@@ -5,7 +5,7 @@
  * @see https://docs.angularjs.org/api/ngResource/service/$resource
  */
 
-angular.module('afredApp').factory('facilityResource',
+angular.module('afredApp').factory('FacilityResource',
   ['$rootScope',
    '$resource',
    function($rootScope,
@@ -27,7 +27,7 @@ angular.module('afredApp').factory('facilityResource',
   }
 ]);
 
-angular.module('afredApp').factory('facilityRepositoryResource',
+angular.module('afredApp').factory('RepositoryResource',
   ['$rootScope',
    '$resource',
    function($rootScope,
@@ -107,7 +107,7 @@ angular.module('afredApp').factory('facilityRepositoryResource',
   }
 ]);
 
-angular.module('afredApp').factory('organizationResource',
+angular.module('afredApp').factory('OrganizationResource',
   ['$rootScope',
    '$resource',
    function($rootScope,
@@ -136,7 +136,7 @@ angular.module('afredApp').factory('organizationResource',
   }
 ]);
 
-angular.module('afredApp').factory('iloResource',
+angular.module('afredApp').factory('IloResource',
   ['$rootScope',
    '$resource',
    function($rootScope,
@@ -165,7 +165,7 @@ angular.module('afredApp').factory('iloResource',
   }
 ]);
 
-angular.module('afredApp').factory('provinceResource',
+angular.module('afredApp').factory('ProvinceResource',
   ['$rootScope',
    '$resource',
    function($rootScope,
@@ -194,7 +194,7 @@ angular.module('afredApp').factory('provinceResource',
   }
 ]);
 
-angular.module('afredApp').factory('disciplineResource',
+angular.module('afredApp').factory('DisciplineResource',
   ['$rootScope',
    '$resource',
    function($rootScope,
@@ -222,7 +222,7 @@ angular.module('afredApp').factory('disciplineResource',
   }
 ]);
 
-angular.module('afredApp').factory('sectorResource',
+angular.module('afredApp').factory('SectorResource',
   ['$rootScope',
    '$resource',
    function($rootScope,
@@ -251,7 +251,7 @@ angular.module('afredApp').factory('sectorResource',
   }
 ]);
 
-angular.module('afredApp').factory('userResource',
+angular.module('afredApp').factory('UserResource',
   ['$rootScope',
    '$resource',
    function($rootScope,
@@ -280,7 +280,7 @@ angular.module('afredApp').factory('userResource',
   }
 ]);
 
-angular.module('afredApp').factory('roleResource',
+angular.module('afredApp').factory('RoleResource',
   ['$rootScope',
    '$resource',
    function($rootScope,
@@ -306,7 +306,7 @@ angular.module('afredApp').factory('roleResource',
   }
 ]);
 
-angular.module('afredApp').factory('emailResource',
+angular.module('afredApp').factory('EmailResource',
   ['$rootScope',
    '$resource',
    function($rootScope,
@@ -331,7 +331,7 @@ angular.module('afredApp').factory('emailResource',
   }
 ]);
 
-angular.module('afredApp').factory('wpResource',
+angular.module('afredApp').factory('WpResource',
   ['$rootScope',
    '$resource',
    function($rootScope,
@@ -366,7 +366,7 @@ angular.module('afredApp').factory('wpResource',
   }
 ]);
 
-angular.module('afredApp').factory('miscResource',
+angular.module('afredApp').factory('MiscResource',
   ['$rootScope',
    '$resource',
    function($rootScope,

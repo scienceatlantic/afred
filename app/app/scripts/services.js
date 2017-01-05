@@ -163,21 +163,21 @@ angular.module('afredApp').service('JsDiff', [
 angular.module('afredApp').service('Repository', [
   '$q',
   '$rootScope',
-  'disciplineResource',
-  'facilityRepositoryResource',
-  'organizationResource',
-  'provinceResource',
-  'sectorResource',
+  'DisciplineResource',
+  'RepositoryResource',
+  'OrganizationResource',
+  'ProvinceResource',
+  'SectorResource',
   function($q,
            $rootScope,
-           disciplineResource,
-           facilityRepositoryResource,
-           organizationResource,
-           provinceResource,
-           sectorResource) {
+           DisciplineResource,
+           RepositoryResource,
+           OrganizationResource,
+           ProvinceResource,
+           SectorResource) {
 
     this.get = function(id) {
-      return facilityRepositoryResource.get({
+      return RepositoryResource.get({
         facilityRepositoryId: id ? id : 0
       }, function() {
         // Do nothing if successful.
@@ -215,7 +215,7 @@ angular.module('afredApp').service('Repository', [
       // organization or a new organization. If it belongs to an existing
       // organization, grab the details from the API.
       if (data.facility.organizationId) {
-        facility.organization = organizationResource.get({
+        facility.organization = OrganizationResource.get({
           organizationId: data.facility.organizationId
         }, function() {
           // Do nothing if successful.
@@ -225,7 +225,7 @@ angular.module('afredApp').service('Repository', [
       }
       
       // Province section.
-      facility.province = provinceResource.get({
+      facility.province = ProvinceResource.get({
         provinceId: data.facility.provinceId
       }, function() {
         // Do nothing if successful.
@@ -238,7 +238,7 @@ angular.module('afredApp').service('Repository', [
       // contains the IDs of the disciplines).
       facility.disciplines = [];
       var isDisciplineReady = $q.defer();
-      var disciplines = disciplineResource.queryNoPaginate(function() {
+      var disciplines = DisciplineResource.queryNoPaginate(function() {
         angular.forEach(disciplines, function(d) {
           if (data.disciplines.indexOf(d.id) >= 0) {
             facility.disciplines.push(d);
@@ -252,7 +252,7 @@ angular.module('afredApp').service('Repository', [
       // Sectors section. (Same as disciplines).
       facility.sectors = [];
       var isSectorReady = $q.defer();
-      var sectors = sectorResource.queryNoPaginate(function() {
+      var sectors = SectorResource.queryNoPaginate(function() {
         angular.forEach(sectors, function(s) {
           if (data.sectors.indexOf(s.id) >= 0) {
             facility.sectors.push(s);

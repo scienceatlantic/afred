@@ -12,12 +12,12 @@ angular.module('afredApp').controller('AdminDisciplinesShowController', [
   'confirmModal',
   'infoModal',
   'warningModal',
-  'disciplineResource',
+  'DisciplineResource',
   function($scope,
            confirmModal,
            infoModal,
            warningModal,
-           disciplineResource) {
+           DisciplineResource) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
@@ -135,7 +135,7 @@ angular.module('afredApp').controller('AdminDisciplinesShowController', [
      * 
      * @type {Angular resource}
      */
-    $scope.discipline = disciplineResource.get($scope._stateParams,
+    $scope.discipline = DisciplineResource.get($scope._stateParams,
       function() {
         $scope.disciplineCopy = angular.copy($scope.discipline);
       }, function(response) {

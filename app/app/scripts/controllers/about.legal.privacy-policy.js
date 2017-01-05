@@ -10,14 +10,14 @@
 
 angular.module('afredApp').controller('AboutLegalPrivacyPolicyController',
   ['$scope',
-   'wpResource',
+   'WpResource',
   function($scope,
-           wpResource) {
+           WpResource) {
     /* ---------------------------------------------------------------------
      * Initialisation code.
      * --------------------------------------------------------------------- */
     
-    $scope.wp = wpResource.getPage($scope._env.wp.pages['privacy policy']);
+    $scope.wp = WpResource.getPage($scope._env.wp.pages['privacy policy']);
     $scope.wp.$promise.then(null, function(response) {
       $scope._httpError(response);
     });

@@ -4,11 +4,11 @@ angular.module('afredApp').controller('FacilitiesFormCreateController',
   ['$interval',
    '$scope',
    '$timeout',
-   'facilityRepositoryResource',
+   'RepositoryResource',
   function($interval,
            $scope,
            $timeout,
-           facilityRepositoryResource) {
+           RepositoryResource) {
     // See explanation at the bottom ($stateChangeStart) for why this is needed.
     if ($scope._state.needToReload) {
       $scope._location.reload();
@@ -62,10 +62,10 @@ angular.module('afredApp').controller('FacilitiesFormCreateController',
      *
      * @requires $scope.form.clearSave() Called if the operation was successful.
      * @requires $scope.form.formatForApi()
-     * @requires facilityRepositoryResource
+     * @requires RepositoryResource
      */
     $scope.submit = function() {
-      $scope.fr = facilityRepositoryResource.submit({
+      $scope.fr = RepositoryResource.submit({
         data: $scope.form.formatForApi()
       }, function() {
         // Clear any saved data.

@@ -6,21 +6,21 @@ angular.module('afredApp').controller('FacilitiesFormController',
    '$timeout',
    '$q',
    'confirmModal',
-   'disciplineResource',
-   'facilityRepositoryResource',
-   'organizationResource',
-   'provinceResource',
-   'sectorResource',
+   'DisciplineResource',
+   'RepositoryResource',
+   'OrganizationResource',
+   'ProvinceResource',
+   'SectorResource',
   function($interval,
            $scope,
            $timeout,
            $q,
            confirmModal,
-           disciplineResource,
-           facilityRepositoryResource,
-           organizationResource,
-           provinceResource,
-           sectorResource) {
+           DisciplineResource,
+           RepositoryResource,
+           OrganizationResource,
+           ProvinceResource,
+           SectorResource) {
     /* ---------------------------------------------------------------------
      * Functions/Objects.
      * --------------------------------------------------------------------- */
@@ -37,7 +37,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
       data: {},
           
       /**
-       * Holds an instance of 'facilityRepositoryResource'.
+       * Holds an instance of 'RepositoryResource'.
        *
        * @type {Angular resource}
        */
@@ -277,7 +277,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
        *
        * @requires $q
        * @requires $scope._httpError This is called if any AJAX call fails.
-       * @requires organizationResource
+       * @requires OrganizationResource
        *
        * @param (number=undefined) organizationId If it edit mode, the facility
        *     being edited could belong to an organization that is (or was 
@@ -291,7 +291,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
         var getHiddenOrgDeferred = $q.defer();
         var isHidden;
         
-        $scope.form.organizations = organizationResource.queryNoPaginate({
+        $scope.form.organizations = OrganizationResource.queryNoPaginate({
           isHidden: 0
         }, function() {
           // Find the 'N/A' option and push it to the end of the array.
@@ -309,7 +309,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
             });
             
             if (isHidden) {
-              organizationResource.get({ organizationId: organizationId },
+              OrganizationResource.get({ organizationId: organizationId },
                 function(data) {                  
                   $scope.form.organizations.push(data);
                   getHiddenOrgDeferred.resolve();  
@@ -345,7 +345,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
        * 
        * @requires $q
        * @requires $scope._httpError This is called if any AJAX call fails.
-       * @requires provinceResource
+       * @requires ProvinceResource
        *
        * @param {number=undefined} provinceId See description in
        *     `$scope.form.getOrganization`.
@@ -357,7 +357,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
         var getHiddenProvinceDeferred = $q.defer();
         var isHidden;
 
-        $scope.form.provinces = provinceResource.queryNoPaginate({
+        $scope.form.provinces = ProvinceResource.queryNoPaginate({
           isHidden: 0
         }, function() {
           // Find the 'N/A' option and push it to the end of the array.
@@ -375,7 +375,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
             });
             
             if (isHidden) {
-              provinceResource.get({ provinceId: provinceId },
+              ProvinceResource.get({ provinceId: provinceId },
                 function(data) {
                   $scope.form.provinces.push(data);
                   getHiddenProvinceDeferred.resolve();
@@ -409,7 +409,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
        *
        * @requires $q
        * @requires $scope._httpError This is called if any AJAX call fails.
-       * @requires disciplineResource
+       * @requires DisciplineResource
        * 
        * @param {Array.<number>=undefined} disciplines Array of IDs. If
        *     provided, the `isSelected` property of each matching discipline is
@@ -420,7 +420,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
       getDisciplines: function(disciplines) {
         var deferred = $q.defer();
 
-        $scope.form.disciplines = disciplineResource.queryNoPaginate(null,
+        $scope.form.disciplines = DisciplineResource.queryNoPaginate(null,
           function() {
             // Adds an `isSelected` property for the checkboxes. It is used in
             // the form.
@@ -463,7 +463,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
        *
        * @requires $q
        * @requires $scope._httpError This is called if any AJAX call fails.
-       * @requires sectorResource
+       * @requires SectorResource
        * 
        * @param {Array.<number>=undefined} sectors Array if IDs. If provided,
        *     the `isSelected` property of each matching sector is marked true.
@@ -471,7 +471,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
       getSectors: function(sectors) {
         var deferred = $q.defer();
 
-        $scope.form.sectors = sectorResource.queryNoPaginate(null,
+        $scope.form.sectors = SectorResource.queryNoPaginate(null,
           function() {
             // Same deal as `$scope.form.getDisciplines()`.      
             $scope.form.sectors.forEach(function(s, i) {
@@ -508,7 +508,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
        *
        * @sideeffect $scope.form.data Facility data retrieved is stored here.
        * @sideeffect $scope.form.fr Data returned from 
-       *     `facilityRepositoryResource.get()` is stored here.
+       *     `RepositoryResource.get()` is stored here.
        *
        * @requires $q
        * @requires $scope._httpError This is called if any AJAX call fails.
@@ -516,7 +516,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
        * @requires $scope.form.getOrganizations()
        * @requires $scope.form.getProvinces()
        * @requires $scope.form.getSectors()
-       * @requires facilityRepositoryResource
+       * @requires RepositoryResource
        * 
        * @param {number=undefined} frId Id of the facility repository record to
        *     retrieve.
@@ -529,7 +529,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
         var deferred = $q.defer();
         var pr = []; // Holds promises.
 
-        $scope.form.fr = facilityRepositoryResource.get({
+        $scope.form.fr = RepositoryResource.get({
           facilityRepositoryId: frId,
           token: token
         }, function(fr) {

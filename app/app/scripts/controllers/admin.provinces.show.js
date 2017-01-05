@@ -5,12 +5,12 @@ angular.module('afredApp').controller('AdminProvincesShowController', [
   'confirmModal',
   'infoModal',
   'warningModal',
-  'provinceResource',
+  'ProvinceResource',
   function($scope,
            confirmModal,
            infoModal,
            warningModal,
-           provinceResource) {
+           ProvinceResource) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
@@ -128,7 +128,7 @@ angular.module('afredApp').controller('AdminProvincesShowController', [
      * 
      * @type {Angular resource}
      */
-    $scope.province = provinceResource.get($scope._stateParams,
+    $scope.province = ProvinceResource.get($scope._stateParams,
       function() {
         $scope.provinceCopy = angular.copy($scope.province);
       },

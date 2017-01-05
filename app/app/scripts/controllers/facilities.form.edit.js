@@ -3,10 +3,10 @@
 angular.module('afredApp').controller('FacilitiesFormEditController',
   ['$scope',
    '$timeout',
-   'facilityRepositoryResource',
+   'RepositoryResource',
   function($scope,
            $timeout,
-           facilityRepositoryResource) {
+           RepositoryResource) {
     // See explanation in 'facilities.form.create.js'.
     if ($scope._state.needToReload) {
       $scope._location.reload();
@@ -63,7 +63,7 @@ angular.module('afredApp').controller('FacilitiesFormEditController',
      *
      */
     $scope.submit = function() {
-      $scope.fr = facilityRepositoryResource.submitEdit({
+      $scope.fr = RepositoryResource.submitEdit({
         facilityRepositoryId: $scope._stateParams.facilityRepositoryId,
         token: $scope._stateParams.token
       }, {

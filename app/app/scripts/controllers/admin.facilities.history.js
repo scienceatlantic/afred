@@ -2,9 +2,9 @@
 
 angular.module('afredApp').controller('AdminFacilitiesHistoryController', [
   '$scope',
-  'facilityRepositoryResource',
+  'RepositoryResource',
   function($scope,
-           facilityRepositoryResource) {
+           RepositoryResource) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
@@ -25,7 +25,7 @@ angular.module('afredApp').controller('AdminFacilitiesHistoryController', [
       },
       
       /**
-       * Holds the data returned from 'facilityRepositoryResource'.
+       * Holds the data returned from 'RepositoryResource'.
        * 
        * @type {resource}
        */
@@ -61,12 +61,12 @@ angular.module('afredApp').controller('AdminFacilitiesHistoryController', [
        * $scope.history.resource Data returned is attached to this.
        *
        * Uses/calls/requires:
-       * facilityRepositoryResource
+       * RepositoryResource
        * $scope.history.form.data.page
        * $scope._httpError403()
        */
       query: function() {
-        $scope.history.resource = facilityRepositoryResource.query({
+        $scope.history.resource = RepositoryResource.query({
           facilityId: $scope._stateParams.facilityId,
           page: $scope.history.form.data.page,
           itemsPerPage: 5

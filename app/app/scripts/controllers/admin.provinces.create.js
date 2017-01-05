@@ -5,12 +5,12 @@ angular.module('afredApp').controller('AdminProvincesCreateController', [
   'confirmModal',
   'infoModal',
   'warningModal',
-  'provinceResource',
+  'ProvinceResource',
   function($scope,
            confirmModal,
            infoModal,
            warningModal,
-           provinceResource) {
+           ProvinceResource) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
@@ -84,11 +84,11 @@ angular.module('afredApp').controller('AdminProvincesCreateController', [
      * Holds the province resource.
      * 
      * Uses/calls/requires:
-     * provinceResource()
+     * ProvinceResource()
      * 
      * @type {Angular resource}
      */
-    $scope.province = new provinceResource();
+    $scope.province = new ProvinceResource();
     
     /**
      * AJAX loading flags.

@@ -2,11 +2,11 @@
 
 angular.module('afredApp').controller('FacilitiesUpdateController',
   ['$scope',
-   'facilityResource',
-   'facilityRepositoryResource',
+   'FacilityResource',
+   'RepositoryResource',
   function($scope,
-           facilityResource,
-           facilityRepositoryResource) {
+           FacilityResource,
+           RepositoryResource) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
@@ -27,7 +27,7 @@ angular.module('afredApp').controller('FacilitiesUpdateController',
     $scope.submit = function() {
       // Don't run if the email field is empty.
       if ($scope.form.data.email) {
-        $scope.fr = facilityResource.query({
+        $scope.fr = FacilityResource.query({
           email: $scope.form.data.email,
           page: $scope.pagination.page,
           itemsPerPage: $scope.pagination.itemsPerPage
@@ -64,16 +64,16 @@ angular.module('afredApp').controller('FacilitiesUpdateController',
      * Generates the token.
      *
      * Side effects:
-     * $scope.ful Holds the promise returned by facilityRepositoryResource
+     * $scope.ful Holds the promise returned by RepositoryResource
      * 
      * Uses:
-     * facilityRepositoryResource
+     * RepositoryResource
      * 
      * @param index Array index of $scope.facilities
      * @param id Facility id.
      */
     $scope.requestToken = function(index, id) {
-      $scope.ful = facilityRepositoryResource.createToken({
+      $scope.ful = RepositoryResource.createToken({
         facilityId: id,
         email: $scope.form.data.email
       }, function(data) {

@@ -5,12 +5,12 @@ angular.module('afredApp').controller('AdminSectorsCreateController', [
   'confirmModal',
   'infoModal',
   'warningModal',
-  'sectorResource',
+  'SectorResource',
   function($scope,
            confirmModal,
            infoModal,
            warningModal,
-           sectorResource) {
+           SectorResource) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
@@ -84,11 +84,11 @@ angular.module('afredApp').controller('AdminSectorsCreateController', [
      * Holds the sector resource.
      * 
      * Uses/calls/requires:
-     * sectorResource()
+     * SectorResource()
      * 
      * @type {Angular resource}
      */
-    $scope.sector = new sectorResource();
+    $scope.sector = new SectorResource();
     
     /**
      * AJAX loading flags.

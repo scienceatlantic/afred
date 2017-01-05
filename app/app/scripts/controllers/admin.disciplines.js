@@ -9,9 +9,9 @@
 
 angular.module('afredApp').controller('AdminDisciplinesController', [
   '$scope',
-  'disciplineResource',
+  'DisciplineResource',
   function($scope,
-           disciplineResource) {
+           DisciplineResource) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
@@ -31,7 +31,7 @@ angular.module('afredApp').controller('AdminDisciplinesController', [
       },
       
       /**
-       * Holds the data returned from 'disciplineResource'.
+       * Holds the data returned from 'DisciplineResource'.
        * @type {resource}
        */
       resource: {},
@@ -66,12 +66,12 @@ angular.module('afredApp').controller('AdminDisciplinesController', [
        * $scope.discipline.resource Data returned is attached to this.
        *
        * Uses/calls/requires:
-       * disciplineResource
+       * DisciplineResource
        * $scope.disciplines.form.data.page
        * $scope._httpError403()
        */
       query: function() {
-        $scope.disciplines.resource = disciplineResource.query({
+        $scope.disciplines.resource = DisciplineResource.query({
           page: $scope.disciplines.form.data.page,
           itemsPerPage: 10
         }, function() {
