@@ -119,8 +119,8 @@
             <div data-af-field 
                  data-af-field-label="Excess capacity*" 
                  data-af-field-tooltip="'Excess capacity means that the piece of equipment is not being fully utilized,
-                                         that there is time available for it to be used by others or on other projects.
-                                         <br><b><i>Please note: this field will not be publicly viewable</i></b>.'">
+                                         that there is time available for it to be used by others or on other
+                                         projects.'">
               <div class="radio">
                 <label>
                   <input type="radio" name="equipmentExcessCapacity{{ $index }}" 
@@ -130,6 +130,9 @@
                   <input type="radio" name="equipmentExcessCapacity{{ $index }}" 
                          data-ng-model="e.hasExcessCapacity" data-ng-value="0" required> No
                 </label>
+
+                <br>
+                <p class="small"><i>Note: this field will not be publicly viewable.</i></p>
               </div>
             </div>
             
