@@ -4,7 +4,7 @@
 <div data-ng-repeat="c in facility.contacts" itemscope itemtype="http://schema.org/Person">
   <!-- Name. -->
   <div class="row">
-    <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.sm }">
       <label>Name</label>
     </div>
 
@@ -28,12 +28,12 @@
       <span data-ng-if="$index == 0" class="label label-default">Primary Contact</span>
     </div>
 
-    <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.sm">
+    <br data-ng-if="_getWidth() < _bootstrap.sm">
   </div>
   
   <!-- Email. -->
   <div class="row">
-    <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.sm }">
       <label>Email</label>
     </div>
 
@@ -47,12 +47,12 @@
       </a>
     </div>
 
-    <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.sm">
+    <br data-ng-if="_getWidth() < _bootstrap.sm">
   </div>
   
   <!-- Telephone. -->
   <div class="row" data-ng-if="c.telephone || isPreview">
-    <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.sm }">
       <label>Telephone</label>
     </div>
 
@@ -81,12 +81,12 @@
       <span class="label label-default" data-ng-if="isPreview && !c.telephone">Blank</span>
     </div>
 
-    <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.sm">
+    <br data-ng-if="_getWidth() < _bootstrap.sm">
   </div>
   
   <!-- Position. -->
   <div class="row" data-ng-if="c.position || isPreview">
-    <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.sm }">
       <label>Position</label>
     </div>
 
@@ -103,12 +103,12 @@
       <span class="label label-default" data-ng-if="isPreview && !c.position">Blank</span>
     </div>
       
-    <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.sm">
+    <br data-ng-if="_getWidth() < _bootstrap.sm">
   </div>
   
   <!-- Website. -->
   <div class="row" data-ng-if="c.website || isPreview">
-    <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
+    <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.sm }">
       <label>Website</label>
     </div>
     

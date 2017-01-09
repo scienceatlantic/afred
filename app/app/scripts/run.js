@@ -475,13 +475,9 @@ angular.module('afredApp').run(['$rootScope',
        * These are Bootstrap's grid's breakpoints (in pixels) (useful for 
        * responsive design).
        */
-      grid: {
-        breakpoints: {
-          sm: 768,
-          md: 992, 
-          lg: 1200 
-        }
-      }
+      sm: 768,
+      md: 992, 
+      lg: 1200 
     };
 
 

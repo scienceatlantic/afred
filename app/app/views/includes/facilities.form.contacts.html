@@ -13,12 +13,12 @@
 
             <span data-ng-show="c.firstName || c.lastName">
               {{ (c.firstName ? c.firstName : '')  + ' ' + (c.lastName ? c.lastName : '') 
-                 | afEllipses:(_getWidth() >= _bootstrap.grid.breakpoints.md ? 18 : 25) }}      
+                 | afEllipses:(_getWidth() >= _bootstrap.md ? 18 : 25) }}      
             </span>
           </span>
         </a>
 
-        <span data-ng-class="{ 'pull-right': _getWidth() >= _bootstrap.grid.breakpoints.md }">
+        <span data-ng-class="{ 'pull-right': _getWidth() >= _bootstrap.md }">
           <a href="" data-ng-show="$index !== 0" data-ng-click="form.removeContact($index)">
             <span class="text-danger">
               <span class="glyphicon glyphicon-remove"></span>
@@ -35,7 +35,7 @@
     </button>
   </div><!-- End of .col-x-x -->
   
-  <hr data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.md">
+  <hr data-ng-show="_getWidth() < _bootstrap.md">
 
   <!-- Form fields. -->
   <div class="col-md-9">                    

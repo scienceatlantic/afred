@@ -4,7 +4,7 @@
 
 <div class="row">
   <!-- Filters. -->
-  <div data-ng-show="_getWidth() >= _bootstrap.grid.breakpoints.md || search.filters.show" class="col-md-4">
+  <div data-ng-show="_getWidth() >= _bootstrap.md || search.filters.show" class="col-md-4">
     <div data-ng-include="'views/includes/search.filters.html'"></div>
   </div>
 
@@ -16,7 +16,7 @@
       </div>
     
       <!-- 'Search' button. -->
-      <p  data-ng-class="{'af-inline-block': _getWidth() > _bootstrap.grid.breakpoints.md}">
+      <p  data-ng-class="{'af-inline-block': _getWidth() > _bootstrap.md}">
         <button type="submit" class="btn btn-default" data-ng-disabled="loading.search">
           <span class="label label-warning"
                 style="padding-right: 3.5px; margin-right: 5px"
@@ -30,7 +30,7 @@
       </p>
 
       <!-- 'Show all' button. -->
-      <p data-ng-class="{'af-inline-block': _getWidth() > _bootstrap.grid.breakpoints.md}">
+      <p data-ng-class="{'af-inline-block': _getWidth() > _bootstrap.md}">
         <button type="button"
                 class="btn btn-default"
                 data-ng-click="search.index(true)"
@@ -46,7 +46,7 @@
     </form>
 
     <!-- Show/Hide filters button. -->
-    <p data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.md">
+    <p data-ng-show="_getWidth() < _bootstrap.md">
       <button class="btn btn-default"
               data-ng-click="search.filters.toggle()">
         <span data-ng-show="!search.filters.show">Show filters</span>

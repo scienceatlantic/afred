@@ -23,7 +23,7 @@
 
 <!-- Submit your facility bar. -->
 <div class="af-home-submit-your-facility-bar" 
-     data-ng-class="{ 'text-center': _getWidth() < _bootstrap.grid.breakpoints.md }">
+     data-ng-class="{ 'text-center': _getWidth() < _bootstrap.md }">
   <div class="container">
     <div class="row">
       <div class="col-md-2">
@@ -34,14 +34,14 @@
 
       <div class="col-md-6">
         <p class="h2">
-          Do you have research <br data-ng-show="_getWidth() >= _bootstrap.grid.breakpoints.md">facilities or equipment?
+          Do you have research <br data-ng-show="_getWidth() >= _bootstrap.md">facilities or equipment?
         </p>
       </div>
 
       <div class="col-md-4">
         <p class="af-heading">
           <button class="btn btn-default btn-lg btn-outline" 
-                  data-ng-class="{ 'pull-right': _getWidth() >= _bootstrap.grid.breakpoints.md }" 
+                  data-ng-class="{ 'pull-right': _getWidth() >= _bootstrap.md }" 
                   data-ng-click="_state.go('facilities.form.create')">
             Submit your facility <span class="fa fa-arrow-right"></span>
           </button>
@@ -49,7 +49,7 @@
       </div>
     </div>
 
-    <p data-ng-class="{ 'pull-right': _getWidth() >= _bootstrap.grid.breakpoints.md }">
+    <p data-ng-class="{ 'pull-right': _getWidth() >= _bootstrap.md }">
       Already submitted? <a data-ui-sref="facilities.update">Edit your facility here</a>.
     </p>
   </div>
@@ -63,8 +63,8 @@
     <div class="row">
       <div class="col-md-3">
         <div class="row">
-          <div data-ng-class="{ 'col-sm-3': _getWidth() >= _bootstrap.grid.breakpoints.md,
-                                'col-sm-1': _getWidth() < _bootstrap.grid.breakpoints.md }">
+          <div data-ng-class="{ 'col-sm-3': _getWidth() >= _bootstrap.md,
+                                'col-sm-1': _getWidth() < _bootstrap.md }">
             <p class="h4">
               <span class="fa-stack fa-lg">
                 <span class="fa fa-circle fa-stack-2x"></span>
@@ -73,8 +73,8 @@
             </p>
           </div>
 
-          <div data-ng-class="{ 'col-sm-9': _getWidth() >= _bootstrap.grid.breakpoints.md,
-                                'col-sm-11': _getWidth() < _bootstrap.grid.breakpoints.md }">
+          <div data-ng-class="{ 'col-sm-9': _getWidth() >= _bootstrap.md,
+                                'col-sm-11': _getWidth() < _bootstrap.md }">
             <p class="h4">Research Intensification</p>
           </div>
         </div>
@@ -87,8 +87,8 @@
 
       <div class="col-md-3">
         <div class="row">
-          <div data-ng-class="{ 'col-sm-3': _getWidth() >= _bootstrap.grid.breakpoints.md,
-                                'col-sm-1': _getWidth() < _bootstrap.grid.breakpoints.md }">
+          <div data-ng-class="{ 'col-sm-3': _getWidth() >= _bootstrap.md,
+                                'col-sm-1': _getWidth() < _bootstrap.md }">
             <p class="h4">
               <span class="fa-stack fa-lg">
                 <span class="fa fa-circle fa-stack-2x"></span>
@@ -97,8 +97,8 @@
             </p>
           </div>
 
-          <div data-ng-class="{ 'col-sm-9': _getWidth() >= _bootstrap.grid.breakpoints.md,
-                                'col-sm-11': _getWidth() < _bootstrap.grid.breakpoints.md }">
+          <div data-ng-class="{ 'col-sm-9': _getWidth() >= _bootstrap.md,
+                                'col-sm-11': _getWidth() < _bootstrap.md }">
             <p class="h4">Partnerships & Collaborations</p>
           </div>
         </div>
@@ -108,8 +108,8 @@
 
       <div class="col-md-3">
         <div class="row">
-          <div data-ng-class="{ 'col-sm-3': _getWidth() >= _bootstrap.grid.breakpoints.md,
-                                'col-sm-1': _getWidth() < _bootstrap.grid.breakpoints.md }">
+          <div data-ng-class="{ 'col-sm-3': _getWidth() >= _bootstrap.md,
+                                'col-sm-1': _getWidth() < _bootstrap.md }">
             <p class="h4">
               <span class="fa-stack fa-lg">
                 <span class="fa fa-circle fa-stack-2x"></span>
@@ -118,8 +118,8 @@
             </p>
           </div>
 
-          <div data-ng-class="{ 'col-sm-9': _getWidth() >= _bootstrap.grid.breakpoints.md,
-                                'col-sm-11': _getWidth() < _bootstrap.grid.breakpoints.md }">
+          <div data-ng-class="{ 'col-sm-9': _getWidth() >= _bootstrap.md,
+                                'col-sm-11': _getWidth() < _bootstrap.md }">
             <p class="h4">Cost Savings</p>
           </div>
         </div>
@@ -132,8 +132,8 @@
 
       <div class="col-md-3">
         <div class="row">
-          <div data-ng-class="{ 'col-sm-3': _getWidth() >= _bootstrap.grid.breakpoints.md,
-                                'col-sm-1': _getWidth() < _bootstrap.grid.breakpoints.md }">
+          <div data-ng-class="{ 'col-sm-3': _getWidth() >= _bootstrap.md,
+                                'col-sm-1': _getWidth() < _bootstrap.md }">
             <p class="h4">
               <span class="fa-stack fa-lg">
                 <span class="fa fa-circle fa-stack-2x"></span>
@@ -142,8 +142,8 @@
             </p>
           </div>
 
-          <div data-ng-class="{ 'col-sm-9': _getWidth() >= _bootstrap.grid.breakpoints.md,
-                                'col-sm-11': _getWidth() < _bootstrap.grid.breakpoints.md }">
+          <div data-ng-class="{ 'col-sm-9': _getWidth() >= _bootstrap.md,
+                                'col-sm-11': _getWidth() < _bootstrap.md }">
             <p class="h4">Revenue Generation</p>
           </div>
         </div>
@@ -169,9 +169,9 @@
             <p style="padding-bottom: 3px;">
               <a data-ui-sref="facilities.show.equipment.show({ facilityId: e.facilityId, equipmentId: e.id })"
                 target="_blank">
-                {{ e.type | afEllipses:(_getWidth() >= _bootstrap.grid.breakpoints.md ? 35 : null) }}<br>
+                {{ e.type | afEllipses:(_getWidth() >= _bootstrap.md ? 35 : null) }}<br>
                 <small class="text-muted">
-                  {{ e.purposeNoHtml | afEllipses:(_getWidth() >= _bootstrap.grid.breakpoints.md ? 100 : 200) }}
+                  {{ e.purposeNoHtml | afEllipses:(_getWidth() >= _bootstrap.md ? 100 : 200) }}
                 </small>
               </a>
             </p>
