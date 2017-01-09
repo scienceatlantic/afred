@@ -272,22 +272,22 @@ angular.module('afredApp').run(['$rootScope',
         case '403':
           // If the user is not already logged in and the 'fromState' param
           // is set, redirect the user to the login page instead and the set
-          // '$scope._state.fromState' property to 'fromState' so that they can
+          // '$scope._persist.fromState' property to 'fromState' so that they can
           // be redirected back to it after login. We need to check that the
           // user has already logged in (first condition in the if statement)
           // because it could be that they have already logged in but are simply
           // not authorised (permission level) to view the content, if we didn't
           // do that, this would create an infinite redirect.
           if (!$rootScope._auth.user.id && fromState) {
-            // Do not update the '$rootScope._state.fromState' property if it's
+            // Do not update the '$rootScope._persist.fromState' property if it's
             // a redirect to the login page. If there are multiple identical 
             // AJAX requests to redirect to the login page and one (or more)
             // calls are made after the app has already redirected to the login
             // page, this condition prevents the more recent calls from
-            // overwriting the '$rootScope._state.fromState' property to 
+            // overwriting the '$rootScope._persist.fromState' property to 
             // 'login' (i.e. losing the actual state the app was in). 
             if (!fromState.includes('login')) {
-              $rootScope._state.fromState = fromState;
+              $rootScope._persist.fromState = fromState;
             }
             $rootScope._state.go('login');
             break;
@@ -492,7 +492,13 @@ angular.module('afredApp').run(['$rootScope',
      * persisted across states.
      * --------------------------------------------------------------------- */
     $rootScope._persist = {
-      reload: false // Flag that tells the app to perform a hard reload.
+      reload: false, // Flag that tells the app to perform a hard reload.
+      fromState: null, // If the user is not logged in and accesses protected
+                       // content, this property stores that state so that we
+                       // can redirect the user after login.
+      facilitySubmissionFormId: null // The facility submission form is given
+                                     // a unique ID so that we can prevents
+                                     // duplicate 'autosave' instances.
     };
 
 
