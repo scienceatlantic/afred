@@ -1,8 +1,7 @@
 'use strict';
 
 angular.module('afredApp').controller('FacilitiesFormController',
-  ['$interval',
-   '$scope',
+  ['$scope',
    '$timeout',
    '$q',
    'confirmModal',
@@ -11,8 +10,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
    'OrganizationResource',
    'ProvinceResource',
    'SectorResource',
-  function($interval,
-           $scope,
+  function($scope,
            $timeout,
            $q,
            confirmModal,
@@ -46,14 +44,14 @@ angular.module('afredApp').controller('FacilitiesFormController',
       /**
        * Keeps track of the current 'contact' being viewed.
        *
-       * @type {integer}
+       * @type {number}
        */
       contactIndex: null,
       
       /**
        * Keeps track of the current 'equipment' being viewed.
        *
-       * @type {integer}
+       * @type {number}
        */
       equipmentIndex: null,
       
@@ -86,17 +84,33 @@ angular.module('afredApp').controller('FacilitiesFormController',
       sectors: [],
       
       /**
-       * Holds the unique ID returned by '$scope.form.startAutosave()'. Can be
-       * used to either stop or prevent '$scope.form.startAutosave()' from
-       * running more than one interval at a time.
+       * Holds the unique ID returned by `$scope.form.startAutosave()`.
        *
-       * @type {integer}
+       * @type {number}
        */
       isAutosaving: 0,
+
+
+      /**
+       * Autosave interval (`$scope.form.autosave()` method).
+       * 
+       * @type {number} Milliseconds
+       */
+      autosaveInterval: 500,
+
+      /**
+       * The form is given a unique ID so that we can ensure the 
+       * `$scope.form.autosave()` method is only running a single interval.
+       * 
+       * @type {number}
+       */
+      id: Math.floor((Math.random() + 1) * 100000),
       
       /**
        * Initialises the form.
-       *
+       * 
+       * @sideeffect $scope._persist.facilitySubmissionFormId Set to 
+       *     `$scope.form.id`.
        * @sideeffect $scope.form.data All form data is attached to this object.
        *
        * @requires $scope.form.addContacts()
@@ -112,6 +126,9 @@ angular.module('afredApp').controller('FacilitiesFormController',
        *     unique token that authorises the edit instance.
        */
       initialise: function(frId, token) {
+        // Persist form ID.
+        $scope._persist.facilitySubmissionFormId = $scope.form.id;
+
         var deferred = $q.defer();
         var promises = [];
 
@@ -575,14 +592,13 @@ angular.module('afredApp').controller('FacilitiesFormController',
       
       /**
        * Retrieves form data from local storage (if found) and then continuously
-       * save form data every `interval` milliseconds.
+       * save form data every `$scope.form.autosaveInterval` milliseconds.
        *
-       * @sideeffect $scope.form.isAutosaving ID returned from `$interval` is 
+       * @sideeffect $scope.form.isAutosaving ID returned from `$timeout` is 
        *     stored here if the operation is successful.
        * @sideeffect $scope.form.data Data retrieved from local storage is 
        *     stored here.
        *
-       * @requires $interval
        * @requires $q
        * @requires $scope._form.cb.getSelected()
        * @requires $scope._state.current.name
@@ -596,20 +612,20 @@ angular.module('afredApp').controller('FacilitiesFormController',
        * @requires angular.toJson()
        * @requires localStorage
        * 
-       * @param {number=500} interval Number of milliseconds between each
-       *     interval.
+       * @param {string} state Router state the function is being called in.
+       *     This will ensure that autosave is terminated if we leave that
+       *     state.
        * 
        * @returns {promise} Promise that resolves when either the operation is
        *     not supported or the first interval is run.
        */
-      startAutosave: function(interval) {
+      startAutosave: function(state) {
         var deferred = $q.defer();
         var promises = [];
 
         // Resolve and return if already autosaving.
         if ($scope.form.isAutosaving) {
-          $scope._warn('Already autosaving. Interval ID: ' 
-            + $scope.form.isAutosaving);
+          $scope._warn('Already autosaving.');
           deferred.resolve();
           return deferred.promise;
         }
@@ -626,7 +642,6 @@ angular.module('afredApp').controller('FacilitiesFormController',
           var ls = localStorage;
           var fromJson = angular.fromJson;
           var toJson = angular.toJson;
-
           var facility = fromJson(ls.getItem(facilityItem));
           var disciplines = fromJson(ls.getItem(disciplinesItem));
           var sectors = fromJson(ls.getItem(sectorsItem));
@@ -644,34 +659,45 @@ angular.module('afredApp').controller('FacilitiesFormController',
         
         // Continuously save form data.
         $q.all(promises).then(function() {
-          $scope.form.isAutosaving = $interval(function() {
-            // Terminates the interval if we're no longer in the right state.
-            if (!$scope._state.is('facilities.form.create')) {
-              $interval.cancel($scope.form.isAutosaving);
-              $scope._info('Interval terminated. No longer saving form data.');
-              return;
-            }
-
-            // Aliases.
-            var d = $scope.form.disciplines;
-            var s = $scope.form.sectors;
-
-            var selectedDisciplines = $scope._form.cb.getSelected(d, true);
-            var selectedSectors = $scope._form.cb.getSelected(s, true);
-
-            ls.setItem(facilityItem, toJson($scope.form.data));
-            ls.setItem(disciplinesItem, toJson(selectedDisciplines));
-            ls.setItem(sectorsItem, toJson(selectedSectors));
-
-            // Log.
-            $scope._info('Form data saved...');
-          }, interval ? interval : 500);
-
-          // Resolve.
-          $timeout(function() {
-            deferred.resolve();
-          }, interval ? interval : 500);
+          try {
+            save();
+          } catch (err) {
+            $scope._error(err);
+          }
+          deferred.resolve();
         });
+
+        function save() {
+          // Terminates the interval if we've changed router states.
+          if (!$scope._state.is(state)) {
+            $scope._info('State changed, autosave terminated.');
+            return;
+          }
+
+          // Ensures that only a single recursive loop is executing.
+          if ($scope._persist.facilitySubmissionFormId !== $scope.form.id) {
+            $scope._info('Terminating duplicate autosave loop.');
+            return;
+          }
+
+          // Aliases.
+          var d = $scope.form.disciplines;
+          var s = $scope.form.sectors;
+
+          var selectedDisciplines = $scope._form.cb.getSelected(d, true);
+          var selectedSectors = $scope._form.cb.getSelected(s, true);
+
+          ls.setItem(facilityItem, toJson($scope.form.data));
+          ls.setItem(disciplinesItem, toJson(selectedDisciplines));
+          ls.setItem(sectorsItem, toJson(selectedSectors));
+
+          // Log.
+          $scope._info('Form data saved.');
+
+          // Loop.
+          $scope.form.isAutosaving = $timeout(save, 
+            $scope.form.autosaveInterval);
+        }
 
         return deferred.promise;
       },
@@ -679,11 +705,11 @@ angular.module('afredApp').controller('FacilitiesFormController',
       /**
        * Clears local storage of any saved form data and stops autosaving.
        * 
-       * @requires $interval
        * @requires $scope._location.reload();
        * @requires $scope._state.current.name
        * @requires $scope._warn()
        * @requires $scope.form.initialise()
+       * @requires $timeout
        *
        * @param {boolean=false} dontConfirm If set to true, confirmation modal 
        *     will not be shown and localStorage will be cleared immediately and 
@@ -693,27 +719,35 @@ angular.module('afredApp').controller('FacilitiesFormController',
        */
       clearSave: function(dontConfirm) {
         if (dontConfirm) {
-          remove();
-          $scope.form.initialise();
-          return;
+          remove().then(function() {
+            $scope.form.initialise();
+          });
+        } else {
+          confirmModal.open('reset-create-facility-form').result.then(
+            function() {
+              remove().then(function() {
+                $scope._location.reload();
+              });
+            }
+          );
         }
-        confirmModal.open('reset-create-facility-form').result.then(function() {
-          remove();
-          $scope._location.reload();
-        });
         
         function remove() {
-          try {
-            // We have to stop autosaving, otherwise clearing the data won't
-            // work if the page is reloaded after this function is called.
-            $interval.cancel($scope.form.isAutosaving);
+          // We have to stop autosaving, otherwise clearing the data won't
+          // work if the page is reloaded after this function is called.
+          $timeout.cancel($scope.form.isAutosaving);
 
-            ['-facility', '-disciplines', '-sectors'].forEach(function(item) {
-              localStorage.removeItem($scope._state.current.name + item);
-            });
-          } catch(e) {
-            $scope._warn('`localStorage` is not supported');
-          }
+          // Delay the clearing process to ensure that no autosave intervals
+          // are running.
+          return $timeout(function() {
+            try {
+              ['-facility', '-disciplines', '-sectors'].forEach(function(item) {
+                localStorage.removeItem($scope._state.current.name + item);
+              });
+            } catch (error) {
+              $scope._warn('`localStorage` is not supported');
+            }
+          }, $scope.form.autosaveInterval + 250);
         }
       },
       
