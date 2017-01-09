@@ -18,11 +18,11 @@ angular.module('afredApp').controller('LoginController',
       $scope.auth = $scope._auth.login($scope.credentials).then(function(response) {
         // If login was successful, save the authenticated user's details
         // and redirect the user to the dashboard (if the 
-        // '$scope._state.fromState' was not set).
+        // '$scope._persist.fromState' was not set).
         if ($scope._auth.save(response)) {
-          if ($scope._state.fromState) {
-            var fromState = $scope._state.fromState;
-            $scope._state.fromState = null;
+          if ($scope._persist.fromState) {
+            var fromState = $scope._persist.fromState;
+            $scope._persist.fromState = null;
             location.href = fromState;
           } else {
             $scope._state.go('admin.dashboard');
