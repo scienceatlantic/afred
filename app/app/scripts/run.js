@@ -34,7 +34,7 @@ angular.module('afredApp').run(['$rootScope',
     });
     
     /* ---------------------------------------------------------------------
-     * Log functions. Making it globally accessble.
+     * Log functions. Making it globally accessible.
      * @see https://docs.angularjs.org/api/ng/service/$log
      * --------------------------------------------------------------------- */
 
@@ -466,7 +466,7 @@ angular.module('afredApp').run(['$rootScope',
     };
     
     /* ---------------------------------------------------------------------
-     * Boostrap contstants.
+     * Boostrap constants.
      * @see http://getbootstrap.com
      * --------------------------------------------------------------------- */
 
@@ -483,5 +483,28 @@ angular.module('afredApp').run(['$rootScope',
         }
       }
     };
+
+
+    /* ---------------------------------------------------------------------
+     * Boostrap contstants.
+     * 
+     * The persist object can be used to store anything that needs to 
+     * persisted across states.
+     * --------------------------------------------------------------------- */
+    $rootScope._persist = {
+      reload: false // Flag that tells the app to perform a hard reload.
+    };
+
+
+    /* ---------------------------------------------------------------------
+     * Global events.
+     * --------------------------------------------------------------------- */
+
+    // Reload app if flag is set.
+    $rootScope.$on('$stateChangeSuccess', function() {
+      if ($rootScope._persist.reload) {
+        $rootScope._location.reload();
+      }
+    });
   }
 ]);
