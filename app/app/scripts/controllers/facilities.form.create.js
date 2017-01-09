@@ -8,12 +8,7 @@ angular.module('afredApp').controller('FacilitiesFormCreateController',
   function($interval,
            $scope,
            $timeout,
-           RepositoryResource) {
-    // See explanation at the bottom ($stateChangeStart) for why this is needed.
-    if ($scope._state.needToReload) {
-      $scope._location.reload();
-    }
-    
+           RepositoryResource) {    
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */    
@@ -108,19 +103,18 @@ angular.module('afredApp').controller('FacilitiesFormCreateController',
     
     // Initialise the form.
     $scope.form.initialise().then(function() {
-      $scope.form.startAutosave().then(function() {
+      $scope.form.startAutosave('facilities.form.create').then(function() {
         $scope.loading.form = false;
       });
     });
     
-    // We're also setting the 'needToReload' property of '$scope._state' to true
+    // We're also setting the `reload` property of `$rootScope._persist` to true
     // if we're going to the 'facilities.form.edit' state. If we don't do a hard
     // reload, TextAngular will complain that ('Editor with name "..." already
     // exists'). This is because the parent state is not reloaded if we're only
-    // switching between child states. Note that the 'needToReload' property is
-    // custom code. It is not part of Angular UI Router.
+    // switching between child states.
     $scope.$on('$stateChangeStart', function(event, toState) {
-      $scope._state.needToReload = (toState.name === 'facilities.form.edit');
+      $scope._persist.reload = (toState.name === 'facilities.form.edit');
     });
   }
 ]);

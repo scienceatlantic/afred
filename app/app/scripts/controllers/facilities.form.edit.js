@@ -7,11 +7,6 @@ angular.module('afredApp').controller('FacilitiesFormEditController',
   function($scope,
            $timeout,
            RepositoryResource) {
-    // See explanation in 'facilities.form.create.js'.
-    if ($scope._state.needToReload) {
-      $scope._location.reload();
-    }
-
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
@@ -113,9 +108,7 @@ angular.module('afredApp').controller('FacilitiesFormEditController',
     
     // See explanation in 'facilities.form.create.js'.
     $scope.$on('$stateChangeStart', function(event, toState) {       
-      if (toState.name === 'facilities.form.create') {
-        $scope._state.needToReload = true;
-      }
+      $scope._persist.reload = toState.name === 'facilities.form.create';
     });
   }
 ]);
