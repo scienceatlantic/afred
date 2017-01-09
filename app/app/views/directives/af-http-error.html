@@ -1,0 +1,13 @@
+<div>
+  <div data-ng-if="error" class="text-center">
+    <div class="alert alert-danger" role="alert">
+      <span class="small">
+        <span class="fa fa-exclamation-triangle"></span>
+        We're having trouble retrieving this, please try refreshing your browser. If the issue persists, please contact
+        <a href="mailto:afred@scienceatlantic.ca">afred@scienceatlantic.ca</a>.
+      </span>
+    </div>
+  </div>
+  
+  <div data-ng-if="!error" data-ng-transclude></div>
+</div>
