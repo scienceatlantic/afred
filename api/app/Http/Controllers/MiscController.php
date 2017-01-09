@@ -60,6 +60,8 @@ class MiscController extends Controller
         return [
             'equipment' => Equipment::with('facility')
                 ->whereNotIn('facilityId', $hiddenFacilities)->notHidden()
+                ->whereRaw('LENGTH(type) > 4')
+                ->whereRaw('LENGTH(purposeNoHtml) > 20')
                 ->orderByRaw('RAND()')->take($take)->get()
         ];
     }
@@ -67,10 +69,11 @@ class MiscController extends Controller
     private function searchFilters()
     {
         $d = [];
-        $d['disciplines'] = Discipline::all();
-        $d['sectors'] = Sector::all();
-        $d['provinces'] = Province::notHidden()->get();
-        $d['organizations'] = Organization::notHidden()->get();
+        $d['disciplines'] = Discipline::orderBy('name', 'asc')->get();
+        $d['sectors'] = Sector::orderBy('name', 'asc')->get();
+        $d['provinces'] = Province::notHidden()->orderBy('name', 'asc')->get();
+        $d['organizations'] = Organization::notHidden()->orderBy('name', 'asc')
+            ->get();
         return $d;
     } 
 }
