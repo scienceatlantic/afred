@@ -7,7 +7,7 @@
  * @see /scripts/routes.js
  */
 
-angular.module('afredApp').controller('AboutLegalTermsOfServiceController',
+angular.module('afredApp').controller('LegalTermsOfServiceController',
   ['$scope',
    'WpResource',
   function($scope,

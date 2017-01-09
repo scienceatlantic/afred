@@ -7,7 +7,7 @@
  * @see /scripts/routes.js (for route info)
  */
 
-angular.module('afredApp').controller('AboutLegalDisclaimerController',
+angular.module('afredApp').controller('LegalDisclaimerController',
   ['$scope',
    'WpResource',
   function($scope,

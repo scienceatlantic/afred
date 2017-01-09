@@ -8,7 +8,7 @@
  * @see /scripts/routes.js
  */
 
-angular.module('afredApp').controller('AboutLegalPrivacyPolicyController',
+angular.module('afredApp').controller('LegalPrivacyPolicyController',
   ['$scope',
    'WpResource',
   function($scope,

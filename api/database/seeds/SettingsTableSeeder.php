@@ -158,9 +158,9 @@ class SettingsTableSeeder extends Seeder
                 '/facilities/form/guide',
                 '/facilities/update',
                 '/about',
-                '/about/legal/privacy-policy',
-                '/about/legal/terms-of-service',
-                '/about/legal/disclaimer',
+                '/legal/privacy-policy',
+                '/legal/terms-of-service',
+                '/legal/disclaimer',
                 '/contact'
             ])
         ]);
