@@ -1,20 +1,29 @@
-<!-- Reset CSS. -->
 <style>
   body {
     margin: 0;
     padding: 0;
   }
+
+  .af-error-message-container {
+    position: absolute;
+    width: 240px;
+    height: 332px;
+    top: 50%;
+    left: 50%;
+    margin-left: -120px; /* margin is -0.5 * width */
+    margin-top: -166px; /* margin is -0.5 * height */ 
+  }
 </style>
  
-<div style="{{ margins() }}"> 
+<div class="af-error-message-container"> 
   <div class="text-center">    
     <img src="images/afred-symbol-bottom-text 200x170.png" alt="AFRED Logo">
     
     <div data-ui-view></div>
-    
+      
     <!-- Don't show a link to the home page if status >= 500. -->
-    <div data-ng-if="httpStatusCode < 500">
-      <p>Click <a data-ui-sref="home">here</a> to get back to the homepage.</p>
-    </div>
+    <p data-ng-if="_state.current.name.split('.')[1] < 500">
+      <button type=" button" class="btn btn-default" data-ng-click="_state.go('home')">Go to homepage</button>
+    </p>
   </div>
 </div>
