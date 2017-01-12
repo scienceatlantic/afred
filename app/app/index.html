@@ -41,49 +41,51 @@
       Atlantic Facilities and Research Equipment Database (AFRED)
     </title>
   </head>
-  <body data-ng-cloak>
+  <body>
     <!-- JavaScript disabled warning message. -->
     <noscript class="h1">
-      The Atlantic Facilities and Research Equipment Database requires
-      JavaScript in order to function. Instructions on how to enable JavaScript
-      can be found <a href="http://enable-javascript.com/" target="_blank">here</a>.
+      The Atlantic Facilities and Research Equipment Database requires JavaScript in order to function. Instructions on
+      how to enable JavaScript can be found <a href="http://enable-javascript.com/" target="_blank">here</a>.
     </noscript>
     
-    <!-- Error pages container. -->
-    <div data-ng-if="_state.includes('error')">
-      <div data-ui-view></div>
-    </div>
-    
-    <!-- All other content container. -->
-    <div data-ng-if="!_state.includes('error')">
-      <!-- Outdated browser warning message. -->
-      <!--[if lt IE 10]>
-        <p class="browsehappy">
-          You are using an <strong>outdated</strong> browser. Please
-          <a href="http://browsehappy.com/">upgrade your browser</a> to improve
-          your experience.
-        </p>
-      <![endif]-->
-
-      <!-- Main Navigation -->
-      <div data-ng-include="'views/includes/nav.html'" onload="main.navbar.toggle()"></div>
+    <div data-ng-cloak>
+      <!-- Error pages container. -->
+      <div data-ng-if="_state.includes('error')">
+        <div data-ui-view></div>
+      </div>
       
-      <div data-ng-class="{ 'af-content-while-logged-in': _auth.user.id }">        
-        <!-- View (for homepage only). -->
-        <div data-ng-if="_state.is('home')">
-          <div data-ui-view></div>
-        </div>
+      <!-- All other content container. -->
+      <div data-ng-if="!_state.includes('error')">
+        <!-- Outdated browser warning message. -->
+        <!--[if lt IE 10]>
+          <div class="alert alert-danger" role="alert">
+            <p class="text-center"> 
+              You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your 
+              browser</a> to improve your experience.
+            </p>
+          </div>
+        <![endif]-->
 
-        <!-- View (for all other pages). -->
-        <div class="container" style="min-height: 300px;" data-ng-if="!_state.is('home')">
-          <div data-ui-view></div>
-        </div>
+        <!-- Main Navigation -->
+        <div data-ng-include="'views/includes/nav.html'" onload="main.navbar.toggle()"></div>
         
-        <!-- Footer -->
-        <div data-ng-include="'views/includes/footer.html'"></div>
+        <div data-ng-class="{ 'af-content-while-logged-in': _auth.user.id }">        
+          <!-- View (for homepage only). -->
+          <div data-ng-if="_state.is('home')">
+            <div data-ui-view></div>
+          </div>
+
+          <!-- View (for all other pages). -->
+          <div class="container" style="min-height: 300px;" data-ng-if="!_state.is('home')">
+            <div data-ui-view></div>
+          </div>
+          
+          <!-- Footer -->
+          <div data-ng-include="'views/includes/footer.html'"></div>
+        </div>
       </div>
     </div>
-    
+
     <!-- 
          Google Analytics.
          Check the 'scripts/run.js' file for more information.
@@ -115,27 +117,13 @@
       }(document, 'script', 'twitter-wjs'));
     </script>
 
-    <!-- JavaScript -->
-    <!-- Third-party JavaScript files -->
-    <!-- build:js(.) scripts/oldieshim.js -->
-    <!--[if lt IE 9]>
-    <script src="bower_components/es5-shim/es5-shim.js"></script>
-    <script src="bower_components/json3/lib/json3.js"></script>
-    <![endif]-->
-    <!-- endbuild -->
-
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
-    <script src="bower_components/angular/angular.js"></script>
-    <script src="bower_components/json3/lib/json3.js"></script>
-    <script src="bower_components/es5-shim/es5-shim.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-resource/angular-resource.js"></script>
-    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-    <script src="bower_components/angular-animate/angular-animate.js"></script>
-    <script src="bower_components/angular-touch/angular-touch.js"></script>
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="bower_components/angularUtils-pagination/dirPagination.js"></script>
@@ -148,8 +136,6 @@
     <script src="bower_components/textAngular/dist/textAngular.js"></script>
     <script src="bower_components/textAngular/dist/textAngular-sanitize.js"></script>
     <script src="bower_components/textAngular/dist/textAngularSetup.js"></script>
-    <script src="bower_components/gsap/src/uncompressed/TweenMax.js"></script>
-    <script src="bower_components/ngFx/dist/ngFx.js"></script>
     <script src="bower_components/angular-bind-html-compile/angular-bind-html-compile.js"></script>
     <script src="bower_components/algoliasearch/dist/algoliasearch.js"></script>
     <script src="bower_components/jsdiff/diff.js"></script>
@@ -224,7 +210,6 @@
     <script src="scripts/controllers/admin.users.show.js"></script>
     <script src="scripts/controllers/admin.users.create.js"></script>
     <script src="scripts/controllers/login.js"></script>
-    <script src="scripts/controllers/error.js"></script>
     <script src="scripts/modals/contact-springboard-atlantic.js"></script>
     <!-- endbuild -->
   </body>
