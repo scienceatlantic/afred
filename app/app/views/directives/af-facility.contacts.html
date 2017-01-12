@@ -38,11 +38,11 @@
     </div>
 
     <div class="col-sm-9">
-      <div data-ng-if="useBindHtml">
+      <div class="af-word-break" data-ng-if="useBindHtml">
         <div data-ng-bind-html="c.email"></div>
       </div>  
 
-      <a data-ng-href="mailto:{{ c.email }}" itemprop="email" data-ng-if="!useBindHtml">
+      <a class="af-word-break" data-ng-href="mailto:{{ c.email }}" itemprop="email" data-ng-if="!useBindHtml">
         {{ c.email }}
       </a>
     </div>
@@ -113,11 +113,11 @@
     </div>
     
     <div class="col-sm-9">
-      <span data-ng-if="useBindHtml">
-        <span data-ng-bind-html="c.website"></span>
-      </span>
+      <div class="af-word-break" data-ng-if="useBindHtml">
+        <div data-ng-bind-html="c.website"></div>
+      </div>
 
-      <a href="{{ c.website }}" target="_blank" itemprop="url" data-ng-if="!useBindHtml">
+      <a class="af-word-break" data-ng-href="{{ c.website }}" target="_blank" itemprop="url" data-ng-if="!useBindHtml">
         {{ c.website }}
       </a>
 

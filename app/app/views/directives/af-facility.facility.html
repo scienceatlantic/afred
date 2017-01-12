@@ -86,11 +86,12 @@
     </div>
 
     <div class="col-sm-9">
-      <a data-ng-href="{{ facility.website }}" target="_blank" itemprop="url" data-ng-if="!useBindHtml">
+      <a class="af-word-break" 
+         data-ng-href="{{ facility.website }}" target="_blank" itemprop="url" data-ng-if="!useBindHtml">
         {{ facility.website }}
       </a>
       
-      <div data-ng-if="useBindHtml">
+      <div class="af-word-break" data-ng-if="useBindHtml">
         <div data-ng-bind-html="facility.website"></div>
       </div>
 
