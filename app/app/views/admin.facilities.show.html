@@ -21,11 +21,11 @@
             <b>
               <!-- Pending. -->
               <span class="text-info" 
-                    data-ng-if="facility.state == 'PENDING_APPROVAL'">
+                    data-ng-if="facility.state === 'PENDING_APPROVAL'">
                 PENDING APPROVAL
               </span>
               <span class="text-info" 
-                    data-ng-if="facility.state == 'PENDING_EDIT_APPROVAL'">
+                    data-ng-if="facility.state === 'PENDING_EDIT_APPROVAL'">
                 PENDING EDIT APPROVAL
               </span>
               
@@ -69,29 +69,28 @@
           </p>
           
           <!-- Current revision anchor (only shown if not already viewing current revision). -->
-          <p>
-            <span data-ng-if="!fr.publishedFacility.id && fr.facility.id">
+          <div data-ng-if="!fr.publishedFacility.id && fr.facility.id">
+            <p>
               <a data-ui-sref="admin.facilities.show({ facilityRepositoryId: fr.facility.facilityRepositoryId })">
                 Current published revision
               </a>
-              (<a data-ui-sref="admin.facilities.compare({ editedFrId: fr.id, originalFrId: fr.facility.facilityRepositoryId })">
+            </p>
+
+            <p>
+              <a data-ui-sref="admin.facilities.compare({ editedFrId: fr.id, originalFrId: fr.facility.facilityRepositoryId })">
                 Compare
-              </a>)
-            </span>
-          </p>
+              </a>
+            </p>
+          </div>
           
           <!-- Revision history anchor. -->
-          <p>
-            <span data-ng-if="fr.facilityId">
-              <a data-ui-sref="admin.facilities.history.index({ facilityId: fr.facilityId })">Revision history</a>
-            </span>
+          <p data-ng-if="fr.facilityId">
+            <a data-ui-sref="admin.facilities.history.index({ facilityId: fr.facilityId })">Revision history</a>
           </p>
           
           <!-- Published link anchor. -->
-          <p>
-            <span data-ng-if="fr.publishedFacility.id">
-              <a data-ui-sref="facilities.show({ facilityId: fr.publishedFacility.id })">View public record</a>
-            </span>
+          <p data-ng-if="fr.publishedFacility.id">
+            <a data-ui-sref="facilities.show({ facilityId: fr.publishedFacility.id })">View public record</a>
           </p>
         </div>
       </div>
@@ -129,7 +128,9 @@
         </div>
       
         <div class="col-sm-9">
-          {{ fr.reviewer.firstName }} {{ fr.reviewer.lastName }}
+          <a data-ui-sref="admin.users.show({ 'userId': fr.reviewer.id })">
+            {{ fr.reviewer.firstName }} {{ fr.reviewer.lastName }}
+          </a>
           <span class="label label-default" data-ng-if="!fr.reviewer.firstName">N/A</span>        
         </div>
       </div>
