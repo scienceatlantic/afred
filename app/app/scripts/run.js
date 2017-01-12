@@ -186,6 +186,7 @@ angular.module('afredApp').run(['$rootScope',
               }
               break;
             case 'save':
+              // No break.
             default:
               promise.then(function(resp) {
                 $rootScope._auth.save(resp);
