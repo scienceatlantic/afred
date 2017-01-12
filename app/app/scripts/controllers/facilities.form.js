@@ -321,7 +321,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
           
           // Check if organization is hidden, if it is, add it to array.
           if (organizationId) {
-            isHidden = !$scope.form.organizations.some(function(o, i) {
+            isHidden = !$scope.form.organizations.some(function(o) {
               return o.id === organizationId;
             });
             
@@ -387,7 +387,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
           
           // Check if province is hidden, if it is, add it to array.
           if (provinceId) {
-            isHidden = $scope.form.provinces.some(function(p, i) {
+            isHidden = $scope.form.provinces.some(function(p) {
               return p.id === provinceId;
             });
             
@@ -676,7 +676,9 @@ angular.module('afredApp').controller('FacilitiesFormController',
 
           // Ensures that only a single recursive loop is executing.
           if ($scope._persist.facilitySubmissionFormId !== $scope.form.id) {
-            $scope._info('Terminating duplicate autosave loop.');
+            $scope._info('Terminating duplicate autosave loop. Form ID: ' 
+              + $scope.form.id + '. Persisted ID: ' 
+              + $scope._persist.facilitySubmissionFormId);
             return;
           }
 
@@ -692,7 +694,7 @@ angular.module('afredApp').controller('FacilitiesFormController',
           ls.setItem(sectorsItem, toJson(selectedSectors));
 
           // Log.
-          $scope._info('Form data saved.');
+          $scope._info('Form data saved. Form ID:' + $scope.form.id);
 
           // Loop.
           $scope.form.isAutosaving = $timeout(save, 
