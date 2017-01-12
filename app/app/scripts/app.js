@@ -7,15 +7,11 @@
  */
 
 angular.module('afredApp', [
-  'ngAnimate',
-  'ngCookies',
   'ngResource',
   'ngSanitize',
-  'ngTouch',
   'ui.router',
   'ui.bootstrap',
   'angularUtils.directives.dirPagination',
-  'textAngular',
-  'ngFx',
-  'angular-bind-html-compile'
+  'angular-bind-html-compile',
+  'textAngular'
 ]);
