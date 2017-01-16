@@ -2,9 +2,9 @@
 
 angular.module('afredApp').controller('AdminOrganizationsController', [
   '$scope',
-  'organizationResource',
+  'OrganizationResource',
   function($scope,
-           organizationResource) {
+           OrganizationResource) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
@@ -24,7 +24,7 @@ angular.module('afredApp').controller('AdminOrganizationsController', [
       },
       
       /**
-       * Holds the data returned from 'organizationResource'.
+       * Holds the data returned from 'OrganizationResource'.
        * @type {resource}
        */
       resource: {},
@@ -58,12 +58,12 @@ angular.module('afredApp').controller('AdminOrganizationsController', [
        * $scope.organization.resource Data returned is attached to this.
        *
        * Uses/calls/requires:
-       * organizationResource
+       * OrganizationResource
        * $scope.organizations.form.data.page
        * $scope._httpError403()
        */
       query: function() {
-        $scope.organizations.resource = organizationResource.query({
+        $scope.organizations.resource = OrganizationResource.query({
           page: $scope.organizations.form.data.page,
           itemsPerPage: 10
         }, function() {

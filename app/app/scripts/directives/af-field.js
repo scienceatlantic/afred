@@ -70,10 +70,13 @@ angular.module('afredApp').directive('afField', [
       link: function($scope, element, attrs, form) {
         // Find the form field element.
         var field = element.find('input[type!="hidden"], select, ' +
-          'textarea:not([ta-bind]), div[data-text-angular], div[text-angular]');
+          'textarea:not([ta-bind]), text-angular');
 
         // Attach the form object to the scope.
         $scope.form = form;
+
+        // Check if the element is a Text Angular element.
+        $scope.isTextAngular = field.hasClass('ta-root');
 
         // Get the HTML field's name attribute. 
         if ($scope.nameOverride) {
@@ -88,44 +91,35 @@ angular.module('afredApp').directive('afField', [
         }
 
         // Parse the 'minlength' property if available.
-        try {
-          $scope.minLength = parseInt(field.attr('minlength'));
-          if (!$scope.minLength) {
-            $scope.minLength = parseInt(field.attr('data-ta-minlength'));
-          }
-          if (!$scope.minLength) {
-            $scope.minLength = parseInt(field.attr('ta-minlength'));
-          }
-        } catch(e) {
-          // Do nothing.
-        }
+        ['data-ng-', 'ng-', ''].some(function(prefix) {
+          $scope.minLength = parseInt(field.attr(prefix + 'minlength'));
+          return $scope.minLength > 0;
+        });
         
         // Parse the 'maxlength' property if available.
-        try {
-          $scope.maxLength = parseInt(field.attr('maxlength'));
-          if (!$scope.maxLength) {
-            $scope.maxLength = parseInt(field.attr('data-ta-maxlength'));
-          }
-          if (!$scope.maxLength) {
-            $scope.maxLength = parseInt(field.attr('ta-maxlength'));
-          }
-        } catch(e) {
-          // Do nothing.
-        }
-
-        // Check if the element is a Text Angular element.
-        $scope.isTextAngular = field.hasClass('ta-root');
+        ['data-ng-', 'ng-', 'data-ta-', 'ta-', ''].some(function(prefix) {
+          var attr = $scope.isTextAngular ? 'max-text' : 'maxlength';
+          $scope.maxLength = parseInt(field.attr(prefix + attr));
+          return $scope.maxLength > 0;
+        });
         
-        // TextAngular code for content length.
+        // Content length.
         if ($scope.isTextAngular) {
-          $timeout(function() {
-            $scope.getTextAngularContentLength = function() {
-              var ta = textAngularManager.retrieveEditor($scope.name);
-              return angular.element(ta.scope.displayElements.text[0])
-                .text().length;
-            };          
-          });
-        }        
+          $scope.len = function() {
+            if (typeof $scope.model === 'string') {
+              return angular.element('<div>' + $scope.model + '</div>').text()
+                .trim().length;
+            }
+            return 0;
+          };
+        } else {
+          $scope.len = function() {
+            if (typeof $scope.model === 'string') {
+              return $scope.model.length;
+            }
+            return 0;
+          };
+        }
       }
     };
   }

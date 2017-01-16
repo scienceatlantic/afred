@@ -5,12 +5,12 @@ angular.module('afredApp').controller('AdminOrganizationsCreateController', [
   'confirmModal',
   'infoModal',
   'warningModal',
-  'organizationResource',
+  'OrganizationResource',
   function($scope,
            confirmModal,
            infoModal,
            warningModal,
-           organizationResource) {
+           OrganizationResource) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
@@ -84,11 +84,11 @@ angular.module('afredApp').controller('AdminOrganizationsCreateController', [
      * Holds the organization resource.
      * 
      * Uses/calls/requires:
-     * organizationResource()
+     * OrganizationResource()
      * 
      * @type {Angular resource}
      */
-    $scope.organization = new organizationResource();
+    $scope.organization = new OrganizationResource();
     
     /**
      * AJAX loading flags.

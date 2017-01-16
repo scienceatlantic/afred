@@ -1,4 +1,4 @@
-<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+<nav class="navbar navbar-default navbar-fixed-top">
   <div class="container">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -44,7 +44,8 @@
         <!-- Logged in user dropdown menu. -->
         <li role="presentation" class="dropdown" data-ng-show="_auth.user.id">
           <!-- Dropdown button. -->
-          <a class="dropdown-toggle" data-toggle="dropdown" href="" role="button" aria-haspopup="true" aria-expanded="false">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="" role="button" 
+             aria-haspopup="true" aria-expanded="false">
             Admin <span class="caret"></span>
           </a>
 
@@ -80,9 +81,9 @@
           </ul>
         </li>
 
-        <!-- Do not use ngIf for the following items, otherwise 
-          -- $scope.main.navbar.toggle() (in main controller) will not attach
-          -- to them.
+        <!-- 
+             Do not use ngIf for the following items, otherwise $scope.main.navbar.toggle() (in main controller) will 
+             not attach to them.
           -->
 
         <!-- Login button. -->
@@ -92,8 +93,10 @@
 
         <!-- Logout button. -->
         <li data-ng-show="_auth.user.id">
-          <a data-ui-sref="login" data-ng-click="_auth.logout()" data-af-loading-btn="_auth.loading.logout" data-af-loading-btn-text="Logging out...">
-            Logout
+          <a data-ui-sref="login" 
+             data-ng-click="_auth.logout()" 
+             data-af-loading-btn="_auth.loading.logout" 
+             data-af-loading-btn-text="Logging out..."> Logout
           </a>
         </li>
       </ul>

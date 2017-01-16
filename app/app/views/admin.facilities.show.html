@@ -12,7 +12,7 @@
 
       <div class="row">
         <!-- Facility state. -->
-        <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
+        <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.sm }">
           <label>State</label>
         </div>
       
@@ -21,108 +21,125 @@
             <b>
               <!-- Pending. -->
               <span class="text-info" 
-                    data-ng-if="facility.state == 'PENDING_APPROVAL'">
+                    data-ng-if="facility.state === 'PENDING_APPROVAL'">
                 PENDING APPROVAL
               </span>
               <span class="text-info" 
-                    data-ng-if="facility.state == 'PENDING_EDIT_APPROVAL'">
+                    data-ng-if="facility.state === 'PENDING_EDIT_APPROVAL'">
                 PENDING EDIT APPROVAL
               </span>
               
               <!-- Published and current. -->
               <span class="text-success" 
-                    data-ng-if="(facility.state == 'PUBLISHED' || facility.state == 'PUBLISHED_EDIT') && fr.publishedFacility.id && fr.facility.id">
+                    data-ng-if="(facility.state === 'PUBLISHED' || facility.state === 'PUBLISHED_EDIT') 
+                                 && fr.publishedFacility.id && fr.facility.id">
                 CURRENT PUBLISHED REVISION
               </span>
               
               <!-- Published but old. -->
               <span class="text-warning" 
-                    data-ng-if="(facility.state == 'PUBLISHED' || facility.state == 'PUBLISHED_EDIT') && !fr.publishedFacility.id && fr.facility.id">
+                    data-ng-if="(facility.state === 'PUBLISHED' || facility.state === 'PUBLISHED_EDIT')
+                                 && !fr.publishedFacility.id && fr.facility.id">
                 PREVIOUS PUBLISHED REVISION
               </span>
               
               <!-- Rejected. -->
               <span class="text-danger" 
-                    data-ng-if="facility.state == 'REJECTED'">
+                    data-ng-if="facility.state === 'REJECTED'">
                 REJECTED
               </span>
               
               <!-- Rejected edit. -->
               <span class="text-danger" 
-                    data-ng-if="facility.state == 'REJECTED_EDIT' && fr.facility.id">
+                    data-ng-if="facility.state === 'REJECTED_EDIT' && fr.facility.id">
                 REJECTED EDIT
               </span>
               
               <!-- Deleted. -->
               <span class="text-danger" 
-                    data-ng-if="(facility.state != 'PENDING' && facility.state != 'PENDING_APPROVAL' && facility.state != 'REJECTED') && !fr.facility.id">
+                    data-ng-if="(facility.state !== 'PENDING' 
+                                 && facility.state !== 'PENDING_APPROVAL' 
+                                 && facility.state !== 'REJECTED') 
+                                 && !fr.facility.id">
                 DELETED 
-                <span class="label label-default" data-ng-if="facility.state == 'PUBLISHED_EDIT'">Edit</span>
-                <span class="label label-default" data-ng-if="facility.state == 'REJECTED_EDIT'">Rejected edit</span>
+                <span class="label label-default" data-ng-if="facility.state === 'PUBLISHED_EDIT'">Edit</span>
+                <span class="label label-default" data-ng-if="facility.state === 'REJECTED_EDIT'">Rejected edit</span>
               </span>
             </b>
           </p>
           
           <!-- Current revision anchor (only shown if not already viewing current revision). -->
-          <p>
-            <span data-ng-if="!fr.publishedFacility.id && fr.facility.id">
+          <div data-ng-if="!fr.publishedFacility.id && fr.facility.id">
+            <p>
               <a data-ui-sref="admin.facilities.show({ facilityRepositoryId: fr.facility.facilityRepositoryId })">
                 Current published revision
               </a>
-              (<a data-ui-sref="admin.facilities.compare({ editedFrId: fr.id, originalFrId: fr.facility.facilityRepositoryId })">Compare</a>)
-            </span>
-          </p>
+            </p>
+
+            <p>
+              <a data-ui-sref="admin.facilities.compare({ editedFrId: fr.id, originalFrId: fr.facility.facilityRepositoryId })">
+                Compare
+              </a>
+            </p>
+          </div>
           
           <!-- Revision history anchor. -->
-          <p>
-            <span data-ng-if="fr.facilityId">
-              <a data-ui-sref="admin.facilities.history.index({ facilityId: fr.facilityId })">Revision history</a>
-            </span>
+          <p data-ng-if="fr.facilityId">
+            <a data-ui-sref="admin.facilities.history.index({ facilityId: fr.facilityId })">Revision history</a>
           </p>
           
           <!-- Published link anchor. -->
-          <p>
-            <span data-ng-if="fr.publishedFacility.id">
-              <a data-ui-sref="facilities.show({ facilityId: fr.publishedFacility.id })">View public record</a>
-            </span>
+          <p data-ng-if="fr.publishedFacility.id">
+            <a data-ui-sref="facilities.show({ facilityId: fr.publishedFacility.id })">View public record</a>
           </p>
         </div>
       </div>
 
-      <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.sm">
+      <br data-ng-if="_getWidth() < _bootstrap.sm">
 
       <!-- Search visiblity -->
       <div class="row">
-        <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
+        <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.sm }">
           <label>Search visibility</label>
         </div>
       
         <div class="col-sm-9">
-          <span data-ng-if="(facility.state == 'PUBLISHED' || facility.state == 'PUBLISHED_EDIT') && facility.isPublic">Public</span>
-          <span data-ng-if="(facility.state == 'PUBLISHED' || facility.state == 'PUBLISHED_EDIT') && !facility.isPublic">Private</span>
-          <span class="label label-default" data-ng-if="facility.state != 'PUBLISHED' && facility.state != 'PUBLISHED_EDIT'">N/A</span>        
+          <span data-ng-if="(facility.state === 'PUBLISHED' || facility.state === 'PUBLISHED_EDIT') 
+                             && facility.isPublic">
+            Public
+          </span>
+          <span data-ng-if="(facility.state === 'PUBLISHED' || facility.state === 'PUBLISHED_EDIT') 
+                             && !facility.isPublic">
+            Private
+          </span>
+          <span class="label label-default" 
+                data-ng-if="facility.state !== 'PUBLISHED' && facility.state !== 'PUBLISHED_EDIT'">
+            N/A
+          </span>        
         </div>
       </div>
 
-      <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.sm">
+      <br data-ng-if="_getWidth() < _bootstrap.sm">
       
       <!-- Reviewed by. -->
       <div class="row">
-        <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
+        <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.sm }">
           <label>Reviewed by</label>
         </div>
       
         <div class="col-sm-9">
-          {{ fr.reviewer.firstName }} {{ fr.reviewer.lastName }}
+          <a data-ui-sref="admin.users.show({ 'userId': fr.reviewer.id })">
+            {{ fr.reviewer.firstName }} {{ fr.reviewer.lastName }}
+          </a>
           <span class="label label-default" data-ng-if="!fr.reviewer.firstName">N/A</span>        
         </div>
       </div>
       
-      <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.sm">
+      <br data-ng-if="_getWidth() < _bootstrap.sm">
 
       <!-- Reviewer message. -->
       <div class="row">
-        <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
+        <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.sm }">
           <label>Reviewer message</label>
         </div>
       
@@ -142,11 +159,11 @@
         </div>
       </div>
       
-      <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.sm">
+      <br data-ng-if="_getWidth() < _bootstrap.sm">
 
       <!-- Date submitted. -->
       <div class="row">
-        <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
+        <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.sm }">
           <label>Date submitted</label>
         </div>
       
@@ -155,11 +172,11 @@
         </div>
       </div>
       
-      <br data-ng-if="_getWidth() < _bootstrap.grid.breakpoints.sm">
+      <br data-ng-if="_getWidth() < _bootstrap.sm">
 
       <!-- Date reviewed. -->
       <div class="row">
-        <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
+        <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.sm }">
           <label>Date reviewed</label>
         </div>
       
@@ -182,12 +199,12 @@
   </div>
   
   <!-- Code for 'PENDING' and 'PENDING_EDIT_APPROVAL' records. -->
-  <div data-ng-if="facility.state == 'PENDING_APPROVAL' || facility.state == 'PENDING_EDIT_APPROVAL'">
+  <div data-ng-if="facility.state === 'PENDING_APPROVAL' || facility.state === 'PENDING_EDIT_APPROVAL'">
     <hr>
     
     <!-- Reviewer message textbox. -->
     <div class="row">
-      <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.grid.breakpoints.sm }">
+      <div class="col-sm-3" data-ng-class="{ 'text-right': _getWidth() >= _bootstrap.sm }">
         <label>Reviewer message</label>
         <p>This is optional. It will be included in the email to the primary contact</p>
       </div>
@@ -204,7 +221,7 @@
       <button type="button" 
               class="btn btn-default" 
               data-ng-click="approve();" 
-              data-ng-if="facility.state == 'PENDING_APPROVAL'" 
+              data-ng-if="facility.state === 'PENDING_APPROVAL'" 
               data-af-loading-btn="loading.approve" 
               data-ng-disabled="loading.approve 
                                 || loading.reject 
@@ -220,7 +237,7 @@
       <button type="button" 
               class="btn btn-default" 
               data-ng-click="reject();" 
-              data-ng-if="facility.state == 'PENDING_APPROVAL'" 
+              data-ng-if="facility.state === 'PENDING_APPROVAL'" 
               data-af-loading-btn="loading.reject" 
               data-ng-disabled="loading.approve 
                                 || loading.reject 
@@ -236,7 +253,7 @@
       <button type="button" 
               class="btn btn-default" 
               data-ng-click="approveEdit();" 
-              data-ng-if="facility.state == 'PENDING_EDIT_APPROVAL'" 
+              data-ng-if="facility.state === 'PENDING_EDIT_APPROVAL'" 
               data-af-loading-btn="loading.approveEdit"
               data-ng-disabled="loading.approve 
                                 || loading.reject 
@@ -252,7 +269,7 @@
       <button type="button" 
               class="btn btn-default" 
               data-ng-click="rejectEdit();" 
-              data-ng-if="facility.state == 'PENDING_EDIT_APPROVAL'" 
+              data-ng-if="facility.state === 'PENDING_EDIT_APPROVAL'" 
               data-af-loading-btn="loading.rejectEdit" 
               data-ng-disabled="loading.approve 
                                 || loading.reject 
@@ -268,7 +285,7 @@
   </div>
   
   <!-- Code for current 'PUBLISHED' or 'PUBLISHED_EDIT' records. -->
-  <div data-ng-if="(facility.state == 'PUBLISHED' || facility.state == 'PUBLISHED_EDIT') && fr.publishedFacility.id">
+  <div data-ng-if="(facility.state === 'PUBLISHED' || facility.state === 'PUBLISHED_EDIT') && fr.publishedFacility.id">
     <button type="button" 
             class="btn btn-default" 
             data-ng-click="unhide()" 

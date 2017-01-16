@@ -2,47 +2,47 @@
 
 <h1 class="h3">Admin / Dashboard</h1>
 
-<div data-af-loading="loading.stats">
+<div data-af-loading="!stats.$resolved">
   <p class="lead">Facilities</p>
   
   <div class="row">
-    <div data-af-dashboard-value="stats.data.facilities.published.total" 
+    <div data-af-dashboard-value="stats.facilities.published.total" 
          data-af-dashboard-value-label="PUBLISHED - TOTAL">
     </div>
     
-    <div data-af-dashboard-value="stats.data.facilities.published.public" 
+    <div data-af-dashboard-value="stats.facilities.published.public" 
          data-af-dashboard-value-label="PUBLISHED - PUBLIC" 
          data-af-dashboard-value-sref="admin.facilities.index({ state: 'PUBLISHED', visibility: 1 })">
     </div>
     
-    <div data-af-dashboard-value="stats.data.facilities.published.private" 
+    <div data-af-dashboard-value="stats.facilities.published.private" 
          data-af-dashboard-value-label="PUBLISHED - PRIVATE" 
          data-af-dashboard-value-sref="admin.facilities.index({ state: 'PUBLISHED', visibility: 0 })">
     </div>
   </div>
   
   <div class="row">
-    <div data-af-dashboard-value="stats.data.facilities.pendingApproval + stats.data.facilities.pendingEditApproval" 
+    <div data-af-dashboard-value="stats.facilities.pendingApproval + stats.facilities.pendingEditApproval" 
          data-af-dashboard-value-label="PENDING - TOTAL" 
          data-af-dashboard-value-sref="admin.facilities.index({ state: 'PENDING_APPROVAL' })">
     </div>
     
-    <div data-af-dashboard-value="stats.data.facilities.pendingApproval" 
+    <div data-af-dashboard-value="stats.facilities.pendingApproval" 
          data-af-dashboard-value-label="PENDING - NEW">
     </div>
 
-    <div data-af-dashboard-value="stats.data.facilities.pendingEditApproval" 
+    <div data-af-dashboard-value="stats.facilities.pendingEditApproval" 
          data-af-dashboard-value-label="PENDING - EDITS">
     </div>
   </div>
 
   <div class="row">
-    <div data-af-dashboard-value="stats.data.facilities.rejected" 
+    <div data-af-dashboard-value="stats.facilities.rejected" 
          data-af-dashboard-value-label="REJECTED" 
          data-af-dashboard-value-sref="admin.facilities.index({ state: 'REJECTED' })">
     </div>
     
-    <div data-af-dashboard-value="stats.data.facilities.deleted" 
+    <div data-af-dashboard-value="stats.facilities.deleted" 
          data-af-dashboard-value-label="DELETED" 
          data-af-dashboard-value-sref="admin.facilities.index({ state: 'DELETED' })">
     </div>
@@ -51,25 +51,25 @@
   <p class="lead">Equipment</p>
   
   <div class="row">
-    <div data-af-dashboard-value="stats.data.equipment.total" 
+    <div data-af-dashboard-value="stats.equipment.total" 
          data-af-dashboard-value-label="TOTAL">
     </div>
     
-    <div data-af-dashboard-value="stats.data.equipment.public" 
+    <div data-af-dashboard-value="stats.equipment.public" 
          data-af-dashboard-value-label="PUBLIC">
     </div>
     
-    <div data-af-dashboard-value="stats.data.equipment.private" 
+    <div data-af-dashboard-value="stats.equipment.private" 
          data-af-dashboard-value-label="PRIVATE">
     </div>
   </div>
   
   <div class="row">
-    <div data-af-dashboard-value="stats.data.equipment.hasExcessCapacity" 
+    <div data-af-dashboard-value="stats.equipment.hasExcessCapacity" 
          data-af-dashboard-value-label="HAS EXCESS CAPACITY">
     </div>
     
-    <div data-af-dashboard-value="stats.data.equipment.noExcessCapacity" 
+    <div data-af-dashboard-value="stats.equipment.noExcessCapacity" 
          data-af-dashboard-value-label="NO EXCESS CAPACITY">
     </div>
   </div>  

@@ -9,9 +9,9 @@
 
 angular.module('afredApp').controller('AdminFacilitiesController',
   ['$scope',
-   'facilityRepositoryResource',
+   'RepositoryResource',
   function($scope,
-           facilityRepositoryResource) {
+           RepositoryResource) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
@@ -154,13 +154,13 @@ angular.module('afredApp').controller('AdminFacilitiesController',
        * $scope.facilities.fr Promise object is attached to this.
        *
        * Uses/calls/requires:
-       * facilityRepositoryResource
+       * RepositoryResource
        * $scope.facility.form.data.page
        * $scope.facility.form.data.state
        * $scope._httpError403()
        */
       query: function() {
-        $scope.facilities.fr = facilityRepositoryResource.query({
+        $scope.facilities.fr = RepositoryResource.query({
           page: $scope.facilities.form.data.page,
           itemsPerPage: 10,
           state: $scope.facilities.form.data.state,

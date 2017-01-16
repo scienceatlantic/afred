@@ -5,14 +5,14 @@ angular.module('afredApp').controller('AdminUsersCreateController', [
   'confirmModal',
   'infoModal',
   'warningModal',
-  'userResource',
-  'roleResource',
+  'UserResource',
+  'RoleResource',
   function($scope,
            confirmModal,
            infoModal,
            warningModal,
-           userResource,
-           roleResource) {
+           UserResource,
+           RoleResource) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
@@ -93,16 +93,16 @@ angular.module('afredApp').controller('AdminUsersCreateController', [
      * Holds the user resource.
      * 
      * Uses/calls/requires:
-     * userResource()
+     * UserResource()
      * 
      * @type {Angular resource}
      */
-    $scope.user = new userResource();
+    $scope.user = new UserResource();
 
     /**
      * 
      */
-    $scope.roles = roleResource.queryNoPaginate();
+    $scope.roles = RoleResource.queryNoPaginate();
     $scope.roles.$promise.then(function(roles) {
       angular.forEach(roles, function(role) {
         role.isSelected = false;

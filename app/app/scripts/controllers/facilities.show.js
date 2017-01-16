@@ -3,10 +3,10 @@
 angular.module('afredApp').controller('FacilitiesShowController',
   ['$scope',
    '$uibModal',
-   'facilityResource',
+   'FacilityResource',
   function($scope,
            $uibModal,
-           facilityResource) {
+           FacilityResource) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
@@ -16,7 +16,7 @@ angular.module('afredApp').controller('FacilitiesShowController',
      */
     $scope.facilities = {
       /**
-       * Data returned from facilityResource.
+       * Data returned from FacilityResource.
        *
        * @type {Angular resource}
        */
@@ -29,13 +29,13 @@ angular.module('afredApp').controller('FacilitiesShowController',
        * $scope.facilities.resource Data retrieved is stored here.
        *
        * Calls/requires/uses:
-       * facilityResource
+       * FacilityResource
        * $scope._stateParans.facilityId
        * $scope.facilities.format()
        * $scope._httpError()
        */
       get: function() {
-        $scope.facilities.resource = facilityResource.get({
+        $scope.facilities.resource = FacilityResource.get({
           facilityId: $scope._stateParams.facilityId
         }, function() {
           $scope.facilities.format();
@@ -49,7 +49,7 @@ angular.module('afredApp').controller('FacilitiesShowController',
        */
       equipment: {
         /**
-         * Data returned from facilityResource.
+         * Data returned from FacilityResource.
          *
          * @type {Angular resource}
          */
@@ -63,17 +63,17 @@ angular.module('afredApp').controller('FacilitiesShowController',
          *
          * Side effects:
          * $scope.facilities.equipment.resource Stores data return from
-         *     facilityResource.
+         *     FacilityResource.
          *
          * Calls/uses/requires:
-         * facilityResource
+         * FacilityResource
          * $scope._stateParams.facilityId
          * $scope._stateParams.equipmentId
          * $scope.facilities.format()
          * $scope._httpError()
          */
         get: function() {
-          $scope.facilities.equipment.resource = facilityResource.get({
+          $scope.facilities.equipment.resource = FacilityResource.get({
             facilityId: $scope._stateParams.facilityId,
             equipmentId: $scope._stateParams.equipmentId
           }, function() {

@@ -5,12 +5,12 @@ angular.module('afredApp').controller('AdminSectorsShowController', [
   'confirmModal',
   'infoModal',
   'warningModal',
-  'sectorResource',
+  'SectorResource',
   function($scope,
            confirmModal,
            infoModal,
            warningModal,
-           sectorResource) {
+           SectorResource) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
@@ -128,7 +128,7 @@ angular.module('afredApp').controller('AdminSectorsShowController', [
      * 
      * @type {Angular resource}
      */
-    $scope.sector = sectorResource.get($scope._stateParams,
+    $scope.sector = SectorResource.get($scope._stateParams,
       function() {
         $scope.sectorCopy = angular.copy($scope.sector);
       }, function(response) {

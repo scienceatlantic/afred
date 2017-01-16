@@ -22,25 +22,29 @@
             </span>
 
             <!-- Previous published revision. -->
-            <span class="text-warning" data-ng-if="!f.publishedFacility.id && f.state != 'PENDING_EDIT_APPROVAL' && f.facility.id && f.state != 'REJECTED_EDIT'">
+            <span class="text-warning" 
+                  data-ng-if="!f.publishedFacility.id 
+                              && f.state !== 'PENDING_EDIT_APPROVAL' 
+                              && f.facility.id 
+                              && f.state != 'REJECTED_EDIT'">
               PREVIOUS PUBLISHED REVISION
             </span>
 
             <!-- Pending edit approval. -->
-            <span class="text-info" data-ng-if="f.state == 'PENDING_EDIT_APPROVAL'">
+            <span class="text-info" data-ng-if="f.state === 'PENDING_EDIT_APPROVAL'">
               PENDING EDIT APPROVAL
             </span>
 
             <!-- Rejected edit. -->
-            <span class="text-danger" data-ng-if="f.facility.id && f.state == 'REJECTED_EDIT'">
+            <span class="text-danger" data-ng-if="f.facility.id && f.state === 'REJECTED_EDIT'">
               REJECTED EDIT
             </span>
 
             <!-- Deleted. -->
             <span class="text-danger" data-ng-if="!f.facility.id">
               DELETED
-              <span class="label label-default" data-ng-if="f.state == 'PUBLISHED_EDIT'">Edit</span>
-              <span class="label label-default" data-ng-if="f.state == 'REJECTED_EDIT'">Rejected edit</span>
+              <span class="label label-default" data-ng-if="f.state === 'PUBLISHED_EDIT'">Edit</span>
+              <span class="label label-default" data-ng-if="f.state === 'REJECTED_EDIT'">Rejected edit</span>
             </span>
           </b>
         </p>

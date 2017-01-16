@@ -2,9 +2,9 @@
 
 angular.module('afredApp').controller('AdminProvincesController', [
   '$scope',
-  'provinceResource',
+  'ProvinceResource',
   function($scope,
-           provinceResource) {
+           ProvinceResource) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
@@ -24,7 +24,7 @@ angular.module('afredApp').controller('AdminProvincesController', [
       },
       
       /**
-       * Holds the data returned from 'provinceResource'.
+       * Holds the data returned from 'ProvinceResource'.
        * @type {resource}
        */
       resource: {},
@@ -59,12 +59,12 @@ angular.module('afredApp').controller('AdminProvincesController', [
        * $scope.province.resource Data returned is attached to this.
        *
        * Uses/calls/requires:
-       * provinceResource
+       * ProvinceResource
        * $scope.provinces.form.data.page
        * $scope._httpError403()
        */
       query: function() {
-        $scope.provinces.resource = provinceResource.query({
+        $scope.provinces.resource = ProvinceResource.query({
           page: $scope.provinces.form.data.page,
           itemsPerPage: 10
         }, function() {

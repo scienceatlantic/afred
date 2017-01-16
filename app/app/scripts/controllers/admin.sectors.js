@@ -2,9 +2,9 @@
 
 angular.module('afredApp').controller('AdminSectorsController', [
   '$scope',
-  'sectorResource',
+  'SectorResource',
   function($scope,
-           sectorResource) {
+           SectorResource) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
@@ -24,7 +24,7 @@ angular.module('afredApp').controller('AdminSectorsController', [
       },
       
       /**
-       * Holds the data returned from 'sectorResource'.
+       * Holds the data returned from 'SectorResource'.
        * @type {resource}
        */
       resource: {},
@@ -59,12 +59,12 @@ angular.module('afredApp').controller('AdminSectorsController', [
        * $scope.sector.resource Data returned is attached to this.
        *
        * Uses/calls/requires:
-       * sectorResource
+       * SectorResource
        * $scope.sectors.form.data.page
        * $scope._httpError403()
        */
       query: function() {
-        $scope.sectors.resource = sectorResource.query({
+        $scope.sectors.resource = SectorResource.query({
           page: $scope.sectors.form.data.page,
           itemsPerPage: 10
         }, function() {

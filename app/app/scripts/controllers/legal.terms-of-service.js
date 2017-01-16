@@ -1,22 +1,22 @@
 'use strict';
 
 /**
- * @fileoverview Disclaimer page. Content is retrieved from WordPress.
+ * @fileoverview Terms of Service page. Content is retrieved from WordPress.
  * 
  * @see https://docs.angularjs.org/guide/controller
- * @see /scripts/routes.js (for route info)
+ * @see /scripts/routes.js
  */
 
-angular.module('afredApp').controller('AboutLegalDisclaimerController',
+angular.module('afredApp').controller('LegalTermsOfServiceController',
   ['$scope',
-   'wpResource',
+   'WpResource',
   function($scope,
-           wpResource) {
+           WpResource) {
     /* ---------------------------------------------------------------------
      * Initialisation code.
      * --------------------------------------------------------------------- */
     
-    $scope.wp = wpResource.getPage($scope._env.wp.pages['disclaimer']);
+    $scope.wp = WpResource.getPage($scope._env.wp.pages['terms of service']);
     $scope.wp.$promise.then(null, function(response) {
       $scope._httpError(response);
     });

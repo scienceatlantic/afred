@@ -2,9 +2,9 @@
 
 angular.module('afredApp').controller('ContactController',
   ['$scope',
-   'emailResource',
+   'EmailResource',
   function($scope,
-           emailResource) {
+           EmailResource) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
@@ -13,16 +13,16 @@ angular.module('afredApp').controller('ContactController',
      * Submits form data to API.
      *
      * Side effects:
-     * $scope.resource Angular resource returned from 'emailResource' is stored
+     * $scope.resource Angular resource returned from 'EmailResource' is stored
      *     here.
      * $scope.view.show Is set to 'SUCCESS' on success, or 'FAILURE' on failure.
      * 
      * Calls/uses/requires:
-     * emailResource
+     * EmailResource
      * $scope.message
      */
     $scope.submit = function() {
-      $scope.resource = emailResource.contactForm($scope.message, function() {        
+      $scope.resource = EmailResource.contactForm($scope.message, function() {        
         $scope.view.show = 'SUCCESS';
       }, function() {
         $scope.view.show = 'FAILURE';
@@ -61,7 +61,7 @@ angular.module('afredApp').controller('ContactController',
     };
     
     /**
-     * Holds data returned from emailResource.
+     * Holds data returned from EmailResource.
      *
      * @type {Angular resource}
      */

@@ -4,6 +4,9 @@
 # Komodo Edit configuration file
 *.komodoproject
 
+# Microsoft Visual Studio Code files
+.vscode
+
 # VIM, etc temporary files on GNU/Linux machines.
 *~
 

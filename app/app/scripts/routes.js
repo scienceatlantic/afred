@@ -93,25 +93,25 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         templateUrl: 'views/about.html',
         controller: 'AboutController'
       }).
-      state('about.legal', {
+      state('legal', {
         'abstract': true,
         url: '/legal',
         template: '<div data-ui-view></div>'
       }).
-      state('about.legal.privacyPolicy', {
+      state('legal.privacyPolicy', {
         url: '/privacy-policy',
-        templateUrl: 'views/about.legal.privacy-policy.html',
-        controller: 'AboutLegalPrivacyPolicyController'
+        templateUrl: 'views/legal.privacy-policy.html',
+        controller: 'LegalPrivacyPolicyController'
       }).
-      state('about.legal.termsOfService', {
+      state('legal.termsOfService', {
         url: '/terms-of-service',
-        templateUrl: 'views/about.legal.terms-of-service.html',
-        controller: 'AboutLegalTermsOfServiceController'
+        templateUrl: 'views/legal.terms-of-service.html',
+        controller: 'LegalTermsOfServiceController'
       }).
-      state('about.legal.disclaimer', {
+      state('legal.disclaimer', {
         url: '/disclaimer',
-        templateUrl: 'views/about.legal.disclaimer.html',
-        controller: 'AboutLegalDisclaimerController'
+        templateUrl: 'views/legal.disclaimer.html',
+        controller: 'LegalDisclaimerController'
       }).
       state('contact', {
         url: '/contact',
@@ -286,8 +286,7 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
       }).
       state('error', {
         'abstract': true,
-        templateUrl: 'views/error.html',
-        controller: 'ErrorController'
+        templateUrl: 'views/error.html'
       }).
       state('error.403', {
         templateUrl: 'views/error.403.html'

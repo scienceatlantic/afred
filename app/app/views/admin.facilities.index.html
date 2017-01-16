@@ -15,7 +15,10 @@
         <a data-ui-sref="admin.facilities.show({ facilityRepositoryId: f.id })">
           {{ f.data.facility.name }}
         </a>
-        <span class="label label-info" data-ng-if="f.state == 'PENDING_EDIT_APPROVAL' || f.state == 'REJECTED_EDIT'">Edit</span>
+        <span class="label label-info" 
+              data-ng-if="f.state === 'PENDING_EDIT_APPROVAL' || f.state === 'REJECTED_EDIT'">
+          Edit
+        </span>
       </p>
     </div>
     

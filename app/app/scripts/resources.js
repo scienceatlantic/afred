@@ -5,7 +5,7 @@
  * @see https://docs.angularjs.org/api/ngResource/service/$resource
  */
 
-angular.module('afredApp').factory('facilityResource',
+angular.module('afredApp').factory('FacilityResource',
   ['$rootScope',
    '$resource',
    function($rootScope,
@@ -27,7 +27,7 @@ angular.module('afredApp').factory('facilityResource',
   }
 ]);
 
-angular.module('afredApp').factory('facilityRepositoryResource',
+angular.module('afredApp').factory('RepositoryResource',
   ['$rootScope',
    '$resource',
    function($rootScope,
@@ -107,24 +107,7 @@ angular.module('afredApp').factory('facilityRepositoryResource',
   }
 ]);
 
-angular.module('afredApp').factory('searchResource',
-  ['$rootScope',
-   '$resource',
-   function($rootScope,
-            $resource) {
-    // Alias to shorten code.
-    var root = $rootScope._env.api.address;
-    
-    return $resource(root + '/search', null, {
-      query: {
-        method: 'GET',
-        isArray: false
-      }
-    });
-  }
-]);
-
-angular.module('afredApp').factory('organizationResource',
+angular.module('afredApp').factory('OrganizationResource',
   ['$rootScope',
    '$resource',
    function($rootScope,
@@ -153,7 +136,7 @@ angular.module('afredApp').factory('organizationResource',
   }
 ]);
 
-angular.module('afredApp').factory('iloResource',
+angular.module('afredApp').factory('IloResource',
   ['$rootScope',
    '$resource',
    function($rootScope,
@@ -182,7 +165,7 @@ angular.module('afredApp').factory('iloResource',
   }
 ]);
 
-angular.module('afredApp').factory('provinceResource',
+angular.module('afredApp').factory('ProvinceResource',
   ['$rootScope',
    '$resource',
    function($rootScope,
@@ -211,7 +194,7 @@ angular.module('afredApp').factory('provinceResource',
   }
 ]);
 
-angular.module('afredApp').factory('disciplineResource',
+angular.module('afredApp').factory('DisciplineResource',
   ['$rootScope',
    '$resource',
    function($rootScope,
@@ -239,7 +222,7 @@ angular.module('afredApp').factory('disciplineResource',
   }
 ]);
 
-angular.module('afredApp').factory('sectorResource',
+angular.module('afredApp').factory('SectorResource',
   ['$rootScope',
    '$resource',
    function($rootScope,
@@ -268,7 +251,7 @@ angular.module('afredApp').factory('sectorResource',
   }
 ]);
 
-angular.module('afredApp').factory('userResource',
+angular.module('afredApp').factory('UserResource',
   ['$rootScope',
    '$resource',
    function($rootScope,
@@ -297,7 +280,7 @@ angular.module('afredApp').factory('userResource',
   }
 ]);
 
-angular.module('afredApp').factory('roleResource',
+angular.module('afredApp').factory('RoleResource',
   ['$rootScope',
    '$resource',
    function($rootScope,
@@ -323,7 +306,7 @@ angular.module('afredApp').factory('roleResource',
   }
 ]);
 
-angular.module('afredApp').factory('emailResource',
+angular.module('afredApp').factory('EmailResource',
   ['$rootScope',
    '$resource',
    function($rootScope,
@@ -348,7 +331,7 @@ angular.module('afredApp').factory('emailResource',
   }
 ]);
 
-angular.module('afredApp').factory('wpResource',
+angular.module('afredApp').factory('WpResource',
   ['$rootScope',
    '$resource',
    function($rootScope,
@@ -357,6 +340,59 @@ angular.module('afredApp').factory('wpResource',
     var root = $rootScope._env.wp.address;
     var username = $rootScope._env.wp.appAuth.username;
     var password = $rootScope._env.wp.appAuth.password;
+
+    // If `window.btoa` is not supported (i.e. < IE 10).
+    // @see https://scotch.io/tutorials/how-to-encode-and-decode-strings-with-base64-in-javascript
+    if (!window.btoa) {
+      var base64 = {
+        _keyStr: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=',
+        encode: function(e) {
+          var t = '';
+          var n, r, i, s, o, u, a;
+          var f = 0;
+          e = base64._utf8_encode(e);
+          while (f < e.length) {
+            n = e.charCodeAt(f++);
+            r = e.charCodeAt(f++);
+            i = e.charCodeAt(f++);
+            s = n >> 2;
+            o = (n & 3) << 4 | r >> 4;
+            u = (r & 15) << 2 | i >> 6;
+            a = i & 63;
+            if (isNaN(r)) {
+              u = a = 64;
+            } else if (isNaN(i)) {
+              a = 64;
+            }
+            t = t + base64._keyStr.charAt(s) + 
+              base64._keyStr.charAt(o) + 
+              base64._keyStr.charAt(u) + 
+              base64._keyStr.charAt(a);
+          }
+          return t;
+        },
+        _utf8_encode: function(e) {
+          e = e.replace(/rn/g, 'n');
+          var t = '';
+          for (var n = 0; n < e.length; n++) {
+            var r = e.charCodeAt(n);
+            if (r < 128) {
+              t += String.fromCharCode(r);
+            } else if (r > 127 && r < 2048) {
+              t += String.fromCharCode(r >> 6 | 192);
+              t += String.fromCharCode(r & 63 | 128);
+            } else {
+              t += String.fromCharCode(r >> 12 | 224);
+              t += String.fromCharCode(r >> 6 & 63 | 128);
+              t += String.fromCharCode(r & 63 | 128);
+            }
+          }
+          return t;
+        }
+      };
+
+      window.btoa = base64.encode;
+    }
     
     var headers = {
       'Authorization': 'Basic ' + btoa(username + ':' + password),
@@ -383,7 +419,7 @@ angular.module('afredApp').factory('wpResource',
   }
 ]);
 
-angular.module('afredApp').factory('homeResource',
+angular.module('afredApp').factory('MiscResource',
   ['$rootScope',
    '$resource',
    function($rootScope,
@@ -391,6 +427,6 @@ angular.module('afredApp').factory('homeResource',
     // Alias to shorten code.
     var root = $rootScope._env.api.address;
     
-    return $resource(root + '/home');
+    return $resource(root + '/misc');
   }
 ]);

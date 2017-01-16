@@ -2,11 +2,13 @@
   <br>
   <form class="form-horizontal" name="organizationForm" role="form" novalidate>
     <div data-af-field data-af-field-label="ID*">
-      <input type="text" class="form-control" name="organizationId" data-ng-model="organization.id" disabled required>
+      <input type="text" class="form-control" name="organizationId"
+             data-ng-model="organization.id" disabled required>
     </div>
     
     <div data-af-field data-af-field-label="Name*" data-af-field-model="organization.name">
-      <input type="text" class="form-control" name="organizationName" data-ng-model="organization.name" placeholder="E.g. Acadia University" maxlength="150" required>
+      <input type="text" class="form-control" name="organizationName"
+             data-ng-model="organization.name" placeholder="E.g. Acadia University" maxlength="150" required>
     </div>
     
     <div data-af-field data-af-field-label="Is hidden*">
@@ -19,11 +21,13 @@
     </div>
     
     <div data-af-field data-af-field-label="Date created*">
-      <input type="text" class="form-control" name="organizationCreatedDate" data-ng-model="organization.dateCreated" disabled required>
+      <input type="text" class="form-control" name="organizationCreatedDate"
+             data-ng-model="organization.dateCreated" disabled required>
     </div>
     
     <div data-af-field data-af-field-label="Date updated*">
-      <input type="text" class="form-control" name="organizationUpdatedDate" data-ng-model="organization.dateUpdated" disabled required>
+      <input type="text" class="form-control" name="organizationUpdatedDate"
+             data-ng-model="organization.dateUpdated" disabled required>
     </div>
     
     <p>
@@ -61,43 +65,56 @@
     </div>
     
     <div data-af-field data-af-field-label="Organization ID*" data-ng-if="ilo.id">
-      <input type="text" class="form-control" name="iloOrganizationId" data-ng-model="ilo.organizationId" required disabled>
+      <input type="text" class="form-control" name="iloOrganizationId"
+             data-ng-model="ilo.organizationId" required disabled>
     </div>
     
     <div data-af-field data-af-field-label="First name*" data-af-field-model="ilo.firstName">
-      <input type="text" class="form-control" name="iloFirstName" data-ng-model="ilo.firstName" maxlength="50" required>
+      <input type="text" class="form-control" name="iloFirstName"
+             data-ng-model="ilo.firstName" maxlength="50" required>
     </div>
     
     <div data-af-field data-af-field-label="Last name*" data-af-field-model="ilo.lastName">
-      <input type="text" class="form-control" name="iloLastName" data-ng-model="ilo.lastName" maxlength="50" required>
+      <input type="text" class="form-control" name="iloLastName"
+             data-ng-model="ilo.lastName" maxlength="50" required>
     </div>
     
     <div data-af-field data-af-field-label="Email*" data-af-field-model="ilo.email">
-      <input type="text" class="form-control" name="iloEmail" data-ng-model="ilo.email" maxlength="254" required>
+      <input type="text" class="form-control" name="iloEmail"
+             data-ng-model="ilo.email" maxlength="254" required>
     </div>
     
     <div data-af-field data-af-field-label="Telephone*">
-      <input type="text" class="form-control" name="iloTelephone" data-ng-model="ilo.telephone" data-ng-model-options="{ debounce: 500 }" data-ng-pattern="/^\d{10}$/" placeholder="5555555555" required>
+      <input type="text" class="form-control" name="iloTelephone"
+             data-ng-model="ilo.telephone" 
+             data-ng-model-options="{ debounce: 500 }" 
+             data-ng-pattern="/^\d{10}$/" placeholder="5555555555" required>
     </div>
     
     <div data-af-field data-af-field-label="Extension" data-af-field-model="ilo.extension">
-      <input type="text" class="form-control" name="iloExtension" maxlength="10" data-ng-model="ilo.extension">
+      <input type="text" class="form-control" name="iloExtension"
+             data-ng-model="ilo.extension" maxlength="10">
     </div>
     
     <div data-af-field data-af-field-label="Position*" data-af-field-model="ilo.extension">
-      <input type="text" class="form-control" name="iloPosition" maxlength="100" data-ng-model="ilo.position" required>
+      <input type="text" class="form-control" name="iloPosition"
+             data-ng-model="ilo.position" maxlength="100" required>
     </div>
     
     <div data-af-field data-af-field-label="Website" data-af-field-model="ilo.website">
-      <input type="url" class="form-control" name="iloWebsite" data-ng-model="ilo.website" data-ng-model-options="{ debounce: 500 }" maxlength="2083">
+      <input type="url" class="form-control" name="iloWebsite"
+             data-ng-model="ilo.website"
+             data-ng-model-options="{ debounce: 500 }" maxlength="2083">
     </div>
     
     <div data-af-field data-af-field-label="Date created" data-ng-if="ilo.id">
-      <input type="text" class="form-control" name="iloDateCreated" data-ng-model="ilo.dateCreated" required disabled>
+      <input type="text" class="form-control" name="iloDateCreated"
+             data-ng-model="ilo.dateCreated" required disabled>
     </div>
     
     <div data-af-field data-af-field-label="Date updated" data-ng-if="ilo.id">
-      <input type="text" class="form-control" name="iloDateUpdated" data-ng-model="ilo.dateUpdated" required disabled>
+      <input type="text" class="form-control" name="iloDateUpdated"
+             data-ng-model="ilo.dateUpdated" required disabled>
     </div>
     
     <p>

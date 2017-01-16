@@ -4,39 +4,51 @@
 
 <div class="row">
   <!-- Filters. -->
-  <div data-ng-show="_getWidth() >= _bootstrap.grid.breakpoints.md || search.filters.show" class="col-md-4">
+  <div data-ng-show="_getWidth() >= _bootstrap.md || search.filters.show" class="col-md-4">
     <div data-ng-include="'views/includes/search.filters.html'"></div>
   </div>
 
   <div class="col-md-8">
-    <form role="form" data-ng-submit="search.index()">
+    <form data-ng-submit="search.index()">
       <!-- Search bar. -->
       <div class="form-group">
         <input class="form-control input-lg" data-ng-model="search.query.q" placeholder="E.g. electron microscope">
       </div>
     
       <!-- 'Search' button. -->
-      <p  data-ng-class="{'af-inline-block': _getWidth() > _bootstrap.grid.breakpoints.md}">
+      <p  data-ng-class="{'af-inline-block': _getWidth() > _bootstrap.md}">
         <button type="submit" class="btn btn-default" data-ng-disabled="loading.search">
-          <span class="label label-warning" data-ng-show="!loading.search && search.query.q && (search.hasQueryChanged || (search.hasFiltersChanged && !_state.is('search.all')))">Update</span>
-          Search
-          <span class="fa fa-search"></span>
+          <span class="label label-warning"
+                style="padding-right: 3.5px; margin-right: 5px"
+                data-ng-show="!loading.search 
+                              && search.query.q
+                              && (search.hasQueryChanged || (search.hasFiltersChanged && !_state.is('search.all')))">
+            Update
+          </span>
+          Search <span class="fa fa-search"></span>
         </button>
       </p>
 
       <!-- 'Show all' button. -->
-      <p data-ng-class="{'af-inline-block': _getWidth() > _bootstrap.grid.breakpoints.md}">
-        <button type="button" class="btn btn-default" data-ng-click="search.index(true)" data-ng-disabled="loading.search">
-          <span class="label label-warning" data-ng-show="!loading.search && search.hasFiltersChanged && _state.is('search.all')">Update</span>
-          Show all (filters included)
-          <span class="fa fa-globe"></span>
+      <p data-ng-class="{'af-inline-block': _getWidth() > _bootstrap.md}">
+        <button type="button"
+                class="btn btn-default"
+                data-ng-click="search.index(true)"
+                data-ng-disabled="loading.search">
+          <span class="label label-warning"
+                style="padding-right: 3.5px; margin-right: 5px"
+                data-ng-show="!loading.search && search.hasFiltersChanged && _state.is('search.all')">
+            Update
+          </span>
+          Show all (filters included) <span class="fa fa-globe"></span>
         </button>     
       </p>
     </form>
 
     <!-- Show/Hide filters button. -->
-    <p data-ng-show="_getWidth() < _bootstrap.grid.breakpoints.md">
-      <button class="btn btn-default" data-ng-click="search.filters.toggle()">
+    <p data-ng-show="_getWidth() < _bootstrap.md">
+      <button class="btn btn-default"
+              data-ng-click="search.filters.toggle()">
         <span data-ng-show="!search.filters.show">Show filters</span>
         <span data-ng-show="search.filters.show">Hide filters</span>
         <span class="fa fa-filter"></span>

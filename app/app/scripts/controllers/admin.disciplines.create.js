@@ -12,12 +12,12 @@ angular.module('afredApp').controller('AdminDisciplinesCreateController', [
   'confirmModal',
   'infoModal',
   'warningModal',
-  'disciplineResource',
+  'DisciplineResource',
   function($scope,
            confirmModal,
            infoModal,
            warningModal,
-           disciplineResource) {
+           DisciplineResource) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
@@ -91,11 +91,11 @@ angular.module('afredApp').controller('AdminDisciplinesCreateController', [
      * Holds the discipline resource.
      * 
      * Uses/calls/requires:
-     * disciplineResource()
+     * DisciplineResource()
      * 
      * @type {Angular resource}
      */
-    $scope.discipline = new disciplineResource();
+    $scope.discipline = new DisciplineResource();
     
     /**
      * AJAX loading flags.

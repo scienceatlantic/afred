@@ -1,27 +1,31 @@
 <div>
   <!-- Facility. -->
-  <div data-ng-class="{ 'panel': !hidePanel, 'panel-default': !hidePanel }" data-ng-if="view == 'facility' || view == 'all'">
+  <div data-ng-class="{ 'panel': !hidePanel, 'panel-default': !hidePanel }" 
+       data-ng-if="view === 'facility' || view === 'all'">
     <div data-ng-class="{ 'panel-body': !hidePanel }">  
       <div data-ng-include="'views/directives/af-facility.facility.html'"></div>
     </div>
   </div>
   
   <!-- Contacts. -->
-  <div data-ng-class="{ 'panel': !hidePanel, 'panel-default': !hidePanel }" data-ng-if="view == 'contacts' || view == 'all'">
+  <div data-ng-class="{ 'panel': !hidePanel, 'panel-default': !hidePanel }" 
+       data-ng-if="view === 'contacts' || view === 'all'">
     <div data-ng-class="{ 'panel-body': !hidePanel }"> 
       <div data-ng-include="'views/directives/af-facility.contacts.html'"></div>
     </div>
   </div>    
   
   <!-- ILO. -->
-  <div data-ng-class="{ 'panel': !hidePanel, 'panel-default': !hidePanel }" data-ng-if="(view == 'ilo' || view == 'all') && facility.organization.ilo.firstName">
+  <div data-ng-class="{ 'panel': !hidePanel, 'panel-default': !hidePanel }" 
+       data-ng-if="(view === 'ilo' || view === 'all') && facility.organization.ilo.firstName">
     <div data-ng-class="{ 'panel-body': !hidePanel }"> 
       <div data-ng-include="'views/directives/af-facility.ilo.html'"></div>
     </div>
   </div>   
   
   <!-- Equipment. -->
-  <div data-ng-class="{ 'panel': !hidePanel, 'panel-default': !hidePanel }" data-ng-if="(view =='equipment' || view == 'all') && facility.equipment.length">
+  <div data-ng-class="{ 'panel': !hidePanel, 'panel-default': !hidePanel }" 
+       data-ng-if="(view === 'equipment' || view === 'all') && facility.equipment.length">
     <div data-ng-class="{ 'panel-body': !hidePanel }"> 
       <div data-ng-include="'views/directives/af-facility.equipment.html'"></div>
     </div>

@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('afredApp').controller('MainController',
-  ['$scope',
-   '$interval',
+  ['$interval',
+   '$scope',
    '$timeout',
-  function($scope,
-           $interval,
+  function($interval,
+           $scope,
            $timeout) {
     /* ---------------------------------------------------------------------
      * Functions.
@@ -36,7 +36,7 @@ angular.module('afredApp').controller('MainController',
             // Do not hide the navbar if the element that was clicked is a 
             // dropdown element that contains more nav options.
             var eClass = e.target.className;
-            if (eClass != 'caret' && eClass != 'dropdown-toggle') {
+            if (eClass !== 'caret' && eClass !== 'dropdown-toggle') {
               angular.element('.navbar-collapse').collapse('hide');
             }
           });
@@ -94,7 +94,7 @@ angular.module('afredApp').controller('MainController',
            */
           run: function() {
             // Alias to shorten code.
-            var s = $scope.main.footer.slider;
+            var slider = $scope.main.footer.slider;
             
             $interval(function() {
               // Hack fix. Some browsers don't properly render the change if the
@@ -104,14 +104,14 @@ angular.module('afredApp').controller('MainController',
               // index by 1, we're going to increase it by 0.1 (i.e. no images 
               // are shown) and then use the timeout function (with a delay of
               // 100ms) to increment it by 1 and then floor it back to an int.
-              s.currentImgIndex += 0.1;
+              slider.currentImgIndex += 0.1;
               $timeout(function() {
-                s.currentImgIndex = Math.floor(++s.currentImgIndex);
-                if (s.currentImgIndex === s.numImages) {
-                  s.currentImgIndex = 0;
+                slider.currentImgIndex = Math.floor(++slider.currentImgIndex);
+                if (slider.currentImgIndex === slider.numImages) {
+                  slider.currentImgIndex = 0;
                 }
               }, 100);        
-            }, s.interval);
+            }, slider.interval);
           }
         }       
       }

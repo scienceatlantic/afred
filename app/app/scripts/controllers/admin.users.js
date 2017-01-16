@@ -2,11 +2,11 @@
 
 angular.module('afredApp').controller('AdminUsersController', [
   '$scope',
-  'userResource',
-  'roleResource',
+  'UserResource',
+  'RoleResource',
   function($scope,
-           userResource,
-           roleResource) {
+           UserResource,
+           RoleResource) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
@@ -26,7 +26,7 @@ angular.module('afredApp').controller('AdminUsersController', [
       },
       
       /**
-       * Holds the data returned from 'userResource'.
+       * Holds the data returned from 'UserResource'.
        * @type {resource}
        */
       resource: {},
@@ -61,12 +61,12 @@ angular.module('afredApp').controller('AdminUsersController', [
        * $scope.user.resource Data returned is attached to this.
        *
        * Uses/calls/requires:
-       * userResource
+       * UserResource
        * $scope.users.form.data.page
        * $scope._httpError403()
        */
       query: function() {
-        $scope.users.resource = userResource.query({
+        $scope.users.resource = UserResource.query({
           page: $scope.users.form.data.page,
           itemsPerPage: 10
         }, function() {

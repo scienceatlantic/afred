@@ -1,4 +1,8 @@
-<div class="af-search-page-results" data-dir-paginate="f in search.results | itemsPerPage: search.resource.hitsPerPage" data-total-items="search.resource.nbHits" data-pagination-id="facilityResults" data-current-page="search.query.page">
+<div class="af-search-page-results" 
+     data-dir-paginate="f in search.results | itemsPerPage: search.resource.hitsPerPage" 
+     data-total-items="search.resource.nbHits" 
+     data-pagination-id="facilityResults" 
+     data-current-page="search.query.page">
   <a data-ui-sref="facilities.show({ facilityId: f.id })" target="_self">
     <div class="panel panel-default">
       <div class="panel-body">
@@ -27,7 +31,9 @@
         </p>
 
         <div data-ng-repeat="c in f._highlightResult.contacts">
-          <p data-ng-if="c.firstName.matchLevel != 'none' || c.lastName.matchLevel != 'none' || c.position.matchLevel != 'none'">
+          <p data-ng-if="c.firstName.matchLevel != 'none' 
+                         || c.lastName.matchLevel != 'none' 
+                         || c.position.matchLevel != 'none'">
             <span class="label label-default">Contact #{{ $index + 1 }}</span>
             <span data-ng-bind-html="c.firstName.value"></span>
             <span data-ng-bind-html="c.lastName.value"></span>
@@ -48,11 +54,19 @@
         </p>
 
         <p data-ng-if="f.description">
-          <span data-ng-bind-html="f._snippetResult.description.value || f.descriptionNoHtml | afEllipses:(f._snippetResult.description.value ? null : 170)"></span>
+          <span data-ng-bind-html="f._snippetResult.description.value || f.descriptionNoHtml 
+                                   | afEllipses:(f._snippetResult.description.value ? null : 170)">
+          </span>
         </p>
       </div>
     </div>
   </a>
 </div><!-- End of dir-paginate -->
 
-<div data-dir-pagination-controls data-pagination-id="facilityResults" data-on-page-change="_state.is('search.q') ? search.index(false, search.query.page, true) : search.index(true, search.query.page, true)" data-ng-disabled="true" data-max-size="_getWidth() < 400 ? 5 : 9"></div>
+<div data-dir-pagination-controls 
+     data-pagination-id="facilityResults" 
+     data-on-page-change="_state.is('search.q') ? 
+                          search.index(false, search.query.page, true) : search.index(true, search.query.page, true)" 
+     data-ng-disabled="true" 
+     data-max-size="_getWidth() < 400 ? 5 : 9">
+</div>

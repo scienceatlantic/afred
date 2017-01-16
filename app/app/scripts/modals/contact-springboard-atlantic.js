@@ -9,10 +9,10 @@
 
 angular.module('afredApp').controller('ContactSpringboardAtlanticModalController', [
   '$scope',
-  'emailResource',
+  'EmailResource',
   '$uibModalInstance',
   function($scope,
-           emailResource,
+           EmailResource,
            $uibModalInstance) {
     /* ---------------------------------------------------------------------
      * Functions.
@@ -25,11 +25,11 @@ angular.module('afredApp').controller('ContactSpringboardAtlanticModalController
      * $scope.view.show Set to 'SUCCESS' on success and 'FAILURE' on failure.
      *
      * Calls/uses/requires:
-     * $scope.resource Data returned from 'emailResource' is stored here.
-     * emailResource
+     * $scope.resource Data returned from 'EmailResource' is stored here.
+     * EmailResource
      */
     $scope.submit = function() {
-      $scope.resource = emailResource.springboardForm($scope.message,
+      $scope.resource = EmailResource.springboardForm($scope.message,
         function() {
           $scope.view.show = 'SUCCESS';  
       }, function() {
@@ -47,7 +47,7 @@ angular.module('afredApp').controller('ContactSpringboardAtlanticModalController
     $scope.modal = $uibModalInstance;
     
     /**
-     * Holds data returned from emailResource.
+     * Holds data returned from EmailResource.
      *
      * @type {Angular resource}
      */

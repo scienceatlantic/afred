@@ -6,7 +6,7 @@
 
   <!-- Search bar. -->
   <div class="text-center">
-    <form class="form-inline" role="form" data-ng-submit="search.q && search.run()">
+    <form class="form-inline" data-ng-submit="search.q && search.run()">
       <div class="form-group">
         <div class="input-group">
           <input class="form-control input-lg" data-ng-model="search.q" placeholder="E.g. electron microscope">
@@ -22,7 +22,8 @@
 </div>
 
 <!-- Submit your facility bar. -->
-<div class="af-home-submit-your-facility-bar" data-ng-class="{ 'text-center': _getWidth() < _bootstrap.grid.breakpoints.md }">
+<div class="af-home-submit-your-facility-bar" 
+     data-ng-class="{ 'text-center': _getWidth() < _bootstrap.md }">
   <div class="container">
     <div class="row">
       <div class="col-md-2">
@@ -33,20 +34,24 @@
 
       <div class="col-md-6">
         <p class="h2">
-          Do you have research <br data-ng-show="_getWidth() >= _bootstrap.grid.breakpoints.md">facilities or equipment?
+          Do you have research <br data-ng-show="_getWidth() >= _bootstrap.md">facilities or equipment?
         </p>
       </div>
 
       <div class="col-md-4">
         <p class="af-heading">
-          <button class="btn btn-default btn-lg btn-outline" data-ng-class="{ 'pull-right': _getWidth() >= _bootstrap.grid.breakpoints.md }" data-ui-sref="facilities.form.create">
+          <button class="btn btn-default btn-lg btn-outline" 
+                  data-ng-class="{ 'pull-right': _getWidth() >= _bootstrap.md }" 
+                  data-ng-click="_state.go('facilities.form.create')">
             Submit your facility <span class="fa fa-arrow-right"></span>
           </button>
         </p>
       </div>
     </div>
 
-    <p data-ng-class="{ 'pull-right': _getWidth() >= _bootstrap.grid.breakpoints.md }">Already submitted? <a data-ui-sref="facilities.update">Edit your facility here</a>.</p>
+    <p data-ng-class="{ 'pull-right': _getWidth() >= _bootstrap.md }">
+      Already submitted? <a data-ui-sref="facilities.update">Edit your facility here</a>.
+    </p>
   </div>
 </div>
 
@@ -58,7 +63,8 @@
     <div class="row">
       <div class="col-md-3">
         <div class="row">
-          <div data-ng-class="{ 'col-sm-3': _getWidth() >= _bootstrap.grid.breakpoints.md, 'col-sm-1': _getWidth() < _bootstrap.grid.breakpoints.md }">
+          <div data-ng-class="{ 'col-sm-3': _getWidth() >= _bootstrap.md,
+                                'col-sm-1': _getWidth() < _bootstrap.md }">
             <p class="h4">
               <span class="fa-stack fa-lg">
                 <span class="fa fa-circle fa-stack-2x"></span>
@@ -67,7 +73,8 @@
             </p>
           </div>
 
-          <div data-ng-class="{ 'col-sm-9': _getWidth() >= _bootstrap.grid.breakpoints.md, 'col-sm-11': _getWidth() < _bootstrap.grid.breakpoints.md }">
+          <div data-ng-class="{ 'col-sm-9': _getWidth() >= _bootstrap.md,
+                                'col-sm-11': _getWidth() < _bootstrap.md }">
             <p class="h4">Research Intensification</p>
           </div>
         </div>
@@ -80,7 +87,8 @@
 
       <div class="col-md-3">
         <div class="row">
-          <div data-ng-class="{ 'col-sm-3': _getWidth() >= _bootstrap.grid.breakpoints.md, 'col-sm-1': _getWidth() < _bootstrap.grid.breakpoints.md }">
+          <div data-ng-class="{ 'col-sm-3': _getWidth() >= _bootstrap.md,
+                                'col-sm-1': _getWidth() < _bootstrap.md }">
             <p class="h4">
               <span class="fa-stack fa-lg">
                 <span class="fa fa-circle fa-stack-2x"></span>
@@ -89,20 +97,19 @@
             </p>
           </div>
 
-          <div data-ng-class="{ 'col-sm-9': _getWidth() >= _bootstrap.grid.breakpoints.md, 'col-sm-11': _getWidth() < _bootstrap.grid.breakpoints.md }">
+          <div data-ng-class="{ 'col-sm-9': _getWidth() >= _bootstrap.md,
+                                'col-sm-11': _getWidth() < _bootstrap.md }">
             <p class="h4">Partnerships & Collaborations</p>
           </div>
         </div>
 
-        <p>
-          Foster new partnerships and collaborations between researchers, industry,
-          and government.
-        </p>
+        <p>Foster new partnerships and collaborations between researchers, industry, and government.</p>
       </div>
 
       <div class="col-md-3">
         <div class="row">
-          <div data-ng-class="{ 'col-sm-3': _getWidth() >= _bootstrap.grid.breakpoints.md, 'col-sm-1': _getWidth() < _bootstrap.grid.breakpoints.md }">
+          <div data-ng-class="{ 'col-sm-3': _getWidth() >= _bootstrap.md,
+                                'col-sm-1': _getWidth() < _bootstrap.md }">
             <p class="h4">
               <span class="fa-stack fa-lg">
                 <span class="fa fa-circle fa-stack-2x"></span>
@@ -111,20 +118,22 @@
             </p>
           </div>
 
-          <div data-ng-class="{ 'col-sm-9': _getWidth() >= _bootstrap.grid.breakpoints.md, 'col-sm-11': _getWidth() < _bootstrap.grid.breakpoints.md }">
+          <div data-ng-class="{ 'col-sm-9': _getWidth() >= _bootstrap.md,
+                                'col-sm-11': _getWidth() < _bootstrap.md }">
             <p class="h4">Cost Savings</p>
           </div>
         </div>
 
         <p>
-          Facilitate cost savings and speed to solutions through access to 
-          sophisticated technical infrastructure and expertise.
+          Facilitate cost savings and speed to solutions through access to sophisticated technical infrastructure and
+          expertise.
         </p>
       </div>
 
       <div class="col-md-3">
         <div class="row">
-          <div data-ng-class="{ 'col-sm-3': _getWidth() >= _bootstrap.grid.breakpoints.md, 'col-sm-1': _getWidth() < _bootstrap.grid.breakpoints.md }">
+          <div data-ng-class="{ 'col-sm-3': _getWidth() >= _bootstrap.md,
+                                'col-sm-1': _getWidth() < _bootstrap.md }">
             <p class="h4">
               <span class="fa-stack fa-lg">
                 <span class="fa fa-circle fa-stack-2x"></span>
@@ -133,14 +142,15 @@
             </p>
           </div>
 
-          <div data-ng-class="{ 'col-sm-9': _getWidth() >= _bootstrap.grid.breakpoints.md, 'col-sm-11': _getWidth() < _bootstrap.grid.breakpoints.md }">
+          <div data-ng-class="{ 'col-sm-9': _getWidth() >= _bootstrap.md,
+                                'col-sm-11': _getWidth() < _bootstrap.md }">
             <p class="h4">Revenue Generation</p>
           </div>
         </div>
 
         <p>
-          Create new income opportunities for infrastructure owners by listing 
-          equipment and facilities available for use.
+          Create new income opportunities for infrastructure owners by listing equipment and facilities available for
+          use.
         </p>
       </div>
     </div>
@@ -154,13 +164,18 @@
       <p class="h3">Have a Look</p>
       
       <div data-af-loading="!haveALook.$resolved">
-        <div data-ng-repeat="e in haveALook.equipment">
-          <p style="padding-bottom: 3px;">
-            <a data-ui-sref="facilities.show.equipment.show({ facilityId: e.facilityId, equipmentId: e.id })" target="_blank">
-              {{ e.type | afEllipses:(_getWidth() >= _bootstrap.grid.breakpoints.md ? 35 : null) }}<br>
-              <small class="text-muted">{{ e.purposeNoHtml | afEllipses:(_getWidth() >= _bootstrap.grid.breakpoints.md ? 100 : 200) }}</small>
-            </a>
-          </p>
+        <div data-af-http-error="!haveALook.equipment">
+          <div data-ng-repeat="e in haveALook.equipment">
+            <p style="padding-bottom: 3px;">
+              <a data-ui-sref="facilities.show.equipment.show({ facilityId: e.facilityId, equipmentId: e.id })"
+                target="_blank">
+                {{ e.type | afEllipses:(_getWidth() >= _bootstrap.md ? 35 : null) }}<br>
+                <small class="text-muted">
+                  {{ e.purposeNoHtml | afEllipses:(_getWidth() >= _bootstrap.md ? 100 : 200) }}
+                </small>
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -168,19 +183,24 @@
     <div class="col-md-4">
       <p class="h3">What's New</p>
       
-      <p>
-        <div data-af-loading="!whatsNew.$resolved">
+      <div data-af-loading="!whatsNew.$resolved">
+        <div data-af-http-error="!whatsNew.content.rendered">
           <div data-bind-html-compile="whatsNew.content.rendered"></div>
         </div>
-      </p>
+      </div> 
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-4" id="homepage-twitter-widget">
       <p class="h3">Recent Tweets</p>
 
-      <div data-af-loading="loading.twitter">
-        <p> 
-          <a class="twitter-timeline" data-chrome="noheader nofooter noborders" data-tweet-limit="2" href="https://twitter.com/AFREDatabase">Tweets by AFREDatabase</a>
+      <div data-af-loading="twitter.loaded === 0">
+        <p data-af-http-error="twitter.loaded === -1">
+          <a class="twitter-timeline" 
+             data-chrome="noheader nofooter noborders"
+             data-tweet-limit="2" href="https://twitter.com/AFREDatabase"
+             data-ng-init="twitter.init('homepage-twitter-widget')">
+            Tweets by AFREDatabase
+          </a>
         </p>
       </div>
     </div>
