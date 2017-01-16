@@ -427,7 +427,14 @@ class FacilityRepositoryController extends Controller
             $e->update();
         }
 
-        // Safe to update the search index.
+        // Remove the records from the indices (regardless of whether it's 
+        // already in there or not) first. This ensures that any deleted 
+        // equipment records (if this is an update) are removed from the 
+        // indices.
+        $f->unsearchable();
+        $f->equipment()->unsearchable();
+
+        // Push to search indices.
         $f->searchable();
         $f->equipment()->searchable();
         

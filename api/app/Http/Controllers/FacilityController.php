@@ -102,8 +102,10 @@ class FacilityController extends Controller
         // Update/remove facility from search index depending on visibility. 
         if ($f->isPublic) {
             $f->searchable();
+            $f->equipment()->searchable();
         } else {
             $f->unsearchable();
+            $f->equipment()->unsearchable();
         }
 
         return $this->toCcArray($f->toArray());
@@ -119,6 +121,12 @@ class FacilityController extends Controller
     {
         $f = Facility::findOrFail($id);
         $deletedFacility = $this->toCcArray($f->toArray());
+
+        // Remove all associated equipment from index. We do not have to do this 
+        // explicitly for the facility because that is done automatically when
+        // we run `$f->delete()`.
+        $f->equipment()->unsearchable();
+
         $f->delete();
         return $deletedFacility;
     }
