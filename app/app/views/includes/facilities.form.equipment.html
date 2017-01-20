@@ -43,9 +43,7 @@
       <div data-ng-form name="equipmentForm{{ $index }}">
         <div class="row" data-ng-show="form.equipmentIndex === $index">
           <div class="col-lg-12">
-            <div data-af-field 
-                 data-af-field-label="Type*" 
-                 data-af-field-model="e.type" 
+            <div data-af-field="Type*" 
                  data-af-field-tooltip="'The full name of the piece of equipment.'">
               <input type="text" class="form-control" name="equipmentType{{ $index }}" 
                      data-ng-model="e.type" 
@@ -54,18 +52,14 @@
                      required>
             </div>
             
-            <div data-af-field 
-                 data-af-field-label="Manufacturer" 
-                 data-af-field-model="e.manufacturer">
+            <div data-af-field="Manufacturer">
               <input type="text" class="form-control" name="equipmentManufacturer{{ $index }}" 
                      data-ng-model="e.manufacturer" 
                      placeholder="E.g. Hitachi Medical" 
                      data-ng-maxlength="100">
             </div>
 
-            <div data-af-field
-                 data-af-field-label="Model"
-                 data-af-field-model="e.model">
+            <div data-af-field="Model">
               <input type="text" class="form-control" name="equipmentModel{{ $index }}" 
                      data-ng-model="e.model" 
                      placeholder="E.g. Echelon Oval 1.5T Ultra-Wide MRI system" 
@@ -76,9 +70,7 @@
                  For this part, we have to use $index to make the names unique otherwise TextAngular will complain. The
                  same goes for equipment specifications.
               -->
-            <div data-af-field
-                 data-af-field-label="Equipment purpose*"
-                 data-af-field-model="e.purpose"
+            <div data-af-field="Equipment purpose*"
                  data-af-field-tooltip="'Provide a brief description of the piece of equipment, its functions, possible
                                          uses, special features, etc.'">
               <text-angular name="equipmentPurpose{{ $index }}" 
@@ -89,9 +81,7 @@
                             required></text-angular>
             </div>
             
-            <div data-af-field 
-                 data-af-field-label="Equipment specifications" 
-                 data-af-field-model="e.specifications" 
+            <div data-af-field="Equipment specifications" 
                  data-af-field-tooltip="'Include information such as dimensions, weight, power supply, battery life, 
                                          software, resolution, range, etc. Please include units of measurement.'">
               <text-angular name="equipmentSpecifications{{ $index }}" 
@@ -100,7 +90,7 @@
                             data-ta-max-text="2000"></text-angular>
             </div>
             
-            <div data-af-field data-af-field-label="Year purchased">
+            <div data-af-field="Year purchased">
               <input type="text" class="form-control" name="equipmentYearPurchased{{ $index }}" 
                      data-ng-model="e.yearPurchased"
                      data-ng-model-options="{ debounce: 500 }"
@@ -108,7 +98,7 @@
                      placeholder="E.g. 1995">
             </div>
             
-            <div data-af-field data-af-field-label="Year manufactured">
+            <div data-af-field="Year manufactured">
               <input type="text" class="form-control" name="equipmentYearManufactured{{ $index }}"
                      data-ng-model="e.yearManufactured"
                      data-ng-model-options="{ debounce: 500 }"
@@ -116,8 +106,7 @@
                      placeholder="E.g. 1990">
             </div>
             
-            <div data-af-field 
-                 data-af-field-label="Excess capacity*" 
+            <div data-af-field="Excess capacity*" 
                  data-af-field-tooltip="'Excess capacity means that the piece of equipment is not being fully utilized,
                                          that there is time available for it to be used by others or on other
                                          projects.'">
@@ -136,8 +125,7 @@
               </div>
             </div>
             
-            <div data-af-field
-                 data-af-field-label="Search visibility*"
+            <div data-af-field="Search visibility*"
                  data-af-field-tooltip="'To ensure that we have a complete listing of everything within your facility,
                                          please include all equipment, even that which you do not want publicly 
                                          viewable. If you do not want the piece of equipment to be publicly viewable,
@@ -154,9 +142,7 @@
               </div>
             </div>
             
-            <div data-af-field 
-                 data-af-field-label="Keywords" 
-                 data-af-field-model="e.keywords"
+            <div data-af-field="Keywords" 
                  data-af-field-tooltip="'Please include any common terms, acronyms, and/or associated words that apply
                                          to this piece of equipment. This improves the likelihood that it will appear in
                                          search results.'">

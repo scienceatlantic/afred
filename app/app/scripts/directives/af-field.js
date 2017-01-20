@@ -4,7 +4,7 @@
  * @fileoverview Angular directive for form fields.
  * 
  * Example usage:
- *  <div data-af-field data-af-field-label="Facility/Lab*">
+ *  <div data-af-field="Facility/Lab*">
  *    <input class="form-control" name="facilityName" data-ng-model="facility.name" required>
  *  </div>
  * 
@@ -27,7 +27,7 @@ angular.module('afredApp').directive('afField', [
          * 
          * @type {string}
          */
-        label: '@afFieldLabel',
+        label: '@afField',
         /**
          * (Optional) Input name attribute. This property is used if the 
          * directive is not able to retrieve the name attribute from the 
@@ -36,14 +36,6 @@ angular.module('afredApp').directive('afField', [
          * @type {string}
          */
         nameOverride: '@afFieldName',
-        /**
-         * (Optional) Input Angular model. Only used if we need to keep track of 
-         * character lengths (the maximum number of characters is determined 
-         * based on the transcluded content's maxlength property).
-         * 
-         * @type {Angular model}
-         */
-        model: '=afFieldModel',
         /**
          * (Optional) Helpful tooltip text.
          * 
@@ -104,22 +96,30 @@ angular.module('afredApp').directive('afField', [
         });
         
         // Content length.
-        if ($scope.isTextAngular) {
-          $scope.len = function() {
-            if (typeof $scope.model === 'string') {
-              return angular.element('<div>' + $scope.model + '</div>').text()
-                .trim().length;
-            }
-            return 0;
-          };
-        } else {
-          $scope.len = function() {
-            if (typeof $scope.model === 'string') {
-              return $scope.model.length;
-            }
-            return 0;
-          };
-        }
+        // Placed in a `$timeout` so that `$scope.name` will execute first 
+        // (see code above).
+        $timeout(function() {
+          if (typeof form[$scope.name] !== 'object') {
+            return;
+          }
+
+          if ($scope.isTextAngular) {
+            $scope.len = function() {
+              if (typeof form[$scope.name].$modelValue === 'string') {
+                return angular.element('<div>' + form[$scope.name].$modelValue 
+                  + '</div>').text().trim().length;
+              }
+              return 0;
+            };
+          } else {
+            $scope.len = function() {
+              if (typeof form[$scope.name].$modelValue === 'string') {
+                return form[$scope.name].$modelValue.length;
+              }
+              return 0;
+            };
+          }
+        });        
       }
     };
   }
