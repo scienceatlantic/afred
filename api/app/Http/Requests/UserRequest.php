@@ -10,9 +10,6 @@ use Route;
 use App\Role;
 use App\User;
 
-// Requests.
-use App\Http\Requests\Request;
-
 class UserRequest extends Request
 {
     /**

@@ -5,9 +5,6 @@ namespace App\Http\Requests;
 // Models.
 use App\Ilo;
 
-// Requests.
-use App\Http\Requests\Request;
-
 class IloRequest extends Request
 {
     /**

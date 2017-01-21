@@ -8,9 +8,6 @@ use Route;
 // Models. 
 use App\Sector;
 
-// Requests.
-use App\Http\Requests\Request;
-
 class SectorRequest extends Request
 {
     /**

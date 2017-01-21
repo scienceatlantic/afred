@@ -8,9 +8,6 @@ use Route;
 // Models.
 use App\Facility;
 
-// Requests.
-use App\Http\Requests\Request;
-
 class FacilityRequest extends Request
 {
     /**

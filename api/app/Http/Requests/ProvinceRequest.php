@@ -8,9 +8,6 @@ use Route;
 // Models.
 use App\Province;
 
-// Requests.
-use App\Http\Requests\Request;
-
 class ProvinceRequest extends Request
 {
     /**

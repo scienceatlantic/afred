@@ -10,9 +10,6 @@ use Log;
 use App\FacilityRepository;
 use App\FacilityUpdateLink;
 
-// Requests.
-use App\Http\Requests\Request;
-
 class UpdateFacilityRepositoryRequest extends Request
 {
     /**
