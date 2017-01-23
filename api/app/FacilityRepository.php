@@ -32,6 +32,8 @@ class FacilityRepository extends Model
      * Name of the database table. An exception had to be made here since
      * we're not calling it 'facility_repositories'. Otherwise, this
      * property wouldn't be necessary.
+     *
+     * @var string
      */
     protected $table = 'facility_repository';
     
