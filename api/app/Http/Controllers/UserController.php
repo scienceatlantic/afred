@@ -2,12 +2,6 @@
 
 namespace App\Http\Controllers;
 
-// Controllers
-use App\Http\Controllers\Controller;
-
-// Laravel.
-use Illuminate\Http\Request;
-
 // Misc.
 use Hash;
 
@@ -15,7 +9,7 @@ use Hash;
 use App\User;
 
 // Requests.
-use App\Http\Requests;
+use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
 
 class UserController extends Controller

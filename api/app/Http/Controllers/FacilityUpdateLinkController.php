@@ -2,14 +2,8 @@
 
 namespace App\Http\Controllers;
 
-// Controllers.
-use App\Http\Controllers\Controller;
-
 // Events.
 use App\Events\FacilityUpdateLinksEvent;
-
-// Laravel.
-use Illuminate\Http\Request;
 
 // Misc.
 use Auth;
@@ -19,7 +13,7 @@ use App\Facility;
 use App\FacilityUpdateLink;
 
 // Requests.
-use App\Http\Requests;
+use Illuminate\Http\Request;
 use App\Http\Requests\FacilityUpdateLinkRequest;
 
 class FacilityUpdateLinkController extends Controller

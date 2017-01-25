@@ -7,15 +7,17 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Http\Request;
-use Schema;
 
 // Misc.
 use Auth;
 use Carbon\Carbon;
 use Log;
+use Schema;
 
-abstract class Controller extends BaseController
+// Requests.
+use Illuminate\Http\Request;
+
+class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
     

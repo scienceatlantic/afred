@@ -2,14 +2,8 @@
 
 namespace App\Http\Controllers;
 
-// Controllers.
-use App\Http\Controllers\Controller;
-
 // Events.
 use App\Events\FacilityRepositoryEvent;
-
-// Laravel.
-use Illuminate\Http\Request;
 
 // Misc.
 use Auth;
@@ -28,6 +22,7 @@ use App\PrimaryContact;
 use App\Sector;
 
 // Requests.
+use Illuminate\Http\Request;
 use App\Http\Requests\IndexFacilityRepositoryRequest;
 use App\Http\Requests\ShowFacilityRepositoryRequest;
 use App\Http\Requests\UpdateFacilityRepositoryRequest;

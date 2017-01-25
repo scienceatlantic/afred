@@ -2,17 +2,11 @@
 
 namespace App\Http\Controllers;
 
-// Controllers.
-use App\Http\Controllers\Controller;
-
-// Laravel.
-use Illuminate\Http\Request;
-
 // Models.
 use App\Province;
 
 // Requests.
-use App\Http\Requests;
+use Illuminate\Http\Request;
 use App\Http\Requests\ProvinceRequest;
 
 class ProvinceController extends Controller

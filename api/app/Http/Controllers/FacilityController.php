@@ -2,12 +2,6 @@
 
 namespace App\Http\Controllers;
 
-// Controllers.
-use App\Http\Controllers\Controller;
-
-// Laravel.
-use Illuminate\Http\Request;
-
 // Misc.
 use Log;
 
@@ -17,7 +11,7 @@ use App\Contact;
 use App\PrimaryContact;
 
 // Requests.
-use App\Http\Requests;
+use Illuminate\Http\Request;
 use App\Http\Requests\FacilityRequest;
 
 class FacilityController extends Controller

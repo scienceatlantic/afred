@@ -2,14 +2,8 @@
 
 namespace App\Http\Controllers;
 
-// Controllers.
-use App\Http\Controllers\Controller;
-
 // Events.
 use App\Events\EmailEvent;
-
-// Laravel.
-use Illuminate\Http\Request;
 
 // Misc.
 use Log;
@@ -19,7 +13,7 @@ use App\User;
 use App\Setting;
 
 // Requests.
-use App\Http\Requests;
+use Illuminate\Http\Request;
 
 class EmailController extends Controller
 {
