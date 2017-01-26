@@ -30,6 +30,21 @@ class CreateSettingsTable extends Migration
                                   'JSONTEXT']);
             $table->string('value', 255)
                   ->nullable();
+            $table->integer('minAuthRoleOnGet')
+                  ->unsigned()
+                  ->nullable();
+            $table->foreign('minAuthRoleOnGet')
+                  ->references('id')
+                  ->on('roles')
+                  ->onDelete('restrict')
+                  ->onUpdate('cascade');
+            $table->integer('minAuthRoleOnPut')
+                  ->unsigned();
+            $table->foreign('minAuthRoleOnPut')
+                  ->references('id')
+                  ->on('roles')
+                  ->onDelete('restrict')
+                  ->onUpdate('cascade');
             $table->dateTime('dateCreated');
             $table->dateTime('dateUpdated');
         });

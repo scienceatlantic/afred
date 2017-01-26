@@ -181,16 +181,6 @@ class User extends Model implements AuthenticatableContract,
         return $this->firstName . ' ' . $this->lastName;
     }
 
-    /**
-     * Retrieves a setting value.
-     * 
-     * @see UserSetting:lookup() for how this works.
-     */
-    public function lookup($name, $default = null)
-    {
-        return UserSetting::lookup($this->id, $name, $default);
-    }
-
     private function role($query, $role, $strict = true)
     {
         // Get permission level.
