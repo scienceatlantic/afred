@@ -3,8 +3,13 @@
 namespace App;
 
 // Laravel.
-use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
+
+// Misc.
+use Laravel\Scout\Searchable;
+
+// Models. 
+use App\Facility;
 
 class Equipment extends Model
 {   
@@ -92,16 +97,29 @@ class Equipment extends Model
     /**
      * Scope for hidden equipment.
      */
-    public function scopeHidden($query)
+    public function scopeHidden($query, 
+        $equipmentFromHiddenFacilitiesAlsoCountAsHidden = false)
     {
-        return $query->where('isPublic', false);
+        $query->where('isPublic', false);
+
+        if ($equipmentFromHiddenFacilitiesAlsoCountAsHidden) {
+            $query->whereIn('facilityId', Facility::hidden()->pluck('id'), 
+                'or');
+        }
+
+        return $query;
     }
     
     /**
      * Scope for public equipent.
      */
-    public function scopeNotHidden($query)
+    public function scopeNotHidden($query, 
+        $equipmentFromHiddenFacilitiesAlsoCountAsHidden = false)
     {
+        if ($equipmentFromHiddenFacilitiesAlsoCountAsHidden) {
+            $query->whereNotIn('facilityId', Facility::hidden()->pluck('id'));
+        }
+
         return $query->where('isPublic', true);
     }
     
