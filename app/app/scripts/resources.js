@@ -419,6 +419,28 @@ angular.module('afredApp').factory('WpResource',
   }
 ]);
 
+angular.module('afredApp').factory('SettingResource',
+  ['$rootScope',
+   '$resource',
+   function($rootScope,
+            $resource) {
+    // Alias to shorten code.
+    var root = $rootScope._env.api.address;
+    
+    return $resource(root + '/settings/:settingId', {
+      settingId: '@id'
+    }, {
+      query: {
+        method: 'GET',
+        isArray: false
+      },
+      update: {
+        method: 'PUT'
+      }
+    });
+  }
+]);
+
 angular.module('afredApp').factory('MiscResource',
   ['$rootScope',
    '$resource',
