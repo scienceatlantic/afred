@@ -19,7 +19,11 @@ angular.module('afredApp').directive('afField', [
       restrict: 'A',
       replace: true,
       require: '^form', // The directive requires an Angular form controller.
-      transclude: true,
+      transclude: {
+        // Content that should be placed after any validation messages (e.g. 
+        // input descriptions, buttons, etc).
+        'afOtherContent': '?afOtherContent'
+      },
       templateUrl: 'views/directives/af-field.html',
       scope: {
         /**
@@ -99,11 +103,11 @@ angular.module('afredApp').directive('afField', [
         // Placed in a `$timeout` so that `$scope.name` will execute first 
         // (see code above).
         $timeout(function() {
-          if (typeof form[$scope.name] !== 'object') {
-            return;
-          }
-
-          if ($scope.isTextAngular) {
+          if ($scope.maxLength < 0 || typeof form[$scope.name] !== 'object') {
+            $scope.len = function() {
+              return 0;
+            }
+          } else if ($scope.isTextAngular) {
             $scope.len = function() {
               if (typeof form[$scope.name].$modelValue === 'string') {
                 return angular.element('<div>' + form[$scope.name].$modelValue 

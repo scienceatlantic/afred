@@ -19,7 +19,7 @@
     <div data-ng-transclude></div>
     
     <!-- Field length count goes here. -->
-    <p class="text-muted" data-ng-if="len() > 0 && maxLength > 0">
+    <p class="text-muted" data-ng-if="maxLength > 0 && len() > 0">
       <small>{{ len() }}/{{ maxLength }} characters remaining.</small>
     </p>
     
@@ -49,5 +49,8 @@
         </span>
       </small>
     </p>
+
+    <!-- Other content. -->
+    <div data-ng-transclude="afOtherContent"></div>
   </div>
 </div>
