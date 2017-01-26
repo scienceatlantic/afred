@@ -3,8 +3,10 @@
 namespace App;
 
 // Laravel.
-use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
+
+// Misc.
+use Laravel\Scout\Searchable;
 
 // Models.
 use App\FacilityRepository;
