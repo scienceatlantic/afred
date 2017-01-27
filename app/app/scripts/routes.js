@@ -284,6 +284,11 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         templateUrl: 'views/admin.settings.html',
         controller: 'AdminSettingsController'
       }).
+      state('admin.resources', {
+        url: '/resources',
+        templateUrl: 'views/admin.resources.html',
+        controller: 'AdminResourcesController'
+      }).
       state('login', {
         url: '/login',
         templateUrl: 'views/login.html',
