@@ -69,7 +69,12 @@
         <!-- Main Navigation -->
         <div data-ng-include="'views/includes/nav.html'" onload="main.navbar.toggle()"></div>
         
-        <div data-ng-class="{ 'af-content-while-logged-in': _auth.user.id }">        
+        <div data-ng-class="{ 'af-content-while-logged-in': _auth.user.id }">
+          <!-- Website notice. -->
+          <div data-ng-if="main.notice.content && !main.notice.dismissed">
+            <div data-ng-include="'views/includes/notice.html'"></div>
+          </div>
+
           <!-- View (for homepage only). -->
           <div data-ng-if="_state.is('home')">
             <div data-ui-view></div>
