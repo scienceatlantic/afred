@@ -164,7 +164,7 @@
       <p class="h3">Have a Look</p>
       
       <div data-af-loading="!haveALook.$resolved">
-        <div data-af-http-error="!haveALook.equipment">
+        <div data-af-http-error="haveALook.equipment.length < 1">
           <div data-ng-repeat="e in haveALook.equipment">
             <p style="padding-bottom: 3px;">
               <a data-ui-sref="facilities.show.equipment.show({ facilityId: e.facilityId, equipmentId: e.id })"
