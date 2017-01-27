@@ -1,0 +1,60 @@
+<p data-af-page-title="Settings"></p>
+
+<!-- Breadcrumbs. -->
+<h1 class="h3">Admin / Settings</h1>
+
+<div data-af-loading="!indices.resource.$resolved && !notice.resource.$resolved">
+  <br>
+
+  <div data-af-loading="!indices.resource.$resolved">
+    <form class="form-horizontal" name="resetSearchIndices" data-ng-submit="indices.refresh()" novalidate>
+      <div data-af-field="Refresh search indices">  
+        <p>
+          <button type="submit" class="btn btn-default btn-sm"
+            data-af-loading-btn="indices.loading"
+            data-af-loading-btn-text="Refreshing..."
+            data-ng-disabled="indices.loading">
+            Refresh <span class="fa fa-refresh"></span>
+          </button>
+        </p>
+
+        <p class="small">
+          Facilities: <span class="af-bold">{{ indices.resource[_env.algolia.indices.facilities].entries }}</span><br>
+          Equipment: <span class="af-bold">{{ indices.resource[_env.algolia.indices.equipment].entries }}</span>
+        </p>
+
+        <p class="small text-muted">
+          Clears out the search indices (i.e. facilities and equipment) and then re-indexes everything in the database.
+        </p>
+      </div>
+    </form>
+    <hr>
+  </div>
+
+  <div data-af-loading="!notice.resource.$resolved">
+    <form class="form-horizontal" name="websiteNotice" data-ng-submit="notice.update()" novalidate>
+      <div data-af-field="Website notice">
+        <textarea class="form-control" name="content" 
+                  data-ng-model="notice.resource.websiteNotice.value"
+                  data-ng-maxlength="1000" rows="6">
+        </textarea>
+        
+        <af-other-content>
+          <p style="padding-top: 5px;">
+            <button type="submit" class="btn btn-default btn-sm"
+                    data-af-loading-btn="notice.loading"
+                    data-af-loading-btn-text="Updating..."
+                    data-ng-disabled="notice.loading">
+              Update <span class="fa fa-pencil"></span>
+            </button>
+          </p>
+
+          <p class="small text-muted">
+            Adds a notice that will be displayed throughout the entire website (e.g. maintenance messages, known issues,
+            etc).
+          </p>      
+        </af-other-content>
+      </div>
+    </form>
+  </div>
+</div>
