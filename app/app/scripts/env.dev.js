@@ -83,9 +83,9 @@ angular.module('afredApp').run(['$rootScope', function($rootScope) {
       
       // Index names for facilities and equipment searches.
       indices: {
-        facilities: 'prod_facilities',
-        equipment: 'prod_equipment' 
+        facilities: 'dev_facilities',
+        equipment: 'dev_equipment' 
       }
-    }
+    }    
   };
 }]);
