@@ -23,7 +23,7 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
     // Routes.
     $stateProvider
       .state('home', {
-        url: '/home',
+        url: '/',
         templateUrl: 'views/home.html',
         controller: 'HomeController'
       }).
