@@ -2,32 +2,32 @@
   <br>
   <form class="form-horizontal" name="userForm" role="form" novalidate>
     <!-- ID. -->
-    <div data-af-field data-af-field-label="ID*">
+    <div data-af-field="ID*">
       <input type="text" class="form-control" name="userId"
              data-ng-model="user.id" disabled required>
     </div>
     
     <!-- First name. -->
-    <div data-af-field data-af-field-label="First name*" data-af-field-model="user.firstName">
+    <div data-af-field="First name*">
       <input type="text" class="form-control" name="userFirstName"
              data-ng-model="user.firstName" maxlength="50" required>
     </div>
 
     <!-- Last name. -->
-    <div data-af-field data-af-field-label="Last name*" data-af-field-model="user.lastName">
+    <div data-af-field="Last name*">
       <input type="text" class="form-control" name="userLastName"
              data-ng-model="user.lastName" maxlength="50" required>
     </div>
     
     <!-- Email. -->
-    <div data-af-field data-af-field-label="Email*" data-af-field-model="user.email">
+    <div data-af-field="Email*">
       <input type="text" class="form-control" name="userEmail"
              data-ng-model="user.email"
              data-ng-model-options="{ debounce: 500 }" maxlength="50" required>
     </div>
     
     <!-- Account status. -->
-    <div data-af-field data-af-field-label="Account status*">
+    <div data-af-field="Account status*">
       <select class="form-control" 
               name="userStatus" 
               data-ng-model="user.isActive" 
@@ -37,7 +37,7 @@
     </div>
 
     <!-- Roles. -->
-    <div data-af-field data-af-field-label="Assigned role(s)*" data-af-field-name="userRoles0">
+    <div data-af-field="Assigned role(s)*" data-af-field-name="userRoles0">
       <div data-ng-repeat="r in roles">
         <div class="checkbox">
           <label>
@@ -51,25 +51,25 @@
     </div>
 
     <!-- Date last pinged. -->
-    <div data-af-field data-af-field-label="Date last pinged">
+    <div data-af-field="Date last pinged">
       <input type="text" class="form-control" name="userLastPingedDate"
              data-ng-model="user.dateLastPinged" disabled>
     </div>
 
     <!-- Date last login. -->
-    <div data-af-field data-af-field-label="Date of last login">
+    <div data-af-field="Date of last login">
       <input type="text" class="form-control" name="userLastLoginDate"
              data-ng-model="user.dateLastLogin" disabled>
     </div>
     
     <!-- Date created. -->
-    <div data-af-field data-af-field-label="Date created*">
+    <div data-af-field="Date created*">
       <input type="text" class="form-control" name="userCreatedDate"
              data-ng-model="user.dateCreated" disabled required>
     </div>
 
     <!-- Date updated. -->
-    <div data-af-field data-af-field-label="Date updated*">
+    <div data-af-field="Date updated*">
       <input type="text" class="form-control" name="userUpdatedDate"
              data-ng-model="user.dateUpdated" disabled required>
     </div>
@@ -109,7 +109,7 @@
 
   <form class="form-horizontal" name="userPasswordForm" role="form" novalidate>
     <br>
-    <div data-af-field data-af-field-label="Password*" data-af-field-model="userPassword.password">
+    <div data-af-field="Password*">
       <input type="password" class="form-control" name="userPassword"
              data-ng-model="userPassword.password"
              data-ng-model-options="{ debounce: 500 }" minlength="8" maxlength="16" required>

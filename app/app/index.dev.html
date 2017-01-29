@@ -69,7 +69,12 @@
         <!-- Main Navigation -->
         <div data-ng-include="'views/includes/nav.html'" onload="main.navbar.toggle()"></div>
         
-        <div data-ng-class="{ 'af-content-while-logged-in': _auth.user.id }">        
+        <div data-ng-class="{ 'af-content-while-logged-in': _auth.user.id }">
+          <!-- Website notice. -->
+          <div data-ng-if="main.notice.content && !main.notice.dismissed">
+            <div data-ng-include="'views/includes/notice.html'"></div>
+          </div>
+
           <!-- View (for homepage only). -->
           <div data-ng-if="_state.is('home')">
             <div data-ui-view></div>
@@ -124,6 +129,7 @@
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-resource/angular-resource.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="bower_components/angularUtils-pagination/dirPagination.js"></script>
@@ -209,6 +215,8 @@
     <script src="scripts/controllers/admin.users.index.js"></script>
     <script src="scripts/controllers/admin.users.show.js"></script>
     <script src="scripts/controllers/admin.users.create.js"></script>
+    <script src="scripts/controllers/admin.settings.js"></script>
+    <script src="scripts/controllers/admin.resources.js"></script>
     <script src="scripts/controllers/login.js"></script>
     <script src="scripts/modals/contact-springboard-atlantic.js"></script>
     <!-- endbuild -->

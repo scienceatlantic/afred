@@ -7,6 +7,7 @@
  */
 
 angular.module('afredApp', [
+  'ngAnimate',
   'ngResource',
   'ngSanitize',
   'ui.router',

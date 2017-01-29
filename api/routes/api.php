@@ -126,7 +126,6 @@ Route::resource('facility-repository', 'FacilityRepositoryController', [
  *****************************************************************************/
  Route::resource('settings', 'SettingController', [
 	'only' => ['index',
-			   		 'show',
              'update']]);
 
 

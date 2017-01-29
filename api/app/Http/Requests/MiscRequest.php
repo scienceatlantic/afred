@@ -20,6 +20,10 @@ class MiscRequest extends Request
                 return $this->isAdmin();
             case 'randomEquipment':
                 return true;
+            case 'refreshSearchIndices':
+                return $this->isAdmin();
+            case 'searchIndices':
+                return $this->isAdmin();
             default:
                 abort(404);
         }

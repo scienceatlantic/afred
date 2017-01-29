@@ -2,9 +2,6 @@
 
 namespace App\Http\Requests;
 
-// Requests.
-use App\Http\Requests\Request;
-
 class IndexFacilityRepositoryRequest extends Request
 {
     /**

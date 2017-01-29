@@ -1,22 +1,22 @@
 <div data-af-loading="!discipline.$resolved">
   <br>
   <form class="form-horizontal" name="disciplineForm" role="form" novalidate>
-    <div data-af-field data-af-field-label="ID*">
+    <div data-af-field="ID*">
       <input type="text" class="form-control" name="disciplineId" 
              data-ng-model="discipline.id" disabled required>
     </div>
     
-    <div data-af-field data-af-field-label="Name*" data-af-field-model="discipline.name">
+    <div data-af-field="Name*">
       <input type="text" class="form-control" name="disciplineName"
              data-ng-model="discipline.name" placeholder="E.g. Nova Scotia" maxlength="150" required>
     </div>
     
-    <div data-af-field data-af-field-label="Date created*">
+    <div data-af-field="Date created*">
       <input type="text" class="form-control" name="disciplineCreatedDate"
              data-ng-model="discipline.dateCreated" disabled required>
     </div>
 
-    <div data-af-field data-af-field-label="Date updated*">
+    <div data-af-field="Date updated*">
       <input type="text" class="form-control" name="disciplineUpdatedDate"
              data-ng-model="discipline.dateUpdated" disabled required>
     </div>

@@ -2,17 +2,12 @@
 
 namespace App\Http\Controllers;
 
-// Controllers.
-use App\Http\Controllers\Controller;
-
 // Events.
 use App\Events\FacilityRepositoryEvent;
 
-// Laravel.
-use Illuminate\Http\Request;
-
 // Misc.
 use Auth;
+use DB;
 use Log;
 
 // Models.
@@ -27,6 +22,7 @@ use App\PrimaryContact;
 use App\Sector;
 
 // Requests.
+use Illuminate\Http\Request;
 use App\Http\Requests\IndexFacilityRepositoryRequest;
 use App\Http\Requests\ShowFacilityRepositoryRequest;
 use App\Http\Requests\UpdateFacilityRepositoryRequest;
@@ -114,7 +110,7 @@ class FacilityRepositoryController extends Controller
 
         // Grab the existing Facility Repository record (ie. state !=
         // PENDING_APPROVAL) otherwise create a new one.
-        if ($request->input('state') == 'PENDING_APPROVAL') {
+        if ($request->input('state') === 'PENDING_APPROVAL') {
             $fr = new FacilityRepository();
         } else {
             $fr = FacilityRepository::findOrFail($id);
@@ -125,77 +121,79 @@ class FacilityRepositoryController extends Controller
         
         // Placeholder for a facility update link record.
         $ful = new FacilityUpdateLink();
-        
-        switch ($fr->state) {
-            case 'PENDING_APPROVAL':
-                $fr->data = $this->formatFrData($request);
-                $fr->dateSubmitted = $now;
-                $fr->save();
-                break;
-            case 'PUBLISHED':
-                $fr->data = $this->publishFacility($fr);
-                $fr->facilityId = $fr->data['facility']['id'];
-                $fr->reviewerId = Auth::user()->id;
-                $fr->reviewerMessage = $request->input('reviewerMessage', null);
-                $fr->dateReviewed = $now;
-                $fr->update();
-                break;            
-            case 'REJECTED':
-                $fr->reviewerId = Auth::user()->id;
-                $fr->reviewerMessage = $request->input('reviewerMessage', null);
-                $fr->dateReviewed = $now;
-                $fr->update();
-                break;            
-            case 'PENDING_EDIT_APPROVAL':
-                // Make a copy of the current facility repository record
-                // before we make a copy to store the edited data (we still
-                // need its facility id and link to the facility update link
-                // record).
-                $originalFr = $fr;
-                $fr = new FacilityRepository();
-                $fr->facilityId = $originalFr->facilityId;
-                $fr->state = 'PENDING_EDIT_APPROVAL';
-                $fr->data = $this->formatFrData($request, true);
-                $fr->dateSubmitted = $now;
-                $fr->save();
-                
-                // Mark the facility update link record as pending and update
-                // its 'frIdAfter' column with the id of the new facility
-                // repository record.
-                $ful = $originalFr->updateRequests()->open()->first();
-                $ful->frIdAfter = $fr->id;
-                $ful->status = 'PENDING';
-                $ful->datePending = $now;
-                $ful->save();
-                break;            
-            case 'PUBLISHED_EDIT':
-                $fr->reviewerId = Auth::user()->id;
-                $fr->reviewerMessage = $request->input('reviewerMessage', null);
-                $fr->dateReviewed = $now;
-                $fr->data = $this->publishFacility($fr, true);
-                $fr->update();
-                
-                // Admin has reviewed the record, close the token.
-                $ful = $fr->originRequest()->pending()->first();
-                $ful->status = 'CLOSED';
-                $ful->dateClosed = $now;
-                $ful->update();
-                break;            
-            case 'REJECTED_EDIT':
-                $fr->reviewerId = Auth::user()->id;
-                $fr->reviewerMessage = $request->input('reviewerMessage', null);
-                $fr->dateReviewed = $now;
-                $fr->update();
-                
-                // Like 'PUBLISHED_EDIT', the admin has reviewed the record,
-                // close it.
-                $ful = $fr->originRequest()->pending()->first();
-                $ful->status = 'CLOSED';
-                $ful->dateClosed = $now;
-                $ful->update();
-                break;
-        }
-        
+
+        // Wrap all database operations in a transaction.
+        DB::transaction(function() use ($request, $id, $now, &$fr, &$ful) {           
+            switch ($fr->state) {
+                case 'PENDING_APPROVAL':
+                    $fr->data = $this->formatFrData($request);
+                    $fr->dateSubmitted = $now;
+                    $fr->save();
+                    break;
+                case 'PUBLISHED':
+                    $fr->data = $this->publishFacility($fr);
+                    $fr->facilityId = $fr->data['facility']['id'];
+                    $fr->reviewerId = Auth::user()->id;
+                    $fr->reviewerMessage = $request->input('reviewerMessage');
+                    $fr->dateReviewed = $now;
+                    $fr->update();
+                    break;            
+                case 'REJECTED':
+                    $fr->reviewerId = Auth::user()->id;
+                    $fr->reviewerMessage = $request->input('reviewerMessage');
+                    $fr->dateReviewed = $now;
+                    $fr->update();
+                    break;            
+                case 'PENDING_EDIT_APPROVAL':
+                    // Make a copy of the current facility repository record
+                    // before we make a copy to store the edited data (we still
+                    // need its facility id and link to the facility update link
+                    // record).
+                    $originalFr = $fr;
+                    $fr = new FacilityRepository();
+                    $fr->facilityId = $originalFr->facilityId;
+                    $fr->state = 'PENDING_EDIT_APPROVAL';
+                    $fr->data = $this->formatFrData($request, true);
+                    $fr->dateSubmitted = $now;
+                    $fr->save();
+                    
+                    // Mark the facility update link record as pending and 
+                    // update its 'frIdAfter' column with the id of the new
+                    // facility repository record.
+                    $ful = $originalFr->updateRequests()->open()->first();
+                    $ful->frIdAfter = $fr->id;
+                    $ful->status = 'PENDING';
+                    $ful->datePending = $now;
+                    $ful->save();
+                    break;            
+                case 'PUBLISHED_EDIT':
+                    $fr->reviewerId = Auth::user()->id;
+                    $fr->reviewerMessage = $request->input('reviewerMessage');
+                    $fr->dateReviewed = $now;
+                    $fr->data = $this->publishFacility($fr, true);
+                    $fr->update();
+                    
+                    // Admin has reviewed the record, close the token.
+                    $ful = $fr->originRequest()->pending()->first();
+                    $ful->status = 'CLOSED';
+                    $ful->dateClosed = $now;
+                    $ful->update();
+                    break;            
+                case 'REJECTED_EDIT':
+                    $fr->reviewerId = Auth::user()->id;
+                    $fr->reviewerMessage = $request->input('reviewerMessage');
+                    $fr->dateReviewed = $now;
+                    $fr->update();
+                    
+                    // Like 'PUBLISHED_EDIT', the admin has reviewed the record,
+                    // close it.
+                    $ful = $fr->originRequest()->pending()->first();
+                    $ful->status = 'CLOSED';
+                    $ful->dateClosed = $now;
+                    $ful->update();
+                    break;
+            }
+        });        
         // Generate an event (emails might need to be sent out).
         event(new FacilityRepositoryEvent($fr, $ful));
         
@@ -427,7 +425,14 @@ class FacilityRepositoryController extends Controller
             $e->update();
         }
 
-        // Safe to update the search index.
+        // Remove the records from the indices (regardless of whether it's 
+        // already in there or not) first. This ensures that any deleted 
+        // equipment records (if this is an update) are removed from the 
+        // indices.
+        $f->unsearchable();
+        $f->equipment()->unsearchable();
+
+        // Push to search indices.
         $f->searchable();
         $f->equipment()->searchable();
         

@@ -47,7 +47,8 @@ angular.module('afredApp').run(['$rootScope', function($rootScope) {
         'terms of service': { pageId: 38 },
         'privacy policy': { pageId: 36 },
         'disclaimer': { pageId: 40 },
-        'form guide': { pageId: 48 }
+        'form guide': { pageId: 48 },
+        'admin resources': { pageId: 113 }
       }
     },
     
@@ -85,6 +86,6 @@ angular.module('afredApp').run(['$rootScope', function($rootScope) {
         facilities: 'prod_facilities',
         equipment: 'prod_equipment' 
       }
-    }
+    }    
   };
 }]);

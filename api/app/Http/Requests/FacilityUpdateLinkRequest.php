@@ -8,9 +8,6 @@ use Route;
 // Models.
 use App\FacilityUpdateLink;
 
-// Requests.
-use App\Http\Requests\Request;
-
 class FacilityUpdateLinkRequest extends Request
 {
     /**

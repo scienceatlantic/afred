@@ -8,9 +8,6 @@ use Route;
 // Models.
 use App\Discipline;
 
-// Requests.
-use App\Http\Requests\Request;
-
 class DisciplineRequest extends Request
 {
     /**

@@ -20,14 +20,10 @@
     <hr>
     
     <!-- Contact form. -->
-    <div data-ng-show="view.show == 'CONTACT_FORM'">
+    <div data-ng-show="view.show === 'CONTACT_FORM'">
       <div class="row">
         <div class="col-sm-6">
-          <div data-af-field 
-               data-af-field-label="Name*" 
-               data-af-field-is-md="true" 
-               data-af-field-is-vertical="true" 
-               data-af-field-model="message.name">
+          <div data-af-field="Name*" data-af-field-is-md="true" data-af-field-is-vertical="true">
             <input type="text" name="name" class="form-control input-sm" 
                    data-ng-model="message.name" 
                    maxlength="50" 
@@ -37,11 +33,7 @@
         </div>  
         
         <div class="col-sm-6">
-          <div data-af-field 
-               data-af-field-label="Email*" 
-               data-af-field-is-md="true" 
-               data-af-field-is-vertical="true" 
-               data-af-field-model="message.email">
+          <div data-af-field="Email*" data-af-field-is-md="true" data-af-field-is-vertical="true">
             <input type="email" name="email" class="form-control input-sm" 
                    data-ng-model="message.email" data-ng-model-options="{ debounce: 500 }" 
                    maxlength="254" 
@@ -51,11 +43,7 @@
         </div>
       </div>
       
-      <div data-af-field 
-           data-af-field-label="Message*" 
-           data-af-field-is-md="true" 
-           data-af-field-is-vertical="true" 
-           data-af-field-model="message.body">
+      <div data-af-field="Message*" data-af-field-is-md="true" data-af-field-is-vertical="true">
         <textarea name="message" class="form-control input-sm" 
                   data-ng-model="message.body" 
                   rows="6" 
@@ -67,12 +55,12 @@
     </div>
     
     <!-- Success message. -->
-    <div data-ng-show="view.show == 'SUCCESS'">
+    <div data-ng-show="view.show === 'SUCCESS'">
       <p>Thank you! Your message has been successfully sent.</p>
     </div>
     
     <!-- Failure message. -->
-    <div data-ng-show="view.show == 'FAILURE'">
+    <div data-ng-show="view.show === 'FAILURE'">
       <p>Oh no! It looks like we were not able to successfully send your message.</p>
     </div>
   </div>
@@ -84,7 +72,7 @@
       </a>
     </span>
 
-    <div data-ng-show="view.show == 'CONTACT_FORM'">
+    <div data-ng-show="view.show === 'CONTACT_FORM'">
       <button type="submit" 
               class="btn btn-default btn-sm" 
               data-ng-click="submit()" 
@@ -101,7 +89,7 @@
       </button>
     </div>
     
-    <div data-ng-show="view.show != 'CONTACT_FORM'">
+    <div data-ng-show="view.show !== 'CONTACT_FORM'">
       <button type="button" class="btn btn-default btn-sm" data-ng-click="modal.close()">
         Close <span class="fa fa-close"></span>
       </button>

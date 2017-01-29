@@ -8,9 +8,6 @@ use Route;
 // Models.
 use App\Organization;
 
-// Requests.
-use App\Http\Requests\Request;
-
 class OrganizationRequest extends Request
 {
     /**

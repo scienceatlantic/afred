@@ -3,8 +3,10 @@
 namespace App;
 
 // Laravel.
-use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
+
+// Misc.
+use Laravel\Scout\Searchable;
 
 // Models.
 use App\FacilityRepository;
@@ -75,7 +77,6 @@ class Facility extends Model
         }
 
         $f->contacts;
-        $f->equipment;
         $f->disciplines;
         $f->organization;
         $f->organization->ilo;
@@ -83,7 +84,11 @@ class Facility extends Model
         $f->province;        
         $f->sectors;
 
-        return $f->toArray();
+        // Only include equipment that is not hidden.
+        $fArray = $f->toArray();
+        $fArray['equipment'] = $f->equipment()->notHidden()->get();
+
+        return $fArray;
     }
     
     /**

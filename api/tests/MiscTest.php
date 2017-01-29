@@ -33,6 +33,32 @@ class MiscTest extends TestCase
              ->assertResponseOk();
     }
 
+    public function testGetRefreshSearchIndicesWithoutAlgoliaIdAndKey()
+    {
+        $this->actingAs($this->getAdmin())
+             ->get('/misc?item=refreshSearchIndices')
+             ->assertResponseStatus(500);
+    }
+
+    public function testGetRefreshSearchIndicesWithoutAuth()
+    {
+        $this->get('/misc?item=refreshSearchIndices')
+             ->assertResponseStatus(403);
+    }
+
+    public function testGetSearchIndicesWithoutAlgoliaIdAndKey()
+    {
+        $this->actingAs($this->getAdmin())
+             ->get('/misc?item=searchIndices')
+             ->assertResponseStatus(500);
+    }
+
+    public function testGetSearchIndicesWithoutAuth()
+    {
+        $this->get('/misc?item=searchIndices')
+             ->assertResponseStatus(403);
+    }
+
     public function testGetInvalidItem()
     {
         $this->get('/misc?item=something')

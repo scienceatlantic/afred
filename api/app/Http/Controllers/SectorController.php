@@ -2,18 +2,12 @@
 
 namespace App\Http\Controllers;
 
-// Controllers.
-use App\Http\Controllers\Controller;
-
-// Laravel.
-use Illuminate\Http\Request;
-
-// Requests
-use App\Http\Requests;
-use App\Http\Requests\SectorRequest;
-
 // Models.
 use App\Sector;
+
+// Requests.
+use Illuminate\Http\Request;
+use App\Http\Requests\SectorRequest;
 
 class SectorController extends Controller
 {

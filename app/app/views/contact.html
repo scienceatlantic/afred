@@ -7,40 +7,24 @@
   <div data-ng-show="view.show === 'CONTACT_FORM'">
     <p>Submit your questions using the form below.</p>
     
-    <div data-af-field 
-         data-af-field-label="Name*"
-         data-af-field-is-md="true"
-         data-af-field-is-vertical="true"
-         data-af-field-model="message.name">
+    <div data-af-field="Name*" data-af-field-is-md="true" data-af-field-is-vertical="true">
       <input type="text" name="name" class="form-control" 
              data-ng-model="message.name" maxlength="50" data-ng-disabled="resource.$resolved === false" required>
     </div>
   
-    <div data-af-field
-         data-af-field-label="Email*"
-         data-af-field-is-md="true"
-         data-af-field-is-vertical="true"
-         data-af-field-model="message.email">
+    <div data-af-field="Email*" data-af-field-is-md="true" data-af-field-is-vertical="true">
       <input type="email" name="email" class="form-control"
              data-ng-model="message.email"
              data-ng-model-options="{ debounce: 500 }"
              maxlength="254" data-ng-disabled="resource.$resolved === false" required>
     </div>
     
-    <div data-af-field
-         data-af-field-label="Subject"
-         data-af-field-is-md="true"
-         data-af-field-is-vertical="true"
-         data-af-field-model="message.subject">
+    <div data-af-field="Subject" data-af-field-is-md="true" data-af-field-is-vertical="true">
       <input type="text" name="subject" class="form-control"
              data-ng-model="message.subject" data-ng-disabled="resource.$resolved === false" maxlength="50">
     </div> 
     
-    <div data-af-field
-         data-af-field-label="Message*"
-         data-af-field-is-md="true"
-         data-af-field-is-vertical="true"
-         data-af-field-model="message.body">
+    <div data-af-field="Message*" data-af-field-is-md="true" data-af-field-is-vertical="true">
       <textarea class="form-control" name="message" rows="6"
                 data-ng-model="message.body" 
                 maxlength="1000" 

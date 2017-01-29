@@ -5,18 +5,29 @@
     <h1>Administrator Login</h1>
     
     <div class="row">
+      <br>
+      
       <div class="col-sm-5">
         <form class="form-horizontal" name="loginForm" data-ng-submit="submit()" role="form" novalidate>          
-          <div data-af-field data-af-field-label="Username*">
+          <div data-af-field="Username*">
             <input type="text" class="form-control" name="email"
                    data-ng-model="credentials.email" required>
           </div>
           
-          <div data-af-field data-af-field-label="Password*">
+          <div data-af-field="Password*">
             <input type="password" class="form-control" name="password"
                    data-ng-model="credentials.password" required>
+            
+            <af-other-content>
+              <div data-ng-show="credentials.invalid">
+                <p class="text-danger small">
+                  <span class="fa fa-exclamation-triangle"></span>
+                  Login failed. Username and/or password is invalid.
+                </p>
+              </div>
+            </af-other-content>
           </div>
-          
+
           <button type="submit"
                   class="btn btn-default"
                   data-af-loading-btn="loading.login"
@@ -25,12 +36,6 @@
             Sign in
           </button>
         </form>
-        
-        <br>
-        
-        <div data-ng-show="credentials.invalid">
-          <img src="images/invalid-password.jpg">
-        </div>
       </div><!-- End of col-x-x -->
     </div><!-- End of .row -->
   </div><!-- End of .col-x-x -->

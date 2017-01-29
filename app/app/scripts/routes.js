@@ -23,7 +23,7 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
     // Routes.
     $stateProvider
       .state('home', {
-        url: '/home',
+        url: '/',
         templateUrl: 'views/home.html',
         controller: 'HomeController'
       }).
@@ -278,6 +278,16 @@ angular.module('afredApp').config(['$stateProvider', '$urlRouterProvider',
         url: '/{userId:int}',
         templateUrl: 'views/admin.users.show.html',
         controller: 'AdminUsersShowController'
+      }).
+      state('admin.settings', {
+        url: '/settings',
+        templateUrl: 'views/admin.settings.html',
+        controller: 'AdminSettingsController'
+      }).
+      state('admin.resources', {
+        url: '/resources',
+        templateUrl: 'views/admin.resources.html',
+        controller: 'AdminResourcesController'
       }).
       state('login', {
         url: '/login',

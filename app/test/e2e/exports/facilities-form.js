@@ -1,4 +1,5 @@
 var chance = new (require('chance'))();
+var admin = new (require('./admin.js'));
 var helper = require('./helper.js');
 
 const FACILITY_NAME = 200;
@@ -242,6 +243,10 @@ FacilityForm.prototype.preview = function() {
 
   browser.wait(helper.click($('button[data-ng-click="preview()"]')), 100);
 
+  var e = element.all(by.cssContainingText('div', 
+    'Please confirm that you have read and agreed to the following:'));
+  browser.wait(protractor.ExpectedConditions.visibilityOf(e.get(0)), 3000);
+
   ['facility', 'primaryContact', 'contacts', 'equipment'].forEach(function(i) {
     function checkPreview(obj) {
       for (var prop in obj) {
@@ -269,6 +274,13 @@ FacilityForm.prototype.preview = function() {
             .count())
             .not
             .toBeLessThan(1);
+
+/*            expect(element.all(by.cssContainingText('div', text.trim()))
+            .get(0))
+            .toEqual(text.trim());*/
+          
+         //var e = element.all(by.cssContainingText('div', text));
+         //expect(e.get(0)).toEqual(text);
         }
       }
     }
@@ -300,7 +312,7 @@ FacilityForm.prototype.submit = function() {
   browser.wait(helper.click($('button[data-ng-click="submit()"]')), 100);
 
   var successMsg = element(by.cssContainingText('p',
-    'Thank you! Your information has been successfully submitted.'));
+    'Your information has been successfully submitted.'));
 
   browser.wait(successMsg, 6000);
 };

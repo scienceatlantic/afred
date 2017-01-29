@@ -2,12 +2,6 @@
 
 namespace App\Http\Controllers;
 
-// Controllers.
-use App\Http\Controllers\Controller;
-
-// Laravel.
-use Illuminate\Http\Request;
-
 // Misc.
 use Auth;
 
@@ -16,7 +10,7 @@ use App\Role;
 use App\User;
 
 // Requests.
-use App\Http\Requests;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {    

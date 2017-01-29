@@ -4,9 +4,11 @@ angular.module('afredApp').controller('MainController',
   ['$interval',
    '$scope',
    '$timeout',
+   'SettingResource',
   function($interval,
            $scope,
-           $timeout) {
+           $timeout,
+           SettingResource) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
@@ -39,6 +41,48 @@ angular.module('afredApp').controller('MainController',
             if (eClass !== 'caret' && eClass !== 'dropdown-toggle') {
               angular.element('.navbar-collapse').collapse('hide');
             }
+          });
+        }
+      },
+
+      /**
+       * Website notice related properties/methods.
+       */
+      notice: {
+        /**
+         * Holds value returned from `$scope.main.notice.get()`.
+         * 
+         * @type {Angular resource}
+         */
+        resource: {},
+
+        /**
+         * Alias of `$scope.notice.main.resource.websiteNotice.value`.
+         * 
+         * @type {string}
+         */
+        content: null,
+
+        /**
+         * Show/Hide website notice flag.
+         * 
+         * @type {boolean}
+         */
+        dismissed: false,
+
+        /**
+         * Get website notice.
+         * 
+         * @sideffect $scope.main.notice.resource Value returned from 
+         *     `SettingResource` is attached here.
+         */
+        get: function() {
+          // Alias.
+          var notice = $scope.main.notice;
+          
+          notice.resource = SettingResource.query({ name: 'websiteNotice'});
+          notice.resource.$promise.then(function(data) {
+            notice.content = data.websiteNotice.value;
           });
         }
       },
@@ -122,5 +166,6 @@ angular.module('afredApp').controller('MainController',
      * --------------------------------------------------------------------- */
     
     $scope.main.footer.slider.run();
+    $scope.main.notice.get();
   }
 ]);
