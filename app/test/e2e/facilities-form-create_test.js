@@ -3,6 +3,15 @@ describe('Facility Submission Form', function() {
   var chance = new (require('chance'))();
   var timeout = 0; // In milliseconds.
 
+/*  beforeEach(function() {
+    browser.ignoreSynchronization = true;
+    browser.manage().window().setSize(1280, 720);
+  });
+
+  afterEach(function() {
+    browser.restart();
+  });*/
+
   it('should see title', function() {
     (new FacilityForm()).get(true);
     expect(browser.getTitle()).toEqual('Submit Facility | AFRED');
