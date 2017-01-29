@@ -54,4 +54,82 @@ class SettingTest extends TestCase
         $this->get('/settings?name=personalContactEmail')
              ->assertResponseStatus(403);
     }
+
+    public function testGetSettingWebsiteNoticeAndAppName()
+    {
+        $websiteNotice = App\Setting::where('name', 'websiteNotice')->first()
+            ->toArray();
+        $appName = App\Setting::where('name', 'appName')->first()->toArray();
+
+        $this->get('/settings?name[]=websiteNotice&name[]=appName')
+             ->seeJson([
+                 'websiteNotice' => $websiteNotice,
+                 'appName'       => $appName
+             ])
+             ->assertResponseOk();
+    }
+
+    public function testGetSettingWebsiteNoticeAndPersonalContactEmail()
+    {
+        $this->actingAs($this->getSuperAdmin())
+             ->get('/settings?name[]=websiteNotice&name[]=personalContactEmail')
+             ->assertResponseOk();
+    }
+
+    public function testGetSettingWebsiteNoticeAndPersonalContactEmailWithoutAuth()
+    {
+        $this->get('/settings?name[]=websiteNotice&name[]=personalContactEmail')
+             ->assertResponseStatus(403);
+    }
+
+    public function testGetSettingWebsiteNoticeAndNonexistentSetting()
+    {
+        $setting = str_random(10);
+
+        $this->actingAs($this->getSuperAdmin())
+             ->get('/settings?name[]=websiteNotice&name[]=' . $setting)
+             ->assertResponseStatus(404);        
+    }
+
+    public function testGetSetting()
+    {
+        $this->get('/settings/1')
+             ->assertResponseStatus(405);
+    }
+
+    public function testPostSetting()
+    {
+        $this->post('/settings')
+             ->assertResponseStatus(405);
+    }
+
+    public function testPostSettingWithAuth()
+    {
+        $this->actingAs($this->getSuperAdmin())
+             ->post('/settings')
+             ->assertResponseStatus(405);
+    }
+
+    public function testPutSettingWebsiteNotice()
+    {
+        $notice = App\Setting::where('name', 'websiteNotice')->first();
+
+        $this->actingAs($this->getAdmin())
+             ->put('/settings/' . $notice->id, ['value' => 'something_else'])
+             ->assertResponseOk();
+    }
+
+    public function testPutSettingWebsiteNoticeWithoutAuth()
+    {
+        $notice = App\Setting::where('name', 'websiteNotice')->first();
+
+        $this->put('/settings/' . $notice->id, ['value' => 'something_else'])
+             ->assertResponseStatus(403);
+    }
+
+    public function testDeleteSetting()
+    {
+        $this->delete('/settings/1')
+             ->assertResponseStatus(405);
+    }
 }

@@ -19,13 +19,13 @@ class SettingBaseRequest extends Request
      *
      * @return array
      */
-    public function rules()
+    public function applyRules($type)
     {
         if ($this->method() !== 'PUT') {
             return [];
         }
 
-        switch ($this->instance()->input('type')) {
+        switch ($type) {
             case 'INT':
                 return ['value' => 'integer'];
             case 'BOOLEAN':

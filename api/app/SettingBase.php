@@ -117,7 +117,7 @@ class SettingBase extends Model
      *     warning. If a value is not found and a $default is not provided or 
      *     is null, the method will abort with an HTTP 500.
      */
-    public function scopeLookup($query, $name, $default = null)
+    public static function lookupValue($query, $name, $default = null)
     {
         // Get an array of settings values.
         if (is_array($name)) {

@@ -28,4 +28,19 @@ class Setting extends SettingBase
     {
         return $this->hasOne('App\SettingText', 'settingId');
     }
+
+    public function authRoleOnGet()
+    {
+        return $this->belongsTo('App\Role', 'minAuthRoleOnGet');
+    }
+
+    public function authRoleOnPut()
+    {
+        return $this->belongsTo('App\Role', 'minAuthRoleOnPut');
+    }
+
+    public static function lookup($name, $default = null)
+    {
+        return parent::lookupValue(Setting::query(), $name, $default);
+    }
 }
