@@ -25,6 +25,13 @@ class SectorRequest extends Request
             case 'PUT':     
                 return $this->isAdmin();
             case 'DELETE':
+                $s = Sector::findOrFail(Route::input('sector'));
+                
+                // Make sure that the sector does not have any facilities.
+                if ($s->facilities()->count()) {
+                    return false;
+                }
+
                 return $this->isAdmin();
             default:
                 return false; 

@@ -87,12 +87,6 @@ class SectorController extends Controller
     public function destroy(SectorRequest $request, $id)
     {
         $s = Sector::findOrFail($id);
-
-        // Make sure that the sector does not have any facilities.
-        if ($s->facilities()->first()) {
-            abort(400);
-        }
-
         $deletedSector = $s->toArray();
         $s->delete();
         return $this->toCcArray($deletedSector);
