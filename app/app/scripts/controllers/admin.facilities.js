@@ -182,7 +182,7 @@ angular.module('afredApp').controller('AdminFacilitiesController',
     // history) from a child state.
     $scope.$on('$stateChangeStart',
       function(event, toState, toParams, fromState, fromParams, options) {
-        if (fromState.name == 'admin.facilities.index') {
+        if (fromState.name === 'admin.facilities.index') {
           $scope.facilities.form.clear();
         }
       }
