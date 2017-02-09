@@ -160,6 +160,7 @@ angular.module('afredApp').controller('SearchController',
          *     if `$scope.search.filters.radios.allOrganizations` is true.
          * @sideeffect $scope.search.query['provinceId[]'] - Array cleared if 
          *     `$scope.search.filters.radios.AllProvinces` is true.
+         * 
          * @requires $scope.search.filters.allDisciplines
          * @requires $scope.search.filters.allOrganizations
          * @requires $scope.search.filters.allProvinces
@@ -244,6 +245,7 @@ angular.module('afredApp').controller('SearchController',
        * Holds Algolia promise returned from AJAX call in `$scope.search.get()`.
        * 
        * @see https://www.algolia.com/doc/api-client/javascript/search#fields
+       * 
        * @type {Algolia search results promise}
        */
       resource: {},
@@ -252,6 +254,7 @@ angular.module('afredApp').controller('SearchController',
        * 'facilities' index Algolia instance.
        * 
        * @see https://www.algolia.com/doc/api-client/javascript/getting-started#init-index
+       * 
        * @type {Algolia index instance}
        */
       facilities: algolia.facilities(),
@@ -260,6 +263,7 @@ angular.module('afredApp').controller('SearchController',
        * 'equipment' index Algolia instance.
        * 
        * @see https://www.algolia.com/doc/api-client/javascript/getting-started#init-index
+       * 
        * @type {Algolia index instance}
        */
       equipment: algolia.equipment(),
@@ -272,6 +276,7 @@ angular.module('afredApp').controller('SearchController',
        * @requires $scope._state.go()
        * @requires $scope._stateParams
        * @requires $scope.search.query
+       * 
        * @param {boolean=false} indexState - True = go to 'state.all', false =
        *     'state.q'.
        * @param {number=1} page - Set page number.
@@ -325,6 +330,7 @@ angular.module('afredApp').controller('SearchController',
        *     inserted into array.
        * @sideeffect $scope.search.query['sectorsId[]'] - Valid values are
        *     inserted into array.
+       * 
        * @requires $scope._state.is()
        * @requires $scope._stateParams.q
        * @requires $scope._stateParams.type - If found.
@@ -367,11 +373,12 @@ angular.module('afredApp').controller('SearchController',
        * that is returned after all values have been parsed.
        * 
        * @param {Array} arr Array of values to parse.
+       * 
        * @return {Array.<number>}
        */
       toInt: function(arr) {
         var values = [];
-        angular.forEach(arr, function(v) {
+        arr.forEach(function(v) {
           try {
             values.push(parseInt(v));
           } catch(e) {
@@ -392,6 +399,7 @@ angular.module('afredApp').controller('SearchController',
        *     AJAX call to Algolia API.
        * @sideeffect $scope.search.results - Results returned after querying the
        *     API are concatenated into this array.
+       * 
        * @requires $scope._httpError() Called if the query fails.
        * @requires $scope.search.parseParams()
        */
@@ -436,10 +444,10 @@ angular.module('afredApp').controller('SearchController',
         // Helper function (generates filter query string).
         function createFilters(items, properties, labels) {
           var str = '';
-          angular.forEach(properties, function(p, index) {
+          properties.forEach(function(p, index) {
             if (items[p].length) {
               str += '(';
-              angular.forEach(items[p], function(id) {
+              items[p].forEach(function(id) {
                 str += labels[index] + id + ' OR '; 
               });
               str = str.substring(0, str.length - 4) + ') AND ';

@@ -15,6 +15,7 @@ angular.module('afredApp').controller('AdminOrganizationsController', [
     $scope.organizations = {
       /**
        * All form related functions/data. In this case only the page number.
+       * 
        * @type {object}
        */
       form: {
@@ -24,20 +25,19 @@ angular.module('afredApp').controller('AdminOrganizationsController', [
       },
       
       /**
-       * Holds the data returned from 'OrganizationResource'.
-       * @type {resource}
+       * Holds the data returned from `OrganizationResource`.
+       * 
+       * @type {Angular resource}
        */
       resource: {},
       
       /**
        * Parses the URL parameters.
        *
-       * Side effects:
-       * $scope.organizations.form.data.page Parsed page number data is attached
-       *     to this.
+       * @sideeffect $scope.organizations.form.data.page Parsed page number data
+       *     is attached to this.
        * 
-       * Uses/calls/requires:
-       * $scope.organizations.form.data.page
+       * @requires $scope.organizations.form.data.page
        */
       parseParams: function() {
         var page = null;
@@ -54,13 +54,12 @@ angular.module('afredApp').controller('AdminOrganizationsController', [
       /**
        * Query organization data.
        *
-       * Side effects:
-       * $scope.organization.resource Data returned is attached to this.
+       * @sideffect $scope.organization.resource Data returned is attached to
+       *     this.
        *
-       * Uses/calls/requires:
-       * OrganizationResource
-       * $scope.organizations.form.data.page
-       * $scope._httpError403()
+       * @requires $scope._httpError403()
+       * @requires $scope.organizations.form.data.page
+       * @requires OrganizationResource
        */
       query: function() {
         $scope.organizations.resource = OrganizationResource.query({

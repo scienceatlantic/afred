@@ -25,14 +25,13 @@ angular.module('afredApp').controller('FacilitiesShowController',
       /**
        * Retrieves the facility data from the API.
        *
-       * Side effects:
-       * $scope.facilities.resource Data retrieved is stored here.
+       * @sideffect $scope.facilities.resource Data retrieved is stored here.
        *
        * Calls/requires/uses:
-       * FacilityResource
-       * $scope._stateParans.facilityId
-       * $scope.facilities.format()
-       * $scope._httpError()
+       * @requires $scope._httpError()
+       * @requires $scope._stateParams.facilityId
+       * @requires $scope.facilities.format()
+       * @requires FacilityResource
        */
       get: function() {
         $scope.facilities.resource = FacilityResource.get({
@@ -57,20 +56,18 @@ angular.module('afredApp').controller('FacilitiesShowController',
         
         /**
          * Retrieves facility data from the API. Is different from
-         * '$scope.facilities.get()' such that the equipment ID is also passed
+         * `$scope.facilities.get()` such that the equipment ID is also passed
          * to the API. If the combination of the facility ID and equipment ID
          * produces no results, the API should return a 404.
          *
-         * Side effects:
-         * $scope.facilities.equipment.resource Stores data return from
-         *     FacilityResource.
+         * @sideeffect $scope.facilities.equipment.resource Stores data return
+         *     from FacilityResource.
          *
-         * Calls/uses/requires:
-         * FacilityResource
-         * $scope._stateParams.facilityId
-         * $scope._stateParams.equipmentId
-         * $scope.facilities.format()
-         * $scope._httpError()
+         * @requires $scope._httpError()
+         * @requires $scope._stateParams.facilityId
+         * @requires $scope._stateParams.equipmentId
+         * @requires $scope.facilities.format()
+         * @requires FacilityResource
          */
         get: function() {
           $scope.facilities.equipment.resource = FacilityResource.get({
@@ -93,9 +90,8 @@ angular.module('afredApp').controller('FacilitiesShowController',
        *  array is removed except for the piece of equipment with the ID in the
        *  URL.
        *
-       * Side effects:
-       * $scope.facilities.resource
-       * $scope.facilities.equipment.resource Only if in the 
+       * @sideffect $scope.facilities.resource
+       * @sideffect $scope.facilities.equipment.resource Only if in the 
        *     'facilities.show.equipment.show' state.
        * 
        */
@@ -103,8 +99,8 @@ angular.module('afredApp').controller('FacilitiesShowController',
         var data = null;
         
         // Use the correct resource. We're using 'data' as an alias for either
-        // '$scope.facilities.equipment.resource' or
-        // '$scope.facilities.resource' to shorten code.
+        // `$scope.facilities.equipment.resource` or
+        // `$scope.facilities.resource` to shorten code.
         if (equipmentId) {
           data = $scope.facilities.equipment.resource;
         } else {

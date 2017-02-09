@@ -99,6 +99,7 @@ angular.module('afredApp').controller('AdminDisciplinesShowController', [
      *
      * @sifeeffect $scope.disciplineCopy
      * 
+     * @requires $scope.discipline
      * @requires angular.copy()
      */
     $scope.commit = function() {
@@ -111,6 +112,7 @@ angular.module('afredApp').controller('AdminDisciplinesShowController', [
      *
      * @sideffect $scope.discipline
      * 
+     * @requires $scope.disciplineCopy
      * @requires angular.copy()
      */
     $scope.rollback = function() {

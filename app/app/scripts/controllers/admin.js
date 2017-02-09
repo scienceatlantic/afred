@@ -21,7 +21,7 @@ angular.module('afredApp').controller('AdminController',
       // We're assuming that if the response doesn't contain the user's details
       // (id in this case), the user is not authenticated.
       if (!response.data.id) {
-        $scope._httpError403('403');
+        $scope._httpError403(403);
       }
     }, function(response) {
       $scope._httpError(response);

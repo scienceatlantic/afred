@@ -15,6 +15,7 @@ angular.module('afredApp').controller('AdminSectorsController', [
     $scope.sectors = {
       /**
        * All form related functions/data. In this case only the page number.
+       * 
        * @type {object}
        */
       form: {
@@ -24,21 +25,19 @@ angular.module('afredApp').controller('AdminSectorsController', [
       },
       
       /**
-       * Holds the data returned from 'SectorResource'.
-       * @type {resource}
+       * Holds the data returned from `SectorResource`.
+       * 
+       * @type {Angular resource}
        */
       resource: {},
       
       /**
        * Parses the URL parameters.
        *
-       * Side effects:
-       * $scope.sectors.form.data.page Parsed page number data is attached
-       *     to this.
+       * @sideeffect $scope.sectors.form.data.page Parsed page number data is
+       *     attached to this.
        * 
-       * Uses/calls/requires:
-       * $scope.sectors.form.data.page
-       * 
+       * @requires $scope.sectors.form.data.page
        */
       parseParams: function() {
         var page = null;
@@ -55,13 +54,11 @@ angular.module('afredApp').controller('AdminSectorsController', [
       /**
        * Query sector data.
        *
-       * Side effects:
-       * $scope.sector.resource Data returned is attached to this.
+       * @sideeffect $scope.sector.resource Data returned is attached to this.
        *
-       * Uses/calls/requires:
-       * SectorResource
-       * $scope.sectors.form.data.page
-       * $scope._httpError403()
+       * @requires $scope._httpError403()
+       * @requires $scope.sectors.form.data.page
+       * @requires SectorResource
        */
       query: function() {
         $scope.sectors.resource = SectorResource.query({

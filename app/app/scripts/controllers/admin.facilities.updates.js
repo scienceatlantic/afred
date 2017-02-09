@@ -4,13 +4,13 @@ angular.module('afredApp').controller('AdminFacilitiesUpdatesController', [
   '$scope',
   'confirmModal',
   'infoModal',
-  'warningModal',
   'RepositoryResource',
+  'warningModal',
   function($scope,
            confirmModal,
            infoModal,
-           warningModal,
-           RepositoryResource) {
+           RepositoryResource,
+           warningModal) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
@@ -20,7 +20,7 @@ angular.module('afredApp').controller('AdminFacilitiesUpdatesController', [
      */
     $scope.facilities.updates = {
       /**
-       * Holds the promise returned from '$scope.facilities.updates.query()'.
+       * Holds the promise returned from `$scope.facilities.updates.query()`.
        * 
        * @type {promise}
        */
@@ -43,8 +43,8 @@ angular.module('afredApp').controller('AdminFacilitiesUpdatesController', [
         /**
          * Clears the form.
          *
-         * Side effects:
-         * $scope.facilities.updates.form.data All properties are set to null.
+         * @sideffect $scope.facilities.updates.form.data All properties are set
+         *     to null.
          */
         clear: function() {
           $scope.facilities.updates.form.data.status = null,
@@ -55,12 +55,10 @@ angular.module('afredApp').controller('AdminFacilitiesUpdatesController', [
       /**
        * Go to index state.
        *
-       * Side effects:
-       * $scope.facilities.updates.form.data.page See @param.
+       * @sideffect $scope.facilities.updates.form.data.page See @param.
        *
-       * Calls/uses/requires:
-       * $scope._state.go()
-       * $scope.facilities.updates.form.data
+       * @requires $scope._state.go()
+       * @requires $scope.facilities.updates.form.data
        *
        * @param {boolean} resetPage If true, the page number is reset to 1.
        */
@@ -76,15 +74,13 @@ angular.module('afredApp').controller('AdminFacilitiesUpdatesController', [
       /**
        * Parses the parameters. To be used by a child state.
        *
-       * Side effects:
-       * $scope.facilities.updates.form.data.status Status is updated to match the value
-       *     retrieved from the URL if it is valid.
-       * $scope.facilities.updates.form.data.page Page number is updated to match value
-       *     retrieved from the URL if it is valid.
+       * @sideeffect $scope.facilities.updates.form.data.status Status is
+       *     updated to match the value retrieved from the URL if it is valid.
+       * @sideeffect $scope.facilities.updates.form.data.page Page number is
+       *     updated to match value retrieved from the URL if it is valid.
        *
-       * Calls/uses/requires:
-       * $scope._state.go()
-       * $scope._stateParams
+       * @requires $scope._state.go()
+       * @requires $scope._stateParams
        */
       parseParams: function() {
         var status = null;
@@ -122,14 +118,13 @@ angular.module('afredApp').controller('AdminFacilitiesUpdatesController', [
       /**
        * Retrieves facility repository data from the API.
        *
-       * Side effects:
-       * $scope.facilities.updates.fr Promise object is attached to this.
+       * @sideffect $scope.facilities.updates.fr Promise object is attached to
+       *     this.
        *
-       * Uses/calls/requires:
-       * RepositoryResource
-       * $scope.facility.form.data.page
-       * $scope.facility.form.data.status
-       * $scope._httpError403()
+       * @requires $scope._httpError403()
+       * @requires $scope.facility.form.data.page
+       * @requires $scope.facility.form.data.status
+       * @requires RepositoryResource
        */
       query: function() {
         $scope.facilities.updates.fr = RepositoryResource.queryTokens({
@@ -146,26 +141,24 @@ angular.module('afredApp').controller('AdminFacilitiesUpdatesController', [
       /**
        * Close an open token.
        *
-       * Side effects:
-       * $scope.facilities.updates.loading.selectedBtnIndex Is set equal to the
-       *     'index' param. Is set to null after the AJAX operation is
-       *     complete.
-       * $scope.facilities.updates.loading.close Set to true at the start of the
-       *     function and then set to false after the AJAX operation is
-       *     complete.
-       * $scope.facilities.updates.fr.data Removes the closed token from the
-       *     array if the operation was successful.
+       * @sideeffect $scope.facilities.updates.loading.selectedBtnIndex Is set
+       *     equal to the `index` param. Is set to null after the AJAX operation
+       *     is complete.
+       * @sideeffect $scope.facilities.updates.loading.close Set to true at the
+       *     start of the function and then set to false after the AJAX
+       *     operation is complete.
+       * @sideeffect $scope.facilities.updates.fr.data Removes the closed token
+       *     from the array if the operation was successful.
        *
-       * Calls/uses/requires:
-       * confirmModal
-       * infoModal
-       * warningModal
-       * RepositoryResource
+       * @requires confirmModal
+       * @requires infoModal
+       * @requires RepositoryResource
+       * @requires warningModal
        *
        * @param {integer} index Index of the element in
-       *     '$scope.facilities.updates.fr.data' that will be closed.
+       *     `$scope.facilities.updates.fr.data` that will be closed.
        * @param {object} token The token element from
-       *     '$scope.facilities.updates.fr.data' that will be closed.
+       *     `$scope.facilities.updates.fr.data` that will be closed.
        */
       close: function(index, token) {
         var t = 'close-token';

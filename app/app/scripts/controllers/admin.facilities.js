@@ -45,8 +45,8 @@ angular.module('afredApp').controller('AdminFacilitiesController',
         /**
          * Clears the form.
          *
-         * Side effects:
-         * $scope.facilities.form.data All properties are set to null.
+         * @sideeffect $scope.facilities.form.data All properties are set to 
+         *     null.
          */
         clear: function() {
           $scope.facilities.form.data.state = null,
@@ -58,15 +58,13 @@ angular.module('afredApp').controller('AdminFacilitiesController',
       /**
        * Redirects to the results page.
        *
-       * Side effects:
-       * $scope.facilities.form.data.page See @param.
-       * $scope.facilities.form.data.visibility If 'resetPage' = true,
-       *     and '$scope.facilities.form.data.state' = PUBLISHED, it is set
-       *     to 1, otherwise null.
+       * @sideeffect $scope.facilities.form.data.page See @param.
+       * @sideeffect $scope.facilities.form.data.visibility If 
+       *     `resetPage` = true, and `$scope.facilities.form.data.state` 
+       *     = 'PUBLISHED', it is set to 1, otherwise null.
        *
-       * Calls/uses/requires:
-       * $scope._state.go()
-       * $scope.facilities.form.data
+       * @requires $scope._state.go()
+       * @requires $scope.facilities.form.data
        *
        * @param {boolean} resetPage If true, the page number is reset to 1.
        */
@@ -75,7 +73,7 @@ angular.module('afredApp').controller('AdminFacilitiesController',
           $scope.facilities.form.data.page = 1;
           
           // If we're viewing PUBLISHED facilities, set visibility to 1. This
-          // means that public facilities is the default view.
+          // means that public facilities are the default view.
           if ($scope.facilities.form.data.state == 'PUBLISHED') {
             $scope.facilities.form.data.visibility = 1;
           } else {
@@ -89,19 +87,17 @@ angular.module('afredApp').controller('AdminFacilitiesController',
       /**
        * Parses the parameters. To be used by a child state.
        *
-       * Side effects:
-       * $scope.facilities.form.data.state State is updated to match the value
+       * @sideeffect $scope.facilities.form.data.page Page number is updated to match value
        *     retrieved from the URL if it is valid.
-       * $scope.facilities.form.data.page Page number is updated to match value
-       *     retrieved from the URL if it is valid.
-       * $scope.facilities.form.data.visibility If '$scope._stateParams.state'
-       *     = PUBLISHED, visibility is updated to match value retrieved from
-       *     the URL if it is valid. If invalid, gets set to 1. If state is not
-       *     PUBLISHED, visibility is set to null.
+       * @sideffect $scope.facilities.form.data.state State is updated to match
+       *     the value retrieved from the URL if it is valid.
+       * @sideeffect $scope.facilities.form.data.visibility If 
+       *     `$scope._stateParams.state` = PUBLISHED, visibility is updated to
+       *     match value retrieved from the URL if it is valid. If invalid, gets
+       *     set to 1. If state is not PUBLISHED, visibility is set to null.
        *
-       * Calls/uses/requires:
-       * $scope._state.go()
-       * $scope._stateParams
+       * @requires $scope._state.go()
+       * @requires $scope._stateParams
        */
       parseParams: function() {
         var state = null;
@@ -150,14 +146,12 @@ angular.module('afredApp').controller('AdminFacilitiesController',
       /**
        * Retrieves facility repository data from the API.
        *
-       * Side effects:
-       * $scope.facilities.fr Promise object is attached to this.
+       * @sideeffect $scope.facilities.fr Promise object is attached to this.
        *
-       * Uses/calls/requires:
-       * RepositoryResource
-       * $scope.facility.form.data.page
-       * $scope.facility.form.data.state
-       * $scope._httpError403()
+       * @requires $scope._httpError403()
+       * @requires $scope.facility.form.data.page
+       * @requires $scope.facility.form.data.state
+       * @requires RepositoryResource
        */
       query: function() {
         $scope.facilities.fr = RepositoryResource.query({

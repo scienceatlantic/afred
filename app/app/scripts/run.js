@@ -380,7 +380,7 @@ angular.module('afredApp').run(['$rootScope',
           selectProp = selectProp ? selectProp : 'isSelected'; // Set default.
 
           var selected = [];
-          angular.forEach(items, function(item) {
+          items.forEach(function(item) {
             if (item[selectProp]) {
               selected.push(idOnly ? item[idProp] : item);
             }
