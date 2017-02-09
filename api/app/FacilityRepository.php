@@ -267,14 +267,15 @@ class FacilityRepository extends Model
      * Custom attribute accessor.
      *
      * @return int 1 = true, 0 = false, -1 = not applicable (i.e. record has 
-     *     been deleted, rejected, or is pending edit approval).
+     *     been deleted, rejected, or was never published).
      */
     public function getIsPreviousRevisionAttribute()
     {
         $f = $this->facility()->first();
         return $this->attributes['isPreviousRevision'] = 
             $f ? ($f->facilityRepositoryId !== $this->id 
-                  && $this->state !== 'PENDING_EDIT_APPROVAL' ? 1 : 0) : -1;
+                  && ($this->state === 'PUBLISHED'
+                  || $this->state === 'PUBLISHED_EDIT') ? 1 : 0) : -1;
             
     }
 
