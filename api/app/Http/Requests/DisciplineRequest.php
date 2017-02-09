@@ -25,8 +25,7 @@ class DisciplineRequest extends Request
             case 'PUT':
                 return $this->isAdmin();
             case 'DELETE':
-                $id = Route::input('discipline');
-                $d = Discipline::findOrFail($id);
+                $d = Discipline::findOrFail(Route::input('discipline'));
 
                 // Make sure it does not have any facilities.
                 if ($d->facilities()->count()) {
