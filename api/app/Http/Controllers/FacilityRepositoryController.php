@@ -41,8 +41,7 @@ class FacilityRepositoryController extends Controller
      */
     public function index(IndexFacilityRepositoryRequest $request)
     {
-        $fr = FacilityRepository::with('reviewer', 'facility',
-            'publishedFacility');
+        $fr = FacilityRepository::with('reviewer', 'originRequest');
         
         // Narrow down query by state.
         switch ($request->input('state')) {
@@ -69,6 +68,9 @@ class FacilityRepositoryController extends Controller
         if ($facilityId = $request->input('facilityId', null)) {
             $fr->where('facilityId', $facilityId);
         }
+
+        // Order by facility name.
+        $fr->orderBy('data->facility->name');
         
         return $this->pageOrGet($fr);
     }
@@ -81,19 +83,10 @@ class FacilityRepositoryController extends Controller
      */
     public function show(ShowFacilityRepositoryRequest $request, $id)
     {
-        $fr = FacilityRepository::with([
-            'updateRequests' => function($query) {
-                $query->notClosed();
-            },
-            'originRequest' => function($query) {
-                $query->notClosed();
-            },
-            'reviewer',
-            'facility',
-            'publishedFacility'
-        ])->findOrFail($id)->toArray();
+        $fr = FacilityRepository::with('reviewer', 'originRequest')
+            ->findOrFail($id);
         
-        return $this->toCcArray($fr);
+        return $this->toCcArray($fr->toArray());
     }
 
     /**

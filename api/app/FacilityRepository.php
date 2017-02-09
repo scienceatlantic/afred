@@ -22,6 +22,20 @@ class FacilityRepository extends Model
                         'dateReviewed'];
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    public $appends = ['facilityName',
+                       'isBeingUpdated',
+                       'isDeleted',
+                       'isPublishedRevision',
+                       'isPreviousRevision',
+                       'isPublic',
+                       'publishedId',
+                       'unclosedUpdateRequest'];
+
+    /**
      * Indicates if the model should be timestamped.
      *
      * @var bool
@@ -56,7 +70,7 @@ class FacilityRepository extends Model
      * @var array
      */
     protected $casts = [
-        'data' => 'array',
+        'data' => 'array'
     ];
     
     /**
@@ -221,5 +235,110 @@ class FacilityRepository extends Model
             ->get();
 
         return $query->whereIn('id', $fr->pluck('id')->toArray());
+    }
+
+    /**
+     * Custom attribute accessor.
+     *
+     * @return int Id of published facility repository or -1 if not 
+     *     applicable (i.e. record has been deleted or rejected).
+     */
+    public function getPublishedIdAttribute()
+    {
+        $f = $this->facility()->first();
+        return $this->attributes['publishedId'] =
+            $f ? $f->facilityRepositoryId : -1;
+    }
+
+    /**
+     * Custom attribute accessor.
+     *
+     * @return int 1 = true, 0 = false, -1 = not applicable (i.e. record has 
+     *     been deleted or rejected).
+     */
+    public function getIsPublishedRevisionAttribute()
+    {
+        $f = $this->facility()->first();
+        return $this->attributes['isPublishedRevision'] =
+            $f ? ($f->facilityRepositoryId === $this->id ? 1 : 0) : -1;
+    }
+
+    /**
+     * Custom attribute accessor.
+     *
+     * @return int 1 = true, 0 = false, -1 = not applicable (i.e. record has 
+     *     been deleted, rejected, or is pending edit approval).
+     */
+    public function getIsPreviousRevisionAttribute()
+    {
+        $f = $this->facility()->first();
+        return $this->attributes['isPreviousRevision'] = 
+            $f ? ($f->facilityRepositoryId !== $this->id 
+                  && $this->state !== 'PENDING_EDIT_APPROVAL' ? 1 : 0) : -1;
+            
+    }
+
+    /**
+     * Custom attribute accessor.
+     *
+     * @return int 1 = true, 0 = false, -1 = not applicable (i.e. record is not
+     *     published).
+     */
+    public function getIsPublicAttribute()
+    {
+        $f = $this->publishedFacility()->first();
+        return $this->attributes['isPublic'] = $f ? $f->isPublic : -1;
+    }
+
+    /**
+     * Custom attribute accessor.
+     *
+     * @return int 1 = true, 0 = false.
+     */
+    public function getIsDeletedAttribute()
+    {
+        return $this->attributes['isDeleted'] = 
+            $this->removed()->where('facilityId', $this->facilityId)
+            ->count() > 0 ? 1 : 0;
+    }
+
+    /**
+     * Custom attribute accessor.
+     *
+     * @return string|null Name of facility.
+     */
+    public function getFacilityNameAttribute()
+    {
+        if (array_key_exists('facility', $this->data)) {
+            return $this->attributes['facilityName'] =
+                $this->data['facility']['name'];
+        }
+        return null;
+    }
+
+    /**
+     * Custom attribute accessor.
+     *
+     * @return int 1 = true, 0 = false, -1 = not applicable (i.e. record is not 
+     *     published).
+     */
+    public function getIsBeingUpdatedAttribute()
+    {
+        $f = $this->publishedFacility()->first();
+        return $this->attributes['isBeingUpdated'] =
+            $f ? ($this->updateRequests()->notClosed()->count() ? 1 : 0) : -1;
+    }
+
+    /**
+     * Custom attribute accessor.
+     *
+     * @return model|null OPEN or PENDING facility update link record, null 
+     *     if none exist.
+     */
+    public function getUnclosedUpdateRequestAttribute()
+    {
+        $f = $this->publishedFacility()->first();
+        return $this->attributes['unclosedUpdateRequest'] = 
+            $f ? $this->updateRequests()->notClosed()->first() : null;
     }
 }
