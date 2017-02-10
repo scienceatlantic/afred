@@ -96,68 +96,7 @@ angular.module('afredApp').controller('MainController',
          *
          * @type integer
          */
-        copyrightEndYear: new Date().getFullYear(),
-        
-        /**
-         * Footer slider related properties/methods.
-         */
-        slider: {
-          
-          /**
-           * Current index of image to show.
-           * 
-           * @see 'footer.html' for the index values corresponding to each 
-           *     image.
-           *
-           * @type float See '$scope.main.footer.slider.run()' for why this is 
-           *     a float instead of an int.
-           */
-          currentImgIndex: 0.0,
-          
-          /**
-           * Interval in milliseconds for '$scope.main.footer.slider.run()'.
-           *
-           * @type integer
-           */
-          interval: 2500,
-
-          /**
-           * Total number of images in the slider. 
-           * 
-           * Used to reset the counter.
-           * 
-           * @type integer
-           */
-          numImages: 6,
-          
-          /**
-           * Executes the slider.
-           *
-           * Side effects:
-           * currentImgIndex Is incremente
-           */
-          run: function() {
-            // Alias to shorten code.
-            var slider = $scope.main.footer.slider;
-            
-            $interval(function() {
-              // Hack fix. Some browsers don't properly render the change if the
-              // images are loaded one after the other immediately. There's a
-              // little bit of a flicker because for a split second both images
-              // are shown at the same time. So instead of incrementing the 
-              // index by 1, we're going to increase it by 0.1 (i.e. no images 
-              // are shown) and then use the timeout function (with a delay of
-              // 100ms) to increment it by 1 and then floor it back to an int.
-              slider.currentImgIndex += 0.1;
-              $timeout(function() {
-                slider.currentImgIndex = Math.floor(++slider.currentImgIndex);
-                if (slider.currentImgIndex === slider.numImages) {
-                  slider.currentImgIndex = 0;
-                }
-              }, 100);        
-            }, slider.interval);
-          }
-        }       
+        copyrightEndYear: new Date().getFullYear()     
       }
     };
     
@@ -165,7 +104,6 @@ angular.module('afredApp').controller('MainController',
      * Initialisation code.
      * --------------------------------------------------------------------- */
     
-    $scope.main.footer.slider.run();
     $scope.main.notice.get();
   }
 ]);
