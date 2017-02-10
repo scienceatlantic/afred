@@ -378,6 +378,11 @@ angular.module('afredApp').controller('SearchController',
        */
       toInt: function(arr) {
         var values = [];
+
+        if (!Array.isArray(arr)) {
+          return values;
+        }
+
         arr.forEach(function(v) {
           try {
             values.push(parseInt(v));
