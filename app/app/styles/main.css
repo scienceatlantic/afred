@@ -71,13 +71,22 @@ html {
   min-height: 100%;
 }
 
-body {
-  margin-bottom: 210px; /* Margin bottom by footer height. */
+
+@media (min-width: 0px) {
+  body {
+    margin-bottom: 620px; /* Margin bottom by footer height (smallest screens). */
+  }
 }
 
-@media (max-width: 991px) {
+@media (min-width: 560px) {
   body {
-    margin-bottom: 590px; /* Margin bottom by footer height (mobile). */
+    margin-bottom: 600px; /* Margin bottom by footer height (medium screens). */
+  }
+}
+
+@media (min-width: 992px) {
+  body {
+    margin-bottom: 210px; /* Margin bottom by footer height (largest screens). */
   }
 }
 
@@ -103,12 +112,6 @@ body {
    sizes). */
 .footer div.col-md-3:first-child p.af-bold {
   padding: 0px;
-}
-
-/* Main site footer slider class styles.
------------------------------------------------------------------------------ */
-.af-footer-slider {
-  min-height: 90px;
 }
 
 /* Copyright text styles.
@@ -141,14 +144,12 @@ nav.navbar {
   padding-top: 30px; /* Padding by logged-in-bar height */
 }
 
-/* Beta note message styles.
+/* Website notice styles.
 ----------------------------------------------------------------------------- */
-.af-beta-note {
-  padding: 5px 0;
-}
-
-.af-beta-note p {
+.af-website-notice {
   margin: 0;
+  border-radius: 0;
+  padding: 10px 0 0 0;
 }
 
 /* --------------------------------------------------------------------------
@@ -199,17 +200,17 @@ nav.navbar {
   color: #fff;
 }
 
-/* Vertically centerise gears. */
+/* Vertically center-ise gears. */
 .af-home-submit-your-facility-bar .fa-gears {
   margin-top: -8px;
 }
 
-/* Vertically centerise text. */
+/* Vertically center-ise text. */
 .af-home-submit-your-facility-bar div.col-md-6 p {
   padding-top: 6px;
 }
 
-/* Vertically centerise button. */
+/* Vertically center-ise button. */
 .af-home-submit-your-facility-bar div.col-md-4 p {
   padding-top: 16px;
 }
@@ -249,7 +250,7 @@ nav.navbar {
   padding-top: 10px;
 }
 
-/* Vertically centerise all headings. */
+/* Vertically center-ise all headings. */
 .af-home-what-can-afred-do-for-you .col-sm-9 p {
   padding-top: 4px;
 }
@@ -259,7 +260,7 @@ nav.navbar {
   padding-top: 12px;
 }
 
-/* Vertically centerise all headings for smaller screens. */
+/* Vertically center-ise all headings for smaller screens. */
 @media (min-width: 768px) and (max-width: 991px) {
   .af-home-what-can-afred-do-for-you .col-sm-11 p {
     padding-top: 13px;
