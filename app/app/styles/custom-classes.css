@@ -28,7 +28,6 @@
   display: inline-block;
 }
 
-
 /* Word wrap class for long URLs, emails, etc.
  * @see: https://css-tricks.com/snippets/css/prevent-long-urls-from-breaking-out-of-container/
 -------------------------------------------------- */
@@ -48,6 +47,24 @@
   -moz-hyphens: auto;
   -webkit-hyphens: auto;
   hyphens: auto;
+}
+
+/* Justified images class
+ * @see: http://stackoverflow.com/a/24782975
+----------------------------------------------------------------------------- */
+.af-justify-image { 
+  text-align: justify;
+}
+
+.af-justify-image img { 
+  display: inline-block;
+}
+
+.af-justify-image:after { 
+  content: ""; 
+  display: inline-block;
+  width: 100%; 
+  height: 0; 
 }
 
 /* Outline Bootstrap button styles.
