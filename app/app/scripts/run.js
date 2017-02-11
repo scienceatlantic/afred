@@ -13,12 +13,14 @@ angular.module('afredApp').run(['$rootScope',
                                 '$log',
                                 '$state',
                                 '$stateParams',
+                                '$interval',
                                 '$location',
                                 '$http',
   function($rootScope,
            $log,
            $state,
            $stateParams,
+           $interval,
            $location,
            $http) {
     
@@ -434,7 +436,7 @@ angular.module('afredApp').run(['$rootScope',
      * @return {integer}
      */
     $rootScope._getWidth = function () {
-      if (self.innerHeight) {
+      if (self.innerWidth) {
         return self.innerWidth;
       }
     
@@ -509,5 +511,12 @@ angular.module('afredApp').run(['$rootScope',
         $rootScope._location.reload();
       }
     });
+
+    /* ---------------------------------------------------------------------
+     * "Heartbeat"
+     * TODO: Without this line of code, values on the `$rootScope` won't be 
+     * updated.
+     * --------------------------------------------------------------------- */
+    $interval(function() {}, 500);
   }
 ]);
