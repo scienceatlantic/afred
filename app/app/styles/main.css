@@ -74,7 +74,7 @@ html {
 
 @media (min-width: 0px) {
   body {
-    margin-bottom: 620px; /* Margin bottom by footer height (smallest screens). */
+    margin-bottom: 630px; /* Margin bottom by footer height (smallest screens). */
   }
 }
 
