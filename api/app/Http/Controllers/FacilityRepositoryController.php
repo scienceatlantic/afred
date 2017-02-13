@@ -70,7 +70,8 @@ class FacilityRepositoryController extends Controller
         }
 
         // Order by facility name.
-        $fr->orderBy('data->facility->name');
+        // MySQL >= 5.7
+        //$fr->orderBy('data->facility->name');
         
         return $this->pageOrGet($fr);
     }
