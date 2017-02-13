@@ -22,19 +22,18 @@ angular.module('afredApp').controller('AdminUsersShowController', [
      * if the AJAX operation was successful, otherwise the '$scope.rollback()'
      * function is called instead.
      *
-     * Side effects:
-     * $scope.loading.update Is set to true at the start of the function and
-     *     then is set to false after the AJAX operation is complete.
+     * @sideffect $scope.loading.update Is set to true at the start of the
+     *     function and then is set to false after the AJAX operation is
+     *     complete.
      *
-     * Calls/uses/requires:
-     * $scope.user
-     * $scope._form.cb.getSelected()
-     * $scope.getUser()
-     * confirmModal
-     * infoModal
-     * warningModal
+     * @requires $scope._form.cb.getSelected()
+     * @requires $scope.getUser()
+     * @requires $scope.user
+     * @requires confirmModal
+     * @requires infoModal
+     * @requires warningModal
      *
-     * @param {Angular FormController} formCtrl The '$setPristine()' function is
+     * @param {Angular FormController} formCtrl The `$setPristine()` function is
      *     called after the AJAX operation is complete (regardless of whether it
      *     failed or not). Will not be called if the user hits the cancel
      *     button.
@@ -79,16 +78,15 @@ angular.module('afredApp').controller('AdminUsersShowController', [
      * Note: If the operation is successful, user will be redirected to
      * 'admin.user.index'.
      *
-     * Side effects:
-     * $scope.loading.remove Is set to true at the start of the function and
-     *     then is set to false after the AJAX operation has completed.
+     * @sideffect $scope.loading.remove Is set to true at the start of the
+     *     function and then is set to false after the AJAX operation has
+     *     completed.
      *
-     * Calls/uses/requires:
-     * $scope.user
-     * $scope._state.go()
-     * confirmModal
-     * infoModal
-     * warningModal
+     * @requires $scope._state.go()
+     * @requires $scope.user
+     * @requires confirmModal
+     * @requires infoModal
+     * @requires warningModal
      */
     $scope.remove = function() {
       var t = 'delete-user'; // Template name (to shorten code).
@@ -109,18 +107,17 @@ angular.module('afredApp').controller('AdminUsersShowController', [
     /**
      * Reset a user's password.
      * 
-     * Calls/uses/requires:
-     * $scope.userPassword
-     * $scope._stateParams.userId
-     * UserResource
-     * confirmModal
-     * infoModal
-     * warningModal
+     * @requires $scope._stateParams.userId
+     * @requires $scope.userPassword
+     * @requires confirmModal
+     * @requires infoModal
+     * @requires UserResource
+     * @requires warningModal
      * 
-     * @param {Angular FormController} formCtrl The '$setPristine()' function is
+     * @param {Angular FormController} formCtrl The `$setPristine()` function is
      *     called after the AJAX operation is complete (regardless of whether it
-     *     failed or not). Will not be called if the user hits the cancel
-     *     button.
+     *     failed or not; will not be called if the user hits the cancel
+     *     button).
      */
     $scope.updatePassword = function(formCtrl) {
       var t = 'reset-user-password'; // Template name (to shorten code).
@@ -144,19 +141,17 @@ angular.module('afredApp').controller('AdminUsersShowController', [
     /**
      * Gets user.
      * 
-     * Side effects:
-     * $scope.user Data retrieved is stored here.
+     * @sideeffect $scope.user Data retrieved is stored here.
      * 
-     * Requires/calls/uses:
-     * UserResource
-     * RoleResource
-     * $scope._httpError403() - Called if AJAX operation fails.
+     * @requires $scope._httpError403() Called if AJAX operation fails.
+     * @requires RoleResource
+     * @requires UserResource
      */
     $scope.getUser = function() {
       $scope.user = UserResource.get($scope._stateParams, function() {
         // Get and set roles.
         $scope.roles = RoleResource.queryNoPaginate(null, function(roles) {
-          angular.forEach(roles, function(role) {
+          roles.forEach(function(role) {
             role.isSelected = Boolean($scope.user.roles[role.id]);
           });
         }, function(response) {

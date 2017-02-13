@@ -25,7 +25,7 @@ angular.module('afredApp').controller('AdminFacilitiesHistoryController', [
       },
       
       /**
-       * Holds the data returned from 'RepositoryResource'.
+       * Holds the data returned from `RepositoryResource`.
        * 
        * @type {resource}
        */
@@ -34,13 +34,10 @@ angular.module('afredApp').controller('AdminFacilitiesHistoryController', [
       /**
        * Parses the URL parameters.
        *
-       * Side effects:
-       * $scope.history.form.data.page Parsed page number data is attached
-       *     to this.
+       * @sideffect $scope.history.form.data.page Parsed page number data is 
+       *     attached to this.
        * 
-       * Uses/calls/requires:
-       * $scope.history.form.data.page
-       * 
+       * @requires $scope.history.form.data.page
        */
       parseParams: function() {
         var page = null;
@@ -57,13 +54,11 @@ angular.module('afredApp').controller('AdminFacilitiesHistoryController', [
       /**
        * Query revision history data.
        *
-       * Side effects:
-       * $scope.history.resource Data returned is attached to this.
+       * @sideeffect $scope.history.resource Data returned is attached to this.
        *
-       * Uses/calls/requires:
-       * RepositoryResource
-       * $scope.history.form.data.page
-       * $scope._httpError403()
+       * @requires $scope._httpError403()
+       * @requires $scope.history.form.data.page
+       * @requires RepositoryResource
        */
       query: function() {
         $scope.history.resource = RepositoryResource.query({

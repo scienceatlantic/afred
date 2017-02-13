@@ -35,7 +35,14 @@
       </div>
 
       <!-- "New Organization" label. -->
-      <span class="label label-default" data-ng-if="isPreview && isNewOrganization">New organization</span>
+      <span class="label label-default" data-ng-if="isPreview && isNewOrganization">
+        New organization
+      </span>
+
+      <!-- "Deleted" label. -->
+      <span class="label label-danger" data-ng-if="isPreview && !isNewOrganization && !facility.organization.name">
+        Deleted
+      </span>
     </div>
 
     <br data-ng-if="_getWidth() < _bootstrap.sm">
@@ -55,6 +62,9 @@
 
         <div data-ng-if="!useBindHtml">{{ facility.city }}</div>
       </div>
+
+      <!-- "Blank" label. -->
+      <span class="label label-default" data-ng-if="isPreview && !facility.city">Blank</span>
     </div>
 
     <br data-ng-if="_getWidth() < _bootstrap.sm">

@@ -186,7 +186,9 @@ angular.module('afredApp').service('Repository', [
       });
     };
 
-    this.getFacility = function(fr) {
+    this.getFacility = function(fr, ignore404s) {
+      ignore404s = ignore404s !== undefined ? ignore404s : true;
+
       var data = angular.copy(fr.data);
       var facility = data.facility;
       facility.organization = data.organization;
@@ -214,23 +216,31 @@ angular.module('afredApp').service('Repository', [
       // Organization section. Check if the facility belongs to an existing
       // organization or a new organization. If it belongs to an existing
       // organization, grab the details from the API.
+      var isOrganizationReady = $q.defer();
       if (data.facility.organizationId) {
         facility.organization = OrganizationResource.get({
           organizationId: data.facility.organizationId
         }, function() {
-          // Do nothing if successful.
+          isOrganizationReady.resolve();
         }, function(response) {
-          $rootScope._httpError(response);
+          if (response.status === 404 && ignore404s) {
+            isOrganizationReady.resolve();  
+          }
+          isOrganizationReady.reject(response);
         });
       }
       
       // Province section.
+      var isProvinceReady = $q.defer();
       facility.province = ProvinceResource.get({
         provinceId: data.facility.provinceId
       }, function() {
-        // Do nothing if successful.
+        isProvinceReady.resolve();
       }, function(response) {
-        $rootScope._httpError(response);
+        if (response.status === 404 && ignore404s) {
+          isProvinceReady.resolve();
+        }
+        isProvinceReady.reject(response);
       });
       
       // Disciplines section. Grab the complete list of disciplines from the API
@@ -238,29 +248,41 @@ angular.module('afredApp').service('Repository', [
       // contains the IDs of the disciplines).
       facility.disciplines = [];
       var isDisciplineReady = $q.defer();
-      var disciplines = DisciplineResource.queryNoPaginate(function() {
-        angular.forEach(disciplines, function(d) {
-          if (data.disciplines.indexOf(d.id) >= 0) {
-            facility.disciplines.push(d);
-          }
+      DisciplineResource.queryNoPaginate(function(disciplines) {
+        var dMap = {}
+        disciplines.forEach(function(discipline, index) {
+          dMap[discipline.id] = index;
         });
+
+        data.disciplines.forEach(function(disciplineId) {
+          if (dMap.hasOwnProperty(disciplineId)) {
+            facility.disciplines.push(disciplines[dMap[disciplineId]]);
+          }
+        });        
+
         isDisciplineReady.resolve();
       }, function(response) {
-        $rootScope._httpError(response); 
+        isDisciplineReady.reject(response);
       });
       
       // Sectors section. (Same as disciplines).
       facility.sectors = [];
       var isSectorReady = $q.defer();
-      var sectors = SectorResource.queryNoPaginate(function() {
-        angular.forEach(sectors, function(s) {
-          if (data.sectors.indexOf(s.id) >= 0) {
-            facility.sectors.push(s);
+      SectorResource.queryNoPaginate(function(sectors) {
+        var sMap = {};
+        sectors.forEach(function(sector, index) {
+          sMap[sector.id] = index;
+        });
+
+        data.sectors.forEach(function(sectorId) {
+          if (sMap.hasOwnProperty(sectorId)) {
+            facility.sectors.push(sectors[sMap[sectorId]]);
           }
         });
+
         isSectorReady.resolve();
       }, function(response) {
-        $rootScope._httpError(response); 
+        isSectorReady.reject(response);
       });
 
       // Set up promise.
@@ -273,12 +295,14 @@ angular.module('afredApp').service('Repository', [
       // Waits for all the async calls to complete before resolving the
       // promise.
       $q.all([
-        facility.organization.$promise,
-        facility.province.$promise,
+        isOrganizationReady.$promise,
+        isProvinceReady.$promise,
         isDisciplineReady.promise,
         isSectorReady.promise
       ]).then(function() {
         deferred.resolve(facility);
+      }, function(response) {
+        $rootScope._httpError(response);
       });
 
       return facility;

@@ -10,33 +10,32 @@
 angular.module('afredApp').controller('AdminDisciplinesCreateController', [
   '$scope',
   'confirmModal',
+  'DisciplineResource',
   'infoModal',
   'warningModal',
-  'DisciplineResource',
   function($scope,
            confirmModal,
+           DisciplineResource,
            infoModal,
-           warningModal,
-           DisciplineResource) {
+           warningModal) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
     
     /**
      * Creates a new discipline record. If the operation was successful,
-     * the user is redirected to the 'admin.disciplines.show' state of the
+     * the user is redirected to the `admin.disciplines.show` state of the
      * newly created record.
      *
-     * Side effects:
-     * $scope.loading.update Is set to true at the start of the function and
-     *     then is set to false after the AJAX operation is complete.
+     * @sideeffect $scope.loading.update Is set to true at the start of the
+     *     function and then is set to false after the AJAX operation is
+     *     complete.
      *
-     * Calls/uses/requires:
-     * $scope.discipline
-     * $scope._state.go()
-     * confirmModal
-     * infoModal
-     * warningModal
+     * @requires $scope._state.go()
+     * @requires $scope.discipline
+     * @requires confirmModal
+     * @requires infoModal
+     * @requires warningModal
      */
     $scope.create = function() {
       $scope.loading.create = true;
@@ -63,12 +62,12 @@ angular.module('afredApp').controller('AdminDisciplinesCreateController', [
      * Clear the form.
      *
      * Side effects:
-     * $scope.discipline 'name' and 'isHidden' property is set to null.
+     * @sideeffect $scope.discipline `name` and `isHidden` property is set to
+     *     null.
      *
-     * Uses/calls/requires:
-     * confirmModal
+     * @requires confirmModal
      *
-     * @param {Angular FormController} formCtrl '$setPristine()' method is
+     * @param {Angular FormController} formCtrl `$setPristine()` method is
      *     is called if the user confirms the action.
      */
     $scope.clear = function(formCtrl) {
@@ -90,8 +89,7 @@ angular.module('afredApp').controller('AdminDisciplinesCreateController', [
     /**
      * Holds the discipline resource.
      * 
-     * Uses/calls/requires:
-     * DisciplineResource()
+     * @requires DisciplineResource()
      * 
      * @type {Angular resource}
      */

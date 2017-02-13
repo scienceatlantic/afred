@@ -25,8 +25,7 @@ class OrganizationRequest extends Request
             case 'PUT':
                 return $this->isAdmin();
             case 'DELETE':
-                $id = Route::input('organization');
-                $o = Organization::findOrFail($id);
+                $o = Organization::findOrFail(Route::input('organization'));
 
                 // Make sure organization does not have any facilities.
                 if ($o->facilities()->count()) {

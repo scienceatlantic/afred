@@ -276,7 +276,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         $columnsToAdd = [], $removeNullValuedColumns = true, $inverse = false)
     {
         // If non-array provided, try converting to array.
-        if (!is_array($columns)) {
+        if (!is_array($columns)) {            
             $columns = $columns->toArray();
         }
 
@@ -287,6 +287,14 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
                     $columnsToAdd, $removeNullValuedColumns, $inverse);
             }
             return;
+        }
+
+        // Attempt to remove appended attributes if present.
+        $model = '\\App\\' . studly_case(str_singular($table));
+        if (class_exists($model)) {
+            $model = new $model();
+            $attrs = isset($model->appends) ? $model->appends : [];
+            $columns = array_except($columns, $attrs);
         }
 
         // Remove null valued columns.

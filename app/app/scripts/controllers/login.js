@@ -15,27 +15,29 @@ angular.module('afredApp').controller('LoginController',
       // Set loading flag to true.
       $scope.loading.login = true;
       
-      $scope.auth = $scope._auth.login($scope.credentials).then(function(response) {
-        // If login was successful, save the authenticated user's details
-        // and redirect the user to the dashboard (if the 
-        // '$scope._persist.fromState' was not set).
-        if ($scope._auth.save(response)) {
-          if ($scope._persist.fromState) {
-            var fromState = $scope._persist.fromState;
-            $scope._persist.fromState = null;
-            location.href = fromState;
+      $scope.auth = $scope._auth.login($scope.credentials).then(
+        function(response) {
+          // If login was successful, save the authenticated user's details and
+          // redirect the user to the dashboard (if the 
+          // `$scope._persist.fromState` was not set).
+          if ($scope._auth.save(response)) {
+            if ($scope._persist.fromState) {
+              var fromState = $scope._persist.fromState;
+              $scope._persist.fromState = null;
+              location.href = fromState;
+            } else {
+              $scope._state.go('admin.dashboard');
+            }
           } else {
-            $scope._state.go('admin.dashboard');
+            $scope.credentials.invalid = true;
+            
+            // Set loading flag to false.
+            $scope.loading.login = false;
           }
-        } else {
-          $scope.credentials.invalid = true;
-          
-          // Set loading flag to false.
-          $scope.loading.login = false;
+        }, function(response) {
+          $scope._httpError(response);
         }
-      }, function(response) {
-        $scope._httpError(response);
-      });
+      );
     };
     
     /* ---------------------------------------------------------------------

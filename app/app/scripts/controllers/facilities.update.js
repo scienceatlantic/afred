@@ -14,15 +14,13 @@ angular.module('afredApp').controller('FacilitiesUpdateController',
     /**
      * Submits the email to the API to retrieve the array of facilities.
      *
-     * Side effects:
-     * $scope.fr Attaches a facility repository resource (promise) to this.
-     * $scope.view.show Updates the view to either 'RESULTS' or
+     * @sideffect $scope.fr Attaches a facility repository resource (promise) to
+     *     this.
+     * @sideffect $scope.view.show Updates the view to either 'RESULTS' or
      *     'NO_RESULTS_MESSAGE'.
-     * 
-     * Uses:
-     * $scope.form
-     * facilityRepositoyResource
-     * 
+     *
+     * @requires $scope.form
+     * @requires RepositoryResource
      */
     $scope.submit = function() {
       // Don't run if the email field is empty.
@@ -47,11 +45,10 @@ angular.module('afredApp').controller('FacilitiesUpdateController',
     /**
      * Reset.
      * 
-     * Side effects:
-     * $scope.view.show Sets to null.
-     * $scope.fr Clears object.
-     * $scope.facilities Resets the array.
-     * #scope.pagination.page Resets to the page to 1.
+     * @sideeffect $scope.facilities Resets the array.
+     * @sideeffect $scope.fr Clears object.
+     * @sideeffect $scope.pagination.page Resets to the page to 1.
+     * @sideeffect $scope.view.show Sets to null.
      */
     $scope.reset = function() {
       $scope.view.show = null;
@@ -63,11 +60,12 @@ angular.module('afredApp').controller('FacilitiesUpdateController',
     /**
      * Generates the token.
      *
-     * Side effects:
-     * $scope.ful Holds the promise returned by RepositoryResource
+     * @sideffect $scope.ful Holds the promise returned by `RepositoryResource`
      * 
-     * Uses:
-     * RepositoryResource
+     * @requires $scope.facilities
+     * @requires $scope.form.data.email
+     * @requires $scope.ful
+     * @requires RepositoryResource
      * 
      * @param index Array index of $scope.facilities
      * @param id Facility id.
@@ -90,6 +88,7 @@ angular.module('afredApp').controller('FacilitiesUpdateController',
      * --------------------------------------------------------------------- */ 
     /**
      * All form related info.
+     * 
      * @type {object}
      */
     $scope.form = {
@@ -100,24 +99,28 @@ angular.module('afredApp').controller('FacilitiesUpdateController',
     
     /**
      * Holds the facility repository resource.
+     * 
      * @type {object}
      */
     $scope.fr = {};
     
     /**
      * Will hold the facility update link resource.
+     * 
      * @type {object}
      */
     $scope.ful = {};
     
     /**
      * Array of facilities.
+     * 
      * @type {array}
      */
     $scope.facilities = [];
     
     /**
      * Controls what is displayed to the user.
+     * 
      * @type {object}
      */
     $scope.view = {
@@ -127,6 +130,7 @@ angular.module('afredApp').controller('FacilitiesUpdateController',
     
     /**
      * Keeps track of the current page number and items per page.
+     * 
      * @type {object}
      */
     $scope.pagination = {
@@ -136,6 +140,7 @@ angular.module('afredApp').controller('FacilitiesUpdateController',
     
     /**
      * AJAX loading flags.
+     * 
      * @type {object}
      */
     $scope.loading = {

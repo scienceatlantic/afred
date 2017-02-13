@@ -67,6 +67,7 @@ angular.module('afredApp').controller('HomeController',
 
       /**
        * Initialisation method.
+       * 
        * @see https://dev.twitter.com/web/javascript/initialization
        * @see https://dev.twitter.com/web/javascript/events
        */

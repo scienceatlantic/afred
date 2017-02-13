@@ -168,19 +168,25 @@
           <div data-ng-repeat="e in haveALook.equipment">
             <p style="padding-bottom: 3px;">
               <a data-ui-sref="facilities.show.equipment.show({ facilityId: e.facilityId, equipmentId: e.id })"
-                target="_blank">
+                 target="_blank">
                 {{ e.type | afEllipses:(_getWidth() >= _bootstrap.md ? 35 : null) }}<br>
-                <small class="text-muted">
+                <span style="color: #333">
                   {{ e.purposeNoHtml | afEllipses:(_getWidth() >= _bootstrap.md ? 100 : 200) }}
-                </small>
+                </span>
               </a>
             </p>
           </div>
         </div>
       </div>
-    </div>
+    </div>  
 
     <div class="col-md-4">
+      <div class="row" data-ng-if="_getWidth() < _bootstrap.md">
+        <div class="col-md-12">
+          <hr>
+        </div>
+      </div>
+
       <p class="h3">What's New</p>
       
       <div data-af-loading="!whatsNew.$resolved">
@@ -191,18 +197,119 @@
     </div>
 
     <div class="col-md-4" id="homepage-twitter-widget">
-      <p class="h3">Recent Tweets</p>
+      <div class="row" data-ng-if="_getWidth() < _bootstrap.md">
+        <div class="col-md-12">
+          <br><br>
+        </div>
+      </div>
 
-      <div data-af-loading="twitter.loaded === 0">
-        <p data-af-http-error="twitter.loaded === -1">
-          <a class="twitter-timeline" 
-             data-chrome="noheader nofooter noborders"
-             data-tweet-limit="2" href="https://twitter.com/AFREDatabase"
-             data-ng-init="twitter.init('homepage-twitter-widget')">
-            Tweets by AFREDatabase
-          </a>
-        </p>
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <p class="h3" style="margin-top: 5px">Recent Tweets</p>
+
+          <div data-af-loading="twitter.loaded === 0">
+            <p data-af-http-error="twitter.loaded === -1">
+              <a class="twitter-timeline" 
+                data-chrome="noheader nofooter noborders"
+                data-tweet-limit="2" href="https://twitter.com/AFREDatabase"
+                data-ng-init="twitter.init('homepage-twitter-widget')">
+                Tweets by AFREDatabase
+              </a>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+
+  <hr>
+
+  <!-- Supporters. -->
+  <div class="row" id="partners-and-supporters">
+    <div class="col-md-12">
+      <p class="h3">Partners and Supporters</p>
+
+      <div data-ng-if="_getWidth() >= 1000">
+        <br>
+        <div class="row">
+          <div class="col-md-12">
+            <p class="af-justify-image">
+              <img src="images/canada-wordmark-322x77.jpg" alt="Canada Wordmark">
+              <img src="images/sa-400x84.png" alt="Science Atlantic Logo">
+            </p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <p class="af-justify-image">
+              <img src="images/bionb-212x59.jpg" alt="BioNB Logo">
+              <img src="images/dal-242x59.png" alt="Dalhousie University Logo">
+              <img src="images/springboard-163x59.jpg" alt="Springboard Atlantic Logo">
+              <img src="images/unb-148x59.jpg" alt="University of New Brunswick Logo">
+            </p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <p class="af-justify-image">
+              <img src="images/acadiau-243x44.jpg" alt="Acadia University Logo">
+              <img src="images/pei-bioalliance-175x44.jpg" alt="PEI BioAlliance Logo">
+              <img src="images/bionova-173x44.jpg" alt="BioNova Logo">
+              <img src="images/cbu-160x44.jpg" alt="Cape Breton University Logo">
+            </p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <p class="af-justify-image">
+              <img src="images/creait-112x44.png" alt="CREAIT Logo">
+              <img src="images/eosence-180x44.jpg" alt="Eosense Logo">
+              <img src="images/mta-199x44.png" alt="Mount Allison University Logo">
+              <img src="images/msvu-136x44.jpg" alt="Mount Saint Vincent University Logo">
+              <img src="images/naia-64x44.jpg" alt="Newfoundland Aquaculture Industry Association Logo">
+            </p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <p class="af-justify-image">
+              <img src="images/smu-186x44.jpg" alt="Saint Mary's University Logo">
+              <img src="images/stfx-141x44.jpg" alt="St. Francis Xavier University Logo">
+              <img src="images/udem-177x44.jpg" alt="Université de Moncton Logo">
+              <img src="images/upei-112x44.jpg" alt="University of Prince Edward Island Logo">
+            </p>
+          </div>
+        </div>
+      </div>
+    
+      <div data-ng-if="_getWidth() < 1000">
+        <ul class="list-group">
+          <li class="list-group-item">Science Atlantic</li>
+          <li class="list-group-item">Atlantic Canada Opportunities Agency (ACOA)</li>
+          <li class="list-group-item">Acadia University</li>
+          <li class="list-group-item">BioNB</li>
+          <li class="list-group-item">BioNova</li>
+          <li class="list-group-item">Cape Breton University</li>
+          <li class="list-group-item">Dalhousie University</li>
+          <li class="list-group-item">Eosense</li>
+          <li class="list-group-item">Memorial University’s Core Research Equipment &amp; Instrument Training Network (CREAIT)</li>
+          <li class="list-group-item">Mount Allison University</li>
+          <li class="list-group-item">Mount Saint Vincent University</li>          
+          <li class="list-group-item">Newfoundland Aquaculture Industry Association</li>
+          <li class="list-group-item">NSERC-Atlantic</li>
+          <li class="list-group-item">PEI BioAlliance</li>
+          <li class="list-group-item">Saint Mary's University</li>
+          <li class="list-group-item">Springboard Atlantic</li>
+          <li class="list-group-item">St. Francis Xavier University</li>
+          <li class="list-group-item">Université de Moncton</li>
+          <li class="list-group-item">University of New Brunswick</li>
+          <li class="list-group-item">University of Prince Edward Island</li>
+        </ul>
+      </div>
+    </div>
+  </div><!-- End of #partners-and-supporters -->
 </div> <!-- End of .container -->

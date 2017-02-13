@@ -168,7 +168,7 @@ class SectorTest extends TestCase
 
         $this->actingAs($this->getAdmin())
              ->delete('/sectors/' . $f->sectors[0]->id)
-             ->assertResponseStatus(400);
+             ->assertResponseStatus(403);
 
         $this->seeInTable('sectors', ['id' => $f->sectors[0]->id]);
     }

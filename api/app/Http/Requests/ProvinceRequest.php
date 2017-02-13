@@ -25,8 +25,7 @@ class ProvinceRequest extends Request
             case 'PUT':
                 return $this->isAdmin();
             case 'DELETE':
-                $id = Route::input('province');
-                $p = Province::findOrFail($id);
+                $p = Province::findOrFail(Route::input('province'));
 
                 // Make sure province has no facilities.
                 if ($p->facilities()->count()) {

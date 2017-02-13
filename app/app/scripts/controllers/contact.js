@@ -12,14 +12,13 @@ angular.module('afredApp').controller('ContactController',
     /**
      * Submits form data to API.
      *
-     * Side effects:
-     * $scope.resource Angular resource returned from 'EmailResource' is stored
-     *     here.
-     * $scope.view.show Is set to 'SUCCESS' on success, or 'FAILURE' on failure.
+     * @sideffect $scope.resource Angular resource returned from `EmailResource`
+     *     is stored here.
+     * @sideffect $scope.view.show Is set to 'SUCCESS' on success, or 'FAILURE'
+     *     on failure.
      * 
-     * Calls/uses/requires:
-     * EmailResource
-     * $scope.message
+     * @requires $scope.message
+     * @requires EmailResource
      */
     $scope.submit = function() {
       $scope.resource = EmailResource.contactForm($scope.message, function() {        
@@ -32,11 +31,10 @@ angular.module('afredApp').controller('ContactController',
     /**
      * Resets contact form.
      *
-     * Side effects:
-     * $scope.message Is set to empty object.
-     * $scope.view.show Is set to 'CONTACT_FORM'.
+     * @sideffect $scope.message Is set to empty object.
+     * @sideffect $scope.view.show Is set to 'CONTACT_FORM'.
      *
-     * @param {Angular form} form Contact form controller.
+     * @param {Angular FormController} form Contact form controller.
      */
     $scope.reset = function(form) {
       form.$setPristine();

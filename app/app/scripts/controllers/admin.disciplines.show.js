@@ -10,36 +10,35 @@
 angular.module('afredApp').controller('AdminDisciplinesShowController', [
   '$scope',
   'confirmModal',
+  'DisciplineResource',
   'infoModal',
   'warningModal',
-  'DisciplineResource',
   function($scope,
            confirmModal,
+           DisciplineResource,
            infoModal,
-           warningModal,
-           DisciplineResource) {
+           warningModal) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
     
     /**
-     * Update discipline instance. The '$scope.commit()' function is called
-     * if the AJAX operation was successful, otherwise the '$scope.rollback()'
+     * Update discipline instance. The `$scope.commit()` function is called
+     * if the AJAX operation was successful, otherwise the `$scope.rollback()`
      * function is called instead.
      *
-     * Side effects:
-     * $scope.loading.update Is set to true at the start of the function and
-     *     then is set to false after the AJAX operation is complete.
+     * @sideeffect $scope.loading.update Is set to true at the start of the
+     *     function and then is set to false after the AJAX operation is
+     *     complete.
      *
-     * Calls/uses/requires:
-     * $scope.discipline
-     * $scope.commit() 
-     * $scope.rollback()
-     * confirmModal
-     * infoModal
-     * warningModal
+     * @requires $scope.commit() 
+     * @requires $scope.discipline
+     * @requires $scope.rollback()
+     * @requires confirmModal
+     * @requires infoModal
+     * @requires warningModal
      *
-     * @param {Angular FormController} formCtrl The '$setPristine()' function is
+     * @param {Angular FormController} formCtrl The `$setPristine()` function is
      *     called after the AJAX operation is complete (regardless of whether it
      *     failed or not). Will not be called if the user hits the cancel
      *     button.
@@ -65,20 +64,18 @@ angular.module('afredApp').controller('AdminDisciplinesShowController', [
     };
     
     /**
-     * Delete the discipline instance.
-     * Note: If the operation is successful, user will be redirected to
-     * 'admin.discipline.index'.
+     * Delete the discipline instance. Note: If the operation is successful,
+     * user will be redirected to the 'admin.discipline.index' state.
      *
-     * Side effects:
-     * $scope.loading.remove Is set to true at the start of the function and
-     *     then is set to false after the AJAX operation has completed.
+     * @sideeffect $scope.loading.remove Is set to true at the start of the
+     *     function and then is set to false after the AJAX operation has
+     *     completed.
      *
-     * Calls/uses/requires:
-     * $scope.discipline
-     * $scope._state.go()
-     * confirmModal
-     * infoModal
-     * warningModal
+     * @requires $scope._state.go()
+     * @requires $scope.discipline
+     * @requires confirmModal
+     * @requires infoModal
+     * @requires warningModal
      */
     $scope.remove = function() {
       var t = 'delete-discipline'; // Template name (to shorten code).
@@ -97,22 +94,26 @@ angular.module('afredApp').controller('AdminDisciplinesShowController', [
     };
     
     /**
-     * A copy of '$scope.discipline' is made and stored in
-     * '$scope.disciplineCopy'.
+     * A copy of `$scope.discipline` is made and stored in
+     * `$scope.disciplineCopy`.
      *
-     * Side effects:
-     * $scope.disciplineCopy
+     * @sifeeffect $scope.disciplineCopy
+     * 
+     * @requires $scope.discipline
+     * @requires angular.copy()
      */
     $scope.commit = function() {
       $scope.disciplineCopy = angular.copy($scope.discipline);
     };
     
     /**
-     * A copy of '$scope.disciplineCopy' is made and stored in
-     * '$scope.discipline'.
+     * A copy of `$scope.disciplineCopy` is made and stored in
+     * `$scope.discipline`.
      *
-     * Side effects:
-     * $scope.discipline
+     * @sideffect $scope.discipline
+     * 
+     * @requires $scope.disciplineCopy
+     * @requires angular.copy()
      */
     $scope.rollback = function() {
       $scope.discipline = angular.copy($scope.disciplineCopy);
@@ -123,15 +124,22 @@ angular.module('afredApp').controller('AdminDisciplinesShowController', [
      * --------------------------------------------------------------------- */
     
     /**
+     * Stores a copy of `$scope.discipline` in case the update operation fails
+     * and we have to revert.
+     * 
+     * @type {Angular resource}
+     */
+    $scope.disciplineCopy = null;
+
+    /**
      * Holds the discipline resource. If the operation fails, redirect
      * to error state.
      *
-     * Side effects:
-     * $scope.disciplineCopy A copy of the resource is stored here.
+     * @sideeffect $scope.disciplineCopy A copy of the resource is stored here.
      * 
-     * Uses/calls/requires:
-     * angular.copy()
-     * $scope._httpError403()
+     * @requires $scope._httpError403()
+     * @requires $scope._stateParams
+     * @requires angular.copy()
      * 
      * @type {Angular resource}
      */
@@ -149,16 +157,8 @@ angular.module('afredApp').controller('AdminDisciplinesShowController', [
      * @type {object}
      */
     $scope.loading = {
-      update: false, // Update operation.
-      remove: false // Remove operation.
+      update: false,
+      remove: false
     };
-    
-    /**
-     * Stores a copy of '$scope.discipline' in case the update operation
-     * fails and we have to revert.
-     * 
-     * @type {Angular resource}
-     */
-    $scope.disciplineCopy = null;
   }
 ]);

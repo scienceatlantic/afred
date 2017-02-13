@@ -4,13 +4,13 @@ angular.module('afredApp').controller('AdminOrganizationsCreateController', [
   '$scope',
   'confirmModal',
   'infoModal',
-  'warningModal',
   'OrganizationResource',
+  'warningModal',
   function($scope,
            confirmModal,
            infoModal,
-           warningModal,
-           OrganizationResource) {
+           OrganizationResource,
+           warningModal) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
@@ -20,16 +20,15 @@ angular.module('afredApp').controller('AdminOrganizationsCreateController', [
      * the user is redirected to the 'admin.organizations.show' state of the
      * newly created record.
      *
-     * Side effects:
-     * $scope.loading.update Is set to true at the start of the function and
-     *     then is set to false after the AJAX operation is complete.
+     * @sideeffect $scope.loading.update Is set to true at the start of the
+     *     function and then is set to false after the AJAX operation is
+     *     complete.
      *
-     * Calls/uses/requires:
-     * $scope.organization
-     * $scope._state.go()
-     * confirmModal
-     * infoModal
-     * warningModal
+     * @requires $scope._state.go()
+     * @requires $scope.organization
+     * @requires confirmModal
+     * @requires infoModal
+     * @requires warningModal
      */
     $scope.create = function() {
       $scope.loading.create = true;
@@ -55,14 +54,13 @@ angular.module('afredApp').controller('AdminOrganizationsCreateController', [
     /**
      * Clear the form.
      *
-     * Side effects:
-     * $scope.organization 'name' and 'isHidden' property is set to null.
+     * @sideeffect $scope.organization `name` and `isHidden` property is set to
+     *     null.
      *
-     * Uses/calls/requires:
-     * confirmModal
+     * @requires confirmModal
      *
-     * @param {Angular FormController} formCtrl '$setPristine()' method is
-     *     is called if the user confirms the action.
+     * @param {Angular FormController} formCtrl `$setPristine()` method is
+     *     called if the user confirms the action.
      */
     $scope.clear = function(formCtrl) {
       var t = 'clear-create-organization-form'; // Template name (shorten code).
@@ -83,8 +81,7 @@ angular.module('afredApp').controller('AdminOrganizationsCreateController', [
     /**
      * Holds the organization resource.
      * 
-     * Uses/calls/requires:
-     * OrganizationResource()
+     * @requires OrganizationResource()
      * 
      * @type {Angular resource}
      */
@@ -96,7 +93,7 @@ angular.module('afredApp').controller('AdminOrganizationsCreateController', [
      * @type {object}
      */
     $scope.loading = {
-      create: false // Create organization.
+      create: false
     };
   }
 ]);

@@ -22,6 +22,7 @@ angular.module('afredApp').controller('AdminDisciplinesController', [
     $scope.disciplines = {
       /**
        * All form related functions/data. In this case only the page number.
+       * 
        * @type {object}
        */
       form: {
@@ -31,21 +32,20 @@ angular.module('afredApp').controller('AdminDisciplinesController', [
       },
       
       /**
-       * Holds the data returned from 'DisciplineResource'.
-       * @type {resource}
+       * Holds the data returned from 'DisciplineResource.query()`. See
+       * `$scope.disciplines.query()`.
+       * 
+       * @type {Angular resource}
        */
       resource: {},
       
       /**
        * Parses the URL parameters.
        *
-       * Side effects:
-       * $scope.disciplines.form.data.page Parsed page number data is attached
-       *     to this.
+       * @sideeffect $scope.disciplines.form.data.page Parsed page number data
+       *     is attached to this.
        * 
-       * Uses/calls/requires:
-       * $scope.disciplines.form.data.page
-       * 
+       * @requires $scope._stateParams.page
        */
       parseParams: function() {
         var page = null;
@@ -62,13 +62,12 @@ angular.module('afredApp').controller('AdminDisciplinesController', [
       /**
        * Query discipline data.
        *
-       * Side effects:
-       * $scope.discipline.resource Data returned is attached to this.
+       * @sideffect $scope.discipline.resource Data returned is attached to
+       *     this.
        *
-       * Uses/calls/requires:
-       * DisciplineResource
-       * $scope.disciplines.form.data.page
-       * $scope._httpError403()
+       * @requires $scope._httpError403()
+       * @requires $scope.disciplines.form.data.page
+       * @requires DisciplineResource
        */
       query: function() {
         $scope.disciplines.resource = DisciplineResource.query({
