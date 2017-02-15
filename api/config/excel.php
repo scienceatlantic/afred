@@ -58,15 +58,15 @@ return array(
     ],
 
     'properties' => [
-        'creator'        => 'Maatwebsite',
-        'lastModifiedBy' => 'Maatwebsite',
-        'title'          => 'Spreadsheet',
-        'description'    => 'Default spreadsheet export',
-        'subject'        => 'Spreadsheet export',
-        'keywords'       => 'maatwebsite, excel, export',
-        'category'       => 'Excel',
-        'manager'        => 'Maatwebsite',
-        'company'        => 'Maatwebsite',
+        'creator'        => null,
+        'lastModifiedBy' => null,
+        'title'          => null,
+        'description'    => null,
+        'subject'        => null,
+        'keywords'       => null,
+        'category'       => null,
+        'manager'        => null,
+        'company'        => null,
     ],
 
     /*
@@ -282,7 +282,7 @@ return array(
             | Whether we want to return information about the stored file or not
             |
             */
-            'returnInfo' => false
+            'returnInfo' => true
 
         ],
 
