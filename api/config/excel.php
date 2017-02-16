@@ -253,7 +253,7 @@ return array(
             | Apply strict comparison when testing for null values in the array
             |--------------------------------------------------------------------------
             */
-            'strictNullComparison' => false
+            'strictNullComparison' => true
         ],
 
         /*
@@ -272,7 +272,7 @@ return array(
             | The path we want to save excel file to
             |
             */
-            'path'       => storage_path('exports'),
+            'path'       => storage_path('excel'),
 
             /*
             |--------------------------------------------------------------------------
