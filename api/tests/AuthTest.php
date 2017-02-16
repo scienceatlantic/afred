@@ -51,7 +51,7 @@ class AuthTest extends TestCase
 
         $this->post('/auth/login', $payload)
               ->seeStatusCode(200)
-              ->see('Not authorized');       
+              ->see('Invalid login credentials');       
     }
 
     public function testPostAuthLoginWithInvalidPassword()
@@ -65,7 +65,7 @@ class AuthTest extends TestCase
 
         $this->post('/auth/login', $payload)
               ->seeStatusCode(200)
-              ->see('Not authorized');           
+              ->see('Invalid login credentials');           
     }
 
     public function testGetAuthLogout()
