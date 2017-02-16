@@ -103,9 +103,14 @@ angular.module('afredApp').controller('FacilitiesFormCreateController',
     
     // Initialise the form.
     $scope.form.initialise().then(function() {
-      $scope.form.startAutosave('facilities.form.create').then(function() {
+      // `$timeout` interferes when testing with Protractor.
+      if (!$scope._env.testing) {
+        $scope.form.startAutosave('facilities.form.create').then(function() {
+          $scope.loading.form = false;
+        });
+      } else {
         $scope.loading.form = false;
-      });
+      }
     });
     
     // We're also setting the `reload` property of `$rootScope._persist` to true

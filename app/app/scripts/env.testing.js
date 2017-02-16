@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * @fileoverview Production environment variables.
+ * @fileoverview Testing environment variables.
  */
 
 angular.module('afredApp').run(['$rootScope', function($rootScope) {  
@@ -15,14 +15,14 @@ angular.module('afredApp').run(['$rootScope', function($rootScope) {
      * --------------------------------------------------------------------- */
     local: false,
     dev: false,
-    production: true,
-    testing: false,
+    production: false,
+    testing: true,
 
     /* ---------------------------------------------------------------------
      * API settings.
      * --------------------------------------------------------------------- */
     api: {
-      address: '//afred.ca/api/app/v2',
+      address: '//localhost:8000',
     },
     
     /* ---------------------------------------------------------------------
@@ -31,7 +31,7 @@ angular.module('afredApp').run(['$rootScope', function($rootScope) {
     app: {
       name: 'Atlantic Facilities and Research Equipment Database',
       shortname: 'AFRED',
-      address: '//afred.ca'
+      address: '//localhost:9000'
     },
     
     /* ---------------------------------------------------------------------
@@ -91,8 +91,8 @@ angular.module('afredApp').run(['$rootScope', function($rootScope) {
       
       // Index names for facilities and equipment searches.
       indices: {
-        facilities: 'prod_facilities',
-        equipment: 'prod_equipment' 
+        facilities: 'dev_facilities',
+        equipment: 'dev_equipment' 
       }
     }    
   };
