@@ -21,6 +21,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         'App\Events\FacilityUpdateLinksEvent' => [
             'App\Listeners\FacilityUpdateLinksListener'
+        ],
+        'App\Events\ReportEvent' => [
+            'App\Listeners\ReportListener'
         ]
     ];
 
