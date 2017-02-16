@@ -26,12 +26,15 @@ class AuthController extends Controller
             return $this->format('login');
         }
 
-        return 'Not authorized';
+        return ['error' => 'Invalid login credentials'];
     }
     
     public function ping()
     {
-        return Auth::check() ? $this->format() : 'Not authenticated';
+        if (Auth::check()) {
+            return $this->format();
+        }
+        return ['error' => 'Not authenticated'];
     }
     
     public function logout()

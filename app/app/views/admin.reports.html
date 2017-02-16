@@ -1,0 +1,22 @@
+<p data-af-page-title="Reports"></p>
+
+<!-- Breadcrumbs. -->
+<h1 class="h3">Admin / Reports</h1>
+
+<div>
+  <br>
+  <p>
+    The generated report will be emailed to your registered email address:
+    <a data-ng-href="mailto:{{ _auth.user.email }}">{{ _auth.user.email }}</a>.
+  </p>
+
+  <p>
+    <button type="button" class="btn btn-default"
+            data-ng-click="getReport()"
+            data-af-loading-btn="report.$resolved === false"
+            data-af-loading-btn-text="Generating..."
+            data-ng-disabled="report.$resolved === false">
+      Generate report <span class="fa fa-file-excel-o"></span>
+    </button>
+  </p>
+</div>

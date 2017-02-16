@@ -441,6 +441,18 @@ angular.module('afredApp').factory('SettingResource',
   }
 ]);
 
+angular.module('afredApp').factory('ReportResource',
+  ['$rootScope',
+   '$resource',
+   function($rootScope,
+            $resource) {
+    // Alias to shorten code.
+    var root = $rootScope._env.api.address;
+    
+    return $resource(root + '/reports');
+  }
+]);
+
 angular.module('afredApp').factory('MiscResource',
   ['$rootScope',
    '$resource',

@@ -9,7 +9,8 @@
         "laravel/framework": "5.3.*",
 		"barryvdh/laravel-cors": "0.8.*",
         "laravel/scout": "^1.1",
-        "algolia/algoliasearch-client-php": "^1.11"
+        "algolia/algoliasearch-client-php": "^1.11",
+        "maatwebsite/excel": "~2.1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

@@ -30,23 +30,25 @@ abstract class BaseListener
     }
     
     protected function mail($template,
-                             $subject,
-                             $data,
-                             $to,
-                             $cc = null,
-                             $bcc = null,
-                             $replyTo = null)
+                            $subject,
+                            $data,
+                            $to,
+                            $cc = null,
+                            $bcc = null,
+                            $replyTo = null,
+                            $attachments = null)
     {
         try {
             Mail::queue(['text' => $template], $data, function($message)
-                use ($subject, $to, $cc, $bcc, $replyTo) {
+                use ($subject, $to, $cc, $bcc, $replyTo, $attachments) {
                     $recipients = [
                         'to'  => $to,
                         'cc'  => $cc ?: [], // If null, return empty array.
                         'bcc' => $bcc ?: [] // Ditto.
                     ];
                     
-                    $replyTo = $replyTo ? $replyTo : [];
+                    $replyTo = $replyTo ?: [];
+                    $attachments = $attachments ?: [];
                     
                     foreach($recipients as $type => $recipient) {
                         // Will hold all the recipients after their details
@@ -77,6 +79,10 @@ abstract class BaseListener
                     $message->subject($subject);
                     if ($this->validateRecipient($replyTo)) {
                         $message->replyTo($replyTo['email'], $replyTo['name']);   
+                    }
+
+                    foreach($attachments as $attachment) {
+                        $message->attach($attachment);
                     }                    
                 }
             );            

@@ -37,3 +37,13 @@ grunt-prod:
 	rm ./dist/index.dev.html
 	rm ./dist/robots.txt
 	rm ./dist/.htaccess
+
+# Runs tests.
+grunt-test:
+	mv ./app/scripts/env.js ./app/scripts/env.local.js
+	mv ./app/scripts/env.testing.js ./app/scripts/env.js
+
+	grunt test
+
+	mv ./app/scripts/env.js ./app/scripts/env.testing.js
+	mv ./app/scripts/env.local.js ./app/scripts/env.js
