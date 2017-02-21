@@ -40,6 +40,11 @@ grunt-prod:
 
 # Runs tests.
 grunt-test:
+	php ../api/artisan migrate:rollback
+	php ../api/artisan migrate
+	php ../api/artisan db:seed
+	-rm ../api/storage/logs/laravel.log
+
 	mv ./app/scripts/env.js ./app/scripts/env.local.js
 	mv ./app/scripts/env.testing.js ./app/scripts/env.js
 
