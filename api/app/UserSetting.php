@@ -7,13 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class UserSetting extends SettingBase
 {
     /**
-     * Indicates if the model should be timestamped.
-     *
-     * @var bool
-     */
-    public $timestamps = false;
-
-    /**
      * Relationship between a user setting and the user it belongs to.
      */
     public function user()

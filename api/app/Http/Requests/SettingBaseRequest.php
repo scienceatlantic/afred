@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-class SettingBaseRequest extends Request
+abstract class SettingBaseRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
