@@ -199,6 +199,22 @@ class SettingsTableSeeder extends Seeder
             'minAuthRoleOnPut' => $adminId,
             'dateCreated'      => $now,
             'dateUpdated'      => $now            
+        ], [
+            'name'             => 'updateFacilityReminderDateLastRun',
+            'type'             => 'DATE',
+            'value'            => null,
+            'minAuthRoleOnGet' => $adminId,
+            'minAuthRoleOnPut' => $adminId,
+            'dateCreated'      => $now,
+            'dateUpdated'      => $now            
+        ], [
+            'name'             => 'updateFacilityReminderIntervalInMonths',
+            'type'             => 'INT',
+            'value'            => 12,
+            'minAuthRoleOnGet' => $adminId,
+            'minAuthRoleOnPut' => $adminId,
+            'dateCreated'      => $now,
+            'dateUpdated'      => $now            
         ]]);
 
         // Sitemap fixed URLs.
