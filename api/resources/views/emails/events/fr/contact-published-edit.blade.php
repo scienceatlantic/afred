@@ -18,7 +18,7 @@ A message from {!! $reviewerName !!}:
 Please check your listing here:
 {!! $settings['appAddress'] !!}/facilities/{!! $facilityId !!}.
 
-You will receive an annual reminder to check your listing for accuracy. If you
+You will receive a periodic reminder to check your listing for accuracy. If you
 wish to make additional edits to your listing at any time, please follow this
 link.
 {!! $settings['appAddress'] !!}/facilities/update.

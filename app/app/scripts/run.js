@@ -29,11 +29,13 @@ angular.module('afredApp').run(['$rootScope',
      * @see http://jasonwatmore.com/post/2015/11/07/AngularJS-Google-Analytics-with-the-UI-Router.aspx
      * --------------------------------------------------------------------- */
 
-    window.ga('create', $rootScope._env.google.analytics.id, 'auto');
+    if ($rootScope._env.production) {
+      window.ga('create', $rootScope._env.google.analytics.id, 'auto');
     
-    $rootScope.$on('$stateChangeSuccess', function () {
-      window.ga('send', 'pageview', $location.path());
-    });
+      $rootScope.$on('$stateChangeSuccess', function() {
+        window.ga('send', 'pageview', $location.path());
+      });
+    }
     
     /* ---------------------------------------------------------------------
      * Log functions. Making it globally accessible.

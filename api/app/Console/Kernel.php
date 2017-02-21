@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\GenerateSitemap::class,
         \App\Console\Commands\JobCron::class,
         \App\Console\Commands\TrimLogs::class,
+        \App\Console\Commands\UpdateFacilityReminder::class,
     ];
 
     /**

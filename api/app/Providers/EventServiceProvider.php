@@ -24,6 +24,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         'App\Events\ReportEvent' => [
             'App\Listeners\ReportListener'
+        ],
+        'App\Events\UpdateFacilityReminderEvent' => [
+            'App\Listeners\UpdateFacilityReminderListener'
         ]
     ];
 

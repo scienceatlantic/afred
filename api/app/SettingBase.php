@@ -6,10 +6,26 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 // Misc.
+use Carbon\Carbon;
 use Log;
 
-class SettingBase extends Model
+abstract class SettingBase extends Model
 {
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['dateCreated',
+                        'dateUpdated'];
+
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+
     /**
      * Value attribute accessor.
      *
@@ -38,12 +54,110 @@ class SettingBase extends Model
                 }
                 return null;
             case 'EMAIL':
+                // No break.
             case 'URL':
-            case 'DATE':
-            case 'DATETIME':
+                // No break.
             case 'STRING':
                 return $v;
+            case 'DATE':
+                // No break.
+            case 'DATETIME':
+                return $v !== null ? Carbon::parse($v) : null;
         }        
+    }
+
+    /**
+     * Updates the `value` column of a setting (and the `dateUpdated` column).
+     */
+    public function updateValue($v)
+    {
+        switch ($this->type) {
+            case 'BOOLEAN':
+                $this->value = $v ? 1 : 0;
+                break;
+            case 'INT':
+                $this->value = $v !== null ? (int) $v : null;
+                break;
+            case 'DOUBLE':
+                $this->value = $v !== null ? (double) $v : null;
+                break;
+            case 'DATE':
+                if ($v instanceof Carbon) {
+                    $this->value = $v->toDateString();
+                } else {
+                    $this->value = $v !== null ? Carbon::parse($v)
+                        ->toDateString() : null;
+                }
+                break;
+            case 'DATETIME':
+                if ($v instanceof Carbon) {
+                    $this->value = $v->toDateTimeString();
+                } else {
+                    $this->value = $v !== null ? Carbon::parse($v)
+                        ->toDateTimeString() : null;
+                }
+                break;
+            case 'EMAIL':
+                if ($v === null || filter_var($v, FILTER_VALIDATE_EMAIL)) {
+                    $this->value = $v;
+                } else {
+                    Log::error('Value is not a valid email', [
+                        'name'  => $this->name,
+                        'value' => $v
+                    ]);
+                    abort(500);
+                }
+                break;
+            case 'URL':
+                if ($v === null || filter_var($v, FILTER_VALIDATE_URL)) {
+                    $this->value = $v;
+                } else {
+                    Log::error('Value is not valid URL', [
+                        'name'  => $this->name,
+                        'value' => $v
+                    ]);
+                    abort(500);
+                }
+            case 'STRING':
+                $this->value = $v;
+                break;
+            case 'JSON':
+                if ($v !== null || (($v = json_encode($v)) === false)) {
+                    Log::error('Value is not valid JSON', [
+                        'name'  => $this->name,
+                        'value' => $v
+                    ]);
+                    abort(500);
+                }
+                $text->value = $v;
+                break;
+            case 'TEXT':
+                $text = $this->text()->first() ?: $this->text()->create([]);
+                $text->value = $v;
+                break;
+            case 'JSONTEXT':
+                if ($v !== null || (($v = json_encode($v)) === false)) {
+                    Log::error('Value is not valid JSON', [
+                        'name'  => $this->name,
+                        'value' => $v
+                    ]);
+                    abort(500);
+                }
+                $text = $this->text()->first() ?: $this->text()->create([]);
+                $text->value = $v;
+                break;
+        }
+        $this->dateUpdated = Carbon::now();
+        $this->update();        
+    }
+
+    /**
+     *  Similar to `find()` except search is based on the `name` column.
+     */
+    public static function findByName($name, $query = null)
+    {
+        $query = $query ?: self::query();
+        return $query->where('name', $name)->first();
     }
 
     /**
@@ -117,8 +231,10 @@ class SettingBase extends Model
      *     warning. If a value is not found and a $default is not provided or 
      *     is null, the method will abort with an HTTP 500.
      */
-    public static function lookupValue($query, $name, $default = null)
+    public static function lookup($name, $default = null, $query = null)
     {
+        $query = $query ?: self::query();
+
         // Get an array of settings values.
         if (is_array($name)) {
             // Grab the data from the database.

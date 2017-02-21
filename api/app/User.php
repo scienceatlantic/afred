@@ -181,6 +181,18 @@ class User extends Model implements AuthenticatableContract,
         return $this->firstName . ' ' . $this->lastName;
     }
 
+    public function lookup($name, $default = null, $query = null)
+    {
+        $query = $query ?: UserSetting::where('userId', $this->id);
+        return UserSetting::lookup($name, $default, $query);
+    }
+
+    public function setting($name)
+    {
+        $query = UserSetting::where('userId', $this->id);
+        return UserSetting::findByName($name, $query);
+    }
+
     private function role($query, $role, $strict = true)
     {
         // Get permission level.

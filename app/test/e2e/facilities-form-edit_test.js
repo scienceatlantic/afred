@@ -22,7 +22,7 @@ describe('Facility Edit Form', function() {
     adminFacilities.approve();
     adminFacilities.getEdit();
 
-    expect(browser.getTitle()).toEqual('Edit Facility | AFRED');
+    expect(browser.getTitle()).toEqual('Update Facility | AFRED');
 
     form.preview();
     form.submit();

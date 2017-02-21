@@ -9,7 +9,7 @@ use App\Setting;
 use Illuminate\Http\Request;
 use App\Http\Requests\SettingRequest;
 
-class SettingController extends SettingBaseController
+class SettingController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,6 +34,8 @@ class SettingController extends SettingBaseController
      */     
     public function update(SettingRequest $request, $id)
     {
-        return $this->updateRecord($request, Setting::findOrFail($id));
+        $s = Setting::findOrFail($id);
+        $s->updateValue($request->value);
+        return $s;
     }
 }
