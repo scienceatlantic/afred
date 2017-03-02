@@ -5,6 +5,9 @@ namespace App;
 // Laravel.
 use Illuminate\Database\Eloquent\Model;
 
+// Controllers.
+use App\Http\Controllers\Controller;
+
 // Misc.
 use Laravel\Scout\Searchable;
 
@@ -83,7 +86,7 @@ class Equipment extends Model
         $e->facility->province;        
         $e->facility->sectors;
 
-        return $e->toArray();
+        return Controller::toCcArray($e->toArray());
     }
     
     /**

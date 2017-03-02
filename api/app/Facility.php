@@ -5,6 +5,9 @@ namespace App;
 // Laravel.
 use Illuminate\Database\Eloquent\Model;
 
+// Controllers.
+use App\Http\Controllers\Controller;
+
 // Misc.
 use Laravel\Scout\Searchable;
 
@@ -88,7 +91,7 @@ class Facility extends Model
         $fArray = $f->toArray();
         $fArray['equipment'] = $f->equipment()->notHidden()->get();
 
-        return $fArray;
+        return Controller::toCcArray($fArray);
     }
     
     /**

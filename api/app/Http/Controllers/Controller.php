@@ -100,7 +100,7 @@ class Controller extends BaseController
      * @param {array} $array Associative array.
      * @return {array}
      */
-    protected static function toCcArray($array)
+    public static function toCcArray($array)
     { 
         $a = [];
         foreach($array as $k => $v) {
