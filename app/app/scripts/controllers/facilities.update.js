@@ -2,11 +2,17 @@
 
 angular.module('afredApp').controller('FacilitiesUpdateController',
   ['$scope',
+   'confirmModal',
    'FacilityResource',
+   'infoModal',
    'RepositoryResource',
+   'warningModal',
   function($scope,
+           confirmModal,
            FacilityResource,
-           RepositoryResource) {
+           infoModal,
+           RepositoryResource,
+           warningModal) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
@@ -65,21 +71,33 @@ angular.module('afredApp').controller('FacilitiesUpdateController',
      * @requires $scope.facilities
      * @requires $scope.form.data.email
      * @requires $scope.ful
+     * @requires confirmModal
+     * @requires infoModal
      * @requires RepositoryResource
+     * @requires warningModal
      * 
      * @param index Array index of $scope.facilities
      * @param id Facility id.
      */
     $scope.requestToken = function(index, id) {
-      $scope.ful = RepositoryResource.createToken({
-        facilityId: id,
-        email: $scope.form.data.email
-      }, function(data) {
-        // Updates 
-        $scope.facilities[index].editorFirstName = data.editorFirstName;
-        $scope.facilities[index].editorLastName = data.editorLastName;
-        $scope.facilities[index].editorEmail = data.editorEmail;
-        $scope.facilities[index].status = data.status;
+      var t = 'create-update-facility-token';
+
+      confirmModal.open(t).result.then(function() {
+        $scope.ful = RepositoryResource.createToken({
+          facilityId: id,
+          email: $scope.form.data.email
+        }, function(data) {
+          // Updates 
+          $scope.facilities[index].editorFirstName = data.editorFirstName;
+          $scope.facilities[index].editorLastName = data.editorLastName;
+          $scope.facilities[index].editorEmail = data.editorEmail;
+          $scope.facilities[index].status = data.status;
+          infoModal.open(t + '-success');
+        }, function() {
+          warningModal.open(t + '-failed');
+        });
+      }, function() {
+        // Do nothing if user hits cancel.
       });
     };
     

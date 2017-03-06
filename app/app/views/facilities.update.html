@@ -4,30 +4,37 @@
   <h1>Keep your Facility Up-to-date</h1>
   
   <p>
-    If you are listed as a contact for a facility, you will be able to update it.
+    If you are listed as a contact for a facility, you will be able to update it. Please follow the instructions listed
+    below:
   </p>
   
   <p>
     <ul>
       <li>
-        To update your facility, please input the email address you used in the facility listing into the form below.
+        Input the email address used when your facility was submitted into the form below. A list of facilities attached
+        to that email address will then be displayed.
       </li>
       <li>
-        A list of facilities attached to your email will then be displayed.
-      </li>
-      <li>
-        Click the "Email token" button below the facility you wish to update. If that button is not shown, that means 
-        that an update request has already been made. You will not be allowed to generate more than one request at a
-        time.
-      </li>
-      <li>
-        An email will be sent to you containing a unique link allowing you to update your facility.
+        Click the <kbd>Request update</kbd> button corresponding to the facility you wish to update, and confirm the
+        request. You will receive an email containing a unique link that will allow you to update your facility. If the
+        <kbd>Request update</kbd> button is not available, you should instead see the following statuses listed:
+        <ul>
+          <li>
+            <b>OPEN</b> - An update request for this facility has already been made. You are not allowed to generate
+            more than one update request at a time.
+          </li>
+          <li>
+            <b>PENDING</b> - An edit of this facility has already been submitted for review. Please be patient while
+            an AFRED administrator reviews the edit. You are not allowed to generate another update request
+            until the edit has been reviewed.
+          </li>
+        </ul>
       </li>
     </ul>
   </p>
     
   <p>
-    If you are having trouble with this form, please contact
+    If you are having trouble with this form, or have any questions about updating your facility, please contact
     <a href="mailto:afred@scienceatlantic.ca">afred@scienceatlantic.ca</a>.
   </p>
   
@@ -41,8 +48,7 @@
       </div>
     </div>
     
-    <button type="submit" 
-            class="btn btn-default"
+    <button type="submit" class="btn btn-default"
             data-af-loading-btn="fr.$resolved === false && pagination.page === 1"
             data-ng-disabled="fr.$resolved === false"
             data-af-loading-btn-text="Searching...">
@@ -68,8 +74,8 @@
           </p>
           
           <p data-ng-show="facility.status === 'OPEN' || facility.status === 'PENDING'">
-            <span class="label label-info">{{ facility.status }}</span>
-            <span class="label label-info">{{ facility.editorFirstName }} {{ facility.editorLastName }}</span>           
+            <span class="label label-default">{{ facility.status }}</span>
+            <span class="label label-default">{{ facility.editorFirstName }} {{ facility.editorLastName }}</span>           
           </p>
           
           <p data-ng-hide="facility.status === 'OPEN' || facility.status === 'PENDING'">
@@ -78,7 +84,7 @@
                     data-af-loading-btn="ful.$resolved === false && form.buttons.selectedIndex === $index"
                     data-af-loading-btn-text="Emailing..."
                     data-ng-disabled="ful.$resolved === false">
-              Email token <span class="fa fa-send"></span>
+              Request update <span class="fa fa-send"></span>
             </button>
           </p>
           <hr data-ng-hide="$index === facilities.length - 1">
@@ -87,8 +93,7 @@
     </div>
     
     <p>
-      <button type="button"
-              class="btn btn-default"
+      <button type="button" class="btn btn-default btn-sm"
               data-ng-click="pagination.page = pagination.page + 1; submit()"
               data-af-loading-btn="fr.$resolved === false"
               data-ng-disabled="fr.$resolved === false || fr.currentPage === fr.lastPage">
