@@ -129,11 +129,12 @@ abstract class SettingBase extends Model
                     ]);
                     abort(500);
                 }
-                $text->value = $v;
+                $this->value = $v;
                 break;
             case 'TEXT':
                 $text = $this->text()->first() ?: $this->text()->create([]);
                 $text->value = $v;
+                $text->save();
                 break;
             case 'JSONTEXT':
                 if ($v !== null || (($v = json_encode($v)) === false)) {
@@ -145,6 +146,7 @@ abstract class SettingBase extends Model
                 }
                 $text = $this->text()->first() ?: $this->text()->create([]);
                 $text->value = $v;
+                $text->save();
                 break;
         }
         $this->dateUpdated = Carbon::now();
