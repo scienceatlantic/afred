@@ -37,15 +37,7 @@ angular.module('afredApp').run(['$rootScope', function($rootScope) {
     /* ---------------------------------------------------------------------
      * WordPress settings.
      * --------------------------------------------------------------------- */
-    wp: {
-      // Application authentication. Will be sent as a header with each request
-      // to the API.
-      // @see http://v2.wp-api.org/guide/authentication/#application-passwords-or-basic-authentication
-      appAuth: {
-        username: 'development',
-        password: 'R0KU jxX7 KjOR vDvX yPCQ 3DR0',
-      },
-      
+    wp: {      
       address: '//afred.ca/api/wp/wp-json/wp/v2',
       
       // Location of specific pages on WordPress. 
