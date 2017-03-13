@@ -22,7 +22,7 @@ angular.module('afredApp').run(['$rootScope', function($rootScope) {
      * API settings.
      * --------------------------------------------------------------------- */
     api: {
-      address: '//afred.ca/api/app/v2/dev',
+      address: '//api.afred.ca/dev',
     },
     
     /* ---------------------------------------------------------------------
@@ -31,22 +31,14 @@ angular.module('afredApp').run(['$rootScope', function($rootScope) {
     app: {
       name: 'Atlantic Facilities and Research Equipment Database',
       shortname: 'AFRED',
-      address: '//afred.ca/dev'
+      address: '//dev.afred.ca'
     },
     
     /* ---------------------------------------------------------------------
      * WordPress settings.
      * --------------------------------------------------------------------- */
     wp: {
-      // Application authentication. Will be sent as a header with each request
-      // to the API.
-      // @see http://v2.wp-api.org/guide/authentication/#application-passwords-or-basic-authentication
-      appAuth: {
-        username: 'development',
-        password: 'R0KU jxX7 KjOR vDvX yPCQ 3DR0',
-      },
-      
-      address: '//afred.ca/api/wp/wp-json/wp/v2',
+      address: '//wp.afred.ca/wp-json/wp/v2',
       
       // Location of specific pages on WordPress. 
       pages: {

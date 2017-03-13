@@ -113,9 +113,11 @@ class SettingTest extends TestCase
     public function testPutSettingWebsiteNotice()
     {
         $notice = App\Setting::where('name', 'websiteNotice')->first();
+        $payload = ['value' => 'something_else'];
 
         $this->actingAs($this->getAdmin())
-             ->put('/settings/' . $notice->id, ['value' => 'something_else'])
+             ->put('/settings/' . $notice->id, $payload)
+             ->seeJson($payload)
              ->assertResponseOk();
     }
 

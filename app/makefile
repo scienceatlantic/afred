@@ -10,19 +10,13 @@ grunt-dev:
 	mv ./app/scripts/env.js ./app/scripts/env.local.js
 	mv ./app/scripts/env.dev.js ./app/scripts/env.js
 
-	mv ./app/index.html ./app/index.local.html
-	mv ./app/index.dev.html ./app/index.html
-
 	grunt --force
 
 	mv ./app/scripts/env.js ./app/scripts/env.dev.js
 	mv ./app/scripts/env.local.js ./app/scripts/env.js
 
-	mv ./app/index.html ./app/index.dev.html
-	mv ./app/index.local.html ./app/index.html	
-
-	rm ./dist/index.local.html
 	rm ./dist/robots.txt
+	rm ./dist/.htaccess
 
 # Runs Grunt for the "production" branch.
 grunt-prod:
@@ -34,7 +28,6 @@ grunt-prod:
 	mv ./app/scripts/env.js ./app/scripts/env.production.js
 	mv ./app/scripts/env.local.js ./app/scripts/env.js
 
-	rm ./dist/index.dev.html
 	rm ./dist/robots.txt
 	rm ./dist/.htaccess
 
