@@ -57,11 +57,11 @@ class GenerateSitemap extends Command
         $addEquipmentChangeFreq = false;
 
         // Sitemap settings from database.
-        $s = Setting::lookup([
-            'appAddress'       => 'base',
-            'sitemapFilename'  => 'filename',
-            'sitemapFixedUrls' => 'fixedUrls',
-            'sitemapPing'      => 'ping'
+        list($base, $filename, $fixedUrls, $fileToPing) = Setting::lookup([
+            'appAddress',
+            'sitemapFilename',
+            'sitemapFixedUrls'    => [],
+            'sitemapPingFilename' => false
         ]);
 
         // Create XML object.
@@ -71,9 +71,9 @@ class GenerateSitemap extends Command
         $sm = new SimpleXMLElement($sm);
 
         // Insert fixed URLs.
-        foreach($s['fixedUrls'] as $url) {
+        foreach($fixedUrls as $url) {
             $urlElmt = $sm->addChild('url');
-            $urlElmt->addChild('loc', $s['base'] . $url);
+            $urlElmt->addChild('loc', $base . $url);
         }
 
         // Insert dynamic (public facilities and equipment) URLs.
@@ -84,8 +84,8 @@ class GenerateSitemap extends Command
         ])->get();
         foreach($facilities as $f) {
             // Insert public facility URL and lastmod.
-            // I.e. https://appAddress/facilities/{f-id}.
-            $fUrl = $s['base'] . '/facilities/' . $f->id;
+            // i.e. https://appAddress/facilities/{f-id}.
+            $fUrl = $base . '/facilities/' . $f->id;
             $urlElmt = $sm->addChild('url');
             $urlElmt->addChild('loc', $fUrl);
             if ($addFacilityLastMod) {
@@ -100,7 +100,7 @@ class GenerateSitemap extends Command
             }
 
             // Insert public equipment URLs lastmods.
-            // I.e. https://appAddress/facilities/{f-id}/equipment/{e-id}.
+            // i.e. https://appAddress/facilities/{f-id}/equipment/{e-id}.
             foreach($f->equipment as $e) {
                 $eUrl = $fUrl . '/equipment/' . $e->id;
                 $urlElmt = $sm->addChild('url');
@@ -118,19 +118,20 @@ class GenerateSitemap extends Command
         }
 
         // Create sitemap file.
-        $handle = fopen($s['filename'] . '-new', 'w');
+        $tempFilename = $filename . '-' . str_random(15);
+        $handle = fopen($tempFilename, 'w');
         fwrite($handle, $sm->asXML());
         fclose($handle);
 
         // Check if the files are different, if they are, override the existing
         // sitemap, if they are not, discard the sitemap that was just
         // generated.
-        if ($this->areFilesDiff($s['filename'], $s['filename'] . '-new')) {
-            rename($s['filename'] . '-new', $s['filename']);
-            $this->ping($s['base'], $s['ping']);
+        if (self::areFilesDiff($filename, $tempFilename)) {
+            rename($tempFilename, $filename);
             Log::info('Sitemap generated.');
+            self::ping($base, $fileToPing);
         } else {
-            unlink($s['filename'] . '-new');
+            unlink($tempFilename);
             Log::info('No change to sitemap.');
         }
     }
@@ -142,23 +143,27 @@ class GenerateSitemap extends Command
             $f1Size = filesize($f1);
             $f2Size = filesize($f2);
             if ($f1Size != $f2Size) {
-                return true;
+                return true; // Files are not the same.
             }
 
             // If the filesizes are the same, then go through the the files byte
             // by byte.
             $f1Handle = fopen($f1, 'r');
             $f2Handle = fopen($f2, 'r');
+            $areTheyDiff = false;
             while (!feof($f1Handle)) {
                 if (fread($f1Handle, $f1Size) != fread($f2Handle, $f2Size)) {                    
-                    return true; // Files are not the same.
+                    $areTheyDiff = true; // Don't return from loop because
+                                         // we need to close the handles.
+                    break;
                 }
             }
             fclose($f1Handle);
             fclose($f2Handle);
 
-            return false; // Files are the same.
+            return $areTheyDiff;
         }
+
         // If any of the files do not exist, assume they are different.
         return true;
     }
@@ -166,7 +171,11 @@ class GenerateSitemap extends Command
     private static function ping($base, $sitemap = null)
     {
         if ($sitemap) {
-            foreach(Setting::lookup('sitemapPingServices') as $service) {
+            if (!($services = Setting::lookup('sitemapPingServices', false))) {
+                Log::warning('Failed to ping sitemap - no services specified');
+            }
+
+            foreach($services as $service) {
                 $ch = curl_init($service . $base . $sitemap);
                 curl_exec($ch);
                 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -175,13 +184,15 @@ class GenerateSitemap extends Command
                         'service' => $service
                     ]);
                 } else {
-                    Log::error('Error pinging service.', [
+                    Log::error('Error pinging sitemap service.', [
                         'curlError' => curl_error($ch),
                         'service'   => $service
                     ]);
                 }
                 curl_close($ch);
             }
+        } else {
+            Log::warning('Failed to ping sitemap - location not specified');
         }
     }
 }

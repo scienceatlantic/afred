@@ -160,7 +160,7 @@ class SettingsTableSeeder extends Seeder
             'dateCreated'      => $now,
             'dateUpdated'      => $now
         ], [
-            'name'             => 'sitemapPing',
+            'name'             => 'sitemapPingFilename',
             'type'             => 'STRING',
             'value'            => '/sitemap.xml',
             'minAuthRoleOnGet' => $superAdminId,
