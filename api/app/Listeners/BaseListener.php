@@ -26,7 +26,7 @@ abstract class BaseListener
             'personalContactTitle',
             'personalContactEmail',
             'twitterHandle'
-        ]);
+        ], null, true);
     }
     
     protected function mail($template,

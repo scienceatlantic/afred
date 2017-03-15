@@ -181,10 +181,10 @@ class User extends Model implements AuthenticatableContract,
         return $this->firstName . ' ' . $this->lastName;
     }
 
-    public function lookup($name, $default = null, $query = null)
+    public function lookup($name, $default = null, $keys = false, $query = null)
     {
         $query = $query ?: UserSetting::where('userId', $this->id);
-        return UserSetting::lookup($name, $default, $query);
+        return UserSetting::lookup($name, $default, $keys, $query);
     }
 
     public function setting($name)

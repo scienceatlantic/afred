@@ -166,135 +166,145 @@ abstract class SettingBase extends Model
      * Retrieves a particular setting's value.
      * 
      * Note: In an attempt to minimise resource usage, this function only runs
-     * a single database query but as a consequence, multiple loops. No testing
+     * a single database query, but as a consequence multiple loops. No testing
      * was done to see if this approach is better than multiple queries and just
      * one loop.
      *
-     * @uses SettingBase::logWarning() To log (warning) any values that were not 
-     *     found but non-null default was given.
+     * @uses SettingBase::isEmpty() Check if a value is empty (empty string or
+     *     null).
      *
-     * @uses SettingBase::logError() To log (error) a value that was not found and 
-     *     abort with HTTP 500.
+     * @uses SettingBase::logDefaultFound() To log (warning) any values that 
+     *     were not found (or found but is empty) but a non-null default was 
+     *     given.
+     *
+     * @uses SettingBase::logErrorNotFound() To log (error) a value that was not
+     *     found (or is empty) and no default was provided. Will abort an 
+     *     HTTP 500.
      * 
      * @param string|array $name What is returned depends on whether a string
      *     or an array is given:
      *     (1) String:
-     *     Name of setting.
+     *     Value of setting or default (if provided).
      *
      *     (2) Array:
-     *     An array of setting names.
+     *     Numerically or associatively indexed array.
+     *
      *
      *     Example where a single setting is retrieved and no default is given:
      *     $appAddress = Setting::lookup('appAddress');
      *
+     *
      *     Example where a single setting is retrieved and a default is given:
      *     $appAddress = Setting::lookup('appAddress', 'http://localhost/');
      *     
-     *     Example where a few settings are retrieved at once and 'appName' and
-     *     'appShortName' are given aliases:
-     *     $someVar = Setting::lookup([
-     *         'appAddress',
-     *         'appName'      => 'name',
-     *         'appShortName' => 'shortName'  
-     *     ]);
-     *     
-     *     They can be accessed like this:
-     *     $someVar['appAddress']
-     *     $someVar['name']
-     *     $someVar['shortName']
      *
-     *     Example where a few settings are retrieved at once and a default is 
-     *     given. That means that any value that was not found will be replaced
-     *     with the default:
-     *     $someVar = Setting::lookup([
-     *         'appName'      => 'name',
-     *         'appShortName' => 'shortName'  
+     *     Example where a few settings are retrieved at once with defaults:
+     *     list($address, $name, $shortName) = Setting::lookup([
+     *         'appAddress',
+     *         'appName'      => 'Atlantic Facilities',
+     *         'appShortName' => 'AF'
+     *     ]);
+     *
+     *
+     *     Example where a few settings are retrieved at once and a single
+     *     default value is provided.
+     *     list($name, $shortName) = Setting::lookup([
+     *         'appName',
+     *         'appShortName',  
      *     ], 'AFRED');
      *
-     *     Example where a few settings are retrieved at once and an array of 
-     *     defaults are provided where each element of the array corresponds 
-     *     with each element of the '$name' array. A null value can be given
-     *     to signify that that particular setting must be found.  
-     *     $someVar = Setting::lookup([
-     *         'appAddress'
+     *
+     *     Example where a few settings are retrieved at once and we want it 
+     *     returned as an associative array:
+     *     $settings = Setting::lookup([
      *         'appName',
-     *         'appShortName',
-     *     ], [
-     *         null,
-     *         'Atlantic Facilities and Research Equipment Database',
-     *         'AFRED'
+     *         'appShortName',  
+     *     ], null, true);
+     *     
+     *     Retrieve values like this:
+     *     $settings['appName']
+     *
+     *     
+     *     Example where a few settings are retrieved at once and we want it 
+     *     returned as an associative array with array keys specified:
+     *     $settings = Setting::lookup([
+     *         'appName',
+     *         'appShortName',  
+     *     ], null, [
+     *         'name',
+     *         'shortName'   
      *     ]);
-     * @param mixed $default If the setting value was not found, it will be
-     *     replaced with this. The 'null' value (which is the default) signifies
-     *     that we don't have a default (the value must exist in the database).
+     *
+     *     Retrieve values like this:
+     *     $settings['name']
+     *
+     *
+     * @param mixed $default If the setting value was not found or is empty, it
+     *     will be replaced with this. The 'null' value (which is the default)
+     *     signifies that we don't have a default (signifying that a non-empty 
+     *     must exist in the database).
+     *
+     * @param array|boolean $keys Default is false = return as numerically
+     *     indexed array, true = return as associative array, array = return
+     *     as associative array with keys specified.
      * 
      * @return mixed See the examples above of what is returned. When a value
-     *     is not found and a $default is provided, it will be logged with a 
-     *     warning. If a value is not found and a $default is not provided or 
-     *     is null, the method will abort with an HTTP 500.
+     *     is not found (or is empty) and a $default is provided, it will be
+     *     logged with a warning. If a value is not found (or is empty) and a
+     *     $default is not provided or is null, the method will abort with an
+     *     HTTP 500 (via `SettingBase::logErrorNotFound()`).
      */
-    public static function lookup($name, $default = null, $query = null)
+    public static function lookup($name, $default = null, $keys = false,
+        $query = null)
     {
         $query = $query ?: self::query();
 
-        // Get an array of settings values.
-        if (is_array($name)) {
-            // Grab the data from the database.
-            $count = 0;
-            foreach($name as $k => $v) {
-                if (++$count === 1) {
-                    $query->where('name', is_string($k) ? $k : $v);
-                    continue;
-                }
-                $query->orWhere('name', is_string($k) ? $k : $v);
-            }
-            $query = $query->get()->pluck('value', 'name');
+        // Convert to array if not already an array.
+        $names = is_array($name) ? $name : [$name];
 
-            // Process the retrieved values.
-            $values = [];
-            $index = 0;
-            foreach($name as $k => $v) {
-                // Get the 'name' of the setting
-                $n = is_string($k) ? $k : $v;
+        // Retrieve values.
+        $i = 0;
+        foreach($names as $k => $v) {
+            $method = $i++ === 0 ? 'where' : 'orWhere';
+            $query->$method('name', is_string($k) ? $k : $v);
+        }
 
-                // Get the default value.
-                $d = is_array($default) ? $default[$index++] : $default;
-                
-                // Value found.
-                if ($query->has($n)) {
-                    $values[$v] = $query[$n];
-                } 
-                // Not found, but default provided.
-                else if ($d !== null) {
-                    SettingBase::logWarning($n, $d);
-                    $values[$v] = $d;
-                } 
-                // Not found and default not provided.
-                else {
-                    SettingBase::logError($n);
-                }
+        // Index retrieved values by name.
+        $queriedValues = $query->get()->pluck('value', 'name');
+
+        // Process the retrieved values.
+        $i = 0;
+        $values = [];
+        foreach($names as $k => $v) {
+            $i++; // Loop index.
+
+            // Get name and default (if provided as assoc array or second
+            // argument to method) values.
+            list($n, $d) = is_string($k) ? [$k, $v] : [$v, $default];
+
+            // Index values associatively, associatively using
+            // aliases, or numerically.
+            $key = is_array($keys) ? $keys[$i] : ($keys ? $n : $i);
+
+            // Value found and is not empty.
+            if ($queriedValues->has($n) && !self::isEmpty($queriedValues[$n])) {
+                $values[$key] = $queriedValues[$n];
+            } 
+            // Not found or is empty, but default provided.
+            else if ($d !== null) {
+                self::logDefaultFound($n, $d);
+                $values[$key] = $queriedValues[$n];
             }
-            return $values;
-        } 
-        // Get just a single setting value.
-        else {
-            // Value found.
-            if ($query = $query->where('name', $name)->first()) {
-                return $query->value;
-            } 
-            // Not found, but default provided.
-            else if ($default !== null) {
-                SettingBase::logWarning($name, $default);
-                return $default;
-            } 
             // Not found and default not provided.
             else {
-                SettingBase::logError($name);
+                self::logErrorNotFound($n);
             }
         }
+
+        return is_array($name) ? $values : array_pop($values);
     }
     
-    private static function logWarning($name, $default) 
+    private static function logDefaultFound($name, $default) 
     {
         Log::warning('Setting not found, using default instead.', [
             'name'    => $name,
@@ -302,11 +312,16 @@ abstract class SettingBase extends Model
         ]);
     }
 
-    private static function logError($name)
+    private static function logErrorNotFound($name)
     {
         Log::error('Setting not found. Aborting!', [
             'name' => $name
         ]);
         abort(500);
+    }
+
+    private static function isEmpty($value)
+    {
+        return ($value === "" || $value === null);
     }
 }

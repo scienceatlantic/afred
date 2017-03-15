@@ -49,12 +49,12 @@ class JobCron extends Command
     {
         Log::info('Command: `cron:job` called.');
 
-        $s = Setting::lookup([
+        list($numCycles, $sleepDur) = Setting::lookup([
             'cronJobNumCycles',
             'cronJobSleepDuration'
         ]); 
-        $numCycles = $this->filterNumCycles($s['cronJobNumCycles']);
-        $sleepDur = $this->filterSleepDuration($s['cronJobSleepDuration']);
+        $numCycles = $this->filterNumCycles($numCycles);
+        $sleepDur = $this->filterSleepDuration($sleepDur);
         
         // Create raw command string.
         // Calling `$this->call('queue:work', ['--once']);` does not seem to 
