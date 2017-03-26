@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Controller;
+
 class TestCase extends Illuminate\Foundation\Testing\TestCase
 {
     /**
@@ -299,11 +301,11 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
 
         // Remove null valued columns.
         if ($removeNullValuedColumns) {
-            $columns = $this->unnullify($columns);
+            $columns = self::unnullify($columns);
         }
 
         // Make sure all array keys are camel cased.
-        $columns = $this->toCamelCaseArr($columns);
+        $columns = Controller::toCcArray($columns);
         
         // Remove columns that should me ignored.
         $columns = array_except($columns, $columnsToIgnore);
@@ -405,7 +407,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
 
         // Remove null valued keys.
         if ($removeNullValuedKeysFromArray2) {
-            $array2 = $this->unnullify($array2);
+            $array2 = self::unnullify($array2);
         }
         
         // Remove keys that should be ignored.
@@ -421,23 +423,14 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         }
     }
 
-    protected function unnullify($arr, $strict = true, $deep = false)
+    public static function unnullify($arr, $strict = true, $deep = false)
     {
         return array_where($arr, function($value, $key) use ($strict, $deep) {
             if (is_array($value) && $deep) {
-                return $this->unnullify($value, $strict, $deep);
+                return self::unnullify($value, $strict, $deep);
             } else {
                 return $strict ? $value !== null : !empty($value);
             }
         });
-    }
-
-    protected function toCamelCaseArr($arr)
-    {
-        $camelCaseKeyedArray = [];
-        foreach($arr as $key => $value) {
-            $camelCaseKeyedArray[camel_case($key)] = $value;
-        }
-        return $camelCaseKeyedArray;
     }
 }
