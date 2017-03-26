@@ -34,11 +34,17 @@ abstract class SettingBase extends Model
      */
     public function getValueAttribute($v)
     {
-        switch ($this->type) {
+        $type = $this->type;
+
+        if ($v === null && $type !== 'TEXT' && $type !== 'JSONTEXT') {
+            return null;
+        }
+
+        switch ($type) {
             case 'BOOLEAN':
-                return (bool) $v;
+                return (boolean) $v;
             case 'INT':
-                return (int) $v;
+                return (integer) $v;
             case 'DOUBLE':
                 return (double) $v;
             case 'JSONTEXT':
@@ -49,10 +55,7 @@ abstract class SettingBase extends Model
             case 'JSON':
                 return json_decode($v, true);
             case 'TEXT':
-                if ($v = $this->text()->first()) {
-                    return $v->value;
-                }
-                return null;
+                return ($v = $this->text()->first()) ? $v->value : null;
             case 'EMAIL':
                 // No break.
             case 'URL':
@@ -62,7 +65,7 @@ abstract class SettingBase extends Model
             case 'DATE':
                 // No break.
             case 'DATETIME':
-                return $v !== null ? Carbon::parse($v) : null;
+                return Carbon::parse($v);
         }        
     }
 
@@ -71,86 +74,109 @@ abstract class SettingBase extends Model
      */
     public function updateValue($v)
     {
-        switch ($this->type) {
-            case 'BOOLEAN':
-                $this->value = $v ? 1 : 0;
-                break;
-            case 'INT':
-                $this->value = $v !== null ? (int) $v : null;
-                break;
-            case 'DOUBLE':
-                $this->value = $v !== null ? (double) $v : null;
-                break;
-            case 'DATE':
-                if ($v instanceof Carbon) {
-                    $this->value = $v->toDateString();
-                } else {
-                    $this->value = $v !== null ? Carbon::parse($v)
-                        ->toDateString() : null;
-                }
-                break;
-            case 'DATETIME':
-                if ($v instanceof Carbon) {
-                    $this->value = $v->toDateTimeString();
-                } else {
-                    $this->value = $v !== null ? Carbon::parse($v)
-                        ->toDateTimeString() : null;
-                }
-                break;
-            case 'EMAIL':
-                if ($v === null || filter_var($v, FILTER_VALIDATE_EMAIL)) {
+        $type = $this->type;
+
+        if ($v !== null) {
+            switch ($type) {
+                case 'BOOLEAN':
+                    self::isType($v, ['boolean', 1, 0, 'NULL']);
+                    $this->value = (boolean) $v;
+                    break;
+                case 'INT':
+                    self::isType($v, ['integer', 'NULL']);
+                    $this->value = (integer) $v;
+                    break;
+                case 'DOUBLE':
+                    self::isType($v, ['integer', 'double', 'NULL']);
+                    $this->value = (double) $v;
+                    break;
+                case 'DATE':
+                    try {
+                        $this->value = Carbon::parse($v)->toDateString();
+                    } catch (\Exception $e) {
+                        Log::error('`$v` is not a valid date string', [
+                            'name'               => $this->name,
+                            'value'              => $v,
+                            'carbonErrorMessage' => $e->getMessage()
+                        ]);
+                        abort(500);
+                    }
+                    break;
+                case 'DATETIME':
+                    try {
+                        $this->value = Carbon::parse($v)->toDateTimeString();
+                    } catch (\Exception $e) {
+                        Log::error('`$v` is not a valid datetime string', [
+                            'name'               => $this->name,
+                            'value'              => $v,
+                            'carbonErrorMessage' => $e->getMessage()
+                        ]);
+                        abort(500);
+                    }
+                    break;
+                case 'EMAIL':
+                    if (!filter_var($v, FILTER_VALIDATE_EMAIL)) {
+                        Log::error('`$v` is not a valid email', [
+                            'name'  => $this->name,
+                            'value' => $v
+                        ]);
+                        abort(500);
+                    }
                     $this->value = $v;
-                } else {
-                    Log::error('Value is not a valid email', [
-                        'name'  => $this->name,
-                        'value' => $v
-                    ]);
-                    abort(500);
-                }
-                break;
-            case 'URL':
-                if ($v === null || filter_var($v, FILTER_VALIDATE_URL)) {
+                    break;
+                case 'URL':
+                    if (!filter_var($v, FILTER_VALIDATE_URL)) {
+                        Log::error('`$v` is not valid URL', [
+                            'name'  => $this->name,
+                            'value' => $v
+                        ]);
+                        abort(500);                        
+                    }
                     $this->value = $v;
-                } else {
-                    Log::error('Value is not valid URL', [
-                        'name'  => $this->name,
-                        'value' => $v
-                    ]);
-                    abort(500);
-                }
-            case 'STRING':
-                $this->value = $v;
-                break;
-            case 'JSON':
-                if ($v !== null || (($v = json_encode($v)) === false)) {
-                    Log::error('Value is not valid JSON', [
-                        'name'  => $this->name,
-                        'value' => $v
-                    ]);
-                    abort(500);
-                }
-                $this->value = $v;
-                break;
-            case 'TEXT':
-                $text = $this->text()->first() ?: $this->text()->create([]);
-                $text->value = $v;
-                $text->save();
-                break;
-            case 'JSONTEXT':
-                if ($v !== null || (($v = json_encode($v)) === false)) {
-                    Log::error('Value is not valid JSON', [
-                        'name'  => $this->name,
-                        'value' => $v
-                    ]);
-                    abort(500);
-                }
-                $text = $this->text()->first() ?: $this->text()->create([]);
-                $text->value = $v;
-                $text->save();
-                break;
+                    break;
+                case 'STRING':
+                    $this->value = $v;
+                    break;
+                case 'JSON':
+                    if (($v = json_encode($v)) === false || !self::isJson($v)) {
+                        Log::error('`$v` is not valid JSON', [
+                            'name'  => $this->name,
+                            'value' => $v
+                        ]);
+                        abort(500);
+                    }
+                    $this->value = $v;
+                    break;
+                case 'TEXT':
+                    $text = $this->text()->first() ?: $this->text()->create([]);
+                    $text->value = $v;
+                    $text->save();
+                    $this->value = null;
+                    break;
+                case 'JSONTEXT':
+                    if (($v = json_encode($v)) === false || !self::isJson($v)) {
+                        Log::error('`$v` is not valid JSON', [
+                            'name'  => $this->name,
+                            'value' => $v
+                        ]);
+                        abort(500);
+                    }
+                    $text = $this->text()->first() ?: $this->text()->create([]);
+                    $text->value = $v;
+                    $text->save();
+                    $this->value = null;
+                    break;
+            }
+        } else {
+            $this->value = null;
+            if ($text = $this->text()->first()) {
+                $text->value = null;
+                $text->update();
+            }
         }
+
         $this->dateUpdated = Carbon::now();
-        $this->update();        
+        $this->update();
     }
 
     /**
@@ -276,16 +302,14 @@ abstract class SettingBase extends Model
         $i = 0;
         $values = [];
         foreach($names as $k => $v) {
-            $i++; // Loop index.
-
-            // Get name and default (if provided as assoc array or second
-            // argument to method) values.
+            // Get name and default values (if provided as assoc array or second
+            // argument to method).
             list($n, $d) = is_string($k) ? [$k, $v] : [$v, $default];
 
             // Index values associatively, associatively using
             // aliases, or numerically.
             $key = is_array($keys) ? $keys[$i] : ($keys ? $n : $i);
-
+            
             // Value found and is not empty.
             if ($queriedValues->has($n) && !self::isEmpty($queriedValues[$n])) {
                 $values[$key] = $queriedValues[$n];
@@ -293,12 +317,14 @@ abstract class SettingBase extends Model
             // Not found or is empty, but default provided.
             else if ($d !== null) {
                 self::logDefaultFound($n, $d);
-                $values[$key] = $queriedValues[$n];
+                $values[$key] = $d;
             }
             // Not found and default not provided.
             else {
                 self::logErrorNotFound($n);
             }
+
+            $i++; // Advance loop index.
         }
 
         return is_array($name) ? $values : array_pop($values);
@@ -323,5 +349,28 @@ abstract class SettingBase extends Model
     private static function isEmpty($value)
     {
         return ($value === "" || $value === null);
+    }
+
+    private static function isType($v, $types)
+    {
+        $str = ' ';
+        $vType = gettype($v);
+        $len = count($types);
+        foreach($types as $index => $type) {
+            if ($vType === $type || $v === $type) {
+                return true;
+            }
+            $str .= '"' . ($vType === $type ? $vType : $type) . '", ';
+            $str .= $index === ($len - 2) ? 'or ' : '';
+        }
+        Log::error('`$v` is not of type' . rtrim($str, ', '));
+        abort(500);
+    }
+
+    private function isJson($str)
+    {
+        return is_string($str) 
+            && is_array(json_decode($str, true)) 
+            && (json_last_error() === JSON_ERROR_NONE);
     }
 }
