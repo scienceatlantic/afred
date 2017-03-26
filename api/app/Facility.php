@@ -89,7 +89,7 @@ class Facility extends Model
 
         // Only include equipment that is not hidden.
         $fArray = $f->toArray();
-        $fArray['equipment'] = $f->equipment()->notHidden()->get();
+        $fArray['equipment'] = $f->equipment()->notHidden()->get()->toArray();
 
         return Controller::toCcArray($fArray);
     }
