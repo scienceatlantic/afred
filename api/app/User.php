@@ -120,7 +120,7 @@ class User extends Model implements AuthenticatableContract,
      */
     public function scopeSuperAdmins($query, $strict = false)
     {
-        return $this->role($query, 'SUPER_ADMIN');
+        return $this->role($query, 'SUPER_ADMIN', $strict);
     }
 
     /**
