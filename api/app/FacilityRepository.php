@@ -254,13 +254,18 @@ class FacilityRepository extends Model
      * Custom attribute accessor.
      *
      * @return int 1 = true, 0 = false, -1 = not applicable (i.e. record has 
-     *     been deleted or rejected).
+     *     been deleted, rejected, or was never published).
      */
     public function getIsPublishedRevisionAttribute()
     {
-        $f = $this->facility()->first();
-        return $this->attributes['isPublishedRevision'] =
-            $f ? ($f->facilityRepositoryId === $this->id ? 1 : 0) : -1;
+        $this->attributes['isPublishedRevision'] = -1;   
+        if (($f = $this->facility()->first())
+            && ($this->state === 'PUBLISHED' 
+            || $this->state === 'PUBLISHED_EDIT')) {
+            $this->attributes['isPublishedRevision'] =
+                $f->facilityRepositoryId === $this->id ? 1 : 0;
+        }
+        return $this->attributes['isPublishedRevision'];
     }
 
     /**
@@ -270,13 +275,15 @@ class FacilityRepository extends Model
      *     been deleted, rejected, or was never published).
      */
     public function getIsPreviousRevisionAttribute()
-    {
-        $f = $this->facility()->first();
-        return $this->attributes['isPreviousRevision'] = 
-            $f ? ($f->facilityRepositoryId !== $this->id 
-                  && ($this->state === 'PUBLISHED'
-                  || $this->state === 'PUBLISHED_EDIT') ? 1 : 0) : -1;
-            
+    {     
+        $this->attributes['IsPreviousRevision'] = -1;   
+        if (($f = $this->facility()->first())
+            && ($this->state === 'PUBLISHED' 
+            || $this->state === 'PUBLISHED_EDIT')) {
+            $this->attributes['IsPreviousRevision'] =
+                $f->facilityRepositoryId !== $this->id ? 1 : 0;
+        }
+        return $this->attributes['IsPreviousRevision'];
     }
 
     /**
