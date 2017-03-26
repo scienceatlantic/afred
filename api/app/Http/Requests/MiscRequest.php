@@ -16,6 +16,8 @@ class MiscRequest extends Request
         switch ($item) {
             case 'searchFilters':
                 return true;
+            case 'facilitiesByEmailWithUnclosedUpdateRequests':
+                return true;
             case 'facilityRepositoryBreakdown':
                 return $this->isAdmin();
             case 'randomEquipment':
