@@ -29,6 +29,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+        // TODO: start using this instead
     }
 
     /**
