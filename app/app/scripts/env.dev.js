@@ -44,11 +44,11 @@ angular.module('afredApp').run(['$rootScope', function($rootScope) {
       pages: {
         'what\'s new': { pageId: 93 },
         'about': { pageId: 5 },
+        'contact': { pageId: 183 },
         'terms of service': { pageId: 38 },
         'privacy policy': { pageId: 36 },
         'disclaimer': { pageId: 40 },
-        'form guide': { pageId: 48 },
-        'admin resources': { pageId: 113 }
+        'form guide': { pageId: 48 }
       }
     },
     
