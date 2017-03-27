@@ -74,8 +74,8 @@ class FacilityRepositoryModelTest extends TestCase
         $this->assertNotEquals($f->name, $pdnFr->facilityName);
         $this->assertEquals(-1, $pdnFr->isBeingUpdated);
         $this->assertEquals(0, $pdnFr->isDeleted);
-        $this->assertEquals(-1, $pdnFr->isPublishedRevision);
-        $this->assertEquals(-1, $pdnFr->isPreviousRevision);
+        $this->assertEquals(0, $pdnFr->isPublishedRevision);
+        $this->assertEquals(0, $pdnFr->isPreviousRevision);
         $this->assertEquals(-1, $pdnFr->isPublic);
         $this->assertEquals($f->facilityRepositoryId, $pdnFr->publishedId);
         $this->assertEquals(null, $pdnFr->unclosedUpdateRequest);
@@ -123,8 +123,8 @@ class FacilityRepositoryModelTest extends TestCase
         $this->assertNotEquals($f->name, $rejFr->facilityName);
         $this->assertEquals(-1, $rejFr->isBeingUpdated);
         $this->assertEquals(0, $rejFr->isDeleted);
-        $this->assertEquals(-1, $rejFr->isPublishedRevision);
-        $this->assertEquals(-1, $rejFr->isPreviousRevision);
+        $this->assertEquals(0, $rejFr->isPublishedRevision);
+        $this->assertEquals(0, $rejFr->isPreviousRevision);
         $this->assertEquals(-1, $rejFr->isPublic);
         $this->assertEquals($pubFr->id, $rejFr->publishedId);
         $this->assertEquals(null, $rejFr->unclosedUpdateRequest);
