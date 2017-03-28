@@ -243,12 +243,55 @@ $factory->define(App\Sector::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->defineAs(App\Sector::class, 'withDates', 
+$factory->defineAs(App\Sector::class, 'withDates',
     function (Faker\Generator $faker) use ($factory) {
         $sector = $factory->raw(App\Sector::class);
         $date = $faker->dateTimeThisMonth();
 
         return array_merge($sector, [
+            'dateCreated' => $date,
+            'dateUpdated' => $date
+        ]);
+    }
+);
+
+$factory->define(App\Role::class, function (Faker\Generator $faker) {
+    return [
+        'name'       => str_random(20),
+        'permission' => rand(1, 10)
+    ];
+});
+
+$factory->defineAs(App\Role::class, 'withDates', 
+    function (Faker\Generator $faker) use ($factory) {
+        $role = $factory->raw(App\Role::class);
+        $date = $faker->dateTimeThisMonth();
+
+        return array_merge($role, [
+            'dateCreated' => $date,
+            'dateUpdated' => $date
+        ]);
+    }
+);
+
+$factory->define(App\Setting::class, function(Faker\Generator $faker) {
+    return [
+        'name'             => str_random(20),
+        'type'             => 'STRING',
+        'value'            => $faker->sentence,
+        'minAuthRoleOnGet' => 1,
+        'minAuthRoleOnPut' => 1,
+        'dateCreated'      => null,
+        'dateUpdated'      => null
+    ];
+});
+
+$factory->defineAs(App\Setting::class, 'withDates', 
+    function (Faker\Generator $faker) use ($factory) {
+        $setting = $factory->raw(App\Setting::class);
+        $date = $faker->dateTimeThisMonth();
+
+        return array_merge($setting, [
             'dateCreated' => $date,
             'dateUpdated' => $date
         ]);

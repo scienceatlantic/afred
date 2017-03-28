@@ -57,16 +57,13 @@ class UpdateFacilityReminder extends Command
         $now = Carbon::parse(Carbon::now()->toDateString());
         
         // Get settings.
-        $s = Setting::lookup([
-            'updateFacilityReminderDateLastRun'      => 'dateLastRun',
-            'updateFacilityReminderIntervalInMonths' => 'interval'
+        list($dateLastRun, $interval) = Setting::lookup([
+            'updateFacilityReminderDateLastRun' => Carbon::parse('1990-01-01'),
+            'updateFacilityReminderIntervalInMonths'
         ]);
 
-        // Set default date.
-        $s['dateLastRun'] = $s['dateLastRun'] ?: Carbon::parse('1990-01-01');
-
         // Make sure command is not run more than once a day.
-        if ($s['dateLastRun']->gte($now)) {
+        if ($dateLastRun->gte($now)) {
             Log::warning('Not allowed to run command more than once a day. '
                 . 'Aborting!');
             abort(500);
@@ -78,14 +75,14 @@ class UpdateFacilityReminder extends Command
         // Get outdated facilities.
         $facilities = Facility::with('currentRevision', 'primaryContact')
             ->whereBetween('dateUpdated', [
-                $s['dateLastRun']->subMonths($s['interval'])->addDay(),
-                $now->subMonths($s['interval']),
+                $dateLastRun->subMonths($interval)->addDay(),
+                $now->subMonths($interval),
             ])->get();
 
         // Generate events (that send out emails).
         foreach($facilities as $f) {
             if (!$f->currentRevision->updateRequests()->notClosed()->count()) {
-                event(new UpdateFacilityReminderEvent($f, $s['interval']));
+                event(new UpdateFacilityReminderEvent($f, $interval));
             } else {
                 Log::info('Facility is being updated. Skipping!', [
                     'id'   => $f->id,

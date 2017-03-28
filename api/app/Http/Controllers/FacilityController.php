@@ -28,21 +28,18 @@ class FacilityController extends Controller
      */
     public function index(FacilityRequest $request)
     {
-        if (!($email = $request->email)) {
-            $f = Facility::with([
-                'province',
-                'organization.ilo',
-                'disciplines',
-                'sectors',
-                'primaryContact',
-                'contacts',
-                'equipment' => function($query) {
-                    $query->notHidden();
-                }
-            ])->notHidden();
-            return $this->pageOrGet($f);            
-        }
-        return $this->indexMatchingFacilities($email);
+        $f = Facility::with([
+            'province',
+            'organization.ilo',
+            'disciplines',
+            'sectors',
+            'primaryContact',
+            'contacts',
+            'equipment' => function($query) {
+                $query->notHidden();
+            }
+        ])->notHidden();
+        return $this->pageOrGet($f);
     }
 
     /**
@@ -123,34 +120,5 @@ class FacilityController extends Controller
 
         $f->delete();
         return $deletedFacility;
-    }
-    
-    private function indexMatchingFacilities($email)
-    {
-        // Find all matching contacts and grab their facility IDs.
-        $cF = Contact::where('email', $email)->select('facilityId');
-        
-        // Find all matching primary contacts and grab their facility IDs.
-        $pcF = PrimaryContact::where('email', $email)->select('facilityId');
-        
-        // Add the two results together and grab all the matching facilities.
-        $ids = $cF->union($pcF)->get()->toArray();
-        
-        // Return the facility data 'left joined' with facility update link
-        // records that are not 'CLOSED'.
-        $f = Facility::leftJoin('facility_update_links', function($join) {
-                $join->on('facility_update_links.frIdBefore', '=',
-                    'facilities.facilityRepositoryId')
-                    ->where('facility_update_links.status', '!=', 'CLOSED');
-            })->whereIn('facilities.id', $ids)
-            ->select('facilities.id',
-                     'facilities.name',
-                     'facilities.city',
-                     'facility_update_links.editorFirstName',
-                     'facility_update_links.editorLastName',
-                     'facility_update_links.editorEmail',
-                     'facility_update_links.status');
-        
-        return $this->pageOrGet($f);
     }
 }

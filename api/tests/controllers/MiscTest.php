@@ -59,6 +59,23 @@ class MiscTest extends TestCase
              ->assertResponseStatus(403);
     }
 
+    public function testGetFacilitiesByEmailWithUnclosedUpdateRequests()
+    {
+        $email = 'afred.dev+testing@scienceatlantic.ca';
+
+        $this->get('/misc?item=facilitiesByEmailWithUnclosedUpdateRequests&email=' . $email)
+             ->assertResponseOk();        
+    }
+
+    public function testGetFacilitiesByEmailWithUnclosedUpdateRequestsWithoutEmail()
+    {
+        $this->get('/misc?item=facilitiesByEmailWithUnclosedUpdateRequests&email=')
+             ->seeJson([
+                 'total' => 0
+             ])
+             ->assertResponseOk();
+    }
+
     public function testGetInvalidItem()
     {
         $this->get('/misc?item=something')

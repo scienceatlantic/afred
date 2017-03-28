@@ -3,8 +3,10 @@
 angular.module('afredApp').controller('ContactController',
   ['$scope',
    'EmailResource',
+   'WpResource',
   function($scope,
-           EmailResource) {
+           EmailResource,
+           WpResource) {
     /* ---------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------- */
@@ -76,5 +78,11 @@ angular.module('afredApp').controller('ContactController',
        */
       show: 'CONTACT_FORM'
     };
+
+    // Get contact page from WordPress.
+    $scope.wp = WpResource.getPage($scope._env.wp.pages['contact']);
+    $scope.wp.$promise.then(null, function(response) {
+      $scope._httpError(response);
+    });
   }
 ]);

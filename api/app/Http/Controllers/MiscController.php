@@ -7,11 +7,13 @@ use \AlgoliaSearch\Client as Algolia;
 use Log;
 
 // Models.
+use App\Contact;
 use App\Discipline;
 use App\Equipment;
 use App\Facility;
 use App\FacilityRepository;
 use App\Organization;
+use App\PrimaryContact;
 use App\Province;
 use App\Sector;
 
@@ -24,7 +26,7 @@ class MiscController extends Controller
     public function index(MiscRequest $request)
     {
         $item = $request->item;
-        return $this->$item();
+        return $this->$item($request);
     }
 
     private function facilityRepositoryBreakdown()
@@ -130,5 +132,36 @@ class MiscController extends Controller
         $indices[$equipment] = $allIndices[$equipment];
         
         return $indices;
+    }
+
+    private function facilitiesByEmailWithUnclosedUpdateRequests($request)
+    {
+        $email = $request->email;
+
+        // Find all matching contacts and grab their facility IDs.
+        $cF = Contact::where('email', $email)->select('facilityId');
+        
+        // Find all matching primary contacts and grab their facility IDs.
+        $pcF = PrimaryContact::where('email', $email)->select('facilityId');
+        
+        // Add the two results together and grab all the matching facilities.
+        $ids = $cF->union($pcF)->get()->toArray();
+        
+        // Return the facility data 'left joined' with facility update link
+        // records that are not 'CLOSED'.
+        $f = Facility::leftJoin('facility_update_links', function($join) {
+                $join->on('facility_update_links.frIdBefore', '=',
+                    'facilities.facilityRepositoryId')
+                    ->where('facility_update_links.status', '!=', 'CLOSED');
+            })->whereIn('facilities.id', $ids)
+            ->select('facilities.id',
+                     'facilities.name',
+                     'facilities.city',
+                     'facility_update_links.editorFirstName',
+                     'facility_update_links.editorLastName',
+                     'facility_update_links.editorEmail',
+                     'facility_update_links.status');
+        
+        return $this->pageOrGet($f);        
     }
 }

@@ -71,22 +71,17 @@ class Role extends Model
      * @return integer Permission level or -1 if $roleIds doesn't contain any
      *     valid role IDs.
      */
-    public function scopeMaxPermission($query, $roleIds = [])
+    public function scopeMaxPermission($query, $roleIds = null)
     {
         // If an array of role IDs were provided, check that at least one of the
         // IDs are valid. If none of the IDs are valid, return -1.
-        if (count($roleIds)) {
-            $found = false;
-            foreach ($roleIds as $roleId) {
+        if ($roleIds && count($roleIds)) {
+            foreach($roleIds as $roleId) {
                 if (is_numeric($roleId) && Role::find($roleId)) {
-                    $query->whereIn('id', $roleIds);
-                    $found = true;
-                    break;
+                    return $query->whereIn('id', $roleIds)->max('permission');
                 }
             }
-            if (!$found) {
-                return -1;
-            }
+            return -1;
         }
         return $query->max('permission');
     }

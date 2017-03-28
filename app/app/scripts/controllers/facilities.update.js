@@ -3,13 +3,13 @@
 angular.module('afredApp').controller('FacilitiesUpdateController',
   ['$scope',
    'confirmModal',
-   'FacilityResource',
+   'MiscResource',
    'infoModal',
    'RepositoryResource',
    'warningModal',
   function($scope,
            confirmModal,
-           FacilityResource,
+           MiscResource,
            infoModal,
            RepositoryResource,
            warningModal) {
@@ -26,12 +26,14 @@ angular.module('afredApp').controller('FacilitiesUpdateController',
      *     'NO_RESULTS_MESSAGE'.
      *
      * @requires $scope.form
+     * @requires MiscResource
      * @requires RepositoryResource
      */
     $scope.submit = function() {
       // Don't run if the email field is empty.
       if ($scope.form.data.email) {
-        $scope.fr = FacilityResource.query({
+        $scope.fr = MiscResource.get({
+          item: 'facilitiesByEmailWithUnclosedUpdateRequests',
           email: $scope.form.data.email,
           page: $scope.pagination.page,
           itemsPerPage: $scope.pagination.itemsPerPage
