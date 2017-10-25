@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFormFieldDropdownValuesTable extends Migration
+class CreateLabelledValuesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateFormFieldDropdownValuesTable extends Migration
      */
     public function up()
     {
-        Schema::create('form_field_dropdown_values', function (Blueprint $table) {
+        Schema::create('labelled_values', function (Blueprint $table) {
             // Columns
             $table->increments('id');
             $table->string('form_label');
@@ -28,6 +28,6 @@ class CreateFormFieldDropdownValuesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('form_field_dropdown_values');
+        Schema::dropIfExists('labelled_values');
     }
 }

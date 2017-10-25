@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFormFieldFormFieldDropdownValueTable extends Migration
+class CreateStringValuesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,14 @@ class CreateFormFieldFormFieldDropdownValueTable extends Migration
      */
     public function up()
     {
-        Schema::create('form_field_form_field_dropdown_value', function (Blueprint $table) {
+        Schema::create('string_values', function (Blueprint $table) {
             // Columns
             $table->increments('id');
+            $table->integer('form_entry_id')
+                  ->unsigned();
             $table->integer('form_field_id')
                   ->unsigned();
-            $table->integer('form_field_dropdown_value_id')
-                  ->unsigned();
+            $table->string('value');
             $table->timestamps();
 
             // Foreign keys & indices
@@ -28,11 +29,11 @@ class CreateFormFieldFormFieldDropdownValueTable extends Migration
                   ->on('form_fields')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
-            $table->foreign('form_field_dropdown_value_id', 'ffffdv_ffdv_id_foreign')
+            $table->foreign('form_entry_id')
                   ->references('id')
-                  ->on('form_field_dropdown_values')
+                  ->on('form_entries')
                   ->onUpdate('cascade')
-                  ->onDelete('cascade');                  
+                  ->onDelete('restrict');
         });
     }
 
@@ -43,6 +44,6 @@ class CreateFormFieldFormFieldDropdownValueTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('form_field_form_field_dropdown_value');
+        Schema::dropIfExists('string_values');
     }
 }

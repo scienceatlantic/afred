@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFormEntryFormFieldCheckboxValueTable extends Migration
+class CreateNumberValuesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,14 @@ class CreateFormEntryFormFieldCheckboxValueTable extends Migration
      */
     public function up()
     {
-        Schema::create('form_entry_form_field_checkbox_value', function (Blueprint $table) {
+        Schema::create('number_values', function (Blueprint $table) {
             // Columns
             $table->increments('id');
             $table->integer('form_entry_id')
                   ->unsigned();
-            $table->integer('form_field_checkbox_value_id')
+            $table->integer('form_field_id')
                   ->unsigned();
+            $table->double('value');
             $table->timestamps();
 
             // Foreign keys & indices
@@ -27,12 +28,12 @@ class CreateFormEntryFormFieldCheckboxValueTable extends Migration
                   ->references('id')
                   ->on('form_entries')
                   ->onUpdate('cascade')
-                  ->onDelete('cascade');
-            $table->foreign('form_field_checkbox_value_id', 'feffcv_ffcv_id_foreign')
+                  ->onDelete('restrict');
+            $table->foreign('form_field_id')
                   ->references('id')
-                  ->on('form_field_checkbox_values')
+                  ->on('form_fields')
                   ->onUpdate('cascade')
-                  ->onDelete('cascade');
+                  ->onDelete('restrict');
         });
     }
 
@@ -43,6 +44,6 @@ class CreateFormEntryFormFieldCheckboxValueTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('form_entry_form_field_checkbox_value');
+        Schema::dropIfExists('number_values');
     }
 }

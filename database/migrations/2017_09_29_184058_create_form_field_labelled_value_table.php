@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFormEntryFormFieldRadioValueTable extends Migration
+class CreateFormFieldLabelledValueTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,26 +13,28 @@ class CreateFormEntryFormFieldRadioValueTable extends Migration
      */
     public function up()
     {
-        Schema::create('form_entry_form_field_radio_value', function (Blueprint $table) {
+        Schema::create('form_field_labelled_value', function (Blueprint $table) {
             // Columns
             $table->increments('id');
-            $table->integer('form_entry_id')
+            $table->integer('form_field_id')
                   ->unsigned();
-            $table->integer('form_field_radio_value_id')
+            $table->integer('labelled_value_id')
                   ->unsigned();
+            $table->boolean('is_active')
+                  ->default(true);
             $table->timestamps();
 
             // Foreign keys & indices
-            $table->foreign('form_entry_id')
+            $table->foreign('form_field_id')
                   ->references('id')
-                  ->on('form_entries')
+                  ->on('form_fields')
                   ->onUpdate('cascade')
-                  ->onDelete('cascade');
-            $table->foreign('form_field_radio_value_id', 'feffrv_ffrv_id_foreign')
+                  ->onDelete('restrict');
+            $table->foreign('labelled_value_id')
                   ->references('id')
-                  ->on('form_field_radio_values')
+                  ->on('labelled_values')
                   ->onUpdate('cascade')
-                  ->onDelete('cascade');                  
+                  ->onDelete('restrict');
         });
     }
 
@@ -43,6 +45,6 @@ class CreateFormEntryFormFieldRadioValueTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('form_entry_form_field_radio_value');
+        Schema::dropIfExists('form_field_labelled_value');
     }
 }

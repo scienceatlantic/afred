@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFormFieldTextValuesTable extends Migration
+class CreateFormEntryLabelledValueTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,27 +13,26 @@ class CreateFormFieldTextValuesTable extends Migration
      */
     public function up()
     {
-        Schema::create('form_field_text_values', function (Blueprint $table) {
+        Schema::create('form_entry_labelled_value', function (Blueprint $table) {
             // Columns
             $table->increments('id');
             $table->integer('form_entry_id')
                   ->unsigned();
-            $table->integer('form_field_id')
+            $table->integer('labelled_value_id')
                   ->unsigned();
-            $table->text('value');
             $table->timestamps();
 
             // Foreign keys & indices
-            $table->foreign('form_field_id')
-                  ->references('id')
-                  ->on('form_fields')
-                  ->onUpdate('cascade')
-                  ->onDelete('restrict');
             $table->foreign('form_entry_id')
                   ->references('id')
                   ->on('form_entries')
                   ->onUpdate('cascade')
-                  ->onDelete('restrict');                  
+                  ->onDelete('restrict');
+            $table->foreign('labelled_value_id')
+                  ->references('id')
+                  ->on('labelled_values')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
         });
     }
 
@@ -44,6 +43,6 @@ class CreateFormFieldTextValuesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('form_field_text_values');
+        Schema::dropIfExists('form_entry_labelled_value');
     }
 }

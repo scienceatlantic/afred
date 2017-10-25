@@ -18,7 +18,7 @@ class CreateFormFieldsTable extends Migration
             $table->increments('id');
             $table->integer('form_section_id')
                   ->unsigned();
-            $table->integer('form_field_type_id')
+            $table->integer('field_type_id')
                   ->unsigned();
             $table->string('form_label');
             $table->string('object_key');
@@ -45,9 +45,9 @@ class CreateFormFieldsTable extends Migration
                   ->on('form_sections')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
-            $table->foreign('form_field_type_id')
+            $table->foreign('field_type_id')
                   ->references('id')
-                  ->on('form_field_types')
+                  ->on('field_types')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
             $table->unique(['form_section_id', 'form_label']);
