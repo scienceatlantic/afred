@@ -1,9 +1,9 @@
 <?php
 
-use App\FormFieldType;
+use App\FieldType;
 use Illuminate\Database\Seeder;
 
-class FormFieldTypesTableSeeder extends Seeder
+class FieldTypesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -33,7 +33,7 @@ class FormFieldTypesTableSeeder extends Seeder
         ];
 
         foreach($types as $type) {
-            $f = new FormFieldType();
+            $f = new FieldType();
             $f->name = $type['name'];
             $f->save();
         }
