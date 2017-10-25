@@ -18,7 +18,7 @@ class FormEntry extends Model
     {
         return FormSection::with([
             'fields' => function($query) {
-                $query->orderBy('page_placement_order');
+                $query->orderBy('form_placement_order');
             },
             'fields.type',
             'fields.stringValues' => function($query) {
@@ -33,12 +33,12 @@ class FormEntry extends Model
             'fields.dateValues' => function($query) {
                 $query->where('form_entry_id', $this->id);
             },
-            'fields.radioValues' => function($query) {
-                $ids = DB::table('form_entry_form_field_radio_value')
-                    ->where('form_entry_id', $this->id)
-                    ->pluck('form_field_radio_value_id');
-
-                $query->whereIn('form_field_radio_values.id', $ids);
+            'fields.labelledValues' => function($query) {
+                $query->whereIn('labelled_values.id',
+                    DB::table('form_entry_labelled_value')
+                        ->where('form_entry_id', $this->id)
+                        ->pluck('labelled_value_id')
+                );
             }
         ])->get();        
     }

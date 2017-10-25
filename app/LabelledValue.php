@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class FormFieldCheckboxValue extends Model
+class LabelledValue extends Model
 {
     function formFields()
     {
@@ -14,5 +14,10 @@ class FormFieldCheckboxValue extends Model
     function formEntries()
     {
         return $this->belongsToMany('App\FormEntry');
+    }
+
+    function categories()
+    {
+        return $this->belongsToMany('App\LabelledValueCategory');
     }
 }
