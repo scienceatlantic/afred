@@ -42,4 +42,46 @@ class FormEntry extends Model
             }
         ])->get();        
     }
+
+    public function getSectionTotal($sectionId)
+    {
+        if (!$section = FormSection::find($sectionId)) {
+            return 0;
+        }
+
+        $fieldIds = $section->fields()->get()->implode('id', ',');
+        $query = "
+            SELECT
+                MAX(indx) AS total
+            FROM (
+                SELECT
+                    MAX(section_repeat_index) AS indx FROM string_values
+                WHERE
+                    string_values.form_entry_id = {$this->id}
+                AND
+                    string_values.form_field_id IN ($fieldIds)
+                UNION ALL
+                SELECT
+                    MAX(section_repeat_index) AS indx FROM text_values
+                WHERE
+                    text_values.form_entry_id = {$this->id}
+                AND
+                    text_values.form_field_id IN ($fieldIds)           
+                UNION ALL
+                SELECT
+                    MAX(section_repeat_index) AS indx FROM number_values
+                WHERE
+                    number_values.form_entry_id = {$this->id}
+                AND
+                    number_values.form_field_id IN ($fieldIds)               
+                UNION ALL
+                SELECT
+                    MAX(section_repeat_index) AS indx FROM form_entry_labelled_value
+                WHERE
+                    form_entry_labelled_value.form_entry_id = {$this->id}
+            ) AS subquery
+        ";
+
+        return count($results = DB::select($query)) ? $results[0]->total : 0;
+    }
 }

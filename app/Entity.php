@@ -28,40 +28,54 @@ class Entity extends Model
             'updated_at' => $e->updated_at
         ];
 
-        foreach($e->formEntries->first()->sections as $section) {
+        $formEntry = $e->formEntries->first();
+        foreach($formEntry->sections as $section) {
             $array[$section->object_key] = [];
-            $fields = [];
-
-            foreach($section->fields as $field) {
-                $value = null;
-
-                switch ($field->type->name) {
-                    case 'plaintext':
-                    case 'richtext':
-                        if ($valueObject = $field->textValues->first()) {
-                            $value = $valueObject->value;
-                        }
-                        break;
-                    case 'checkbox':
-                        $value = $field->labelledValues->toArray();
-                        break;
-                    case 'radio':
-                    case 'dropdown':
-                        if ($valueObject = $field->labelledValues->first()) {
-                            $value = $valueObject->form_label;
-                        }
-                        break;
-                    default:
-                        $valueMethod = $field->type->name . 'Values';
-                        if ($valueObject = $field->$valueMethod->first()) {
-                            $value = $valueObject->value;
-                        }
-                }
+            $sectTotal = $formEntry->getSectionTotal($section->id);
+            
+            for ($sectIndex = 1; $sectIndex <= $sectTotal; $sectIndex++) {
+                $fields = [];
                 
-                $fields[$field->object_key] = $value;
-            }
+                foreach($section->fields as $field) {
+                    $value = null;
+     
+                    switch ($field->type->name) {
+                        case 'plaintext':
+                        case 'richtext':
+                            $valueObject = $field->textValues
+                                ->where('section_repeat_index', $sectIndex)
+                                ->first();
+                            if ($valueObject) {
+                                $value = $valueObject->value;
+                            }
+                            break;
+                        case 'checkbox':
+                            $value = $field->labelledValues->toArray();
+                            break;
+                        case 'radio':
+                        case 'dropdown':
+                            $valueObject = $field->labelledValues
+                                ->where('section_repeat_index', $sectIndex)
+                                ->first();                        
+                            if ($valueObject) {
+                                $value = $valueObject->form_label;
+                            }
+                            break;
+                        default:
+                            $valueMethod = $field->type->name . 'Values';
+                            $valueObject = $field->$valueMethod
+                                ->where('section_repeat_index', $sectIndex)
+                                ->first();                              
+                            if ($valueObject) {
+                                $value = $valueObject->value;
+                            }
+                    }
+                    
+                    $fields[$field->object_key] = $value;
+                }
 
-            array_push($array[$section->object_key], $fields);
+                array_push($array[$section->object_key], $fields);
+            }
         }
 
         return $array;
