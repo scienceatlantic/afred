@@ -20,6 +20,8 @@ class CreateTextValuesTable extends Migration
                   ->unsigned();
             $table->integer('form_field_id')
                   ->unsigned();
+            $table->integer('section_repeat_index')
+                  ->unsigned();                  
             $table->text('value');
             $table->timestamps();
 
@@ -33,7 +35,8 @@ class CreateTextValuesTable extends Migration
                   ->references('id')
                   ->on('form_entries')
                   ->onUpdate('cascade')
-                  ->onDelete('restrict');                  
+                  ->onDelete('restrict');
+            $table->index('section_repeat_index');                                 
         });
     }
 

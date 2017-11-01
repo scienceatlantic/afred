@@ -20,6 +20,8 @@ class CreateDateValuesTable extends Migration
                   ->unsigned();
             $table->integer('form_field_id')
                   ->unsigned();
+            $table->integer('section_repeat_index')
+                  ->unsigned();                  
             $table->dateTime('value');
             $table->timestamps();
 
@@ -34,6 +36,7 @@ class CreateDateValuesTable extends Migration
                   ->on('form_fields')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
+            $table->index('section_repeat_index');
         });
     }
 

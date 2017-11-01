@@ -20,6 +20,8 @@ class CreateNumberValuesTable extends Migration
                   ->unsigned();
             $table->integer('form_field_id')
                   ->unsigned();
+            $table->integer('section_repeat_index')
+                  ->unsigned();                  
             $table->double('value');
             $table->timestamps();
 
@@ -34,6 +36,7 @@ class CreateNumberValuesTable extends Migration
                   ->on('form_fields')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
+            $table->index('section_repeat_index');
         });
     }
 

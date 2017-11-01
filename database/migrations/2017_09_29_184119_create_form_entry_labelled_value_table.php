@@ -20,6 +20,8 @@ class CreateFormEntryLabelledValueTable extends Migration
                   ->unsigned();
             $table->integer('labelled_value_id')
                   ->unsigned();
+            $table->integer('section_repeat_index')
+                  ->unsigned();                  
             $table->timestamps();
 
             // Foreign keys & indices
@@ -33,6 +35,7 @@ class CreateFormEntryLabelledValueTable extends Migration
                   ->on('labelled_values')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
+            $table->index('section_repeat_index');
         });
     }
 

@@ -20,6 +20,8 @@ class CreateStringValuesTable extends Migration
                   ->unsigned();
             $table->integer('form_field_id')
                   ->unsigned();
+            $table->integer('section_repeat_index')
+                  ->unsigned();
             $table->string('value');
             $table->timestamps();
 
@@ -34,6 +36,7 @@ class CreateStringValuesTable extends Migration
                   ->on('form_entries')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
+            $table->index('section_repeat_index');
         });
     }
 
