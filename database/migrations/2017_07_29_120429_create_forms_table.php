@@ -18,6 +18,9 @@ class CreateFormsTable extends Migration
             $table->increments('id');
             $table->integer('directory_id')
                   ->unsigned();
+            $table->integer('language_code_id')
+                  ->unsigned();
+            $table->string('name');
             $table->timestamps();
 
             // Foreign keys & indices
@@ -26,6 +29,12 @@ class CreateFormsTable extends Migration
                   ->on('directories')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
+            $table->foreign('language_code_id')
+                  ->references('id')
+                  ->on('language_codes')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');                  
+            $table->unique(['directory_id', 'name']);
         });
     }
 

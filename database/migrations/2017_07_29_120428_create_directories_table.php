@@ -14,6 +14,7 @@ class CreateDirectoriesTable extends Migration
     public function up()
     {
         Schema::create('directories', function (Blueprint $table) {
+            // Columns
             $table->increments('id');
             $table->string('name');
             $table->string('shortname')
@@ -21,6 +22,10 @@ class CreateDirectoriesTable extends Migration
             $table->string('wp_api_url');
             $table->string('wp_api_username');
             $table->timestamps();
+
+            // Foreign keys & indices
+            $table->unique('name');
+            $table->index('shortname');
         });
     }
 

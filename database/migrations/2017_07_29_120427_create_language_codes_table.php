@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUsersTable extends Migration
+class CreateLanguageCodesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,16 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('language_codes', function (Blueprint $table) {
+            // Columns
             $table->increments('id');
             $table->string('name');
-            $table->string('email')
-                  ->unique();
-            $table->string('password');
-            $table->rememberToken();
+            $table->string('iso_639_1');
             $table->timestamps();
+
+            // Foreign keys & indices
+            $table->unique('name');
+            $table->unique('iso_639_1');
         });
     }
 
@@ -31,6 +33,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('language_codes');
     }
 }

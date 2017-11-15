@@ -16,8 +16,11 @@ class CreateLabelledValuesTable extends Migration
         Schema::create('labelled_values', function (Blueprint $table) {
             // Columns
             $table->increments('id');
-            $table->string('form_label');
+            $table->string('label');
             $table->timestamps();
+
+            // Foreign Keys & Indices
+            $table->unique('label');
         });
     }
 

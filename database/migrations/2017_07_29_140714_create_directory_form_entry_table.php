@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDirectoryEntityTable extends Migration
+class CreateDirectoryFormEntryTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateDirectoryEntityTable extends Migration
      */
     public function up()
     {
-        Schema::create('directory_entity', function (Blueprint $table) {
+        Schema::create('directory_form_entry', function (Blueprint $table) {
             // Columns
             $table->increments('id');
             $table->integer('directory_id')
                   ->unsigned();
-            $table->integer('entity_id')
+            $table->integer('form_entry_id')
                   ->unsigned();
             $table->timestamps();
 
@@ -28,12 +28,12 @@ class CreateDirectoryEntityTable extends Migration
                   ->on('directories')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
-            $table->foreign('entity_id')
+            $table->foreign('form_entry_id')
                   ->references('id')
                   ->on('entities')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
-            $table->unique(['directory_id', 'entity_id']);                  
+            $table->unique(['directory_id', 'form_entry_id']);
         });
     }
 
@@ -44,6 +44,6 @@ class CreateDirectoryEntityTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('directory_entity');
+        Schema::dropIfExists('directory_form_entry');
     }
 }

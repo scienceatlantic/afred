@@ -18,14 +18,21 @@ class CreateFormEntriesTable extends Migration
             $table->increments('id');
             $table->integer('entity_id')
                   ->unsigned();
+            $table->integer('form_entry_status_id')
+                  ->unsigned();
             $table->timestamps();
 
             // Foreign keys & indices
+            $table->foreign('form_entry_status_id')
+                  ->references('id')
+                  ->on('form_entry_statuses')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
             $table->foreign('entity_id')
                   ->references('id')
                   ->on('entities')
                   ->onUpdate('cascade')
-                  ->onDelete('restrict');
+                  ->onDelete('restrict');            
         });
     }
 

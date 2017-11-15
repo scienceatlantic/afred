@@ -16,8 +16,18 @@ class CreateLabelledValueCategoriesTable extends Migration
         Schema::create('labelled_value_categories', function (Blueprint $table) {
             // Columns
             $table->increments('id');
+            $table->integer('language_code_id')
+                  ->unsigned();
             $table->string('name');
             $table->timestamps();
+
+            // Foreign keys & indices
+            $table->foreign('language_code_id')
+                  ->references('id')
+                  ->on('language_codes')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
+            $table->unique(['language_code_id', 'name']);
         });
     }
 

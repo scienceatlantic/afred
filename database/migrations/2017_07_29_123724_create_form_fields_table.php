@@ -20,7 +20,7 @@ class CreateFormFieldsTable extends Migration
                   ->unsigned();
             $table->integer('field_type_id')
                   ->unsigned();
-            $table->string('form_label');
+            $table->string('label');
             $table->string('object_key');
             $table->string('intro_text')
                   ->nullable();
@@ -28,12 +28,14 @@ class CreateFormFieldsTable extends Migration
                   ->nullable();
             $table->string('placeholder')
                   ->nullable();
-            $table->integer('form_placement_order');
+            $table->integer('placement_order');
+            $table->string('input_pattern')
+                  ->nullable();
             $table->boolean('is_required');
             $table->boolean('is_active')
                   ->default(true);
             $table->boolean('is_searchable');                  
-            $table->boolean('is_full_width')
+            $table->boolean('is_single_column')
                   ->default(false);
             $table->boolean('is_inline')
                   ->default(false);                  
@@ -50,9 +52,9 @@ class CreateFormFieldsTable extends Migration
                   ->on('field_types')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
-            $table->unique(['form_section_id', 'form_label']);
+            $table->unique(['form_section_id', 'label']);
             $table->unique(['form_section_id', 'object_key']);
-            $table->unique(['form_section_id', 'form_placement_order']);          
+            $table->unique(['form_section_id', 'placement_order']);
         });
     }
 

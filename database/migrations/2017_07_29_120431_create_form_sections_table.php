@@ -18,20 +18,28 @@ class CreateFormSectionsTable extends Migration
             $table->increments('id');
             $table->integer('form_id')
                   ->unsigned();
-            $table->string('form_label');
+            $table->string('slug_prefix');
+            $table->string('label_singular');
+            $table->string('label_plural');
             $table->string('object_key');
             $table->string('intro_text')
                   ->nullable();
             $table->string('help_text')
                   ->nullable();
-            $table->integer('repeat_min')
+            $table->integer('min')
                   ->unsigned();
-            $table->integer('repeat_max')
+            $table->integer('max')
                   ->unsigned();
-            $table->integer('form_placement_order')
+            $table->string('repeat_key')
+                  ->nullable();
+            $table->string('repeat_placeholder')
+                  ->nullable();
+            $table->integer('placement_order')
                   ->unsigned();
             $table->boolean('is_active')
                   ->default(true);
+            $table->boolean('is_searchable')
+                  ->default(true);          
             $table->timestamps();
 
             // Foreign keys & indices
@@ -40,9 +48,10 @@ class CreateFormSectionsTable extends Migration
                   ->on('forms')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
-            $table->unique(['form_id', 'form_label']);
+            $table->unique(['form_id', 'label_singular']);
+            $table->unique(['form_id', 'label_plural']);
             $table->unique(['form_id', 'object_key']);
-            $table->unique(['form_id', 'form_placement_order']);
+            $table->unique(['form_id', 'placement_order']);
         });
     }
 

@@ -16,6 +16,8 @@ class CreateEntitiesTable extends Migration
         Schema::create('entities', function (Blueprint $table) {
             // Columns
             $table->increments('id');
+            $table->boolean('is_searchable')
+                  ->default(true);
             $table->timestamps();
         });
     }
