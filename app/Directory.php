@@ -6,13 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Directory extends Model
 {
-    public function form()
+    public function forms()
     {
-        return $this->hasOne('App\Form');
+        return $this->hasMany('App\Form');
     }
 
-    public function entities()
+    public function formEntries()
     {
-        return $this->belongsToMany('App\Entity');
+        return $this->belongsToMany('App\FormEntries');
     }
 }

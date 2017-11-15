@@ -4,15 +4,11 @@ namespace App;
 
 use App\FormEntry;
 use App\FormSection;
+use DB;
 use Illuminate\Database\Eloquent\Model;
 
 class Entity extends Model
-{
-    public function directories()
-    {
-        return $this->belongsToMany('App\Directory');
-    }
-    
+{   
     public function formEntries()
     {
         return $this->hasMany('App\FormEntry');
@@ -50,15 +46,25 @@ class Entity extends Model
                             }
                             break;
                         case 'checkbox':
-                            $value = $field->labelledValues->toArray();
+                            $ids = DB::table('form_entry_labelled_value')
+                                ->where('form_entry_id', $formEntry->id)
+                                ->where('section_repeat_index', $sectIndex)
+                                ->pluck('labelled_value_id');
+                            $value = $field->labelledValues
+                                ->whereIn('id', $ids)
+                                ->pluck('label');
                             break;
                         case 'radio':
                         case 'dropdown':
-                            $valueObject = $field->labelledValues
+                            $ids = DB::table('form_entry_labelled_value')
+                                ->where('form_entry_id', $formEntry->id)
                                 ->where('section_repeat_index', $sectIndex)
-                                ->first();                        
-                            if ($valueObject) {
-                                $value = $valueObject->form_label;
+                                ->pluck('labelled_value_id');
+                            $valueArray = $field->labelledValues
+                                ->whereIn('id', $ids)
+                                ->pluck('label');
+                            if (count($valueArray)) {
+                                $value = $valueArray[0];
                             }
                             break;
                         default:

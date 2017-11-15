@@ -18,7 +18,7 @@ class FormEntry extends Model
     {
         return FormSection::with([
             'fields' => function($query) {
-                $query->orderBy('form_placement_order');
+                $query->orderBy('placement_order');
             },
             'fields.type',
             'fields.stringValues' => function($query) {
@@ -73,12 +73,14 @@ class FormEntry extends Model
                 WHERE
                     number_values.form_entry_id = {$this->id}
                 AND
-                    number_values.form_field_id IN ($fieldIds)               
+                    number_values.form_field_id IN ($fieldIds)
                 UNION ALL
                 SELECT
-                    MAX(section_repeat_index) AS indx FROM form_entry_labelled_value
+                    MAX(section_repeat_index) AS indx FROM date_values
                 WHERE
-                    form_entry_labelled_value.form_entry_id = {$this->id}
+                    date_values.form_entry_id = {$this->id}
+                AND
+                    date_values.form_field_id IN ($fieldIds)
             ) AS subquery
         ";
 
