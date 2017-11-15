@@ -1,6 +1,8 @@
 <?php
 
-use App\FormFieldDropdownValue;
+use App\LabelledValue;
+use App\LabelledValueCategory;
+use App\LanguageCode;
 use Illuminate\Database\Seeder;
 
 class ProvinceDataSeeder extends Seeder
@@ -14,32 +16,43 @@ class ProvinceDataSeeder extends Seeder
     {
         $provinces = [
             [
-                'form_label' => 'Alberta (AB)'
+                'label' => 'Alberta (AB)'
             ], [
-                'form_label' => 'British Columbia (BC)'
+                'label' => 'British Columbia (BC)'
             ], [
-                'form_label' => 'Manitoba (MB)'
+                'label' => 'Manitoba (MB)'
             ], [
-                'form_label' => 'New Brunswick (NB)'
+                'label' => 'New Brunswick (NB)'
             ], [
-                'form_label' => 'Newfoundland and Labrador (NL)'
+                'label' => 'Newfoundland and Labrador (NL)'
             ], [
-                'form_label' => 'Nova Scotia (NS)'
+                'label' => 'Nova Scotia (NS)'
             ], [
-                'form_label' => 'Ontario (ON)'
+                'label' => 'Ontario (ON)'
             ], [
-                'form_label' => 'Prince Edward Island (PE)'
+                'label' => 'Prince Edward Island (PE)'
             ], [
-                'form_label' => 'Quebec (QC)'
+                'label' => 'Quebec (QC)'
             ], [
-                'form_label' => 'Saskatchewan (SK)'
+                'label' => 'Saskatchewan (SK)'
             ]
         ];
 
+        $languageCode = LanguageCode::where('iso_639_1', 'en')->first();
+
+        $category = new LabelledValueCategory();
+        $category->language_code_id = $languageCode->id;
+        $category->name = 'Canadian Provinces';
+        $category->save();
+
         foreach($provinces as $province) {
-            $p = new FormFieldDropdownValue();
-            $p->form_label = $province['form_label'];
-            $p->save();
+            $p = LabelledValue::where('label', $province['label'])->first();
+            if (!$p) {
+                $p = new LabelledValue();
+                $p->label = $province['label'];
+                $p->save();
+            }
+            $p->categories()->attach($category->id);
         }
     }
 }
