@@ -1,0 +1,27 @@
+<?php
+
+use Illuminate\Database\Seeder;
+
+class DatabaseSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        $this->call(LanguageCodesTableSeeder::class);
+        $this->call(FieldTypesTableSeeder::class);
+        $this->call(FormEntryStatusesTableSeeder::class);
+
+        $this->call(OrganizationDataSeeder::class);
+        $this->call(ProvinceDataSeeder::class);
+        $this->call(ResearchDisciplinesDataSeeder::class);
+        $this->call(SectorsOfApplicationDataSeeder::class);
+        
+        
+        $this->call(DirectoriesTableSeeder::class);
+        $this->call(AfredFormDataSeeder::class);
+    }
+}

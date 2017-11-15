@@ -1,7 +1,0 @@
-# robotstxt.org
-User-agent: *
-Disallow: /dev/
-Disallow: /beta/admin/
-Disallow: /beta/login/
-
-Sitemap: https://afred.ca/sitemap.xml
