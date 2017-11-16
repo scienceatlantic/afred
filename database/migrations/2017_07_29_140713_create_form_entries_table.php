@@ -16,7 +16,7 @@ class CreateFormEntriesTable extends Migration
         Schema::create('form_entries', function (Blueprint $table) {
             // Columns
             $table->increments('id');
-            $table->integer('entity_id')
+            $table->integer('resource_id')
                   ->unsigned();
             $table->integer('form_entry_status_id')
                   ->unsigned();
@@ -28,9 +28,9 @@ class CreateFormEntriesTable extends Migration
                   ->on('form_entry_statuses')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
-            $table->foreign('entity_id')
+            $table->foreign('resource_id')
                   ->references('id')
-                  ->on('entities')
+                  ->on('resources')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');            
         });

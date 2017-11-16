@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Entity;
+use App\Resource;
 use App\FormEntry;
 use App\FormEntryStatus;
 use App\FormField;
@@ -14,10 +14,10 @@ use App\FormSection;
 use Illuminate\Http\Request;
 use View;
 
-class EntityController extends Controller
+class ResourceController extends Controller
 {
     public static $withRelationships = [
-        'formEntries'
+        
     ];
 
     /**
@@ -25,9 +25,13 @@ class EntityController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Entity::with(self::$withRelationships)->get();
+        $resources = $this->pageOrGet(Resource::query());
+        foreach($resources as &$resource) {
+            $resource->format($request->status);
+        }
+        return $resources;
     }
 
     public function action(Request $request, $id = null)
@@ -54,12 +58,14 @@ class EntityController extends Controller
      */
     public function show($id, Request $request)
     {
+        $e = Resource::findOrFail($id);
+        $e->format($request->status);
         if ($request->templateId) {
-            $e = Entity::toTemplateArray($id);
-            return View::make('templates.published-entities.id-1', $e)
+            return View
+                ::make('templates.published-resources.id-1', $e->formatted)
                 ->render();
         }
-        return Entity::with('formEntries')->findOrFail($id);
+        return $e;
     }
 
     /**
@@ -75,9 +81,9 @@ class EntityController extends Controller
 
     function submitFormEntry($request)
     {
-        // Create new entity.
-        $entity = new Entity();
-        $entity->save();
+        // Create new resource.
+        $resource = new Resource();
+        $resource->save();
 
         // Get the status.
         $formEntryStatus = FormEntryStatus
@@ -87,17 +93,17 @@ class EntityController extends Controller
         // Create new form entry.
         $formEntry = new FormEntry();
         $formEntry->form_entry_status_id = $formEntryStatus->id;
-        $formEntry->entity_id = $entity->id;
+        $formEntry->resource_id = $resource->id;
         $formEntry->save();
 
         self::storeFormEntry($request, $formEntry);
 
-        return Entity::with(self::$withRelationships)->find($entity->id);
+        return Resource::with(self::$withRelationships)->find($resource->id);
     }
 
     private function publishFormEntry(Request $request, $id)
     {
-        $entity = Entity::findOrFail($id);
+        $resource = Resource::findOrFail($id);
 
         $submittedStatus = FormEntryStatus
             ::where('name', 'Submitted')
@@ -107,7 +113,7 @@ class EntityController extends Controller
             ::where('name', 'Published')
             ->first();
 
-        $formEntry = $entity->formEntries()
+        $formEntry = $resource->formEntries()
             ->where('form_entry_status_id', $submittedStatus->id)
             ->first();
     
@@ -119,7 +125,7 @@ class EntityController extends Controller
 
         // Email event
 
-        return Entity::with(self::$withRelationships)->find($entity->id);
+        return Resource::with(self::$withRelationships)->find($resource->id);
     }
 
     private function rejectFormEntry()

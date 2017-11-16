@@ -1,7 +1,7 @@
 <?php
 
 use App\Directory;
-use App\Entity;
+use App\Resource;
 use App\Form;
 use App\FormEntry;
 use App\FormField;

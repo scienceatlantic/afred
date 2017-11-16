@@ -1,7 +1,7 @@
 <?php
 
 use App\Directory;
-use App\Entity;
+use App\Resource;
 use App\Form;
 use App\FormEntry;
 use App\FormField;
@@ -25,12 +25,12 @@ class DummyDataSeeder extends Seeder
         $afredDirectory = Directory::find(1);
         $afredForm = Form::find(1);
 
-        $entity = new Entity();
-        $entity->save();
-        $entity->directories()->attach($afredDirectory->id);
+        $resource = new Resource();
+        $resource->save();
+        $resource->directories()->attach($afredDirectory->id);
 
         $formEntry = new FormEntry();
-        $formEntry->entity_id = $entity->id;
+        $formEntry->resource_id = $resource->id;
         $formEntry->save();
 
         $this->createFacilitySection($afredForm->id);

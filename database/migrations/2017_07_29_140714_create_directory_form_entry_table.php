@@ -30,7 +30,7 @@ class CreateDirectoryFormEntryTable extends Migration
                   ->onDelete('restrict');
             $table->foreign('form_entry_id')
                   ->references('id')
-                  ->on('entities')
+                  ->on('resources')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
             $table->unique(['directory_id', 'form_entry_id']);

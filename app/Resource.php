@@ -6,27 +6,47 @@ use App\FormEntry;
 use App\FormSection;
 use DB;
 use Illuminate\Database\Eloquent\Model;
+use Log;
 
-class Entity extends Model
-{   
+class Resource extends Model
+{
     public function formEntries()
     {
         return $this->hasMany('App\FormEntry');
     }
 
-    public static function toTemplateArray($id)
-    {
-        $e = self::with('formEntries')->findOrFail($id);
+    public function format(
+        $formEntryStatus = 'Published',
+        $type = 'Search'
+    ) {
+        $this->formatted = null;
 
-        $array = [
-            'id'         => $e->id,
-            'created_at' => $e->created_at,
-            'updated_at' => $e->updated_at
+        $status = FormEntryStatus::where('name', $formEntryStatus)->first();
+        if (!$status) {
+            Log::error('Form entry status not found');
+            return;
+        }
+
+        $formEntry = $this->formEntries()
+            ->where('form_entry_status_id', $status->id)
+            ->first();
+        if (!$formEntry) {
+            Log::error('Form entry not found');
+            return;
+        }
+        
+        $data = [
+            'directory_id'  => [1,2,3],
+            'resource_id'     => $this->id,
+            'form_id'       => '',
+            'form_entry_id' => $formEntry->id,
+            'status'        => $status->name,
+            'sections'      => [],
+            'created_at'    => $this->created_at,
+            'updated_at'    => $this->updated_at
         ];
-
-        $formEntry = $e->formEntries->first();
         foreach($formEntry->sections as $section) {
-            $array[$section->object_key] = [];
+            $data['sections'][$section->object_key] = [];
             $sectTotal = $formEntry->getSectionTotal($section->id);
             
             for ($sectIndex = 1; $sectIndex <= $sectTotal; $sectIndex++) {
@@ -51,8 +71,7 @@ class Entity extends Model
                                 ->where('section_repeat_index', $sectIndex)
                                 ->pluck('labelled_value_id');
                             $value = $field->labelledValues
-                                ->whereIn('id', $ids)
-                                ->pluck('label');
+                                ->whereIn('id', $ids);
                             break;
                         case 'radio':
                         case 'dropdown':
@@ -61,8 +80,7 @@ class Entity extends Model
                                 ->where('section_repeat_index', $sectIndex)
                                 ->pluck('labelled_value_id');
                             $valueArray = $field->labelledValues
-                                ->whereIn('id', $ids)
-                                ->pluck('label');
+                                ->whereIn('id', $ids);
                             if (count($valueArray)) {
                                 $value = $valueArray[0];
                             }
@@ -80,10 +98,10 @@ class Entity extends Model
                     $fields[$field->object_key] = $value;
                 }
 
-                array_push($array[$section->object_key], $fields);
+                array_push($data['sections'][$section->object_key], $fields);
             }
         }
 
-        return $array;
+        $this->formatted = $data;
     }
 }
