@@ -13,10 +13,30 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::resource('/forms', 'FormController');
+// directories
+Route::resource('directories', 'DirectoryController', [
+    'only' => ['index']
+]);
 
-Route::post('/entities', 'EntityController@action');
-Route::put('/entities', 'EntityController@action');
-Route::resource('/entities', 'EntityController', ['only' => [
-    'index', 'show'
-]]);
+// directories/forms
+Route::resource('directories.forms', 'FormController', [
+    'only' => ['index', 'show']
+]);
+
+// directories/forms/entries
+Route::post(
+    '/directories/{directory}/forms/{form}/entries',
+    'FormEntryController@action'
+);
+Route::put(
+    '/directories/{directory}/forms/{form}/entries/{entry}',
+    'FormEntryController@action'
+);
+Route::resource('directories.forms.entries', 'FormEntryController', [
+    'only' => ['index', 'show', 'delete']
+]);
+
+// form-entry-statuses
+Route::resource('/form-entry-statuses', 'FormEntryStatusController', [
+    'only' => ['index']
+]);
