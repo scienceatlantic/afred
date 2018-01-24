@@ -19,8 +19,9 @@ class CreateDirectoriesTable extends Migration
             $table->string('name');
             $table->string('shortname')
                   ->nullable();
-            $table->string('wp_api_url');
-            $table->string('wp_api_username');
+            $table->string('wp_base_url');
+            $table->string('wp_api_base_url');
+            $table->string('wp_api_password');
             $table->timestamps();
 
             // Foreign keys & indices

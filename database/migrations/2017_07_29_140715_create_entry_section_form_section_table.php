@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFormEntryLabelledValueTable extends Migration
+class CreateEntrySectionFormSectionTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,29 +13,32 @@ class CreateFormEntryLabelledValueTable extends Migration
      */
     public function up()
     {
-        Schema::create('form_entry_labelled_value', function (Blueprint $table) {
+        Schema::create('entry_section_form_section', function (Blueprint $table) {
             // Columns
             $table->increments('id');
-            $table->integer('form_entry_id')
+            $table->integer('form_section_id')
                   ->unsigned();
-            $table->integer('labelled_value_id')
+            $table->integer('entry_section_id')
                   ->unsigned();
-            $table->integer('section_repeat_index')
-                  ->unsigned();                  
+            $table->integer('wp_post_id')
+                  ->unsigned()
+                  ->nullable();
+            $table->string('wp_slug')
+                  ->nullable();
             $table->timestamps();
 
             // Foreign keys & indices
-            $table->foreign('form_entry_id')
+            $table->foreign('form_section_id')
                   ->references('id')
-                  ->on('form_entries')
+                  ->on('form_sections')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
-            $table->foreign('labelled_value_id')
+            $table->foreign('entry_section_id')
                   ->references('id')
-                  ->on('labelled_values')
+                  ->on('entry_sections')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
-            $table->index('section_repeat_index');
+            $table->unique(['form_section_id', 'entry_section_id'], 'fs_id_es_id_unique');
         });
     }
 
@@ -46,6 +49,6 @@ class CreateFormEntryLabelledValueTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('form_entry_labelled_value');
+        Schema::dropIfExists('entry_section_form_section');
     }
 }

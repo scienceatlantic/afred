@@ -18,21 +18,27 @@ class CreateFormEntriesTable extends Migration
             $table->increments('id');
             $table->integer('resource_id')
                   ->unsigned();
+            $table->integer('form_id')
+                  ->unsigned();
             $table->integer('form_entry_status_id')
                   ->unsigned();
+            $table->json('cache')
+                  ->nullable();
+            $table->boolean('isCached')
+                  ->default(false);
             $table->timestamps();
 
             // Foreign keys & indices
+            $table->foreign('form_id')
+                  ->references('id')
+                  ->on('forms')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');                  
             $table->foreign('form_entry_status_id')
                   ->references('id')
                   ->on('form_entry_statuses')
                   ->onUpdate('cascade')
-                  ->onDelete('restrict');
-            $table->foreign('resource_id')
-                  ->references('id')
-                  ->on('resources')
-                  ->onUpdate('cascade')
-                  ->onDelete('restrict');            
+                  ->onDelete('restrict');                  
         });
     }
 

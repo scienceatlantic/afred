@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFormsTable extends Migration
+class CreateFormSectionFormSectionTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,30 +13,29 @@ class CreateFormsTable extends Migration
      */
     public function up()
     {
-        Schema::create('forms', function (Blueprint $table) {
+        Schema::create('form_section_form_section', function (Blueprint $table) {
             // Columns
             $table->increments('id');
-            $table->integer('directory_id')
+            $table->integer('form_section_id')
                   ->unsigned();
-            $table->integer('language_code_id')
+            $table->integer('compatible_form_section_id')
                   ->unsigned();
-            $table->string('name');
-            $table->string('pagination_section_object_key');
-            $table->string('pagination_field_object_key');
+            $table->string('resource_template');
+            $table->string('search_index');
             $table->timestamps();
 
             // Foreign keys & indices
-            $table->foreign('directory_id')
+            $table->foreign('form_section_id', 'fs_id_foreign')
                   ->references('id')
-                  ->on('directories')
+                  ->on('form_sections')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
-            $table->foreign('language_code_id')
+            $table->foreign('compatible_form_section_id', 'cfs_id_foreign')
                   ->references('id')
-                  ->on('language_codes')
+                  ->on('form_sections')
                   ->onUpdate('cascade')
-                  ->onDelete('restrict');                  
-            $table->unique(['directory_id', 'name']);
+                  ->onDelete('restrict');
+            $table->unique(['form_section_id', 'compatible_form_section_id'], 'fs_id_cfs_id_unique');
         });
     }
 
@@ -47,6 +46,6 @@ class CreateFormsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('forms');
+        Schema::dropIfExists('form_section_form_section');
     }
 }

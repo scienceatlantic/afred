@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDirectoryFormEntryTable extends Migration
+class CreateFormFormEntryTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,27 +13,27 @@ class CreateDirectoryFormEntryTable extends Migration
      */
     public function up()
     {
-        Schema::create('directory_form_entry', function (Blueprint $table) {
+        Schema::create('form_form_entry', function (Blueprint $table) {
             // Columns
             $table->increments('id');
-            $table->integer('directory_id')
+            $table->integer('form_id')
                   ->unsigned();
             $table->integer('form_entry_id')
                   ->unsigned();
             $table->timestamps();
 
-            // Foreign keys & columns
-            $table->foreign('directory_id')
+            // Foreign keys & indices
+            $table->foreign('form_id')
                   ->references('id')
-                  ->on('directories')
+                  ->on('forms')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
             $table->foreign('form_entry_id')
                   ->references('id')
-                  ->on('resources')
+                  ->on('form_entries')
                   ->onUpdate('cascade')
-                  ->onDelete('restrict');
-            $table->unique(['directory_id', 'form_entry_id']);
+                  ->onDelete('restrict');                              
+            $table->unique(['form_id', 'form_entry_id']);
         });
     }
 
@@ -44,6 +44,6 @@ class CreateDirectoryFormEntryTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('directory_form_entry');
+        Schema::dropIfExists('form_form_entry');
     }
 }

@@ -30,16 +30,19 @@ class CreateFormSectionsTable extends Migration
                   ->unsigned();
             $table->integer('max')
                   ->unsigned();
-            $table->string('repeat_key')
+            $table->string('repeat_object_key')
                   ->nullable();
             $table->string('repeat_placeholder')
                   ->nullable();
             $table->integer('placement_order')
                   ->unsigned();
+            $table->string('field_resource_title_object_key')
+                  ->nullable();
+            $table->boolean('is_resource');
             $table->boolean('is_active')
                   ->default(true);
             $table->boolean('is_searchable')
-                  ->default(true);          
+                  ->default(true);
             $table->timestamps();
 
             // Foreign keys & indices
@@ -48,6 +51,7 @@ class CreateFormSectionsTable extends Migration
                   ->on('forms')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
+            $table->unique('slug_prefix');
             $table->unique(['form_id', 'label_singular']);
             $table->unique(['form_id', 'label_plural']);
             $table->unique(['form_id', 'object_key']);

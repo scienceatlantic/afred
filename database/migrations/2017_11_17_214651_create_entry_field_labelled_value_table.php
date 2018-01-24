@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDateValuesTable extends Migration
+class CreateEntryFieldLabelledValueTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,24 @@ class CreateDateValuesTable extends Migration
      */
     public function up()
     {
-        Schema::create('date_values', function (Blueprint $table) {
+        Schema::create('entry_field_labelled_value', function (Blueprint $table) {
             // Columns
             $table->increments('id');
             $table->integer('entry_field_id')
                   ->unsigned();
-            $table->dateTime('value');
+            $table->integer('labelled_value_id')
+                  ->unsigned();
             $table->timestamps();
 
             // Foreign keys & indices
             $table->foreign('entry_field_id')
                   ->references('id')
                   ->on('entry_fields')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
+            $table->foreign('labelled_value_id')
+                  ->references('id')
+                  ->on('labelled_values')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
         });
@@ -37,6 +43,6 @@ class CreateDateValuesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('date_values');
+        Schema::dropIfExists('entry_field_labelled_value');
     }
 }

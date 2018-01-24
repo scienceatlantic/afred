@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDateValuesTable extends Migration
+class CreateFormFormTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,27 @@ class CreateDateValuesTable extends Migration
      */
     public function up()
     {
-        Schema::create('date_values', function (Blueprint $table) {
+        Schema::create('form_form', function (Blueprint $table) {
             // Columns
             $table->increments('id');
-            $table->integer('entry_field_id')
+            $table->integer('form_id')
                   ->unsigned();
-            $table->dateTime('value');
+            $table->integer('compatible_form_id')
+                  ->unsigned();
             $table->timestamps();
 
             // Foreign keys & indices
-            $table->foreign('entry_field_id')
+            $table->foreign('form_id')
                   ->references('id')
-                  ->on('entry_fields')
+                  ->on('forms')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
+            $table->foreign('compatible_form_id')
+                  ->references('id')
+                  ->on('forms')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
+            $table->unique(['form_id', 'compatible_form_id']);
         });
     }
 
@@ -37,6 +44,6 @@ class CreateDateValuesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('date_values');
+        Schema::dropIfExists('form_form');
     }
 }
