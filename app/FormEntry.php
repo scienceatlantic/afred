@@ -2,8 +2,10 @@
 
 namespace App;
 
-use DB;
+use App\Form;
+use App\FormEntryStatus as Status;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 
 class FormEntry extends Model
 {
@@ -12,78 +14,181 @@ class FormEntry extends Model
      *
      * @var array
      */
-    protected $appends = ['sections'];
+    protected $appends = [
+        'data'
+    ];
 
-    public function getSectionsAttribute()
+    /** 
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = ['cache'];
+
+    public function status()
     {
-        return FormSection::with([
-            'fields' => function($query) {
-                $query->orderBy('placement_order');
-            },
-            'fields.type',
-            'fields.stringValues' => function($query) {
-                $query->where('form_entry_id', $this->id);
-            },
-            'fields.textValues' => function($query) {
-                $query->where('form_entry_id', $this->id);
-            },
-            'fields.numberValues' => function($query) {
-                $query->where('form_entry_id', $this->id);
-            },
-            'fields.dateValues' => function($query) {
-                $query->where('form_entry_id', $this->id);
-            },
-            'fields.labelledValues' => function($query) {
-                $query->whereIn('labelled_values.id',
-                    DB::table('form_entry_labelled_value')
-                        ->where('form_entry_id', $this->id)
-                        ->pluck('labelled_value_id')
-                );
-            }
-        ])->get();        
+        return $this->belongsTo('App\FormEntryStatus', 'form_entry_status_id');
     }
 
-    public function getSectionTotal($sectionId)
+    public function form()
     {
-        if (!$section = FormSection::find($sectionId)) {
-            return 0;
+        return $this->belongsTo('App\Form');
+    }
+
+    public function formsAttachedTo()
+    {
+        return $this->belongsToMany('App\Form')->withTimestamps();
+    }
+
+    public function entrySections()
+    {
+        return $this->hasMany('App\EntrySection');
+    }
+
+    public static function saveEntry(Request $request, Form $form)
+    {
+        $maxResourceId = self::max('resource_id');
+
+        $formEntry = new self();
+        $formEntry->resource_id = ++$maxResourceId;
+        $formEntry->form_id = $form->id;
+        $formEntry->form_entry_status_id = Status::findStatus('Submitted')->id;
+        $formEntry->save();
+
+        $formEntry->formsAttachedTo()->attach($request->formIds);
+
+        foreach($request->sections as $section => $fieldsets) {
+            // Check that the section exists, otherwise skip.
+            $formSection = FormSection
+                ::where('object_key', $section)
+                ->first();
+            if (!$formSection) {
+                continue;
+            }
+
+            // Get all compatible form section IDs.
+            $compatibleFormSectionIds = $formSection->compatibleFormSections()
+                ->pluck('compatible_form_section_id');
+
+            // Create entry sections for each fieldset.
+            foreach($fieldsets as $fieldset) {
+                // Create entry section.
+                $entrySection = new EntrySection();
+                $entrySection->form_entry_id = $formEntry->id;
+                $entrySection->form_section_id = $formSection->id;
+                $entrySection->save();
+
+                // Attach compatible form sections.
+                $entrySection->formSectionsAttachedTo()
+                    ->attach($compatibleFormSectionIds);
+
+                // Create fields.
+                foreach($formSection->formFields as $formField) {
+                    // Get value of field if it exists, otherwise skip.
+                    if (isset($fieldset[$formField->object_key])) {
+                        $value = $fieldset[$formField->object_key];
+                    } else {
+                        continue;
+                    }
+
+                    // Create field.
+                    $entryField = new EntryField();
+                    $entryField->entry_section_id = $entrySection->id;
+                    $entryField->form_field_id = $formField->id;
+                    $entryField->save();
+
+                    // Set value.
+                    $entryField->setValue($value);
+                }
+            }
         }
 
-        $fieldIds = $section->fields()->get()->implode('id', ',');
-        $query = "
-            SELECT
-                MAX(indx) AS total
-            FROM (
-                SELECT
-                    MAX(section_repeat_index) AS indx FROM string_values
-                WHERE
-                    string_values.form_entry_id = {$this->id}
-                AND
-                    string_values.form_field_id IN ($fieldIds)
-                UNION ALL
-                SELECT
-                    MAX(section_repeat_index) AS indx FROM text_values
-                WHERE
-                    text_values.form_entry_id = {$this->id}
-                AND
-                    text_values.form_field_id IN ($fieldIds)           
-                UNION ALL
-                SELECT
-                    MAX(section_repeat_index) AS indx FROM number_values
-                WHERE
-                    number_values.form_entry_id = {$this->id}
-                AND
-                    number_values.form_field_id IN ($fieldIds)
-                UNION ALL
-                SELECT
-                    MAX(section_repeat_index) AS indx FROM date_values
-                WHERE
-                    date_values.form_entry_id = {$this->id}
-                AND
-                    date_values.form_field_id IN ($fieldIds)
-            ) AS subquery
-        ";
+        // Update cache.
+        $formEntry->cache = $formEntry->data;
+        $formEntry->update();
+        
+        return $formEntry;
+    }
 
-        return count($results = DB::select($query)) ? $results[0]->total : 0;
+    public function updateStatus($formEntryStatusId)
+    {
+        $this->form_entry_status_id = $formEntryStatusId;
+        $this->cache = null;
+        $this->update();
+    }
+
+    public function getCacheAttribute($value)
+    {
+        return $this->isCached ? json_decode($value, true) : null;
+    }
+
+    public function setCacheAttribute($value)
+    {
+        $this->attributes['cache'] = $value ? json_encode($value) : null;
+        $this->isCached = $value ? true : false;
+    }
+
+    public function getDataAttribute()
+    {
+        // Check cache first.
+        if ($this->isCached) {
+            return $this->cache;
+        }
+
+        $formEntry = self::with([
+            'status',
+            'form.directory',
+            'entrySections.formSection',
+            'entrySections.entryFields.formField.type',
+            'entrySections.entryFields.stringValue',
+            'entrySections.entryFields.textValue',
+            'entrySections.entryFields.numberValue',
+            'entrySections.entryFields.dateValue',
+            'entrySections.entryFields.labelledValues'
+        ])->find($this->id);
+
+        $data = [
+            'home_directory' => $formEntry->form->directory,
+            'form_id'        => $formEntry->form->id,
+            'status'         => $formEntry->status,
+            'title'          => null,
+            'resource'       => []
+        ];
+
+        foreach(FormEntryStatus::all() as $status) {
+            $data['is_' . strtolower($status->name)]
+                = $formEntry->status->name === $status->name;
+        }
+
+        foreach($formEntry->entrySections as $entrySection) {
+            $formSection = $entrySection->formSection;
+
+            if (!isset($data['resource'][$formSection->object_key])) {
+                $data['resource'][$formSection->object_key] = [];
+            }
+
+            $fields = [];
+            // TODO: COMMENT HERE!
+            $fields['entry_section_id'] = $entrySection->id;
+
+            foreach($entrySection->entryFields as $entryField) {
+                $fields[$entryField->formField->object_key]
+                    = $entryField->value;
+            }
+            array_push($data['resource'][$formSection->object_key], $fields);
+        }
+
+        // Get pagination title
+        $sectionKey = $formEntry->form->pagination_section_object_key;
+        $fieldKey = $formEntry->form->pagination_field_object_key;
+        if (isset($data['resource'][$sectionKey][0][$fieldKey])) {
+            $data['title'] = $data['resource'][$sectionKey][0][$fieldKey];
+        }
+
+        // Update cache
+        $formEntry->cache = $data;
+        $formEntry->update();
+
+        return $data;
     }
 }

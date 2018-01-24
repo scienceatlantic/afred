@@ -8,16 +8,17 @@ class LabelledValue extends Model
 {
     function formFields()
     {
-        return $this->belongsToMany('App\FormField');
+        return $this->belongsToMany('App\FormField')->withTimestamps();
     }    
 
     function formEntries()
     {
-        return $this->belongsToMany('App\FormEntry');
+        return $this->belongsToMany('App\FormEntry')->withTimestamps();
     }
 
     function categories()
     {
-        return $this->belongsToMany('App\LabelledValueCategory');
+        return $this->belongsToMany('App\LabelledValueCategory')
+            ->withTimestamps();
     }
 }

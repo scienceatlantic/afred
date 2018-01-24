@@ -8,6 +8,6 @@ class LabelledValueCategory extends Model
 {
     function values()
     {
-        return $this->belongsToMany('App\LabelledValue');
+        return $this->belongsToMany('App\LabelledValue')->withTimestamps();
     }
 }

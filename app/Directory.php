@@ -6,6 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Directory extends Model
 {
+/**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = ['wp_api_password'];
+
     public function forms()
     {
         return $this->hasMany('App\Form');
@@ -13,6 +20,6 @@ class Directory extends Model
 
     public function formEntries()
     {
-        return $this->belongsToMany('App\FormEntries');
+        return $this->belongsToMany('App\FormEntries')->withTimestamps();
     }
 }
