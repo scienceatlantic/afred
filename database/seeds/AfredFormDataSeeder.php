@@ -33,7 +33,11 @@ class AfredFormDataSeeder extends Seeder
         $afredForm->directory_id = $afredDirectory->id;
         $afredForm->language_code_id = $languageCode->id;
         $afredForm->name = 'Facilities';
+        $afredForm->pagination_section_object_key = 'facilities';
+        $afredForm->pagination_field_object_key = 'name';
         $afredForm->save();
+
+        $afredForm->compatibleForms()->attach($afredForm->id);
 
         $this->createFacilitySection($afredForm->id);
         $this->createPrimaryContactSection($afredForm->id);
@@ -52,7 +56,14 @@ class AfredFormDataSeeder extends Seeder
         $formSection->min = 1;
         $formSection->max = 1;
         $formSection->placement_order = 1;
+        $formSection->field_resource_title_object_key = 'name';
+        $formSection->is_resource = true;
         $formSection->save();
+
+        $formSection->compatibleFormSections()->attach($formSection->id, [
+            'resource_template' => 'afred_facilities_facility_afred',
+            'search_index'      => 'dev_afred_facilities_facility'
+        ]);
 
         $fieldStringType = FieldType::where('name', 'string')->first();
         $fieldRichTextType = FieldType::where('name', 'richtext')->first();
@@ -204,6 +215,7 @@ class AfredFormDataSeeder extends Seeder
         $formSection->min = 1;
         $formSection->max = 1;
         $formSection->placement_order = 2;
+        $formSection->is_resource = false;
         $formSection->save();
 
         $fieldStringType = FieldType::where('name', 'string')->first();
@@ -311,9 +323,10 @@ class AfredFormDataSeeder extends Seeder
         $formSection->object_key = 'contacts';
         $formSection->min = 0;
         $formSection->max = 10;
-        $formSection->repeat_key = 'firstName';
+        $formSection->repeat_object_key = 'firstName';
         $formSection->repeat_placeholder = 'Contact';
         $formSection->placement_order = 3;
+        $formSection->is_resource = false;
         $formSection->save();
 
         $fieldStringType = FieldType::where('name', 'string')->first();
@@ -421,10 +434,17 @@ class AfredFormDataSeeder extends Seeder
         $formSection->object_key = 'equipment';
         $formSection->min = 1;
         $formSection->max = 50;
-        $formSection->repeat_key = 'type';
+        $formSection->repeat_object_key = 'type';
         $formSection->repeat_placeholder = 'Equipment';
         $formSection->placement_order = 4;
+        $formSection->field_resource_title_object_key = 'type';
+        $formSection->is_resource = true;
         $formSection->save();
+
+        $formSection->compatibleFormSections()->attach($formSection->id, [
+            'resource_template' => 'afred_facilities_equipment_afred',
+            'search_index'      => 'dev_afred_facilities_equipment'
+        ]);
 
         $fieldStringType = FieldType::where('name', 'string')->first();
         $fieldRichTextType = FieldType::where('name', 'richtext')->first();

@@ -3,7 +3,7 @@
 use App\Directory;
 use Illuminate\Database\Seeder;
 
-class DirectoriesTableSeeder extends Seeder
+class DummyDirectoriesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.

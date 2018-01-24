@@ -20,8 +20,9 @@ class DatabaseSeeder extends Seeder
         $this->call(ResearchDisciplinesDataSeeder::class);
         $this->call(SectorsOfApplicationDataSeeder::class);
         
-        
         $this->call(DirectoriesTableSeeder::class);
         $this->call(AfredFormDataSeeder::class);
+
+        $this->call(DummyAfredFormDataSeeder::class);
     }
 }

@@ -32,7 +32,7 @@ class ResearchDisciplinesDataSeeder extends Seeder
             ], [
                 'label' => 'Engineering - Agricultural, Forest, Environmental, Mining, Mineral'
             ], [
-                'label' => 'Engineering - Chemical, Nuclear, Otherv'
+                'label' => 'Engineering - Chemical, Nuclear, Other'
             ], [
                 'label' => 'Engineering - Civil, Structural'
             ], [
