@@ -22,9 +22,21 @@ class CreateFormEntriesTable extends Migration
                   ->unsigned();
             $table->integer('form_entry_status_id')
                   ->unsigned();
+            $table->integer('reviewer_user_id')
+                  ->unsigned()
+                  ->nullable();
+            $table->integer('author_user_id')
+                  ->unsigned()
+                  ->nullable();
             $table->json('cache')
                   ->nullable();
-            $table->boolean('isCached')
+            $table->text('message')
+                  ->nullable();
+            $table->text('notes')
+                  ->nullable();
+            $table->boolean('isEdit')
+                  ->default(true);
+            $table->boolean('isCacheValid')
                   ->default(false);
             $table->timestamps();
 
@@ -38,7 +50,17 @@ class CreateFormEntriesTable extends Migration
                   ->references('id')
                   ->on('form_entry_statuses')
                   ->onUpdate('cascade')
-                  ->onDelete('restrict');                  
+                  ->onDelete('restrict');
+            $table->foreign('reviewer_user_id')
+                  ->references('id')
+                  ->on('users')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
+            $table->foreign('author_user_id')
+                  ->references('id')
+                  ->on('users')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');            
         });
     }
 
