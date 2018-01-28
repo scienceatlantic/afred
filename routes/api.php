@@ -32,8 +32,12 @@ Route::put(
     '/directories/{directory}/forms/{form}/entries/{entry}',
     'FormEntryController@action'
 );
+Route::delete(
+    '/directories/{directory}/forms/{form}/entries/{entry}',
+    'FormEntryController@action'
+);
 Route::resource('directories.forms.entries', 'FormEntryController', [
-    'only' => ['index', 'show', 'delete']
+    'only' => ['index', 'show']
 ]);
 
 // form-entry-statuses
