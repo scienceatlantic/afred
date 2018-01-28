@@ -11,7 +11,7 @@ use App\Form;
 use App\FormEntry;
 use App\FormEntryStatus as Status;
 use App\FormSection;
-use App\Wordpress;
+use App\WordPress;
 use Illuminate\Http\Request;
 use View;
 
@@ -73,17 +73,6 @@ class FormEntryController extends Controller
         return $formEntry;
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
     public function action(
         Request $request,
         $directoryId,
@@ -114,7 +103,7 @@ class FormEntryController extends Controller
     {
         $formEntry = null;
 
-        DB::transaction(function() use ($request, $form, $formEntry) {
+        DB::transaction(function() use ($request, $form, &$formEntry) {
             $formEntry = FormEntry::saveEntry($request, $form);
         });
 
@@ -123,10 +112,11 @@ class FormEntryController extends Controller
 
     private function publish(FormEntry $formEntry)
     {
-        DB::transaction(function() use ($formEntry) {
+        DB::transaction(function() use (&$formEntry) {
             $formEntry->updateStatus(Status::findStatus('Published')->id);
             
-            Wordpress::saveResources($formEntry);
+            WordPress::addResources($formEntry);
+
             Algolia::addObjects($formEntry);
     
             // Email
@@ -137,10 +127,25 @@ class FormEntryController extends Controller
 
     private function reject(FormEntry $formEntry)
     {
-        DB::transaction(function() use ($formEntry) {
+        DB::transaction(function() use (&$formEntry) {
             $formEntry->updateStatus(Status::findStatus('Rejected')->id);
+
+            // Email
         });
         
+        return $formEntry;
+    }
+
+    private function delete(FormEntry $formEntry)
+    {
+        DB::transaction(function() use (&$formEntry) {
+            $formEntry->updateStatus(Status::findStatus('Deleted')->id);
+
+            WordPress::deleteResources($formEntry);
+
+            Algolia::deleteObjects($formEntry);
+        });
+
         return $formEntry;
     }
 }
