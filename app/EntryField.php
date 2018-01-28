@@ -50,19 +50,34 @@ class EntryField extends Model
             case 'number':
             case 'date':
                 $method = strtolower($type) . 'Value';
-                return $returnValueObject ? $this->$method
-                    : $this->$method->value;
+                if ($returnValueObject) {
+                    return $this->$method;
+                }
+                return $this->$method->value;
             case 'richtext':
             case 'plaintext':
-                return $returnValueObject ? $this->textValue 
-                    : $this->textValue->value;
+                if ($returnValueObject) {
+                    return $this->textValue;
+                }
+                return $this->textValue->value;
             case 'dropdown':
             case 'radio':
-                return $returnValueObject ? $this->labelledValues[0] 
-                    : $this->labelledValues[0]->value;
+                if ($returnValueObject) {
+                    return $this->labelledValues[0];
+                }
+                return [
+                    $this->labelledValues[0]->id
+                        => $this->labelledValues[0]->label
+                ];
             case 'checkbox':
-                return $returnValueObject ? $this->labelledValues 
-                    : $this->labelledValues()->pluck('label');
+                if ($returnValueObject) {
+                    return $this->labelledValues;
+                }
+                $values = [];
+                foreach($this->labelledValues as $labelledValue) {
+                    $values[$labelledValue->id] = $labelledValue->label;
+                }
+                return $values;
             default:
                 return null;
         }

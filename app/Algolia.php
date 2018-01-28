@@ -41,21 +41,30 @@ class Algolia
             }
         }
     }
+    
+    public static function updateObjects(
+        FormEntry $oldFormEntry,
+        FormEntry $newFormEntry
+    ) {
 
-    public function deleteObjects(FormEntry $formEntry)
+    }
+    
+    public static function deleteObjects(FormEntry $formEntry)
     {
-/*         $client = self::getClient();
+        $client = self::getClient();
 
-        foreach($formEntry->form->formSection as $formSection) {
-            if (!$formSection->is_resource) {
-                continue;
-            }
-            
-            foreach($formSection->getSearchIndices() as $searchIndex) {
+        $homeForm = $formEntry->form;
 
+        // Get all entry section IDs (including sections that are not resources
+        // - Algolia will just ignore those).
+        $entrySectionIds = $formEntry->entrySections()->pluck('id');
+
+        foreach($homeForm->formSections as $homeFormSection) {
+            foreach($homeFormSection->getSearchIndices() as $searchIndex) {
+                $client->initIndex($searchIndex)
+                    ->deleteObjects($entrySectionIds);
             }
         }
-        $client->initIndex($index)->deleteObjects([]); */
     }
 
     private static function getClient()

@@ -4,49 +4,55 @@ namespace App;
 
 use GuzzleHttp\Client as GuzzleHttp;
 
-class Wordpress
+class WordPress
 {
-    public static function saveResources(FormEntry $formEntry)
+    public static function addResources(FormEntry $formEntry)
     {
-        $form = $formEntry->form;
-        $directory = $form->directory;
+        $homeForm = $formEntry->form;
 
-        foreach($form->formSections as $formSection) {
+        foreach($homeForm->formSections as $homeFormSection) {
             // Skip if not a resource.
-            if (!$formSection->is_resource) {
+            if (!$homeFormSection->is_resource) {
                 continue;
             }
 
-            // Get all entry sections of `$formSection` type.
+            // Get all entry sections of `$homeFormSection` type.
             $entrySections = $formEntry
                 ->entrySections()
-                ->where('form_section_id', $formSection->id)
+                ->where('form_section_id', $homeFormSection->id)
                 ->get();
 
-            
+            // Add each entry section to each WordPress installation that it is
+            // linked (attached) to.
             foreach($entrySections as $entrySection) {
                 foreach($entrySection->formSectionsAttachedTo as $formSectionAttachedTo) {
-                    $url = $directory->wp_api_base_url . '/r';
-                    $slug = $formSection->slug_prefix . '_' . $entrySection->id;
+                    $formAttachedTo = $formSectionAttachedTo->form;
+                    $directoryAttachedTo = $formAttachedTo->directory;
 
-                    foreach($formSection->getResourceTemplates() as $template) {
+                    $url = $directoryAttachedTo->wp_api_base_url 
+                        . '/'
+                        . env('WP_CUSTOM_POST_TYPE_REST_BASE');
+                    $slug = $homeFormSection->slug_prefix . '_' . $entrySection->id;
+
+                    foreach($homeFormSection->getResourceTemplates() as $template) {
                         $content = "[afredwp_resource "
-                        . "directoryId='{$directory->id}' "
-                        . "formId='{$form->id}' "
-                        . "formEntryId='{$formEntry->id}' "
-                        . "entrySectionId='{$entrySection->id}' "
-                        . "template='{$template}']";
+                            . "directoryId='{$directoryAttachedTo->id}' "
+                            . "formId='{$formAttachedTo->id}' "
+                            . "formEntryId='{$formEntry->id}' "
+                            . "entrySectionId='{$entrySection->id}' "
+                            . "template='{$template}']";
 
-                        $response = self::saveResource(
+                        $response = self::addResource(
                             $url, 
-                            $directory->wp_api_password,
+                            $directoryAttachedTo->wp_api_password,
                             $slug,
                             $entrySection->title,
                             $content
                         );
 
+                        // TODO: What if it fails?
+
                         $wpPost = json_decode($response->getBody(), true);
-                        
                         $entrySection
                             ->formSectionsAttachedTo()
                             ->updateExistingPivot($formSectionAttachedTo->id, [
@@ -66,7 +72,34 @@ class Wordpress
 
     }
 
-    public static function saveResource(
+    public static function deleteResources(FormEntry $formEntry)
+    {
+        $entrySections = $formEntry->entrySections;
+
+        foreach($entrySections as $entrySection) {
+            foreach($entrySection->formSectionsAttachedTo as $formSectionAttachedTo) {
+                $directoryAttachedTo = $formSectionAttachedTo->form->directory;
+
+                // Skip if WordPress post id does not exist.
+                if (!$wpPostId = $formSectionAttachedTo->pivot->wp_post_id) {
+                    continue;
+                }
+
+                $url = $directoryAttachedTo->wp_api_base_url 
+                    . '/' 
+                    . env('WP_CUSTOM_POST_TYPE_REST_BASE')
+                    . '/'
+                    . $wpPostId;
+                
+                $response = self::deleteResource(
+                    $url,
+                    $directoryAttachedTo->wp_api_password
+                );
+            }
+        }
+    }
+
+    public static function addResource(
         $url,
         $password,
         $slug,
@@ -84,5 +117,20 @@ class Wordpress
                 'status'  => 'publish'
             ]
         ]);
+    }
+
+    public static function deleteResource(
+        $url,
+        $password,
+        $bypassTrash = false
+    ) {
+        return (new GuzzleHttp())->delete($url, [
+            'headers' => [
+                'Authorization' => "Basic {$password}"
+            ],
+            'json'   => [
+                'force' => $bypassTrash
+            ]
+        ]);        
     }
 }

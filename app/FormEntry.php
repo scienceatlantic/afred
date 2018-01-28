@@ -23,7 +23,13 @@ class FormEntry extends Model
      *
      * @var array
      */
-    protected $hidden = ['cache'];
+    protected $hidden = [
+        'cache',
+        'token',
+        'message',
+        'notes',
+        'isCacheValid',
+    ];
 
     public function status()
     {
@@ -45,18 +51,37 @@ class FormEntry extends Model
         return $this->hasMany('App\EntrySection');
     }
 
+    public function author()
+    {
+        return $this->belongsTo('App\User');
+    }
+
+    public function reviewer()
+    {
+        return $this->belongsTo('App\User');
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany('App\User')->withTimestamps();
+    }
+
     public static function saveEntry(Request $request, Form $form)
     {
-        $maxResourceId = self::max('resource_id');
+        // Generate a new resource id.
+        $resourceId = (self::max('resource_id') + 1);
 
+        // Create new form entry
         $formEntry = new self();
-        $formEntry->resource_id = ++$maxResourceId;
+        $formEntry->resource_id = $resourceId;
         $formEntry->form_id = $form->id;
         $formEntry->form_entry_status_id = Status::findStatus('Submitted')->id;
         $formEntry->save();
 
-        $formEntry->formsAttachedTo()->attach($request->formIds);
+        // Attach compatible forms (i.e. directories).
+        $formEntry->formsAttachedTo()->attach($request->forms);
 
+        // Attach fields and values.
         foreach($request->sections as $section => $fieldsets) {
             // Check that the section exists, otherwise skip.
             $formSection = FormSection
@@ -110,6 +135,11 @@ class FormEntry extends Model
         return $formEntry;
     }
 
+    public static function updateEntry(FormEntry $formEntry)
+    {
+        
+    }
+
     public function updateStatus($formEntryStatusId)
     {
         $this->form_entry_status_id = $formEntryStatusId;
@@ -119,19 +149,19 @@ class FormEntry extends Model
 
     public function getCacheAttribute($value)
     {
-        return $this->isCached ? json_decode($value, true) : null;
+        return $this->isCacheValid ? json_decode($value, true) : null;
     }
 
     public function setCacheAttribute($value)
     {
         $this->attributes['cache'] = $value ? json_encode($value) : null;
-        $this->isCached = $value ? true : false;
+        $this->isCacheValid = $value ? true : false;
     }
 
     public function getDataAttribute()
     {
         // Check cache first.
-        if ($this->isCached) {
+        if ($this->isCacheValid) {
             return $this->cache;
         }
 

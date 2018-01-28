@@ -8,7 +8,9 @@ class EntrySection extends Model
 {
     public function formSectionsAttachedTo()
     {
-        return $this->belongsToMany('App\FormSection')->withTimestamps();
+        return $this->belongsToMany('App\FormSection')
+            ->withPivot('wp_post_id', 'wp_slug')
+            ->withTimestamps();
     }
 
     public function formEntry()

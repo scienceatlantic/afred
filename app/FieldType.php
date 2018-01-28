@@ -10,4 +10,9 @@ class FieldType extends Model
     {
         return $this->hasMany('App\FormField');
     }
+
+    public static function findType($name)
+    {
+        return self::where('name', $name)->first();
+    }
 }
