@@ -1,9 +1,6 @@
 <?php
 
-use App\LanguageCode;
-use Illuminate\Database\Seeder;
-
-class LanguageCodesTableSeeder extends Seeder
+class LanguageCodesTableSeeder extends BaseSeeder
 {
     /**
      * Run the database seeds.
@@ -751,11 +748,6 @@ class LanguageCodesTableSeeder extends Seeder
             ]          
         ];
 
-        foreach($codes as $code) {
-            $lc = new LanguageCode();
-            $lc->name = $code['name'];
-            $lc->iso_639_1 = $code['iso_639_1'];
-            $lc->save();
-        }
+        self::saveModels('LanguageCode', $codes);
     }
 }

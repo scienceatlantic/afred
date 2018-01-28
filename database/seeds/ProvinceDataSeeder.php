@@ -1,11 +1,6 @@
 <?php
 
-use App\LabelledValue;
-use App\LabelledValueCategory;
-use App\LanguageCode;
-use Illuminate\Database\Seeder;
-
-class ProvinceDataSeeder extends Seeder
+class ProvinceDataSeeder extends BaseSeeder
 {
     /**
      * Run the database seeds.
@@ -38,21 +33,7 @@ class ProvinceDataSeeder extends Seeder
             ]
         ];
 
-        $languageCode = LanguageCode::where('iso_639_1', 'en')->first();
-
-        $category = new LabelledValueCategory();
-        $category->language_code_id = $languageCode->id;
-        $category->name = 'Canadian Provinces';
-        $category->save();
-
-        foreach($provinces as $province) {
-            $p = LabelledValue::where('label', $province['label'])->first();
-            if (!$p) {
-                $p = new LabelledValue();
-                $p->label = $province['label'];
-                $p->save();
-            }
-            $p->categories()->attach($category->id);
-        }
+        $category = self::saveCategory('Canadian Provinces');
+        self::saveLabelledValues($provinces, [$category->id]);
     }
 }

@@ -1,9 +1,6 @@
 <?php
 
-use App\Form;
-use Illuminate\Database\Seeder;
-
-class FormsTableSeeder extends Seeder
+class FormsTableSeeder extends BaseSeeder
 {
     /**
      * Run the database seeds.
@@ -18,10 +15,6 @@ class FormsTableSeeder extends Seeder
             ]
         ];
 
-        foreach($forms as $form) {
-            $f = new Form();
-            $f->directory_id = $form['directory_id'];
-            $f->save();
-        }
+        self::saveModels('Form', $forms);
     }
 }

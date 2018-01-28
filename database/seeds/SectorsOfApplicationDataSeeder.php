@@ -1,11 +1,6 @@
 <?php
 
-use App\LabelledValue;
-use App\LabelledValueCategory;
-use App\LanguageCode;
-use Illuminate\Database\Seeder;
-
-class SectorsOfApplicationDataSeeder extends Seeder
+class SectorsOfApplicationDataSeeder extends BaseSeeder
 {
     /**
      * Run the database seeds.
@@ -78,21 +73,7 @@ class SectorsOfApplicationDataSeeder extends Seeder
             ]
         ];
 
-        $languageCode = LanguageCode::where('iso_639_1', 'en')->first();
-
-        $category = new LabelledValueCategory();
-        $category->language_code_id = $languageCode->id;
-        $category->name = 'Sectors of Application';
-        $category->save();
-
-        foreach($sectors as $sector) {
-            $s = LabelledValue::where('label', $sector['label'])->first();
-            if (!$s) {
-                $s = new LabelledValue();
-                $s->label = $sector['label'];
-                $s->save();
-            }
-            $s->categories()->attach($category->id);
-        }
+        $category = self::saveCategory('Sectors of Application');
+        self::saveLabelledValues($sectors, [$category->id]);
     }
 }

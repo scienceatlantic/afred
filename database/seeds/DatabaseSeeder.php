@@ -11,6 +11,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $this->call(RolesTableSeeder::class);
         $this->call(LanguageCodesTableSeeder::class);
         $this->call(FieldTypesTableSeeder::class);
         $this->call(FormEntryStatusesTableSeeder::class);
@@ -19,6 +20,8 @@ class DatabaseSeeder extends Seeder
         $this->call(ProvinceDataSeeder::class);
         $this->call(ResearchDisciplinesDataSeeder::class);
         $this->call(SectorsOfApplicationDataSeeder::class);
+        $this->call(ExcessCapacityDataSeeder::class);
+        $this->call(SearchVisibilityDataSeeder::class);
         
         $this->call(DirectoriesTableSeeder::class);
         $this->call(AfredFormDataSeeder::class);

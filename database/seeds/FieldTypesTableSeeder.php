@@ -1,9 +1,6 @@
 <?php
 
-use App\FieldType;
-use Illuminate\Database\Seeder;
-
-class FieldTypesTableSeeder extends Seeder
+class FieldTypesTableSeeder extends BaseSeeder
 {
     /**
      * Run the database seeds.
@@ -32,10 +29,6 @@ class FieldTypesTableSeeder extends Seeder
             ]
         ];
 
-        foreach($types as $type) {
-            $f = new FieldType();
-            $f->name = $type['name'];
-            $f->save();
-        }
+        self::saveModels('FieldType', $types);
     }
 }

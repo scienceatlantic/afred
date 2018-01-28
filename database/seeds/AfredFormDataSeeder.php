@@ -24,10 +24,9 @@ class AfredFormDataSeeder extends Seeder
     public function run()
     {
         $afredDirectory = Directory
-            ::where('name', 'Atlantic Facilities and Research Equipment Database')
-            ->first();
+            ::findDirectory('Atlantic Facilities and Research Equipment Database');
 
-        $languageCode = LanguageCode::where('iso_639_1', 'en')->first();
+        $languageCode = LanguageCode::findCode('en');
 
         $afredForm = new Form();
         $afredForm->directory_id = $afredDirectory->id;
@@ -47,6 +46,31 @@ class AfredFormDataSeeder extends Seeder
 
     private function createFacilitySection($formId)
     {
+        $organizationIds = LabelledValueCategory
+            ::findCategory('Organizations')
+            ->values()
+            ->pluck('labelled_values.id');
+
+        $provinceIds = LabelledValueCategory
+            ::findCategory('Canadian Provinces')
+            ->values()
+            ->pluck('labelled_values.id');
+
+        $disciplineIds = LabelledValueCategory
+            ::findCategory('Research Disciplines')
+            ->values()
+            ->pluck('labelled_values.id');
+            
+        $sectorsIds = LabelledValueCategory
+            ::findCategory('Sectors of Application')
+            ->values()
+            ->pluck('labelled_values.id');
+
+        $fieldStringType = FieldType::findType('string');
+        $fieldRichTextType = FieldType::findType('richtext');
+        $fieldDropdownType = FieldType::findType('dropdown');
+        $fieldCheckboxType = FieldType::findType('checkbox');     
+
         $formSection = new FormSection();
         $formSection->form_id = $formId;
         $formSection->slug_prefix = 'facility';
@@ -64,11 +88,6 @@ class AfredFormDataSeeder extends Seeder
             'resource_template' => 'afred_facilities_facility_afred',
             'search_index'      => 'dev_afred_facilities_facility'
         ]);
-
-        $fieldStringType = FieldType::where('name', 'string')->first();
-        $fieldRichTextType = FieldType::where('name', 'richtext')->first();
-        $fieldDropdownType = FieldType::where('name', 'dropdown')->first();
-        $fieldCheckboxType = FieldType::where('name', 'checkbox')->first();
 
         // Facility/Lab
         $formField = new FormField();
@@ -107,12 +126,6 @@ class AfredFormDataSeeder extends Seeder
         $formField->is_active = 1;
         $formField->save();
 
-        $organizationIds = LabelledValueCategory
-            ::where('name', 'Organizations')
-            ->first()
-            ->values()
-            ->pluck('labelled_values.id');
-
         $formField->labelledValues()->attach($organizationIds);
 
         // Province
@@ -126,12 +139,6 @@ class AfredFormDataSeeder extends Seeder
         $formField->is_required = 1;
         $formField->is_active = 1;
         $formField->save();
-
-        $provinceIds = LabelledValueCategory
-            ::where('name', 'Canadian Provinces')
-            ->first()
-            ->values()
-            ->pluck('labelled_values.id');
 
         $formField->labelledValues()->attach($provinceIds);
 
@@ -174,12 +181,6 @@ class AfredFormDataSeeder extends Seeder
         $formField->is_required = 1;
         $formField->is_active = 1;
         $formField->save();
-
-        $disciplineIds = LabelledValueCategory
-            ::where('name', 'Research Disciplines')
-            ->first()
-            ->values()
-            ->pluck('labelled_values.id');
         
         $formField->labelledValues()->attach($disciplineIds);
 
@@ -195,17 +196,15 @@ class AfredFormDataSeeder extends Seeder
         $formField->is_active = 1;
         $formField->save();
 
-        $sectorsIds = LabelledValueCategory
-            ::where('name', 'Sectors of Application')
-            ->first()
-            ->values()
-            ->pluck('labelled_values.id');
-
         $formField->labelledValues()->attach($sectorsIds);
     }
 
     public function createPrimaryContactSection($formId)
     {
+        $fieldStringType = FieldType::findType('string');
+        $fieldRichTextType = FieldType::findType('richtext');
+        $fieldDropdownType = FieldType::findType('dropdown');
+
         $formSection = new FormSection();
         $formSection->form_id = $formId;
         $formSection->slug_prefix = 'primary-contact';
@@ -217,10 +216,6 @@ class AfredFormDataSeeder extends Seeder
         $formSection->placement_order = 2;
         $formSection->is_resource = false;
         $formSection->save();
-
-        $fieldStringType = FieldType::where('name', 'string')->first();
-        $fieldRichTextType = FieldType::where('name', 'richtext')->first();
-        $fieldDropdownType = FieldType::where('name', 'dropdown')->first();
 
         // First name
         $formField = new FormField();
@@ -315,6 +310,10 @@ class AfredFormDataSeeder extends Seeder
 
     public function createContactsSection($formId)
     {
+        $fieldStringType = FieldType::findType('string');
+        $fieldRichTextType = FieldType::findType('richtext');
+        $fieldDropdownType = FieldType::findType('dropdown');
+
         $formSection = new FormSection();
         $formSection->form_id = $formId;
         $formSection->slug_prefix = 'contact';
@@ -328,10 +327,6 @@ class AfredFormDataSeeder extends Seeder
         $formSection->placement_order = 3;
         $formSection->is_resource = false;
         $formSection->save();
-
-        $fieldStringType = FieldType::where('name', 'string')->first();
-        $fieldRichTextType = FieldType::where('name', 'richtext')->first();
-        $fieldDropdownType = FieldType::where('name', 'dropdown')->first();
 
         // First name
         $formField = new FormField();
@@ -426,6 +421,22 @@ class AfredFormDataSeeder extends Seeder
 
     public function createEquipmentSection($formId)
     {
+        $fieldStringType = FieldType::findType('string');
+        $fieldRichTextType = FieldType::findType('richtext');
+        $fieldNumberType = FieldType::findType('number');
+        $fieldRadioType = FieldType::findType('radio');
+        $fieldDropdownType = FieldType::findType('dropdown');
+
+        $excessCapacityIds = LabelledValueCategory
+            ::findCategory('Excess capacity')
+            ->values()
+            ->pluck('labelled_values.id');
+
+        $searchVisibilityIds = LabelledValueCategory
+            ::findCategory('Search visibility')
+            ->values()
+            ->pluck('labelled_values.id');
+                
         $formSection = new FormSection();
         $formSection->form_id = $formId;
         $formSection->slug_prefix = 'equipment';
@@ -445,12 +456,6 @@ class AfredFormDataSeeder extends Seeder
             'resource_template' => 'afred_facilities_equipment_afred',
             'search_index'      => 'dev_afred_facilities_equipment'
         ]);
-
-        $fieldStringType = FieldType::where('name', 'string')->first();
-        $fieldRichTextType = FieldType::where('name', 'richtext')->first();
-        $formNumberType = FieldType::where('name', 'number')->first();
-        $formRadioType = FieldType::where('name', 'radio')->first();
-        $fieldDropdownType = FieldType::where('name', 'dropdown')->first();
 
         // Type
         $formField = new FormField();
@@ -520,7 +525,7 @@ class AfredFormDataSeeder extends Seeder
         // Year purchased
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $formNumberType->id;
+        $formField->field_type_id = $fieldNumberType->id;
         $formField->label = 'Year purchased';
         $formField->object_key = 'yearPurchased';
         $formField->placement_order = 6;
@@ -533,7 +538,7 @@ class AfredFormDataSeeder extends Seeder
         // Year manufactured
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $formNumberType->id;
+        $formField->field_type_id = $fieldNumberType->id;
         $formField->label = 'Year manufactured';
         $formField->object_key = 'yearManufactured';
         $formField->placement_order = 7;
@@ -547,7 +552,7 @@ class AfredFormDataSeeder extends Seeder
         // Excess capacity
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $formRadioType->id;
+        $formField->field_type_id = $fieldRadioType->id;
         $formField->label = 'Excess capacity';
         $formField->object_key = 'excessCapacity';
         $formField->placement_order = 8;
@@ -558,20 +563,12 @@ class AfredFormDataSeeder extends Seeder
         $formField->is_active = 1;
         $formField->save();
 
-        $formFieldRadioValue = new LabelledValue();
-        $formFieldRadioValue->label = 'Yes';
-        $formFieldRadioValue->save();
-        $formFieldRadioValue->formFields()->attach($formField->id);
-
-        $formFieldRadioValue = new LabelledValue();
-        $formFieldRadioValue->label = 'No';
-        $formFieldRadioValue->save();
-        $formFieldRadioValue->formFields()->attach($formField->id);
+        $formField->labelledValues()->attach($excessCapacityIds);
 
         // Search visibility
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $formRadioType->id;
+        $formField->field_type_id = $fieldRadioType->id;
         $formField->label = 'Search visibility';
         $formField->object_key = 'searchVisibility';
         $formField->placement_order = 9;
@@ -582,14 +579,6 @@ class AfredFormDataSeeder extends Seeder
         $formField->is_active = 1;
         $formField->save();
 
-        $formFieldRadioValue = new LabelledValue();
-        $formFieldRadioValue->label = 'Public';
-        $formFieldRadioValue->save();
-        $formFieldRadioValue->formFields()->attach($formField->id);
-
-        $formFieldRadioValue = new LabelledValue();
-        $formFieldRadioValue->label = 'Private';
-        $formFieldRadioValue->save();
-        $formFieldRadioValue->formFields()->attach($formField->id);
+        $formField->labelledValues()->attach($searchVisibilityIds);
     }
 }

@@ -1,9 +1,6 @@
 <?php
 
-use App\Directory;
-use Illuminate\Database\Seeder;
-
-class DummyDirectoriesTableSeeder extends Seeder
+class DummyDirectoriesTableSeeder extends BaseSeeder
 {
     /**
      * Run the database seeds.
@@ -22,12 +19,6 @@ class DummyDirectoriesTableSeeder extends Seeder
             ]
         ];
 
-        foreach($directories as $directory) {
-            $d = new Directory();
-            foreach($directory as $key => $value) {
-                $d->$key = $directory[$key];
-            }
-            $d->save();
-        }
+        self::saveModels('Directory', $directories);
     }
 }

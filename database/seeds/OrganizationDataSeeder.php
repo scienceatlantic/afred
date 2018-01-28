@@ -1,11 +1,6 @@
 <?php
 
-use App\LabelledValue;
-use App\LabelledValueCategory;
-use App\LanguageCode;
-use Illuminate\Database\Seeder;
-
-class OrganizationDataSeeder extends Seeder
+class OrganizationDataSeeder extends BaseSeeder
 {
     /**
      * Run the database seeds.
@@ -76,21 +71,7 @@ class OrganizationDataSeeder extends Seeder
             ]
         ];
 
-        $languageCode = LanguageCode::where('iso_639_1', 'en')->first();
-
-        $category = new LabelledValueCategory();
-        $category->language_code_id = $languageCode->id;
-        $category->name = 'Organizations';
-        $category->save();
-
-        foreach($organisations as $organisation) {
-            $o = LabelledValue::where('label', $organisation['label'])->first();
-            if (!$o) {
-                $o = new LabelledValue();
-                $o->label = $organisation['label'];
-                $o->save();
-            }
-            $o->categories()->attach($category->id);
-        }
+        $category = self::saveCategory('Organizations');
+        self::saveLabelledValues($organisations, [$category->id]);
     }
 }

@@ -1,9 +1,6 @@
 <?php
 
-use App\FormEntryStatus;
-use Illuminate\Database\Seeder;
-
-class FormEntryStatusesTableSeeder extends Seeder
+class FormEntryStatusesTableSeeder extends BaseSeeder
 {
     /**
      * Run the database seeds.
@@ -28,10 +25,6 @@ class FormEntryStatusesTableSeeder extends Seeder
             ]
         ];
 
-        foreach($statuses as $status) {
-            $f = new FormEntryStatus();
-            $f->name = $status['name'];
-            $f->save();
-        }
+        self::saveModels('FormEntryStatus', $statuses);
     }
 }

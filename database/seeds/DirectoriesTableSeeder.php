@@ -1,9 +1,6 @@
 <?php
 
-use App\Directory;
-use Illuminate\Database\Seeder;
-
-class DirectoriesTableSeeder extends Seeder
+class DirectoriesTableSeeder extends BaseSeeder
 {
     /**
      * Run the database seeds.
@@ -18,16 +15,10 @@ class DirectoriesTableSeeder extends Seeder
                 'shortname'       => 'AFRED',
                 'wp_base_url'     => 'http://localhost/afred-wp-demo',
                 'wp_api_base_url' => 'http://localhost/afred-wp-demo/wp-json/wp/v2',
-                'wp_api_password' => 'cm9vdDpkTFVrIG0wbFUgQTl5eiAzSUZ1IFpLTnMgV0R1bg==', // TODO: Commit only dummy credentials to GitHub!
+                'wp_api_password' => 'cm9vdDp2VFptIG1LZEMgSFpDNSBNV2JiIHBlS3MgU2RSVQ==', // TODO: Commit only dummy credentials to GitHub!
             ]
         ];
 
-        foreach($directories as $directory) {
-            $d = new Directory();
-            foreach($directory as $key => $value) {
-                $d->$key = $directory[$key];
-            }
-            $d->save();
-        }
+        self::saveModels('Directory', $directories);
     }
 }

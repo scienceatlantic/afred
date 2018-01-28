@@ -46,6 +46,18 @@ class DummyAfredFormDataSeeder extends Seeder
             ->forms()
             ->where('name', 'Facilities')
             ->first();
+        $searchVisibilityIds  = LabelledValueCategory::where('name', 'Search visibility')
+            ->first()
+            ->values()
+            ->get()
+            ->pluck('id')
+            ->toArray();
+        $excessCapacityIds  = LabelledValueCategory::where('name', 'Excess capacity')
+            ->first()
+            ->values()
+            ->get()
+            ->pluck('id')
+            ->toArray();
 
         $nbFacilities = $faker->numberBetween(8, 18);
         for($index = 0; $index < $nbFacilities; $index++) {
@@ -56,8 +68,14 @@ class DummyAfredFormDataSeeder extends Seeder
                 'province'     => $faker->randomElement($provinceIds),
                 'website'      => $faker->url,
                 'description'  => $faker->paragraphs(3, true),
-                'disciplines'  => $faker->randomElements($disciplineIds, $faker->numberBetween(1, count($disciplineIds))),
-                'sectors'      => $faker->randomElements($sectorIds, $faker->numberBetween(1, count($disciplineIds)))
+                'disciplines'  => $faker->randomElements(
+                    $disciplineIds,
+                    $faker->numberBetween(1, count($disciplineIds))
+                ),
+                'sectors'      => $faker->randomElements(
+                    $sectorIds,
+                    $faker->numberBetween(1, count($disciplineIds))
+                )
             ]];
     
             $primaryContact = [[
@@ -88,13 +106,21 @@ class DummyAfredFormDataSeeder extends Seeder
             $nbEquipment = $faker->numberBetween(1, 50);
             for($i = 0; $i < $nbEquipment; $i++) {
                 array_push($equipment, [
-                    'type'                    => $faker->word,
-                    'model'                   => $faker->word,
-                    'manufacturer'            => $faker->word,
-                    'equipmentPurpose'        => $faker->paragraphs(3, true),
-                    'equipmentSpecifications' => $faker->paragraphs(3, true),
-                    'yearPurchased'           => $faker->numberBetween(1980, 2017),
-                    'yearManufactured'        => $faker->numberBetween(1980, 2017)
+                    'type'             => $faker->word,
+                    'model'            => $faker->word,
+                    'manufacturer'     => $faker->word,
+                    'purpose'          => $faker->paragraphs(3, true),
+                    'specifications'   => $faker->paragraphs(3, true),
+                    'yearPurchased'    => $faker->numberBetween(1980, 2017),
+                    'yearManufactured' => $faker->numberBetween(1980, 2017),
+                    'searchVisibility' => $faker->randomElements(
+                        $searchVisibilityIds,
+                        $faker->numberBetween(1, count($searchVisibilityIds))
+                    ),
+                    'excessCapacity'   => $faker->randomElements(
+                        $excessCapacityIds,
+                        $faker->numberBetween(1, count($excessCapacityIds))
+                    )
                 ]);
             }
 
@@ -105,7 +131,7 @@ class DummyAfredFormDataSeeder extends Seeder
                     'action' => 'submit'
                 ],
                 'json' => [
-                    'formIds' => Form::all()->pluck('id'),
+                    'forms' => Form::all()->pluck('id'),
                     'sections' => [
                         'facilities'      => $facility,
                         'primaryContacts' => $primaryContact,
