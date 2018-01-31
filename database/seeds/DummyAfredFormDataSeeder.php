@@ -17,47 +17,43 @@ class DummyAfredFormDataSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create();
-        $organizationIds = LabelledValueCategory::where('name', 'Organizations')
-            ->first()
+
+        $organizationIds = LabelledValueCategory
+            ::findCategory('Organizations')
             ->values()
-            ->get()
-            ->pluck('id')
+            ->pluck('labelled_values.id')
             ->toArray();
-        $provinceIds = LabelledValueCategory::where('name', 'Canadian Provinces')
-            ->first()
+        $provinceIds = LabelledValueCategory
+            ::findCategory('Canadian Provinces')
             ->values()
-            ->get()
-            ->pluck('id')
+            ->pluck('labelled_values.id')
             ->toArray();
-        $disciplineIds = LabelledValueCategory::where('name', 'Research Disciplines')
-            ->first()
+        $disciplineIds = LabelledValueCategory
+            ::findCategory('Research Disciplines')
             ->values()
-            ->get()
-            ->pluck('id')
+            ->pluck('labelled_values.id')
             ->toArray();
-        $sectorIds = LabelledValueCategory::where('name', 'Sectors of Application')
-            ->first()
+        $sectorIds = LabelledValueCategory
+            ::findCategory('Sectors of Application')
             ->values()
-            ->get()
-            ->pluck('id')
+            ->pluck('labelled_values.id')
             ->toArray();
-        $form = Directory::where('shortname', 'AFRED')
-            ->first()
+        $searchVisibilityIds = LabelledValueCategory
+            ::findCategory('Search visibility')
+            ->values()
+            ->pluck('labelled_values.id')
+            ->toArray();
+        $excessCapacityIds = LabelledValueCategory
+            ::findCategory('Excess capacity')
+            ->values()
+            ->pluck('labelled_values.id')
+            ->toArray();
+        
+        $form = Directory
+            ::findDirectory('Atlantic Facilities and Research Equipment Database')
             ->forms()
             ->where('name', 'Facilities')
-            ->first();
-        $searchVisibilityIds  = LabelledValueCategory::where('name', 'Search visibility')
-            ->first()
-            ->values()
-            ->get()
-            ->pluck('id')
-            ->toArray();
-        $excessCapacityIds  = LabelledValueCategory::where('name', 'Excess capacity')
-            ->first()
-            ->values()
-            ->get()
-            ->pluck('id')
-            ->toArray();
+            ->first();            
 
         $nbFacilities = $faker->numberBetween(8, 18);
         for($index = 0; $index < $nbFacilities; $index++) {
@@ -82,7 +78,9 @@ class DummyAfredFormDataSeeder extends Seeder
                 'firstName' => $faker->firstName,
                 'lastName'  => $faker->lastName,
                 'email'     => $faker->email,
-                'telephone' => $faker->numberBetween(100000, 999999) . '' . $faker->numberBetween(1000, 9999),
+                'telephone' => $faker->numberBetween(100000, 999999) 
+                            . '' 
+                            . $faker->numberBetween(1000, 9999),
                 'position'  => $faker->word,
                 'website'   => $faker->url,
                 'extension' => $faker->numberBetween(1000, 9999)
@@ -95,7 +93,9 @@ class DummyAfredFormDataSeeder extends Seeder
                     'firstName' => $faker->firstName,
                     'lastName'  => $faker->lastName,
                     'email'     => $faker->email,
-                    'telephone' => $faker->numberBetween(100000, 999999) . '' . $faker->numberBetween(1000, 9999),
+                    'telephone' => $faker->numberBetween(100000, 999999)
+                                . '' 
+                                . $faker->numberBetween(1000, 9999),
                     'position'  => $faker->word,
                     'website'   => $faker->url,
                     'extension' => $faker->numberBetween(1000, 9999)
@@ -124,9 +124,10 @@ class DummyAfredFormDataSeeder extends Seeder
                 ]);
             }
 
+            //TODO:
             $url = "//localhost/afred/public/api/directories/{$form->directory->id}/forms/{$form->id}/entries";
-            $http = new GuzzleHttp();
-            $response = $http->post($url, [
+
+            $response = (new GuzzleHttp())->post($url, [
                 'query' => [
                     'action' => 'submit'
                 ],

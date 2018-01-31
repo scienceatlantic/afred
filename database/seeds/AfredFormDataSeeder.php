@@ -74,6 +74,8 @@ class AfredFormDataSeeder extends Seeder
         $formSection = new FormSection();
         $formSection->form_id = $formId;
         $formSection->slug_prefix = 'facility';
+        $formSection->listing_template_prefix = 'afred_facilities_facility_afred';
+        $formSection->search_index = 'dev_afred_facilities_facility';
         $formSection->label_singular = 'Facility';
         $formSection->label_plural = 'Facilities';
         $formSection->object_key = 'facilities';
@@ -83,11 +85,6 @@ class AfredFormDataSeeder extends Seeder
         $formSection->field_resource_title_object_key = 'name';
         $formSection->is_resource = true;
         $formSection->save();
-
-        $formSection->compatibleFormSections()->attach($formSection->id, [
-            'resource_template' => 'afred_facilities_facility_afred',
-            'search_index'      => 'dev_afred_facilities_facility'
-        ]);
 
         // Facility/Lab
         $formField = new FormField();
@@ -440,6 +437,8 @@ class AfredFormDataSeeder extends Seeder
         $formSection = new FormSection();
         $formSection->form_id = $formId;
         $formSection->slug_prefix = 'equipment';
+        $formSection->listing_template_prefix = 'afred_facilities_equipment_afred';
+        $formSection->search_index = 'dev_afred_facilities_equipment';        
         $formSection->label_singular = 'Equipment';
         $formSection->label_plural = 'Equipment';
         $formSection->object_key = 'equipment';
@@ -451,11 +450,6 @@ class AfredFormDataSeeder extends Seeder
         $formSection->field_resource_title_object_key = 'type';
         $formSection->is_resource = true;
         $formSection->save();
-
-        $formSection->compatibleFormSections()->attach($formSection->id, [
-            'resource_template' => 'afred_facilities_equipment_afred',
-            'search_index'      => 'dev_afred_facilities_equipment'
-        ]);
 
         // Type
         $formField = new FormField();

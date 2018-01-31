@@ -19,7 +19,7 @@ class FormEntryStatusesTableSeeder extends BaseSeeder
             ], [
                 'name' => 'Rejected'
             ], [
-                'name' => 'Past'
+                'name' => 'Revision'
             ], [
                 'name' => 'Deleted'
             ]
