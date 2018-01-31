@@ -19,6 +19,10 @@ class CreateFormSectionsTable extends Migration
             $table->integer('form_id')
                   ->unsigned();
             $table->string('slug_prefix');
+            $table->string('listing_template_prefix')
+                  ->nullable();
+            $table->string('search_index')
+                  ->nullable();
             $table->string('label_singular');
             $table->string('label_plural');
             $table->string('object_key');
@@ -51,7 +55,14 @@ class CreateFormSectionsTable extends Migration
                   ->on('forms')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
+
+
+            // TODO: unique by id?
             $table->unique('slug_prefix');
+
+
+
+
             $table->unique(['form_id', 'label_singular']);
             $table->unique(['form_id', 'label_plural']);
             $table->unique(['form_id', 'object_key']);

@@ -20,6 +20,9 @@ class CreateEntrySectionsTable extends Migration
                   ->unsigned();
             $table->integer('form_section_id')
                   ->unsigned();
+            $table->integer('published_entry_section_id')
+                  ->unsigned()
+                  ->nullable();
             $table->timestamps();
 
             // Foreign keys & indices
@@ -32,7 +35,12 @@ class CreateEntrySectionsTable extends Migration
                   ->references('id')
                   ->on('form_sections')
                   ->onUpdate('cascade')
-                  ->onDelete('restrict');                  
+                  ->onDelete('restrict');
+            $table->foreign('published_entry_section_id')
+                  ->references('id')
+                  ->on('entry_sections')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
         });
     }
 
