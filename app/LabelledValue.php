@@ -18,7 +18,8 @@ class LabelledValue extends Model
 
     public function categories()
     {
-        return $this->belongsToMany('App\LabelledValueCategory')
+        return $this
+            ->belongsToMany('App\LabelledValueCategory')
             ->withTimestamps();
     }
 }

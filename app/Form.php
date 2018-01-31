@@ -13,8 +13,7 @@ class Form extends Model
 
     public function compatibleForms()
     {
-        return $this->belongsToMany
-            (
+        return $this->belongsToMany(
                 'App\Form',
                 'form_form', 
                 'form_id', 

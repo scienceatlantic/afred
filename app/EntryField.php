@@ -66,8 +66,8 @@ class EntryField extends Model
                     return $this->labelledValues[0];
                 }
                 return [
-                    $this->labelledValues[0]->id
-                        => $this->labelledValues[0]->label
+                    'labelled_value_id' => $this->labelledValues[0]->id,
+                    'value'             => $this->labelledValues[0]->label
                 ];
             case 'checkbox':
                 if ($returnValueObject) {
@@ -75,7 +75,10 @@ class EntryField extends Model
                 }
                 $values = [];
                 foreach($this->labelledValues as $labelledValue) {
-                    $values[$labelledValue->id] = $labelledValue->label;
+                    array_push($values, [
+                        'labelled_value_id' => $labelledValue->id,
+                        'value'             => $labelledValue->label
+                    ]);
                 }
                 return $values;
             default:
