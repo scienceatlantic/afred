@@ -1,11 +1,70 @@
 <div class="afredwp">
   <div class="panel panel-default">
-    <div class="panel-body">
+    <div class="panel-body">      
+      <p style="text-decoration: underline">
+        <b>Equipment</b>
+      <p>
+
+      @foreach ($data['sections']['equipment'] as $index => $equip)
+        @if ($equip['_meta']['entry_section_id'] === $entrySectionId)
+          @isset($equip['type'])
+            <div class="row">
+              <p class="col-md-4">Type</p>
+              <p class="col-md-8">{{ $equip['type'] }}</p>
+            </div>
+          @endisset
+
+          @isset($equip['manufacturer'])
+            <div class="row">
+              <p class="col-md-4">Manufacturer</p>
+              <p class="col-md-8">{{ $equip['manufacturer'] }}</p>
+            </div>
+          @endisset
+
+          @isset($equip['model'])
+            <div class="row">
+              <p class="col-md-4">Model</p>
+              <p class="col-md-8">{{ $equip['model'] }}</p>
+            </div>
+          @endisset
+
+          @isset($equip['purpose'])
+            <div class="row">
+              <p class="col-md-4">Purpose</p>
+              <p class="col-md-8">{{ $equip['purpose'] }}</p>
+            </div>
+          @endisset
+
+          @isset($equip['specifications'])
+            <div class="row">
+              <p class="col-md-4">Specifications</p>
+              <p class="col-md-8">{{ $equip['specifications'] }}</p>
+            </div>
+          @endisset
+
+          @isset($equip['yearManufactured'])
+            <div class="row">
+              <p class="col-md-4">Year manufactured</p>
+              <p class="col-md-8">{{ $equip['yearManufactured'] }}</p>
+            </div>
+          @endisset
+
+          @isset($equip['yearPurchased'])
+            <div class="row">
+              <p class="col-md-4">Year purchased</p>
+              <p class="col-md-8">{{ $equip['yearPurchased'] }}</p>
+            </div>
+          @endisset
+        @endif
+      @endforeach
+
       <p style="text-decoration: underline">
         <b>Research Facility</b>
       </p>
 
-      @foreach ($data['resource']['facilities'] as $facility)
+      <hr>      
+
+      @foreach ($data['sections']['facilities'] as $facility)
         @isset($facility['name'])
           <div class="row">
             <p class="col-md-4">Facility</p>
@@ -13,10 +72,10 @@
           </div>
         @endisset
 
-        @isset($facility['organization'])
+        @isset($facility['organization'][0]['value'])
           <div class="row">
             <p class="col-md-4">Organization</p>
-            <p class="col-md-8">{{ $facility['organization'] }}</p>
+            <p class="col-md-8">{{ $facility['organization'][0]['value'] }}</p>
           </div>
         @endisset
 
@@ -27,10 +86,10 @@
           </div>
         @endisset
 
-        @isset($facility['province'])
+        @isset($facility['province'][0]['value'])
           <div class="row">
             <p class="col-md-4">Province</p>
-            <p class="col-md-8">{{ $facility['province'] }}</p>
+            <p class="col-md-8">{{ $facility['province'][0]['value'] }}</p>
           </div>
         @endisset
 
@@ -60,7 +119,7 @@
             <div class="col-md-8">
               <ul>
                 @foreach ($facility['disciplines'] as $discipline)
-                  <li>{{ $discipline }}</li>
+                  <li>{{ $discipline['value'] }}</li>
                 @endforeach
               <ul>
             </div>
@@ -73,7 +132,7 @@
             <div class="col-md-8">
               <ul>
                 @foreach ($facility['sectors'] as $sector)
-                  <li>{{ $sector }}</li>
+                  <li>{{ $sector['value'] }}</li>
                 @endforeach
               <ul>
             </div>
@@ -88,7 +147,7 @@
     <b>Contacts</b>
   </p>
 
-  @foreach ($data['resource']['primaryContacts'] as $index => $contact)
+  @foreach ($data['sections']['primaryContacts'] as $index => $contact)
     @isset($contact['firstName'])
       <div class="row">
         <p class="col-md-4">Name</p>
@@ -138,12 +197,12 @@
       </div>
     @endisset
 
-    @if ($index !== count($data['resource']['primaryContacts']) - 1)
+    @if ($index !== count($data['sections']['primaryContacts']) - 1)
       <hr>
     @endif
   @endforeach
 
-  @foreach ($data['resource']['contacts'] as $index => $contact)
+  @foreach ($data['sections']['contacts'] as $index => $contact)
     @isset($contact['firstName'])
       <div class="row">
         <p class="col-md-4">Name</p>
@@ -193,68 +252,7 @@
       </div>
     @endisset
 
-    @if ($index !== count($data['resource']['contacts']) - 1)
-      <hr>
-    @endif
-  @endforeach
-
-  <hr>
-  
-  <p style="text-decoration: underline">
-    <b>Equipment</b>
-  <p>
-
-  @foreach ($data['resource']['equipment'] as $index => $equip)
-    @isset($equip['type'])
-      <div class="row">
-        <p class="col-md-4">Type</p>
-        <p class="col-md-8">{{ $equip['type'] }}</p>
-      </div>
-    @endisset
-
-    @isset($equip['manufacturer'])
-      <div class="row">
-        <p class="col-md-4">Manufacturer</p>
-        <p class="col-md-8">{{ $equip['manufacturer'] }}</p>
-      </div>
-    @endisset
-
-    @isset($equip['model'])
-      <div class="row">
-        <p class="col-md-4">Model</p>
-        <p class="col-md-8">{{ $equip['model'] }}</p>
-      </div>
-    @endisset
-
-    @isset($equip['purpose'])
-      <div class="row">
-        <p class="col-md-4">Purpose</p>
-        <p class="col-md-8">{{ $equip['purpose'] }}</p>
-      </div>
-    @endisset
-
-    @isset($equip['specifications'])
-      <div class="row">
-        <p class="col-md-4">Specifications</p>
-        <p class="col-md-8">{{ $equip['specifications'] }}</p>
-      </div>
-    @endisset
-
-    @isset($equip['yearManufactured'])
-      <div class="row">
-        <p class="col-md-4">Year manufactured</p>
-        <p class="col-md-8">{{ $equip['yearManufactured'] }}</p>
-      </div>
-    @endisset
-
-    @isset($equip['yearPurchased'])
-      <div class="row">
-        <p class="col-md-4">Year purchased</p>
-        <p class="col-md-8">{{ $equip['yearPurchased'] }}</p>
-      </div>
-    @endisset
-
-    @if ($index !== count($data['resource']['equipment']) - 1)
+    @if ($index !== count($data['sections']['contacts']) - 1)
       <hr>
     @endif
   @endforeach

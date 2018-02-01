@@ -5,7 +5,7 @@
         <b>Research Facility</b>
       </p>
 
-      @foreach ($data['resource']['facilities'] as $facility)
+      @foreach ($data['sections']['facilities'] as $facility)
         @isset($facility['name'])
           <div class="row">
             <p class="col-md-4">Facility</p>
@@ -13,10 +13,10 @@
           </div>
         @endisset
 
-        @isset($facility['organization'])
+        @isset($facility['organization'][0])
           <div class="row">
             <p class="col-md-4">Organization</p>
-            <p class="col-md-8">{{ $facility['organization'] }}</p>
+            <p class="col-md-8">{{ $facility['organization'][0]['value'] }}</p>
           </div>
         @endisset
 
@@ -27,10 +27,10 @@
           </div>
         @endisset
 
-        @isset($facility['province'])
+        @isset($facility['province'][0])
           <div class="row">
             <p class="col-md-4">Province</p>
-            <p class="col-md-8">{{ $facility['province'] }}</p>
+            <p class="col-md-8">{{ $facility['province'][0]['value'] }}</p>
           </div>
         @endisset
 
@@ -60,7 +60,7 @@
             <div class="col-md-8">
               <ul>
                 @foreach ($facility['disciplines'] as $discipline)
-                  <li>{{ $discipline }}</li>
+                  <li>{{ $discipline['value'] }}</li>
                 @endforeach
               <ul>
             </div>
@@ -73,7 +73,7 @@
             <div class="col-md-8">
               <ul>
                 @foreach ($facility['sectors'] as $sector)
-                  <li>{{ $sector }}</li>
+                  <li>{{ $sector['value'] }}</li>
                 @endforeach
               <ul>
             </div>
@@ -88,7 +88,7 @@
     <b>Contacts</b>
   </p>
 
-  @foreach ($data['resource']['primaryContacts'] as $index => $contact)
+  @foreach ($data['sections']['primaryContacts'] as $index => $contact)
     @isset($contact['firstName'])
       <div class="row">
         <p class="col-md-4">Name</p>
@@ -138,12 +138,12 @@
       </div>
     @endisset
 
-    @if ($index !== count($data['resource']['primaryContacts']) - 1)
+    @if ($index !== count($data['sections']['primaryContacts']) - 1)
       <hr>
     @endif
   @endforeach
 
-  @foreach ($data['resource']['contacts'] as $index => $contact)
+  @foreach ($data['sections']['contacts'] as $index => $contact)
     @isset($contact['firstName'])
       <div class="row">
         <p class="col-md-4">Name</p>
@@ -157,8 +157,7 @@
       <div class="row">
         <p class="col-md-4">Email</p>
         <p class="col-md-8">
-          <a href="mailto:{{ $contact['email'] }}"></a>
-          {{ $contact['email'] }}
+          <a href="mailto:{{ $contact['email'] }}">{{ $contact['email'] }}</a>
         </p>
       </div>
     @endisset
@@ -193,7 +192,7 @@
       </div>
     @endisset
 
-    @if ($index !== count($data['resource']['contacts']) - 1)
+    @if ($index !== count($data['sections']['contacts']) - 1)
       <hr>
     @endif
   @endforeach
@@ -204,7 +203,7 @@
     <b>Equipment</b>
   <p>
 
-  @foreach ($data['resource']['equipment'] as $index => $equip)
+  @foreach ($data['sections']['equipment'] as $index => $equip)
     @isset($equip['type'])
       <div class="row">
         <p class="col-md-4">Type</p>
@@ -254,7 +253,7 @@
       </div>
     @endisset
 
-    @if ($index !== count($data['resource']['equipment']) - 1)
+    @if ($index !== count($data['sections']['equipment']) - 1)
       <hr>
     @endif
   @endforeach
