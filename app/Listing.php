@@ -15,4 +15,24 @@ class Listing extends Model
     {
         return $this->belongsTo('App\FormSection');
     }
+
+    public function getTemplateAttribute()
+    {
+        $listing = self
+            ::with([
+                'entrySection.formSection',
+                'formSection'
+            ])
+            ->find($this->id);
+
+        return 'templates.r.'
+            . $listing
+                ->entrySection
+                ->formSection
+                ->listing_template_prefix
+            . '_'
+            . $listing
+                ->formSection
+                ->listing_template_prefix;
+    }
 }
