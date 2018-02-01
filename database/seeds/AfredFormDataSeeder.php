@@ -74,7 +74,7 @@ class AfredFormDataSeeder extends Seeder
         $formSection = new FormSection();
         $formSection->form_id = $formId;
         $formSection->slug_prefix = 'facility';
-        $formSection->listing_template_prefix = 'afred_facilities_facility_afred';
+        $formSection->listing_template_prefix = 'afred_facility';
         $formSection->search_index = 'dev_afred_facilities_facility';
         $formSection->label_singular = 'Facility';
         $formSection->label_plural = 'Facilities';
@@ -437,7 +437,7 @@ class AfredFormDataSeeder extends Seeder
         $formSection = new FormSection();
         $formSection->form_id = $formId;
         $formSection->slug_prefix = 'equipment';
-        $formSection->listing_template_prefix = 'afred_facilities_equipment_afred';
+        $formSection->listing_template_prefix = 'afred_equipment';
         $formSection->search_index = 'dev_afred_facilities_equipment';        
         $formSection->label_singular = 'Equipment';
         $formSection->label_plural = 'Equipment';
