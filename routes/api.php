@@ -25,15 +25,19 @@ Route::resource('directories.forms', 'FormController', [
 
 // directories/forms/entries
 Route::post(
-    '/directories/{directory}/forms/{form}/entries',
+    'directories/{directory}/forms/{form}/entries',
+    'FormEntryController@action'
+);
+Route::post(
+    'directories/{directory}/forms/{form}/entries/{entry}',
     'FormEntryController@action'
 );
 Route::put(
-    '/directories/{directory}/forms/{form}/entries/{entry}',
+    'directories/{directory}/forms/{form}/entries/{entry}',
     'FormEntryController@action'
 );
 Route::delete(
-    '/directories/{directory}/forms/{form}/entries/{entry}',
+    'directories/{directory}/forms/{form}/entries/{entry}',
     'FormEntryController@action'
 );
 Route::resource('directories.forms.entries', 'FormEntryController', [
@@ -41,6 +45,12 @@ Route::resource('directories.forms.entries', 'FormEntryController', [
 ]);
 
 // form-entry-statuses
-Route::resource('/form-entry-statuses', 'FormEntryStatusController', [
+Route::resource('form-entry-statuses', 'FormEntryStatusController', [
     'only' => ['index']
 ]);
+
+// listings
+Route::get(
+    'directories/{directory}/forms/{form}/entries/{entry}/sections/{section}/listings/{listing}',
+    'ListingController@show'
+);
