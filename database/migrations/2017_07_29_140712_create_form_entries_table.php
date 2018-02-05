@@ -34,9 +34,9 @@ class CreateFormEntriesTable extends Migration
                   ->nullable();
             $table->text('notes')
                   ->nullable();
-            $table->boolean('isEdit')
+            $table->boolean('is_edit')
                   ->default(false);
-            $table->boolean('isCacheValid')
+            $table->boolean('is_cache_valid')
                   ->default(false);
             $table->timestamps();
 

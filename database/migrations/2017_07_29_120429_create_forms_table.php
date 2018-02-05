@@ -20,6 +20,9 @@ class CreateFormsTable extends Migration
                   ->unsigned();
             $table->integer('language_code_id')
                   ->unsigned();
+            $table->integer('wp_post_id')
+                  ->unsigned()
+                  ->nullable();
             $table->string('name');
             $table->string('pagination_section_object_key');
             $table->string('pagination_field_object_key');

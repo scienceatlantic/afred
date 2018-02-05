@@ -18,7 +18,16 @@ class CreateUsersTable extends Migration
             $table->increments('id');
             $table->integer('role_id')
                   ->unsigned();
-            $table->string('name');
+            $table->integer('wp_user_id')
+                  ->unsigned()
+                  ->nullable();        
+            $table->string('wp_username')
+                  ->nullable()
+                  ->unique();
+            $table->string('first_name')
+                  ->nullable();
+            $table->string('last_name')
+                  ->nullable();
             $table->string('email')
                   ->unique();
             $table->string('password');
