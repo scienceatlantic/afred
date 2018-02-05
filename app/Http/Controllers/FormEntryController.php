@@ -6,22 +6,31 @@ use DB;
 use App\Directory;
 use App\FormEntry;
 use App\FormEntryStatus as Status;
-use Illuminate\Http\Request;
+use App\Http\Requests\FormEntryRequest;
 
 class FormEntryController extends Controller
 {
+    public static $relationships = [
+        'status',
+        'form.directory',
+        'author',
+        'reviewer'
+    ];
+
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, $directoryId, $formId)
+    public function index(FormEntryRequest $request, $directoryId, $formId)
     {
         $formEntries = Directory
             ::findOrFail($directoryId)
             ->forms()
             ->findOrFail($formId)
-            ->formEntries();
+            ->formEntries()
+            ->with(self::$relationships);
 
         if ($request->status) {
             // Abort if status not found.
@@ -43,7 +52,7 @@ class FormEntryController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(
-        Request $request,
+        FormEntryRequest $request,
         $directoryId,
         $formId,
         $formEntryId
@@ -53,11 +62,12 @@ class FormEntryController extends Controller
             ->forms()
             ->findOrFail($formId)
             ->formEntries()
+            ->with(self::$relationships)
             ->findOrFail($formEntryId);
     }
 
     public function action(
-        Request $request,
+        FormEntryRequest $request,
         $directoryId,
         $formId,
         $formEntryId = null

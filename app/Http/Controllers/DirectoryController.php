@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Directory;
-use Illuminate\Http\Request;
+use App\Http\Requests\DirectoryRequest;
 
 class DirectoryController extends Controller
 {
@@ -12,7 +12,7 @@ class DirectoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(DirectoryRequest $request)
     {
         return $this->pageOrGet(Directory::query());
     }
