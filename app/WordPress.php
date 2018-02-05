@@ -36,13 +36,27 @@ class WordPress
             $url .= '/' . $listing->wp_post_id;
         }
 
-        return self::addResource(
+        $response = self::addResource(
             $url,
             $targetDirectory->wp_api_password,
             $slug,
             $listing->entrySection->title,
             $content
         );
+
+        $wpPost = json_decode($response->getBody(), true);
+
+        if (!isset($wpPost['id'])) {
+            $msg = 'Failed to add listing to WordPress.';
+            Log::error($msg, ['response body' => $wpPost]);
+            abort(500);
+        }
+
+        $listing->wp_post_id = $wpPost['id'];
+        $listing->wp_slug = $wpPost['slug'];
+        $listing->update();
+
+        return $response;
     }
 
     public static function deleteListing(
@@ -83,7 +97,7 @@ class WordPress
                 'content' => $content,
                 'status'  => 'publish'
             ],
-            'http_errors' => false
+            'http_errors' => true
         ]);
     }
 
@@ -99,7 +113,7 @@ class WordPress
             'json' => [
                 'force' => $bypassTrash
             ],
-            'http_errors' => false
+            'http_errors' => true
         ]);        
     }
 }

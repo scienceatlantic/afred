@@ -71,4 +71,20 @@ class EntrySection extends Model
         
         return isset($fields[$key]) ? $fields[$key]->value : null;
     }
+
+    public function getMetaAttribute()
+    {
+        $meta = [
+            'entry_section_id'           => $this->id,
+            'published_entry_section_id' => $this->published_entry_section_id,
+            'title'                      => $this->title
+        ];
+        $meta['listings'] = [];
+
+        foreach($this->listings()->get() as $listing) {
+            array_push($meta['listings'], $listing->data);
+        }
+
+        return $meta;
+    }
 }
