@@ -138,7 +138,7 @@ class DummyAfredFormDataSeeder extends Seeder
                         'primaryContacts' => $primaryContact,
                         'contacts'        => $contacts,
                         'equipment'       => $equipment
-                    ]                    
+                    ]
                 ]
             ]);
         }

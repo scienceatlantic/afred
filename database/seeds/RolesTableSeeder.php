@@ -19,6 +19,12 @@ class RolesTableSeeder extends BaseSeeder
             ], [
                 'name'  => 'Author',
                 'level' => 8
+            ], [
+                'name'  => 'Contributor',
+                'level' => 7
+            ], [
+                'name'  => 'Subscriber',
+                'level' => 6
             ]
         ];
 

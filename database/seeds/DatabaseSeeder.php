@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
         $this->call(LanguageCodesTableSeeder::class);
         $this->call(FieldTypesTableSeeder::class);
         $this->call(FormEntryStatusesTableSeeder::class);
+        $this->call(FormEntryTokenStatusesTableSeeder::class);
 
         $this->call(OrganizationDataSeeder::class);
         $this->call(ProvinceDataSeeder::class);
