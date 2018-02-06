@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
-class ListingRequest extends BaseRequest
+use Illuminate\Foundation\Http\FormRequest;
+
+class ListingRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -11,7 +13,7 @@ class ListingRequest extends BaseRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**

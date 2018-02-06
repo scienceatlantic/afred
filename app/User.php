@@ -50,10 +50,18 @@ class User extends Authenticatable
         return $this->belongsToMany('App\FormEntry')->withTimestamps();
     }
 
-    public static function findByUsername($wpUsername)
+    public static function findByWpUsername($wpUsername)
     {
         return self::where('wp_username', $wpUsername)->first();
     }
+
+    public static function findByWpIdAndHome($wpUserId, $wpHome)
+    {
+        return self
+            ::where('wp_user_id', $wpUserId)
+            ->where('wp_home', $wpHome)
+            ->first();
+    }    
 
     public function getIsAdministratorAttribute()
     {

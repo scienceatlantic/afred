@@ -3,6 +3,7 @@
 namespace App;
 
 use GuzzleHttp\Client as GuzzleHttp;
+use Log;
 
 class WordPress
 {
