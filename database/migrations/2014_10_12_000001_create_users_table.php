@@ -20,16 +20,16 @@ class CreateUsersTable extends Migration
                   ->unsigned();
             $table->integer('wp_user_id')
                   ->unsigned()
-                  ->nullable();        
+                  ->nullable();
+            $table->string('wp_home')
+                  ->nullable();
             $table->string('wp_username')
-                  ->nullable()
-                  ->unique();
+                  ->nullable();
             $table->string('first_name')
                   ->nullable();
             $table->string('last_name')
                   ->nullable();
-            $table->string('email')
-                  ->unique();
+            $table->string('email');
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
@@ -40,6 +40,9 @@ class CreateUsersTable extends Migration
                   ->on('roles')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
+            $table->unique('email');
+            $table->unique('wp_username');
+            $table->unique(['wp_user_id', 'wp_home']);
         });
     }
 
