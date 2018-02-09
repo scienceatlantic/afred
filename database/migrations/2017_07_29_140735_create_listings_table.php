@@ -27,6 +27,10 @@ class CreateListingsTable extends Migration
                   ->nullable();
             $table->string('wp_slug')
                   ->nullable();
+            $table->boolean('is_in_wp')
+                  ->default(false);
+            $table->boolean('is_in_algolia')
+                  ->default(false);
             $table->timestamps();
 
             // Foreign keys & indices

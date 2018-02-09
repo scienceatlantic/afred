@@ -28,6 +28,9 @@ class CreateFormEntriesTable extends Migration
             $table->integer('author_user_id')
                   ->unsigned()
                   ->nullable();
+            $table->integer('primary_contact_user_id')
+                  ->unsigned()
+                  ->nullable();
             $table->json('cache')
                   ->nullable();
             $table->text('message')
@@ -38,6 +41,8 @@ class CreateFormEntriesTable extends Migration
                   ->default(false);
             $table->boolean('is_cache_valid')
                   ->default(false);
+            $table->timestamp('reviewed_at')
+                  ->nullable();
             $table->timestamps();
 
             // Foreign keys & indices

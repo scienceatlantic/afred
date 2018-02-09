@@ -42,6 +42,10 @@ class CreateFormSectionsTable extends Migration
                   ->unsigned();
             $table->string('field_resource_title_object_key')
                   ->nullable();
+            $table->boolean('is_primary_contact')
+                  ->default(false);
+            $table->boolean('is_editor')
+                  ->default(false);
             $table->boolean('is_resource');
             $table->boolean('is_active')
                   ->default(true);
@@ -55,14 +59,7 @@ class CreateFormSectionsTable extends Migration
                   ->on('forms')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
-
-
-            // TODO: unique by id?
-            $table->unique('slug_prefix');
-
-
-
-
+            $table->unique(['form_id', 'slug_prefix']);
             $table->unique(['form_id', 'label_singular']);
             $table->unique(['form_id', 'label_plural']);
             $table->unique(['form_id', 'object_key']);
