@@ -1,11 +1,11 @@
 @component('mail::message')
-Hi {!! $recipient->first_name !!},
+Hi {{ $reviewer->first_name }},
 
-@if ($recipient->id === $formEntry->reviewer->id)
-This is a confirmation email that you have approved an edit of
+@if ($reviewer->id === $formEntry->reviewer->id)
+This is a confirmation email that you have approved
 "{!! $formEntry->data['pagination_title'] !!}".
 @else
-An edit of "{!! $formEntry->data['pagination_title'] !!}" has been approved by
+"{!! $formEntry->data['pagination_title'] !!}" has been approved by
 {!! $formEntry->reviewer->name !!}.
 @endif
 

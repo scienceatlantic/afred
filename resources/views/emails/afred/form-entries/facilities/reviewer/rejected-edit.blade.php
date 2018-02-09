@@ -1,7 +1,7 @@
 @component('mail::message')
-Hi {{ $recipient->first_name }},
+Hi {{ $reviewer->first_name }},
 
-@if ($recipient->id === $formEntry->reviewer->id)
+@if ($reviewer->id === $formEntry->reviewer->id)
 This is a confirmation email that you have rejected an edit of
 "{!! $formEntry->data['pagination_title'] !!}".
 @else
