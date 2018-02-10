@@ -14,7 +14,7 @@ A message from {!! $formEntry->reviewer->name !!}:
 
 To complete your edit, or if you have any questions or comments, please
 contact Lois Whitehead, Science Atlantic's Executive Director, at
-lois.whitehead@scienceatlantic.ca.
+[lois.whitehead@scienceatlantic.ca](lois.whitehead@scienceatlantic.ca).
 
 Regards,<br>
 AFRED Bot

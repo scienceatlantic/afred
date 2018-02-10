@@ -9,8 +9,10 @@ This is a confirmation email that you have approved
 {!! $formEntry->reviewer->name !!}.
 @endif
 
-The facility can be found here:
-{!! $formEntry->wp_admin_url !!}
+The published listing(s) can be found here:
+@foreach ($formEntry->listings as $listing)
+  - <a href="{{ $listing->data['wp_post_url'] }}" target="_blank">{{ $listing->entrySection->title }}</a>
+@endforeach
 
 Regards,<br>
 AFRED Bot

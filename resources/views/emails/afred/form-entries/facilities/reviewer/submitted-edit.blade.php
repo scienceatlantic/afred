@@ -1,11 +1,9 @@
 @component('mail::message')
 Hi {!! $reviewer->first_name !!},
 
-An edit of "{!! $formEntry->data['pagination_title'] !!}" has been submitted
-into AFRED and is pending review.
-
-To view it, please follow this link:
-[{{ $formEntry->wp_admin_url }}]({{ $formEntry->wp_admin_url }})
+An edit of
+<a href="{{ $formEntry->wp_admin_url }}" target="_blank">"{!! $formEntry->data['pagination_title'] !!}"</a>
+has been submitted into AFRED and is pending review.
 
 Regards,<br>
 AFRED Bot
