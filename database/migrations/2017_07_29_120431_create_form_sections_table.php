@@ -19,8 +19,6 @@ class CreateFormSectionsTable extends Migration
             $table->integer('form_id')
                   ->unsigned();
             $table->string('slug_prefix');
-            $table->string('listing_template_prefix')
-                  ->nullable();
             $table->string('search_index')
                   ->nullable();
             $table->string('label_singular');

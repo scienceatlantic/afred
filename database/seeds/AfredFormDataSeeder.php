@@ -33,6 +33,7 @@ class AfredFormDataSeeder extends Seeder
         $afredForm->language_code_id = $languageCode->id;
         $afredForm->wp_post_id = 187; // TODO
         $afredForm->name = 'Facilities';
+        $afredForm->resource_folder = 'facilities';
         $afredForm->pagination_section_object_key = 'facilities';
         $afredForm->pagination_field_object_key = 'name';
         $afredForm->save();
@@ -75,7 +76,6 @@ class AfredFormDataSeeder extends Seeder
         $formSection = new FormSection();
         $formSection->form_id = $formId;
         $formSection->slug_prefix = 'facility';
-        $formSection->listing_template_prefix = 'afred_facility';
         $formSection->search_index = 'dev_afred_facilities_facility';
         $formSection->label_singular = 'Facility';
         $formSection->label_plural = 'Facilities';
@@ -208,10 +208,12 @@ class AfredFormDataSeeder extends Seeder
         $formSection->slug_prefix = 'primary-contact';
         $formSection->label_singular = 'Primary Contact';
         $formSection->label_plural = 'Primary Contacts';
-        $formSection->object_key = 'primaryContacts';
+        $formSection->object_key = 'primary_contacts';
         $formSection->min = 1;
         $formSection->max = 1;
         $formSection->placement_order = 2;
+        $formSection->is_primary_contact = true;
+        $formSection->is_editor = true;
         $formSection->is_resource = false;
         $formSection->save();
 
@@ -220,7 +222,7 @@ class AfredFormDataSeeder extends Seeder
         $formField->form_section_id = $formSection->id;
         $formField->field_type_id = $fieldStringType->id;
         $formField->label = 'First name';
-        $formField->object_key = 'firstName';
+        $formField->object_key = 'first_name';
         $formField->placement_order = 1;
         $formField->is_searchable = 1;
         $formField->is_required = 1;
@@ -232,7 +234,7 @@ class AfredFormDataSeeder extends Seeder
         $formField->form_section_id = $formSection->id;
         $formField->field_type_id = $fieldStringType->id;
         $formField->label = 'Last name';
-        $formField->object_key = 'lastName';
+        $formField->object_key = 'last_name';
         $formField->placement_order = 2;
         $formField->is_searchable = 1;
         $formField->is_required = 1;
@@ -320,9 +322,10 @@ class AfredFormDataSeeder extends Seeder
         $formSection->object_key = 'contacts';
         $formSection->min = 0;
         $formSection->max = 10;
-        $formSection->repeat_object_key = 'firstName';
+        $formSection->repeat_object_key = 'first_name';
         $formSection->repeat_placeholder = 'Contact';
         $formSection->placement_order = 3;
+        $formSection->is_editor = true;
         $formSection->is_resource = false;
         $formSection->save();
 
@@ -331,7 +334,7 @@ class AfredFormDataSeeder extends Seeder
         $formField->form_section_id = $formSection->id;
         $formField->field_type_id = $fieldStringType->id;
         $formField->label = 'First name';
-        $formField->object_key = 'firstName';
+        $formField->object_key = 'first_name';
         $formField->placement_order = 1;
         $formField->is_searchable = 1;
         $formField->is_required = 1;
@@ -343,7 +346,7 @@ class AfredFormDataSeeder extends Seeder
         $formField->form_section_id = $formSection->id;
         $formField->field_type_id = $fieldStringType->id;
         $formField->label = 'Last name';
-        $formField->object_key = 'lastName';
+        $formField->object_key = 'last_name';
         $formField->placement_order = 2;
         $formField->is_searchable = 1;
         $formField->is_required = 1;
@@ -438,7 +441,6 @@ class AfredFormDataSeeder extends Seeder
         $formSection = new FormSection();
         $formSection->form_id = $formId;
         $formSection->slug_prefix = 'equipment';
-        $formSection->listing_template_prefix = 'afred_equipment';
         $formSection->search_index = 'dev_afred_facilities_equipment';        
         $formSection->label_singular = 'Equipment';
         $formSection->label_plural = 'Equipment';
@@ -522,7 +524,7 @@ class AfredFormDataSeeder extends Seeder
         $formField->form_section_id = $formSection->id;
         $formField->field_type_id = $fieldNumberType->id;
         $formField->label = 'Year purchased';
-        $formField->object_key = 'yearPurchased';
+        $formField->object_key = 'year_purchased';
         $formField->placement_order = 6;
         $formField->is_single_column = 1;
         $formField->is_searchable = 1;
@@ -535,7 +537,7 @@ class AfredFormDataSeeder extends Seeder
         $formField->form_section_id = $formSection->id;
         $formField->field_type_id = $fieldNumberType->id;
         $formField->label = 'Year manufactured';
-        $formField->object_key = 'yearManufactured';
+        $formField->object_key = 'year_manufactured';
         $formField->placement_order = 7;
         $formField->is_single_column = 1;
         $formField->is_inline = 1;
@@ -549,7 +551,7 @@ class AfredFormDataSeeder extends Seeder
         $formField->form_section_id = $formSection->id;
         $formField->field_type_id = $fieldRadioType->id;
         $formField->label = 'Excess capacity';
-        $formField->object_key = 'excessCapacity';
+        $formField->object_key = 'excess_capacity';
         $formField->placement_order = 8;
         $formField->is_single_column = 1;
         $formField->is_inline = 1;
@@ -565,7 +567,7 @@ class AfredFormDataSeeder extends Seeder
         $formField->form_section_id = $formSection->id;
         $formField->field_type_id = $fieldRadioType->id;
         $formField->label = 'Search visibility';
-        $formField->object_key = 'searchVisibility';
+        $formField->object_key = 'search_visibility';
         $formField->placement_order = 9;
         $formField->is_single_column = 1;
         $formField->is_inline = 1;

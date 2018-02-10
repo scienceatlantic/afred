@@ -24,7 +24,7 @@ class CreateFormsTable extends Migration
                   ->unsigned()
                   ->nullable();
             $table->string('name');
-            $table->string('email_folder');
+            $table->string('resource_folder');
             $table->string('pagination_section_object_key');
             $table->string('pagination_field_object_key');
             $table->timestamps();
@@ -41,7 +41,7 @@ class CreateFormsTable extends Migration
                   ->onUpdate('cascade')
                   ->onDelete('restrict');                  
             $table->unique(['directory_id', 'name']);
-            $table->unique('email_folder');
+            $table->unique('resource_folder');
         });
     }
 

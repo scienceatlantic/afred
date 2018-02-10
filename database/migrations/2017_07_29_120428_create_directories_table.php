@@ -19,7 +19,7 @@ class CreateDirectoriesTable extends Migration
             $table->string('name');
             $table->string('shortname')
                   ->nullable();
-            $table->string('email_folder');
+            $table->string('resource_folder');
             $table->string('wp_base_url');
             $table->string('wp_admin_base_url');
             $table->string('wp_api_base_url');
@@ -28,7 +28,7 @@ class CreateDirectoriesTable extends Migration
 
             // Foreign keys & indices
             $table->unique('name');
-            $table->unique('email_folder');
+            $table->unique('resource_folder');
             $table->index('shortname');
         });
     }
