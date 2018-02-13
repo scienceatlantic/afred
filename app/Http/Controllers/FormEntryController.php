@@ -17,7 +17,6 @@ class FormEntryController extends Controller
         'reviewer'
     ];
 
-
     /**
      * Display a listing of the resource.
      *
@@ -77,9 +76,9 @@ class FormEntryController extends Controller
             ->forms()
             ->findOrFail($formId);
 
-        $response = null;
+        $formEntry = null;
         DB::transaction(
-            function() use ($request, $form, $formEntryId, &$response) {
+            function() use ($request, $form, $formEntryId, &$formEntry) {
                 $action = $request->action;
 
                 switch ($action) {
@@ -93,7 +92,7 @@ class FormEntryController extends Controller
                                 ->findOrFail($formEntryId);
                         }
 
-                        $response = FormEntry::submitFormEntry(
+                        $formEntry = FormEntry::submitFormEntry(
                             $request,
                             $form,
                             $oldFormEntry
@@ -103,7 +102,8 @@ class FormEntryController extends Controller
                     case 'reject':
                     case 'delete':
                         $method = $action . 'FormEntry';
-                        $response = FormEntry::$method(
+                        $formEntry = FormEntry::$method(
+                            $request,
                             $form->formEntries()->findOrFail($formEntryId)
                         );
                         break;
@@ -112,6 +112,6 @@ class FormEntryController extends Controller
                 }
             }
         );
-        return $response;
+        return FormEntry::with(self::$relationships)->find($formEntry->id);
     }
 }

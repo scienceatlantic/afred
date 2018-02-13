@@ -15,6 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $appends = [
+        'name',
         'is_administrator',
         'is_editor',
         'is_at_least_editor',
@@ -50,6 +51,46 @@ class User extends Authenticatable
         return $this->belongsToMany('App\FormEntry')->withTimestamps();
     }
 
+    public function scopeAdministrators($query)
+    {
+        return $query->where(
+            'role_id',
+            Role::findRole('Administrator')->id
+        );
+    }
+
+    public function scopeEditors($query)
+    {
+        return $query->where(
+            'role_id',
+            Role::findRole('Editor')->id
+        );
+    }
+    
+    public function scopeAuthors($query)
+    {
+        return $query->where(
+            'role_id',
+            Role::findRole('Author')->id
+        );
+    }
+    
+    public function scopeContributors($query)
+    {
+        return $query->where(
+            'role_id',
+            Role::findRole('Contributor')->id
+        );
+    }
+    
+    public function scopeSubscribers($query)
+    {
+        return $query->where(
+            'role_id',
+            Role::findRole('Subscriber')->id
+        );
+    }
+
     public static function findByWpUsername($wpUsername)
     {
         return self::where('wp_username', $wpUsername)->first();
@@ -61,7 +102,17 @@ class User extends Authenticatable
             ::where('wp_user_id', $wpUserId)
             ->where('wp_home', $wpHome)
             ->first();
-    }    
+    }
+
+    public static function findByEmail($email)
+    {
+        return self::where('email', $email)->first();
+    }
+    
+    public function getNameAttribute()
+    {
+        return $this->first_name . ' ' . $this->last_name;
+    }
 
     public function getIsAdministratorAttribute()
     {
@@ -110,5 +161,5 @@ class User extends Authenticatable
     {
         return Role::find($this->role_id)->level
             >= Role::findRole('Subscriber')->level;
-    }
+    }   
 }

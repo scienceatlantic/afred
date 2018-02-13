@@ -31,4 +31,9 @@ class Form extends Model
     {
         return $this->hasMany('App\FormEntry');
     }
+
+    public function searchSections()
+    {
+        return $this->hasManyThrough('App\SearchSection', 'App\FormSection');
+    }
 }

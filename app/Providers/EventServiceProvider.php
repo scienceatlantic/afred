@@ -13,9 +13,16 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'App\Events\Event' => [
-            'App\Listeners\EventListener',
+        'App\Events\FormEntryUpdate' => [
+            'App\Listeners\SendFormEntryUpdateEmail'
         ],
+        'App\Events\ListingCreated' => [
+            'App\Listeners\AddListingToWordpressAndAlgolia',
+        ],
+        'App\Events\ListingDeleted' => [
+            'App\Listeners\DeleteListingFromWordpress',
+            'App\Listeners\DeleteListingFromAlgolia'
+        ]
     ];
 
     /**
