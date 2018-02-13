@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
         $this->call(FieldTypesTableSeeder::class);
         $this->call(FormEntryStatusesTableSeeder::class);
         $this->call(FormEntryTokenStatusesTableSeeder::class);
+        $this->call(SearchFacetOperatorTableSeeder::class);
 
         $this->call(OrganizationDataSeeder::class);
         $this->call(ProvinceDataSeeder::class);
@@ -27,7 +28,8 @@ class DatabaseSeeder extends Seeder
         $this->call(DirectoriesTableSeeder::class);
         $this->call(AfredFormDataSeeder::class);
 
-        $this->call(DummyAfredFormDataSeeder::class);
         $this->call(DummyUsersTableSeeder::class);
+        $this->call(Afred2DataSeeder::class);
+        //$this->call(DummyAfredFormDataSeeder::class);
     }
 }

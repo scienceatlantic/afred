@@ -21,7 +21,11 @@ class ProvinceDataSeeder extends BaseSeeder
             ], [
                 'label' => 'Newfoundland and Labrador (NL)'
             ], [
+                'label' => 'Northwest Territories (NT)'
+            ], [
                 'label' => 'Nova Scotia (NS)'
+            ], [
+                'label' => 'Nunavut (NU)'
             ], [
                 'label' => 'Ontario (ON)'
             ], [
@@ -30,10 +34,12 @@ class ProvinceDataSeeder extends BaseSeeder
                 'label' => 'Quebec (QC)'
             ], [
                 'label' => 'Saskatchewan (SK)'
+            ], [
+                'label' => 'Yukon (YT)'
             ]
         ];
 
-        $category = self::saveCategory('Canadian Provinces');
+        $category = self::saveCategory('Canadian Provinces and Territories');
         self::saveLabelledValues($provinces, [$category->id]);
     }
 }

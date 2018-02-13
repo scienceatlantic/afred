@@ -8,6 +8,9 @@ use App\FormField;
 use App\FieldType;
 use App\FormSection;
 use App\StringValue;
+use App\SearchSection;
+use App\SearchFacet;
+use App\SearchFacetOperator;
 use App\NumberValue;
 use App\LabelledValue;
 use App\LabelledValueCategory;
@@ -23,8 +26,9 @@ class AfredFormDataSeeder extends Seeder
      */
     public function run()
     {
-        $afredDirectory = Directory
-            ::findDirectory('Atlantic Facilities and Research Equipment Database');
+        $afredDirectory = Directory::findDirectory(
+            'Atlantic Facilities and Research Equipment Database'
+        );
 
         $languageCode = LanguageCode::findCode('en');
 
@@ -44,6 +48,9 @@ class AfredFormDataSeeder extends Seeder
         $this->createPrimaryContactSection($afredForm->id);
         $this->createContactsSection($afredForm->id);
         $this->createEquipmentSection($afredForm->id);
+
+        $this->createFacilitySearchSection($afredForm->id);
+        $this->createEquipmentSearchSection($afredForm->id);
     }
 
     private function createFacilitySection($formId)
@@ -54,7 +61,7 @@ class AfredFormDataSeeder extends Seeder
             ->pluck('labelled_values.id');
 
         $provinceIds = LabelledValueCategory
-            ::findCategory('Canadian Provinces')
+            ::findCategory('Canadian Provinces and Territories')
             ->values()
             ->pluck('labelled_values.id');
 
@@ -423,6 +430,7 @@ class AfredFormDataSeeder extends Seeder
     public function createEquipmentSection($formId)
     {
         $fieldStringType = FieldType::findType('string');
+        $fieldPlainTextType = FieldType::findType('plaintext');
         $fieldRichTextType = FieldType::findType('richtext');
         $fieldNumberType = FieldType::findType('number');
         $fieldRadioType = FieldType::findType('radio');
@@ -576,6 +584,155 @@ class AfredFormDataSeeder extends Seeder
         $formField->is_active = 1;
         $formField->save();
 
+        // Keywords
+        $formField = new FormField();
+        $formField->form_section_id = $formSection->id;
+        $formField->field_type_id = $fieldPlainTextType->id; // TODO
+        $formField->label = 'Keywords';
+        $formField->object_key = 'keywords';
+        $formField->placement_order = 10;
+        $formField->is_single_column = 1;
+        $formField->is_inline = 1;
+        $formField->is_searchable = 1;
+        $formField->is_required = 0;
+        $formField->is_active = 1;
+        $formField->save();        
+
         $formField->labelledValues()->attach($searchVisibilityIds);
     }
+
+    public function createFacilitySearchSection($formId)
+    {
+        $andOperator = SearchFacetOperator::findOperator('AND');
+        $orOperator = SearchFacetOperator::findOperator('OR');
+
+        $formSection = Form
+            ::find($formId)
+            ->formSections()
+            ->where('object_key', 'facilities')
+            ->first();
+
+        $searchSection = new SearchSection();
+        $searchSection->form_section_id = $formSection->id;
+        $searchSection->label = 'Facilities/Contacts';
+        $searchSection->result_html = '
+            <div class="panel panel-default">
+              <div class="panel-body">
+                <p class="h4">
+                  {{ s.facilities.name }}
+                  <span v-if="s.facilities.organization">| {{ s.facilities.organization.value }}</span>
+                </p>
+                <p class="small">
+                  {{ s.facilities.city }}<!--
+               --><span v-if="s.facilities.city && s.facilities.province">,</span>
+                  <span v-if="s.facilities.province">{{ s.facilities.province.value }}</span>
+                </p>
+                <p class="small text-muted">{{ s.facilities.description }}</p>
+              </div>
+            </div>
+        ';
+        $searchSection->input_placeholder = 'e.g. electron microscope';
+        $searchSection->placement_order = 2;
+        $searchSection->is_default = false;
+        $searchSection->save();
+
+        $searchFacet = new SearchFacet();
+        $searchFacet->search_section_id = $searchSection->id;
+        $searchFacet->search_facet_operator_id = $orOperator->id;
+        $searchFacet->label = 'Provinces';
+        $searchFacet->algolia_object_key = 'sections.facilities.province.value';
+        $searchFacet->placement_order = 1;
+        $searchFacet->save();
+
+        $searchFacet = new SearchFacet();
+        $searchFacet->search_section_id = $searchSection->id;
+        $searchFacet->search_facet_operator_id = $orOperator->id;
+        $searchFacet->label = 'Organizations';
+        $searchFacet->algolia_object_key = 'sections.facilities.organization.value';
+        $searchFacet->placement_order = 2;
+        $searchFacet->save();
+
+        $searchFacet = new SearchFacet();
+        $searchFacet->search_section_id = $searchSection->id;
+        $searchFacet->search_facet_operator_id = $andOperator->id;
+        $searchFacet->label = 'Disciplines';
+        $searchFacet->algolia_object_key = 'sections.facilities.disciplines.value';
+        $searchFacet->placement_order = 3;
+        $searchFacet->save();
+        
+        $searchFacet = new SearchFacet();
+        $searchFacet->search_section_id = $searchSection->id;
+        $searchFacet->search_facet_operator_id = $andOperator->id;
+        $searchFacet->label = 'Sections';
+        $searchFacet->algolia_object_key = 'sections.facilities.sectors.value';
+        $searchFacet->placement_order = 4;
+        $searchFacet->save();        
+    }
+
+    public function createEquipmentSearchSection($formId)
+    {
+        $andOperator = SearchFacetOperator::findOperator('AND');
+        $orOperator = SearchFacetOperator::findOperator('OR');
+                
+        $formSection = Form
+            ::find($formId)
+            ->formSections()
+            ->where('object_key', 'equipment')
+            ->first();
+
+        $searchSection = new SearchSection();
+        $searchSection->form_section_id = $formSection->id;
+        $searchSection->label = 'Equipment';
+        $searchSection->result_html = '
+            <div class="panel panel-default">
+              <div class="panel-body">
+                <p class="h4">
+                  {{ s.equipment.type }} | {{ s.facilities[0].name }}
+                </p>
+                <p class="small" v-if="s.facilities[0].organization || s.facilities[0].province">
+                  <span v-if="s.facilities[0].organization">{{ s.facilities[0].organization.value }}</span><!--
+               --><span v-if="s.facilities[0].organization && s.facilities[0].province">,</span>
+                  <span v-if="s.facilities[0].province">{{ s.facilities[0].province.value }}</span>
+                </p>
+                <p class="small text-muted">{{ s.equipment.purpose }}</p>
+              </div>
+            </div>
+        ';
+        $searchSection->input_placeholder = 'e.g. electron microscope';
+        $searchSection->placement_order = 1;
+        $searchSection->is_default = true;
+        $searchSection->save();
+
+        $searchFacet = new SearchFacet();
+        $searchFacet->search_section_id = $searchSection->id;
+        $searchFacet->search_facet_operator_id = $orOperator->id;
+        $searchFacet->label = 'Provinces';
+        $searchFacet->algolia_object_key = 'sections.facilities.province.value';
+        $searchFacet->placement_order = 1;
+        $searchFacet->save();
+
+        $searchFacet = new SearchFacet();
+        $searchFacet->search_section_id = $searchSection->id;
+        $searchFacet->search_facet_operator_id = $orOperator->id;
+        $searchFacet->label = 'Organizations';
+        $searchFacet->algolia_object_key = 'sections.facilities.organization.value';
+        $searchFacet->placement_order = 2;
+        $searchFacet->save();
+
+        $searchFacet = new SearchFacet();
+        $searchFacet->search_section_id = $searchSection->id;
+        $searchFacet->search_facet_operator_id = $andOperator->id;
+        $searchFacet->label = 'Disciplines';
+        $searchFacet->algolia_object_key = 'sections.facilities.disciplines.value';
+        $searchFacet->placement_order = 3;
+        $searchFacet->save();
+        
+        $searchFacet = new SearchFacet();
+        $searchFacet->search_section_id = $searchSection->id;
+        $searchFacet->search_facet_operator_id = $andOperator->id;
+        $searchFacet->label = 'Sections';
+        $searchFacet->algolia_object_key = 'sections.facilities.sectors.value';
+        $searchFacet->placement_order = 4;
+        $searchFacet->save();        
+    }    
 }

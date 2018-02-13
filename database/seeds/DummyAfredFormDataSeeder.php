@@ -24,7 +24,7 @@ class DummyAfredFormDataSeeder extends Seeder
             ->pluck('labelled_values.id')
             ->toArray();
         $provinceIds = LabelledValueCategory
-            ::findCategory('Canadian Provinces')
+            ::findCategory('Canadian Provinces and Territories')
             ->values()
             ->pluck('labelled_values.id')
             ->toArray();

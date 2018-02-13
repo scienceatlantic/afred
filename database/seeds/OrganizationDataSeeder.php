@@ -11,11 +11,15 @@ class OrganizationDataSeeder extends BaseSeeder
     {
         $organisations = [
             [
-                'label' => 'N/A'
-            ], [
                 'label' => 'Acadia University'
             ], [
+                'label' => 'ACENET'
+            ], [
+                'label' => 'Cape Breton Fish Harvesters Association'
+            ], [
                 'label' => 'Cape Breton University'
+            ], [
+                'label' => 'Coastal zones research institute'
             ], [
                 'label' => 'Collège communautaire du Nouveau-Brunswick'
             ], [
@@ -27,7 +31,13 @@ class OrganizationDataSeeder extends BaseSeeder
             ], [
                 'label' => 'Dalhousie University Faculty of Agriculture'
             ], [
+                'label' => 'Falck Safety Services Canada'
+            ], [
                 'label' => 'Holland College'
+            ], [
+                'label' => 'Leeway Marine'
+            ], [
+                'label' => 'Luna Ocean Consulting Ltd.'
             ], [
                 'label' => 'Memorial University'
             ], [
@@ -43,6 +53,8 @@ class OrganizationDataSeeder extends BaseSeeder
             ], [
                 'label' => 'NSCAD University'
             ], [
+                'label' => 'NSHA & IWK'
+            ], [
                 'label' => 'Saint Mary\'s University'
             ], [
                 'label' => 'St. Francis Xavier University'
@@ -56,18 +68,6 @@ class OrganizationDataSeeder extends BaseSeeder
                 'label' => 'University of New Brunswick Saint John'
             ], [
                 'label' => 'University of Prince Edward Island'
-            ], [
-                'label' => 'Falck Safety Services Canada'
-            ], [
-                'label' => 'Cape Breton Fish Harvesters Association'
-            ], [
-                'label' => 'NSHA & IWK'
-            ], [
-                'label' => 'Leeway Marine'
-            ], [
-                'label' => 'Luna Ocean Consulting Ltd.'
-            ], [
-                'label' => 'Coastal zones research institute'
             ]
         ];
 
