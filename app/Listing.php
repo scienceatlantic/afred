@@ -30,20 +30,37 @@ class Listing extends Model
     {
         $listing = self
             ::with([
-                'entrySection.formSection',
+                'entrySection.formSection.form.directory',
                 'formSection'
             ])
             ->find($this->id);
 
-        return 'templates.r.'
-            . $listing
-                ->entrySection
-                ->formSection
-                ->listing_template_prefix
-            . '_'
-            . $listing
-                ->formSection
-                ->listing_template_prefix;
+        $rootFormSection = $listing->entrySection->formSection;
+        $targetFormSection = $listing->formSection;
+
+        $directory = '';
+        if ($rootFormSection->id !== $targetFormSection->id) {
+            $directory = '-' 
+                . $targetFormSection
+                ->form
+                ->directory
+                ->resource_folder;
+        }
+
+        //wp.<dir>.r.<form>.<rootFormSection>(-targetDirectory?)
+        return 'wp.'
+            . $rootFormSection
+                ->form
+                ->directory
+                ->resource_folder
+            . '.r.'
+            . $rootFormSection
+                ->form
+                ->resource_folder
+            . '.'
+            . $rootFormSection
+                ->object_key
+            . $directory;
     }
 
     public function getDataAttribute()

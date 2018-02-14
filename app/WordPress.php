@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Directory;
 use GuzzleHttp\Client as GuzzleHttp;
 use Log;
 
@@ -9,6 +10,11 @@ class WordPress
 {
     public static function addListing(Listing $listing)
     {
+        // Skip if already in WP.
+        if ($listing->is_in_wp) {
+            return $listng;
+        }
+
         // Aliases.
         $rootForm = $listing->entrySection->formEntry->form;
         $rootDirectory = $rootForm->directory;
@@ -19,7 +25,7 @@ class WordPress
         $url = $targetDirectory->wp_api_base_url
             . '/'
             . env('WP_CUSTOM_POST_TYPE_REST_BASE');
-        $slug = $targetFormSection->slug_prefix 
+        $slug = $targetFormSection->slug_prefix
             . '_' 
             . $listing->entrySection->id;
 
@@ -55,24 +61,23 @@ class WordPress
 
         $listing->wp_post_id = $wpPost['id'];
         $listing->wp_slug = $wpPost['slug'];
+        $listing->is_in_wp = true;
         $listing->update();
 
-        return $response;
+        return $listing;
     }
 
     public static function deleteListing(
-        Listing $listing,
+        Directory $targetDirectory,
+        $wpPostId,
         $bypassTrash = false
     ) {
-        // Get target directory.
-        $targetDirectory = $listing->formSection->form->directory;
-
         // Generate URL.
         $url = $targetDirectory->wp_api_base_url
             . '/'
             . env('WP_CUSTOM_POST_TYPE_REST_BASE')
             . '/'
-            . $listing->wp_post_id;
+            . $wpPostId;
 
         return self::deleteResource(
             $url,

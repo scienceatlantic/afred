@@ -87,4 +87,18 @@ class EntrySection extends Model
 
         return $meta;
     }
+
+    public function getFieldValue($objectKey)
+    {
+        $formFieldIds = FormField
+            ::where('object_key', $objectKey)
+            ->pluck('id');
+
+        $field = $this
+            ->entryFields()
+            ->whereIn('form_field_id', $formFieldIds)
+            ->first();
+
+        return $field ? $field->value : null;
+    }    
 }
