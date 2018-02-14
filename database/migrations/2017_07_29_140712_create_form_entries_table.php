@@ -31,7 +31,7 @@ class CreateFormEntriesTable extends Migration
             $table->integer('primary_contact_user_id')
                   ->unsigned()
                   ->nullable();
-            $table->json('cache')
+            $table->longText('cache')
                   ->nullable();
             $table->text('message')
                   ->nullable();
