@@ -6,6 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Listing extends Model
 {
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'root_directory',
+        'target_directory',
+        'wp_post_url'
+    ];
+
     public function entrySection()
     {
         return $this->belongsTo('App\EntrySection');
@@ -63,23 +74,30 @@ class Listing extends Model
             . $directory;
     }
 
-    public function getDataAttribute()
+    public function getRootDirectoryAttribute()
+    {
+        // Get a copy of the object this way to avoid eager loading the
+        // relationships on to the actual instance.
+        $listing = self::with('entrySection.formEntry.form.directory')
+            ->find($this->id);
+        return $listing->entrySection->formEntry->form->directory;        
+    }
+
+    public function getTargetDirectoryAttribute()
+    {
+        // Get a copy of the object this way to avoid eager loading the
+        // relationships on to the actual instance.
+        $listing = self::with('formSection.form.directory')->find($this->id);
+        return $listing->formSection->form->directory;
+    }
+
+    public function getWpPostUrlAttribute()
     {
         // Get a copy of the object this way to avoid eager loading the
         // relationships on to the actual instance.
         $listing = self::with('formSection.form.directory')->find($this->id);
         $targetDir = $listing->formSection->form->directory;
 
-        return [
-            'directory' => [
-                'id'              => $targetDir->id,
-                'name'            => $targetDir->name,
-                'shortname'       => $targetDir->shortname,
-                'wp_base_url'     => $targetDir->wp_base_url,
-                'wp_api_base_url' => $targetDir->wp_api_base_url
-            ],
-            'wp_slug' => $this->wp_slug,
-            'wp_post_url' => $targetDir->wp_base_url . '?p=' . $this->wp_post_id
-        ];
+        return $targetDir->wp_base_url . '?p=' . $this->wp_post_id;
     }
 }

@@ -20,7 +20,6 @@ class ListingController extends Controller
         $directoryId,
         $formId,
         $formEntryId,
-        $entrySectionId,
         $listingId
     ) {
         $listing = Directory
@@ -29,8 +28,6 @@ class ListingController extends Controller
             ->findOrFail($formId)
             ->formEntries()
             ->findOrFail($formEntryId)
-            ->entrySections()
-            ->findOrFail($entrySectionId)
             ->listings()
             ->with('entrySection.formEntry')
             ->findOrFail($listingId);

@@ -31,6 +31,10 @@ class FormEntryController extends Controller
             ->formEntries()
             ->with(self::$relationships);
 
+        if ($request->resourceId) {
+            $formEntries->where('resource_id', $request->resourceId);
+        }
+
         if ($request->status) {
             // Abort if status not found.
             if (!($status = Status::findStatus($request->status))) {

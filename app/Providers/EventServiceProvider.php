@@ -14,7 +14,7 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
         'App\Events\FormEntryUpdate' => [
-            'App\Listeners\SendFormEntryUpdateEmail'
+            'App\Listeners\EmailFormEntryUpdate'
         ],
         'App\Events\ListingCreated' => [
             'App\Listeners\AddListingToWordpressAndAlgolia',
@@ -22,6 +22,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\ListingDeleted' => [
             'App\Listeners\DeleteListingFromWordpress',
             'App\Listeners\DeleteListingFromAlgolia'
+        ],
+        'App\Events\FormEntryTokenCreated' => [
+            'App\Listeners\EmailFormEntryToken'
         ]
     ];
 

@@ -7,7 +7,7 @@
 
       @isset($data['sections']['equipment'])
         @foreach ($data['sections']['equipment'] as $index => $equip)
-          @if ($equip['_meta']['entry_section_id'] === $entrySectionId)
+          @if ($equip['entry_section']['id'] === $entrySectionId)
             @isset($equip['type'])
               <div class="row">
                 <p class="col-md-4">Type</p>

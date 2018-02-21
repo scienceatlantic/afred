@@ -6,6 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class EntrySection extends Model
 {
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'is_public',
+        'title'
+    ];
+
     public function formEntry()
     {
         return $this->belongsTo('App\FormEntry');
@@ -70,22 +80,6 @@ class EntrySection extends Model
             ->keyBy('formField.object_key');
         
         return isset($fields[$key]) ? $fields[$key]->value : null;
-    }
-
-    public function getMetaAttribute()
-    {
-        $meta = [
-            'entry_section_id'           => $this->id,
-            'published_entry_section_id' => $this->published_entry_section_id,
-            'title'                      => $this->title
-        ];
-        $meta['listings'] = [];
-
-        foreach($this->listings()->get() as $listing) {
-            array_push($meta['listings'], $listing->data);
-        }
-
-        return $meta;
     }
 
     public function getFieldValue($objectKey)

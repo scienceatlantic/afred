@@ -5,6 +5,7 @@ namespace App;
 use App\Events\FormEntryUpdate;
 use App\Events\ListingCreated;
 use App\Events\ListingDeleted;
+use App\EntrySection;
 use App\Form;
 use App\FormEntryStatus as Status;
 use App\FormEntryToken as Token;
@@ -26,6 +27,7 @@ class FormEntry extends Model
         'is_rejected',
         'is_deleted',
         'wp_admin_url',
+        'wp_admin_compare_url',
         'data'
     ];
 
@@ -92,7 +94,11 @@ class FormEntry extends Model
 
     public function tokens()
     {
-        return $this->hasMany('App\FormEntryToken');
+        return $this->hasMany(
+            'App\FormEntryToken',
+            'resource_id',
+            'resource_id'
+        );
     }
 
     public function scopeSubmitted($query)
@@ -151,12 +157,26 @@ class FormEntry extends Model
     public function getWpAdminUrlAttribute()
     {
         return $this->form->directory->wp_admin_base_url
-            . '/admin.php?page=afredwp-resource&directoryId='
+            . '/admin.php?page=afredwp-resource&afredwp-directory-id='
             . $this->form->directory->id
-            . '&formId='
+            . '&afredwp-form-id='
             . $this->form->id
-            . '&formEntryId='
+            . '&afredwp-form-entry-id='
             . $this->id;
+    }
+
+    public function getWpAdminCompareUrlAttribute()
+    {
+        if ($this->is_edit) {
+            return $this->form->directory->wp_admin_base_url
+                . '/admin.php?page=afredwp-resource-compare&afredwp-directory-id='
+                . $this->form->directory->id
+                . '&afredwp-form-id='
+                . $this->form->id
+                . '&afredwp-edited-form-entry-id='
+                . $this->id;            
+        }
+        return null;
     }
 
     public function getHasPendingOperationsAttribute()
@@ -164,38 +184,86 @@ class FormEntry extends Model
         return false;
     }
 
-    public static function hasOpenToken(self $formEntry)
+    public function getHasOpenTokenAttribute()
     {
-        return (bool) Token
-            ::whereIn(
-                'form_entry_id',
-                self::where('resource_id', $formEntry->resource_id)->pluck('id')
-            )
-            ->open()
-            ->count();
+        return (bool) $this->tokens()->open()->count();
     }
 
-    public static function hasLockedToken(self $formEntry)
+    public function getHasLockedTokenAttribute()
     {
-        return (bool) Token
-            ::whereIn(
-                'form_entry_id',
-                self::where('resource_id', $formEntry->resource_id)->pluck('id')
-            )
-            ->locked()
-            ->count();
+        return (bool) $this->tokens()->locked()->count();
     }
-    
-    public static function hasUnclosedToken(self $formEntry)
+
+    public function getHasUnclosedTokenAttribute()
     {
-        return (bool) Token
-            ::whereIn(
-                'form_entry_id',
-                self::where('resource_id', $formEntry->resource_id)->pluck('id')
-            )
-            ->unclosed()
-            ->count();
+        return (bool) $this->tokens()->unclosed()->count();
     }
+
+    public function getDataAttribute()
+    {
+        // Check cache first.
+        if ($this->is_cache_valid) {
+            return $this->cache;
+        }
+
+        // Get a copy of the object this way to avoid eager loading the
+        // relationships on to the actual instance.
+        $formEntry = self::with([
+            'form',
+            'entrySections.formSection',
+            'entrySections.entryFields.formField.type',
+            'entrySections.entryFields.stringValue',
+            'entrySections.entryFields.textValue',
+            'entrySections.entryFields.numberValue',
+            'entrySections.entryFields.dateValue',
+            'entrySections.entryFields.labelledValues'
+        ])->find($this->id);
+
+        $data = [
+            'pagination_title' => null,
+            'sections'         => []
+        ];
+
+        // Attach section and fields.
+        foreach($formEntry->entrySections as $entrySection) {
+            $formSection = $entrySection->formSection;
+
+            // Create section if it hasn't already been created.
+            if (!isset($data['sections'][$formSection->object_key])) {
+                $data['sections'][$formSection->object_key] = [];
+            }
+
+            // Add fields and corresponding values.
+            $fields = [];
+
+            // Add the 'entry_section' property so that we can easily identify
+            // each entry section in the fieldset.
+            $fields['entry_section'] = EntrySection
+                ::with('listings')
+                ->find($entrySection->id)
+                ->toArray();
+
+            foreach($entrySection->entryFields as $entryField) {
+                $formField = $entryField->formField;
+                $fields[$formField->object_key] = $entryField->value;
+            }
+
+            array_push($data['sections'][$formSection->object_key], $fields);
+        }
+
+        // Get the title of the resource (for pagination).
+        $sectionKey = $formEntry->form->pagination_section_object_key;
+        $fieldKey = $formEntry->form->pagination_field_object_key;
+        if (isset($data['sections'][$sectionKey][0][$fieldKey])) {
+            $data['pagination_title'] = $data['sections'][$sectionKey][0][$fieldKey];
+        }
+
+        // Update cache
+        $formEntry->cache = $data;
+        $formEntry->update();
+
+        return $data;
+    }    
 
     public static function submitFormEntry(
         Request $request,
@@ -250,16 +318,13 @@ class FormEntry extends Model
 
             // Create entry sections for each fieldset.
             foreach($fieldsets as $fieldset) {
-                // TODO
-                $meta = isset($fieldset['_meta']) ?  $fieldset['_meta'] : [];
-
                 // Create new entry section.
                 $entrySection = new EntrySection();
                 $entrySection->form_entry_id = $formEntry->id;
                 $entrySection->form_section_id = $rootFormSection->id;
-                if ($isEdit && isset($meta['published_entry_section_id'])) {
+                if ($isEdit && isset($fieldset['entry_section'])) {
                     $entrySection->published_entry_section_id
-                        = $meta['published_entry_section_id'];
+                        = $fieldset['entry_section']['published_entry_section_id'];
                 }
                 $entrySection->save();
 
@@ -494,69 +559,6 @@ class FormEntry extends Model
         $formEntry->is_cache_valid = false;
 
         return $formEntry;
-    }
-
-    public function getDataAttribute()
-    {
-        // Check cache first.
-        if ($this->is_cache_valid) {
-            return $this->cache;
-        }
-
-        // Get a copy of the object this way to avoid eager loading the
-        // relationships on to the actual instance.
-        $formEntry = self::with([
-            'form',
-            'entrySections.formSection',
-            'entrySections.entryFields.formField.type',
-            'entrySections.entryFields.stringValue',
-            'entrySections.entryFields.textValue',
-            'entrySections.entryFields.numberValue',
-            'entrySections.entryFields.dateValue',
-            'entrySections.entryFields.labelledValues'
-        ])->find($this->id);
-
-        $data = [
-            'pagination_title' => null,
-            'sections'         => []
-        ];
-
-        // Attach section and fields.
-        foreach($formEntry->entrySections as $entrySection) {
-            $formSection = $entrySection->formSection;
-
-            // Create section if it hasn't already been created.
-            if (!isset($data['sections'][$formSection->object_key])) {
-                $data['sections'][$formSection->object_key] = [];
-            }
-
-            // Add fields and corresponding values.
-            $fields = [];
-
-            // Add the '_meta' property so that we can easily identify each
-            // entry section in the fieldset.
-            $fields['_meta'] = $entrySection->meta;
-
-            foreach($entrySection->entryFields as $entryField) {
-                $formField = $entryField->formField;
-                $fields[$formField->object_key] = $entryField->value;
-            }
-
-            array_push($data['sections'][$formSection->object_key], $fields);
-        }
-
-        // Get the title of the resource (for pagination).
-        $sectionKey = $formEntry->form->pagination_section_object_key;
-        $fieldKey = $formEntry->form->pagination_field_object_key;
-        if (isset($data['sections'][$sectionKey][0][$fieldKey])) {
-            $data['pagination_title'] = $data['sections'][$sectionKey][0][$fieldKey];
-        }
-
-        // Update cache
-        $formEntry->cache = $data;
-        $formEntry->update();
-
-        return $data;
     }
 
     public static function addEntrySectionAsAuthor($data, FormEntry $formEntry)
