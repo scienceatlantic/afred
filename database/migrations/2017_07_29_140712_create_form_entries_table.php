@@ -46,6 +46,7 @@ class CreateFormEntriesTable extends Migration
             $table->timestamps();
 
             // Foreign keys & indices
+            $table->index('resource_id');
             $table->foreign('form_id')
                   ->references('id')
                   ->on('forms')

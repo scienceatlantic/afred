@@ -18,6 +18,8 @@ class CreateFormEntryTokensTable extends Migration
             $table->increments('id');
             $table->integer('form_entry_id')
                   ->unsigned();
+            $table->integer('resource_id')
+                  ->unsigned();
             $table->integer('user_id')
                   ->unsigned();
             $table->integer('form_entry_token_status_id')
@@ -28,6 +30,11 @@ class CreateFormEntryTokensTable extends Migration
             // Foreign keys & indices
             $table->foreign('form_entry_id')
                   ->references('id')
+                  ->on('form_entries')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
+            $table->foreign('resource_id')
+                  ->references('resource_id')
                   ->on('form_entries')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');

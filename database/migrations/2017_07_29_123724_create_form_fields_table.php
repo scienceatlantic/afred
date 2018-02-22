@@ -31,6 +31,8 @@ class CreateFormFieldsTable extends Migration
             $table->integer('placement_order');
             $table->string('input_pattern')
                   ->nullable();
+            $table->text('tinymce_init')
+                  ->nullable();
             $table->boolean('is_required');
             $table->boolean('is_active')
                   ->default(true);
