@@ -1,1 +1,1 @@
-AFRED | (ID: {{ $formEntry->id }}) Facility Rejected
+AFRED | (#{{ $formEntry->resource_id }}-{{ $formEntry->id }}) Facility Rejected

@@ -1,1 +1,1 @@
-AFRED | (ID: {{ $formEntry->id }}-{{ $formEntry->resource_id }}) Facility Update Request
+AFRED | (#{{ $formEntry->id }}-{{ $formEntry->resource_id }}) Facility Update Request

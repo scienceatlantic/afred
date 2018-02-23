@@ -11,7 +11,7 @@ This is a confirmation email that you have approved
 
 The published listing(s) can be found here:
 @foreach ($formEntry->listings as $listing)
-  - <a href="{{ $listing->data['wp_post_url'] }}" target="_blank">{{ $listing->entrySection->title }}</a>
+  - <a href="{{ $listing->wp_post_url }}" target="_blank">{{ $listing->entrySection->title }}</a>
 @endforeach
 
 Regards,<br>

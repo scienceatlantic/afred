@@ -8,14 +8,14 @@ Research Equipment Database (AFRED).
 
 @if ($formEntry->message)
 @component('mail::panel')
-A message from {!! $formEntry->reviewer->name !!}:
+A message from {!! $formEntry->reviewer->name !!}:<br>
 {!! $formEntry->message !!}
 @endcomponent
 @endif
 
 Please check your listing(s) here:
 @foreach ($formEntry->listings as $listing)
-  - <a href="{{ $listing->data['wp_post_url'] }}" target="_blank">{{ $listing->entrySection->title }}</a>
+  - <a href="{{ $listing->wp_post_url }}" target="_blank">{{ $listing->entrySection->title }}</a>
 @endforeach
 
 You will receive a periodic reminder to check your listing for accuracy. If you
