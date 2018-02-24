@@ -43,10 +43,10 @@ class FormEntryUpdate extends Mailable
             . '.'
             . ($this->reviewer ? 'reviewer.' : 'author.')
             . strtolower($this->formEntry->status->name)
-            . ($this->formEntry->isEdit ? '-edit' : '');
+            . ($this->formEntry->is_edit ? '-edit' : '');
 
         $subject = view("$template-subject", ['formEntry' => $this->formEntry]);
-        
+
         return $this->subject($subject)->markdown($template);
     }
 }

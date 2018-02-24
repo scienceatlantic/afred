@@ -26,8 +26,14 @@ class FormEntry extends Model
         'is_revision',
         'is_rejected',
         'is_deleted',
+        'has_open_token',
+        'has_locked_token',
+        'has_unclosed_token',
         'wp_admin_url',
         'wp_admin_compare_url',
+        'wp_admin_history_url',
+        'wp_admin_tokens_url',
+        'wp_form_url',
         'data'
     ];
 
@@ -47,51 +53,86 @@ class FormEntry extends Model
         'cache'
     ];
 
+    /**
+     * Relationship between form entry and its status.
+     */
     public function status()
     {
         return $this->belongsTo('App\FormEntryStatus', 'form_entry_status_id');
     }
 
+    /**
+     * Relationship between form entry and its form.
+     */
     public function form()
     {
         return $this->belongsTo('App\Form');
     }
 
+    /**
+     * Relationship between form entry and the form(s) it's attached to (i.e. 
+     * directories the form entry is saved to).
+     */
     public function formsAttachedTo()
     {
         return $this->belongsToMany('App\Form')->withTimestamps();
     }
 
+    /**
+     * Relationship between form entry and its entry sections.
+     */
     public function entrySections()
     {
         return $this->hasMany('App\EntrySection');
     }
 
+    /**
+     * Relationship between form entry and its author.
+     */
     public function author()
     {
         return $this->belongsTo('App\User', 'author_user_id');
     }
 
+    /**
+     * Relationship between form entry and its reviewer.
+     */
     public function reviewer()
     {
         return $this->belongsTo('App\User', 'reviewer_user_id');
     }
 
+    /**
+     * Relationship between form entry and its primary contact.
+     */
     public function primaryContact()
     {
         return $this->belongsTo('App\User', 'primary_contact_user_id');
     }
 
+    /**
+     * Relationship between form entry and its editors (i.e. users granted
+     * access to generate edit "tokens").
+     */    
     public function editors()
     {
         return $this->belongsToMany('App\User')->withTimestamps();
     }
 
+    /**
+     * Relationship between form entry and its listings (via EntrySection) (i.e.
+     * published data).
+     */
     public function listings()
     {
         return $this->hasManyThrough('App\Listing', 'App\EntrySection');
     }
 
+    /**
+     * Relationship between form entry and its edit tokens. The relationship is
+     * linked via the "resource_id" column so that we're getting all tokens
+     * attached to a particular resource (i.e. including all edits).
+     */
     public function tokens()
     {
         return $this->hasMany(
@@ -101,18 +142,40 @@ class FormEntry extends Model
         );
     }
 
+    /**
+     * Scope to get all "submitted" form entries.
+     */
     public function scopeSubmitted($query)
     {
         $statusId = Status::findStatus('Submitted')->id;
         return $query->where('form_entry_status_id', $statusId);
     }
 
+    /**
+     * Scope to get all "published" form entries.
+     */    
     public function scopePublished($query)
     {
         $statusId = Status::findStatus('Published')->id;
         return $query->where('form_entry_status_id', $statusId);
     }
 
+    /**
+     * 
+     */
+    public function getPublished()
+    {
+        return self
+            ::where('resource_id', $this->resource_id)
+            ->published()
+            ->first();
+    }
+
+    /**
+     * 
+     * 
+     * @return 
+     */
     public function getCacheAttribute($value)
     {
         return $this->is_cache_valid ? json_decode($value, true) : null;
@@ -154,31 +217,6 @@ class FormEntry extends Model
         return $this->form_entry_status_id === $statusId;
     }
 
-    public function getWpAdminUrlAttribute()
-    {
-        return $this->form->directory->wp_admin_base_url
-            . '/admin.php?page=afredwp-resource&afredwp-directory-id='
-            . $this->form->directory->id
-            . '&afredwp-form-id='
-            . $this->form->id
-            . '&afredwp-form-entry-id='
-            . $this->id;
-    }
-
-    public function getWpAdminCompareUrlAttribute()
-    {
-        if ($this->is_edit) {
-            return $this->form->directory->wp_admin_base_url
-                . '/admin.php?page=afredwp-resource-compare&afredwp-directory-id='
-                . $this->form->directory->id
-                . '&afredwp-form-id='
-                . $this->form->id
-                . '&afredwp-edited-form-entry-id='
-                . $this->id;            
-        }
-        return null;
-    }
-
     public function getHasPendingOperationsAttribute()
     {
         return false;
@@ -197,12 +235,68 @@ class FormEntry extends Model
     public function getHasUnclosedTokenAttribute()
     {
         return (bool) $this->tokens()->unclosed()->count();
+    }    
+
+    public function getWpAdminUrlAttribute()
+    {
+        return $this->form->directory->wp_admin_base_url
+            . '/admin.php?page=afredwp-resource&afredwp-directory-id='
+            . $this->form->directory->id
+            . '&afredwp-form-id='
+            . $this->form->id
+            . '&afredwp-form-entry-id='
+            . $this->id;
+    }
+
+    public function getWpAdminCompareUrlAttribute()
+    {
+        if ($this->is_edit && $this->status->name === 'Submitted') {
+            return $this->form->directory->wp_admin_base_url
+                . '/admin.php?page=afredwp-resource-compare&afredwp-directory-id='
+                . $this->form->directory->id
+                . '&afredwp-form-id='
+                . $this->form->id
+                . '&afredwp-edited-form-entry-id='
+                . $this->id;
+        }
+        return null;
+    }
+
+    public function getWpAdminHistoryUrlAttribute()
+    {
+        return $this->form->directory->wp_admin_base_url
+            . '/admin.php?page=afredwp-resource-history&afredwp-directory-id='
+            . $this->form->directory->id
+            . '&afredwp-form-id='
+            . $this->form->id
+            . '&afredwp-origin-form-entry-id='
+            . $this->id
+            . '&afredwp-resource-id='
+            . $this->resource_id;
+    }
+    
+    public function getWpAdminTokensUrlAttribute()
+    {
+        return $this->form->directory->wp_admin_base_url
+            . '/admin.php?page=afredwp-resource-tokens&afredwp-directory-id='
+            . $this->form->directory->id
+            . '&afredwp-form-id='
+            . $this->form->id
+            . '&afredwp-form-entry-id='
+            . $this->id;
+    }    
+
+    public function getWpFormUrlAttribute()
+    {
+        return $this->form->directory->wp_base_url
+            . '/?p='
+            . $this->form->wp_post_id;
     }
 
     public function getDataAttribute()
     {
         // Check cache first.
-        if ($this->is_cache_valid) {
+        if ($this->is_cache_valid && $this->cache) {
             return $this->cache;
         }
 
@@ -272,7 +366,7 @@ class FormEntry extends Model
     ) {
         $isEdit = (bool) $oldFormEntry;
 
-        // TODO
+        // Set resource ID (if it's an edit, use existing).
         if ($isEdit) {
             $resourceId = $oldFormEntry->resource_id;
         } else {
@@ -284,11 +378,10 @@ class FormEntry extends Model
         $formEntry->resource_id = $resourceId;
         $formEntry->form_id = $rootForm->id;
         $formEntry->form_entry_status_id = Status::findStatus('Submitted')->id;
+        // Set author of form entry if request is submitted by a logged-in
+        // WordPress user.
         if ($request->user()) {
             $formEntry->author_user_id = $request->user()->id;
-        }
-        if ($request->user()) {
-            $formEntry->primary_contact_user_id = $request->user()->id;
         }
         $formEntry->is_edit = $isEdit;
         $formEntry->save();
@@ -306,11 +399,11 @@ class FormEntry extends Model
         $formEntry->formsAttachedTo()->attach($formsAttachedToIds);
 
         // Attach fields and values.
-        foreach($request->sections as $section => $fieldsets) {
+        foreach($request->sections as $sectionObjectKey => $fieldsets) {
             // Check that the section exists, otherwise skip.
             $rootFormSection = $rootForm
                 ->formSections()
-                ->where('object_key', $section)
+                ->where('object_key', $sectionObjectKey)
                 ->first();
             if (!$rootFormSection) {
                 continue;
@@ -322,6 +415,8 @@ class FormEntry extends Model
                 $entrySection = new EntrySection();
                 $entrySection->form_entry_id = $formEntry->id;
                 $entrySection->form_section_id = $rootFormSection->id;
+                // Add "published_entry_section_id" if this is an edit of an
+                // existing entry section.
                 if ($isEdit && isset($fieldset['entry_section'])) {
                     $entrySection->published_entry_section_id
                         = $fieldset['entry_section']['published_entry_section_id'];
@@ -330,8 +425,6 @@ class FormEntry extends Model
 
                 // Create fields.
                 foreach($rootFormSection->formFields as $rootFormField) {
-                    
-
                     // Get value of field if it exists, otherwise skip.
                     if (isset($fieldset[$rootFormField->object_key])) {
                         $value = $fieldset[$rootFormField->object_key];
@@ -349,19 +442,54 @@ class FormEntry extends Model
                     $entryField->setValue($value);
                 }
 
-                if ($rootFormSection->is_primary_contact) {
+                // Add entry section as primary contact if form section's 
+                // primary contact flag is true and primary contact has not been
+                // set.
+                if ($rootFormSection->is_primary_contact
+                    && !$formEntry->primaryContact) {
                     self::addPrimaryContact($formEntry, $entrySection);
                 }
 
+                // Add entry section as an editor if the form section's editor
+                // flag is true.
                 if ($rootFormSection->is_editor) {
                     self::addEditor($formEntry, $entrySection);
                 }                
             }
         }
 
-        // TODO
-        if (!$formEntry->primaryContact) {
-            
+        // If the primary contact has not been set, and the request was
+        // submitted by an authenticated user, set that user as the primary
+        // contact. Otherwise, abort.
+        if (!$formEntry->primaryContact && $request->user()) {
+            $formEntry->primary_contact_user_id = $request->user()->id;
+            $formEntry->update();
+        } else {
+            Log::error('Primary contact not set on form entry', [
+                'formEntry' => $formEntry->toArray()
+            ]);
+            abort(500);
+        }
+
+        // If the author has not been set, but the primary contact has, set the
+        // primary contact as the author. Otherwise, abort.
+        if (!$formEntry->author && $formEntry->primaryContact) {
+            $formEntry->author_user_id = $formEntry->primaryContact->id;
+            $formEntry->update();
+        } else {
+            Log::error('Author not set on form entry', [
+                'formEntry' => $formEntry->toArray()
+            ]);
+            abort(500);
+        }
+
+        // If this is an edit, lock the edit token (so that it can be used to
+        // submit more edits).
+        if ($formEntry->is_edit) {
+            Token::lockToken(
+                $formEntry->tokens()->open()->first(),
+                $formEntry
+            );
         }
 
         // Update cache.
@@ -375,36 +503,37 @@ class FormEntry extends Model
 
     public static function publishFormEntry(Request $request, self $formEntry) {
         // Determine if publishing an edited form entry. If it is an edit, get
-        // the currently published form entry (i.e. `$oldFormEntry`).
-        $oldFormEntry = null;
-        if ($formEntry->is_edit) {
-            $oldFormEntry = self
-                ::where('resource_id', $formEntry->resource_id)
-                ->published()
-                ->first();
-            
-            if (!$oldFormEntry) {
-                $msg = 'Trying to publish an edited form entry but currently '
-                     . 'published form entry was not found';
-                Log::error($msg, [
-                    '$formEntry'    => $formEntry->toArray(),
-                    '$oldFormEntry' => 'null'
-                ]);
-                abort(500);
-            }
+        // the currently published form entry. If we can't find the currently
+        // published form entry, abort.
+        if ($formEntry->is_edit && !$oldFormEntry = $formEntry->getPublished()) {
+            $msg = 'Trying to publish an edited form entry but currently '
+                 . 'published form entry was not found';
+            Log::error($msg, [
+                '$formEntry' => $formEntry->toArray()
+            ]);
+            abort(500);
         }
 
-        // Update status.
+        // Update status of currently published form entry (if this is an edit)
+        // to "Revision".
         if ($formEntry->is_edit) {
             $revisionStatus = Status::findStatus('Revision');
             $oldFormEntry->form_entry_status_id = $revisionStatus->id;
             $oldFormEntry->update();
         }
+
+        // Update status of form entry from "Submitted" to "Published".
         $formEntry->form_entry_status_id = Status::findStatus('Published')->id;
+        $formEntry->update();
+
+        // Add message/notes
+        $formEntry->message = $request->message;
+        $formEntry->notes = $request->notes;
         $formEntry->update();
 
         // Set reviewer.
         $formEntry->reviewer_user_id = $request->user()->id;
+        $formEntry->update();
 
         // Get the root form (i.e. form that generated this form entry).
         $rootForm = $formEntry->form;
@@ -436,18 +565,20 @@ class FormEntry extends Model
 
             // Loop through each entry section.
             foreach($entrySections as $entrySection) {
-                // Skip entry section if it's not meant to be public.
+                // Skip entry section if it's not meant to be public (i.e. not
+                // published to WordPress or Algolia).
                 if (!$entrySection->is_public) {
                     $entrySection->published_entry_section_id = null;
                     $entrySection->update();
                     continue;
                 }
 
-                // Get the entry section id that will be used by the listing
-                // when publishing to WordPress and Algolia.
+                // Set the "published_entry_section_id" that will be used by
+                // WordPress and Algolia (if it is not already set - i.e. not an
+                // edit).
                 if (!$entrySection->published_entry_section_id) {
-                    $entrySection->published_entry_section_id = $entrySection
-                        ->id;
+                    $entrySection->published_entry_section_id
+                        = $entrySection->id;
                     $entrySection->update();
                 }
 
@@ -461,33 +592,34 @@ class FormEntry extends Model
                         $targetFormSection->id
                     );
 
-                    // If it exists, update it with the new entry section's id
-                    // and set WP and Algolia flags to false (to signify that
-                    // they need to be updated).
+                    // If it exists, link it to the new entry section.
                     if ($listing) {
                         $listing->entry_section_id = $entrySection->id;
-                        $listing->is_in_wp = false;
-                        $listing->is_in_algolia = false;
                         $listing->update();
                     } 
-                    // If it doesn't, create a new listing.
+                    // If it doesn't exist, create a new listing.
                     else {
                         $listing = new Listing();
                         $listing->entry_section_id = $entrySection->id;
                         $listing->form_section_id = $targetFormSection->id;
-                        $listing->published_entry_section_id = $entrySection
-                            ->published_entry_section_id;
-                        $listing->is_in_wp = false;
-                        $listing->is_in_algolia = false;
+                        $listing->published_entry_section_id
+                            = $entrySection->published_entry_section_id;
                         $listing->save();
                     }
+
+                    // Set the flags to false to signify that they either need
+                    // to be updated (i.e. if it's an edit) or created in WP and
+                    // Algolia.
+                    $listing->is_in_wp = false;
+                    $listing->is_in_algolia = false;
+                    $listing->update();
                 }
             }
         }
 
         // Delete any old WordPress resources or Algolia objects from the old
         // form entry (that were not carried over to the new form entry).
-        if ($oldFormEntry) {
+        if ($formEntry->is_edit) {
             foreach($oldFormEntry->listings as $listing) {
                 event(new ListingDeleted(
                     $listing->entrySection->formSection->form->directory,
@@ -500,19 +632,26 @@ class FormEntry extends Model
             $oldFormEntry->listings()->delete();
         }        
 
-        // Set cache flags to flags (so that the caches are rebuilt).
+        // Set cache flags to false (so that the caches are rebuilt).
         $formEntry->is_cache_valid = false;
-        if ($oldFormEntry) {
+        if ($formEntry->is_edit) {
             $oldFormEntry->is_cache_valid = false;
         }
 
+        // Create events for new listings.
         foreach($formEntry->listings as $listing) {
             event(new ListingCreated($formEntry, $listing));
         }
 
-        // Set reviewed at timestamp.
+        // Set "reviewed_at" timestamp.
         $formEntry->reviewed_at = now();
         $formEntry->update();
+
+        // If this is an edit, close the edit token (signifying that the update
+        // process is complete).
+        if ($formEntry->is_edit) {
+            Token::closeToken($formEntry->tokens()->locked()->first());
+        }
 
         return $formEntry;
     }
@@ -525,13 +664,22 @@ class FormEntry extends Model
         // Set reviewer.
         $formEntry->reviewer_user_id = $request->user()->id;
 
+        // Add message/notes
+        $formEntry->message = $request->message;
+        $formEntry->notes = $request->notes;        
+
         // Invalidate cache to rebuild the data.
         $formEntry->is_cache_valid = false;
 
         // Set reviewed at timestamp.
         $formEntry->reviewed_at = now();
 
-        $formEntry->update();        
+        $formEntry->update();
+        
+        // Close the edit token.
+        if ($formEntry->is_edit) {
+            Token::closeToken($formEntry->tokens()->locked()->first());
+        }        
 
         event(new FormEntryUpdate($formEntry));        
 
@@ -540,6 +688,16 @@ class FormEntry extends Model
 
     public static function deleteFormEntry(Request $request, self $formEntry)
     {
+        // Not allowed to delete form entries with open or locked edit tokens.
+        if ($token = $formEntry->tokens()->unclosed()->first()) {
+            Log::error('Attempting to delete form entry with unclosed token', [
+                'formEntry' => $formEntry->toArray(),
+                'token'     => $token->toArray()
+            ]);
+            abort(500);
+        }
+
+
         // Update status.
         $formEntry->form_entry_status_id = Status::findStatus('Deleted')->id;
         $formEntry->update();
@@ -559,21 +717,6 @@ class FormEntry extends Model
         $formEntry->is_cache_valid = false;
 
         return $formEntry;
-    }
-
-    public static function addEntrySectionAsAuthor($data, FormEntry $formEntry)
-    {
-        if (!$user = User::findByEmail($data['email'])) {
-            $user = new User();
-            $user->role_id = Role::findRole('Author')->id;
-            $user->email = $data['email'];
-            $user->first_name = $data['last_name'];
-            $user->last_name = $data['last_name'];
-            $user->save();   
-        }
-
-        $formEntry->author_user_id = $user->id;
-        $formEntry->update();
     }
 
     public static function addPrimaryContact(

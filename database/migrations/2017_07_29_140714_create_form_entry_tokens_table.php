@@ -16,8 +16,11 @@ class CreateFormEntryTokensTable extends Migration
         Schema::create('form_entry_tokens', function (Blueprint $table) {
             // Columns.
             $table->increments('id');
-            $table->integer('form_entry_id')
+            $table->integer('before_update_form_entry_id')
                   ->unsigned();
+            $table->integer('after_update_form_entry_id')
+                  ->unsigned()
+                  ->nullable();
             $table->integer('resource_id')
                   ->unsigned();
             $table->integer('user_id')
@@ -28,11 +31,16 @@ class CreateFormEntryTokensTable extends Migration
             $table->timestamps();
 
             // Foreign keys & indices
-            $table->foreign('form_entry_id')
+            $table->foreign('before_update_form_entry_id')
                   ->references('id')
                   ->on('form_entries')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
+            $table->foreign('after_update_form_entry_id')
+                  ->references('id')
+                  ->on('form_entries')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');                  
             $table->foreign('resource_id')
                   ->references('resource_id')
                   ->on('form_entries')

@@ -26,9 +26,42 @@ class FormEntryTokenController extends Controller
             return $this->pageOrGet(FormEntry::where('id', 0));
         }
 
-        return self::format(
-            $user->formEntries()->where('form_id', $form->id)->get()
-        );
+        $formEntries = $user
+            ->formEntries()
+            ->published()
+            ->where('form_id', $form->id)
+            ->get();
+
+        return self::format($formEntries);
+    }
+
+    public function index(
+        FormEntryTokenRequest $request,
+        $directoryId,
+        $formId,
+        $formEntryId
+    ) {
+        $formEntry = Directory
+            ::findOrFail($directoryId)
+            ->forms()
+            ->findOrFail($formId)
+            ->formEntries()
+            ->findOrFail($formEntryId);
+
+        $tokens = $formEntry
+            ->tokens()
+            ->with(
+                'beforeUpdateFormEntry',
+                'afterUpdateFormEntry',
+                'user',
+                'status'
+            );
+
+        if ($request->orderByDesc) {
+            $tokens->orderBy($request->orderByDesc, 'desc');
+        }
+
+        return $this->pageOrGet($tokens);
     }
 
     public function open(
@@ -44,22 +77,21 @@ class FormEntryTokenController extends Controller
             ->formEntries()
             ->findOrFail($formEntryId);
 
+        // Get user either via "email" in request or logged-in user. If both
+        // fail, abort.
         if (!($user = User::findbyEmail($request->email))) {
-            abort(400);
+            if (!$user = $request->user()) {
+                abort(400);
+            }
         }
 
-        $openStatus = TokenStatus::findStatus('Open');
+        $token = Token::openToken($formEntry, $user);
 
-        $token = new Token();
-        $token->form_entry_id = $formEntry->id;
-        $token->user_id = $user->id;
-        $token->form_entry_token_status_id = $openStatus->id;
-        $token->value = str_random(20);
-        $token->save();
-
-        event(new FormEntryTokenCreated());
-
-        return self::format([$formEntry])[0];
+        $data = self::format([$formEntry])[0];
+        if ($request->user()) {
+            $data['wp_edit_url'] = $token->wp_edit_url;
+        }
+        return $data;
     }
 
     public function close(
@@ -67,37 +99,35 @@ class FormEntryTokenController extends Controller
         $directoryId,
         $formId,
         $formEntryId,
-        $formEntrytokenId
+        $formEntryTokenId
     ) {
         $token = Directory
             ::findOrFail($directoryId)
             ->forms()
             ->findOrFail($formId)
             ->entries()
-            ->findOrFail($formEntryId);
-        // resource_id ?????
+            ->findOrFail($formEntryId)
+            ->tokens()
+            ->findOrFail($formEntryTokenId);
 
-        $closedStatus = TokenStatus::findStatus('Closed');
-
-        $token->form_entry_token_status_id = $closedStatus->id;
-        $token->update();
-
-        return $token;
+        return Token::closeToken($token);
     }
 
-    public static function format($formEntries)
+    private static function format($formEntries)
     {
         $data = [];
+
         foreach($formEntries as $formEntry) {
             array_push($data, [
                 'id'                 => $formEntry->id,
                 'pagination_title'   => $formEntry->data['pagination_title'],
-                'status'             => $formEntry->status,
-                'has_open_token'     => FormEntry::hasOpenToken($formEntry),
-                'has_locked_token'   => FormEntry::hasLockedToken($formEntry),
-                'has_unclosed_token' => FormEntry::hasUnclosedToken($formEntry),
+                'status'             => $formEntry->status->name,
+                'has_open_token'     => $formEntry->has_open_token,
+                'has_locked_token'   => $formEntry->has_locked_token,
+                'has_unclosed_token' => $formEntry->has_unclosed_token
             ]);
         }
+        
         return $data;
     }
 }

@@ -45,6 +45,10 @@ class FormEntryController extends Controller
                 ->where('form_entry_status_id', $status->id);
         }
 
+        if ($request->orderByDesc) {
+            $formEntries->orderBy($request->orderByDesc, 'desc');
+        }
+
         return $this->pageOrGet($formEntries);
     }
 
@@ -80,7 +84,7 @@ class FormEntryController extends Controller
             ->forms()
             ->findOrFail($formId);
 
-        $formEntry = null;
+        $formEntry = '';
         DB::transaction(
             function() use ($request, $form, $formEntryId, &$formEntry) {
                 $action = $request->action;
