@@ -29,15 +29,19 @@ class WordPress
             . '_' 
             . $listing->entrySection->id;
 
+        // Get Vue root container id.
+        $vueRootId = env('VUE_ROOT_ID');
+
         // Generate content.
-        $content = "[afredwp_resource "
+        $content = "<div id='{$vueRootId}'>"
+            . "[afredwp_resource "
             . "directoryId='{$rootDirectory->id}' "
             . "formId='{$rootForm->id}' "
             . "formEntryId='{$listing->entrySection->formEntry->id}' "
-            . "entrySectionId='{$listing->entrySection->id}' "
-            . "listingId='{$listing->id}']";
+            . "listingId='{$listing->id}']"
+            . "</div>";
 
-        // Append WordPress post id to URL if available. This will turn the
+        // Append WordPress post ID to URL if available. This will turn the
         // operation into an update.
         if ($listing->wp_post_id) {
             $url .= '/' . $listing->wp_post_id;
