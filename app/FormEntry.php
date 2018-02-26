@@ -346,10 +346,10 @@ class FormEntry extends Model
         }
 
         // Get the title of the resource (for pagination).
-        $sectionKey = $formEntry->form->pagination_section_object_key;
-        $fieldKey = $formEntry->form->pagination_field_object_key;
-        if (isset($data['sections'][$sectionKey][0][$fieldKey])) {
-            $data['pagination_title'] = $data['sections'][$sectionKey][0][$fieldKey];
+        $sKey = $formEntry->form->pagination_section_object_key;
+        $fKey = $formEntry->form->pagination_field_object_key;
+        if (isset($data['sections'][$sKey][0][$fKey])) {
+            $data['pagination_title'] = $data['sections'][$sKey][0][$fKey];
         }
 
         // Update cache
@@ -448,12 +448,19 @@ class FormEntry extends Model
                 if ($rootFormSection->is_primary_contact
                     && !$formEntry->primaryContact) {
                     self::addPrimaryContact($formEntry, $entrySection);
+
+                    // This ensures that the model's eager loads are re-loaded.
+                    $formEntry = $formEntry->fresh();
+                    
                 }
 
                 // Add entry section as an editor if the form section's editor
                 // flag is true.
                 if ($rootFormSection->is_editor) {
                     self::addEditor($formEntry, $entrySection);
+
+                    // This ensures that the model's eager loads are re-loaded.
+                    $formEntry = $formEntry->fresh();
                 }                
             }
         }
@@ -461,26 +468,32 @@ class FormEntry extends Model
         // If the primary contact has not been set, and the request was
         // submitted by an authenticated user, set that user as the primary
         // contact. Otherwise, abort.
-        if (!$formEntry->primaryContact && $request->user()) {
+        if (!$formEntry->primaryContact) {
+            if (!$request->user()) {
+                Log::error('Primary contact not set on form entry', [
+                    'formEntry' => $formEntry->toArray()
+                ]);
+                abort(500);
+            }
+
             $formEntry->primary_contact_user_id = $request->user()->id;
             $formEntry->update();
-        } else {
-            Log::error('Primary contact not set on form entry', [
-                'formEntry' => $formEntry->toArray()
-            ]);
-            abort(500);
+            $formEntry = $formEntry->fresh();
         }
 
         // If the author has not been set, but the primary contact has, set the
         // primary contact as the author. Otherwise, abort.
-        if (!$formEntry->author && $formEntry->primaryContact) {
+        if (!$formEntry->author) {
+            if (!$formEntry->primaryContact) {
+                Log::error('Author not set on form entry', [
+                    'formEntry' => $formEntry->toArray()
+                ]);
+                abort(500);
+            }
+
             $formEntry->author_user_id = $formEntry->primaryContact->id;
             $formEntry->update();
-        } else {
-            Log::error('Author not set on form entry', [
-                'formEntry' => $formEntry->toArray()
-            ]);
-            abort(500);
+            $formEntry = $formEntry->fresh();
         }
 
         // If this is an edit, lock the edit token (so that it can be used to
@@ -746,9 +759,6 @@ class FormEntry extends Model
         }
 
         $formEntry->primary_contact_user_id = $user->id;
-        if (!$formEntry->author) {
-            $formEntry->author_user_id = $user->id;
-        }
         $formEntry->update();
     }
     

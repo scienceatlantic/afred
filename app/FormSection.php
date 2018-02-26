@@ -15,4 +15,14 @@ class FormSection extends Model
     {
         return $this->hasMany('App\FormField');
     }
+
+    public function formSectionsIncludedInSearch()
+    {
+        return $this->belongsToMany(
+            'App\FormSection',
+            'form_section_form_section',
+            'root_form_section_id',
+            'target_form_section_id'
+        )->withTimestamps();
+    }
 }

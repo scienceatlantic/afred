@@ -125,7 +125,7 @@ class DummyAfredFormDataSeeder extends Seeder
             }
 
             //TODO:
-            $url = "//localhost/afred/public/api/directories/{$form->directory->id}/forms/{$form->id}/entries";
+            $url = "//localhost/afred/public/directories/{$form->directory->id}/forms/{$form->id}/entries";
 
             $response = (new GuzzleHttp())->post($url, [
                 'query' => [

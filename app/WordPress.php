@@ -12,7 +12,7 @@ class WordPress
     {
         // Skip if already in WP.
         if ($listing->is_in_wp) {
-            return $listng;
+            return $listing;
         }
 
         // Aliases.

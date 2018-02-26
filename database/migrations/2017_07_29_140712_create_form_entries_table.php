@@ -66,7 +66,12 @@ class CreateFormEntriesTable extends Migration
                   ->references('id')
                   ->on('users')
                   ->onUpdate('cascade')
-                  ->onDelete('restrict');            
+                  ->onDelete('restrict');
+            $table->foreign('primary_contact_user_id')
+                  ->references('id')
+                  ->on('users')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');                             
         });
     }
 

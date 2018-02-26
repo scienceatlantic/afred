@@ -156,7 +156,7 @@ class FormEntryToken extends Model
         $token->value = str_random(20);
         $token->save();
 
-        event(new FormEntryTokenCreated($token, $formEntry));
+        event(new FormEntryTokenCreated($token, $beforeUpdateFormEntry));
 
         return $token;
     }

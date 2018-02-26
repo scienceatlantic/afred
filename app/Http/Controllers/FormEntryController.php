@@ -14,7 +14,8 @@ class FormEntryController extends Controller
         'status',
         'form.directory',
         'author',
-        'reviewer'
+        'reviewer',
+        'primaryContact'
     ];
 
     /**
