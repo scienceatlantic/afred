@@ -49,6 +49,19 @@ class AfredFormDataSeeder extends Seeder
         $this->createContactsSection($afredForm->id);
         $this->createEquipmentSection($afredForm->id);
 
+        // Included "Primary Contacts" and "Contacts" as search sections that
+        // should be included when searching for facilities.
+        $afredForm->formSections()
+            ->where('object_key', 'facilities')
+            ->first()
+            ->formSectionsIncludedInSearch()
+            ->attach(
+                $afredForm->formSections()
+                    ->where('object_key', 'primary_contacts')
+                    ->orWhere('object_key', 'contacts')
+                    ->pluck('id')
+            );
+
         $this->createFacilitySearchSection($afredForm->id);
         $this->createEquipmentSearchSection($afredForm->id);
     }
@@ -575,7 +588,7 @@ class AfredFormDataSeeder extends Seeder
         $formField->form_section_id = $formSection->id;
         $formField->field_type_id = $fieldRadioType->id;
         $formField->label = 'Search visibility';
-        $formField->object_key = 'search_visibility';
+        $formField->object_key = 'is_public';
         $formField->placement_order = 9;
         $formField->is_single_column = 1;
         $formField->is_inline = 1;
@@ -583,6 +596,8 @@ class AfredFormDataSeeder extends Seeder
         $formField->is_required = 1;
         $formField->is_active = 1;
         $formField->save();
+
+        $formField->labelledValues()->attach($searchVisibilityIds);
 
         // Keywords
         $formField = new FormField();

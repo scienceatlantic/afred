@@ -93,6 +93,10 @@ class Listing extends Model
 
     public function getWpPostUrlAttribute()
     {
+        if (!$this->wp_post_id) {
+            return null;
+        }
+        
         // Get a copy of the object this way to avoid eager loading the
         // relationships on to the actual instance.
         $listing = self::with('formSection.form.directory')->find($this->id);

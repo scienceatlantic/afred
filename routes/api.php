@@ -13,17 +13,6 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/mailable/{type}', function ($type) {
-    $reviewer = $type === 'reviewer' ? App\User::find(1) : null;
-    return new App\Mail\FormEntryUpdate(App\FormEntry::find(1), $reviewer);
-});
-
-
-
-
-
-
-
 // directories
 Route::resource('directories', 'DirectoryController', [
     'only' => ['index']
@@ -44,10 +33,6 @@ Route::post(
     'directories/{directory}/forms/{form}/entries',
     'FormEntryController@action'
 );
-Route::post(
-    'directories/{directory}/forms/{form}/entries/{entry}',
-    'FormEntryController@action'
-);
 Route::put(
     'directories/{directory}/forms/{form}/entries/{entry}',
     'FormEntryController@action'
@@ -66,6 +51,11 @@ Route::get(
     'FormEntryTokenController@search'
 );
 
+Route::get(
+    'directories/{directory}/forms/{form}/entries/{entry}/tokens',
+        'FormEntryTokenController@index'
+);
+
 // directories/forms/entries/tokens
 Route::post(
     'directories/{directory}/forms/{form}/entries/{entry}/tokens/open',
@@ -76,9 +66,9 @@ Route::post(
     'FormEntryTokenController@close'
 );
 
-// directories/forms/entries/sections/listings
+// directories/forms/entries/listings
 Route::get(
-    'directories/{directory}/forms/{form}/entries/{entry}/sections/{section}/listings/{listing}',
+    'directories/{directory}/forms/{form}/entries/{entry}/listings/{listing}',
     'ListingController@show'
 );
 
@@ -115,4 +105,3 @@ Route::post(
     'logout',
     'LoginController@logout'
 );
-

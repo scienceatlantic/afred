@@ -48,6 +48,8 @@ class FormEntryController extends Controller
 
         if ($request->orderByDesc) {
             $formEntries->orderBy($request->orderByDesc, 'desc');
+        } else {
+            $formEntries->orderBy('order_by_title', 'asc');
         }
 
         return $this->pageOrGet($formEntries);
