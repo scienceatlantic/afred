@@ -31,6 +31,8 @@ class CreateFormEntriesTable extends Migration
             $table->integer('primary_contact_user_id')
                   ->unsigned()
                   ->nullable();
+            $table->string('order_by_title')
+                  ->nullable();
             $table->longText('cache')
                   ->nullable();
             $table->text('message')
@@ -47,6 +49,7 @@ class CreateFormEntriesTable extends Migration
 
             // Foreign keys & indices
             $table->index('resource_id');
+            $table->index('order_by_title');
             $table->foreign('form_id')
                   ->references('id')
                   ->on('forms')

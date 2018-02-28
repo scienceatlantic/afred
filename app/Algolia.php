@@ -57,24 +57,45 @@ class Algolia
         // Get target section.
         $targetSection = $listing->entrySection->formSection;
 
+        // Alias
+        $targetSectObjKey = $targetSection->object_key;
+
         // Create the search object.
         $data = [];
 
         // The target section is added as a single object (instead of all the
         // elements in that array).
-        $data['sections'][$targetSection->object_key] = self::findFieldset(
+        $data['sections'][$targetSectObjKey] = self::findFieldset(
             $listing->entrySection->id,
-            $formEntry->data['sections'][$targetSection->object_key]
+            $formEntry->data['sections'][$targetSectObjKey]
+        );
+
+        // Remove private fields from target section's fieldset.
+        $data['sections'][$targetSectObjKey] = self::getPublicFields(
+            $targetSection,
+            $data['sections'][$targetSectObjKey]
         );
 
         // Add other sections that should also be included in the search object.
         foreach($targetSection->formSectionsIncludedInSearch as $formSection) {
             $key = $formSection->object_key;
 
-            // Add section only if it exists in the dataset.
-            if (isset($formEntry->data['sections'][$key])) {
-                $fieldsets = $formEntry->data['sections'][$key];
-                $data['sections'][$key] = self::getPublicFieldsets($fieldsets);
+            // Skip section if it doesn't exist in the form entry.
+            if (!isset($formEntry->data['sections'][$key])) {
+                continue;
+            }
+
+            // Get public fieldsets.
+            $data['sections'][$key] = self::getPublicFieldsets(
+                $formEntry->data['sections'][$key]
+            );
+
+            // Filter out private fields from each fieldset.
+            foreach($data['sections'][$key] as $i => $fieldset) {
+                $data['sections'][$key][$i] = self::getPublicFields(
+                    $formSection,
+                    $fieldset
+                );
             }
         }
 
@@ -96,24 +117,29 @@ class Algolia
         $entrySectionId,
         $fieldsets
     ) {
-        foreach($fieldsets as $fieldset) {
-            if ($fieldset['entry_section']['id'] === $entrySectionId) {
-                return $fieldset;
-            }
-        }
-        return null;
+        return array_first($fieldsets, function($fieldset) {
+            return $fieldset['entry_section']['id'] === $entrySectionId;
+        }, null);
     }
 
     private static function getPublicFieldsets($fieldsets)
     {
-        $data = [];
+        return array_where($fieldsets, function($fieldset) {
+            return $fieldset['entry_section']['is_public'];
+        });
+    }
 
-        foreach($fieldsets as $fieldset) {
-            if ($fieldset['entry_section']['is_public']) {
-                array_push($data, $fieldset);
-            }
-        }
-
-        return $data;
+    private static function getPublicFields(
+        FormSection $formSection,
+        $fieldset
+    ) {
+        return array_except(
+            $fieldset,
+            $formSection
+                ->formFields()
+                ->where('is_searchable', 0)
+                ->pluck('object_key')
+                ->toArray()
+        );
     }
 }

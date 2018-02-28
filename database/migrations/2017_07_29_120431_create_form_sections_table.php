@@ -47,8 +47,6 @@ class CreateFormSectionsTable extends Migration
             $table->boolean('is_resource');
             $table->boolean('is_active')
                   ->default(true);
-            $table->boolean('is_searchable')
-                  ->default(true);
             $table->timestamps();
 
             // Foreign keys & indices
