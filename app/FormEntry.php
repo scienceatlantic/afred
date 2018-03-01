@@ -246,7 +246,7 @@ class FormEntry extends Model
             . $this->form->id
             . '&afredwp-form-entry-id='
             . $this->id;
-    }
+    }   
 
     public function getWpAdminCompareUrlAttribute()
     {
@@ -350,6 +350,12 @@ class FormEntry extends Model
         $fKey = $formEntry->form->pagination_field_object_key;
         if (isset($data['sections'][$sKey][0][$fKey])) {
             $data['pagination_title'] = $data['sections'][$sKey][0][$fKey];
+        }
+
+        // Set the "order_by_title" (i.e. = pagination_title)
+        if (isset($data['pagination_title'])) {
+            $formEntry->order_by_title = $data['pagination_title'];
+            $formEntry->update();
         }
 
         // Update cache

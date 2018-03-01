@@ -113,7 +113,19 @@ class UserController extends Controller
      */
     public function destroy(UserRequest $request, $id)
     {
-        //
+        if ($request->email) {
+            $user = User::findByEmail($request->email);
+        } else {
+            $user = User::find($id);
+        }
+
+        if (!$user) {
+            abort(404);
+        }
+
+        $deletedUser = $user->toArray();
+        $user->delete();
+        return $deletedUser;
     }
 
     public function isUsernameUnique(UserRequest $request)

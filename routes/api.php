@@ -87,7 +87,7 @@ Route::post(
     'UserController@isEmailUnique'
 );
 Route::resource('users', 'UserController', [
-    'only' => ['index', 'show', 'store', 'update']
+    'only' => ['index', 'show', 'store', 'update', 'destroy']
 ]);
 
 // login
