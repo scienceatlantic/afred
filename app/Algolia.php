@@ -117,9 +117,11 @@ class Algolia
         $entrySectionId,
         $fieldsets
     ) {
-        return array_first($fieldsets, function($fieldset) {
-            return $fieldset['entry_section']['id'] === $entrySectionId;
-        }, null);
+        return array_first($fieldsets,
+            function($fieldset) use ($entrySectionId) {
+                return $fieldset['entry_section']['id'] === $entrySectionId;
+            },
+        null);
     }
 
     private static function getPublicFieldsets($fieldsets)
