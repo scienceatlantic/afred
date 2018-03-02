@@ -45,6 +45,11 @@ Route::resource('directories.forms.entries', 'FormEntryController', [
     'only' => ['index', 'show']
 ]);
 
+// directories/forms/metrics
+Route::resource('directories.forms.metrics', 'FormMetricController', [
+    'only' => ['index']
+]);
+
 // directories/forms/tokens/search
 Route::get(
     'directories/{directory}/forms/{form}/tokens/search',

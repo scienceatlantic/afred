@@ -161,6 +161,26 @@ class FormEntry extends Model
     }
 
     /**
+     * Scope to get all "rejected" form entries.
+     */    
+    public function scopeRejected($query, $includeEdits = false)
+    {
+        $statusId = Status::findStatus('Rejected')->id;
+        return $query
+            ->where('form_entry_status_id', $statusId)
+            ->where('is_edit', $includeEdits);
+    }
+
+    /**
+     * Scope to get all "deleted" form entries.
+     */    
+    public function scopeDeleted($query)
+    {
+        $statusId = Status::findStatus('Deleted')->id;
+        return $query->where('form_entry_status_id', $statusId);
+    }
+
+    /**
      * 
      */
     public function getPublished()
