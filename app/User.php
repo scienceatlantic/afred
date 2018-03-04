@@ -96,22 +96,22 @@ class User extends Authenticatable
         return self::where('wp_username', $wpUsername)->first();
     }
 
-    public static function findByWpIdAndHome($wpUserId, $wpHome)
-    {
-        return self
-            ::where('wp_user_id', $wpUserId)
-            ->where('wp_home', $wpHome)
-            ->first();
-    }
-
     public static function findByEmail($email)
     {
         return self::where('email', $email)->first();
     }
+
+    public static function findByEmailOrFail($email)
+    {
+        return self::findByEmail($email) ?: abort(404);
+    }
     
     public function getNameAttribute()
     {
-        return $this->first_name . ' ' . $this->last_name;
+        if ($name = trim($this->first_name . ' ' . $this->last_name)) {
+            return $name;
+        }
+        return null;
     }
 
     public function getIsAdministratorAttribute()

@@ -15,10 +15,15 @@ class UserDestroyRequest extends FormRequest
     public function authorize()
     {
         if ($user = $this->user()) {
-            return $user->can(
-                'destroy',
-                User::findOrFail($this->route('user'))
-            );
+            $id = $this->route('user');
+
+            if (filter_var($id, FILTER_VALIDATE_EMAIL)) {
+                $userBeingUpdated = User::findByEmailOrFail($id);
+            } else {
+                $userBeingUpdated = User::findOrFail($id);
+            }
+
+            return $user->can('destroy', $userBeingUpdated);
         }
 
         return false;

@@ -99,7 +99,7 @@ Route::post(
 
 // users/{id}
 Route::resource('users', 'UserController', [
-    'only' => ['index', 'show', 'store', 'update', 'destroy']
+    'only' => ['store', 'update', 'destroy']
 ]);
 
 // login
