@@ -18,21 +18,23 @@ Route::resource('directories', 'DirectoryController', [
     'only' => ['index']
 ]);
 
-// directories/forms
+// directories/{id}/forms/{id}
 Route::resource('directories.forms', 'FormController', [
     'only' => ['index', 'show']
 ]);
 
-// directories/forms/search-sections
+// directories/{id}/forms/{id}/search-sections
 Route::resource('directories.forms.search-sections', 'SearchSectionController', [
     'only' => ['index']
 ]);
 
-// directories/forms/entries
+// directories/{id}/forms/{id}/entries
 Route::post(
     'directories/{directory}/forms/{form}/entries',
     'FormEntryController@action'
 );
+
+// directories/{id}/forms/{id}/entries/{id}
 Route::put(
     'directories/{directory}/forms/{form}/entries/{entry}',
     'FormEntryController@action'
@@ -45,33 +47,36 @@ Route::resource('directories.forms.entries', 'FormEntryController', [
     'only' => ['index', 'show']
 ]);
 
-// directories/forms/metrics
+// directories/{id}/forms/{id}/metrics
 Route::resource('directories.forms.metrics', 'FormMetricController', [
     'only' => ['index']
 ]);
 
-// directories/forms/tokens/search
+// directories/{id}/forms/{id}/tokens/search
 Route::get(
     'directories/{directory}/forms/{form}/tokens/search',
     'FormEntryTokenController@search'
 );
 
+// directories/{id}/forms/{id}/entries/{id}/tokens
 Route::get(
     'directories/{directory}/forms/{form}/entries/{entry}/tokens',
         'FormEntryTokenController@index'
 );
 
-// directories/forms/entries/tokens
+// directories/{id}/forms/{id}/entries/{id}/tokens/open
 Route::post(
     'directories/{directory}/forms/{form}/entries/{entry}/tokens/open',
     'FormEntryTokenController@open'
 );
-Route::post(
+
+// directories/{id}/forms/{id}/entries/{id}/tokens/{id}/close
+Route::put(
     'directories/{directory}/forms/{form}/entries/{entry}/tokens/{token}/close',
     'FormEntryTokenController@close'
 );
 
-// directories/forms/entries/listings
+// directories/{id}/forms/{id}/entries/{id}/listings/{id}
 Route::get(
     'directories/{directory}/forms/{form}/entries/{entry}/listings/{listing}',
     'ListingController@show'
@@ -91,6 +96,8 @@ Route::post(
     'users/is-email-unique',
     'UserController@isEmailUnique'
 );
+
+// users/{id}
 Route::resource('users', 'UserController', [
     'only' => ['index', 'show', 'store', 'update', 'destroy']
 ]);

@@ -7,12 +7,22 @@ use App\FormEntry;
 use App\FormEntryToken as Token;
 use App\FormEntryTokenStatus as TokenStatus;
 use App\User;
-use App\Http\Requests\FormEntryTokenRequest;
+use App\Http\Requests\FormEntryTokenCloseRequest;
+use App\Http\Requests\FormEntryTokenIndexRequest;
+use App\Http\Requests\FormEntryTokenOpenRequest;
+use App\Http\Requests\FormEntryTokenSearchRequest;
 
 class FormEntryTokenController extends Controller
 {
+    public static $withRelationships = [
+        'beforeUpdateFormEntry',
+        'afterUpdateFormEntry',
+        'user',
+        'status'
+    ];
+
     public function search(
-        FormEntryTokenRequest $request,
+        FormEntryTokenSearchRequest $request,
         $directoryId,
         $formId
     ) {
@@ -36,7 +46,7 @@ class FormEntryTokenController extends Controller
     }
 
     public function index(
-        FormEntryTokenRequest $request,
+        FormEntryTokenIndexRequest $request,
         $directoryId,
         $formId,
         $formEntryId
@@ -50,12 +60,7 @@ class FormEntryTokenController extends Controller
 
         $tokens = $formEntry
             ->tokens()
-            ->with(
-                'beforeUpdateFormEntry',
-                'afterUpdateFormEntry',
-                'user',
-                'status'
-            );
+            ->with(self::$withRelationships);
 
         if ($request->orderByDesc) {
             $tokens->orderBy($request->orderByDesc, 'desc');
@@ -65,7 +70,7 @@ class FormEntryTokenController extends Controller
     }
 
     public function open(
-        FormEntryTokenRequest $request,
+        FormEntryTokenOpenRequest $request,
         $directoryId,
         $formId,
         $formEntryId
@@ -77,13 +82,8 @@ class FormEntryTokenController extends Controller
             ->formEntries()
             ->findOrFail($formEntryId);
 
-        // Get user either via "email" in request or logged-in user. If both
-        // fail, abort.
-        if (!($user = User::findbyEmail($request->email))) {
-            if (!$user = $request->user()) {
-                abort(400);
-            }
-        }
+        // Get user either via "email" in request or logged-in user.
+        $user = User::findbyEmail($request->email) ?: $request->user();
 
         $token = Token::openToken($formEntry, $user);
 
@@ -95,7 +95,7 @@ class FormEntryTokenController extends Controller
     }
 
     public function close(
-        FormEntryTokenRequest $request,
+        FormEntryTokenCloseRequest $request,
         $directoryId,
         $formId,
         $formEntryId,
@@ -105,12 +105,14 @@ class FormEntryTokenController extends Controller
             ::findOrFail($directoryId)
             ->forms()
             ->findOrFail($formId)
-            ->entries()
+            ->formEntries()
             ->findOrFail($formEntryId)
             ->tokens()
             ->findOrFail($formEntryTokenId);
 
-        return Token::closeToken($token);
+        $token = Token::closeToken($token);
+        
+        return Token::with(self::$withRelationships)->find($token->id);
     }
 
     private static function format($formEntries)

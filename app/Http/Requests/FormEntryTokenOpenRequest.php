@@ -4,9 +4,10 @@ namespace App\Http\Requests;
 
 use App\Directory;
 use App\FormEntryToken as Token;
+use App\User;
 use Illuminate\Foundation\Http\FormRequest;
 
-class FormEntryTokenIndexRequest extends FormRequest
+class FormEntryTokenOpenRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -15,14 +16,18 @@ class FormEntryTokenIndexRequest extends FormRequest
      */
     public function authorize()
     {
-        if ($user = $this->user()) {
-            return $user->can(
-                'indexTokens',
-                Directory::findOrFail($this->route('directory'))
-            );
+        if (!$user = User::findByEmail($this->get('email')) ?: $this->user()) {
+            abort(400);
         }
 
-        return false;
+        $formEntry = Directory
+            ::findOrFail($this->route('directory'))
+            ->forms()
+            ->findOrFail($this->route('form'))
+            ->formEntries()
+            ->findOrFail($this->route('entry'));
+
+        return $user->can('openToken', $formEntry);
     }
 
     /**

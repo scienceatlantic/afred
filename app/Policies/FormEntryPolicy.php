@@ -89,4 +89,38 @@ class FormEntryPolicy
 
         return false;
     }
+
+    public function openToken(User $user, FormEntry $formEntry)
+    {
+        if (!$formEntry->is_published) {
+            $msg = 'Attempting to open token on form entry that is not '
+                 . 'published';
+            Log::warning($msg, [
+                'formEntry' => $formEntry->toArray(),
+                'user'      => $user->toArray()
+            ]);
+            abort(400);            
+        }
+
+        if ($formEntry->tokens()->unclosed()->count()) {
+            $msg = 'Attempting to open token on form entry that already has '
+                 . 'open/locked token';
+            Log::warning($msg, [
+                'formEntry' => $formEntry->toArray(),
+                'user'      => $user->toArray()
+            ]);
+            abort(400);
+        }
+
+        if ($user->is_administrator) {
+            return true;
+        } else if ($user->is_editor) {
+            return true;
+        } else {
+            return (bool) $user
+                ->formEntries()
+                ->where('id', $formEntry->id)
+                ->first();
+        }
+    }
 }

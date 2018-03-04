@@ -43,6 +43,18 @@ class DirectoryPolicy
                 ->first();
         }
 
-        return false;        
+        return false;
+    }
+
+    public function indexTokens(User $User, Directory $directory)
+    {
+        if ($user->is_editor) {
+            return (bool) $directory
+                ->users()
+                ->where('id', $user->id)
+                ->first();
+        }
+
+        return false;
     }
 }
