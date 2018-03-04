@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Directory;
 use Illuminate\Foundation\Http\FormRequest;
 
-class DirectoryRequest extends FormRequest
+class FormMetricIndexRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,14 +13,10 @@ class DirectoryRequest extends FormRequest
      */
     public function authorize()
     {
-        if (!$user = $this->user()) {
-            return false;
+        if ($user = $this->user()) {
+            return $user->is_at_least_editor;
         }
 
-        switch ($this->method()) {
-            case 'GET':
-                return $user->can('index', Directory::class);
-        }
         return false;
     }
 

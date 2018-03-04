@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Form;
-use Illuminate\Foundation\Http\FormRequest as BaseFormRequest;
+use App\User;
+use Illuminate\Foundation\Http\FormRequest;
 
-class FormRequest extends BaseFormRequest
+class UserUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,15 +14,13 @@ class FormRequest extends BaseFormRequest
      */
     public function authorize()
     {
-        switch ($this->method()) {
-            case 'GET':
-                if ($formId = $this->route('form')) {
-                    return true;
-                }
-                if ($user = $this->user()) {
-                    return $user->can('index', Form::class);
-                }
+        if ($user = $this->user()) {
+            return $user->can(
+                'update',
+                User::findOrFail($this->route('user'))
+            );
         }
+
         return false;
     }
 

@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\FormEntryStatus as Status;
+use App\Directory;
 use Illuminate\Foundation\Http\FormRequest;
 
-class FormEntryStatusRequest extends FormRequest
+class DirectoryIndexRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,14 +14,10 @@ class FormEntryStatusRequest extends FormRequest
      */
     public function authorize()
     {
-        if (!$user = $this->user()) {
-            return false;
+        if ($user = $this->user()) {
+            return $user->can('index', Directory::class);
         }
-
-        switch ($this->method()) {
-            case 'GET':
-                return $user->can('index', Status::class);
-        }
+        
         return false;
     }
 

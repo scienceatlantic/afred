@@ -9,20 +9,10 @@ class UserPolicy
 {
     use HandlesAuthorization;
 
-    public function index(User $user)
-    {
-        return $user->is_at_least_subscriber;
-    }
-
-    public function show(User $user, User $userBeingShowned)
-    {
-        return $user->is_at_least_subscriber;
-    }
-
-    public function create(User $user)
+    public function store(User $user)
     {
         return $user->is_administrator;
-    }
+    }    
 
     public function update(User $user, User $userBeingUpdated)
     {
@@ -31,6 +21,12 @@ class UserPolicy
         } else if ($user->id === $userBeingUpdated->id) {
             return true;
         }
+
         return false;
+    }
+
+    public function destroy(User $user, User $userBeingDestroyed)
+    {
+        return $user->is_administrator;
     }
 }

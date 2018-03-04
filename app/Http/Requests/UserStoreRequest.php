@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\User;
 use Illuminate\Foundation\Http\FormRequest;
 
-class SearchSectionRequest extends FormRequest
+class UserStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +14,11 @@ class SearchSectionRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        if ($user = $this->user()) {
+            return $user->can('store', User::class);
+        }
+
+        return false;
     }
 
     /**

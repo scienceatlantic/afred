@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Directory;
 use Illuminate\Foundation\Http\FormRequest;
 
-class FormEntryTokenRequest extends FormRequest
+class FormEntryIndexRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +14,13 @@ class FormEntryTokenRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        $directory = Directory::findOrFail($this->route('directory'));
+
+        if ($user = $this->user()) {
+            return $user->can('indexFormEntries', $directory);
+        }
+
+        return false;
     }
 
     /**

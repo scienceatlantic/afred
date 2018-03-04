@@ -10,13 +10,23 @@ class FormPolicy
 {
     use HandlesAuthorization;
 
-    public function index(User $user)
+    public function before($user, $ability)
     {
-        return $user->is_at_least_subscriber;
+        if ($user->is_administrator) {
+            return true;
+        }
     }
 
     public function show(User $user, Form $form)
     {
-        return true;
+        if ($user->is_editor) {
+            return (bool) $form
+                ->directories
+                ->users()
+                ->where('id', $user->id)
+                ->first();
+        }
+
+        return false;
     }
 }

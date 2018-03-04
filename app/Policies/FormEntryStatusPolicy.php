@@ -10,8 +10,8 @@ class FormEntryStatusPolicy
 {
     use HandlesAuthorization;
 
-    public function index($user)
+    public function index(User $user)
     {
-        return true;
+        return $user->is_at_least_editor;
     }
 }

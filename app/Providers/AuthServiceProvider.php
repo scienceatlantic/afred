@@ -17,7 +17,6 @@ class AuthServiceProvider extends ServiceProvider
         'App\Form'            => 'App\Policies\FormPolicy',
         'App\FormEntry'       => 'App\Policies\FormEntryPolicy',
         'App\FormEntryStatus' => 'App\Policies\FormEntryStatusPolicy',
-        'App\ListingStatus'   => 'App\Policies\ListingPolicy',
         'App\User'            => 'App\Policies\UserPolicy',
     ];
 
