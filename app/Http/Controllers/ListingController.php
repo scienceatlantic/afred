@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Directory;
 use Log;
 use View;
-use App\Http\Requests\ListingRequest;
+use App\Http\Requests\ListingShowRequest;
 
 class ListingController extends Controller
 {
@@ -16,7 +16,7 @@ class ListingController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(
-        ListingRequest $request,
+        ListingShowRequest $request,
         $directoryId,
         $formId,
         $formEntryId,

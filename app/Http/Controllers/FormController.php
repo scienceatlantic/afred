@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Directory;
 use App\Form;
-use App\Http\Requests\FormRequest;
+use App\Http\Requests\FormIndexRequest;
+use App\Http\Requests\FormShowRequest;
 
 class FormController extends Controller
 {
@@ -19,7 +20,7 @@ class FormController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(FormRequest $request, $directoryId)
+    public function index(FormIndexRequest $request, $directoryId)
     {
         return $this->pageOrGet(
             Directory
@@ -35,7 +36,7 @@ class FormController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(FormRequest $request, $directoryId, $formId)
+    public function show(FormShowRequest $request, $directoryId, $formId)
     {
         return Directory
             ::findOrFail($directoryId)

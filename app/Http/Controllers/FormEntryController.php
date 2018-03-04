@@ -7,6 +7,9 @@ use App\Directory;
 use App\FormEntry;
 use App\FormEntryStatus as Status;
 use App\Http\Requests\FormEntryRequest;
+use App\Http\Requests\FormEntryActionRequest;
+use App\Http\Requests\FormEntryIndexRequest;
+use App\Http\Requests\FormEntryShowRequest;
 
 class FormEntryController extends Controller
 {
@@ -23,8 +26,11 @@ class FormEntryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(FormEntryRequest $request, $directoryId, $formId)
-    {
+    public function index(
+        FormEntryIndexRequest $request,
+        $directoryId,
+        $formId
+    ) {
         $formEntries = Directory
             ::findOrFail($directoryId)
             ->forms()
@@ -62,7 +68,7 @@ class FormEntryController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(
-        FormEntryRequest $request,
+        FormEntryShowRequest $request,
         $directoryId,
         $formId,
         $formEntryId
@@ -77,7 +83,7 @@ class FormEntryController extends Controller
     }
 
     public function action(
-        FormEntryRequest $request,
+        FormEntryActionRequest $request,
         $directoryId,
         $formId,
         $formEntryId = null

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Directory;
 use App\EntrySection;
-use App\Http\Requests\FormMetricRequest;
+use App\Http\Requests\FormMetricIndexRequest;
 use Illuminate\Http\Request;
 
 class FormMetricController extends Controller
@@ -15,7 +15,7 @@ class FormMetricController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(
-        FormMetricRequest $request,
+        FormMetricIndexRequest $request,
         $directoryId,
         $formId
     ) {

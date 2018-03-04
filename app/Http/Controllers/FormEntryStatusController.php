@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\FormEntryStatus;
-use App\Http\Requests\FormEntryStatusRequest;
+use App\Http\Requests\FormEntryStatusIndexRequest;
 
 class FormEntryStatusController extends Controller
 {
@@ -12,7 +12,7 @@ class FormEntryStatusController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(FormEntryStatus $request)
+    public function index(FormEntryStatusIndexRequest $request)
     {
         return $this->pageOrGet(FormEntryStatus::query());
     }

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Directory;
-use App\Http\Requests\SearchSectionRequest;
+use App\Http\Requests\SearchSectionIndexRequest;
 
 class SearchSectionController extends Controller
 {
@@ -12,8 +12,11 @@ class SearchSectionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(SearchSectionRequest $request, $directoryId, $formId)
-    {
+    public function index(
+        SearchSectionIndexRequest $request,
+        $directoryId,
+        $formId
+    ) {
         return Directory
             ::findOrFail($directoryId)
             ->forms()

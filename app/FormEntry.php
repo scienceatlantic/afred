@@ -29,6 +29,7 @@ class FormEntry extends Model
         'has_open_token',
         'has_locked_token',
         'has_unclosed_token',
+        'has_pending_operations',
         'wp_admin_url',
         'wp_admin_compare_url',
         'wp_admin_history_url',
@@ -239,7 +240,17 @@ class FormEntry extends Model
 
     public function getHasPendingOperationsAttribute()
     {
-        return false;
+        $formEntry = $this->fresh();
+
+        if (!$formEntry->is_published) {
+            return false;
+        }
+
+        return (bool) $formEntry
+            ->listings()
+            ->where('is_in_algolia', false)
+            ->where('is_in_wp', false)
+            ->count();
     }
 
     public function getHasOpenTokenAttribute()
