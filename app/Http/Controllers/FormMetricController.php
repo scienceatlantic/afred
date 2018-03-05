@@ -26,7 +26,7 @@ class FormMetricController extends Controller
 
         $formSections = $form
             ->formSections()
-            ->orderBy('placement_order', 'desc')
+            ->orderBy('placement_order', 'asc')
             ->get();
         $sections = [];
         $publishedFormEntryIds = $form->formEntries()->published()->pluck('id');

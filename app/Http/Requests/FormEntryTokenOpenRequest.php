@@ -16,7 +16,13 @@ class FormEntryTokenOpenRequest extends FormRequest
      */
     public function authorize()
     {
-        if (!$user = User::findByEmail($this->get('email')) ?: $this->user()) {
+        if ($this->has('email')) {
+            $user = $user = User::findByEmail($this->get('email'));
+        } else {
+            $user = $this->user();
+        }
+
+        if (!$user) {
             abort(400);
         }
 

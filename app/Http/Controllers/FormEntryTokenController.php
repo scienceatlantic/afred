@@ -83,7 +83,11 @@ class FormEntryTokenController extends Controller
             ->findOrFail($formEntryId);
 
         // Get user either via "email" in request or logged-in user.
-        $user = User::findbyEmail($request->email) ?: $request->user();
+        if ($request->has('email')) {
+            $user = User::findbyEmail($request->email);
+        } else {
+            $user = $request->user();
+        }
 
         $token = Token::openToken($formEntry, $user);
 

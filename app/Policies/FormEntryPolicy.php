@@ -119,7 +119,7 @@ class FormEntryPolicy
         } else {
             return (bool) $user
                 ->formEntries()
-                ->where('id', $formEntry->id)
+                ->where('form_entries.id', $formEntry->id)
                 ->first();
         }
     }

@@ -49,7 +49,7 @@ class AfredFormDataSeeder extends Seeder
         $this->createContactsSection($afredForm->id);
         $this->createEquipmentSection($afredForm->id);
 
-        // Included "Primary Contacts" and "Contacts" as search sections that
+        // Include "Primary Contacts" and "Contacts" as search sections that
         // should be included when searching for facilities.
         $afredForm->formSections()
             ->where('object_key', 'facilities')
@@ -59,6 +59,18 @@ class AfredFormDataSeeder extends Seeder
                 $afredForm->formSections()
                     ->where('object_key', 'primary_contacts')
                     ->orWhere('object_key', 'contacts')
+                    ->pluck('id')
+            );
+
+        // Include "Facilities" as a search section that should be included when
+        // searching for equipment.
+        $afredForm->formSections()
+            ->where('object_key', 'equipment')
+            ->first()
+            ->formSectionsIncludedInSearch()
+            ->attach(
+                $afredForm->formSections()
+                    ->where('object_key', 'facilities')
                     ->pluck('id')
             );
 
