@@ -1,4 +1,4 @@
-<div class="afredwp">
+<div class="afredwp" style="max-width: 800px;">
   <div class="panel panel-default">
     <div class="panel-body">
       <p class="h4">Equipment</p>
