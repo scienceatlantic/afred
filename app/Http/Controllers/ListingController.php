@@ -32,8 +32,8 @@ class ListingController extends Controller
             ->with('entrySection.formEntry')
             ->findOrFail($listingId);
         
-        $data = $listing->entrySection->formEntry->toArray();
-        $data['entrySectionId'] = $listing->entry_section_id;
+        $data['formEntry'] = $listing->entrySection->formEntry;
+        $data['listing'] = $listing;
 
         if (View::exists($listing->template)) {
             try {

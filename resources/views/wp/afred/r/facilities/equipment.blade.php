@@ -1,124 +1,154 @@
 <div class="afredwp">
   <div class="panel panel-default">
-    <div class="panel-body">      
-      <p style="text-decoration: underline">
-        <b>Equipment</b>
-      <p>
+    <div class="panel-body">
+      <p class="h4">Equipment</p>
 
-      @isset($data['sections']['equipment'])
-        @foreach ($data['sections']['equipment'] as $index => $equip)
-          @if ($equip['entry_section']['id'] === $entrySectionId)
+      <hr><br>
+
+      @isset($formEntry->data['sections']['equipment'])
+        @foreach ($formEntry->data['sections']['equipment'] as $index => $equip)
+          @if ($equip['entry_section']['id'] === $listing->entry_section_id )
             @isset($equip['type'])
               <div class="row">
-                <p class="col-md-4">Type</p>
-                <p class="col-md-8">{{ $equip['type'] }}</p>
+                <div class="col-md-4">
+                  <label class="afredwp-pull-right-md">Type</label>
+                </div>
+                <div class="col-md-8">{{ $equip['type'] }}</div>
               </div>
             @endisset
 
             @isset($equip['manufacturer'])
               <div class="row">
-                <p class="col-md-4">Manufacturer</p>
-                <p class="col-md-8">{{ $equip['manufacturer'] }}</p>
+                <div class="col-md-4">
+                  <label class="afredwp-pull-right-md">Manufacturer</label>
+                </div>
+                <div class="col-md-8">{{ $equip['manufacturer'] }}</div>
               </div>
             @endisset
 
             @isset($equip['model'])
               <div class="row">
-                <p class="col-md-4">Model</p>
-                <p class="col-md-8">{{ $equip['model'] }}</p>
+                <div class="col-md-4">
+                  <label class="afredwp-pull-right-md">Model</label>
+                </div>
+                <div class="col-md-8">{{ $equip['model'] }}</div>
               </div>
             @endisset
 
             @isset($equip['purpose'])
               <div class="row">
-                <p class="col-md-4">Purpose</p>
-                <p class="col-md-8">{{ $equip['purpose'] }}</p>
+                <div class="col-md-4">
+                  <label class="afredwp-pull-right-md">Purpose</label>
+                </div>
+                <div class="col-md-8">{!! $equip['purpose'] !!}</div>
               </div>
             @endisset
 
             @isset($equip['specifications'])
               <div class="row">
-                <p class="col-md-4">Specifications</p>
-                <p class="col-md-8">{{ $equip['specifications'] }}</p>
+                <div class="col-md-4">
+                  <label class="afredwp-pull-right-md">Specifications</label>
+                </div>
+                <div class="col-md-8">{!! $equip['specifications'] !!}</div>
               </div>
             @endisset
 
             @isset($equip['yearManufactured'])
               <div class="row">
-                <p class="col-md-4">Year manufactured</p>
-                <p class="col-md-8">{{ $equip['yearManufactured'] }}</p>
+                <div class="col-md-4">
+                  <label class="afredwp-pull-right-md">Year manufactured</label>
+                </div>
+                <div class="col-md-8">{{ $equip['yearManufactured'] }}</div>
               </div>
             @endisset
 
             @isset($equip['year_purchased'])
               <div class="row">
-                <p class="col-md-4">Year purchased</p>
-                <p class="col-md-8">{{ $equip['year_purchased'] }}</p>
+                <div class="col-md-4">
+                  <label class="afredwp-pull-right-md">Year purchased</label>
+                </div>
+                <div class="col-md-8">{!! $equip['year_purchased'] !!}</div>
               </div>
             @endisset
           @endif
         @endforeach
       @endisset
+    </div>
+  </div>
 
-      <p style="text-decoration: underline">
-        <b>Research Facility</b>
-      </p>
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <p class="h4">Research Facility</p>
 
-      <hr>      
+      <hr><br>
 
-      @isset($data['sections']['facilities'])
-        @foreach ($data['sections']['facilities'] as $facility)
+      @isset($formEntry->data['sections']['facilities'])
+        @foreach ($formEntry->data['sections']['facilities'] as $facility)
           @isset($facility['name'])
             <div class="row">
-              <p class="col-md-4">Facility</p>
-              <p class="col-md-8">{{ $facility['name'] }}</p>
+              <div class="col-md-4">
+                <label class="afredwp-pull-right-md">Facility</label>
+              </div>
+              <div class="col-md-8">{{ $facility['name'] }}</div>
             </div>
           @endisset
 
-          @isset($facility['organization'][0]['value'])
+          @isset($facility['organization'])
             <div class="row">
-              <p class="col-md-4">Organization</p>
-              <p class="col-md-8">{{ $facility['organization'][0]['value'] }}</p>
+              <div class="col-md-4">
+                <label class="afredwp-pull-right-md">Organization</label>
+              </div>
+              <div class="col-md-8">{{ $facility['organization']['value'] }}</div>
             </div>
           @endisset
 
           @isset($facility['city'])
             <div class="row">
-              <p class="col-md-4">City</p>
-              <p class="col-md-8">{{ $facility['city'] }}</p>
+              <div class="col-md-4">
+                <label class="afredwp-pull-right-md">City</label>
+              </div>
+              <div class="col-md-8">{{ $facility['city'] }}</div>
             </div>
           @endisset
 
-          @isset($facility['province'][0]['value'])
+          @isset($facility['province'])
             <div class="row">
-              <p class="col-md-4">Province</p>
-              <p class="col-md-8">{{ $facility['province'][0]['value'] }}</p>
+              <div class="col-md-4">
+                <label class="afredwp-pull-right-md">Province</label>
+              </div>
+              <div class="col-md-8">{{ $facility['province']['value'] }}</div>
             </div>
           @endisset
 
           @isset($facility['website'])
             <div class="row">
-              <p class="col-md-4">Website</p>
-              <p class="col-md-8">
+              <div class="col-md-4">
+                <label class="afredwp-pull-right-md">Website</label>
+              </div>
+              <div class="col-md-8">
                 <a href="{{ $facility['website'] }}" target="_blank">
                   {{ $facility['website'] }}
                 </a>
-              </p>
+              </div>
             </div>
           @endisset
 
           @isset($facility['description'])
             <div class="row">
-              <p class="col-md-4">Description</p>
-              <p class="col-md-8">
-                {{ $facility['description'] }}
-              </p>
+              <div class="col-md-4">
+                <label class="afredwp-pull-right-md">Description</label>
+              </div>
+              <div class="col-md-8">
+                {!! $facility['description'] !!}
+              </div>
             </div>
           @endisset
           
           @if (count($facility['disciplines']))
             <div class="row">
-              <p class="col-md-4">Research disciplines</p>
+              <div class="col-md-4">
+                <label class="afredwp-pull-right-md">Research disciplines</label>
+              </div>
               <div class="col-md-8">
                 <ul>
                   @foreach ($facility['disciplines'] as $discipline)
@@ -131,7 +161,9 @@
 
           @if (count($facility['sectors']))
             <div class="row">
-              <p class="col-md-4">Sectors of application</p>
+              <div class="col-md-4">
+                <label class="afredwp-pull-right-md">Sectors of application</label>
+              </div>
               <div class="col-md-8">
                 <ul>
                   @foreach ($facility['sectors'] as $sector)
@@ -146,128 +178,155 @@
     </div>
   </div>
 
-  <hr>
-  <p style="text-decoration: underline">
-    <b>Contacts</b>
-  </p>
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <p class="h4">Contacts</p>
 
-  @isset($data['sections']['primary_contacts'])
-    @foreach ($data['sections']['primary_contacts'] as $index => $contact)
-      @isset($contact['first_name'])
-        <div class="row">
-          <p class="col-md-4">Name</p>
-          <p class="col-md-8">
-            {{ $contact['first_name'] }} {{ $contact['last_name'] }}
-          </p>
-        </div>
+      <hr><br>
+
+      @isset($formEntry->data['sections']['primary_contacts'])
+        @foreach ($formEntry->data['sections']['primary_contacts'] as $index => $contact)
+          @isset($contact['first_name'])
+            <div class="row">
+              <div class="col-md-4">
+                <label class="afredwp-pull-right-md">Name</label>
+              </div>
+              <div class="col-md-8">
+                {{ $contact['first_name'] }} {{ $contact['last_name'] }}
+              </div>
+            </div>
+          @endisset
+
+          @isset($contact['email'])
+            <div class="row">
+              <div class="col-md-4">
+                <label class="afredwp-pull-right-md">Email</label>
+              </div>
+              <div class="col-md-8">
+                <a href="mailto:{{ $contact['email'] }}"></a>
+                {{ $contact['email'] }}
+              </div>
+            </div>
+          @endisset
+
+          @isset($contact['telephone'])
+            <div class="row">
+              <div class="col-md-4">
+                <label class="afredwp-pull-right-md">Telephone</label>
+              </div>
+              <div class="col-md-8">
+                {{ $contact['telephone'] }}
+                @isset($contact['extension'])
+                  <span class="label label-default">Ext: {{ $contact['extension'] }}</span>
+                @endisset          
+              </div>
+            </div>
+          @endisset
+
+          @isset($contact['position'])
+            <div class="row">
+              <div class="col-md-4">
+                <label class="afredwp-pull-right-md">Position</label>
+              </div>
+              <div class="col-md-8">{{ $contact['position'] }}</div>
+            </div>
+          @endisset
+
+          @isset($contact['website'])
+            <div class="row">
+              <div class="col-md-4">
+                <label class="afredwp-pull-right-md">Website</label>
+              </div>
+              <div class="col-md-8">
+                <a href="{{ $contact['website'] }}" target="_blank">
+                  {{ $contact['website'] }}
+                </a>
+              </div>
+            </div>
+          @endisset
+
+          @if ($index !== count($formEntry->data['sections']['primary_contacts']) - 1)
+            <hr>
+          @endif
+        @endforeach
       @endisset
 
-      @isset($contact['email'])
-        <div class="row">
-          <p class="col-md-4">Email</p>
-          <p class="col-md-8">
-            <a href="mailto:{{ $contact['email'] }}"></a>
-            {{ $contact['email'] }}
-          </p>
-        </div>
+      @isset($formEntry->data['sections']['contacts'])
+        @foreach ($formEntry->data['sections']['contacts'] as $index => $contact)
+          @isset($contact['first_name'])
+            <div class="row">
+              <div class="col-md-4">
+                <label class="afredwp-pull-right-md">Name</label>
+              </div>
+              <div class="col-md-8">
+                {{ $contact['first_name'] }} {{ $contact['last_name'] }}
+              </div>
+            </div>
+          @endisset
+
+          @isset($contact['email'])
+            <div class="row">
+              <div class="col-md-4">
+                <label class="afredwp-pull-right-md">Email</label>
+              </div>
+              <div class="col-md-8">
+                <a href="mailto:{{ $contact['email'] }}">{{ $contact['email'] }}</a>
+              </div>
+            </div>
+          @endisset
+
+          @isset($contact['telephone'])
+            <div class="row">
+              <div class="col-md-4">
+                <label class="afredwp-pull-right-md">Telephone</label>
+              </div>
+              <div class="col-md-8">
+                {{ $contact['telephone'] }}
+                @isset($contact['extension'])
+                  <span class="label label-default">Ext: {{ $contact['extension'] }}</span>
+                @endisset
+              </div>
+            </div>
+          @endisset
+
+          @isset($contact['position'])
+            <div class="row">
+              <div class="col-md-4">
+                <label class="afredwp-pull-right-md">Position</label>
+              </div>
+              <div class="col-md-8">{{ $contact['position'] }}</div>
+            </div>
+          @endisset
+
+          @isset($contact['website'])
+            <div class="row">
+              <div class="col-md-4">
+                <label class="afredwp-pull-right-md">Website</label>
+              </div>
+              <div class="col-md-8">
+                <a href="{{ $contact['website'] }}" target="_blank">
+                  {{ $contact['website'] }}
+                </a>
+              </div>
+            </div>
+          @endisset
+
+          @if ($index !== count($formEntry->data['sections']['contacts']) - 1)
+            <hr>
+          @endif
+        @endforeach
       @endisset
-
-      @isset($contact['telephone'])
-        <div class="row">
-          <p class="col-md-4">Telephone</p>
-          <p class="col-md-8">
-            {{ $contact['telephone'] }}
-            @isset($contact['extension'])
-              <span class="label label-default">Ext: {{ $contact['extension'] }}</span>
-            @endisset          
-          </p>
-        </div>
-      @endisset
-
-      @isset($contact['position'])
-        <div class="row">
-          <p class="col-md-4">Position</p>
-          <p class="col-md-8">{{ $contact['position'] }}</p>
-        </div>
-      @endisset
-
-      @isset($contact['website'])
-        <div class="row">
-          <p class="col-md-4">Website</p>
-          <p class="col-md-8">
-            <a href="{{ $contact['website'] }}" target="_blank">
-              {{ $contact['website'] }}
-            </a>
-          </p>
-        </div>
-      @endisset
-
-      @if ($index !== count($data['sections']['primary_contacts']) - 1)
-        <hr>
-      @endif
-    @endforeach
-  @endisset
-
-  @isset($data['sections']['contacts'])
-    @foreach ($data['sections']['contacts'] as $index => $contact)
-      @isset($contact['first_name'])
-        <div class="row">
-          <p class="col-md-4">Name</p>
-          <p class="col-md-8">
-            {{ $contact['first_name'] }} {{ $contact['last_name'] }}
-          </p>
-        </div>
-      @endisset
-
-      @isset($contact['email'])
-        <div class="row">
-          <p class="col-md-4">Email</p>
-          <p class="col-md-8">
-            <a href="mailto:{{ $contact['email'] }}"></a>
-            {{ $contact['email'] }}
-          </p>
-        </div>
-      @endisset
-
-      @isset($contact['telephone'])
-        <div class="row">
-          <p class="col-md-4">Telephone</p>
-          <p class="col-md-8">
-            {{ $contact['telephone'] }}
-            @isset($contact['extension'])
-              <span class="label label-default">Ext: {{ $contact['extension'] }}</span>
-            @endisset
-          </p>
-        </div>
-      @endisset
-
-      @isset($contact['position'])
-        <div class="row">
-          <p class="col-md-4">Position</p>
-          <p class="col-md-8">{{ $contact['position'] }}</p>
-        </div>
-      @endisset
-
-      @isset($contact['website'])
-        <div class="row">
-          <p class="col-md-4">Website</p>
-          <p class="col-md-8">
-            <a href="{{ $contact['website'] }}" target="_blank">
-              {{ $contact['website'] }}
-            </a>
-          </p>
-        </div>
-      @endisset
-
-      @if ($index !== count($data['sections']['contacts']) - 1)
-        <hr>
-      @endif
-    @endforeach
-  @endisset
+    </div>
+  </div>
   
-  <hr>
-  <div style="font-size: 10pt">
-    <p>Date submitted: {{ $created_at }}</p>
-    <p>Date updated: {{ $updated_at }}</p>
+  <div class="small text-muted">
+    <p>
+      @isset($formEntry->created_at)
+        Date submitted: {{ $formEntry->created_at->toDayDateTimeString() }}<br>
+      @endisset
+      @isset($formEntry->updated_at)
+        Date updated: {{ $formEntry->updated_at->toDayDateTimeString() }}
+      @endisset
+    </p>
   </div>
 </div>
