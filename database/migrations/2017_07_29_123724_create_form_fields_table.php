@@ -33,6 +33,8 @@ class CreateFormFieldsTable extends Migration
                   ->nullable();
             $table->text('tinymce_init')
                   ->nullable();
+            $table->boolean('has_ilo')
+                  ->default(false);
             $table->boolean('is_required');
             $table->boolean('is_active')
                   ->default(true);
@@ -40,7 +42,7 @@ class CreateFormFieldsTable extends Migration
             $table->boolean('is_single_column')
                   ->default(false);
             $table->boolean('is_inline')
-                  ->default(false);                  
+                  ->default(false);             
             $table->timestamps();
 
             // Foreign keys & indices

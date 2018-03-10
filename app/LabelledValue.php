@@ -22,4 +22,9 @@ class LabelledValue extends Model
             ->belongsToMany('App\LabelledValueCategory')
             ->withTimestamps();
     }
+
+    public function ilo()
+    {
+        return $this->hasOne('App\Ilo');
+    }
 }

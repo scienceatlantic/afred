@@ -23,6 +23,8 @@ class CreateEntrySectionsTable extends Migration
             $table->integer('published_entry_section_id')
                   ->unsigned()
                   ->nullable();
+            $table->boolean('is_public')
+                  ->default(true);
             $table->timestamps();
 
             // Foreign keys & indices

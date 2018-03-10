@@ -21,6 +21,7 @@ class FormEntry extends Model
      * @var array
      */
     protected $appends = [
+        'ilo',
         'is_submitted',
         'is_published',
         'is_revision',
@@ -85,6 +86,11 @@ class FormEntry extends Model
     public function entrySections()
     {
         return $this->hasMany('App\EntrySection');
+    }
+
+    public function entryFields()
+    {
+        return $this->hasManyThrough('App\EntryField', 'App\EntrySection');
     }
 
     /**
@@ -190,6 +196,37 @@ class FormEntry extends Model
             ::where('resource_id', $this->resource_id)
             ->published()
             ->first();
+    }
+
+    public function getIloAttribute()
+    {
+        $formEntry = $this->fresh();
+
+        $formField = $formEntry
+            ->form
+            ->formFields()
+            ->where('has_ilo', true)
+            ->first();
+
+        if (!$formField) {
+            return null;
+        }
+
+        $entryField = $formEntry
+            ->entryFields()
+            ->where('form_field_id', $formField->id)
+            ->first();
+
+        if (!$entryField) {
+            return null;
+        }
+
+        if ($ilo = $entryField->getValue(true)->ilo) {
+            $ilo->labelledValue;
+            return $ilo;
+        }
+
+        return null;
     }
 
     /**
@@ -477,6 +514,19 @@ class FormEntry extends Model
 
                     // Set value.
                     $entryField->setValue($value);
+
+                    // TODO
+                    if ($rootFormField->object_key === 'is_public') {
+                        $labelledValue = $entryField->value;
+
+                        if ($labelledValue['value'] === 'Public') {
+                            $entrySection->is_public = true;
+                        } else if ($labelledValue['value'] === 'Private') {
+                            $entrySection->is_public = false;
+                        }
+                        
+                        $entrySection->update();
+                    }
                 }
 
                 // Add entry section as primary contact if form section's 

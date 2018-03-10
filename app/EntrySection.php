@@ -12,7 +12,6 @@ class EntrySection extends Model
      * @var array
      */
     protected $appends = [
-        'is_public',
         'title'
     ];
 
@@ -34,37 +33,6 @@ class EntrySection extends Model
     public function listings()
     {
         return $this->hasMany('App\Listing');
-    }
-
-    public function getIsPublicAttribute()
-    {
-        $formFieldIds = $this
-            ->entryFields()
-            ->pluck('form_field_id')
-            ->toArray();
-
-        $formField = FormField
-            ::whereIn('id', $formFieldIds)
-            ->where('object_key', '_is_public')
-            ->first();
-
-        // If property doesn't exist on the form, return true.
-        if (!$formField) {
-            return true;
-        }
-
-        $entryField = $this
-            ->entryFields()
-            ->where('id', $formField->id)
-            ->first();
-
-        // If property doesn't exist in the fieldset, return true.
-        if (!$entryField) {
-            return true;
-        }
-
-        // Property exists, return flag's value.
-        return $entryField->value;
     }
 
     public function getTitleAttribute()

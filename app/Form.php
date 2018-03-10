@@ -27,9 +27,19 @@ class Form extends Model
         return $this->hasMany('App\FormSection');
     }
 
+    public function formFields()
+    {
+        return $this->hasManyThrough('App\FormField', 'App\FormSection');
+    }
+
     public function formEntries()
     {
         return $this->hasMany('App\FormEntry');
+    }
+
+    public function formReports()
+    {
+        return $this->hasMany('App\FormReport');
     }
 
     public function searchSections()
