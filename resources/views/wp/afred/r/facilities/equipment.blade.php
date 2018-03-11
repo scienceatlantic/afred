@@ -76,6 +76,21 @@
     </div>
   </div>
 
+  {{-- View entire facility button --}}
+  <?php 
+    $facilityListing = $formEntry
+        ->listings()
+        ->where('wp_slug', 'like', 'facility_%')
+        ->first()
+  ?>
+  @isset($facilityListing)
+    <p>
+      <button class="btn btn-default" onclick="location.href = '{{ $facilityListing->wp_post_url }}';">
+        See all equipment for this facility
+      </button>
+    </p>
+  @endisset
+
   <div class="panel panel-default">
     <div class="panel-body">
       <p class="h4">Research Facility</p>
@@ -193,6 +208,7 @@
               </div>
               <div class="col-md-8">
                 {{ $contact['first_name'] }} {{ $contact['last_name'] }}
+                <span class="label label-default">Primary Contact</span>
               </div>
             </div>
           @endisset
@@ -203,8 +219,7 @@
                 <label class="afredwp-pull-right-md">Email</label>
               </div>
               <div class="col-md-8">
-                <a href="mailto:{{ $contact['email'] }}"></a>
-                {{ $contact['email'] }}
+                <a href="mailto:{{ $contact['email'] }}">{{ $contact['email'] }}</a>
               </div>
             </div>
           @endisset
@@ -318,6 +333,76 @@
       @endisset
     </div>
   </div>
+
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <p class="h4">Industry Liaison Office Contact (ILO)</p>
+
+      <hr><br>
+
+      @isset($formEntry->ilo)
+        @isset($formEntry->ilo->name)
+          <div class="row">
+            <div class="col-md-4">
+              <label class="afredwp-pull-right-md">Name</label>
+            </div>
+            <div class="col-md-8">
+              {{ $formEntry->ilo->name }}
+            </div>
+          </div>
+        @endisset
+
+        @isset($formEntry->ilo->email)
+          <div class="row">
+            <div class="col-md-4">
+              <label class="afredwp-pull-right-md">Email</label>
+            </div>
+            <div class="col-md-8">
+              <a href="mailto:{{ $formEntry->ilo->email }}">
+                {{ $formEntry->ilo->email }}
+              </a>
+            </div>
+          </div>
+        @endisset
+
+        @isset($formEntry->ilo->telephone)
+          <div class="row">
+            <div class="col-md-4">
+              <label class="afredwp-pull-right-md">Telephone</label>
+            </div>
+            <div class="col-md-8">
+              {{ $formEntry->ilo->telephone }}
+              @isset($formEntry->ilo->extension)
+                <span class="label label-default">Ext: {{ $formEntry->ilo->extension }}</span>
+              @endisset          
+            </div>
+          </div>
+        @endisset
+
+        @isset($formEntry->ilo->position)
+          <div class="row">
+            <div class="col-md-4">
+              <label class="afredwp-pull-right-md">Position</label>
+            </div>
+            <div class="col-md-8">{{ $formEntry->ilo->position }}</div>
+          </div>
+        @endisset
+
+        @isset($formEntry->ilo->website)
+          <div class="row">
+            <div class="col-md-4">
+              <label class="afredwp-pull-right-md">Website</label>
+            </div>
+            <div class="col-md-8">
+              <a href="{{ $formEntry->ilo->website }}" target="_blank">
+                {{ $formEntry->ilo->website }}
+              </a>
+            </div>
+          </div>
+        @endisset
+      @endisset
+    </div>
+  </div>  
   
   <div class="small text-muted">
     <p>
