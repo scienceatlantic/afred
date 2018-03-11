@@ -12,6 +12,7 @@ class SearchSection extends Model
      * @var array
      */
     protected $appends = [
+        'wp_base_url',
         'search_index',
         'form_section_object_key'
     ];
@@ -26,13 +27,18 @@ class SearchSection extends Model
         return $this->hasMany('App\SearchFacet');
     }
 
+    public function getWpBaseUrlAttribute()
+    {
+        return $this->fresh()->formSection->form->directory->wp_base_url;
+    }
+
     public function getSearchIndexAttribute()
     {
-        return $this->formSection()->first()->search_index;
+        return $this->fresh()->formSection->search_index;
     }
 
     public function getFormSectionObjectKeyAttribute()
     {
-        return $this->formSection()->first()->object_key;
+        return $this->fresh()->formSection->object_key;
     }
 }

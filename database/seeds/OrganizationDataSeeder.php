@@ -29,7 +29,7 @@ class OrganizationDataSeeder extends BaseSeeder
             ], [
                 'label' => 'Dalhousie University'
             ], [
-                'label' => 'Dalhousie University Faculty of Agriculture'
+                'label' => 'Dalhousie University, Faculty of Agriculture'
             ], [
                 'label' => 'Falck Safety Services Canada'
             ], [
@@ -41,7 +41,7 @@ class OrganizationDataSeeder extends BaseSeeder
             ], [
                 'label' => 'Memorial University'
             ], [
-                'label' => 'Memorial University Grenfell Campus'
+                'label' => 'Memorial University, Grenfell Campus'
             ], [
                 'label' => 'Mount Allison University'
             ], [
@@ -63,9 +63,9 @@ class OrganizationDataSeeder extends BaseSeeder
             ], [
                 'label' => 'Université de Moncton'
             ], [
-                'label' => 'University of New Brunswick Fredericton'
+                'label' => 'University of New Brunswick, Fredericton'
             ], [
-                'label' => 'University of New Brunswick Saint John'
+                'label' => 'University of New Brunswick, Saint John'
             ], [
                 'label' => 'University of Prince Edward Island'
             ]

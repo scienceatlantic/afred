@@ -151,6 +151,7 @@ class AfredFormDataSeeder extends Seeder
         $formField->label = 'Organization';
         $formField->object_key = 'organization';
         $formField->placement_order = 3;
+        $formField->has_ilo = 1;
         $formField->is_searchable = 1;
         $formField->is_required = 1;
         $formField->is_active = 1;

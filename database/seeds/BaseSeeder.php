@@ -15,7 +15,7 @@ class BaseSeeder extends Seeder
         foreach($modelValues as $modelValue) {
             $model = new $modelClass();
             foreach($modelValue as $property => $value) {
-                $model->$property = $value;
+                $model->$property = $value !== '' ? $value : null;
             }
             $model->save();
 
