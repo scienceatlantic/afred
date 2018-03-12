@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Directory;
 use App\Form;
-use Illuminate\Http\Request;
+use App\Http\Requests\FormIndexRequest;
+use App\Http\Requests\FormShowRequest;
 
 class FormController extends Controller
 {
     public static $withRelationships = [
-        'sections.fields.type',
-        'sections.fields.labelledValues'
+        'compatibleForms.directory',
+        'formSections.formFields.type',
+        'formSections.formFields.labelledValues'
     ];
 
     /**
@@ -17,20 +20,14 @@ class FormController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(FormIndexRequest $request, $directoryId)
     {
-        
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+        return $this->pageOrGet(
+            Directory
+                ::findOrFail($directoryId)
+                ->forms()
+                ->with(self::$withRelationships)
+        );
     }
 
     /**
@@ -39,31 +36,12 @@ class FormController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(FormShowRequest $request, $directoryId, $formId)
     {
-        return Form::with(self::$withRelationships)->findOrFail($id);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return Directory
+            ::findOrFail($directoryId)
+            ->forms()
+            ->with(self::$withRelationships)
+            ->findOrFail($formId);
     }
 }

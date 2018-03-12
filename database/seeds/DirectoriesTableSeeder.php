@@ -1,9 +1,6 @@
 <?php
 
-use App\Directory;
-use Illuminate\Database\Seeder;
-
-class DirectoriesTableSeeder extends Seeder
+class DirectoriesTableSeeder extends BaseSeeder
 {
     /**
      * Run the database seeds.
@@ -14,20 +11,16 @@ class DirectoriesTableSeeder extends Seeder
     {
         $directories = [
             [
-                'name'            => 'Atlantic Facilities and Research Equipment Database',
-                'shortname'       => 'AFRED',
-                'wp_api_url'      => 'https://afred.ca/wp/json',
-                'wp_api_username' => 'afred'
+                'name'              => 'Atlantic Facilities and Research Equipment Database',
+                'shortname'         => 'AFRED',
+                'resource_folder'      => 'afred',
+                'wp_base_url'       => 'http://localhost/afred-wp-demo',
+                'wp_admin_base_url' => 'http://localhost/afred-wp-demo/wp-admin',
+                'wp_api_base_url'   => 'http://localhost/afred-wp-demo/wp-json/wp/v2',
+                'wp_api_password'   => 'cm9vdDp2VFptIG1LZEMgSFpDNSBNV2JiIHBlS3MgU2RSVQ==', // TODO: Commit only dummy credentials to GitHub!
             ]
         ];
 
-        foreach($directories as $directory) {
-            $d = new Directory();
-            $d->name = $directory['name'];
-            $d->shortname = $directory['shortname'];
-            $d->wp_api_url = $directory['wp_api_url'];
-            $d->wp_api_username = $directory['wp_api_username'];
-            $d->save();
-        }
+        self::saveModels('Directory', $directories);
     }
 }

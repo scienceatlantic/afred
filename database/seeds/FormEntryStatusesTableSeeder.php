@@ -1,9 +1,6 @@
 <?php
 
-use App\FormEntryStatus;
-use Illuminate\Database\Seeder;
-
-class FormEntryStatusesTableSeeder extends Seeder
+class FormEntryStatusesTableSeeder extends BaseSeeder
 {
     /**
      * Run the database seeds.
@@ -14,24 +11,26 @@ class FormEntryStatusesTableSeeder extends Seeder
     {
         $statuses = [
             [
-                'name' => 'Draft'
+                'name'              => 'Submitted',
+                'show_in_dropdown'  => true
             ], [
-                'name' => 'Submitted'
+                'name'              => 'Published',
+                'show_in_dropdown'  => true
             ], [
-                'name' => 'Published'
+                'name'              => 'Rejected',
+                'show_in_dropdown'  => true
             ], [
-                'name' => 'Rejected'
+                'name'              => 'Revision',
+                'show_in_dropdown'  => false
             ], [
-                'name' => 'Past'
+                'name'              => 'Deleted',
+                'show_in_dropdown'  => true
             ], [
-                'name' => 'Deleted'
+                'name'              => 'Hidden',
+                'show_in_dropdown'  => true
             ]
         ];
 
-        foreach($statuses as $status) {
-            $f = new FormEntryStatus();
-            $f->name = $status['name'];
-            $f->save();
-        }
+        self::saveModels('FormEntryStatus', $statuses);
     }
 }

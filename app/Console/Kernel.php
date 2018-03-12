@@ -24,8 +24,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        // TODO queue:work -- once count num of jobs....
+        $schedule->command('jobs:run')->everyMinute();
     }
 
     /**

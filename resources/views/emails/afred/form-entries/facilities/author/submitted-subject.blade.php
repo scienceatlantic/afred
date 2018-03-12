@@ -1,0 +1,1 @@
+AFRED | (#{{ $formEntry->resource_id }}-{{ $formEntry->id }}) Facility Submission Received

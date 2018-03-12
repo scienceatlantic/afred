@@ -1,11 +1,6 @@
 <?php
 
-use App\LabelledValue;
-use App\LabelledValueCategory;
-use App\LanguageCode;
-use Illuminate\Database\Seeder;
-
-class ResearchDisciplinesDataSeeder extends Seeder
+class ResearchDisciplinesDataSeeder extends BaseSeeder
 {
     /**
      * Run the database seeds.
@@ -32,7 +27,7 @@ class ResearchDisciplinesDataSeeder extends Seeder
             ], [
                 'label' => 'Engineering - Agricultural, Forest, Environmental, Mining, Mineral'
             ], [
-                'label' => 'Engineering - Chemical, Nuclear, Otherv'
+                'label' => 'Engineering - Chemical, Nuclear, Other'
             ], [
                 'label' => 'Engineering - Civil, Structural'
             ], [
@@ -56,21 +51,7 @@ class ResearchDisciplinesDataSeeder extends Seeder
             ]
         ];
 
-        $languageCode = LanguageCode::where('iso_639_1', 'en')->first();
-
-        $category = new LabelledValueCategory();
-        $category->language_code_id = $languageCode->id;
-        $category->name = 'Research Disciplines';
-        $category->save();
-
-        foreach($disciplines as $discipline) {
-            $d = LabelledValue::where('label', $discipline['label'])->first();
-            if (!$d) {
-                $d = new LabelledValue();
-                $d->label = $discipline['label'];
-                $d->save();
-            }
-            $d->categories()->attach($category->id);
-        }        
+        $category = self::saveCategory('Research Disciplines');
+        self::saveLabelledValues($disciplines, [$category->id]);
     }
 }

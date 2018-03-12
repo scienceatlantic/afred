@@ -6,18 +6,25 @@ use Illuminate\Database\Eloquent\Model;
 
 class LabelledValue extends Model
 {
-    function formFields()
+    public function formFields()
     {
-        return $this->belongsToMany('App\FormField');
+        return $this->belongsToMany('App\FormField')->withTimestamps();
     }    
 
-    function formEntries()
+    public function formEntries()
     {
-        return $this->belongsToMany('App\FormEntry');
+        return $this->belongsToMany('App\FormEntry')->withTimestamps();
     }
 
-    function categories()
+    public function categories()
     {
-        return $this->belongsToMany('App\LabelledValueCategory');
+        return $this
+            ->belongsToMany('App\LabelledValueCategory')
+            ->withTimestamps();
+    }
+
+    public function ilo()
+    {
+        return $this->hasOne('App\Ilo');
     }
 }

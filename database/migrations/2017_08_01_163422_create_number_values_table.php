@@ -16,27 +16,17 @@ class CreateNumberValuesTable extends Migration
         Schema::create('number_values', function (Blueprint $table) {
             // Columns
             $table->increments('id');
-            $table->integer('form_entry_id')
+            $table->integer('entry_field_id')
                   ->unsigned();
-            $table->integer('form_field_id')
-                  ->unsigned();
-            $table->integer('section_repeat_index')
-                  ->unsigned();                  
             $table->double('value');
             $table->timestamps();
 
             // Foreign keys & indices
-            $table->foreign('form_entry_id')
+            $table->foreign('entry_field_id')
                   ->references('id')
-                  ->on('form_entries')
+                  ->on('entry_fields')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
-            $table->foreign('form_field_id')
-                  ->references('id')
-                  ->on('form_fields')
-                  ->onUpdate('cascade')
-                  ->onDelete('restrict');
-            $table->index('section_repeat_index');
         });
     }
 

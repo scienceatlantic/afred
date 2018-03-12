@@ -11,8 +11,8 @@ class DateValue extends Model
         return $this->belongsTo('App\FormField');
     }
 
-    public function formEntry()
+    public function entryField()
     {
-        return $this->belongsTo('App\FormEntry');
+        return $this->belongsTo('App\EntryField');
     }    
 }

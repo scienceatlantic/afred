@@ -1,11 +1,6 @@
 <?php
 
-use App\LabelledValue;
-use App\LabelledValueCategory;
-use App\LanguageCode;
-use Illuminate\Database\Seeder;
-
-class OrganizationDataSeeder extends Seeder
+class OrganizationDataSeeder extends BaseSeeder
 {
     /**
      * Run the database seeds.
@@ -16,11 +11,15 @@ class OrganizationDataSeeder extends Seeder
     {
         $organisations = [
             [
-                'label' => 'N/A'
-            ], [
                 'label' => 'Acadia University'
             ], [
+                'label' => 'ACENET'
+            ], [
+                'label' => 'Cape Breton Fish Harvesters Association'
+            ], [
                 'label' => 'Cape Breton University'
+            ], [
+                'label' => 'Coastal zones research institute'
             ], [
                 'label' => 'Collège communautaire du Nouveau-Brunswick'
             ], [
@@ -30,13 +29,19 @@ class OrganizationDataSeeder extends Seeder
             ], [
                 'label' => 'Dalhousie University'
             ], [
-                'label' => 'Dalhousie University Faculty of Agriculture'
+                'label' => 'Dalhousie University, Faculty of Agriculture'
+            ], [
+                'label' => 'Falck Safety Services Canada'
             ], [
                 'label' => 'Holland College'
             ], [
+                'label' => 'Leeway Marine'
+            ], [
+                'label' => 'Luna Ocean Consulting Ltd.'
+            ], [
                 'label' => 'Memorial University'
             ], [
-                'label' => 'Memorial University Grenfell Campus'
+                'label' => 'Memorial University, Grenfell Campus'
             ], [
                 'label' => 'Mount Allison University'
             ], [
@@ -48,6 +53,8 @@ class OrganizationDataSeeder extends Seeder
             ], [
                 'label' => 'NSCAD University'
             ], [
+                'label' => 'NSHA & IWK'
+            ], [
                 'label' => 'Saint Mary\'s University'
             ], [
                 'label' => 'St. Francis Xavier University'
@@ -56,41 +63,15 @@ class OrganizationDataSeeder extends Seeder
             ], [
                 'label' => 'Université de Moncton'
             ], [
-                'label' => 'University of New Brunswick Fredericton'
+                'label' => 'University of New Brunswick, Fredericton'
             ], [
-                'label' => 'University of New Brunswick Saint John'
+                'label' => 'University of New Brunswick, Saint John'
             ], [
                 'label' => 'University of Prince Edward Island'
-            ], [
-                'label' => 'Falck Safety Services Canada'
-            ], [
-                'label' => 'Cape Breton Fish Harvesters Association'
-            ], [
-                'label' => 'NSHA & IWK'
-            ], [
-                'label' => 'Leeway Marine'
-            ], [
-                'label' => 'Luna Ocean Consulting Ltd.'
-            ], [
-                'label' => 'Coastal zones research institute'
             ]
         ];
 
-        $languageCode = LanguageCode::where('iso_639_1', 'en')->first();
-
-        $category = new LabelledValueCategory();
-        $category->language_code_id = $languageCode->id;
-        $category->name = 'Organizations';
-        $category->save();
-
-        foreach($organisations as $organisation) {
-            $o = LabelledValue::where('label', $organisation['label'])->first();
-            if (!$o) {
-                $o = new LabelledValue();
-                $o->label = $organisation['label'];
-                $o->save();
-            }
-            $o->categories()->attach($category->id);
-        }
+        $category = self::saveCategory('Organizations');
+        self::saveLabelledValues($organisations, [$category->id]);
     }
 }

@@ -20,7 +20,13 @@ class CreateFormsTable extends Migration
                   ->unsigned();
             $table->integer('language_code_id')
                   ->unsigned();
+            $table->integer('wp_post_id')
+                  ->unsigned()
+                  ->nullable();
             $table->string('name');
+            $table->string('resource_folder');
+            $table->string('pagination_section_object_key');
+            $table->string('pagination_field_object_key');
             $table->timestamps();
 
             // Foreign keys & indices
@@ -35,6 +41,7 @@ class CreateFormsTable extends Migration
                   ->onUpdate('cascade')
                   ->onDelete('restrict');                  
             $table->unique(['directory_id', 'name']);
+            $table->unique('resource_folder');
         });
     }
 
