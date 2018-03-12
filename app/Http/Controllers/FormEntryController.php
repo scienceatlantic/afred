@@ -50,6 +50,12 @@ class FormEntryController extends Controller
 
             $formEntries = $formEntries
                 ->where('form_entry_status_id', $status->id);
+
+            // TODO
+            if ($status->name === 'Rejected') {
+                $formEntries = $formEntries
+                    ->where('is_edit', false);
+            }
         }
 
         if ($request->orderByDesc) {
@@ -118,6 +124,8 @@ class FormEntryController extends Controller
                     case 'publish':
                     case 'reject':
                     case 'delete':
+                    case 'hide':
+                    case 'show':
                         $method = $action . 'FormEntry';
                         $formEntry = FormEntry::$method(
                             $request,
