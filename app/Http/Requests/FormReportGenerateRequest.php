@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Directory;
 use Illuminate\Foundation\Http\FormRequest;
 
-class FormReportShowRequest extends FormRequest
+class FormReportGenerateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,7 @@ class FormReportShowRequest extends FormRequest
             ->findOrFail($this->route('report'));
 
         if ($user = $this->user()) {
-            return $user->can('show', $formReport);
+            return $user->can('generate', $formReport);
         }
         
         return false;

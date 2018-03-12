@@ -10,7 +10,12 @@ class FormReportPolicy
 {
     use HandlesAuthorization;
 
-    public function show(User $user, FormReport $formReport)
+    public function index(User $user)
+    {
+        return $user->is_at_least_editor;
+    }
+
+    public function generate(User $user, FormReport $formReport)
     {
         return $user->is_at_least_editor;
     }
