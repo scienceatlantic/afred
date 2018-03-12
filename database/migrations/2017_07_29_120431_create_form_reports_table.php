@@ -19,6 +19,7 @@ class CreateFormReportsTable extends Migration
             $table->integer('form_id')
                   ->unsigned();
             $table->string('name');
+            $table->string('filename');
             $table->text('report_columns');
             $table->text('cache')
                   ->nullable();

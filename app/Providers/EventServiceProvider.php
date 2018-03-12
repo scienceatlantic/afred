@@ -25,6 +25,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         'App\Events\FormEntryTokenCreated' => [
             'App\Listeners\EmailFormEntryToken'
+        ],
+        'App\Events\FormReportRequested' => [
+            'App\Listeners\EmailFormReport'
         ]
     ];
 

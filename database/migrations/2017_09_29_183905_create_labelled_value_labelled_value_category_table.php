@@ -24,15 +24,15 @@ class CreateLabelledValueLabelledValueCategoryTable extends Migration
 
             // Foreign keys & indices
             $table->foreign('labelled_value_id', 'lv_id_foreign')
-            ->references('id')
-            ->on('labelled_values')
-            ->onUpdate('cascade')
-            ->onDelete('restrict');
-      $table->foreign('labelled_value_category_id', 'lvc_id_foreign')
-            ->references('id')
-            ->on('labelled_value_categories')
-            ->onUpdate('cascade')
-            ->onDelete('restrict');
+                  ->references('id')
+                  ->on('labelled_values')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
+            $table->foreign('labelled_value_category_id', 'lvc_id_foreign')
+                  ->references('id')
+                  ->on('labelled_value_categories')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
         });
     }
 
