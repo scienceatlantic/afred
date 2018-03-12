@@ -35,6 +35,7 @@ class EmailFormEntryUpdate implements ShouldQueue
         $isReviewerAlsoAuthor
             = $reviewers->contains('id', $event->formEntry->author->id);
 
+        // TODO: ILO!
         if (!$isReviewerAlsoAuthor) {
             Mail::to('prasad@scienceatlantic.ca')
                 ->send(new FormEntryUpdateMail($event->formEntry));
