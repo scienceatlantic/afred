@@ -23,11 +23,16 @@ Route::resource('directories.forms', 'FormController', [
     'only' => ['index', 'show']
 ]);
 
-// directories/{id}/forms/{id}/reports/{id}
-Route::get(
-    'directories/{directory}/forms/{form}/reports/{report}',
-    'FormReportController@show'
+// directories/{id}/forms/{id}/reports/{id}/generate
+Route::post(
+    'directories/{directory}/forms/{form}/reports/{report}/generate',
+    'FormReportController@generate'
 );
+
+// directories/{id}/forms/{id}/reports
+Route::resource('directories.forms.reports', 'FormReportController', [
+    'only' => ['index']
+]);
 
 // directories/{id}/forms/{id}/search-sections
 Route::resource('directories.forms.search-sections', 'SearchSectionController', [
