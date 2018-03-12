@@ -36,11 +36,23 @@ class FormMetricController extends Controller
             }
 
             array_push($sections, [
-                'label' => $formSection->label_plural,
-                'value' => EntrySection
-                    ::whereIn('form_entry_id', $publishedFormEntryIds)
-                    ->where('form_section_id', $formSection->id)
-                    ->count()
+                'label'  => $formSection->label_plural,
+                'values' => [
+                    'total'   => EntrySection
+                        ::whereIn('form_entry_id', $publishedFormEntryIds)
+                        ->where('form_section_id', $formSection->id)
+                        ->count(),
+                    'public'  => EntrySection
+                        ::whereIn('form_entry_id', $publishedFormEntryIds)
+                        ->where('form_section_id', $formSection->id)
+                        ->where('is_public', true)
+                        ->count(),
+                    'private' => EntrySection
+                        ::whereIn('form_entry_id', $publishedFormEntryIds)
+                        ->where('form_section_id', $formSection->id)
+                        ->where('is_public', false)
+                        ->count()
+                ]
             ]);
         }
 
@@ -63,7 +75,7 @@ class FormMetricController extends Controller
 
         return [
             'statuses' => $statuses,
-            'published_sections' => $sections
+            'approved_sections' => $sections
         ];
     }
 }
