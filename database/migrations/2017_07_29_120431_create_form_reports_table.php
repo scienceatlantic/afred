@@ -14,23 +14,59 @@ class CreateFormReportsTable extends Migration
     public function up()
     {
         Schema::create('form_reports', function (Blueprint $table) {
-            // Columns
             $table->increments('id');
+
+            /**
+             * Form that the form report belongs to.
+             */
             $table->integer('form_id')
                   ->unsigned();
-            $table->string('name');
-            $table->string('filename');
-            $table->text('report_columns');
-            $table->text('cache')
-                  ->nullable();
-            $table->timestamps();
-
-            // Foreign keys & indices
             $table->foreign('form_id')
                   ->references('id')
                   ->on('forms')
                   ->onUpdate('cascade')
                   ->onDelete('cascade');
+
+            /**
+             * Name of the form.
+             * 
+             * E.g. "Published Equipment"
+             */
+            $table->string('name');
+            
+            /**
+             * Name used when generating the actual file.
+             * 
+             * E.g. "Published Equipment"
+             */
+            $table->string('filename');
+
+            /**
+             * Columns for the report
+             * 
+             * Do not use spaces.
+             * E.g. 'facilities.0.name,equipment.*.type'
+             */
+            $table->text('report_columns');
+
+            /**
+             * Cache that contains the parsed report_columns.
+             * 
+             * The API sets this value, do not set it yourself. Emptying this
+             * column forces the API to regenerate the cache (this is needed
+             * if we have updated the report_columns).
+             * 
+             * //TODO
+             * It is a JSON encoded array in the following format:
+             * [[headings], [form_section_object_keys], []]
+             */
+            $table->text('cache')
+                  ->nullable();
+            
+            $table->timestamps();
+
+            // Foreign keys & indices
+
             $table->unique(['form_id', 'name']);
         });
     }

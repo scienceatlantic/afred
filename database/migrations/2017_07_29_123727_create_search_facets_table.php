@@ -31,7 +31,7 @@ class CreateSearchFacetsTable extends Migration
                   ->references('id')
                   ->on('search_sections')
                   ->onUpdate('cascade')
-                  ->onDelete('restrict');
+                  ->onDelete('cascade');
             $table->foreign('search_facet_operator_id')
                   ->references('id')
                   ->on('search_facet_operators')

@@ -14,26 +14,23 @@ class CreateDirectoryUserTable extends Migration
     public function up()
     {
         Schema::create('directory_user', function (Blueprint $table) {
-            // Columns
-            $table->increments('id');
             $table->integer('directory_id')
                   ->unsigned();
-            $table->integer('user_id')
-                  ->unsigned();           
-            $table->timestamps();
-
-            // Foreign keys & indices
             $table->foreign('directory_id')
                   ->references('id')
                   ->on('directories')
                   ->onUpdate('cascade')
                   ->onDelete('cascade');
+
+            $table->integer('user_id')
+                  ->unsigned();           
             $table->foreign('user_id')
                   ->references('id')
                   ->on('users')
                   ->onUpdate('cascade')
                   ->onDelete('cascade');
-            $table->unique(['directory_id', 'user_id']);
+
+            $table->timestamps();
         });
     }
 
