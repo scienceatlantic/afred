@@ -102,55 +102,55 @@ class FormReport extends Model
         $sections = [];
         $columns = [];
 
+        // TODO add ability to specify your own headings?
+        // e.g. facilities.0.name:"Facility Name"
         foreach(explode(',', $value) as $reportColumn) {
-            list($section, $i, $field) = explode('.', $reportColumn);
+            list($section, $indexOp, $field) = explode('.', $reportColumn);
 
             // Store section if not already added.
             if (!array_key_exists($section, $sectionsMap)) {
                 array_push($sections, $section);
             }
 
+            // Get the form section if it exists, otherwise warn and skip.
             $formSection = $self
                 ->form
                 ->formSections()
                 ->where('object_key', $section)
                 ->first();
-
             if (!$formSection) {
                 self::warnFormSectionMissing($section);
                 continue;
-            }                
+            } 
+            
+            // Parse index operator (cast to int if not '*').
+            $i = $indexOp === '*' ? '*' : (int) $indexOp;
 
             // '*' Wildcard operator, get all fields.
             if ($field === '*') {
                 $formFields = $formSection
                     ->formFields()
-                    ->orderBy('placement_order', 'desc')
+                    ->orderBy('placement_order', 'asc')
                     ->get();
 
                 foreach($formFields as $formField) {
-                    array_push($columns, [
-                        $section,
-                        $i,
-                        $formField->object_key
-                    ]);
-
+                    array_push($columns, [$section, $i, $formField->object_key]);
                     array_push($headers, $formField->label);
                 }
             } 
-            // Get specified field.
+            // Get specified field if it exists, otherwise warn and skip.
             else {
                 $formField = $formSection
                     ->formFields()
                     ->where('object_key', $field)
                     ->first();
-                
                 if (!$formField) {
                     self::warnFormFieldMissing($field);
+                    continue;
                 }
 
                 array_push($headers, $formField->label);
-                array_push($columns, [$section, (int) $i, $field]);
+                array_push($columns, [$section, $i, $field]);
             }
         }
 
@@ -177,9 +177,11 @@ class FormReport extends Model
             $row = [];
 
             foreach($columns as $column) {
-                list($s, $i, $f) = $column;
+                list($s, $indexOp, $f) = $column;
     
-                $i = $i === '*' ? $index : $i;
+                // If index is a star, replace with current index value,
+                // otherwise use indexOp's value.
+                $i = $indexOp === '*' ? $index : $indexOp;
     
                 // For radio and dropdown fields.
                 if (isset($dataSections[$s][$i][$f]['value'])) {

@@ -35,7 +35,7 @@ class AfredFormDataSeeder extends Seeder
         $afredForm = new Form();
         $afredForm->directory_id = $afredDirectory->id;
         $afredForm->language_code_id = $languageCode->id;
-        $afredForm->wp_post_id = 187; // TODO
+        $afredForm->wp_post_id = 13;
         $afredForm->name = 'Facilities';
         $afredForm->resource_folder = 'facilities';
         $afredForm->pagination_section_object_key = 'facilities';
