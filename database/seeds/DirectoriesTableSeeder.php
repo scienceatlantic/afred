@@ -13,7 +13,7 @@ class DirectoriesTableSeeder extends BaseSeeder
             [
                 'name'              => 'Atlantic Facilities and Research Equipment Database',
                 'shortname'         => 'AFRED',
-                'resource_folder'      => 'afred',
+                'resource_folder'   => 'afred',
                 'wp_base_url'       => 'http://localhost/afred-wp-demo',
                 'wp_admin_base_url' => 'http://localhost/afred-wp-demo/wp-admin',
                 'wp_api_base_url'   => 'http://localhost/afred-wp-demo/wp-json/wp/v2',
