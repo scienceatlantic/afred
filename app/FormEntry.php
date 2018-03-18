@@ -408,6 +408,13 @@ class FormEntry extends Model
             foreach($entrySection->entryFields as $entryField) {
                 $formField = $entryField->formField;
                 $fields[$formField->object_key] = $entryField->value;
+
+                // Add additional '<object_key>_no_html' attribute for richtext
+                // fields
+                if ($formField->type->name === 'richtext') {
+                    $key = $formField->object_key . '_no_html';
+                    $fields[$key] = strip_tags($entryField->value);
+                }
             }
 
             array_push($data['sections'][$formSection->object_key], $fields);

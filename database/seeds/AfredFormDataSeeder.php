@@ -655,7 +655,7 @@ class AfredFormDataSeeder extends Seeder
                --><span v-if="s.facilities.city && s.facilities.province">,</span>
                   <span v-if="s.facilities.province">{{ s.facilities.province.value }}</span>
                 </p>
-                <p class="small text-muted">{{ s.facilities.description }}</p>
+                <p class="small text-muted">{{ s.facilities.description_no_html }}</p>
               </div>
             </div>
         ';
@@ -722,7 +722,7 @@ class AfredFormDataSeeder extends Seeder
                --><span v-if="s.facilities[0].organization && s.facilities[0].province">,</span>
                   <span v-if="s.facilities[0].province">{{ s.facilities[0].province.value }}</span>
                 </p>
-                <p class="small text-muted">{{ s.equipment.purpose }}</p>
+                <p class="small text-muted">{{ s.equipment.purpose_no_html }}</p>
               </div>
             </div>
         ';
