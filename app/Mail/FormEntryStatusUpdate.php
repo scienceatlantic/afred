@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class FormEntryUpdate extends Mailable
+class FormEntryStatusUpdate extends Mailable
 {
     use Queueable, SerializesModels;
 

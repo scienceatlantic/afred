@@ -2,14 +2,14 @@
 
 namespace App\Listeners;
 
-use App\Events\FormEntryUpdate;
-use App\Mail\FormEntryUpdate as FormEntryUpdateMail;
+use App\Events\FormEntryStatusUpdated;
+use App\Mail\FormEntryStatusUpdate as FormEntryStatusUpdateMail;
 use App\User;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Mail;
 
-class EmailFormEntryUpdate implements ShouldQueue
+class EmailFormEntryStatusUpdate implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -24,10 +24,10 @@ class EmailFormEntryUpdate implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param  FormEntryUpdate  $event
+     * @param  FormEntryStatusUpdated  $event
      * @return void
      */
-    public function handle(FormEntryUpdate $event)
+    public function handle(FormEntryStatusUpdated $event)
     {
         // TODO
         $reviewers = User::administrators()->get();
@@ -38,13 +38,13 @@ class EmailFormEntryUpdate implements ShouldQueue
         // TODO: ILO!
         if (!$isReviewerAlsoAuthor) {
             Mail::to('prasad@scienceatlantic.ca')
-                ->send(new FormEntryUpdateMail($event->formEntry));
+                ->send(new FormEntryStatusUpdateMail($event->formEntry));
         }
 
         // BUT DON'T EMAIL OTHER ADMINISTRATORS!!!! (i.e. administrators of other installations!)
         foreach($reviewers as $reviewer) {
             Mail::to('prasad@scienceatlantic.ca')//$reviewer)
-                ->send(new FormEntryUpdateMail($event->formEntry, $reviewer));
+                ->send(new FormEntryStatusUpdateMail($event->formEntry, $reviewer));
         }
     }
 }

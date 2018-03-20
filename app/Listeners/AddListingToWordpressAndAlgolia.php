@@ -5,7 +5,7 @@ namespace App\Listeners;
 use App\Algolia;
 use App\Listing;
 use App\WordPress;
-use App\Events\FormEntryUpdate;
+use App\Events\FormEntryStatusUpdated;
 use App\Events\ListingCreated;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -45,9 +45,8 @@ class AddListingToWordpressAndAlgolia implements ShouldQueue
         // Invalidate cache if there are no more listings that need to be added
         // to either WordPress or Algolia.
         if ($isLastListing) {
-            $event->formEntry->is_cache_valid = false;
-            $event->formEntry->update();
-            event(new FormEntryUpdate($event->formEntry));
+            $event->formEntry->refreshCache();
+            event(new FormEntryStatusUpdated($event->formEntry));
         }
     }
 }
