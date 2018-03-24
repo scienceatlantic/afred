@@ -50,6 +50,8 @@ class FormEntryActionRequest extends FormRequest
             case 'publish':
             case 'reject':
             case 'delete':
+            case 'hide':
+            case 'unhide':
                 if (!$user = $this->user()) {
                     return false;
                 }

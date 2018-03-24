@@ -13,22 +13,33 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'App\Events\FormEntryUpdate' => [
-            'App\Listeners\EmailFormEntryUpdate'
+        'App\Events\FormEntryStatusUpdated' => [
+            'App\Listeners\EmailFormEntryStatusUpdate'
         ],
         'App\Events\ListingCreated' => [
-            'App\Listeners\AddListingToWordpressAndAlgolia',
+            'App\Listeners\AddListingToWordpress',
+        ],
+        'App\Events\ListingAddedToWordpress' => [
+            'App\Listeners\AddListingToAlgolia'
         ],
         'App\Events\ListingDeleted' => [
             'App\Listeners\DeleteListingFromWordpress',
             'App\Listeners\DeleteListingFromAlgolia'
+        ],
+        'App\Events\ListingHidden' => [
+            'App\Listeners\HideListingInWordpress',
+            'App\Listeners\DeleteHiddenListingFromAlgolia'
+        ],
+        'App\Events\ListingUnhidden' => [
+            'App\Listeners\UnhideListingInWordpress',
+            'App\Listeners\AddUnhiddenListingToAlgolia'
         ],
         'App\Events\FormEntryTokenCreated' => [
             'App\Listeners\EmailFormEntryToken'
         ],
         'App\Events\FormReportRequested' => [
             'App\Listeners\EmailFormReport'
-        ]
+        ],
     ];
 
     /**

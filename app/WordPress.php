@@ -47,13 +47,18 @@ class WordPress
             $url .= '/' . $listing->wp_post_id;
         }
 
-        $response = self::addResource(
-            $url,
-            $targetDirectory->wp_api_password,
-            $slug,
-            $listing->entrySection->title,
-            $content
-        );
+        $response = (new GuzzleHttp())->post($url, [
+            'headers' => [
+                'Authorization' => "Basic {$targetDirectory->wp_api_password}"
+            ],
+            'json'    => [
+                'slug'    => $slug,
+                'title'   => $listing->entrySection->title,
+                'content' => $content,
+                'status'  => 'publish'
+            ],
+            'http_errors' => true
+        ]);
 
         $wpPost = json_decode($response->getBody(), true);
 
@@ -76,52 +81,60 @@ class WordPress
         $wpPostId,
         $bypassTrash = false
     ) {
-        // Generate URL.
         $url = $targetDirectory->wp_api_base_url
             . '/'
             . env('WP_CUSTOM_POST_TYPE_REST_BASE')
             . '/'
             . $wpPostId;
 
-        return self::deleteResource(
-            $url,
-            $targetDirectory->wp_api_password,
-            $bypassTrash
-        );
-    }
-
-    private static function addResource(
-        $url,
-        $password,
-        $slug,
-        $title,
-        $content
-    ) {
-        return (new GuzzleHttp())->post($url, [
+        return (new GuzzleHttp())->delete($url, [
             'headers' => [
-                'Authorization' => "Basic {$password}"
+                'Authorization' => "Basic {$targetDirectory->wp_api_password}"
             ],
-            'json'    => [
-                'slug'    => $slug,
-                'title'   => $title,
-                'content' => $content,
-                'status'  => 'publish'
+            'json' => [
+                'force' => $bypassTrash
             ],
             'http_errors' => true
         ]);
     }
 
-    private static function deleteResource(
-        $url,
-        $password,
-        $bypassTrash = false
+    public static function hideListing(
+        Directory $targetDirectory,
+        $wpPostId
     ) {
-        return (new GuzzleHttp())->delete($url, [
+        $url = $targetDirectory->wp_api_base_url
+            . '/'
+            . env('WP_CUSTOM_POST_TYPE_REST_BASE')
+            . '/'
+            . $wpPostId;        
+
+        return (new GuzzleHttp())->post($url, [
             'headers' => [
-                'Authorization' => "Basic {$password}"
+                'Authorization' => "Basic {$targetDirectory->wp_api_password}"
             ],
             'json' => [
-                'force' => $bypassTrash
+                'status' => 'private'
+            ],
+            'http_errors' => true
+        ]);
+    }
+
+    public static function unhideListing(
+        Directory $targetDirectory,
+        $wpPostId
+    ) {
+        $url = $targetDirectory->wp_api_base_url
+            . '/'
+            . env('WP_CUSTOM_POST_TYPE_REST_BASE')
+            . '/'
+            . $wpPostId;        
+
+        return (new GuzzleHttp())->post($url, [
+            'headers' => [
+                'Authorization' => "Basic {$targetDirectory->wp_api_password}"
+            ],
+            'json' => [
+                'status' => 'publish'
             ],
             'http_errors' => true
         ]);        
