@@ -43,9 +43,11 @@ class ListingController extends Controller
             } catch (\Exception $e) {
                 // Log and go to abort command below.
                 Log::error($e->getMessage());
+                abort(500);
             }
         }
 
+        Log::error('Template not found', ['template' => $listing->template]);
         abort(400);
     }
 }

@@ -38,6 +38,7 @@ class ClearJobs extends Command
      */
     public function handle()
     {
+        $this->info('Clearing: jobs');
         Jobs::truncate();
     }
 }

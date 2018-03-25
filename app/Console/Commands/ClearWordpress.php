@@ -38,19 +38,28 @@ class ClearWordpress extends Command
      */
     public function handle()
     {
-        $databases = explode(',', env('DB_DEV_WP_DATABASES', ''));
+        if (!$databases = explode(',', env('DB_DEV_WP_DATABASES', null))) {
+            $this->error('\'DB_DEV_WP_DATABASES is empty\'. Aborting!');
+            return;
+        }
+        
 
         foreach($databases as $database) {
+            $this->info('Clearing: ' . $database . ' database');
+
+            // Set database connection
             config(['database.connections.mysql.database' => $database]);
 
+            // Clear connection cache before running command below
             DB::purge('mysql');
             
+            // Remove all plugin related posts
             DB::table('wp_posts')
                 ->where('post_type', 'afredwp_resource')
                 ->delete();
         }
 
-        // Clear connection cache after command is complete.
+        // Clear connection cache again after command is complete.
         DB::purge('mysql');
     }
 }
