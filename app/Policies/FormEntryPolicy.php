@@ -12,6 +12,7 @@ class FormEntryPolicy
 {
     use HandlesAuthorization;
 
+    // TODO: call it conflicts with ?action=show
     public function show(User $user, FormEntry $formEntry)
     {
         if ($user->is_administrator) {
@@ -73,6 +74,54 @@ class FormEntryPolicy
                 'formEntry' => $formEntry->toArray(),
                 'user'      => $user->toArray()
             ]);
+            abort(400);
+        }
+
+        if ($user->is_administrator) {
+            return true;
+        } else if ($user->is_editor) {
+            return (bool) $formEntry
+                ->form
+                ->directory
+                ->users()
+                ->where('id', $user->id)
+                ->first();            
+        }
+
+        return false;
+    }
+
+    public function hide(User $user, FormEntry $formEntry)
+    {
+        if (!$user->is_at_least_editor) {
+            return false;
+        }
+        
+        if (!$formEntry->is_published) {
+            abort(400);
+        }
+
+        if ($user->is_administrator) {
+            return true;
+        } else if ($user->is_editor) {
+            return (bool) $formEntry
+                ->form
+                ->directory
+                ->users()
+                ->where('id', $user->id)
+                ->first();            
+        }
+
+        return false;
+    }
+
+    public function unhide(User $user, FormEntry $formEntry)
+    {
+        if (!$user->is_at_least_editor) {
+            return false;
+        }
+        
+        if (!$formEntry->is_hidden) {
             abort(400);
         }
 

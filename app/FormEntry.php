@@ -2,9 +2,11 @@
 
 namespace App;
 
-use App\Events\FormEntryUpdate;
+use App\Events\FormEntryStatusUpdated;
 use App\Events\ListingCreated;
 use App\Events\ListingDeleted;
+use App\Events\ListingHidden;
+use App\Events\ListingUnhidden;
 use App\EntrySection;
 use App\Form;
 use App\FormEntryStatus as Status;
@@ -24,6 +26,7 @@ class FormEntry extends Model
         'ilo',
         'is_submitted',
         'is_published',
+        'is_hidden',
         'is_revision',
         'is_rejected',
         'is_deleted',
@@ -168,6 +171,15 @@ class FormEntry extends Model
     }
 
     /**
+     * Scope to get all "hidden" form entries.
+     */    
+    public function scopeHidden($query)
+    {
+        $statusId = Status::findStatus('Hidden')->id;
+        return $query->where('form_entry_status_id', $statusId);
+    }    
+
+    /**
      * Scope to get all "rejected" form entries.
      */    
     public function scopeRejected($query, $includeEdits = false)
@@ -236,14 +248,20 @@ class FormEntry extends Model
      */
     public function getCacheAttribute($value)
     {
-        return $this->is_cache_valid ? json_decode($value, true) : null;
+        return $value ? json_decode($value, true) : null;
     }
 
     public function setCacheAttribute($value)
     {
         $this->attributes['cache'] = $value ? json_encode($value) : null;
-        $this->is_cache_valid = $value ? true : false;
     }
+
+    public function refreshCache()
+    {
+        $this->cache = null;
+        $this->update();
+        $this->data;
+    }    
 
     public function getIsSubmittedAttribute()
     {
@@ -256,6 +274,12 @@ class FormEntry extends Model
         $statusId = Status::findStatus('Published')->id;
         return $this->form_entry_status_id === $statusId;
     }
+
+    public function getIsHiddenAttribute()
+    {
+        $statusId = Status::findStatus('Hidden')->id;
+        return $this->form_entry_status_id === $statusId;
+    }    
 
     public function getIsRevisionAttribute()
     {
@@ -364,7 +388,7 @@ class FormEntry extends Model
     public function getDataAttribute()
     {
         // Check cache first.
-        if ($this->is_cache_valid && $this->cache) {
+        if ($this->cache) {
             return $this->cache;
         }
 
@@ -408,6 +432,13 @@ class FormEntry extends Model
             foreach($entrySection->entryFields as $entryField) {
                 $formField = $entryField->formField;
                 $fields[$formField->object_key] = $entryField->value;
+
+                // Add additional '<object_key>_no_html' attribute for richtext
+                // fields
+                if ($formField->type->name === 'richtext') {
+                    $key = $formField->object_key . '_no_html';
+                    $fields[$key] = strip_tags($entryField->value);
+                }
             }
 
             array_push($data['sections'][$formSection->object_key], $fields);
@@ -431,7 +462,7 @@ class FormEntry extends Model
         $formEntry->update();
 
         return $data;
-    }    
+    }
 
     public static function submitFormEntry(
         Request $request,
@@ -592,11 +623,9 @@ class FormEntry extends Model
             );
         }
 
-        // Update cache.
-        $formEntry->cache = $formEntry->data;
-        $formEntry->update();
+        $formEntry->refreshCache();
 
-        event(new FormEntryUpdate($formEntry));
+        event(new FormEntryStatusUpdated($formEntry));
         
         return $formEntry;
     }
@@ -722,7 +751,7 @@ class FormEntry extends Model
         if ($formEntry->is_edit) {
             foreach($oldFormEntry->listings as $listing) {
                 event(new ListingDeleted(
-                    $listing->entrySection->formSection->form->directory,
+                    $listing->targetDirectory,
                     $listing->formSection,
                     $oldFormEntry,
                     $listing->wp_post_id,
@@ -730,17 +759,6 @@ class FormEntry extends Model
                 ));
             }
             $oldFormEntry->listings()->delete();
-        }        
-
-        // Set cache flags to false (so that the caches are rebuilt).
-        $formEntry->is_cache_valid = false;
-        if ($formEntry->is_edit) {
-            $oldFormEntry->is_cache_valid = false;
-        }
-
-        // Create events for new listings.
-        foreach($formEntry->listings as $listing) {
-            event(new ListingCreated($formEntry, $listing));
         }
 
         // Set "reviewed_at" timestamp.
@@ -752,41 +770,42 @@ class FormEntry extends Model
         if ($formEntry->is_edit) {
             Token::closeToken($formEntry->tokens()->locked()->first());
         }
+        
+        $formEntry->refreshCache();
+        if ($formEntry->is_edit) {
+            $oldFormEntry->refreshCache();
+        }        
+
+        // Create events for new listings.
+        foreach($formEntry->listings as $listing) {
+            event(new ListingCreated($formEntry, $listing));
+        }
 
         return $formEntry;
     }
 
     public static function rejectFormEntry(Request $request, self $formEntry)
     {
-        // Update status.
         $formEntry->form_entry_status_id = Status::findStatus('Rejected')->id;
-
-        // Set reviewer.
         $formEntry->reviewer_user_id = $request->user()->id;
-
-        // Add message/notes
         $formEntry->message = $request->message;
         $formEntry->notes = $request->notes;        
-
-        // Invalidate cache to rebuild the data.
-        $formEntry->is_cache_valid = false;
-
-        // Set reviewed at timestamp.
         $formEntry->reviewed_at = now();
-
         $formEntry->update();
         
         // Close the edit token.
         if ($formEntry->is_edit) {
             Token::closeToken($formEntry->tokens()->locked()->first());
-        }        
+        }
 
-        event(new FormEntryUpdate($formEntry));        
+        $formEntry->refreshCache();
+
+        event(new FormEntryStatusUpdated($formEntry));
 
         return $formEntry;
     }
 
-    public static function deleteFormEntry(Request $request, self $formEntry)
+    public static function deleteFormEntry(self $formEntry)
     {
         // Not allowed to delete form entries with open or locked edit tokens.
         if ($token = $formEntry->tokens()->unclosed()->first()) {
@@ -797,14 +816,12 @@ class FormEntry extends Model
             abort(500);
         }
 
-
-        // Update status.
         $formEntry->form_entry_status_id = Status::findStatus('Deleted')->id;
         $formEntry->update();
 
         foreach($formEntry->listings as $listing) {
             event(new ListingDeleted(
-                $listing->formSection->form->directory,
+                $listing->targetDirectory,
                 $listing->formSection,
                 $formEntry,
                 $listing->wp_post_id,
@@ -813,13 +830,43 @@ class FormEntry extends Model
         }
         $formEntry->listings()->delete();
 
-        // Invalidate cache to rebuild the data.
-        $formEntry->is_cache_valid = false;
+        $formEntry->refreshCache();
 
         return $formEntry;
     }
 
-    public static function addPrimaryContact(
+    public static function hideFormEntry(self $formEntry)
+    {
+        $formEntry->form_entry_status_id = Status::findStatus('Hidden')->id;
+        $formEntry->update();
+
+        foreach($formEntry->listings as $listing) {
+            $listing->is_in_algolia = false;
+            $listing->update();
+
+            event(new ListingHidden($listing));
+        }
+
+        $formEntry->refreshCache();
+
+        return $formEntry;
+    }
+
+    public static function unhideFormEntry(self $formEntry)
+    {
+        $formEntry->form_entry_status_id = Status::findStatus('Published')->id;
+        $formEntry->update();
+
+        foreach($formEntry->listings as $listing) {
+            event(new ListingUnhidden($formEntry, $listing));
+        }
+
+        $formEntry->refreshCache();
+
+        return $formEntry;
+    }
+
+    private static function addPrimaryContact(
         self $formEntry,
         EntrySection $entrySection
     ) {
@@ -849,7 +896,7 @@ class FormEntry extends Model
         $formEntry->update();
     }
     
-    public static function addEditor(
+    private static function addEditor(
         self $formEntry,
         EntrySection $entrySection
     ) {

@@ -33,7 +33,7 @@ class CreateSearchSectionsTable extends Migration
                   ->references('id')
                   ->on('form_sections')
                   ->onUpdate('cascade')
-                  ->onDelete('restrict');
+                  ->onDelete('cascade');
             $table->unique('form_section_id');
             $table->unique(['form_section_id', 'placement_order']);
         });

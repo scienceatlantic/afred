@@ -50,7 +50,7 @@ class CreateFormFieldsTable extends Migration
                   ->references('id')
                   ->on('form_sections')
                   ->onUpdate('cascade')
-                  ->onDelete('restrict');
+                  ->onDelete('cascade');
             $table->foreign('field_type_id')
                   ->references('id')
                   ->on('field_types')

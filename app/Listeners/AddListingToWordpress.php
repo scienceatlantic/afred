@@ -3,11 +3,12 @@
 namespace App\Listeners;
 
 use App\WordPress;
-use App\Events\ListingDeleted;
+use App\Events\ListingAddedToWordpress;
+use App\Events\ListingCreated;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class DeleteListingFromWordpress implements ShouldQueue
+class AddListingToWordpress implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -22,11 +23,13 @@ class DeleteListingFromWordpress implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param  ListingDeleted  $event
+     * @param  ListingCreated  $event
      * @return void
      */
-    public function handle(ListingDeleted $event)
+    public function handle(ListingCreated $event)
     {
-        WordPress::deleteListing($event->targetDirectory, $event->wpPostId);
+        $listing = Wordpress::addListing($event->listing);
+
+        event(new ListingAddedToWordpress($event->formEntry, $listing));
     }
 }

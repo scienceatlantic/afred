@@ -3,14 +3,12 @@
 namespace App\Listeners;
 
 use App\Algolia;
-use App\Listing;
-use App\WordPress;
-use App\Events\FormEntryUpdate;
-use App\Events\ListingCreated;
+use App\Events\FormEntryStatusUpdated;
+use App\Events\ListingAddedToWordpress;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class AddListingToWordpressAndAlgolia implements ShouldQueue
+class AddListingToAlgolia implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -25,15 +23,12 @@ class AddListingToWordpressAndAlgolia implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param  ListingCreated  $event
+     * @param  ListingAddedToWordpress  $event
      * @return void
      */
-    public function handle(ListingCreated $event)
+    public function handle(ListingAddedToWordpress $event)
     {
-        Algolia::addListing(
-            $event->formEntry,
-            Wordpress::addListing($event->listing)
-        );
+        Algolia::addListing($event->formEntry, $event->listing);
 
         $isLastListing = !$event
             ->formEntry
@@ -45,9 +40,8 @@ class AddListingToWordpressAndAlgolia implements ShouldQueue
         // Invalidate cache if there are no more listings that need to be added
         // to either WordPress or Algolia.
         if ($isLastListing) {
-            $event->formEntry->is_cache_valid = false;
-            $event->formEntry->update();
-            event(new FormEntryUpdate($event->formEntry));
+            $event->formEntry->refreshCache();
+            event(new FormEntryStatusUpdated($event->formEntry));
         }
     }
 }

@@ -14,11 +14,25 @@ class CreateRolesTable extends Migration
     public function up()
     {
         Schema::create('roles', function (Blueprint $table) {
-            // Columns.
             $table->increments('id');
+
+            /**
+             * Name of role.
+             * 
+             * E.g. 'Administrator', 'Editor', etc.
+             */
             $table->string('name');
+
+            /**
+             * Permission level.
+             * 
+             * Higher value = higher permission level.
+             * Useful for scenarios where we have to determine if a user has "at
+             * least" a certain permission level.
+             */
             $table->integer('level')
                   ->unsigned();
+                              
             $table->timestamps();
         });
     }

@@ -27,7 +27,7 @@ Route::resource('directories.forms', 'FormController', [
 Route::post(
     'directories/{directory}/forms/{form}/reports/{report}/generate',
     'FormReportController@generate'
-);
+)->name('directories.forms.reports.generate');
 
 // directories/{id}/forms/{id}/reports
 Route::resource('directories.forms.reports', 'FormReportController', [
@@ -43,17 +43,19 @@ Route::resource('directories.forms.search-sections', 'SearchSectionController', 
 Route::post(
     'directories/{directory}/forms/{form}/entries',
     'FormEntryController@action'
-);
+)->name('directories.forms.entries.store');
 
 // directories/{id}/forms/{id}/entries/{id}
 Route::put(
     'directories/{directory}/forms/{form}/entries/{entry}',
     'FormEntryController@action'
-);
+)->name('directories.forms.entries.update');
+
 Route::delete(
     'directories/{directory}/forms/{form}/entries/{entry}',
     'FormEntryController@action'
-);
+)->name('directories.forms.entries.destroy');
+
 Route::resource('directories.forms.entries', 'FormEntryController', [
     'only' => ['index', 'show']
 ]);
@@ -67,30 +69,30 @@ Route::resource('directories.forms.metrics', 'FormMetricController', [
 Route::get(
     'directories/{directory}/forms/{form}/tokens/search',
     'FormEntryTokenController@search'
-);
-
-// directories/{id}/forms/{id}/entries/{id}/tokens
-Route::get(
-    'directories/{directory}/forms/{form}/entries/{entry}/tokens',
-        'FormEntryTokenController@index'
-);
+)->name('directories.forms.tokens.search');
 
 // directories/{id}/forms/{id}/entries/{id}/tokens/open
 Route::post(
     'directories/{directory}/forms/{form}/entries/{entry}/tokens/open',
     'FormEntryTokenController@open'
-);
+)->name('directories.forms.entries.tokens.open');
 
 // directories/{id}/forms/{id}/entries/{id}/tokens/{id}/close
 Route::put(
     'directories/{directory}/forms/{form}/entries/{entry}/tokens/{token}/close',
     'FormEntryTokenController@close'
-);
+)->name('directories.forms.entries.tokens.close');
+
+// directories/{id}/forms/{id}/entries/{id}/tokens
+Route::resource('directories.forms.entries.tokens', 'FormEntryTokenController', [
+    'only' => ['index']
+]);
 
 // directories/{id}/forms/{id}/entries/{id}/listings/{id}
-Route::get(
-    'directories/{directory}/forms/{form}/entries/{entry}/listings/{listing}',
-    'ListingController@show'
+Route::resource(
+    'directories.forms.entries.listings',
+    'ListingController',
+    ['only' => ['show']]
 );
 
 // form-entry-statuses
@@ -103,6 +105,7 @@ Route::post(
     'users/is-username-unique',
     'UserController@isUsernameUnique'
 );
+
 Route::post(
     'users/is-email-unique',
     'UserController@isEmailUnique'
@@ -117,14 +120,16 @@ Route::resource('users', 'UserController', [
 Route::post(
     'login',
     'LoginController@login'
-);
+)->name('login');
+
 // ping
 Route::get(
     'ping',
     'LoginController@ping'
-);
+)->name('ping');
+
 // logout
 Route::post(
     'logout',
     'LoginController@logout'
-);
+)->name('logout');

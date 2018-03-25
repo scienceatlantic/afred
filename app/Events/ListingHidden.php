@@ -2,7 +2,6 @@
 
 namespace App\Events;
 
-use App\FormEntry;
 use App\Listing;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
@@ -12,11 +11,9 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class ListingCreated
+class ListingHidden
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
-    public $formEntry;
 
     public $listing;
 
@@ -25,9 +22,8 @@ class ListingCreated
      *
      * @return void
      */
-    public function __construct(FormEntry $formEntry, Listing $listing)
+    public function __construct(Listing $listing)
     {
-        $this->formEntry = $formEntry;
         $this->listing = $listing;
     }
 

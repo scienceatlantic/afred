@@ -30,13 +30,6 @@ class DeleteListingFromAlgolia implements ShouldQueue
         Algolia::deleteListing(
             $event->targetFormSection,
             $event->publishedEntrySectionId
-        );
-
-        // Invalidate cache if there are no more listings attached to the form
-        // entry.
-        if (!$event->formEntry->listings()->count()) {
-            $event->formEntry->is_cache_valid = false;
-            $event->formEntry->update();
-        }        
+        ); 
     }
 }

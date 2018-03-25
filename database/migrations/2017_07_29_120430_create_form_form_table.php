@@ -14,26 +14,29 @@ class CreateFormFormTable extends Migration
     public function up()
     {
         Schema::create('form_form', function (Blueprint $table) {
-            // Columns
-            $table->increments('id');
+            /**
+             * Form this relationship belongs to.
+             */
             $table->integer('form_id')
                   ->unsigned();
-            $table->integer('compatible_form_id')
-                  ->unsigned();
-            $table->timestamps();
-
-            // Foreign keys & indices
             $table->foreign('form_id')
                   ->references('id')
                   ->on('forms')
                   ->onUpdate('cascade')
-                  ->onDelete('restrict');
+                  ->onDelete('cascade');
+
+            /**
+             * Form that we're saying the form above is compatible with.
+             */
+            $table->integer('compatible_form_id')
+                  ->unsigned();
             $table->foreign('compatible_form_id')
                   ->references('id')
                   ->on('forms')
                   ->onUpdate('cascade')
-                  ->onDelete('restrict');
-            $table->unique(['form_id', 'compatible_form_id']);
+                  ->onDelete('cascade');
+
+            $table->timestamps();
         });
     }
 

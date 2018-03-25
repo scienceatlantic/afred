@@ -124,8 +124,10 @@ class DummyAfredFormDataSeeder extends Seeder
                 ]);
             }
 
-            //TODO:
-            $url = "//localhost/afred/public/directories/{$form->directory->id}/forms/{$form->id}/entries";
+            $url = route('directories.forms.entries', [
+                'directory' => 1,
+                'form' => 1
+            ]);
 
             $response = (new GuzzleHttp())->post($url, [
                 'query' => [

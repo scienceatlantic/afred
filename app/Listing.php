@@ -22,6 +22,9 @@ class Listing extends Model
         return $this->belongsTo('App\EntrySection');
     }
 
+    /**
+     * Target form section
+     */
     public function formSection()
     {
         return $this->belongsTo('App\FormSection');
@@ -76,19 +79,12 @@ class Listing extends Model
 
     public function getRootDirectoryAttribute()
     {
-        // Get a copy of the object this way to avoid eager loading the
-        // relationships on to the actual instance.
-        $listing = self::with('entrySection.formEntry.form.directory')
-            ->find($this->id);
-        return $listing->entrySection->formEntry->form->directory;        
+        return $this->fresh()->entrySection->formEntry->form->directory;        
     }
 
     public function getTargetDirectoryAttribute()
     {
-        // Get a copy of the object this way to avoid eager loading the
-        // relationships on to the actual instance.
-        $listing = self::with('formSection.form.directory')->find($this->id);
-        return $listing->formSection->form->directory;
+        return $this->fresh()->formSection->form->directory;
     }
 
     public function getWpPostUrlAttribute()
@@ -96,12 +92,7 @@ class Listing extends Model
         if (!$this->wp_post_id) {
             return null;
         }
-        
-        // Get a copy of the object this way to avoid eager loading the
-        // relationships on to the actual instance.
-        $listing = self::with('formSection.form.directory')->find($this->id);
-        $targetDir = $listing->formSection->form->directory;
 
-        return $targetDir->wp_base_url . '?p=' . $this->wp_post_id;
+        return $this->target_directory->wp_base_url . '?p=' . $this->wp_post_id;
     }
 }

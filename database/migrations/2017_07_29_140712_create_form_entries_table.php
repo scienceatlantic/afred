@@ -41,8 +41,6 @@ class CreateFormEntriesTable extends Migration
                   ->nullable();
             $table->boolean('is_edit')
                   ->default(false);
-            $table->boolean('is_cache_valid')
-                  ->default(false);
             $table->timestamp('reviewed_at')
                   ->nullable();
             $table->timestamps();

@@ -123,12 +123,17 @@ class FormEntryController extends Controller
                         break;
                     case 'publish':
                     case 'reject':
-                    case 'delete':
-                    case 'hide':
-                    case 'show':
                         $method = $action . 'FormEntry';
                         $formEntry = FormEntry::$method(
                             $request,
+                            $form->formEntries()->findOrFail($formEntryId)
+                        );
+                        break;                
+                    case 'delete':
+                    case 'hide':
+                    case 'unhide':
+                        $method = $action . 'FormEntry';
+                        $formEntry = FormEntry::$method(
                             $form->formEntries()->findOrFail($formEntryId)
                         );
                         break;
