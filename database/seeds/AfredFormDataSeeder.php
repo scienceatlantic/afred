@@ -1,24 +1,27 @@
 <?php
 
 use App\Directory;
-use App\Resource;
 use App\Form;
-use App\FormEntry;
 use App\FormField;
-use App\FieldType;
 use App\FormSection;
 use App\StringValue;
 use App\SearchSection;
 use App\SearchFacet;
-use App\SearchFacetOperator;
-use App\NumberValue;
 use App\LabelledValue;
 use App\LabelledValueCategory;
 use App\LanguageCode;
-use Illuminate\Database\Seeder;
 
-class AfredFormDataSeeder extends Seeder
+class AfredFormDataSeeder extends BaseFormSeeder
 {
+    public static $facilitiesSearchIndex = 'dev_afred_facilities_facility';
+    public static $equipmentSearchIndex = 'dev_afred_facilities_equipment';
+    public static $formWpPostId = 13;
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     /**
      * Run the database seeds.
      *
@@ -35,7 +38,7 @@ class AfredFormDataSeeder extends Seeder
         $afredForm = new Form();
         $afredForm->directory_id = $afredDirectory->id;
         $afredForm->language_code_id = $languageCode->id;
-        $afredForm->wp_post_id = 13;
+        $afredForm->wp_post_id = self::$formWpPostId;
         $afredForm->name = 'Facilities';
         $afredForm->resource_folder = 'facilities';
         $afredForm->pagination_section_object_key = 'facilities';
@@ -100,15 +103,10 @@ class AfredFormDataSeeder extends Seeder
             ->values()
             ->pluck('labelled_values.id');
 
-        $fieldStringType = FieldType::findType('string');
-        $fieldRichTextType = FieldType::findType('richtext');
-        $fieldDropdownType = FieldType::findType('dropdown');
-        $fieldCheckboxType = FieldType::findType('checkbox');     
-
         $formSection = new FormSection();
         $formSection->form_id = $formId;
         $formSection->slug_prefix = 'facility';
-        $formSection->search_index = 'dev_afred_facilities_facility';
+        $formSection->search_index = self::$facilitiesSearchIndex;
         $formSection->label_singular = 'Facility';
         $formSection->label_plural = 'Facilities';
         $formSection->object_key = 'facilities';
@@ -122,10 +120,11 @@ class AfredFormDataSeeder extends Seeder
         // Facility/Lab
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $fieldStringType->id;
+        $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'Facility/Lab';
         $formField->object_key = 'name';
-        $formField->help_text = 'This is the name of the facility/lab hosting the equipment. You should create a separate record for each facility/lab you have.';
+        $formField->help_text = 'This is the name of the facility/lab hosting the equipment. You should create a '
+                              . 'separate record for each facility/lab you have.';
         $formField->placement_order = 1;
         $formField->is_searchable = 1;
         $formField->is_required = 1;
@@ -135,7 +134,7 @@ class AfredFormDataSeeder extends Seeder
         // City
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $fieldStringType->id;
+        $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'City';
         $formField->object_key = 'city';
         $formField->placement_order = 2;
@@ -147,7 +146,7 @@ class AfredFormDataSeeder extends Seeder
         // Organization
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $fieldDropdownType->id;
+        $formField->field_type_id = $this->fieldDropdownType->id;
         $formField->label = 'Organization';
         $formField->object_key = 'organization';
         $formField->placement_order = 3;
@@ -162,7 +161,7 @@ class AfredFormDataSeeder extends Seeder
         // Province
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $fieldDropdownType->id;
+        $formField->field_type_id = $this->fieldDropdownType->id;
         $formField->label = 'Province';
         $formField->object_key = 'province';
         $formField->placement_order = 4;
@@ -176,12 +175,12 @@ class AfredFormDataSeeder extends Seeder
         // Facilty website
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $fieldStringType->id;
+        $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'Website';
         $formField->object_key = 'website';
         $formField->placeholder = 'http://example.com';
         $formField->placement_order = 5;
-        $formField->input_pattern = "https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)";
+        $formField->input_pattern = self::$websiteInputPattern;
         $formField->is_searchable = 1;
         $formField->is_required = 0;
         $formField->is_active = 1;
@@ -190,7 +189,7 @@ class AfredFormDataSeeder extends Seeder
         // Facility description
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $fieldRichTextType->id;
+        $formField->field_type_id = $this->fieldRichtextType->id;
         $formField->label = 'Description';
         $formField->object_key = 'description';
         $formField->placeholder = 'What does the facility do?';
@@ -204,7 +203,7 @@ class AfredFormDataSeeder extends Seeder
         // Research disciplines
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $fieldCheckboxType->id;
+        $formField->field_type_id = $this->fieldCheckboxType->id;
         $formField->label = 'Research disciplines';
         $formField->object_key = 'disciplines';
         $formField->placement_order = 7;
@@ -218,7 +217,7 @@ class AfredFormDataSeeder extends Seeder
         // Sectors of application
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $fieldCheckboxType->id;
+        $formField->field_type_id = $this->fieldCheckboxType->id;
         $formField->label = 'Sectors of application';
         $formField->object_key = 'sectors';
         $formField->placement_order = 8;
@@ -232,10 +231,6 @@ class AfredFormDataSeeder extends Seeder
 
     public function createPrimaryContactSection($formId)
     {
-        $fieldStringType = FieldType::findType('string');
-        $fieldRichTextType = FieldType::findType('richtext');
-        $fieldDropdownType = FieldType::findType('dropdown');
-
         $formSection = new FormSection();
         $formSection->form_id = $formId;
         $formSection->slug_prefix = 'primary-contact';
@@ -253,7 +248,7 @@ class AfredFormDataSeeder extends Seeder
         // First name
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $fieldStringType->id;
+        $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'First name';
         $formField->object_key = 'first_name';
         $formField->placement_order = 1;
@@ -265,7 +260,7 @@ class AfredFormDataSeeder extends Seeder
         // Last name
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $fieldStringType->id;
+        $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'Last name';
         $formField->object_key = 'last_name';
         $formField->placement_order = 2;
@@ -277,11 +272,11 @@ class AfredFormDataSeeder extends Seeder
         // Email
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $fieldStringType->id;
+        $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'Email';
         $formField->object_key = 'email';
         $formField->placeholder = 'person@example.com';
-        $formField->input_pattern="^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$";
+        $formField->input_pattern = self::$emailInputPattern;
         $formField->placement_order = 3;
         $formField->is_searchable = 1;
         $formField->is_required = 1;
@@ -291,11 +286,11 @@ class AfredFormDataSeeder extends Seeder
         // Telephone
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $fieldStringType->id;
+        $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'Telephone';
         $formField->object_key = 'telephone';
         $formField->placeholder = '9999999999';
-        $formField->input_pattern = '^\(?([0-9]{3})\)?[-.●]?([0-9]{3})[-.●]?([0-9]{4})$';
+        $formField->input_pattern = self::$telephoneInputPattern;
         $formField->placement_order = 4;
         $formField->is_searchable = 1;
         $formField->is_required = 1;
@@ -305,7 +300,7 @@ class AfredFormDataSeeder extends Seeder
         // Position
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $fieldStringType->id;
+        $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'Position';
         $formField->object_key = 'position';
         $formField->placement_order = 5;
@@ -317,12 +312,12 @@ class AfredFormDataSeeder extends Seeder
         // Website
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $fieldStringType->id;
+        $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'Website';
         $formField->object_key = 'website';
         $formField->placeholder = 'http://example.com';
         $formField->placement_order = 6;
-        $formField->input_pattern = "https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)";
+        $formField->input_pattern = self::$websiteInputPattern;
         $formField->is_searchable = 1;
         $formField->is_required = 0;
         $formField->is_active = 1;
@@ -331,7 +326,7 @@ class AfredFormDataSeeder extends Seeder
         // Extension
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $fieldStringType->id;
+        $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'Extension';
         $formField->object_key = 'extension';
         $formField->placement_order = 7;
@@ -343,10 +338,6 @@ class AfredFormDataSeeder extends Seeder
 
     public function createContactsSection($formId)
     {
-        $fieldStringType = FieldType::findType('string');
-        $fieldRichTextType = FieldType::findType('richtext');
-        $fieldDropdownType = FieldType::findType('dropdown');
-
         $formSection = new FormSection();
         $formSection->form_id = $formId;
         $formSection->slug_prefix = 'contact';
@@ -365,7 +356,7 @@ class AfredFormDataSeeder extends Seeder
         // First name
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $fieldStringType->id;
+        $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'First name';
         $formField->object_key = 'first_name';
         $formField->placement_order = 1;
@@ -377,7 +368,7 @@ class AfredFormDataSeeder extends Seeder
         // Last name
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $fieldStringType->id;
+        $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'Last name';
         $formField->object_key = 'last_name';
         $formField->placement_order = 2;
@@ -389,12 +380,12 @@ class AfredFormDataSeeder extends Seeder
         // Email
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $fieldStringType->id;
+        $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'Email';
         $formField->object_key = 'email';
         $formField->placeholder = 'person@example.com';
         $formField->placement_order = 3;
-        $formField->input_pattern="^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$";
+        $formField->input_pattern = self::$emailInputPattern;
         $formField->is_searchable = 1;
         $formField->is_required = 1;
         $formField->is_active = 1;
@@ -403,11 +394,11 @@ class AfredFormDataSeeder extends Seeder
         // Telephone
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $fieldStringType->id;
+        $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'Telephone';
         $formField->object_key = 'telephone';
         $formField->placeholder = '9999999999';
-        $formField->input_pattern = '^\(?([0-9]{3})\)?[-.●]?([0-9]{3})[-.●]?([0-9]{4})$';
+        $formField->input_pattern = self::$telephoneInputPattern;
         $formField->placement_order = 4;
         $formField->is_searchable = 1;
         $formField->is_required = 0;
@@ -417,7 +408,7 @@ class AfredFormDataSeeder extends Seeder
         // Position
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $fieldStringType->id;
+        $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'Position';
         $formField->object_key = 'position';
         $formField->placement_order = 5;
@@ -429,12 +420,12 @@ class AfredFormDataSeeder extends Seeder
         // Website
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $fieldStringType->id;
+        $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'Website';
         $formField->object_key = 'website';
         $formField->placeholder = 'http://example.com';
         $formField->placement_order = 6;
-        $formField->input_pattern = "https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)";
+        $formField->input_pattern = self::$websiteInputPattern;
         $formField->is_searchable = 1;
         $formField->is_required = 0;
         $formField->is_active = 1;
@@ -443,7 +434,7 @@ class AfredFormDataSeeder extends Seeder
         // Extension
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $fieldStringType->id;
+        $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'Extension';
         $formField->object_key = 'extension';
         $formField->placement_order = 7;
@@ -455,13 +446,6 @@ class AfredFormDataSeeder extends Seeder
 
     public function createEquipmentSection($formId)
     {
-        $fieldStringType = FieldType::findType('string');
-        $fieldPlainTextType = FieldType::findType('plaintext');
-        $fieldRichTextType = FieldType::findType('richtext');
-        $fieldNumberType = FieldType::findType('number');
-        $fieldRadioType = FieldType::findType('radio');
-        $fieldDropdownType = FieldType::findType('dropdown');
-
         $excessCapacityIds = LabelledValueCategory
             ::findCategory('Excess capacity')
             ->values()
@@ -475,7 +459,7 @@ class AfredFormDataSeeder extends Seeder
         $formSection = new FormSection();
         $formSection->form_id = $formId;
         $formSection->slug_prefix = 'equipment';
-        $formSection->search_index = 'dev_afred_facilities_equipment';        
+        $formSection->search_index = self::$equipmentSearchIndex;
         $formSection->label_singular = 'Equipment';
         $formSection->label_plural = 'Equipment';
         $formSection->object_key = 'equipment';
@@ -491,7 +475,7 @@ class AfredFormDataSeeder extends Seeder
         // Type
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $fieldStringType->id;
+        $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'Type';
         $formField->object_key = 'type';
         $formField->placement_order = 1;
@@ -504,7 +488,7 @@ class AfredFormDataSeeder extends Seeder
         // Model
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $fieldStringType->id;
+        $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'Model';
         $formField->object_key = 'model';
         $formField->placement_order = 2;
@@ -517,7 +501,7 @@ class AfredFormDataSeeder extends Seeder
         // Manufacturer
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $fieldStringType->id;
+        $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'Manufacturer';
         $formField->object_key = 'manufacturer';
         $formField->placement_order = 3;
@@ -530,7 +514,7 @@ class AfredFormDataSeeder extends Seeder
         // Purpose
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $fieldRichTextType->id;
+        $formField->field_type_id = $this->fieldRichtextType->id;
         $formField->label = 'Equipment purpose';
         $formField->object_key = 'purpose';
         $formField->placement_order = 4;
@@ -543,7 +527,7 @@ class AfredFormDataSeeder extends Seeder
         // Specifications
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $fieldRichTextType->id;
+        $formField->field_type_id = $this->fieldRichtextType->id;
         $formField->label = 'Equipment specifications';
         $formField->object_key = 'specifications';
         $formField->placement_order = 5;
@@ -556,7 +540,7 @@ class AfredFormDataSeeder extends Seeder
         // Year purchased
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $fieldNumberType->id;
+        $formField->field_type_id = $this->fieldNumberType->id;
         $formField->label = 'Year purchased';
         $formField->object_key = 'year_purchased';
         $formField->placement_order = 6;
@@ -569,7 +553,7 @@ class AfredFormDataSeeder extends Seeder
         // Year manufactured
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $fieldNumberType->id;
+        $formField->field_type_id = $this->fieldNumberType->id;
         $formField->label = 'Year manufactured';
         $formField->object_key = 'year_manufactured';
         $formField->placement_order = 7;
@@ -583,7 +567,7 @@ class AfredFormDataSeeder extends Seeder
         // Excess capacity
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $fieldRadioType->id;
+        $formField->field_type_id = $this->fieldRadioType->id;
         $formField->label = 'Excess capacity';
         $formField->object_key = 'excess_capacity';
         $formField->placement_order = 8;
@@ -599,7 +583,7 @@ class AfredFormDataSeeder extends Seeder
         // Search visibility
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $fieldRadioType->id;
+        $formField->field_type_id = $this->fieldRadioType->id;
         $formField->label = 'Search visibility';
         $formField->object_key = 'is_public';
         $formField->placement_order = 9;
@@ -615,7 +599,7 @@ class AfredFormDataSeeder extends Seeder
         // Keywords
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $fieldPlainTextType->id; // TODO
+        $formField->field_type_id = $this->fieldPlaintextType->id; // TODO
         $formField->label = 'Keywords';
         $formField->object_key = 'keywords';
         $formField->placement_order = 10;
@@ -631,9 +615,6 @@ class AfredFormDataSeeder extends Seeder
 
     public function createFacilitySearchSection($formId)
     {
-        $andOperator = SearchFacetOperator::findOperator('AND');
-        $orOperator = SearchFacetOperator::findOperator('OR');
-
         $formSection = Form
             ::find($formId)
             ->formSections()
@@ -666,7 +647,7 @@ class AfredFormDataSeeder extends Seeder
 
         $searchFacet = new SearchFacet();
         $searchFacet->search_section_id = $searchSection->id;
-        $searchFacet->search_facet_operator_id = $orOperator->id;
+        $searchFacet->search_facet_operator_id = $this->orOperator->id;
         $searchFacet->label = 'Provinces';
         $searchFacet->algolia_object_key = 'sections.facilities.province.value';
         $searchFacet->placement_order = 1;
@@ -674,7 +655,7 @@ class AfredFormDataSeeder extends Seeder
 
         $searchFacet = new SearchFacet();
         $searchFacet->search_section_id = $searchSection->id;
-        $searchFacet->search_facet_operator_id = $orOperator->id;
+        $searchFacet->search_facet_operator_id = $this->orOperator->id;
         $searchFacet->label = 'Organizations';
         $searchFacet->algolia_object_key = 'sections.facilities.organization.value';
         $searchFacet->placement_order = 2;
@@ -682,7 +663,7 @@ class AfredFormDataSeeder extends Seeder
 
         $searchFacet = new SearchFacet();
         $searchFacet->search_section_id = $searchSection->id;
-        $searchFacet->search_facet_operator_id = $andOperator->id;
+        $searchFacet->search_facet_operator_id = $this->andOperator->id;
         $searchFacet->label = 'Disciplines';
         $searchFacet->algolia_object_key = 'sections.facilities.disciplines.value';
         $searchFacet->placement_order = 3;
@@ -690,7 +671,7 @@ class AfredFormDataSeeder extends Seeder
         
         $searchFacet = new SearchFacet();
         $searchFacet->search_section_id = $searchSection->id;
-        $searchFacet->search_facet_operator_id = $andOperator->id;
+        $searchFacet->search_facet_operator_id = $this->andOperator->id;
         $searchFacet->label = 'Sections';
         $searchFacet->algolia_object_key = 'sections.facilities.sectors.value';
         $searchFacet->placement_order = 4;
@@ -698,10 +679,7 @@ class AfredFormDataSeeder extends Seeder
     }
 
     public function createEquipmentSearchSection($formId)
-    {
-        $andOperator = SearchFacetOperator::findOperator('AND');
-        $orOperator = SearchFacetOperator::findOperator('OR');
-                
+    {           
         $formSection = Form
             ::find($formId)
             ->formSections()
@@ -733,7 +711,7 @@ class AfredFormDataSeeder extends Seeder
 
         $searchFacet = new SearchFacet();
         $searchFacet->search_section_id = $searchSection->id;
-        $searchFacet->search_facet_operator_id = $orOperator->id;
+        $searchFacet->search_facet_operator_id = $this->orOperator->id;
         $searchFacet->label = 'Provinces';
         $searchFacet->algolia_object_key = 'sections.facilities.province.value';
         $searchFacet->placement_order = 1;
@@ -741,7 +719,7 @@ class AfredFormDataSeeder extends Seeder
 
         $searchFacet = new SearchFacet();
         $searchFacet->search_section_id = $searchSection->id;
-        $searchFacet->search_facet_operator_id = $orOperator->id;
+        $searchFacet->search_facet_operator_id = $this->orOperator->id;
         $searchFacet->label = 'Organizations';
         $searchFacet->algolia_object_key = 'sections.facilities.organization.value';
         $searchFacet->placement_order = 2;
@@ -749,7 +727,7 @@ class AfredFormDataSeeder extends Seeder
 
         $searchFacet = new SearchFacet();
         $searchFacet->search_section_id = $searchSection->id;
-        $searchFacet->search_facet_operator_id = $andOperator->id;
+        $searchFacet->search_facet_operator_id = $this->andOperator->id;
         $searchFacet->label = 'Disciplines';
         $searchFacet->algolia_object_key = 'sections.facilities.disciplines.value';
         $searchFacet->placement_order = 3;
@@ -757,7 +735,7 @@ class AfredFormDataSeeder extends Seeder
         
         $searchFacet = new SearchFacet();
         $searchFacet->search_section_id = $searchSection->id;
-        $searchFacet->search_facet_operator_id = $andOperator->id;
+        $searchFacet->search_facet_operator_id = $this->andOperator->id;
         $searchFacet->label = 'Sections';
         $searchFacet->algolia_object_key = 'sections.facilities.sectors.value';
         $searchFacet->placement_order = 4;
