@@ -16,6 +16,7 @@ class FormEntryController extends Controller
     public static $relationships = [
         'status',
         'form.directory',
+        'formsAttachedTo.directory',
         'author',
         'reviewer',
         'primaryContact'
