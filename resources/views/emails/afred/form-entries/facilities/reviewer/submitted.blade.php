@@ -6,6 +6,5 @@ A new facility,
 has been submitted into AFRED and is pending review.
 
 Regards,<br>
-AFRED Bot<br>
-{{ config('mail.from.address') }}
+AFRED Bot
 @endcomponent
