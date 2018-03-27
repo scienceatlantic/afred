@@ -37,13 +37,13 @@ class EmailFormEntryStatusUpdate implements ShouldQueue
 
         // TODO: ILO!
         if (!$isReviewerAlsoAuthor) {
-            Mail::to('prasad@scienceatlantic.ca')
+            Mail::to('afred.dev@scienceatlantic.ca')
                 ->send(new FormEntryStatusUpdateMail($event->formEntry));
         }
 
         // BUT DON'T EMAIL OTHER ADMINISTRATORS!!!! (i.e. administrators of other installations!)
         foreach($reviewers as $reviewer) {
-            Mail::to('prasad@scienceatlantic.ca')//$reviewer)
+            Mail::to('afred.dev@scienceatlantic.ca')//$reviewer)
                 ->send(new FormEntryStatusUpdateMail($event->formEntry, $reviewer));
         }
     }

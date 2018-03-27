@@ -30,7 +30,7 @@ class EmailFormEntryToken implements ShouldQueue
     {
         // TODO!
         //$event->token->user->email;
-        Mail::to('prasad@scienceatlantic.ca')
+        Mail::to('afred.dev@scienceatlantic.ca')
             ->send(new FormEntryTokenMail($event->token, $event->formEntry));
     }
 }
