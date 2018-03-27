@@ -61,13 +61,13 @@ class Listing extends Model
                 ->resource_folder;
         }
 
-        //wp.<dir>.r.<form>.<rootFormSection>(-targetDirectory?)
+        //wp.<dir>.form-entries.<form>.<rootFormSection>(-targetDirectory?)
         return 'wp.'
             . $rootFormSection
                 ->form
                 ->directory
                 ->resource_folder
-            . '.r.'
+            . '.form-entries.'
             . $rootFormSection
                 ->form
                 ->resource_folder
