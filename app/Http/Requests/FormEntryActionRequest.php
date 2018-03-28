@@ -57,7 +57,7 @@ class FormEntryActionRequest extends FormRequest
                 }
 
                 return $user->can(
-                    $action,
+                    $action === 'delete' ? 'destroy' : $action,
                     FormEntry::findOrFail($this->route('entry'))
                 );                
         }
