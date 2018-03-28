@@ -27,4 +27,19 @@ class Directory extends Model
     {
         return self::where('name', $name)->first();
     }
+
+    public function getTargetWpAdminBaseUrl()
+    {
+        if (array_key_exists('targetDirectoryId', $_REQUEST)) {
+            $targetDirectory = self::find($_REQUEST['targetDirectoryId']);
+
+            if ($targetDirectory) {
+                return $targetDirectory->wp_admin_base_url;
+            }
+
+            abort(400);
+        }
+
+        return $this->wp_admin_base_url;
+    }    
 }

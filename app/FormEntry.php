@@ -2,15 +2,15 @@
 
 namespace App;
 
+use App\EntrySection;
+use App\Form;
+use App\FormEntryStatus as Status;
+use App\FormEntryToken as Token;
 use App\Events\FormEntryStatusUpdated;
 use App\Events\ListingCreated;
 use App\Events\ListingDeleted;
 use App\Events\ListingHidden;
 use App\Events\ListingUnhidden;
-use App\EntrySection;
-use App\Form;
-use App\FormEntryStatus as Status;
-use App\FormEntryToken as Token;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Log;
@@ -331,7 +331,7 @@ class FormEntry extends Model
 
     public function getWpAdminUrlAttribute()
     {
-        return $this->form->directory->wp_admin_base_url
+        return $this->form->directory->getTargetWpAdminBaseUrl()
             . '/admin.php?page=afredwp-resource&afredwp-directory-id='
             . $this->form->directory->id
             . '&afredwp-form-id='
@@ -343,7 +343,7 @@ class FormEntry extends Model
     public function getWpAdminCompareUrlAttribute()
     {
         if ($this->is_edit && $this->status->name === 'Submitted') {
-            return $this->form->directory->wp_admin_base_url
+            return $this->form->directory->getTargetWpAdminBaseUrl()
                 . '/admin.php?page=afredwp-resource-compare&afredwp-directory-id='
                 . $this->form->directory->id
                 . '&afredwp-form-id='
@@ -356,7 +356,7 @@ class FormEntry extends Model
 
     public function getWpAdminHistoryUrlAttribute()
     {
-        return $this->form->directory->wp_admin_base_url
+        return $this->form->directory->getTargetWpAdminBaseUrl()
             . '/admin.php?page=afredwp-resource-history&afredwp-directory-id='
             . $this->form->directory->id
             . '&afredwp-form-id='
@@ -369,7 +369,7 @@ class FormEntry extends Model
     
     public function getWpAdminTokensUrlAttribute()
     {
-        return $this->form->directory->wp_admin_base_url
+        return $this->form->directory->getTargetWpAdminBaseUrl()
             . '/admin.php?page=afredwp-resource-tokens&afredwp-directory-id='
             . $this->form->directory->id
             . '&afredwp-form-id='
@@ -923,5 +923,5 @@ class FormEntry extends Model
         }
 
         $formEntry->editors()->attach($user->id);
-    }     
+    }
 }
