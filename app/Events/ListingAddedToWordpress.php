@@ -16,6 +16,8 @@ class ListingAddedToWordpress
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $formEntryId;
+
     public $formEntry;
 
     public $listing;
@@ -27,6 +29,7 @@ class ListingAddedToWordpress
      */
     public function __construct(FormEntry $formEntry, Listing $listing)
     {
+        $this->formEntryId = $formEntry->id;
         $this->formEntry = $formEntry;
         $this->listing = $listing;
     }

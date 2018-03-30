@@ -17,6 +17,8 @@ class ListingDeleted
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $formEntryId;
+
     public $targetDirectory;
 
     public $targetFormSection;
@@ -39,6 +41,7 @@ class ListingDeleted
         $wpPostId,
         $publishedEntrySectionId
     ) {
+        $this->formEntryId = $formEntry->id;
         $this->targetDirectory = $targetDirectory;
         $this->targetFormSection = $targetFormSection;
         $this->formEntry = $formEntry;

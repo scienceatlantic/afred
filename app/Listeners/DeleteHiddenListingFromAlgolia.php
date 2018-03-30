@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Algolia;
+use App\Events\ListingEventCompleted;
 use App\Events\ListingHidden;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -31,5 +32,7 @@ class DeleteHiddenListingFromAlgolia implements ShouldQueue
             $event->listing->formSection,
             $event->listing->published_entry_section_id
         );
+
+        event(new ListingEventCompleted($event->formEntry, 'ListingHidden'));
     }
 }

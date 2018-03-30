@@ -16,6 +16,12 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\FormEntryStatusUpdated' => [
             'App\Listeners\EmailFormEntryStatusUpdate'
         ],
+        'App\Events\FormEntryTokenCreated' => [
+            'App\Listeners\EmailFormEntryToken'
+        ],
+        'App\Events\FormReportRequested' => [
+            'App\Listeners\EmailFormReport'
+        ],        
         'App\Events\ListingCreated' => [
             'App\Listeners\AddListingToWordpress',
         ],
@@ -34,11 +40,8 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\UnhideListingInWordpress',
             'App\Listeners\AddUnhiddenListingToAlgolia'
         ],
-        'App\Events\FormEntryTokenCreated' => [
-            'App\Listeners\EmailFormEntryToken'
-        ],
-        'App\Events\FormReportRequested' => [
-            'App\Listeners\EmailFormReport'
+        'App\Events\ListingEventCompleted' => [
+            'App\Listeners\RefreshFormEntryCache'
         ],
     ];
 

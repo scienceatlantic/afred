@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\WordPress;
+use App\Events\ListingEventCompleted;
 use App\Events\ListingHidden;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -31,5 +32,7 @@ class HideListingInWordpress implements ShouldQueue
             $event->listing->targetDirectory,
             $event->listing->wp_post_id
         );
+
+        event(new ListingEventCompleted($event->formEntry, 'ListingHidden'));
     }
 }

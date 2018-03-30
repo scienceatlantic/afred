@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Listing;
+use App\FormEntry;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -11,26 +11,23 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class ListingHidden
+class ListingEventCompleted
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $formEntryId;
-
     public $formEntry;
 
-    public $listing;
+    public $eventName;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Listing $listing)
+    public function __construct(FormEntry $formEntry, $eventName)
     {
-        $this->formEntryId = $listing->entrySection->formEntry->id;
-        $this->formEntry = $listing->entrySection->formEntry;
-        $this->listing = $listing;
+        $this->formEntry = $formEntry;
+        $this->eventName = $eventName;
     }
 
     /**

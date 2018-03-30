@@ -6,6 +6,7 @@ use App\EntrySection;
 use App\Form;
 use App\FormEntryStatus as Status;
 use App\FormEntryToken as Token;
+use App\Job;
 use App\Events\FormEntryStatusUpdated;
 use App\Events\ListingCreated;
 use App\Events\ListingDeleted;
@@ -30,10 +31,17 @@ class FormEntry extends Model
         'is_revision',
         'is_rejected',
         'is_deleted',
+        'can_publish',
+        'can_reject',
+        'can_hide',
+        'can_unhide',
+        'can_edit',
+        'can_delete',
+        'job_count',
+        'has_pending_jobs',
         'has_open_token',
         'has_locked_token',
         'has_unclosed_token',
-        'has_pending_operations',
         'wp_admin_url',
         'wp_admin_compare_url',
         'wp_admin_history_url',
@@ -261,7 +269,13 @@ class FormEntry extends Model
         $this->cache = null;
         $this->update();
         $this->data;
-    }    
+    }
+
+    public function getJobCountAttribute()
+    {
+        $value = "%\\\\\\\"formEntryId\\\\\\\";i:{$this->id};%";
+        return Job::where('payload', 'like', $value)->count();
+    }
 
     public function getIsSubmittedAttribute()
     {
@@ -299,20 +313,46 @@ class FormEntry extends Model
         return $this->form_entry_status_id === $statusId;
     }
 
-    public function getHasPendingOperationsAttribute()
+    public function getCanPublishAttribute()
     {
-        $formEntry = $this->fresh();
-
-        if (!$formEntry->is_published) {
-            return false;
-        }
-
-        return (bool) $formEntry
-            ->listings()
-            ->where('is_in_algolia', false)
-            ->where('is_in_wp', false)
-            ->count();
+        return $this->is_submitted && !$this->has_pending_jobs;
     }
+
+    public function getCanRejectAttribute()
+    {
+        return $this->can_publish;
+    }
+
+    public function getCanHideAttribute()
+    {
+        return $this->is_published
+            && !$this->has_unclosed_token
+            && !$this->has_pending_jobs;
+    }
+
+    public function getCanUnhideAttribute()
+    {
+        return $this->is_hidden && !$this->has_pending_jobs;
+    }
+
+    public function getCanEditAttribute()
+    {
+        return $this->is_published
+            && !$this->has_pending_jobs
+            && !$this->has_unclosed_token;
+    }
+
+    public function getCanDeleteAttribute()
+    {
+        return $this->is_published
+            && !$this->has_pending_jobs
+            && !$this->has_unclosed_token;
+    }
+
+    public function getHasPendingJobsAttribute()
+    {
+        return $this->job_count > 0;
+    }    
 
     public function getHasOpenTokenAttribute()
     {
@@ -778,8 +818,10 @@ class FormEntry extends Model
 
         // Create events for new listings.
         foreach($formEntry->listings as $listing) {
-            event(new ListingCreated($formEntry, $listing));
+            event(new ListingCreated($listing));
         }
+
+        event(new FormEntryStatusUpdated($formEntry));
 
         return $formEntry;
     }
@@ -858,7 +900,7 @@ class FormEntry extends Model
         $formEntry->update();
 
         foreach($formEntry->listings as $listing) {
-            event(new ListingUnhidden($formEntry, $listing));
+            event(new ListingUnhidden($listing));
         }
 
         $formEntry->refreshCache();
