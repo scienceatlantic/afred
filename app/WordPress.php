@@ -79,7 +79,7 @@ class WordPress
     public static function deleteListing(
         Directory $targetDirectory,
         $wpPostId,
-        $bypassTrash = false
+        $bypassTrash = true
     ) {
         $url = $targetDirectory->wp_api_base_url
             . '/'
