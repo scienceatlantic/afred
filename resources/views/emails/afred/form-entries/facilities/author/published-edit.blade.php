@@ -20,7 +20,7 @@ Please check your listing(s) here:
 
 You will receive a periodic reminder to check your listing for accuracy. If you
 wish to make additional edits to your listing at any time, please follow this
-link:
+link:<br>
 [https://localhost/afred-wp-demo/update-facility](https://localhost/afred-wp-demo/update-facility)
 
 If you have any questions or comments, please contact Lois Whitehead, Science

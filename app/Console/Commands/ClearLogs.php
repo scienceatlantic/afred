@@ -40,6 +40,8 @@ class ClearLogs extends Command
         $logFile = storage_path('logs/laravel.log');
 
         if (file_exists($logFile)) {
+            $this->info('Clearing: ' . $logFile);
+
             $handle = fopen($logFile, 'r+');
             ftruncate($handle, 0);
             fclose($handle);

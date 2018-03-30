@@ -2,7 +2,7 @@
 Hi {!! $formEntry->author->first_name !!},
 
 Thank you for your submission to the Atlantic Facilities and Research Equipment
-Database. Your information has not yet been posteed because we need further
+Database. Your information has not yet been posted because we need further
 information.
 
 @if ($formEntry->message)

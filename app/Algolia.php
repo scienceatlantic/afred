@@ -55,7 +55,7 @@ class Algolia
         Listing $listing
     ) {
         // Get target section.
-        $targetSection = $listing->entrySection->formSection;
+        $targetSection = $listing->formSection;
 
         // Alias
         $targetSectObjKey = $targetSection->object_key;

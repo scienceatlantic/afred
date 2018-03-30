@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs;
+use App\Job;
 use Illuminate\Console\Command;
 
 class ClearJobs extends Command
@@ -38,6 +38,7 @@ class ClearJobs extends Command
      */
     public function handle()
     {
-        Jobs::truncate();
+        $this->info('Clearing: jobs');
+        Job::truncate();
     }
 }

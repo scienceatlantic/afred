@@ -24,12 +24,17 @@ class FormMetricController extends Controller
             ->forms()
             ->findOrFail($formId);
 
+        $publishedIds = $form->formEntries()->published()->pluck('id');
+        $hiddenIds = $form->formEntries()->hidden()->pluck('id');
+        $approvedIds = $publishedIds->concat($hiddenIds);
+
+        $sections = [];
+
         $formSections = $form
             ->formSections()
             ->orderBy('placement_order', 'asc')
             ->get();
-        $sections = [];
-        $publishedFormEntryIds = $form->formEntries()->published()->pluck('id');
+
         foreach($formSections as $formSection) {
             if (!$formSection->is_resource) {
                 continue;
@@ -39,31 +44,35 @@ class FormMetricController extends Controller
                 'label'  => $formSection->label_plural,
                 'values' => [
                     'total'   => EntrySection
-                        ::whereIn('form_entry_id', $publishedFormEntryIds)
+                        ::whereIn('form_entry_id', $approvedIds)
                         ->where('form_section_id', $formSection->id)
                         ->count(),
                     'public'  => EntrySection
-                        ::whereIn('form_entry_id', $publishedFormEntryIds)
+                        ::whereIn('form_entry_id', $publishedIds)
                         ->where('form_section_id', $formSection->id)
                         ->where('is_public', true)
                         ->count(),
                     'private' => EntrySection
-                        ::whereIn('form_entry_id', $publishedFormEntryIds)
+                        ::whereIn('form_entry_id', $publishedIds)
                         ->where('form_section_id', $formSection->id)
                         ->where('is_public', false)
+                        ->count(),
+                    'hidden' => EntrySection
+                        ::whereIn('form_entry_id', $hiddenIds)
+                        ->where('form_section_id', $formSection->id)
                         ->count()
                 ]
             ]);
         }
 
         $statuses = [];
-        foreach(['submitted', 'published', 'rejected', 'deleted'] as $status) {
+        foreach(['submitted', 'published', 'hidden', 'rejected', 'deleted'] as $status) {
             $statuses[$status] = [
                 'value' => $form
                     ->formEntries()
                     ->$status()
                     ->count(),
-                'wp_admin_url' => $form->directory->wp_admin_base_url
+                'wp_admin_url' => $form->directory->getTargetWpAdminBaseUrl()
                     . '/admin.php?page=afredwp-resources&afredwp-directory-id='
                     . $form->directory->id
                     . '&afredwp-form-id='

@@ -15,6 +15,10 @@ class ListingHidden
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $formEntryId;
+
+    public $formEntry;
+
     public $listing;
 
     /**
@@ -24,6 +28,8 @@ class ListingHidden
      */
     public function __construct(Listing $listing)
     {
+        $this->formEntryId = $listing->entrySection->formEntry->id;
+        $this->formEntry = $listing->entrySection->formEntry;
         $this->listing = $listing;
     }
 

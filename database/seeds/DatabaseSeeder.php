@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
         
         $this->call(DirectoriesTableSeeder::class);
         $this->call(AfredFormDataSeeder::class);
+        $this->call(UCalgaryFormDataSeeder::class);
 
         $this->call(FormReportTableSeeder::class);
 

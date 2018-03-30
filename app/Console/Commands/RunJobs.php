@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs;
+use App\Job;
 use Illuminate\Console\Command;
 
 class RunJobs extends Command
@@ -38,7 +38,7 @@ class RunJobs extends Command
      */
     public function handle()
     {
-        $numJobs = Jobs::count();
+        $numJobs = Job::count();
         for ($i = 0; $i < $numJobs; $i++) {
             $this->call('queue:work', [
                 '--once',

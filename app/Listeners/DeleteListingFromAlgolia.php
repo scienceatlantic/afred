@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Algolia;
+use App\Events\ListingEventCompleted;
 use App\Events\ListingDeleted;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -30,6 +31,8 @@ class DeleteListingFromAlgolia implements ShouldQueue
         Algolia::deleteListing(
             $event->targetFormSection,
             $event->publishedEntrySectionId
-        ); 
+        );
+
+        event(new ListingEventCompleted($event->formEntry), 'ListingDeleted');
     }
 }

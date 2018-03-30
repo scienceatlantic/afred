@@ -1,98 +1,6 @@
 <div class="afredwp" style="max-width: 800px;">
   <div class="panel panel-default">
     <div class="panel-body">
-      <p class="h4">Equipment</p>
-
-      <hr><br>
-
-      @isset($formEntry->data['sections']['equipment'])
-        @foreach ($formEntry->data['sections']['equipment'] as $index => $equip)
-          @if ($equip['entry_section']['id'] === $listing->entry_section_id )
-            @isset($equip['type'])
-              <div class="row">
-                <div class="col-md-4">
-                  <label class="afredwp-pull-right-md">Type</label>
-                </div>
-                <div class="col-md-8">{{ $equip['type'] }}</div>
-              </div>
-            @endisset
-
-            @isset($equip['manufacturer'])
-              <div class="row">
-                <div class="col-md-4">
-                  <label class="afredwp-pull-right-md">Manufacturer</label>
-                </div>
-                <div class="col-md-8">{{ $equip['manufacturer'] }}</div>
-              </div>
-            @endisset
-
-            @isset($equip['model'])
-              <div class="row">
-                <div class="col-md-4">
-                  <label class="afredwp-pull-right-md">Model</label>
-                </div>
-                <div class="col-md-8">{{ $equip['model'] }}</div>
-              </div>
-            @endisset
-
-            @isset($equip['purpose'])
-              <div class="row">
-                <div class="col-md-4">
-                  <label class="afredwp-pull-right-md">Purpose</label>
-                </div>
-                <div class="col-md-8">{!! $equip['purpose'] !!}</div>
-              </div>
-            @endisset
-
-            @isset($equip['specifications'])
-              <div class="row">
-                <div class="col-md-4">
-                  <label class="afredwp-pull-right-md">Specifications</label>
-                </div>
-                <div class="col-md-8">{!! $equip['specifications'] !!}</div>
-              </div>
-            @endisset
-
-            @isset($equip['yearManufactured'])
-              <div class="row">
-                <div class="col-md-4">
-                  <label class="afredwp-pull-right-md">Year manufactured</label>
-                </div>
-                <div class="col-md-8">{{ $equip['yearManufactured'] }}</div>
-              </div>
-            @endisset
-
-            @isset($equip['year_purchased'])
-              <div class="row">
-                <div class="col-md-4">
-                  <label class="afredwp-pull-right-md">Year purchased</label>
-                </div>
-                <div class="col-md-8">{!! $equip['year_purchased'] !!}</div>
-              </div>
-            @endisset
-          @endif
-        @endforeach
-      @endisset
-    </div>
-  </div>
-
-  {{-- View entire facility button --}}
-  <?php 
-    $facilityListing = $formEntry
-        ->listings()
-        ->where('wp_slug', 'like', 'facility_%')
-        ->first()
-  ?>
-  @isset($facilityListing)
-    <p>
-      <button class="btn btn-default" onclick="location.href = '{{ $facilityListing->wp_post_url }}';">
-        See all equipment for this facility
-      </button>
-    </p>
-  @endisset
-
-  <div class="panel panel-default">
-    <div class="panel-body">
       <p class="h4">Research Facility</p>
 
       <hr><br>
@@ -208,7 +116,6 @@
               </div>
               <div class="col-md-8">
                 {{ $contact['first_name'] }} {{ $contact['last_name'] }}
-                <span class="label label-default">Primary Contact</span>
               </div>
             </div>
           @endisset
@@ -219,7 +126,8 @@
                 <label class="afredwp-pull-right-md">Email</label>
               </div>
               <div class="col-md-8">
-                <a href="mailto:{{ $contact['email'] }}">{{ $contact['email'] }}</a>
+                <a href="mailto:{{ $contact['email'] }}"></a>
+                {{ $contact['email'] }}
               </div>
             </div>
           @endisset
@@ -333,76 +241,85 @@
       @endisset
     </div>
   </div>
-
+  
   <div class="panel panel-default">
     <div class="panel-body">
-      <p class="h4">Industry Liaison Office Contact (ILO)</p>
+      <p class="h4">Equipment</p>
 
       <hr><br>
 
-      @isset($formEntry->ilo)
-        @isset($formEntry->ilo->name)
-          <div class="row">
-            <div class="col-md-4">
-              <label class="afredwp-pull-right-md">Name</label>
+      @isset($formEntry->data['sections']['equipment'])
+        @foreach ($formEntry->data['sections']['equipment'] as $index => $equip)
+          @isset($equip['type'])
+            <div class="row">
+              <div class="col-md-4">
+                <label class="afredwp-pull-right-md">Type</label>
+              </div>
+              <div class="col-md-8">{{ $equip['type'] }}</div>
             </div>
-            <div class="col-md-8">
-              {{ $formEntry->ilo->name }}
-            </div>
-          </div>
-        @endisset
+          @endisset
 
-        @isset($formEntry->ilo->email)
-          <div class="row">
-            <div class="col-md-4">
-              <label class="afredwp-pull-right-md">Email</label>
+          @isset($equip['manufacturer'])
+            <div class="row">
+              <div class="col-md-4">
+                <label class="afredwp-pull-right-md">Manufacturer</label>
+              </div>
+              <div class="col-md-8">{{ $equip['manufacturer'] }}</div>
             </div>
-            <div class="col-md-8">
-              <a href="mailto:{{ $formEntry->ilo->email }}">
-                {{ $formEntry->ilo->email }}
-              </a>
-            </div>
-          </div>
-        @endisset
+          @endisset
 
-        @isset($formEntry->ilo->telephone)
-          <div class="row">
-            <div class="col-md-4">
-              <label class="afredwp-pull-right-md">Telephone</label>
+          @isset($equip['model'])
+            <div class="row">
+              <div class="col-md-4">
+                <label class="afredwp-pull-right-md">Model</label>
+              </div>
+              <div class="col-md-8">{{ $equip['model'] }}</div>
             </div>
-            <div class="col-md-8">
-              {{ $formEntry->ilo->telephone }}
-              @isset($formEntry->ilo->extension)
-                <span class="label label-default">Ext: {{ $formEntry->ilo->extension }}</span>
-              @endisset          
-            </div>
-          </div>
-        @endisset
+          @endisset
 
-        @isset($formEntry->ilo->position)
-          <div class="row">
-            <div class="col-md-4">
-              <label class="afredwp-pull-right-md">Position</label>
+          @isset($equip['purpose'])
+            <div class="row">
+              <div class="col-md-4">
+                <label class="afredwp-pull-right-md">Purpose</label>
+              </div>
+              <div class="col-md-8">{!! $equip['purpose'] !!}</div>
             </div>
-            <div class="col-md-8">{{ $formEntry->ilo->position }}</div>
-          </div>
-        @endisset
+          @endisset
 
-        @isset($formEntry->ilo->website)
-          <div class="row">
-            <div class="col-md-4">
-              <label class="afredwp-pull-right-md">Website</label>
+          @isset($equip['specifications'])
+            <div class="row">
+              <div class="col-md-4">
+                <label class="afredwp-pull-right-md">Specifications</label>
+              </div>
+              <div class="col-md-8">{!! $equip['specifications'] !!}</div>
             </div>
-            <div class="col-md-8">
-              <a href="{{ $formEntry->ilo->website }}" target="_blank">
-                {{ $formEntry->ilo->website }}
-              </a>
+          @endisset
+
+          @isset($equip['yearManufactured'])
+            <div class="row">
+              <div class="col-md-4">
+                <label class="afredwp-pull-right-md">Year manufactured</label>
+              </div>
+              <div class="col-md-8">{{ $equip['yearManufactured'] }}</div>
             </div>
-          </div>
-        @endisset
+          @endisset
+
+          @isset($equip['year_purchased'])
+            <div class="row">
+              <div class="col-md-4">
+                <label class="afredwp-pull-right-md">Year purchased</label>
+              </div>
+              <div class="col-md-8">{!! $equip['year_purchased'] !!}</div>
+            </div>
+          @endisset
+
+          @if ($index !== count($formEntry->data['sections']['equipment']) - 1)
+            <hr>
+          @endif
+        @endforeach
       @endisset
     </div>
-  </div>  
+  </div>
   
   <div class="small text-muted">
     <p>
@@ -412,6 +329,13 @@
       @isset($formEntry->updated_at)
         Date updated: {{ $formEntry->updated_at->toDayDateTimeString() }}
       @endisset
+    </p>
+  </div>
+
+  <div class="small text-muted">
+    <p>
+      You are viewing a record that belongs to the
+      <a href="https://afred.ca">Atlantic Facilities and Research Equipment Database</a>
     </p>
   </div>
 </div>

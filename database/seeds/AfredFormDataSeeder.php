@@ -13,8 +13,8 @@ use App\LanguageCode;
 
 class AfredFormDataSeeder extends BaseFormSeeder
 {
-    public static $facilitiesSearchIndex = 'dev_afred_facilities_facility';
-    public static $equipmentSearchIndex = 'dev_afred_facilities_equipment';
+    public static $facilitiesSearchIndex = 'development_afred_facilities_facility';
+    public static $equipmentSearchIndex = 'development_afred_facilities_equipment';
     public static $formWpPostId = 13;
 
     public function __construct()
@@ -29,37 +29,35 @@ class AfredFormDataSeeder extends BaseFormSeeder
      */
     public function run()
     {
-        $afredDirectory = Directory::findDirectory(
-            'Atlantic Facilities and Research Equipment Database'
-        );
+        $directory = Directory::findDirectory('Atlantic Facilities and Research Equipment Database');
 
         $languageCode = LanguageCode::findCode('en');
 
-        $afredForm = new Form();
-        $afredForm->directory_id = $afredDirectory->id;
-        $afredForm->language_code_id = $languageCode->id;
-        $afredForm->wp_post_id = self::$formWpPostId;
-        $afredForm->name = 'Facilities';
-        $afredForm->resource_folder = 'facilities';
-        $afredForm->pagination_section_object_key = 'facilities';
-        $afredForm->pagination_field_object_key = 'name';
-        $afredForm->save();
+        $form = new Form();
+        $form->directory_id = $directory->id;
+        $form->language_code_id = $languageCode->id;
+        $form->wp_post_id = self::$formWpPostId;
+        $form->name = 'Facilities';
+        $form->resource_folder = 'facilities';
+        $form->pagination_section_object_key = 'facilities';
+        $form->pagination_field_object_key = 'name';
+        $form->save();
 
-        $afredForm->compatibleForms()->attach($afredForm->id);
+        $form->compatibleForms()->attach($form->id);
 
-        $this->createFacilitySection($afredForm->id);
-        $this->createPrimaryContactSection($afredForm->id);
-        $this->createContactsSection($afredForm->id);
-        $this->createEquipmentSection($afredForm->id);
+        $this->createFacilitySection($form->id);
+        $this->createPrimaryContactSection($form->id);
+        $this->createContactsSection($form->id);
+        $this->createEquipmentSection($form->id);
 
         // Include "Primary Contacts" and "Contacts" as search sections that
         // should be included when searching for facilities.
-        $afredForm->formSections()
+        $form->formSections()
             ->where('object_key', 'facilities')
             ->first()
             ->formSectionsIncludedInSearch()
             ->attach(
-                $afredForm->formSections()
+                $form->formSections()
                     ->where('object_key', 'primary_contacts')
                     ->orWhere('object_key', 'contacts')
                     ->pluck('id')
@@ -67,18 +65,18 @@ class AfredFormDataSeeder extends BaseFormSeeder
 
         // Include "Facilities" as a search section that should be included when
         // searching for equipment.
-        $afredForm->formSections()
+        $form->formSections()
             ->where('object_key', 'equipment')
             ->first()
             ->formSectionsIncludedInSearch()
             ->attach(
-                $afredForm->formSections()
+                $form->formSections()
                     ->where('object_key', 'facilities')
                     ->pluck('id')
             );
 
-        $this->createFacilitySearchSection($afredForm->id);
-        $this->createEquipmentSearchSection($afredForm->id);
+        $this->createFacilitySearchSection($form->id);
+        $this->createEquipmentSearchSection($form->id);
     }
 
     private function createFacilitySection($formId)

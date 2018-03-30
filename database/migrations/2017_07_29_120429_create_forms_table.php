@@ -58,8 +58,8 @@ class CreateFormsTable extends Migration
              *                          ^                    ^
              *                      directory              form
              */
-            $table->string('resource_folder')
-                  ->unique();
+            $table->string('resource_folder');
+            $table->unique(['id', 'resource_folder']);
 
             /**
              * Form section's object key for the form section that contains the
