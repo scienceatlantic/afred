@@ -19,11 +19,16 @@ class FormEntryActionRequest extends FormRequest
         
         switch ($action) {
             case 'submit':
+                // Determine if submission is an edit. New (i.e. non-edits) do
+                // not need any additional validation.
                 $isEdit = (bool) $this->route('entry');
                 if (!$isEdit) {
                     return true;
                 }
 
+                // If it is an edit, verify that it was submitted on a form
+                // entry that has an open tokena and also verify the value of
+                // token itself.
                 $formEntry = FormEntry::findOrFail($this->route('entry'));
 
                 if (!$token = $formEntry->tokens()->open()->first()) {
