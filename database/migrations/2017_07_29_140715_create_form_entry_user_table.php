@@ -15,7 +15,8 @@ class CreateFormEntryUserTable extends Migration
     {
         Schema::create('form_entry_user', function (Blueprint $table) {
             // Columns
-            $table->increments('id');
+            // TODO
+            //$table->increments('id');
             $table->integer('form_entry_id')
                   ->unsigned();
             $table->integer('user_id')
@@ -33,6 +34,7 @@ class CreateFormEntryUserTable extends Migration
                   ->on('users')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
+            // Unique...
         });
     }
 

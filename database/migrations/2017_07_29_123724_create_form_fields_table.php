@@ -19,7 +19,7 @@ class CreateFormFieldsTable extends Migration
             $table->integer('form_section_id')
                   ->unsigned();
             $table->integer('field_type_id')
-                  ->unsigned();
+                  ->unsigned();            
             $table->string('label');
             $table->string('object_key');
             $table->string('intro_text')
@@ -38,11 +38,11 @@ class CreateFormFieldsTable extends Migration
             $table->boolean('is_required');
             $table->boolean('is_active')
                   ->default(true);
-            $table->boolean('is_searchable');                  
+            $table->boolean('is_searchable');
             $table->boolean('is_single_column')
                   ->default(false);
             $table->boolean('is_inline')
-                  ->default(false);             
+                  ->default(false);     
             $table->timestamps();
 
             // Foreign keys & indices
@@ -55,10 +55,10 @@ class CreateFormFieldsTable extends Migration
                   ->references('id')
                   ->on('field_types')
                   ->onUpdate('cascade')
-                  ->onDelete('restrict');
-            $table->unique(['form_section_id', 'label']);
-            $table->unique(['form_section_id', 'object_key']);
+                  ->onDelete('restrict');                  
             $table->unique(['form_section_id', 'placement_order']);
+            $table->unique(['form_section_id', 'object_key']);
+            $table->unique(['form_section_id', 'label']);
         });
     }
 

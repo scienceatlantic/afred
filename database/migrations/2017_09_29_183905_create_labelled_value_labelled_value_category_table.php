@@ -33,6 +33,10 @@ class CreateLabelledValueLabelledValueCategoryTable extends Migration
                   ->on('labelled_value_categories')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
+            $table->unique(
+                ['labelled_value_id', 'labelled_value_category_id'],
+                'lv_id_lvc_id_unique'
+            );
         });
     }
 

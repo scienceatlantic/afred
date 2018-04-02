@@ -15,7 +15,6 @@ class CreateFormFieldLabelledValueTable extends Migration
     {
         Schema::create('form_field_labelled_value', function (Blueprint $table) {
             // Columns
-            $table->increments('id');
             $table->integer('form_field_id')
                   ->unsigned();
             $table->integer('labelled_value_id')
@@ -35,6 +34,10 @@ class CreateFormFieldLabelledValueTable extends Migration
                   ->on('labelled_values')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
+            $table->unique(
+                  ['form_field_id', 'labelled_value_id'],
+                  'ff_id_lv_id_unique'
+            );
         });
     }
 

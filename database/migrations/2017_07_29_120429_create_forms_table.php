@@ -14,66 +14,34 @@ class CreateFormsTable extends Migration
     public function up()
     {
         Schema::create('forms', function (Blueprint $table) {
+            // Columns
             $table->increments('id');
-
             $table->integer('directory_id')
                   ->unsigned();
+            $table->integer('language_code_id')
+                  ->unsigned();
+            $table->integer('wp_post_id')
+                  ->unsigned()
+                  ->nullable();
+            $table->string('name');
+            $table->string('resource_folder');
+            $table->string('pagination_section_object_key');
+            $table->string('pagination_field_object_key');
+            $table->timestamps();
+
+            // Foreign keys & indices
             $table->foreign('directory_id')
                   ->references('id')
                   ->on('directories')
                   ->onUpdate('cascade')
                   ->onDelete('cascade');
-
-            $table->integer('language_code_id')
-                  ->unsigned();
             $table->foreign('language_code_id')
                   ->references('id')
                   ->on('language_codes')
                   ->onUpdate('cascade')
-                  ->onDelete('restrict');
-
-            /**
-             * WordPress post ID of the page that contains this form.
-             */
-            $table->integer('wp_post_id')
-                  ->unsigned()
-                  ->nullable();
-            
-            /**
-             * Name of the form.
-             * 
-             * E.g. 'Facilities'
-             */
-            $table->string('name');
+                  ->onDelete('restrict');            
             $table->unique(['directory_id', 'name']);
-
-            /**
-             * Name of the folder that contains all the resources (blade 
-             * templates) related to this form.
-             * 
-             * E.g. If the folder is set to 'facilities', and it belongs to a
-             * directory with a resource folder called 'afred' the API will look
-             * for its related form entry email resources in:
-             * resources/views/emails/afred/form-entries/facilities/...
-             *                          ^                    ^
-             *                      directory              form
-             */
-            $table->string('resource_folder');
             $table->unique(['id', 'resource_folder']);
-
-            /**
-             * Form section's object key for the form section that contains the
-             * field used to title a form entry.
-             */
-            $table->string('pagination_section_object_key');
-            
-            /**
-             * Form field's object key for the form field that contains the
-             * value that will be used to title a form entry.
-             */
-            $table->string('pagination_field_object_key');
-
-            $table->timestamps();
         });
     }
 

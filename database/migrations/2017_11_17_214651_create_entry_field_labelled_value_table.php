@@ -15,7 +15,6 @@ class CreateEntryFieldLabelledValueTable extends Migration
     {
         Schema::create('entry_field_labelled_value', function (Blueprint $table) {
             // Columns
-            $table->increments('id');
             $table->integer('entry_field_id')
                   ->unsigned();
             $table->integer('labelled_value_id')
@@ -33,6 +32,10 @@ class CreateEntryFieldLabelledValueTable extends Migration
                   ->on('labelled_values')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
+            $table->unique(
+                ['entry_field_id', 'labelled_value_id'],
+                'ef_id_lv_id_unique'
+            );
         });
     }
 

@@ -12,22 +12,22 @@ class FormEntryStatusesTableSeeder extends BaseSeeder
         $statuses = [
             [
                 'name'              => 'Submitted',
-                'show_in_dropdown'  => true
+                'is_distinct'  => true
             ], [
                 'name'              => 'Published',
-                'show_in_dropdown'  => true
+                'is_distinct'  => true
             ], [
                 'name'              => 'Rejected',
-                'show_in_dropdown'  => true
+                'is_distinct'  => true
             ], [
                 'name'              => 'Revision',
-                'show_in_dropdown'  => false
+                'is_distinct'  => false
             ], [
                 'name'              => 'Deleted',
-                'show_in_dropdown'  => true
+                'is_distinct'  => true
             ], [
                 'name'              => 'Hidden',
-                'show_in_dropdown'  => true
+                'is_distinct'  => true
             ]
         ];
 
