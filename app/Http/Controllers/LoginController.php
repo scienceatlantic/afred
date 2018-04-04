@@ -15,7 +15,7 @@ class LoginController extends Controller
         $email = $request->email;
 
         // User is allowed to login via email or wp_username. If a username was
-        // provided, grap user's email for auth.
+        // provided, grab user's email for auth.
         if ($user = User::findByWpUsername($request->email)) {
             $email = $user->email;
         }
