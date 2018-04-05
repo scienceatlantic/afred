@@ -17,7 +17,7 @@ class CreateFormEntryStatusesTable extends Migration
             // Columns
             $table->increments('id');
             $table->string('name');
-            $table->boolean('is_distinct')
+            $table->boolean('show_in_dropdown')
                   ->default(true);
             $table->timestamps();
 
