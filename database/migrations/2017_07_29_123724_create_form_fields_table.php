@@ -22,9 +22,16 @@ class CreateFormFieldsTable extends Migration
                   ->unsigned();            
             $table->string('label');
             $table->string('object_key');
-            $table->string('intro_text')
+            $table->integer('max_length')
+                  ->unsigned()
                   ->nullable();
-            $table->string('help_text')
+            $table->integer('min_value')
+                  ->nullable();
+            $table->integer('max_value')
+                  ->nullable();                  
+            $table->text('notes')
+                  ->nullable();
+            $table->text('help_text')
                   ->nullable();
             $table->string('placeholder')
                   ->nullable();
@@ -42,7 +49,11 @@ class CreateFormFieldsTable extends Migration
             $table->boolean('is_single_column')
                   ->default(false);
             $table->boolean('is_inline')
-                  ->default(false);     
+                  ->default(false);
+            $table->boolean('is_split_list')
+                  ->default(false);              
+            $table->boolean('show_select_all')
+                  ->default(false);
             $table->timestamps();
 
             // Foreign keys & indices

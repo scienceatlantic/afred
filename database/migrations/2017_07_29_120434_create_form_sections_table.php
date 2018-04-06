@@ -24,9 +24,9 @@ class CreateFormSectionsTable extends Migration
             $table->string('label_singular');
             $table->string('label_plural');
             $table->string('object_key');
-            $table->string('intro_text')
+            $table->text('intro_text')
                   ->nullable();
-            $table->string('help_text')
+            $table->text('help_text')
                   ->nullable();
             $table->integer('min')
                   ->unsigned();

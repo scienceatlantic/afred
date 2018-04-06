@@ -19,6 +19,9 @@ class CreateFormFieldLabelledValueTable extends Migration
                   ->unsigned();
             $table->integer('labelled_value_id')
                   ->unsigned();
+            $table->integer('placement_order')
+                  ->unsigned()
+                  ->nullable();
             $table->boolean('is_active')
                   ->default(true);
             $table->timestamps();
@@ -37,6 +40,10 @@ class CreateFormFieldLabelledValueTable extends Migration
             $table->unique(
                   ['form_field_id', 'labelled_value_id'],
                   'ff_id_lv_id_unique'
+            );
+            $table->unique(
+                  ['form_field_id', 'placement_order'],
+                  'ff_id_po_unique'
             );
         });
     }

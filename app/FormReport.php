@@ -102,8 +102,6 @@ class FormReport extends Model
         $sections = [];
         $columns = [];
 
-        // TODO add ability to specify your own headings?
-        // e.g. facilities.0.name:"Facility Name"
         foreach(explode(',', $value) as $reportColumn) {
             list($section, $indexOp, $field) = explode('.', $reportColumn);
 

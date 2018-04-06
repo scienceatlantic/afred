@@ -15,8 +15,6 @@ class CreateFormEntryUserTable extends Migration
     {
         Schema::create('form_entry_user', function (Blueprint $table) {
             // Columns
-            // TODO
-            //$table->increments('id');
             $table->integer('form_entry_id')
                   ->unsigned();
             $table->integer('user_id')

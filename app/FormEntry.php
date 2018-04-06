@@ -545,9 +545,10 @@ class FormEntry extends Model
 
         // Attach fields and values.
         foreach($request->sections as $sectionObjectKey => $fieldsets) {
-            // Check that the section exists, otherwise skip.
+            // Check that the section exists and is active, otherwise skip.
             $rootFormSection = $rootForm
                 ->formSections()
+                ->active()
                 ->where('object_key', $sectionObjectKey)
                 ->first();
             if (!$rootFormSection) {
@@ -568,8 +569,12 @@ class FormEntry extends Model
                 }
                 $entrySection->save();
 
-                // Create fields.
-                foreach($rootFormSection->formFields as $rootFormField) {
+                // Create fields (only those that are active).
+                $rootFormFields = $rootFormSection
+                    ->formFields()
+                    ->active()
+                    ->get();
+                foreach($rootFormFields as $rootFormField) {
                     // Get value of field if it exists, otherwise skip.
                     if (isset($fieldset[$rootFormField->object_key])) {
                         $value = $fieldset[$rootFormField->object_key];
