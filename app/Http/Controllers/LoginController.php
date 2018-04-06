@@ -20,11 +20,17 @@ class LoginController extends Controller
             $email = $user->email;
         }
 
-        $credentials = ['email' => $email, 'password' => $request->password];
+        $user = User::findByEmail($email);
 
-        if (Auth::attempt($credentials)) {
-            return Auth::user();
+        // Skip if user is not active, or user's password is blank.
+        if (!$user->is_active || $user->password) {
+            $credentials = ['email' => $email, 'password' => $request->password];
+
+            if (Auth::attempt($credentials)) {
+                return Auth::user();
+            }
         }
+
         return ['error' => 'Authentication failed'];
     }
 

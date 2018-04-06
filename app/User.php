@@ -51,6 +51,11 @@ class User extends Authenticatable
         return $this->belongsToMany('App\FormEntry')->withTimestamps();
     }
 
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
     public function scopeAdministrators($query)
     {
         return $query->where(
