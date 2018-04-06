@@ -29,7 +29,7 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
      */
     public function run()
     {
-        $directory = Directory::findDirectory('Atlantic Facilities and Research Equipment Database');
+        $directory = Directory::findDirectory('University of Calgary');
 
         $languageCode = LanguageCode::findCode('en');
 
