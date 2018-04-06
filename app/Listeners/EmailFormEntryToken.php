@@ -28,9 +28,26 @@ class EmailFormEntryToken implements ShouldQueue
      */
     public function handle(FormEntryTokenCreated $event)
     {
-        // TODO!
-        //$event->token->user->email;
-        Mail::to('afred.dev@scienceatlantic.ca')
+        $administrators = $formEntry
+            ->form
+            ->directory
+            ->users()
+            ->administrators()
+            ->active()
+            ->get();
+
+        $editors = $formEntry
+            ->form
+            ->directory
+            ->users()
+            ->editors()
+            ->active()
+            ->get();
+        
+        $others = $administrators->concat($editors);
+
+        Mail::to($event->token->user->email)
+            ->bcc($others)
             ->send(new FormEntryTokenMail($event->token, $event->formEntry));
     }
 }

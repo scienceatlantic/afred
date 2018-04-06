@@ -2,7 +2,6 @@
 
 namespace App\Events;
 
-use App\FormEntry;
 use App\FormEntryToken;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
@@ -25,10 +24,10 @@ class FormEntryTokenCreated
      *
      * @return void
      */
-    public function __construct(FormEntryToken $token, FormEntry $formEntry)
+    public function __construct(FormEntryToken $token)
     {
         $this->token = $token;
-        $this->formEntry = $formEntry;
+        $this->formEntry = $token->beforeUpdateFormEntry;
     }
 
     /**

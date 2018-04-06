@@ -32,6 +32,11 @@ class Directory extends Model
         return $this->belongsToMany('App\FormEntries')->withTimestamps();
     }
 
+    public function users()
+    {
+        return $this->belongsToMany('App\User')->withTimestamps();
+    }    
+
     public static function findDirectory($name)
     {
         return self::where('name', $name)->first();

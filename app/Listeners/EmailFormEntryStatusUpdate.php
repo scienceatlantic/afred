@@ -77,22 +77,43 @@ class EmailFormEntryStatusUpdate implements ShouldQueue
                 return;
         }
 
-        // TODO
-        $reviewers = User::administrators()->get();
+        $administrators = $formEntry
+            ->form
+            ->directory
+            ->users()
+            ->administrators()
+            ->active()
+            ->get();
+
+        $editors = $formEntry
+            ->form
+            ->directory
+            ->users()
+            ->editors()
+            ->active()
+            ->get();
+
+        $reviewers = $administrators->concat($editors);
 
         $isReviewerAlsoAuthor
             = $reviewers->contains('id', $event->formEntry->author->id);
 
-        // TODO: ILO!
         if (!$isReviewerAlsoAuthor) {
-            Mail::to('afred.dev@scienceatlantic.ca')
-                ->send(new FormEntryStatusUpdateMail($event->formEntry));
+            $mail = Mail::to($event->formEntry->author);
+
+            // Copy ILO if applicable.
+            if ($event->formEntry->status->name === 'Published'
+                && !$event->formEntry->is_edit
+                && $event->formEntry->ilo) {
+                $mail->cc($event->formEntry->ilo);
+            }
+
+            $mail->send(new FormEntryStatusUpdateMail($event->formEntry));
         }
 
-        // BUT DON'T EMAIL OTHER ADMINISTRATORS!!!! (i.e. administrators of other installations!)
         foreach($reviewers as $reviewer) {
-            Mail::to('afred.dev@scienceatlantic.ca')//$reviewer)
-                ->send(new FormEntryStatusUpdateMail($event->formEntry, $reviewer));
+            $msg = new FormEntryStatusUpdateMail($event->formEntry, $reviewer);
+            Mail::to($reviewer)->send($msg);
         }
     }
 }
