@@ -52,7 +52,7 @@ class FormEntryController extends Controller
             $formEntries = $formEntries
                 ->where('form_entry_status_id', $status->id);
 
-            // TODO
+            // If requesting for rejected form entries, don't include edits.
             if ($status->name === 'Rejected') {
                 $formEntries = $formEntries
                     ->where('is_edit', false);

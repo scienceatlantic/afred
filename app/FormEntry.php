@@ -591,7 +591,10 @@ class FormEntry extends Model
                     // Set value.
                     $entryField->setValue($value);
 
-                    // TODO
+                    // Check for the special 'is_public' attribute. If found,
+                    // set the corresponding entry section's is_public
+                    // attribute (i.e. public = searchable, private = not
+                    // searchable).
                     if ($rootFormField->object_key === 'is_public') {
                         $labelledValue = $entryField->value;
 
@@ -932,7 +935,7 @@ class FormEntry extends Model
             $user->email = $email;
             $user->first_name = $entrySection->getFieldValue('first_name');
             $user->last_name = $entrySection->getFieldValue('last_name');
-            $user->password = 'password'; // TODO
+            $user->password = '';
             $user->save();
         } else if ($user->is_subscriber) {
             $user->role_id = Role::findRole('Contributor')->id;
@@ -962,7 +965,7 @@ class FormEntry extends Model
             $user->email = $email;
             $user->first_name = $entrySection->getFieldValue('first_name');
             $user->last_name = $entrySection->getFieldValue('last_name');
-            $user->password = 'password'; // TODO
+            $user->password = '';
             $user->save();
         } else if ($user->is_subscriber) {
             $user->role_id = Role::findRole('Contributor')->id;
