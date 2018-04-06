@@ -51,5 +51,7 @@ class RunJobs extends Command
 
             $this->call('queue:work', ['--once']);
         }
+
+        exit();
     }
 }
