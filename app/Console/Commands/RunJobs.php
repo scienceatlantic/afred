@@ -19,9 +19,9 @@ class RunJobs extends Command
      *
      * @var string
      */
-    protected $description = 'Calls `queue:work --once` based on the number of'
+    protected $description = 'Calls `queue:work --once` based on the number of '
                            . 'jobs that are currently in the jobs table. Will ' 
-                           . 'timeout after a certain period';
+                           . 'timeout after a certain period.';
 
     /**
      * Create a new command instance.
