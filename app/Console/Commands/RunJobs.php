@@ -46,7 +46,7 @@ class RunJobs extends Command
         for ($i = 0; $i < $numJobs; $i++) {
             // Timeout after 2.5 minutes
             if (time() - $startTime > 150) {
-                break;
+                exit();
             }
 
             $this->call('queue:work', ['--once']);
