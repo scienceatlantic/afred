@@ -19,7 +19,9 @@ class RunJobs extends Command
      *
      * @var string
      */
-    protected $description = '';
+    protected $description = 'Calls `queue:work --once` based on the number of'
+                           . 'jobs that are currently in the jobs table. Will ' 
+                           . 'timeout after a certain period';
 
     /**
      * Create a new command instance.
@@ -38,12 +40,16 @@ class RunJobs extends Command
      */
     public function handle()
     {
+        $startTime = time();
         $numJobs = Job::count();
+
         for ($i = 0; $i < $numJobs; $i++) {
-            $this->call('queue:work', [
-                '--once',
-                '--retries=10'
-            ]);
+            // Timeout after 2.5 minutes
+            if (time() - $startTime > 150) {
+                break;
+            }
+
+            $this->call('queue:work', ['--once']);
         }
     }
 }
