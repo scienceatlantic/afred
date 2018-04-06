@@ -24,8 +24,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // TODO queue:work -- once count num of jobs....
-        $schedule->command('jobs:run')->everyMinute();
+        //$schedule->command()->everyMinute();
     }
 
     /**
