@@ -28,7 +28,7 @@ class EmailFormEntryToken implements ShouldQueue
      */
     public function handle(FormEntryTokenCreated $event)
     {
-        $administrators = $formEntry
+        $administrators = $event->formEntry
             ->form
             ->directory
             ->users()
@@ -36,7 +36,7 @@ class EmailFormEntryToken implements ShouldQueue
             ->active()
             ->get();
 
-        $editors = $formEntry
+        $editors = $event->formEntry
             ->form
             ->directory
             ->users()

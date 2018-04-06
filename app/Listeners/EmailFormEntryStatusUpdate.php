@@ -77,7 +77,7 @@ class EmailFormEntryStatusUpdate implements ShouldQueue
                 return;
         }
 
-        $administrators = $formEntry
+        $administrators = $event->formEntry
             ->form
             ->directory
             ->users()
@@ -85,7 +85,7 @@ class EmailFormEntryStatusUpdate implements ShouldQueue
             ->active()
             ->get();
 
-        $editors = $formEntry
+        $editors = $event->formEntry
             ->form
             ->directory
             ->users()
