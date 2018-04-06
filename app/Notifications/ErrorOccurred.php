@@ -7,7 +7,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class ErrorOccurred extends Notification implements ShouldQueue
+class ErrorOccurred extends Notification
 {
     use Queueable;
 
@@ -46,7 +46,6 @@ class ErrorOccurred extends Notification implements ShouldQueue
                     ->error()
                     ->subject('AFRED | API Exception!')
                     ->greeting('AHHHHHHHHHHHHHHHHHHH!')
-                    ->line('AFRED\'s API broke :(')
                     ->line('Error message:')
                     ->line($this->exceptionMessage);
     }
