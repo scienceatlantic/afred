@@ -1,4 +1,4 @@
-@component('mail::message')
+@component('emails.afred-message')
 Hi {!! $formEntry->author->first_name !!},
 
 Thank you for your submission to the Atlantic Facilities and Research Equipment
@@ -13,8 +13,8 @@ A message from {!! $formEntry->reviewer->name !!}:<br>
 @endif
 
 To complete your listing, or if you have any questions or comments, please
-contact Lois Whitehead, Science Atlantic's Executive Director, at
-[lois.whitehead@scienceatlantic.ca](lois.whitehead@scienceatlantic.ca).
+contact Caitlynne Hines, Science Communication Officer, at
+<a href="mailto:caitlynne.hines@scienceatlantic.ca">caitlynne.hines@scienceatlantic.ca</a>.
 
 Regards,<br>
 AFRED Bot

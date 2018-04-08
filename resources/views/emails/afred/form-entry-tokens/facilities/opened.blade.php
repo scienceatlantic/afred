@@ -1,4 +1,4 @@
-@component('mail::message')
+@component('emails.afred-message')
 Hi {!! $token->user->first_name !!},
 
 You have requested to update {!! $formEntry->data['pagination_title'] !!}.
