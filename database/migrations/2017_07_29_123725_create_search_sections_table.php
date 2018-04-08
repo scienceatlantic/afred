@@ -19,7 +19,6 @@ class CreateSearchSectionsTable extends Migration
             $table->integer('form_section_id')
                   ->unsigned();
             $table->string('label');
-            $table->text('result_html');
             $table->string('input_placeholder')
                   ->nullable();
             $table->integer('placement_order')

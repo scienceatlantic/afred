@@ -722,22 +722,6 @@ class AfredFormDataSeeder extends BaseFormSeeder
         $searchSection = new SearchSection();
         $searchSection->form_section_id = $formSection->id;
         $searchSection->label = 'Facilities/Contacts';
-        $searchSection->result_html = '
-            <div class="panel panel-default">
-              <div class="panel-body">
-                <p class="h4">
-                  {{ s.facilities.name }}
-                  <span v-if="s.facilities.organization">| {{ s.facilities.organization.value }}</span>
-                </p>
-                <p class="small">
-                  {{ s.facilities.city }}<!--
-               --><span v-if="s.facilities.city && s.facilities.province">,</span>
-                  <span v-if="s.facilities.province">{{ s.facilities.province.value }}</span>
-                </p>
-                <p class="small text-muted">{{ s.facilities.description_no_html }}</p>
-              </div>
-            </div>
-        ';
         $searchSection->input_placeholder = 'e.g. electron microscope';
         $searchSection->placement_order = 2;
         $searchSection->is_default = false;
@@ -787,21 +771,6 @@ class AfredFormDataSeeder extends BaseFormSeeder
         $searchSection = new SearchSection();
         $searchSection->form_section_id = $formSection->id;
         $searchSection->label = 'Equipment';
-        $searchSection->result_html = '
-            <div class="panel panel-default">
-              <div class="panel-body">
-                <p class="h4">
-                  {{ s.equipment.type }} | {{ s.facilities[0].name }}
-                </p>
-                <p class="small" v-if="s.facilities[0].organization || s.facilities[0].province">
-                  <span v-if="s.facilities[0].organization">{{ s.facilities[0].organization.value }}</span><!--
-               --><span v-if="s.facilities[0].organization && s.facilities[0].province">,</span>
-                  <span v-if="s.facilities[0].province">{{ s.facilities[0].province.value }}</span>
-                </p>
-                <p class="small text-muted">{{ s.equipment.purpose_no_html }}</p>
-              </div>
-            </div>
-        ';
         $searchSection->input_placeholder = 'e.g. electron microscope';
         $searchSection->placement_order = 1;
         $searchSection->is_default = true;

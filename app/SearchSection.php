@@ -12,6 +12,7 @@ class SearchSection extends Model
      * @var array
      */
     protected $appends = [
+        'templates',
         'wp_base_url',
         'search_index',
         'form_section_object_key'
@@ -25,6 +26,35 @@ class SearchSection extends Model
     public function searchFacets()
     {
         return $this->hasMany('App\SearchFacet');
+    }
+
+    public function getTemplatesAttribute()
+    {
+        $templates = [];
+
+        $section = $this->fresh();
+
+        $form = $section
+            ->formSection
+            ->form
+            ->resource_folder;
+
+        $dir = $section
+            ->formSection
+            ->form
+            ->directory
+            ->resource_folder;
+
+        $path = resource_path("views/wp/{$dir}/search-sections/$form/");
+
+        $files = array_diff(scandir($path), ['.', '..']);
+        
+        foreach($files as $file) {
+            $key = str_replace('.blade.php', '', $file);
+            $templates[$key] = file_get_contents($path . $file);
+        }
+
+        return $templates;
     }
 
     public function getWpBaseUrlAttribute()
