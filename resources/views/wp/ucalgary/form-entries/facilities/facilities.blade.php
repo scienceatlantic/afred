@@ -260,71 +260,73 @@
 
       @isset($formEntry->data['sections']['equipment'])
         @foreach ($formEntry->data['sections']['equipment'] as $index => $equip)
-          @isset($equip['type'])
-            <div class="row">
-              <div class="col-md-4">
-                <label class="afredwp-pull-right-md">Type</label>
+          @if ($equip['entry_section']['is_public'])
+            @isset($equip['type'])
+              <div class="row">
+                <div class="col-md-4">
+                  <label class="afredwp-pull-right-md">Type</label>
+                </div>
+                <div class="col-md-8">{{ $equip['type'] }}</div>
               </div>
-              <div class="col-md-8">{{ $equip['type'] }}</div>
-            </div>
-          @endisset
+            @endisset
 
-          @isset($equip['manufacturer'])
-            <div class="row">
-              <div class="col-md-4">
-                <label class="afredwp-pull-right-md">Manufacturer</label>
+            @isset($equip['manufacturer'])
+              <div class="row">
+                <div class="col-md-4">
+                  <label class="afredwp-pull-right-md">Manufacturer</label>
+                </div>
+                <div class="col-md-8">{{ $equip['manufacturer'] }}</div>
               </div>
-              <div class="col-md-8">{{ $equip['manufacturer'] }}</div>
-            </div>
-          @endisset
+            @endisset
 
-          @isset($equip['model'])
-            <div class="row">
-              <div class="col-md-4">
-                <label class="afredwp-pull-right-md">Model</label>
+            @isset($equip['model'])
+              <div class="row">
+                <div class="col-md-4">
+                  <label class="afredwp-pull-right-md">Model</label>
+                </div>
+                <div class="col-md-8">{{ $equip['model'] }}</div>
               </div>
-              <div class="col-md-8">{{ $equip['model'] }}</div>
-            </div>
-          @endisset
+            @endisset
 
-          @isset($equip['purpose'])
-            <div class="row">
-              <div class="col-md-4">
-                <label class="afredwp-pull-right-md">Purpose</label>
+            @isset($equip['purpose'])
+              <div class="row">
+                <div class="col-md-4">
+                  <label class="afredwp-pull-right-md">Purpose</label>
+                </div>
+                <div class="col-md-8">{!! $equip['purpose'] !!}</div>
               </div>
-              <div class="col-md-8">{!! $equip['purpose'] !!}</div>
-            </div>
-          @endisset
+            @endisset
 
-          @isset($equip['specifications'])
-            <div class="row">
-              <div class="col-md-4">
-                <label class="afredwp-pull-right-md">Specifications</label>
+            @isset($equip['specifications'])
+              <div class="row">
+                <div class="col-md-4">
+                  <label class="afredwp-pull-right-md">Specifications</label>
+                </div>
+                <div class="col-md-8">{!! $equip['specifications'] !!}</div>
               </div>
-              <div class="col-md-8">{!! $equip['specifications'] !!}</div>
-            </div>
-          @endisset
+            @endisset
 
-          @isset($equip['yearManufactured'])
-            <div class="row">
-              <div class="col-md-4">
-                <label class="afredwp-pull-right-md">Year manufactured</label>
+            @isset($equip['yearManufactured'])
+              <div class="row">
+                <div class="col-md-4">
+                  <label class="afredwp-pull-right-md">Year manufactured</label>
+                </div>
+                <div class="col-md-8">{{ $equip['yearManufactured'] }}</div>
               </div>
-              <div class="col-md-8">{{ $equip['yearManufactured'] }}</div>
-            </div>
-          @endisset
+            @endisset
 
-          @isset($equip['year_purchased'])
-            <div class="row">
-              <div class="col-md-4">
-                <label class="afredwp-pull-right-md">Year purchased</label>
+            @isset($equip['year_purchased'])
+              <div class="row">
+                <div class="col-md-4">
+                  <label class="afredwp-pull-right-md">Year purchased</label>
+                </div>
+                <div class="col-md-8">{!! $equip['year_purchased'] !!}</div>
               </div>
-              <div class="col-md-8">{!! $equip['year_purchased'] !!}</div>
-            </div>
-          @endisset
+            @endisset
 
-          @if ($index !== count($formEntry->data['sections']['equipment']) - 1)
-            <hr>
+            @if ($index !== count($formEntry->data['sections']['equipment']) - 1)
+              <hr>
+            @endif
           @endif
         @endforeach
       @endisset
