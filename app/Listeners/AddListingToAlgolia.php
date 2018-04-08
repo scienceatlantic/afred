@@ -32,5 +32,18 @@ class AddListingToAlgolia implements ShouldQueue
         Algolia::addListing($event->formEntry, $event->listing);
 
         event(new ListingEventCompleted($event->formEntry, 'ListingCreated'));
+
+        // Send out status updated email if all listings have been added to
+        // WordPress and Algolia.
+        $allListingsAdded = !$event
+            ->formEntry
+            ->listings()
+            ->where('is_in_wp', false)
+            ->orWhere('is_in_algolia', false)
+            ->count();
+        
+        if ($allListingsAdded) {
+            event(new FormEntryStatusUpdated($event->formEntry));
+        }        
     }
 }

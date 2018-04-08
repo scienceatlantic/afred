@@ -32,35 +32,6 @@ class EmailFormEntryStatusUpdate implements ShouldQueue
     {
         switch ($event->formEntry->status->name) {
             case 'Published':
-                // We have to make sure that the listings have been published
-                // before sending out the email.
-                $numListingsToBeAdded = $event
-                    ->formEntry
-                    ->listings()
-                    ->where('is_in_wp', false)
-                    ->orWhere('is_in_algolia', false)
-                    ->count();
-                
-                // If we're still waiting for listings to be added...
-                if ($numListingsToBeAdded > 0) {
-                    // If there are still pending jobs, re-create the event.
-                    if ($event->formEntry->job_count > 0) {
-                        event(new FormEntryStatusUpdated($event->formEntry));
-                    } 
-                    // If there are no more pending jobs, but some listings were
-                    // not added to WordPress or Algolia, log it and quit.
-                    else {
-                        $msg = 'Cannot send form entry published email. '
-                             . 'Certain listings were not added to either '
-                             . 'WordPress or Algolia and there are no more '
-                             . 'pending jobs.';
-                        Log::error($msg, [
-                            'formEntryId' => $event->formEntry->id
-                        ]);
-                        return;
-                    }
-                }
-                break;
             case 'Submitted':
             case 'Rejected':
                 // Nothing to do here, just send email below.
