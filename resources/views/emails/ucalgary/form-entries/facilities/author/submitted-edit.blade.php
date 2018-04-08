@@ -1,4 +1,4 @@
-@component('mail::message')
+@component('emails.ucalgary-message')
 Hi {!! $formEntry->author->first_name !!},
 
 Thank you!

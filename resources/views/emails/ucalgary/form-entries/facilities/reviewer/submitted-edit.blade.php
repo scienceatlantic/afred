@@ -1,4 +1,4 @@
-@component('mail::message')
+@component('emails.ucalgary-message')
 Hi {!! $reviewer->first_name !!},
 
 An edit of
