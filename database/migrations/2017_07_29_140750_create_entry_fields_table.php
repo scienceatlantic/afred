@@ -27,7 +27,7 @@ class CreateEntryFieldsTable extends Migration
                   ->references('id')
                   ->on('entry_sections')
                   ->onUpdate('cascade')
-                  ->onDelete('restrict');
+                  ->onDelete('cascade');
             $table->foreign('form_field_id')
                   ->references('id')
                   ->on('form_fields')

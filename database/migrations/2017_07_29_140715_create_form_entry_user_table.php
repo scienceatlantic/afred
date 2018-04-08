@@ -26,12 +26,12 @@ class CreateFormEntryUserTable extends Migration
                   ->references('id')
                   ->on('form_entries')
                   ->onUpdate('cascade')
-                  ->onDelete('restrict');
+                  ->onDelete('cascade');
             $table->foreign('user_id')
                   ->references('id')
                   ->on('users')
                   ->onUpdate('cascade')
-                  ->onDelete('restrict');
+                  ->onDelete('cascade');
             // Unique...
         });
     }

@@ -26,7 +26,7 @@ class CreateTextValuesTable extends Migration
                   ->references('id')
                   ->on('entry_fields')
                   ->onUpdate('cascade')
-                  ->onDelete('restrict');                              
+                  ->onDelete('cascade');
         });
     }
 

@@ -31,12 +31,12 @@ class CreateFormFieldLabelledValueTable extends Migration
                   ->references('id')
                   ->on('form_fields')
                   ->onUpdate('cascade')
-                  ->onDelete('restrict');
+                  ->onDelete('cascade');
             $table->foreign('labelled_value_id')
                   ->references('id')
                   ->on('labelled_values')
                   ->onUpdate('cascade')
-                  ->onDelete('restrict');
+                  ->onDelete('cascade');
             $table->unique(
                   ['form_field_id', 'labelled_value_id'],
                   'ff_id_lv_id_unique'

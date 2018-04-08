@@ -15,7 +15,6 @@ class CreateFormEntryStatusFormReportTable extends Migration
     {
         Schema::create('form_entry_status_form_report', function (Blueprint $table) {
             // Columns
-            $table->increments('id');
             $table->integer('form_entry_status_id')
                   ->unsigned();
             $table->integer('form_report_id')
@@ -27,7 +26,7 @@ class CreateFormEntryStatusFormReportTable extends Migration
                   ->references('id')
                   ->on('form_entry_statuses')
                   ->onUpdate('cascade')
-                  ->onDelete('restrict');
+                  ->onDelete('cascade');
             $table->foreign('form_report_id', 'fr_id_foreign')
                   ->references('id')
                   ->on('form_reports')

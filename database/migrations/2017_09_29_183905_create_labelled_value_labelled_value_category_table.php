@@ -15,7 +15,6 @@ class CreateLabelledValueLabelledValueCategoryTable extends Migration
     {
         Schema::create('labelled_value_labelled_value_category', function (Blueprint $table) {
             // Columns
-            $table->increments('id');
             $table->integer('labelled_value_id')
                   ->unsigned();
             $table->integer('labelled_value_category_id')

@@ -35,17 +35,17 @@ class CreateFormEntryTokensTable extends Migration
                   ->references('id')
                   ->on('form_entries')
                   ->onUpdate('cascade')
-                  ->onDelete('restrict');
+                  ->onDelete('cascade');
             $table->foreign('after_update_form_entry_id')
                   ->references('id')
                   ->on('form_entries')
                   ->onUpdate('cascade')
-                  ->onDelete('restrict');                  
+                  ->onDelete('cascade');
             $table->foreign('resource_id')
                   ->references('resource_id')
                   ->on('form_entries')
                   ->onUpdate('cascade')
-                  ->onDelete('restrict');
+                  ->onDelete('cascade');
             $table->foreign('user_id')
                   ->references('id')
                   ->on('users')
