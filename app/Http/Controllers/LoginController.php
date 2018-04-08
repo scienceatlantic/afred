@@ -15,16 +15,22 @@ class LoginController extends Controller
         $email = $request->email;
 
         // User is allowed to login via email or wp_username. If a username was
-        // provided, grap user's email for auth.
+        // provided, grab user's email for auth.
         if ($user = User::findByWpUsername($request->email)) {
             $email = $user->email;
         }
 
-        $credentials = ['email' => $email, 'password' => $request->password];
+        $user = User::findByEmail($email);
 
-        if (Auth::attempt($credentials)) {
-            return Auth::user();
+        // Skip if user is not active, or user's password is blank.
+        if (!$user->is_active || $user->password) {
+            $credentials = ['email' => $email, 'password' => $request->password];
+
+            if (Auth::attempt($credentials)) {
+                return Auth::user();
+            }
         }
+
         return ['error' => 'Authentication failed'];
     }
 

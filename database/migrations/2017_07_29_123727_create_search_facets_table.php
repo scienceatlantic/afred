@@ -36,7 +36,7 @@ class CreateSearchFacetsTable extends Migration
                   ->references('id')
                   ->on('search_facet_operators')
                   ->onUpdate('cascade')
-                  ->onDelete('restrict');           
+                  ->onDelete('restrict');     
             $table->unique(['search_section_id', 'placement_order']);
         });
     }

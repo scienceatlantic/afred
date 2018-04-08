@@ -15,7 +15,6 @@ class CreateLabelledValueLabelledValueCategoryTable extends Migration
     {
         Schema::create('labelled_value_labelled_value_category', function (Blueprint $table) {
             // Columns
-            $table->increments('id');
             $table->integer('labelled_value_id')
                   ->unsigned();
             $table->integer('labelled_value_category_id')
@@ -33,6 +32,10 @@ class CreateLabelledValueLabelledValueCategoryTable extends Migration
                   ->on('labelled_value_categories')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
+            $table->unique(
+                ['labelled_value_id', 'labelled_value_category_id'],
+                'lv_id_lvc_id_unique'
+            );
         });
     }
 

@@ -77,6 +77,15 @@ class Listing extends Model
             . $directory;
     }
 
+    public function getSearchTemplateObjectKeyAttribute()
+    {
+        $template = $this->template;
+        $index = strrpos($template, '.');
+
+        //<rootFormSection>(-targetDirectory?)
+        return substr($this->template, $index + 1);
+    }
+
     public function getRootDirectoryAttribute()
     {
         return $this->fresh()->entrySection->formEntry->form->directory;        

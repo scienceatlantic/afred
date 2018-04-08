@@ -25,4 +25,9 @@ class FormSection extends Model
             'target_form_section_id'
         )->withTimestamps();
     }
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
 }

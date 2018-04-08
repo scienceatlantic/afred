@@ -93,7 +93,7 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
             ->pluck('labelled_values.id');
 
         $provinceIds = LabelledValueCategory
-            ::findCategory('Canadian Provinces and Territories')
+            ::findCategory('Canadian Atlantic Provinces')
             ->values()
             ->pluck('labelled_values.id');
 
@@ -106,6 +106,8 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
             ::findCategory('Sectors of Application')
             ->values()
             ->pluck('labelled_values.id');
+
+        $notApplicable = LabelledValue::findLabel('N/A');
 
         $formSection = new FormSection();
         $formSection->form_id = $formId;
@@ -127,8 +129,10 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'Facility/Lab';
         $formField->object_key = 'name';
-        $formField->help_text = 'This is the name of the facility/lab hosting the equipment. You should create a '
-                              . 'separate record for each facility/lab you have.';
+        $formField->max_length = 200;
+        $formField->help_text = 'This is the name of the facility/lab hosting '
+                              . 'the equipment. You should create a separate ' 
+                              . 'record for each facility/lab you have.';
         $formField->placement_order = 1;
         $formField->is_searchable = 1;
         $formField->is_required = 1;
@@ -141,6 +145,10 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'City';
         $formField->object_key = 'city';
+        $formField->max_length = 150;
+        $formField->help_text = 'If your facility/lab has locations in '
+                              . 'multiple cities, please list all cities ' 
+                              . 'separated by commas (or leave blank).';
         $formField->placement_order = 2;
         $formField->is_searchable = 1;
         $formField->is_required = 1;
@@ -153,6 +161,12 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $formField->field_type_id = $this->fieldDropdownType->id;
         $formField->label = 'Organization';
         $formField->object_key = 'organization';
+        $formField->help_text = 'Refers to the name of the ' 
+                              . 'institute/company/association/etc with which '
+                              . 'your facility/lab is affiliated. Please '
+                              . 'select organization from drop down list. '
+                              . 'If the organization name does not differ from '
+                              . 'the facility/lab name, please select "N/A".';
         $formField->placement_order = 3;
         $formField->has_ilo = 1;
         $formField->is_searchable = 1;
@@ -160,18 +174,26 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $formField->is_active = 1;
         $formField->save();
 
+        $formField->labelledValues()->attach($notApplicable->id);
         $formField->labelledValues()->attach($organizationIds);
 
         // Province
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $this->fieldDropdownType->id;
+        $formField->field_type_id = $this->fieldCheckboxType->id;
         $formField->label = 'Province';
         $formField->object_key = 'province';
-        $formField->placement_order = 4;
+        $formField->help_text = 'If your facility/lab has locations in '
+                              . 'multiple provinces, please select all that '
+                              . 'apply. If your province is not listed, please '
+                              . 'contact afred@scienceatlantic.ca.';
+        $formField->placement_order = 5;
         $formField->is_searchable = 1;
         $formField->is_required = 1;
         $formField->is_active = 1;
+        $formField->is_single_column = 1;
+        $formField->is_split_list = 1;
+        $formField->show_select_all = 1;
         $formField->save();
 
         $formField->labelledValues()->attach($provinceIds);
@@ -182,8 +204,9 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'Website';
         $formField->object_key = 'website';
+        $formField->max_length = 2083;
         $formField->placeholder = 'http://example.com';
-        $formField->placement_order = 5;
+        $formField->placement_order = 4;
         $formField->input_pattern = self::$websiteInputPattern;
         $formField->is_searchable = 1;
         $formField->is_required = 0;
@@ -196,6 +219,9 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $formField->field_type_id = $this->fieldRichtextType->id;
         $formField->label = 'Description';
         $formField->object_key = 'description';
+        $formField->max_length = 2000;
+        $formField->help_text = 'Describe what your facility/lab does, such as '
+                              . 'type of research, services offered, etc.';
         $formField->placeholder = 'What does the facility do?';
         $formField->placement_order = 6;
         $formField->is_single_column = 1;
@@ -210,10 +236,18 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $formField->field_type_id = $this->fieldCheckboxType->id;
         $formField->label = 'Research disciplines';
         $formField->object_key = 'disciplines';
+        $formField->help_text = 'Please check all research disciplines for '
+                              . 'which your facility/lab could be relevant. '
+                              . 'You must select at least one research '
+                              . 'discipline. If none apply, please contact '
+                              . 'afred@scienceatlantic.ca.';
         $formField->placement_order = 7;
         $formField->is_searchable = 1;
         $formField->is_required = 1;
         $formField->is_active = 1;
+        $formField->is_single_column = 1;
+        $formField->is_split_list = 1;
+        $formField->show_select_all = 1;
         $formField->save();
         
         $formField->labelledValues()->attach($disciplineIds);
@@ -224,10 +258,18 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $formField->field_type_id = $this->fieldCheckboxType->id;
         $formField->label = 'Sectors of application';
         $formField->object_key = 'sectors';
+        $formField->help_text = 'Please check all sectors of application for '
+                              . 'which your facility/lab could be relevant. '
+                              . 'You must select at least one sector of '
+                              . 'application. If none apply, please contact '
+                              . 'afred@scienceatlantic.ca.';
         $formField->placement_order = 8;
         $formField->is_searchable = 1;
         $formField->is_required = 1;
         $formField->is_active = 1;
+        $formField->is_single_column = 1;
+        $formField->is_split_list = 1;
+        $formField->show_select_all = 1;
         $formField->save();
 
         $formField->labelledValues()->attach($sectorsIds);
@@ -255,6 +297,7 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'First name';
         $formField->object_key = 'first_name';
+        $formField->max_length = 50;
         $formField->placement_order = 1;
         $formField->is_searchable = 1;
         $formField->is_required = 1;
@@ -267,6 +310,7 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'Last name';
         $formField->object_key = 'last_name';
+        $formField->max_length = 50;
         $formField->placement_order = 2;
         $formField->is_searchable = 1;
         $formField->is_required = 1;
@@ -279,6 +323,7 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'Email';
         $formField->object_key = 'email';
+        $formField->max_length = 254;
         $formField->placeholder = 'person@example.com';
         $formField->input_pattern = self::$emailInputPattern;
         $formField->placement_order = 3;
@@ -293,6 +338,7 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'Telephone';
         $formField->object_key = 'telephone';
+        $formField->max_length = 10;
         $formField->placeholder = '9999999999';
         $formField->input_pattern = self::$telephoneInputPattern;
         $formField->placement_order = 4;
@@ -307,6 +353,7 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'Position';
         $formField->object_key = 'position';
+        $formField->max_length = 100;
         $formField->placement_order = 5;
         $formField->is_searchable = 1;
         $formField->is_required = 1;
@@ -319,6 +366,9 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'Website';
         $formField->object_key = 'website';
+        $formField->max_length = 2083;
+        $formField->help_text = 'If you have your own website, separate from '
+                              . 'the facility website, enter it here.';
         $formField->placeholder = 'http://example.com';
         $formField->placement_order = 6;
         $formField->input_pattern = self::$websiteInputPattern;
@@ -333,6 +383,7 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'Extension';
         $formField->object_key = 'extension';
+        $formField->max_length = 10;
         $formField->placement_order = 7;
         $formField->is_searchable = 1;
         $formField->is_required = 0;
@@ -363,6 +414,7 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'First name';
         $formField->object_key = 'first_name';
+        $formField->max_length = 50;
         $formField->placement_order = 1;
         $formField->is_searchable = 1;
         $formField->is_required = 1;
@@ -375,6 +427,7 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'Last name';
         $formField->object_key = 'last_name';
+        $formField->max_length = 50;
         $formField->placement_order = 2;
         $formField->is_searchable = 1;
         $formField->is_required = 1;
@@ -387,6 +440,7 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'Email';
         $formField->object_key = 'email';
+        $formField->max_length = 254;
         $formField->placeholder = 'person@example.com';
         $formField->placement_order = 3;
         $formField->input_pattern = self::$emailInputPattern;
@@ -401,6 +455,7 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'Telephone';
         $formField->object_key = 'telephone';
+        $formField->max_length = 10;
         $formField->placeholder = '9999999999';
         $formField->input_pattern = self::$telephoneInputPattern;
         $formField->placement_order = 4;
@@ -415,6 +470,7 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'Position';
         $formField->object_key = 'position';
+        $formField->max_length = 100;
         $formField->placement_order = 5;
         $formField->is_searchable = 1;
         $formField->is_required = 0;
@@ -427,6 +483,9 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'Website';
         $formField->object_key = 'website';
+        $formField->max_length = 2083;
+        $formField->help_text = 'If you have your own website, separate from '
+                              . 'the facility website, enter it here.';        
         $formField->placeholder = 'http://example.com';
         $formField->placement_order = 6;
         $formField->input_pattern = self::$websiteInputPattern;
@@ -441,6 +500,7 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'Extension';
         $formField->object_key = 'extension';
+        $formField->max_length = 10;
         $formField->placement_order = 7;
         $formField->is_searchable = 1;
         $formField->is_required = 0;
@@ -482,23 +542,13 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'Type';
         $formField->object_key = 'type';
+        $formField->max_length = 200;
+        $formField->help_text = 'The full name of the piece of equipment.';
+        $formField->placeholder = 'E.g. Magnetic resonance imaging (MRI)';
         $formField->placement_order = 1;
         $formField->is_single_column = 1;
         $formField->is_searchable = 1;
         $formField->is_required = 1;
-        $formField->is_active = 1;
-        $formField->save();
-
-        // Model
-        $formField = new FormField();
-        $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $this->fieldStringType->id;
-        $formField->label = 'Model';
-        $formField->object_key = 'model';
-        $formField->placement_order = 2;
-        $formField->is_single_column = 1;
-        $formField->is_searchable = 1;
-        $formField->is_required = 0;
         $formField->is_active = 1;
         $formField->save();
 
@@ -508,6 +558,23 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'Manufacturer';
         $formField->object_key = 'manufacturer';
+        $formField->max_length = 100;
+        $formField->placeholder = 'E.g. Hitachi Medical';
+        $formField->placement_order = 2;
+        $formField->is_single_column = 1;
+        $formField->is_searchable = 1;
+        $formField->is_required = 0;
+        $formField->is_active = 1;
+        $formField->save();        
+
+        // Model
+        $formField = new FormField();
+        $formField->form_section_id = $formSection->id;
+        $formField->field_type_id = $this->fieldStringType->id;
+        $formField->label = 'Model';
+        $formField->object_key = 'model';
+        $formField->placeholder = 'E.g. Echelon Oval 1.5T Ultra-Wide MRI system';
+        $formField->max_length = 100;
         $formField->placement_order = 3;
         $formField->is_single_column = 1;
         $formField->is_searchable = 1;
@@ -521,6 +588,10 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $formField->field_type_id = $this->fieldRichtextType->id;
         $formField->label = 'Equipment purpose';
         $formField->object_key = 'purpose';
+        $formField->max_length = 2000;
+        $formField->help_text = 'Provide a brief description of the piece of '
+                              . 'equipment, its functions, possible uses, '
+                              . 'special features, etc.';
         $formField->placement_order = 4;
         $formField->is_single_column = 1;
         $formField->is_searchable = 1;
@@ -534,6 +605,11 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $formField->field_type_id = $this->fieldRichtextType->id;
         $formField->label = 'Equipment specifications';
         $formField->object_key = 'specifications';
+        $formField->max_length = 2000;
+        $formField->help_text = 'Include information such as dimensions, ' 
+                              . 'weight, power supply, battery life, software, '
+                              . 'resolution, range, etc. Please include units '
+                              . 'of measurement.';
         $formField->placement_order = 5;
         $formField->is_single_column = 1;
         $formField->is_searchable = 1;
@@ -547,6 +623,9 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $formField->field_type_id = $this->fieldNumberType->id;
         $formField->label = 'Year purchased';
         $formField->object_key = 'year_purchased';
+        $formField->min_value = 1000;
+        $formField->max_value = 3000;
+        $formField->placeholder = 'E.g. 1995';
         $formField->placement_order = 6;
         $formField->is_single_column = 1;
         $formField->is_searchable = 1;
@@ -560,6 +639,9 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $formField->field_type_id = $this->fieldNumberType->id;
         $formField->label = 'Year manufactured';
         $formField->object_key = 'year_manufactured';
+        $formField->min_value = 1000;
+        $formField->max_value = 3000;
+        $formField->placeholder = 'E.g. 1990';
         $formField->placement_order = 7;
         $formField->is_single_column = 1;
         $formField->is_inline = 1;
@@ -573,7 +655,12 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $formField->form_section_id = $formSection->id;
         $formField->field_type_id = $this->fieldRadioType->id;
         $formField->label = 'Excess capacity';
+        $formField->notes = 'Note: this field will not be publicly viewable.';
         $formField->object_key = 'excess_capacity';
+        $formField->help_text = 'Excess capacity means that the piece of '
+                              . 'equipment is not being fully utilized, that '
+                              . 'there is time available for it to be used by '
+                              . 'others or on other projects.';
         $formField->placement_order = 8;
         $formField->is_single_column = 1;
         $formField->is_inline = 1;
@@ -590,6 +677,12 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $formField->field_type_id = $this->fieldRadioType->id;
         $formField->label = 'Search visibility';
         $formField->object_key = 'is_public';
+        $formField->help_text = 'To ensure that we have a complete listing of '
+                              . 'everything within your facility, please '
+                              . 'include all equipment, even that which you do '
+                              . 'not want publicly viewable. If you do not '
+                              . 'want the piece of equipment to be publicly '
+                              . 'viewable, check "Private".';
         $formField->placement_order = 9;
         $formField->is_single_column = 1;
         $formField->is_inline = 1;
@@ -603,9 +696,16 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         // Keywords
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $this->fieldPlaintextType->id; // TODO
+        $formField->field_type_id = $this->fieldStringType->id;
         $formField->label = 'Keywords';
         $formField->object_key = 'keywords';
+        $formField->max_length = 500;
+        $formField->help_text = 'Please include any common terms, acronyms, '
+                              . 'and/or associated words that apply to this '
+                              . 'piece of equipment. This improves the '
+                              . 'likelihood that it will appear in search '
+                              . 'results.';
+        $formField->placeholder = 'E.g. NMRI, MRT, etc.';
         $formField->placement_order = 10;
         $formField->is_single_column = 1;
         $formField->is_inline = 1;
@@ -628,22 +728,6 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $searchSection = new SearchSection();
         $searchSection->form_section_id = $formSection->id;
         $searchSection->label = 'Facilities/Contacts';
-        $searchSection->result_html = '
-            <div class="panel panel-default">
-              <div class="panel-body">
-                <p class="h4">
-                  {{ s.facilities.name }}
-                  <span v-if="s.facilities.organization">| {{ s.facilities.organization.value }}</span>
-                </p>
-                <p class="small">
-                  {{ s.facilities.city }}<!--
-               --><span v-if="s.facilities.city && s.facilities.province">,</span>
-                  <span v-if="s.facilities.province">{{ s.facilities.province.value }}</span>
-                </p>
-                <p class="small text-muted">{{ s.facilities.description_no_html }}</p>
-              </div>
-            </div>
-        ';
         $searchSection->input_placeholder = 'e.g. electron microscope';
         $searchSection->placement_order = 2;
         $searchSection->is_default = false;
@@ -693,21 +777,6 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $searchSection = new SearchSection();
         $searchSection->form_section_id = $formSection->id;
         $searchSection->label = 'Equipment';
-        $searchSection->result_html = '
-            <div class="panel panel-default">
-              <div class="panel-body">
-                <p class="h4">
-                  {{ s.equipment.type }} | {{ s.facilities[0].name }}
-                </p>
-                <p class="small" v-if="s.facilities[0].organization || s.facilities[0].province">
-                  <span v-if="s.facilities[0].organization">{{ s.facilities[0].organization.value }}</span><!--
-               --><span v-if="s.facilities[0].organization && s.facilities[0].province">,</span>
-                  <span v-if="s.facilities[0].province">{{ s.facilities[0].province.value }}</span>
-                </p>
-                <p class="small text-muted">{{ s.equipment.purpose_no_html }}</p>
-              </div>
-            </div>
-        ';
         $searchSection->input_placeholder = 'e.g. electron microscope';
         $searchSection->placement_order = 1;
         $searchSection->is_default = true;

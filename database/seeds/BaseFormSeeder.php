@@ -17,12 +17,12 @@ abstract class BaseFormSeeder extends Seeder
     public $fieldDropdownType;
 
     // Common input patterns
-    // E.g. http://example.com, https://example.com, etc
-    public static $websiteInputPattern = 'https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)';
+    // E.g. example.com, http://example.com, https://example.com, etc.
+    public static $websiteInputPattern = '(https?:\/\/(www\.)?)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)';
     // E.g. person@example.com
     public static $emailInputPattern = "^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$";
     // E.g. 9999999999
-    public static $telephoneInputPattern = '^\(?([0-9]{3})\)?[-.●]?([0-9]{3})[-.●]?([0-9]{4})$';
+    public static $telephoneInputPattern = '^[0-9]{10}$';
 
     // Search facet operators
     public $andOperator;

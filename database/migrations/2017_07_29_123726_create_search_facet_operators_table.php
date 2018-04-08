@@ -18,6 +18,9 @@ class CreateSearchFacetOperatorsTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->timestamps();
+
+            // Foreign keys & indices
+            $table->unique('name');
         });
     }
 

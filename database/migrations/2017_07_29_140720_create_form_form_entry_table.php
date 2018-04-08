@@ -15,7 +15,6 @@ class CreateFormFormEntryTable extends Migration
     {
         Schema::create('form_form_entry', function (Blueprint $table) {
             // Columns
-            $table->increments('id');
             $table->integer('form_id')
                   ->unsigned();
             $table->integer('form_entry_id')
@@ -32,7 +31,7 @@ class CreateFormFormEntryTable extends Migration
                   ->references('id')
                   ->on('form_entries')
                   ->onUpdate('cascade')
-                  ->onDelete('restrict');                              
+                  ->onDelete('cascade');
             $table->unique(['form_id', 'form_entry_id']);
         });
     }

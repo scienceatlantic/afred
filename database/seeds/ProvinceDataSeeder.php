@@ -39,7 +39,22 @@ class ProvinceDataSeeder extends BaseSeeder
             ]
         ];
 
-        $category = self::saveCategory('Canadian Provinces and Territories');
+        $category = self::saveCategory('Canadian Provinces and Territories');        
         self::saveLabelledValues($provinces, [$category->id]);
+
+        $category = self::saveCategory('Canadian Atlantic Provinces');
+        self::saveLabelledValues([
+                [
+                    'label' => 'New Brunswick (NB)'
+                ], [
+                    'label' => 'Newfoundland and Labrador (NL)'
+                ], [
+                    'label' => 'Nova Scotia (NS)'
+                ], [
+                    'label' => 'Prince Edward Island (PE)'
+                ]
+            ],
+            [$category->id]
+        );
     }
 }

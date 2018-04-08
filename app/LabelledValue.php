@@ -27,4 +27,9 @@ class LabelledValue extends Model
     {
         return $this->hasOne('App\Ilo');
     }
+
+    public static function findLabel($label)
+    {
+        return self::where('label', $label)->first();
+    }
 }

@@ -33,6 +33,6 @@ class DeleteListingFromAlgolia implements ShouldQueue
             $event->publishedEntrySectionId
         );
 
-        event(new ListingEventCompleted($event->formEntry), 'ListingDeleted');
+        event(new ListingEventCompleted($event->formEntry, 'ListingDeleted'));
     }
 }

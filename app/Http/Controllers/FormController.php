@@ -9,12 +9,6 @@ use App\Http\Requests\FormShowRequest;
 
 class FormController extends Controller
 {
-    public static $withRelationships = [
-        'compatibleForms.directory',
-        'formSections.formFields.type',
-        'formSections.formFields.labelledValues'
-    ];
-
     /**
      * Display a listing of the resource.
      *
@@ -26,7 +20,22 @@ class FormController extends Controller
             Directory
                 ::findOrFail($directoryId)
                 ->forms()
-                ->with(self::$withRelationships)
+                ->with([
+                    'compatibleForms.directory',
+                    'formSections' => function($query) {
+                        $query->active()
+                            ->orderBy('form_sections.placement_order');
+                    },
+                    'formSections.formFields' => function($query) {
+                        $query->active()
+                            ->orderBy('form_fields.placement_order');
+                    },
+                    'formSections.formFields.type',
+                    'formSections.formFields.labelledValues' => function($query) {
+                        $query->where('form_field_labelled_value.is_active', 1)
+                            ->orderBy('form_field_labelled_value.placement_order');
+                    },
+                ])
         );
     }
 
@@ -41,7 +50,22 @@ class FormController extends Controller
         return Directory
             ::findOrFail($directoryId)
             ->forms()
-            ->with(self::$withRelationships)
+            ->with([
+                'compatibleForms.directory',
+                'formSections' => function($query) {
+                    $query->active()
+                        ->orderBy('form_sections.placement_order');
+                },
+                'formSections.formFields' => function($query) {
+                    $query->active()
+                        ->orderBy('form_fields.placement_order');
+                },
+                'formSections.formFields.type',
+                'formSections.formFields.labelledValues' => function($query) {
+                    $query->where('form_field_labelled_value.is_active', 1)
+                        ->orderBy('form_field_labelled_value.placement_order');
+                },
+            ])
             ->findOrFail($formId);
     }
 }

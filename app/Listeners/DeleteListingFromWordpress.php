@@ -30,6 +30,6 @@ class DeleteListingFromWordpress implements ShouldQueue
     {
         WordPress::deleteListing($event->targetDirectory, $event->wpPostId);
 
-        event(new ListingEventCompleted($event->formEntry), 'ListingDeleted');
+        event(new ListingEventCompleted($event->formEntry, 'ListingDeleted'));
     }
 }

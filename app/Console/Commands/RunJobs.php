@@ -19,7 +19,9 @@ class RunJobs extends Command
      *
      * @var string
      */
-    protected $description = '';
+    protected $description = 'Calls `queue:work --once` based on the number of '
+                           . 'jobs that are currently in the jobs table. Will ' 
+                           . 'timeout after a certain period.';
 
     /**
      * Create a new command instance.
@@ -38,12 +40,21 @@ class RunJobs extends Command
      */
     public function handle()
     {
+        $startTime = time();
         $numJobs = Job::count();
+
+        // Calling `$this->call('queue:work', ['--once']);` does not seem to 
+        // work (i.e. argument `--once` is ignored and queue is run in daemon
+        // mode).
+        $command = ' ' . __DIR__ . '/../../../artisan queue:work --once';        
+
         for ($i = 0; $i < $numJobs; $i++) {
-            $this->call('queue:work', [
-                '--once',
-                '--retries=10'
-            ]);
+            // Timeout after 2.5 minutes
+            if (time() - $startTime > 150) {
+                exit();
+            }
+
+            exec(PHP_BINARY . $command);
         }
     }
 }

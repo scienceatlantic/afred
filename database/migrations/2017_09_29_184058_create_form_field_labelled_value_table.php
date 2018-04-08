@@ -15,11 +15,13 @@ class CreateFormFieldLabelledValueTable extends Migration
     {
         Schema::create('form_field_labelled_value', function (Blueprint $table) {
             // Columns
-            $table->increments('id');
             $table->integer('form_field_id')
                   ->unsigned();
             $table->integer('labelled_value_id')
                   ->unsigned();
+            $table->integer('placement_order')
+                  ->unsigned()
+                  ->nullable();
             $table->boolean('is_active')
                   ->default(true);
             $table->timestamps();
@@ -29,12 +31,20 @@ class CreateFormFieldLabelledValueTable extends Migration
                   ->references('id')
                   ->on('form_fields')
                   ->onUpdate('cascade')
-                  ->onDelete('restrict');
+                  ->onDelete('cascade');
             $table->foreign('labelled_value_id')
                   ->references('id')
                   ->on('labelled_values')
                   ->onUpdate('cascade')
-                  ->onDelete('restrict');
+                  ->onDelete('cascade');
+            $table->unique(
+                  ['form_field_id', 'labelled_value_id'],
+                  'ff_id_lv_id_unique'
+            );
+            $table->unique(
+                  ['form_field_id', 'placement_order'],
+                  'ff_id_po_unique'
+            );
         });
     }
 

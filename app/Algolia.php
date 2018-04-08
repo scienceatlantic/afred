@@ -102,6 +102,9 @@ class Algolia
         // ID that will be used by Algolia to uniquely identify the object.
         $data['objectID'] = $listing->published_entry_section_id;
 
+        // Search template's object key.
+        $data['search_template_object_key'] = $listing->search_template_object_key;
+
         // Add other meta properties.
         $data['pagination_title'] = $formEntry->data['pagination_title'];
         $data['form_entry_id'] = $formEntry->id;

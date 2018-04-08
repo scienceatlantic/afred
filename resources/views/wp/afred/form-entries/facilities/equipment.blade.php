@@ -7,7 +7,7 @@
 
       @isset($formEntry->data['sections']['equipment'])
         @foreach ($formEntry->data['sections']['equipment'] as $index => $equip)
-          @if ($equip['entry_section']['id'] === $listing->entry_section_id )
+          @if ($equip['entry_section']['id'] === $listing->entry_section_id)
             @isset($equip['type'])
               <div class="row">
                 <div class="col-md-4">
@@ -131,7 +131,17 @@
               <div class="col-md-4">
                 <label class="afredwp-pull-right-md">Province</label>
               </div>
-              <div class="col-md-8">{{ $facility['province']['value'] }}</div>
+              <div class="col-md-8">
+                @if (count($facility['province']) > 1)
+                  <ul>
+                    @foreach ($facility['province'] as $province)
+                      <li>{{ $province['value'] }}</li>
+                    @endforeach
+                  <ul>
+                @elseif (isset($province[0]['value']))
+                  {{ $province[0]['value'] }}
+                @endif
+              </div>
             </div>
           @endisset
 

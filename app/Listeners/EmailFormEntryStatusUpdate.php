@@ -8,6 +8,7 @@ use App\User;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Mail;
+use Log;
 
 class EmailFormEntryStatusUpdate implements ShouldQueue
 {
@@ -40,16 +41,24 @@ class EmailFormEntryStatusUpdate implements ShouldQueue
                     ->orWhere('is_in_algolia', false)
                     ->count();
                 
-                // If we're still waiting for listings to be created, abort (
-                // with the hope that it will be done the next time this is 
-                // called).
+                // If we're still waiting for listings to be added...
                 if ($numListingsToBeAdded > 0) {
-                    $msg = 'Still waiting for all listings to be added before '
-                         . 'sending out published notification email.';
-                    Log::warning($msg, [
-                        'formEntry' => $event->formEntry->toArray()
-                    ]);
-                    abort(500);
+                    // If there are still pending jobs, re-create the event.
+                    if ($event->formEntry->job_count > 0) {
+                        event(new FormEntryStatusUpdated($event->formEntry));
+                    } 
+                    // If there are no more pending jobs, but some listings were
+                    // not added to WordPress or Algolia, log it and quit.
+                    else {
+                        $msg = 'Cannot send form entry published email. '
+                             . 'Certain listings were not added to either '
+                             . 'WordPress or Algolia and there are no more '
+                             . 'pending jobs.';
+                        Log::error($msg, [
+                            'formEntryId' => $event->formEntry->id
+                        ]);
+                        return;
+                    }
                 }
                 break;
             case 'Submitted':
@@ -68,22 +77,43 @@ class EmailFormEntryStatusUpdate implements ShouldQueue
                 return;
         }
 
-        // TODO
-        $reviewers = User::administrators()->get();
+        $administrators = $event->formEntry
+            ->form
+            ->directory
+            ->users()
+            ->administrators()
+            ->active()
+            ->get();
+
+        $editors = $event->formEntry
+            ->form
+            ->directory
+            ->users()
+            ->editors()
+            ->active()
+            ->get();
+
+        $reviewers = $administrators->concat($editors);
 
         $isReviewerAlsoAuthor
             = $reviewers->contains('id', $event->formEntry->author->id);
 
-        // TODO: ILO!
         if (!$isReviewerAlsoAuthor) {
-            Mail::to('afred.dev@scienceatlantic.ca')
-                ->send(new FormEntryStatusUpdateMail($event->formEntry));
+            $mail = Mail::to($event->formEntry->author);
+
+            // Copy ILO if applicable.
+            if ($event->formEntry->status->name === 'Published'
+                && !$event->formEntry->is_edit
+                && $event->formEntry->ilo) {
+                $mail->cc($event->formEntry->ilo);
+            }
+
+            $mail->send(new FormEntryStatusUpdateMail($event->formEntry));
         }
 
-        // BUT DON'T EMAIL OTHER ADMINISTRATORS!!!! (i.e. administrators of other installations!)
         foreach($reviewers as $reviewer) {
-            Mail::to('afred.dev@scienceatlantic.ca')//$reviewer)
-                ->send(new FormEntryStatusUpdateMail($event->formEntry, $reviewer));
+            $msg = new FormEntryStatusUpdateMail($event->formEntry, $reviewer);
+            Mail::to($reviewer)->send($msg);
         }
     }
 }

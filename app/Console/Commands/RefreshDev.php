@@ -18,8 +18,9 @@ class RefreshDev extends Command
      *
      * @var string
      */
-    protected $description = 'Runs `logs:clear`, `migrate:refresh --seed`, '
-                           . '`jobs:clear`, `algolia:clear`, `wordpress:clear`';
+    protected $description = 'Runs `logs:clear`, `db:clear`, '
+                           . '`migrate:refresh --seed`, `jobs:clear`, '
+                           . '`algolia:clear`, and `wordpress:clear`';
 
     /**
      * Create a new command instance.
@@ -39,6 +40,8 @@ class RefreshDev extends Command
     public function handle()
     {
         $this->call('logs:clear');
+
+        $this->call('db:clear');
 
         $this->call('migrate:refresh', [
             '--seed' => null

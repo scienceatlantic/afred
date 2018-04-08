@@ -18,7 +18,7 @@ class CreateStringValuesTable extends Migration
             $table->increments('id');
             $table->integer('entry_field_id')
                   ->unsigned();
-            $table->string('value');
+            $table->string('value', 2100);
             $table->timestamps();
 
             // Foreign keys & indices
@@ -26,7 +26,7 @@ class CreateStringValuesTable extends Migration
                   ->references('id')
                   ->on('entry_fields')
                   ->onUpdate('cascade')
-                  ->onDelete('restrict');
+                  ->onDelete('cascade');
         });
     }
 

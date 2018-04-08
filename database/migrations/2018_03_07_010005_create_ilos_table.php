@@ -25,7 +25,7 @@ class CreateIlosTable extends Migration
             $table->string('telephone');
             $table->string('extension')
                   ->nullable();
-            $table->string('website')
+            $table->string('website', 2083)
                   ->nullable();                  
             $table->timestamps();
 
