@@ -31,8 +31,8 @@ class EmailFormEntryStatusUpdate implements ShouldQueue
     public function handle(FormEntryStatusUpdated $event)
     {
         switch ($event->formEntry->status->name) {
-            case 'Published':
             case 'Submitted':
+            case 'Published':
             case 'Rejected':
                 // Nothing to do here, just send email below.
                 break;
@@ -73,7 +73,7 @@ class EmailFormEntryStatusUpdate implements ShouldQueue
             $mail = Mail::to($event->formEntry->author);
 
             // Copy ILO if applicable.
-            if ($event->formEntry->status->name === 'Published'
+            if ($event->formEntry->is_published
                 && !$event->formEntry->is_edit
                 && $event->formEntry->ilo) {
                 $mail->cc($event->formEntry->ilo);

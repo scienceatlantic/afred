@@ -5,7 +5,6 @@ namespace App\Listeners;
 use App\Algolia;
 use App\Events\FormEntryStatusUpdated;
 use App\Events\ListingAddedToWordpress;
-use App\Events\ListingEventCompleted;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -30,8 +29,6 @@ class AddListingToAlgolia implements ShouldQueue
     public function handle(ListingAddedToWordpress $event)
     {
         Algolia::addListing($event->formEntry, $event->listing);
-
-        event(new ListingEventCompleted($event->formEntry, 'ListingCreated'));
 
         // Send out status updated email if all listings have been added to
         // WordPress and Algolia.

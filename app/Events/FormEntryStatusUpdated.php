@@ -15,7 +15,11 @@ class FormEntryStatusUpdated
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $formEntryId;
+
     public $formEntry;
+
+    public $status;
 
     /**
      * Create a new event instance.
@@ -24,6 +28,7 @@ class FormEntryStatusUpdated
      */
     public function __construct(FormEntry $formEntry)
     {
+        $this->formEntryId = $formEntry->id;
         $this->formEntry = $formEntry;
     }
 

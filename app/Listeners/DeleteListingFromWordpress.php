@@ -3,7 +3,6 @@
 namespace App\Listeners;
 
 use App\WordPress;
-use App\Events\ListingEventCompleted;
 use App\Events\ListingDeleted;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -29,7 +28,5 @@ class DeleteListingFromWordpress implements ShouldQueue
     public function handle(ListingDeleted $event)
     {
         WordPress::deleteListing($event->targetDirectory, $event->wpPostId);
-
-        event(new ListingEventCompleted($event->formEntry, 'ListingDeleted'));
     }
 }
