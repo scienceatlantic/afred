@@ -3,7 +3,6 @@
 namespace App\Listeners;
 
 use App\Algolia;
-use App\Events\ListingEventCompleted;
 use App\Events\ListingUnhidden;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -30,6 +29,15 @@ class AddUnhiddenListingToAlgolia implements ShouldQueue
     {
         Algolia::addListing($event->formEntry, $event->listing);
 
-        event(new ListingEventCompleted($event->formEntry, 'ListingUnhidden'));
+        // Refresh cache once all listings have been added to Algolia.
+        $allListingsAdded = !$event
+            ->formEntry
+            ->listings()
+            ->where('is_in_algolia', false)
+            ->count();
+    
+        if ($allListingsAdded) {
+            $event->formEntry->refreshCache();
+        }
     }
 }

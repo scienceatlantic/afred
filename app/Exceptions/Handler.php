@@ -39,15 +39,16 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $exception)
     {
+        // TODO Disabled (still needs work...)
         // Try to also email the error message.
-        try {
+        /*try {
             if ($email = env('MAIL_ERRORS_TO')) {
                 Notification::route('mail', $email)
                     ->notify(new ErrorOccurred($exception->getMessage()));
             }
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-        }
+        }*/
 
         parent::report($exception);
     }

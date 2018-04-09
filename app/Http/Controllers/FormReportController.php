@@ -41,11 +41,6 @@ class FormReportController extends Controller
             ->formReports()
             ->findOrFail($formReportId);
 
-        // TODO
-        // e.g. facilities.*.name, facilities.*.*
-        // e.g. facilities.0.name, facilities.0.organization.value, equipment.*.*
-        // e.g. facilities.
-
         event(new FormReportRequested(
             $formReport,
             $request->user(),

@@ -1,4 +1,4 @@
-@component('mail::message')
+@component('emails.ucalgary-message')
 Hi {!! $reviewer->first_name !!},
 
 @if ($reviewer->id === $formEntry->reviewer->id)

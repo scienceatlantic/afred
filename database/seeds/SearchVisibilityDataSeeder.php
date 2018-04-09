@@ -11,9 +11,9 @@ class SearchVisibilityDataSeeder extends BaseSeeder
     {
         $publicOrPrivate = [
             [
-                'label' => 'Private'
-            ], [
                 'label' => 'Public'
+            ], [
+                'label' => 'Private'
             ]
         ];
 

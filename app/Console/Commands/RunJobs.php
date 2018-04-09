@@ -40,21 +40,28 @@ class RunJobs extends Command
      */
     public function handle()
     {
-        $startTime = time();
-        $numJobs = Job::count();
+        $repeat = 4;
 
-        // Calling `$this->call('queue:work', ['--once']);` does not seem to 
-        // work (i.e. argument `--once` is ignored and queue is run in daemon
-        // mode).
-        $command = ' ' . __DIR__ . '/../../../artisan queue:work --once';        
-
-        for ($i = 0; $i < $numJobs; $i++) {
-            // Timeout after 2.5 minutes
-            if (time() - $startTime > 150) {
-                exit();
+        // Repeat the command (some events generate their own events and
+        // running this again allows us to execute all of those right now
+        // instead of waiting for the next time this is called via cron).
+        for ($repeatCount = 0; $repeatCount < $repeat; $repeatCount++) {
+            $startTime = time();
+            $numJobs = Job::count();
+    
+            // Calling `$this->call('queue:work', ['--once']);` does not seem to 
+            // work (i.e. argument `--once` is ignored and queue is run in
+            // daemon mode).
+            $command = ' ' . __DIR__ . '/../../../artisan queue:work --once';        
+    
+            for ($i = 0; $i < $numJobs; $i++) {
+                // Timeout after 2.5 minutes
+                if (time() - $startTime > 150) {
+                    break;
+                }
+    
+                exec(PHP_BINARY . $command);
             }
-
-            exec(PHP_BINARY . $command);
         }
     }
 }

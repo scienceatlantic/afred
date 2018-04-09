@@ -29,6 +29,17 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
      */
     public function run()
     {
+        $directories = [[
+            'name'              => 'University of Calgary',
+            'shortname'         => 'ucalgary',
+            'resource_folder'   => 'ucalgary',
+            'wp_base_url'       => 'http://localhost/afred-wp-demo2',
+            'wp_admin_base_url' => 'http://localhost/afred-wp-demo2/wp-admin',
+            'wp_api_base_url'   => 'http://localhost/afred-wp-demo2/wp-json/wp/v2',
+            'wp_api_password'   => 'YWZyZWR3cGRlbW8yOnlIQTUgVlRBSSBqU3V4IGVXdkogUE8zNCBIZ1Aw'
+        ]];
+        BaseSeeder::saveModels('Directory', $directories);
+
         $directory = Directory::findDirectory('University of Calgary');
 
         $languageCode = LanguageCode::findCode('en');

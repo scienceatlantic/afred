@@ -27,14 +27,12 @@ class DatabaseSeeder extends Seeder
         $this->call(SearchVisibilityDataSeeder::class);
         $this->call(IlosTableSeeder::class);
         
-        $this->call(DirectoriesTableSeeder::class);
         $this->call(AfredFormDataSeeder::class);
-        $this->call(UCalgaryFormDataSeeder::class);
-
+        $this->call(Afred2DataSeeder::class);
         $this->call(FormReportTableSeeder::class);
 
-        $this->call(DummyUsersTableSeeder::class);
-        //$this->call(Afred2DataSeeder::class);
+        //$this->call(DummyUsersTableSeeder::class);
         //$this->call(DummyAfredFormDataSeeder::class);
+        //$this->call(UCalgaryFormDataSeeder::class);
     }
 }

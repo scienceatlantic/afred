@@ -39,10 +39,7 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\ListingUnhidden' => [
             'App\Listeners\UnhideListingInWordpress',
             'App\Listeners\AddUnhiddenListingToAlgolia'
-        ],
-        'App\Events\ListingEventCompleted' => [
-            'App\Listeners\RefreshFormEntryCache'
-        ],
+        ]
     ];
 
     /**

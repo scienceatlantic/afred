@@ -829,7 +829,8 @@ class FormEntry extends Model
             event(new ListingCreated($listing));
         }
 
-        event(new FormEntryStatusUpdated($formEntry));
+        // Don't create a new FormEntryStatusUpdated event. We need all the
+        // listings to be published first before doing that.
 
         return $formEntry;
     }
