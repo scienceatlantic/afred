@@ -138,8 +138,8 @@
                       <li>{{ $province['value'] }}</li>
                     @endforeach
                   <ul>
-                @elseif (isset($province[0]['value']))
-                  {{ $province[0]['value'] }}
+                @elseif (isset($facility['province'][0]['value']))
+                  {{ $facility['province'][0]['value'] }}
                 @endif
               </div>
             </div>
