@@ -26,7 +26,7 @@ class CreateEntryFieldLabelledValueTable extends Migration
                   ->references('id')
                   ->on('entry_fields')
                   ->onUpdate('cascade')
-                  ->onDelete('restrict');
+                  ->onDelete('cascade');
             $table->foreign('labelled_value_id')
                   ->references('id')
                   ->on('labelled_values')
