@@ -55,10 +55,11 @@ class RunJobs extends Command
             $command = ' ' . __DIR__ . '/../../../artisan queue:work --once';        
     
             for ($i = 0; $i < $numJobs; $i++) {
-                // Timeout after 2.5 minutes
-                if (time() - $startTime > 150) {
-                    break;
-                }
+                // Timeout after 50 seconds (since we're running this command
+                // every minute)
+                if (time() - $startTime > 50) {
+                    exit();
+                }   
     
                 exec(PHP_BINARY . $command);
             }
