@@ -14,6 +14,14 @@ class DirectoryController extends Controller
      */
     public function index(DirectoryIndexRequest $request)
     {
-        return $this->pageOrGet(Directory::query());
+        $user = $request->user();
+
+        // Administrator has access to all directories
+        if ($user->is_administrator) {
+            $this->pageOrGet(Directory::query());
+        }
+
+        // Editors have access to some directories
+        return $this->pageOrGet($user->directories());
     }
 }
