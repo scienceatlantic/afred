@@ -91,9 +91,10 @@ class WordPress
             'headers' => [
                 'Authorization' => "Basic {$targetDirectory->wp_api_password}"
             ],
-            'json' => [
+            // TODO Adding this breaks the request for some reason
+            /* 'json' => [
                 'force' => $bypassTrash
-            ],
+            ], */
             'http_errors' => true
         ]);
     }
