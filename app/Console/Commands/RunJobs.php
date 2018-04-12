@@ -63,6 +63,10 @@ class RunJobs extends Command
     
                 exec(PHP_BINARY . $command);
             }
+
+            // Sleep for 10 seconds (to allow more jobs to enter the queue in
+            // the mean time).
+            sleep(10);
         }
     }
 }
