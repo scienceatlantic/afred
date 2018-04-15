@@ -162,7 +162,7 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
                               . 'separated by commas (or leave blank).';
         $formField->placement_order = 2;
         $formField->is_searchable = 1;
-        $formField->is_required = 1;
+        $formField->is_required = 0;
         $formField->is_active = 1;
         $formField->save();
 
