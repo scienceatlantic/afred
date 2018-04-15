@@ -64,7 +64,10 @@ class WordPress
 
         if (!isset($wpPost['id'])) {
             $msg = 'Failed to add listing to WordPress.';
-            Log::error($msg, ['response body' => $wpPost]);
+            Log::error($msg, [
+                'statusCode' => $response->getStatusCode(),
+                'response'   => (string) $response->getBody()
+            ]);
             abort(500);
         }
 
