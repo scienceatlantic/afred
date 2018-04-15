@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use View;
 
 class SearchSection extends Model
 {
@@ -46,12 +47,13 @@ class SearchSection extends Model
             ->resource_folder;
 
         $path = resource_path("views/wp/{$dir}/search-sections/$form/");
+        $bladePath = "wp/{$dir}/search-sections/$form/";
 
         $files = array_diff(scandir($path), ['.', '..']);
         
         foreach($files as $file) {
             $key = str_replace('.blade.php', '', $file);
-            $templates[$key] = file_get_contents($path . $file);
+            $templates[$key] = View::make($bladePath . $key)->render();
         }
 
         return $templates;
