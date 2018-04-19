@@ -10,5 +10,5 @@ has been rejected by {!! $reviewer->name !!}.
 @endif
 
 Regards,<br>
-uCalgary Bot
+UofC Bot
 @endcomponent

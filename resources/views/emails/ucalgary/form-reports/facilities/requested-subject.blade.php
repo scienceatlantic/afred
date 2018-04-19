@@ -1,1 +1,1 @@
-uCalgary | Report Generated
+UofC | Report Generated

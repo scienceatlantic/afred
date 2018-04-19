@@ -15,5 +15,5 @@ The published listing(s) can be found here:
 @endforeach
 
 Regards,<br>
-uCalgary Bot
+UofC Bot
 @endcomponent

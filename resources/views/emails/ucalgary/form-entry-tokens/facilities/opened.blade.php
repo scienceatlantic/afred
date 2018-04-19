@@ -8,5 +8,5 @@ unable to click on the URL, copy and paste it into your browser.
 <a href="{{ $token->wp_edit_url }}" target="_blank">{!! $token->wp_edit_url !!}</a>
 
 Regards,<br>
-uCalgary Bot
+UofC Bot
 @endcomponent

@@ -3,7 +3,7 @@ Hi {!! $formEntry->author->first_name !!},
 
 Congratulations!
 
-Your facility edit has been approved for inclusion in uCalgary.
+Your facility edit has been approved for inclusion in UofC.
 
 @if ($formEntry->message)
 @component('mail::panel')
@@ -23,5 +23,5 @@ link:<br>
 [https://localhost/afred-wp-demo/update-facility](https://localhost/afred-wp-demo/update-facility)
 
 Regards,<br>
-uCalgary Bot
+UofC Bot
 @endcomponent

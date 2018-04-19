@@ -1,1 +1,1 @@
-uCalgary | (#{{ $formEntry->resource_id }}-{{ $formEntry->id }}) Facility Edit Submitted
+UofC | (#{{ $formEntry->resource_id }}-{{ $formEntry->id }}) Facility Edit Submitted

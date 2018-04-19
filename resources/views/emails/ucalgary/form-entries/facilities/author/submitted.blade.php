@@ -3,9 +3,9 @@ Hi {!! $formEntry->author->first_name !!},
 
 Thank you!
 
-Your information has been successfully submitted to uCalgary. You will receive
+Your information has been successfully submitted to UofC. You will receive
 another email once the submission has been reviewed.
 
 Regards,<br>
-uCalgary Bot
+UofC Bot
 @endcomponent

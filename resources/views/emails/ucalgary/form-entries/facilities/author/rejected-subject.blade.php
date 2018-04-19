@@ -1,1 +1,1 @@
-uCalgary | (#{{ $formEntry->resource_id }}-{{ $formEntry->id }}) Facility Submission Follow-up Required
+UofC | (#{{ $formEntry->resource_id }}-{{ $formEntry->id }}) Facility Submission Follow-up Required

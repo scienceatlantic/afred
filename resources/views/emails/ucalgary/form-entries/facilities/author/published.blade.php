@@ -3,7 +3,7 @@ Hi {!! $formEntry->author->first_name !!},
 
 Congratulations!
 
-Your submission has been approved for inclusion in uCalgary.
+Your submission has been approved for inclusion in UofC.
 
 @if ($formEntry->message)
 @component('mail::panel')
@@ -29,5 +29,5 @@ officer (ILO), {!! $formEntry->ilo->name !!}, at
 @endif
 
 Regards,<br>
-uCalgary Bot
+UofC Bot
 @endcomponent

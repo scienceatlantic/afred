@@ -4,5 +4,5 @@ Hi {!! $user->first_name !!},
 Your requested report is attached in this email.
 
 Regards,<br>
-uCalgary Bot
+UofC Bot
 @endcomponent
