@@ -680,7 +680,7 @@ class FormEntry extends Model
         if ($formEntry->is_edit) {
             $formEntry->author_user_id = $oldFormEntry
                 ->tokens()
-                ->opened()
+                ->open()
                 ->first()
                 ->user
                 ->id;
