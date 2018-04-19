@@ -745,7 +745,7 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $searchFacet->search_section_id = $searchSection->id;
         $searchFacet->search_facet_operator_id = $this->andOperator->id;
         $searchFacet->label = 'Faculties/Departments';
-        $searchFacet->algolia_object_key = 'sections.facilities.faculties.value';
+        $searchFacet->algolia_object_key = 'sections.facilities.faculty.value';
         $searchFacet->placement_order = 1;
         $searchFacet->save();
 
@@ -760,7 +760,7 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $searchFacet = new SearchFacet();
         $searchFacet->search_section_id = $searchSection->id;
         $searchFacet->search_facet_operator_id = $this->andOperator->id;
-        $searchFacet->label = 'Sections';
+        $searchFacet->label = 'Sectors';
         $searchFacet->algolia_object_key = 'sections.facilities.sectors.value';
         $searchFacet->placement_order = 3;
         $searchFacet->save();        
@@ -786,7 +786,7 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $searchFacet->search_section_id = $searchSection->id;
         $searchFacet->search_facet_operator_id = $this->andOperator->id;
         $searchFacet->label = 'Faculties/Departments';
-        $searchFacet->algolia_object_key = 'sections.facilities.faculties.value';
+        $searchFacet->algolia_object_key = 'sections.facilities.faculty.value';
         $searchFacet->placement_order = 1;
         $searchFacet->save();        
 
@@ -801,7 +801,7 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $searchFacet = new SearchFacet();
         $searchFacet->search_section_id = $searchSection->id;
         $searchFacet->search_facet_operator_id = $this->andOperator->id;
-        $searchFacet->label = 'Sections';
+        $searchFacet->label = 'Sectors';
         $searchFacet->algolia_object_key = 'sections.facilities.sectors.value';
         $searchFacet->placement_order = 3;
         $searchFacet->save();        
