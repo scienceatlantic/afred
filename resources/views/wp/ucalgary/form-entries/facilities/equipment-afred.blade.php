@@ -122,7 +122,7 @@
               <div class="col-md-4">
                 <label class="afredwp-pull-right-md">Faculty/Department</label>
               </div>
-              <div class="col-md-8">{{ $facility['faculty'] }}</div>
+              <div class="col-md-8">{{ $facility['faculty']['value'] }}</div>
             </div>
           @endisset        
 
