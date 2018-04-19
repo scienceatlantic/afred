@@ -23,6 +23,15 @@
               </div>
               <div class="col-md-8">{{ $facility['organization']['value'] }}</div>
             </div>
+          @endisset          
+
+          @isset($facility['faculty'])
+            <div class="row">
+              <div class="col-md-4">
+                <label class="afredwp-pull-right-md">Faculty/Department</label>
+              </div>
+              <div class="col-md-8">{{ $facility['faculty'] }}</div>
+            </div>
           @endisset
 
           @isset($facility['city'])
@@ -39,17 +48,7 @@
               <div class="col-md-4">
                 <label class="afredwp-pull-right-md">Province</label>
               </div>
-              <div class="col-md-8">
-                @if (count($facility['province']) > 1)
-                  <ul>
-                    @foreach ($facility['province'] as $province)
-                      <li>{{ $province['value'] }}</li>
-                    @endforeach
-                  <ul>
-                @elseif (isset($facility['province'][0]['value']))
-                  {{ $facility['province'][0]['value'] }}
-                @endif
-              </div>
+              <div class="col-md-8">{{ $facility['province']['value'] }}</div>
             </div>
           @endisset
 
