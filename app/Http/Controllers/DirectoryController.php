@@ -18,7 +18,7 @@ class DirectoryController extends Controller
 
         // Administrator has access to all directories
         if ($user->is_administrator) {
-            $this->pageOrGet(Directory::query());
+            return $this->pageOrGet(Directory::query());
         }
 
         // Editors have access to some directories
