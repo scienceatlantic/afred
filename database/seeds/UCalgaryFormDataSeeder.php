@@ -31,11 +31,11 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
     {
         $directories = [[
             'name'              => 'University of Calgary',
-            'shortname'         => 'ucalgary',
+            'shortname'         => 'UofC',
             'resource_folder'   => 'ucalgary',
-            'wp_base_url'       => 'http://localhost/afred-wp-demo2',
-            'wp_admin_base_url' => 'http://localhost/afred-wp-demo2/wp-admin',
-            'wp_api_base_url'   => 'http://localhost/afred-wp-demo2/wp-json/wp/v2',
+            'wp_base_url'       => 'https://dev.afred.ca/code/ucalgary/home/',
+            'wp_admin_base_url' => 'https://dev.afred.ca/code/ucalgary/wp/wp-admin',
+            'wp_api_base_url'   => 'https://dev.afred.ca/code/ucalgary/home/wp-json/wp/v2',
             'wp_api_password'   => 'YWZyZWR3cGRlbW8yOnlIQTUgVlRBSSBqU3V4IGVXdkogUE8zNCBIZ1Aw'
         ]];
         BaseSeeder::saveModels('Directory', $directories);
@@ -60,7 +60,9 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
             ->where('name', 'Facilities')
             ->first();
 
-        $form->compatibleForms()->attach([$form->id, $afredForm->id]);
+        // TODO Enable compatibility with AFRED?
+        //$form->compatibleForms()->attach([$form->id, $afredForm->id]);
+        $form->compatibleForms()->attach($form->id);
 
         $this->createFacilitySection($form->id);
         $this->createPrimaryContactSection($form->id);
@@ -98,13 +100,8 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
 
     private function createFacilitySection($formId)
     {
-        $organizationIds = LabelledValueCategory
-            ::findCategory('Organizations')
-            ->values()
-            ->pluck('labelled_values.id');
-
-        $provinceIds = LabelledValueCategory
-            ::findCategory('Canadian Atlantic Provinces')
+        $facultyIds = LabelledValueCategory
+            ::findCategory('University of Calgary Faculties and Departments')
             ->values()
             ->pluck('labelled_values.id');
 
@@ -117,8 +114,6 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
             ::findCategory('Sectors of Application')
             ->values()
             ->pluck('labelled_values.id');
-
-        $notApplicable = LabelledValue::findLabel('N/A');
 
         $formSection = new FormSection();
         $formSection->form_id = $formId;
@@ -150,6 +145,20 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $formField->is_active = 1;
         $formField->save();
 
+        // Faculty/Department
+        $formField = new FormField();
+        $formField->form_section_id = $formSection->id;
+        $formField->field_type_id = $this->fieldDropdownType->id;
+        $formField->label = 'Faculty/Department';
+        $formField->object_key = 'faculty';
+        $formField->placement_order = 2;
+        $formField->is_searchable = 1;
+        $formField->is_required = 1;
+        $formField->is_active = 1;
+        $formField->save();
+
+        $formField->labelledValues()->attach($facultyIds);
+
         // City
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
@@ -160,7 +169,7 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $formField->help_text = 'If your facility/lab has locations in '
                               . 'multiple cities, please list all cities ' 
                               . 'separated by commas (or leave blank).';
-        $formField->placement_order = 2;
+        $formField->placement_order = 3;
         $formField->is_searchable = 1;
         $formField->is_required = 0;
         $formField->is_active = 1;
@@ -178,20 +187,20 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
                               . 'select organization from drop down list. '
                               . 'If the organization name does not differ from '
                               . 'the facility/lab name, please select "N/A".';
-        $formField->placement_order = 3;
+        $formField->placement_order = 4;
         $formField->has_ilo = 1;
         $formField->is_searchable = 1;
         $formField->is_required = 1;
         $formField->is_active = 1;
         $formField->save();
 
-        $formField->labelledValues()->attach($notApplicable->id);
-        $formField->labelledValues()->attach($organizationIds);
+        $uCalgary = LabelledValue::findLabel('University of Calgary');
+        $formField->labelledValues()->attach($uCalgary->id);
 
         // Province
         $formField = new FormField();
         $formField->form_section_id = $formSection->id;
-        $formField->field_type_id = $this->fieldCheckboxType->id;
+        $formField->field_type_id = $this->fieldDropdownType->id;
         $formField->label = 'Province';
         $formField->object_key = 'province';
         $formField->help_text = 'If your facility/lab has locations in '
@@ -207,7 +216,8 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $formField->show_select_all = 1;
         $formField->save();
 
-        $formField->labelledValues()->attach($provinceIds);
+        $alberta = LabelledValue::findLabel('Alberta (AB)');
+        $formField->labelledValues()->attach($alberta->id);
 
         // Facilty website
         $formField = new FormField();
@@ -217,7 +227,7 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $formField->object_key = 'website';
         $formField->max_length = 2083;
         $formField->placeholder = 'http://example.com';
-        $formField->placement_order = 4;
+        $formField->placement_order = 6;
         $formField->input_pattern = self::$websiteInputPattern;
         $formField->is_searchable = 1;
         $formField->is_required = 0;
@@ -234,7 +244,7 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $formField->help_text = 'Describe what your facility/lab does, such as '
                               . 'type of research, services offered, etc.';
         $formField->placeholder = 'What does the facility do?';
-        $formField->placement_order = 6;
+        $formField->placement_order = 7;
         $formField->is_single_column = 1;
         $formField->is_searchable = 1;
         $formField->is_required = 1;
@@ -252,7 +262,7 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
                               . 'You must select at least one research '
                               . 'discipline. If none apply, please contact '
                               . 'afred@scienceatlantic.ca.';
-        $formField->placement_order = 7;
+        $formField->placement_order = 8;
         $formField->is_searchable = 1;
         $formField->is_required = 1;
         $formField->is_active = 1;
@@ -274,7 +284,7 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
                               . 'You must select at least one sector of '
                               . 'application. If none apply, please contact '
                               . 'afred@scienceatlantic.ca.';
-        $formField->placement_order = 8;
+        $formField->placement_order = 9;
         $formField->is_searchable = 1;
         $formField->is_required = 1;
         $formField->is_active = 1;
@@ -746,18 +756,10 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
 
         $searchFacet = new SearchFacet();
         $searchFacet->search_section_id = $searchSection->id;
-        $searchFacet->search_facet_operator_id = $this->orOperator->id;
-        $searchFacet->label = 'Provinces';
-        $searchFacet->algolia_object_key = 'sections.facilities.province.value';
+        $searchFacet->search_facet_operator_id = $this->andOperator->id;
+        $searchFacet->label = 'Faculties/Departments';
+        $searchFacet->algolia_object_key = 'sections.facilities.faculties.value';
         $searchFacet->placement_order = 1;
-        $searchFacet->save();
-
-        $searchFacet = new SearchFacet();
-        $searchFacet->search_section_id = $searchSection->id;
-        $searchFacet->search_facet_operator_id = $this->orOperator->id;
-        $searchFacet->label = 'Organizations';
-        $searchFacet->algolia_object_key = 'sections.facilities.organization.value';
-        $searchFacet->placement_order = 2;
         $searchFacet->save();
 
         $searchFacet = new SearchFacet();
@@ -765,7 +767,7 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $searchFacet->search_facet_operator_id = $this->andOperator->id;
         $searchFacet->label = 'Disciplines';
         $searchFacet->algolia_object_key = 'sections.facilities.disciplines.value';
-        $searchFacet->placement_order = 3;
+        $searchFacet->placement_order = 2;
         $searchFacet->save();
         
         $searchFacet = new SearchFacet();
@@ -773,7 +775,7 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $searchFacet->search_facet_operator_id = $this->andOperator->id;
         $searchFacet->label = 'Sections';
         $searchFacet->algolia_object_key = 'sections.facilities.sectors.value';
-        $searchFacet->placement_order = 4;
+        $searchFacet->placement_order = 3;
         $searchFacet->save();        
     }
 
@@ -795,26 +797,18 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
 
         $searchFacet = new SearchFacet();
         $searchFacet->search_section_id = $searchSection->id;
-        $searchFacet->search_facet_operator_id = $this->orOperator->id;
-        $searchFacet->label = 'Provinces';
-        $searchFacet->algolia_object_key = 'sections.facilities.province.value';
+        $searchFacet->search_facet_operator_id = $this->andOperator->id;
+        $searchFacet->label = 'Faculties/Departments';
+        $searchFacet->algolia_object_key = 'sections.facilities.faculties.value';
         $searchFacet->placement_order = 1;
-        $searchFacet->save();
-
-        $searchFacet = new SearchFacet();
-        $searchFacet->search_section_id = $searchSection->id;
-        $searchFacet->search_facet_operator_id = $this->orOperator->id;
-        $searchFacet->label = 'Organizations';
-        $searchFacet->algolia_object_key = 'sections.facilities.organization.value';
-        $searchFacet->placement_order = 2;
-        $searchFacet->save();
+        $searchFacet->save();        
 
         $searchFacet = new SearchFacet();
         $searchFacet->search_section_id = $searchSection->id;
         $searchFacet->search_facet_operator_id = $this->andOperator->id;
         $searchFacet->label = 'Disciplines';
         $searchFacet->algolia_object_key = 'sections.facilities.disciplines.value';
-        $searchFacet->placement_order = 3;
+        $searchFacet->placement_order = 2;
         $searchFacet->save();
         
         $searchFacet = new SearchFacet();
@@ -822,7 +816,7 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $searchFacet->search_facet_operator_id = $this->andOperator->id;
         $searchFacet->label = 'Sections';
         $searchFacet->algolia_object_key = 'sections.facilities.sectors.value';
-        $searchFacet->placement_order = 4;
+        $searchFacet->placement_order = 3;
         $searchFacet->save();        
     }
 }
