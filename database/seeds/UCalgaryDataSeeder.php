@@ -137,7 +137,7 @@ class UCalgaryDataSeeder extends BaseSeeder
 
         // Add UofT
         self::saveLabelledValues([[
-                'label' => 'University of Calgary'
+            'label' => 'University of Calgary'
         ]]);
     }
 }

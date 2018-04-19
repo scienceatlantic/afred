@@ -181,12 +181,6 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $formField->field_type_id = $this->fieldDropdownType->id;
         $formField->label = 'Organization';
         $formField->object_key = 'organization';
-        $formField->help_text = 'Refers to the name of the ' 
-                              . 'institute/company/association/etc with which '
-                              . 'your facility/lab is affiliated. Please '
-                              . 'select organization from drop down list. '
-                              . 'If the organization name does not differ from '
-                              . 'the facility/lab name, please select "N/A".';
         $formField->placement_order = 4;
         $formField->has_ilo = 1;
         $formField->is_searchable = 1;
@@ -203,17 +197,10 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
         $formField->field_type_id = $this->fieldDropdownType->id;
         $formField->label = 'Province';
         $formField->object_key = 'province';
-        $formField->help_text = 'If your facility/lab has locations in '
-                              . 'multiple provinces, please select all that '
-                              . 'apply. If your province is not listed, please '
-                              . 'contact afred@scienceatlantic.ca.';
         $formField->placement_order = 5;
         $formField->is_searchable = 1;
         $formField->is_required = 1;
         $formField->is_active = 1;
-        $formField->is_single_column = 1;
-        $formField->is_split_list = 1;
-        $formField->show_select_all = 1;
         $formField->save();
 
         $alberta = LabelledValue::findLabel('Alberta (AB)');
