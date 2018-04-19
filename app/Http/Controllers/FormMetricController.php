@@ -72,7 +72,7 @@ class FormMetricController extends Controller
                     ->formEntries()
                     ->$status()
                     ->count(),
-                'wp_admin_url' => $form->directory->getTargetWpAdminBaseUrl()
+                'wp_admin_url' => $form->directory->target_wp_admin_base_url
                     . '/admin.php?page=afredwp-resources&afredwp-directory-id='
                     . $form->directory->id
                     . '&afredwp-form-id='

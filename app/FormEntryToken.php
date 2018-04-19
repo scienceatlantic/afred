@@ -24,6 +24,9 @@ class FormEntryToken extends Model
         'wp_edit_url'
     ];
 
+    /**
+     * Relationship with the form entry before the update.
+     */
     public function beforeUpdateFormEntry()
     {
         return $this->belongsTo(
@@ -32,6 +35,9 @@ class FormEntryToken extends Model
         );
     }
 
+    /**
+     * Relationship with the form entry after the update.
+     */
     public function afterUpdateFormEntry()
     {
         return $this->belongsTo(
@@ -40,11 +46,17 @@ class FormEntryToken extends Model
         );
     }
 
+    /**
+     * Relationship with the user that opened the token.
+     */
     public function user()
     {
         return $this->belongsTo('App\User');
     }
 
+    /**
+     * The form entry token's status.
+     */
     public function status()
     {
         return $this->belongsTo(

@@ -16,11 +16,17 @@ class Form extends Model
         'submission_messages'
     ];
 
+    /**
+     * Relationship with the directory it belongs to.
+     */
     public function directory()
     {
         return $this->belongsTo('App\Directory');
     }
 
+    /**
+     * Relationship with all the forms this form is compatible with.
+     */
     public function compatibleForms()
     {
         return $this->belongsToMany(
@@ -32,31 +38,51 @@ class Form extends Model
             ->withTimestamps();
     }
 
+    /**
+     * Relationship with all the form section it has.
+     */
     public function formSections()
     {
         return $this->hasMany('App\FormSection');
     }
 
+    /**
+     * Relationship with all the form fields it has (via form sections).
+     */
     public function formFields()
     {
         return $this->hasManyThrough('App\FormField', 'App\FormSection');
     }
 
+    /**
+     * Relationship with all the form entries it has.
+     */
     public function formEntries()
     {
         return $this->hasMany('App\FormEntry');
     }
 
+    /**
+     * Relationship with all the form reports it has.
+     */
     public function formReports()
     {
         return $this->hasMany('App\FormReport');
     }
 
+    /**
+     * Relationship with all the searc sections it has (via form sections).
+     */
     public function searchSections()
     {
         return $this->hasManyThrough('App\SearchSection', 'App\FormSection');
     }
 
+    /**
+     * Dynamic attribute that contains all the submission messages (i.e.
+     * submission successfully received, etc.) that the client WordPress plugin
+     * can use.
+     */
     public function getSubmissionMessagesAttribute()
     {
         $form = $this->fresh();

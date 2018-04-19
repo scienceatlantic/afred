@@ -9,6 +9,9 @@ use App\Listing;
 
 class Algolia
 {   
+    /**
+     * Adds a listing to Algolia.
+     */
     public static function addListing(
         FormEntry $formEntry,
         Listing $listing
@@ -34,6 +37,9 @@ class Algolia
         return $listing;
     }
 
+    /**
+     * Deletes a listing from Algolia.
+     */
     public static function deleteListing(
         FormSection $targetFormSection,
         $publishedEntrySectionId
@@ -45,11 +51,17 @@ class Algolia
             ->deleteObject($publishedEntrySectionId);
     }
 
+    /**
+     * Get an Algolia Client instance.
+     */
     public static function getClient()
     {
         return new AlgoliaClient(env('ALGOLIA_APP_ID'), env('ALGOLIA_SECRET'));
     }
 
+    /**
+     * Creates the search object that will be uploaded to Algolia.
+     */
     private static function getSearchObject(
         FormEntry $formEntry,
         Listing $listing
@@ -116,6 +128,10 @@ class Algolia
         return $data;
     }
 
+    /**
+     * Looks for a specific fieldset (i.e. entry section) within a provided
+     * set of fieldsets (i.e. entry sections).
+     */
     private static function findFieldset(
         $entrySectionId,
         $fieldsets
@@ -127,6 +143,10 @@ class Algolia
         null);
     }
 
+    /**
+     * Returns an array of public (i.e. is_public = true) fieldsets (i.e.
+     * entry sections).
+     */
     private static function getPublicFieldsets($fieldsets)
     {
         return array_where($fieldsets, function($fieldset) {
@@ -134,6 +154,10 @@ class Algolia
         });
     }
 
+    /**
+     * Returns an array of public (i.e. is_searchable = true) fields (i.e. entry
+     * fields).
+     */
     private static function getPublicFields(
         FormSection $formSection,
         $fieldset

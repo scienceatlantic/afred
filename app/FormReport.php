@@ -10,6 +10,9 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class FormReport extends Model
 {
+    /**
+     * Map of file extensions with their respective MIME types.
+     */
     public static $mimeTypeMap = [
         'xls'  => 'application/vnd.ms-excel',
         'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -25,11 +28,23 @@ class FormReport extends Model
         'cache'
     ];    
     
+    /**
+     * Relationship with the form it belongs to.
+     */
     public function form()
     {
         return $this->belongsTo('App\Form');
     }
 
+    /**
+     * Relationship with the form entry statuses a report is being narrowed down
+     * to.
+     * 
+     * The point of this relationship is to narrow down a report to a set of 
+     * statuses. I.e. you could create a report called "List of published
+     * equipment" and use this relationship to attach the report to the 
+     * "Published" form entry status so that only published data is returned.
+     */
     public function statuses()
     {
         return $this->belongsToMany(
@@ -40,8 +55,22 @@ class FormReport extends Model
         )->withTimestamps();
     }
 
+    /**
+     * Generates the report.
+     * 
+     * @param $fileType {string=xlsx} "xlsx", "xls", or "csv"
+     * 
+     * @return {array} An array containing:
+     * 
+     * "full"  => absolute path + filename
+     * "file"  => just the file name (without the path)
+     * "title" => title of the report
+     * "ext"   => MIME type
+     */
     public function generate($fileType = 'xlsx')
     {
+        // Generate the file name (attach a random string at the end to avoid
+        // clashes).
         $filename = $this->filename
             . ' '
             . now()->format('(M j, Y) (h-i-s A)')
@@ -55,6 +84,7 @@ class FormReport extends Model
 
                 list($headers, $sections, $columns) = $self->report_columns;
 
+                // Narrow down by status if applicable
                 if ($self->statuses->count()) {
                     $formEntries->whereIn(
                         'form_entry_status_id',
@@ -62,7 +92,10 @@ class FormReport extends Model
                     );
                 }
 
+                // First row contains the headers
                 $sheet->row(1, $headers);
+
+                // Extract row(s) from each form entry.
                 foreach($formEntries->get() as $formEntry) {
                     $sheet->rows(self::getRows($formEntry, $sections, $columns));
                 }
@@ -77,6 +110,14 @@ class FormReport extends Model
         ];
     }
 
+    /**
+     * Laravel getter method to access the cache.
+     * 
+     * If the cache is not empty, it will return an associative array.
+     * 
+     * The cache contains parsed data from information stored in the
+     * `report_columns` attribute.
+     */
     public function getCacheAttribute($value)
     {
         if (!$value) {
@@ -85,13 +126,39 @@ class FormReport extends Model
         return json_decode($value, true);
     }
 
+    /**
+     * Laravel setter method to set the cache.
+     * 
+     * The value provided is encoded into JSON. Setting the cache to null will
+     * force the API to generate it.
+     */
     public function setCacheAttribute($value)
     {
         $this->attributes['cache'] = json_encode($value);
     }
 
+    /**
+     * Laravel getter method for the report_columns column.
+     * 
+     * Returns an array in this format:
+     * 
+     * 0 => [headers] (e.g. ["name", "type", ...])
+     * 1 => [form section object keys] (e.g. ["facilities", "equipment"])
+     * 2 => [
+     *   {"form section object key"."index"."form field object key"},
+     *   ...
+     * ] (e.g. 
+     * [  
+     *   "facilities",
+     *   0,
+     *   "name"
+     * ])
+     * 
+     * The value returned from this method will be used to generate the report.
+     */
     public function getReportColumnsAttribute($value)
     {
+        // Return cache if available.
         if ($cache = $this->cache) {
             return $cache;
         }
@@ -102,7 +169,9 @@ class FormReport extends Model
         $sections = [];
         $columns = [];
 
+        // Parse the values.
         foreach(explode(',', $value) as $reportColumn) {
+            // Breakdown each segment (delimited by a comma)
             list($section, $indexOp, $field) = explode('.', $reportColumn);
 
             // Store section if not already added.
@@ -152,6 +221,7 @@ class FormReport extends Model
             }
         }
 
+        // Store parsed values into cache.
         $cache = [$headers, $sections, $columns];
         $this->cache = $cache;
         $this->update();
@@ -159,6 +229,12 @@ class FormReport extends Model
         return $cache;
     }
 
+    /**
+     * Private helper method to extract the row(s) from a form entry's dataset.
+     * 
+     * Each form entry's data set will (probably) generate multiple rows of
+     * data.
+     */
     private static function getRows(FormEntry $formEntry, $sections, $columns)
     {
         $dataSections = $formEntry->data['sections'];
@@ -207,6 +283,11 @@ class FormReport extends Model
         return $rows;
     }
 
+    /**
+     * Logs a warning message if a form section's object key is missing (i.e.
+     * specified in the `report_columns` column but does not exist in the
+     * dataset).
+     */
     private static function warnFormSectionMissing($section)
     {
         $msg = 'Form section missing. Skipping section in report';
@@ -215,6 +296,11 @@ class FormReport extends Model
         ]);
     }
 
+    /**
+     * Logs a warning message if a form field's object key is missing (i.e.
+     * specified in the `report_columns` column but does not exist in the
+     * dataset).
+     */    
     private static function warnFormFieldMissing($field)
     {
         $msg = 'Form field missing. Skipping field in report';

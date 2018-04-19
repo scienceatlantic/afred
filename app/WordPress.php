@@ -8,6 +8,9 @@ use Log;
 
 class WordPress
 {
+    /**
+     * Publish listing to WordPress
+     */
     public static function addListing(Listing $listing)
     {
         // Skip if already in WP.
@@ -79,6 +82,9 @@ class WordPress
         return $listing;
     }
 
+    /**
+     * Delete listing from WordPress.
+     */
     public static function deleteListing(
         Directory $targetDirectory,
         $wpPostId,
@@ -102,6 +108,9 @@ class WordPress
         ]);
     }
 
+    /**
+     * Hide (mark as private) listing in WordPress
+     */
     public static function hideListing(
         Directory $targetDirectory,
         $wpPostId
@@ -123,6 +132,9 @@ class WordPress
         ]);
     }
 
+    /**
+     * Unhide (private to publish) in WordPress.
+     */
     public static function unhideListing(
         Directory $targetDirectory,
         $wpPostId
