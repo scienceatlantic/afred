@@ -405,7 +405,7 @@ class AfredFormDataSeeder extends BaseFormSeeder
         $formSection->label_plural = 'Contacts';
         $formSection->object_key = 'contacts';
         $formSection->min = 0;
-        $formSection->max = 10;
+        $formSection->max = 3;
         $formSection->repeat_object_key = 'first_name';
         $formSection->repeat_placeholder = 'Contact';
         $formSection->placement_order = 3;
