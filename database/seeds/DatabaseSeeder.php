@@ -31,8 +31,12 @@ class DatabaseSeeder extends Seeder
         $this->call(Afred2DataSeeder::class);
         $this->call(FormReportTableSeeder::class);
 
+        // UofT Data
+        $this->call(UCalgaryDataSeeder::class);
+        $this->call(UCalgaryFormDataSeeder::class);
+
         //$this->call(DummyUsersTableSeeder::class);
         //$this->call(DummyAfredFormDataSeeder::class);
-        //$this->call(UCalgaryFormDataSeeder::class);
+        
     }
 }
