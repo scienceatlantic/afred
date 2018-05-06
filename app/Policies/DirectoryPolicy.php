@@ -46,7 +46,7 @@ class DirectoryPolicy
         return false;
     }
 
-    public function indexTokens(User $User, Directory $directory)
+    public function indexTokens(User $user, Directory $directory)
     {
         if ($user->is_editor) {
             return (bool) $directory
