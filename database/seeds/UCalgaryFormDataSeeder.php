@@ -36,7 +36,7 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
             'wp_base_url'       => 'https://infrastructure.ucalgary.ca',
             'wp_admin_base_url' => 'https://infrastructure.ucalgary.ca/wp/wp-admin',
             'wp_api_base_url'   => 'https://infrastructure.ucalgary.ca/wp-json/wp/v2',
-            'wp_api_password'   => '' // Do not commit actual pwd to GitHub
+            'wp_api_password'   => 'dummy' // Do not commit actual pwd to GitHub
         ]];
         BaseSeeder::saveModels('Directory', $directories);
 
