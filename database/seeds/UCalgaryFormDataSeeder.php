@@ -13,8 +13,8 @@ use App\LanguageCode;
 
 class UCalgaryFormDataSeeder extends BaseFormSeeder
 {
-    public static $facilitiesSearchIndex = 'development_ucalgary_facilities_facility';
-    public static $equipmentSearchIndex = 'development_ucalgary_facilities_equipment';
+    public static $facilitiesSearchIndex = 'production_ucalgary_facilities_facility';
+    public static $equipmentSearchIndex = 'production_ucalgary_facilities_equipment';
     public static $formWpPostId = 11;
 
     public function __construct()
@@ -33,10 +33,10 @@ class UCalgaryFormDataSeeder extends BaseFormSeeder
             'name'              => 'University of Calgary',
             'shortname'         => 'UofC',
             'resource_folder'   => 'ucalgary',
-            'wp_base_url'       => 'https://dev.afred.ca/code/ucalgary/home/',
-            'wp_admin_base_url' => 'https://dev.afred.ca/code/ucalgary/wp/wp-admin',
-            'wp_api_base_url'   => 'https://dev.afred.ca/code/ucalgary/home/wp-json/wp/v2',
-            'wp_api_password'   => 'YWZyZWR3cGRlbW8yOnlIQTUgVlRBSSBqU3V4IGVXdkogUE8zNCBIZ1Aw'
+            'wp_base_url'       => 'https://infrastructure.ucalgary.ca',
+            'wp_admin_base_url' => 'https://infrastructure.ucalgary.ca/wp/wp-admin',
+            'wp_api_base_url'   => 'https://infrastructure.ucalgary.ca/wp-json/wp/v2',
+            'wp_api_password'   => '' // Do not commit actual pwd to GitHub
         ]];
         BaseSeeder::saveModels('Directory', $directories);
 
