@@ -3,7 +3,7 @@ Hi {!! $formEntry->author->first_name !!},
 
 Congratulations!
 
-Your submission has been approved for inclusion in UofC.
+Your submission has been approved for inclusion in the University of Calgary Research Infrastructure Database.
 
 @if ($formEntry->message)
 @component('mail::panel')
@@ -20,7 +20,7 @@ Please check your listing(s) here:
 You will receive a periodic reminder to check your listing for accuracy. If you
 wish to make edits to your listing at any time, please follow the instructions
 on this page:<br>
-[https://localhost/afred-wp-demo/update-facility](https://localhost/afred-wp-demo/update-facility)
+[https://infrastructure.ucalgary.ca/update-facility/](https://infrastructure.ucalgary.ca/update-facility/)
 
 @if ($formEntry->ilo)
 A copy of this email has also been sent to your organization's industry liaison
