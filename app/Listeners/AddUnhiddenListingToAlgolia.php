@@ -37,7 +37,7 @@ class AddUnhiddenListingToAlgolia implements ShouldQueue
             ->count();
     
         if ($allListingsAdded) {
-            $event->formEntry->refreshCache();
+            $event->formEntry->emptyCache();
         }
     }
 }
