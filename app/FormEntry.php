@@ -283,13 +283,14 @@ class FormEntry extends Model
     }
 
     /**
-     * Regenerates the `cache` property.
+     * Nullifies the `cache` property so that the `data` property will need to
+     * be regenerated.
      */
-    public function refreshCache()
+    public function emptyCache()
     {
+        unset($this->data);
         $this->cache = null;
         $this->update();
-        $this->data;
     }
 
     /**
@@ -833,7 +834,7 @@ class FormEntry extends Model
             );
         }
 
-        $formEntry->refreshCache();
+        $formEntry->emptyCache();
 
         event(new FormEntryStatusUpdated($formEntry));
         
@@ -986,9 +987,9 @@ class FormEntry extends Model
             Token::closeToken($formEntry->tokens()->locked()->first());
         }
         
-        $formEntry->refreshCache();
+        $formEntry->emptyCache();
         if ($formEntry->is_edit) {
-            $oldFormEntry->refreshCache();
+            $oldFormEntry->emptyCache();
         }        
 
         // Create events for new listings.
@@ -1021,7 +1022,7 @@ class FormEntry extends Model
             Token::closeToken($formEntry->tokens()->locked()->first());
         }
 
-        $formEntry->refreshCache();
+        $formEntry->emptyCache();
 
         event(new FormEntryStatusUpdated($formEntry));
 
@@ -1062,7 +1063,7 @@ class FormEntry extends Model
         }
         $formEntry->listings()->delete();
 
-        $formEntry->refreshCache();
+        $formEntry->emptyCache();
 
         return $formEntry;
     }
@@ -1086,7 +1087,7 @@ class FormEntry extends Model
             event(new ListingHidden($listing));
         }
 
-        $formEntry->refreshCache();
+        $formEntry->emptyCache();
 
         return $formEntry;
     }
@@ -1107,7 +1108,7 @@ class FormEntry extends Model
             event(new ListingUnhidden($listing));
         }
 
-        $formEntry->refreshCache();
+        $formEntry->emptyCache();
 
         return $formEntry;
     }
