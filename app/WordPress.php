@@ -30,7 +30,7 @@ class WordPress
             . env('WP_CUSTOM_POST_TYPE_REST_BASE');
         $slug = $targetFormSection->slug_prefix
             . '_' 
-            . $listing->entrySection->id;
+            . $listing->published_entry_section_id;
 
         // Get Vue root container id.
         $vueRootId = env('VUE_ROOT_ID');
