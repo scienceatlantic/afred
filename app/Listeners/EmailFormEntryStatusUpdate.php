@@ -30,6 +30,9 @@ class EmailFormEntryStatusUpdate implements ShouldQueue
      */
     public function handle(FormEntryStatusUpdated $event)
     {
+        // Empty the cache
+        $event->formEntry->emptyCache();
+
         switch ($event->formEntry->status->name) {
             case 'Submitted':
             case 'Published':
