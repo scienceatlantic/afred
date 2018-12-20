@@ -59,7 +59,7 @@
                 <label class="afredwp-pull-right-md">Website</label>
               </div>
               <div class="col-md-8">
-                <a href="{{ $facility['website'] }}" target="_blank">
+                <a href="{{ add_protocol($facility['website']) }}" target="_blank">
                   {{ $facility['website'] }}
                 </a>
               </div>
@@ -76,7 +76,7 @@
               </div>
             </div>
           @endisset
-          
+
           @if (count($facility['disciplines']))
             <div class="row">
               <div class="col-md-4">
@@ -151,7 +151,7 @@
                 {{ $contact['telephone'] }}
                 @isset($contact['extension'])
                   <span class="label label-default">Ext: {{ $contact['extension'] }}</span>
-                @endisset          
+                @endisset
               </div>
             </div>
           @endisset
@@ -171,7 +171,7 @@
                 <label class="afredwp-pull-right-md">Website</label>
               </div>
               <div class="col-md-8">
-                <a href="{{ $contact['website'] }}" target="_blank">
+                <a href="{{ add_protocol($contact['website']) }}" target="_blank">
                   {{ $contact['website'] }}
                 </a>
               </div>
@@ -237,7 +237,7 @@
                 <label class="afredwp-pull-right-md">Website</label>
               </div>
               <div class="col-md-8">
-                <a href="{{ $contact['website'] }}" target="_blank">
+                <a href="{{ add_protocol($contact['website']) }}" target="_blank">
                   {{ $contact['website'] }}
                 </a>
               </div>
@@ -251,7 +251,7 @@
       @endisset
     </div>
   </div>
-  
+
   <div class="panel panel-default">
     <div class="panel-body">
       <p class="h4">Equipment</p>
@@ -332,7 +332,7 @@
       @endisset
     </div>
   </div>
-  
+
   <div class="small text-muted">
     <p>
       @isset($formEntry->created_at)

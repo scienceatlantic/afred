@@ -132,7 +132,7 @@
                 <label class="afredwp-pull-right-md">Website</label>
               </div>
               <div class="col-md-8">
-                <a href="{{ $facility['website'] }}" target="_blank">
+                <a href="{{ add_protocol($facility['website']) }}" target="_blank">
                   {{ $facility['website'] }}
                 </a>
               </div>
@@ -244,7 +244,7 @@
                 <label class="afredwp-pull-right-md">Website</label>
               </div>
               <div class="col-md-8">
-                <a href="{{ $contact['website'] }}" target="_blank">
+                <a href="{{ add_protocol($contact['website']) }}" target="_blank">
                   {{ $contact['website'] }}
                 </a>
               </div>
@@ -310,7 +310,7 @@
                 <label class="afredwp-pull-right-md">Website</label>
               </div>
               <div class="col-md-8">
-                <a href="{{ $contact['website'] }}" target="_blank">
+                <a href="{{ add_protocol($contact['website']) }}" target="_blank">
                   {{ $contact['website'] }}
                 </a>
               </div>
