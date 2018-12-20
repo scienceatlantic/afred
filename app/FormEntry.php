@@ -55,9 +55,9 @@ class FormEntry extends Model
      *
      * @var array
      */
-    protected $dates = ['reviewed_at'];    
+    protected $dates = ['reviewed_at'];
 
-    /** 
+    /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
@@ -83,7 +83,7 @@ class FormEntry extends Model
     }
 
     /**
-     * Relationship between form entry and the form(s) it's attached to (i.e. 
+     * Relationship between form entry and the form(s) it's attached to (i.e.
      * directories the form entry is saved to).
      */
     public function formsAttachedTo()
@@ -134,7 +134,7 @@ class FormEntry extends Model
     /**
      * Relationship between form entry and its editors (i.e. users granted
      * access to generate edit "tokens").
-     */    
+     */
     public function editors()
     {
         return $this->belongsToMany('App\User')->withTimestamps();
@@ -174,7 +174,7 @@ class FormEntry extends Model
 
     /**
      * Scope to get all "published" form entries.
-     */    
+     */
     public function scopePublished($query)
     {
         $statusId = Status::findStatus('Published')->id;
@@ -183,16 +183,16 @@ class FormEntry extends Model
 
     /**
      * Scope to get all "hidden" form entries.
-     */    
+     */
     public function scopeHidden($query)
     {
         $statusId = Status::findStatus('Hidden')->id;
         return $query->where('form_entry_status_id', $statusId);
-    }    
+    }
 
     /**
      * Scope to get all "rejected" form entries.
-     */    
+     */
     public function scopeRejected($query, $includeEdits = false)
     {
         $statusId = Status::findStatus('Rejected')->id;
@@ -203,7 +203,7 @@ class FormEntry extends Model
 
     /**
      * Scope to get all "deleted" form entries.
-     */    
+     */
     public function scopeDeleted($query)
     {
         $statusId = Status::findStatus('Deleted')->id;
@@ -223,7 +223,7 @@ class FormEntry extends Model
 
     /**
      * Dynamic property that returns an ILO if found.
-     * 
+     *
      * @return {Ilo|null}
      */
     public function getIloAttribute()
@@ -265,8 +265,8 @@ class FormEntry extends Model
     /**
      * Laravel getter method to automatically decode the cache into JSON if it
      * is not empty.
-     * 
-     * @return 
+     *
+     * @return
      */
     public function getCacheAttribute($value)
     {
@@ -295,11 +295,11 @@ class FormEntry extends Model
 
     /**
      * Determines if this form entry has any pending jobs.
-     * 
+     *
      * This method basically searches the `payload` column in the `jobs` table
      * to determine if its form entry ID is in it. That is how it determines if
-     * it has any pending jobs. 
-     * 
+     * it has any pending jobs.
+     *
      * Have a look at the events generated. A lot of them will have a
      * `formEntryId` property that is not being used. It's only purpose is to be
      * used by this method to identify the form entry it belongs to.
@@ -312,18 +312,18 @@ class FormEntry extends Model
 
     /**
      * Does this form entry has a form entry status of "Submitted"?
-     * 
+     *
      * @return {bool}
      */
     public function getIsSubmittedAttribute()
     {
         $statusId = Status::findStatus('Submitted')->id;
         return $this->form_entry_status_id === $statusId;
-    }    
-    
+    }
+
     /**
      * Does this form entry has a form entry status of "Published"?
-     * 
+     *
      * @return {bool}
      */
     public function getIsPublishedAttribute()
@@ -334,18 +334,18 @@ class FormEntry extends Model
 
     /**
      * Does this form entry has a form entry status of "Hidden"?
-     * 
+     *
      * @return {bool}
      */
     public function getIsHiddenAttribute()
     {
         $statusId = Status::findStatus('Hidden')->id;
         return $this->form_entry_status_id === $statusId;
-    }    
+    }
 
     /**
      * Does this form entry has a form entry status of "Revision"?
-     * 
+     *
      * @return {bool}
      */
     public function getIsRevisionAttribute()
@@ -353,10 +353,10 @@ class FormEntry extends Model
         $statusId = Status::findStatus('Revision')->id;
         return $this->form_entry_status_id === $statusId;
     }
-    
+
     /**
      * Does this form entry has a form entry status of "Rejected"?
-     * 
+     *
      * @return {bool}
      */
     public function getIsRejectedAttribute()
@@ -364,10 +364,10 @@ class FormEntry extends Model
         $statusId = Status::findStatus('Rejected')->id;
         return $this->form_entry_status_id === $statusId;
     }
-    
+
     /**
      * Does this form entry has a form entry status of "Deleted"?
-     * 
+     *
      * @return {bool}
      */
     public function getIsDeletedAttribute()
@@ -378,7 +378,7 @@ class FormEntry extends Model
 
     /**
      * Can this form entry be published?
-     * 
+     *
      * @return {bool}
      */
     public function getCanPublishAttribute()
@@ -388,9 +388,9 @@ class FormEntry extends Model
 
     /**
      * Can this form entry be rejected?
-     * 
+     *
      * @return {bool}
-     */    
+     */
     public function getCanRejectAttribute()
     {
         return $this->can_publish;
@@ -398,7 +398,7 @@ class FormEntry extends Model
 
     /**
      * Can you hide (i.e. temporarily remove from public view) this form entry?
-     * 
+     *
      * @return {bool}
      */
     public function getCanHideAttribute()
@@ -410,9 +410,9 @@ class FormEntry extends Model
 
     /**
      * Can you unhide this form entry?
-     * 
+     *
      * @return {bool}
-     */    
+     */
     public function getCanUnhideAttribute()
     {
         return $this->is_hidden && !$this->has_pending_jobs;
@@ -420,7 +420,7 @@ class FormEntry extends Model
 
     /**
      * Can this form entry be edited?
-     * 
+     *
      * @return {bool}
      */
     public function getCanEditAttribute()
@@ -432,9 +432,9 @@ class FormEntry extends Model
 
     /**
      * Can this form entry be deleted?
-     * 
+     *
      * @return {bool}
-     */    
+     */
     public function getCanDeleteAttribute()
     {
         return $this->is_published
@@ -444,17 +444,17 @@ class FormEntry extends Model
 
     /**
      * Does this form entry have any pending jobs?
-     * 
+     *
      * @return {bool}
      */
     public function getHasPendingJobsAttribute()
     {
         return $this->job_count > 0;
-    }    
+    }
 
     /**
      * Does this form entry have any open form entry tokens?
-     * 
+     *
      * @return {bool}
      */
     public function getHasOpenTokenAttribute()
@@ -464,9 +464,9 @@ class FormEntry extends Model
 
     /**
      * Does this form entry have any locked form entry tokens?
-     * 
+     *
      * @return {bool}
-     */    
+     */
     public function getHasLockedTokenAttribute()
     {
         return (bool) $this->tokens()->locked()->count();
@@ -474,17 +474,17 @@ class FormEntry extends Model
 
     /**
      * Does this form entry have any open or locked form entry tokens?
-     * 
+     *
      * @return {bool}
-     */     
+     */
     public function getHasUnclosedTokenAttribute()
     {
         return (bool) $this->tokens()->unclosed()->count();
-    }    
+    }
 
     /**
      * WordPress resource administration page URL.
-     * 
+     *
      * @return {string}
      */
     public function getWpAdminUrlAttribute()
@@ -496,11 +496,11 @@ class FormEntry extends Model
             . $this->form->id
             . '&afredwp-form-entry-id='
             . $this->id;
-    }   
+    }
 
     /**
      * WordPress resource administration compare page (for edits) URL.
-     * 
+     *
      * @return {string}
      */
     public function getWpAdminCompareUrlAttribute()
@@ -519,7 +519,7 @@ class FormEntry extends Model
 
     /**
      * WordPress resource administration history (list of edits) page URL.
-     * 
+     *
      * @return {string}
      */
     public function getWpAdminHistoryUrlAttribute()
@@ -534,11 +534,11 @@ class FormEntry extends Model
             . '&afredwp-resource-id='
             . $this->resource_id;
     }
-    
+
     /**
      * WordPress resource administration form entry tokens (list of all the
      * form entry tokens for this particular resource) page URL.
-     * 
+     *
      * @return {string}
      */
     public function getWpAdminTokensUrlAttribute()
@@ -550,11 +550,11 @@ class FormEntry extends Model
             . $this->form->id
             . '&afredwp-form-entry-id='
             . $this->id;
-    }    
+    }
 
     /**
      * WordPress submission form page URL.
-     * 
+     *
      * @return {string}
      */
     public function getWpFormUrlAttribute()
@@ -569,14 +569,14 @@ class FormEntry extends Model
 
     /**
      * Returns the `data` dynamic attribute.
-     * 
+     *
      * This is the attribute that contains all the entry section and all the
      * entry section's entry fields data.
      */
     public function getDataAttribute()
     {
         // Check cache first.
-        if ($this->cache) {
+        if ($this->cache && env('APP_ENV') == 'production') {
             return $this->cache;
         }
 
@@ -654,7 +654,7 @@ class FormEntry extends Model
 
     /**
      * "Submit" (i.e. status=Submitted) a form entry (new or edit).
-     * 
+     *
      * @return {FormEntry} Newly created form entry.
      */
     public static function submitFormEntry(
@@ -670,7 +670,7 @@ class FormEntry extends Model
         } else {
             $resourceId = (self::max('resource_id') + 1);
         }
-        
+
         // Create new form entry
         $formEntry = new self();
         $formEntry->resource_id = $resourceId;
@@ -685,13 +685,13 @@ class FormEntry extends Model
                 ->first()
                 ->user
                 ->id;
-        } 
+        }
         // If the request was submitted by a logged-in user, then set that user
-        // as the author.        
+        // as the author.
         else if ($request->user()) {
             $formEntry->author_user_id = $request->user()->id;
         }
-        
+
         $formEntry->save();
 
         // Attach compatible form (that were selected).
@@ -766,12 +766,12 @@ class FormEntry extends Model
                         } else if ($labelledValue['value'] === 'Private') {
                             $entrySection->is_public = false;
                         }
-                        
+
                         $entrySection->update();
                     }
                 }
 
-                // Add entry section as primary contact if form section's 
+                // Add entry section as primary contact if form section's
                 // primary contact flag is true and primary contact has not been
                 // set.
                 if ($rootFormSection->is_primary_contact
@@ -780,7 +780,7 @@ class FormEntry extends Model
 
                     // This ensures that the model's eager loads are re-loaded.
                     $formEntry = $formEntry->fresh();
-                    
+
                 }
 
                 // Add entry section as an editor if the form section's editor
@@ -790,7 +790,7 @@ class FormEntry extends Model
 
                     // This ensures that the model's eager loads are re-loaded.
                     $formEntry = $formEntry->fresh();
-                }                
+                }
             }
         }
 
@@ -837,13 +837,13 @@ class FormEntry extends Model
         $formEntry->emptyCache();
 
         event(new FormEntryStatusUpdated($formEntry));
-        
+
         return $formEntry;
     }
 
     /**
      * "Publish" (i.e. status=Published) a form entry (new or edit).
-     * 
+     *
      * @return {FormEntry} Published form entry
      */
     public static function publishFormEntry(Request $request, self $formEntry) {
@@ -941,7 +941,7 @@ class FormEntry extends Model
                     if ($listing) {
                         $listing->entry_section_id = $entrySection->id;
                         $listing->update();
-                    } 
+                    }
                     // If it doesn't exist, create a new listing.
                     else {
                         $listing = new Listing();
@@ -986,11 +986,11 @@ class FormEntry extends Model
         if ($formEntry->is_edit) {
             Token::closeToken($formEntry->tokens()->locked()->first());
         }
-        
+
         $formEntry->emptyCache();
         if ($formEntry->is_edit) {
             $oldFormEntry->emptyCache();
-        }        
+        }
 
         // Create events for new listings.
         foreach($formEntry->listings as $listing) {
@@ -1005,7 +1005,7 @@ class FormEntry extends Model
 
     /**
      * "Reject" (i.e. status=Rejected) a form entry (new or edit).
-     * 
+     *
      * @return {FormEntry} Rejected form entry
      */
     public static function rejectFormEntry(Request $request, self $formEntry)
@@ -1013,10 +1013,10 @@ class FormEntry extends Model
         $formEntry->form_entry_status_id = Status::findStatus('Rejected')->id;
         $formEntry->reviewer_user_id = $request->user()->id;
         $formEntry->message = $request->message;
-        $formEntry->notes = $request->notes;        
+        $formEntry->notes = $request->notes;
         $formEntry->reviewed_at = now();
         $formEntry->update();
-        
+
         // Close the edit token.
         if ($formEntry->is_edit) {
             Token::closeToken($formEntry->tokens()->locked()->first());
@@ -1031,13 +1031,13 @@ class FormEntry extends Model
 
     /**
      * "Delete" (i.e. status=Delete) a form entry.
-     * 
+     *
      * Note: This is considered a "soft" delete. It still exists in the database
      * but all its listings are removed from WordPress and Algolia and then
      * finally the listings itself are deleted.
-     * 
+     *
      * @return {FormEntry} Deleted form entry
-     */    
+     */
     public static function deleteFormEntry(self $formEntry)
     {
         // Not allowed to delete form entries with open or locked edit tokens.
@@ -1070,9 +1070,9 @@ class FormEntry extends Model
 
     /**
      * "Hide" (i.e. status=Hidden) a published form entry.
-     * 
+     *
      * Temporarily remove a form entry from publication.
-     * 
+     *
      * @return {FormEntry} Hidden form entry
      */
     public static function hideFormEntry(self $formEntry)
@@ -1094,11 +1094,11 @@ class FormEntry extends Model
 
     /**
      * "Unhide" (i.e. status=Published) a hidden form entry.
-     * 
+     *
      * Re-publish a hidden form entry.
-     * 
+     *
      * @return {FormEntry} Published form entry
-     */    
+     */
     public static function unhideFormEntry(self $formEntry)
     {
         $formEntry->form_entry_status_id = Status::findStatus('Published')->id;
@@ -1122,7 +1122,7 @@ class FormEntry extends Model
         self $formEntry,
         EntrySection $entrySection
     ) {
-        // Check if the entry section contains an `email` entry field. If it 
+        // Check if the entry section contains an `email` entry field. If it
         // does not, abort!
         if (!$email = $entrySection->getFieldValue('email')) {
             $msg = 'The `email` field cannot be empty. Unable to add entry '
@@ -1143,7 +1143,7 @@ class FormEntry extends Model
             $user->last_name = $entrySection->getFieldValue('last_name');
             $user->password = '';
             $user->save();
-        } 
+        }
         // If the user exists in the users table but is a Subscriber, bump their
         // role up to "Contributor".
         else if ($user->is_subscriber) {
@@ -1154,22 +1154,22 @@ class FormEntry extends Model
         $formEntry->primary_contact_user_id = $user->id;
         $formEntry->update();
     }
-    
+
     /**
      * When a form entry is submitted, this method is used on entry sections
      * that have form sections with `is_editor = true` to add the editor to the
      * form entry.
-     * 
+     *
      * Note: This is not the same as a user with a role of "Editor". An editor
      * in this case is a user that has edit rights (i.e. is allowed to generate
      * a form entry token to be used for editing).
-     */    
+     */
     private static function addEditor(
         self $formEntry,
         EntrySection $entrySection
     ) {
-        // Check if the entry section contains an `email` entry field. If it 
-        // does not, abort!        
+        // Check if the entry section contains an `email` entry field. If it
+        // does not, abort!
         if (!$email = $entrySection->getFieldValue('email')) {
             $msg = 'The `email` field cannot be empty. Unable to add entry '
                  . 'section as an editor';
@@ -1180,7 +1180,7 @@ class FormEntry extends Model
         }
 
         // If the user does not exist in the users table (determined by the
-        // email), create the user with a role of "Contributor"        
+        // email), create the user with a role of "Contributor"
         if (!$user = User::findByEmail($email)) {
             $user = new User();
             $user->role_id = Role::findRole('Contributor')->id;
@@ -1189,9 +1189,9 @@ class FormEntry extends Model
             $user->last_name = $entrySection->getFieldValue('last_name');
             $user->password = '';
             $user->save();
-        } 
+        }
         // If the user exists in the users table but is a Subscriber, bump their
-        // role up to "Contributor".        
+        // role up to "Contributor".
         else if ($user->is_subscriber) {
             $user->role_id = Role::findRole('Contributor')->id;
             $user->update();
