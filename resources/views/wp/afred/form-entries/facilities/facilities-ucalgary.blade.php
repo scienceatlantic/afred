@@ -1,4 +1,4 @@
-<div class="afredwp" style="max-width: 800px;">
+<div class="afredwp printable" style="max-width: 800px;">
   <div class="panel panel-default">
     <div class="panel-body">
       <p class="h4">Research Facility</p>
@@ -76,7 +76,7 @@
               </div>
             </div>
           @endisset
-          
+
           @if (count($facility['disciplines']))
             <div class="row">
               <div class="col-md-4">
@@ -151,7 +151,7 @@
                 {{ $contact['telephone'] }}
                 @isset($contact['extension'])
                   <span class="label label-default">Ext: {{ $contact['extension'] }}</span>
-                @endisset          
+                @endisset
               </div>
             </div>
           @endisset
@@ -251,7 +251,7 @@
       @endisset
     </div>
   </div>
-  
+
   <div class="panel panel-default">
     <div class="panel-body">
       <p class="h4">Equipment</p>
@@ -330,7 +330,7 @@
       @endisset
     </div>
   </div>
-  
+
   <div class="small text-muted">
     <p>
       @isset($formEntry->created_at)
