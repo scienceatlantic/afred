@@ -12,7 +12,7 @@ class UserPolicy
     public function store(User $user)
     {
         return $user->is_administrator;
-    }    
+    }
 
     public function update(User $user, User $userBeingUpdated)
     {

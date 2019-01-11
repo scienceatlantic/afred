@@ -1,6 +1,6 @@
 @verbatim
-  <div class="panel panel-default">
-    <div class="panel-body">
+  <div class="card panel-default">
+    <div class="card-block">
       <p class="h4">
         {{ s.facilities.name }}
         <span v-if="s.facilities.organization">| {{ s.facilities.organization.value }}</span>

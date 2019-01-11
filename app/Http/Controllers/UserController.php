@@ -53,7 +53,7 @@ class UserController extends Controller
         } else {
             $user = User::findOrFail($id);
         }
-        
+
         if ($request->has('roles')) {
             $user->role_id = Role
                 ::whereIn('name', $request->roles)

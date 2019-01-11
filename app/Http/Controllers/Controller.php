@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Log;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -15,7 +16,7 @@ abstract class Controller extends BaseController
     /**
      * Pagination flag.
      *
-     * @type 
+     * @type
      */
     public $paginate;
 
@@ -24,12 +25,12 @@ abstract class Controller extends BaseController
         $this->paginate = $request->input('paginate', true);
         $this->itemsPerPage = $request->input('itemsPerPage', 15);
     }
-    
+
     public function pageOrGet($model)
     {
         if ($this->paginate) {
             return $model->paginate($this->itemsPerPage);
         }
         return $model->get();
-    }    
+    }
 }

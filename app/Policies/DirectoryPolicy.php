@@ -31,8 +31,8 @@ class DirectoryPolicy
                 ->first();
         }
 
-        return false;        
-    }    
+        return false;
+    }
 
     public function indexFormEntries(User $user, Directory $directory)
     {

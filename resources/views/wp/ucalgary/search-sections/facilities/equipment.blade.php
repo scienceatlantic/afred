@@ -1,6 +1,6 @@
 @verbatim
-  <div class="panel panel-default">
-    <div class="panel-body">
+  <div class="card panel-default">
+    <div class="card-block">
       <p class="h4">
         {{ s.equipment.type }} | {{ s.facilities[0].name }}
       </p>

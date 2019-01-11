@@ -1,9 +1,9 @@
-<table class="panel" width="100%" cellpadding="0" cellspacing="0">
+<table class="card" width="100%" cellpadding="0" cellspacing="0">
     <tr>
-        <td class="panel-content">
+        <td class="card-content">
             <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
-                    <td class="panel-item">
+                    <td class="card-item">
                         {{ Illuminate\Mail\Markdown::parse($slot) }}
                     </td>
                 </tr>

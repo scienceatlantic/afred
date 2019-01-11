@@ -1,6 +1,6 @@
 <div class="afredwp" style="max-width: 800px;">
-  <div class="panel panel-default">
-    <div class="panel-body">
+  <div class="card panel-default">
+    <div class="card-block">
       <p class="h4">Equipment</p>
 
       <hr><br>
@@ -11,7 +11,7 @@
             @isset($equip['type'])
               <div class="row">
                 <div class="col-md-4">
-                  <label class="afredwp-pull-right-md">Type</label>
+                  <label class="afredwp-pull-right-md control-label">Type</label>
                 </div>
                 <div class="col-md-8">{{ $equip['type'] }}</div>
               </div>
@@ -20,7 +20,7 @@
             @isset($equip['manufacturer'])
               <div class="row">
                 <div class="col-md-4">
-                  <label class="afredwp-pull-right-md">Manufacturer</label>
+                  <label class="afredwp-pull-right-md control-label">Manufacturer</label>
                 </div>
                 <div class="col-md-8">{{ $equip['manufacturer'] }}</div>
               </div>
@@ -29,7 +29,7 @@
             @isset($equip['model'])
               <div class="row">
                 <div class="col-md-4">
-                  <label class="afredwp-pull-right-md">Model</label>
+                  <label class="afredwp-pull-right-md control-label">Model</label>
                 </div>
                 <div class="col-md-8">{{ $equip['model'] }}</div>
               </div>
@@ -38,7 +38,7 @@
             @isset($equip['purpose'])
               <div class="row">
                 <div class="col-md-4">
-                  <label class="afredwp-pull-right-md">Purpose</label>
+                  <label class="afredwp-pull-right-md control-label">Purpose</label>
                 </div>
                 <div class="col-md-8">{!! $equip['purpose'] !!}</div>
               </div>
@@ -47,7 +47,7 @@
             @isset($equip['specifications'])
               <div class="row">
                 <div class="col-md-4">
-                  <label class="afredwp-pull-right-md">Specifications</label>
+                  <label class="afredwp-pull-right-md control-label">Specifications</label>
                 </div>
                 <div class="col-md-8">{!! $equip['specifications'] !!}</div>
               </div>
@@ -56,7 +56,7 @@
             @isset($equip['yearManufactured'])
               <div class="row">
                 <div class="col-md-4">
-                  <label class="afredwp-pull-right-md">Year manufactured</label>
+                  <label class="afredwp-pull-right-md control-label">Year manufactured</label>
                 </div>
                 <div class="col-md-8">{{ $equip['yearManufactured'] }}</div>
               </div>
@@ -65,7 +65,7 @@
             @isset($equip['year_purchased'])
               <div class="row">
                 <div class="col-md-4">
-                  <label class="afredwp-pull-right-md">Year purchased</label>
+                  <label class="afredwp-pull-right-md control-label">Year purchased</label>
                 </div>
                 <div class="col-md-8">{!! $equip['year_purchased'] !!}</div>
               </div>
@@ -77,7 +77,7 @@
   </div>
 
   {{-- View entire facility button --}}
-  <?php 
+  <?php
     $facilityListing = $formEntry
         ->listings()
         ->where('wp_slug', 'like', 'facility_%')
@@ -85,14 +85,14 @@
   ?>
   @isset($facilityListing)
     <p>
-      <button class="btn btn-default" onclick="location.href = '{{ $facilityListing->wp_post_url }}';">
+      <button class="btn btn-secondary" onclick="location.href = '{{ $facilityListing->wp_post_url }}';">
         See all equipment for this facility
       </button>
     </p>
   @endisset
 
-  <div class="panel panel-default">
-    <div class="panel-body">
+  <div class="card panel-default">
+    <div class="card-block">
       <p class="h4">Research Facility</p>
 
       <hr><br>
@@ -102,7 +102,7 @@
           @isset($facility['name'])
             <div class="row">
               <div class="col-md-4">
-                <label class="afredwp-pull-right-md">Facility</label>
+                <label class="afredwp-pull-right-md control-label">Facility</label>
               </div>
               <div class="col-md-8">{{ $facility['name'] }}</div>
             </div>
@@ -111,7 +111,7 @@
           @isset($facility['faculty'])
             <div class="row">
               <div class="col-md-4">
-                <label class="afredwp-pull-right-md">Faculty/Department</label>
+                <label class="afredwp-pull-right-md control-label">Faculty/Department</label>
               </div>
               <div class="col-md-8">{{ $facility['faculty']['value'] }}</div>
             </div>
@@ -120,7 +120,7 @@
           @isset($facility['city'])
             <div class="row">
               <div class="col-md-4">
-                <label class="afredwp-pull-right-md">City</label>
+                <label class="afredwp-pull-right-md control-label">City</label>
               </div>
               <div class="col-md-8">{{ $facility['city'] }}</div>
             </div>
@@ -129,7 +129,7 @@
           @isset($facility['website'])
             <div class="row">
               <div class="col-md-4">
-                <label class="afredwp-pull-right-md">Website</label>
+                <label class="afredwp-pull-right-md control-label">Website</label>
               </div>
               <div class="col-md-8">
                 <a href="{{ add_protocol($facility['website']) }}" target="_blank">
@@ -142,18 +142,18 @@
           @isset($facility['description'])
             <div class="row">
               <div class="col-md-4">
-                <label class="afredwp-pull-right-md">Description</label>
+                <label class="afredwp-pull-right-md control-label">Description</label>
               </div>
               <div class="col-md-8">
                 {!! $facility['description'] !!}
               </div>
             </div>
           @endisset
-          
+
           @if (count($facility['disciplines']))
             <div class="row">
               <div class="col-md-4">
-                <label class="afredwp-pull-right-md">Research disciplines</label>
+                <label class="afredwp-pull-right-md control-label">Research disciplines</label>
               </div>
               <div class="col-md-8">
                 <ul>
@@ -168,7 +168,7 @@
           @if (count($facility['sectors']))
             <div class="row">
               <div class="col-md-4">
-                <label class="afredwp-pull-right-md">Sectors of application</label>
+                <label class="afredwp-pull-right-md control-label">Sectors of application</label>
               </div>
               <div class="col-md-8">
                 <ul>
@@ -184,8 +184,8 @@
     </div>
   </div>
 
-  <div class="panel panel-default">
-    <div class="panel-body">
+  <div class="card panel-default">
+    <div class="card-block">
       <p class="h4">Contacts</p>
 
       <hr><br>
@@ -195,7 +195,7 @@
           @isset($contact['first_name'])
             <div class="row">
               <div class="col-md-4">
-                <label class="afredwp-pull-right-md">Name</label>
+                <label class="afredwp-pull-right-md control-label">Name</label>
               </div>
               <div class="col-md-8">
                 {{ $contact['first_name'] }} {{ $contact['last_name'] }}
@@ -207,7 +207,7 @@
           @isset($contact['email'])
             <div class="row">
               <div class="col-md-4">
-                <label class="afredwp-pull-right-md">Email</label>
+                <label class="afredwp-pull-right-md control-label">Email</label>
               </div>
               <div class="col-md-8">
                 <a href="mailto:{{ $contact['email'] }}">{{ $contact['email'] }}</a>
@@ -218,13 +218,13 @@
           @isset($contact['telephone'])
             <div class="row">
               <div class="col-md-4">
-                <label class="afredwp-pull-right-md">Telephone</label>
+                <label class="afredwp-pull-right-md control-label">Telephone</label>
               </div>
               <div class="col-md-8">
                 {{ $contact['telephone'] }}
                 @isset($contact['extension'])
                   <span class="label label-default">Ext: {{ $contact['extension'] }}</span>
-                @endisset          
+                @endisset
               </div>
             </div>
           @endisset
@@ -232,7 +232,7 @@
           @isset($contact['position'])
             <div class="row">
               <div class="col-md-4">
-                <label class="afredwp-pull-right-md">Position</label>
+                <label class="afredwp-pull-right-md control-label">Position</label>
               </div>
               <div class="col-md-8">{{ $contact['position'] }}</div>
             </div>
@@ -241,7 +241,7 @@
           @isset($contact['website'])
             <div class="row">
               <div class="col-md-4">
-                <label class="afredwp-pull-right-md">Website</label>
+                <label class="afredwp-pull-right-md control-label">Website</label>
               </div>
               <div class="col-md-8">
                 <a href="{{ add_protocol($contact['website']) }}" target="_blank">
@@ -262,7 +262,7 @@
           @isset($contact['first_name'])
             <div class="row">
               <div class="col-md-4">
-                <label class="afredwp-pull-right-md">Name</label>
+                <label class="afredwp-pull-right-md control-label">Name</label>
               </div>
               <div class="col-md-8">
                 {{ $contact['first_name'] }} {{ $contact['last_name'] }}
@@ -273,7 +273,7 @@
           @isset($contact['email'])
             <div class="row">
               <div class="col-md-4">
-                <label class="afredwp-pull-right-md">Email</label>
+                <label class="afredwp-pull-right-md control-label">Email</label>
               </div>
               <div class="col-md-8">
                 <a href="mailto:{{ $contact['email'] }}">{{ $contact['email'] }}</a>
@@ -284,7 +284,7 @@
           @isset($contact['telephone'])
             <div class="row">
               <div class="col-md-4">
-                <label class="afredwp-pull-right-md">Telephone</label>
+                <label class="afredwp-pull-right-md control-label">Telephone</label>
               </div>
               <div class="col-md-8">
                 {{ $contact['telephone'] }}
@@ -298,7 +298,7 @@
           @isset($contact['position'])
             <div class="row">
               <div class="col-md-4">
-                <label class="afredwp-pull-right-md">Position</label>
+                <label class="afredwp-pull-right-md control-label">Position</label>
               </div>
               <div class="col-md-8">{{ $contact['position'] }}</div>
             </div>
@@ -307,7 +307,7 @@
           @isset($contact['website'])
             <div class="row">
               <div class="col-md-4">
-                <label class="afredwp-pull-right-md">Website</label>
+                <label class="afredwp-pull-right-md control-label">Website</label>
               </div>
               <div class="col-md-8">
                 <a href="{{ add_protocol($contact['website']) }}" target="_blank">
@@ -324,7 +324,7 @@
       @endisset
     </div>
   </div>
-  
+
   <div class="small text-muted">
     <p>
       @isset($formEntry->created_at)

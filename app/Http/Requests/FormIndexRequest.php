@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\User;
 use App\Directory;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -18,8 +19,13 @@ class FormIndexRequest extends FormRequest
 
         if ($user = $this->user()) {
             return $user->can('indexForms', $directory);
+
+        // This is a hack to allow local environment development
+        } else if (env('APP_ENV') == "local"){
+            $user = User::whereEmail('afred@scienceatlantic.ca')->first();
+            return $user->can('indexForms', $directory);
         }
-        
+
         return false;
     }
 

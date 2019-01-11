@@ -1,11 +1,11 @@
 @verbatim
-  <div class="panel panel-default">
-    <div class="panel-body">
-      <p class="h4">
-        {{ s.facilities.name }}
-        <span v-if="s.facilities.organization">| {{ s.facilities.organization.value }}</span>
-      </p>
-      
+  <div class="card panel-default search_section_facilities_panel ucalgary_facilities_panel">
+    <div class="card-header">
+      {{ s.facilities.name }}
+      <span v-if="s.facilities.organization">| {{ s.facilities.organization.value }}</span>
+    </div>
+    <div class="card-body">
+
       <p class="small">
         {{ s.facilities.city }}<!--
     --><span v-if="s.facilities.city && s.facilities.province">,</span>

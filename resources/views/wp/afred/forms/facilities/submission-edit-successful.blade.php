@@ -16,7 +16,7 @@
   
 <p>
   <a href="http://goo.gl/forms/OGaVECiNwKwFe2ED2" target="_blank">
-    <button type="button" class="btn btn-default">
+    <button type="button" class="btn btn-secondary">
       Start the survey
       <span class="fa fa-arrow-right" style="padding-left: 3px;"></span>
     </button>

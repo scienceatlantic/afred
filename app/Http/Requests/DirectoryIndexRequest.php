@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use Log;
+use App\User;
 use App\Directory;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -16,8 +18,13 @@ class DirectoryIndexRequest extends FormRequest
     {
         if ($user = $this->user()) {
             return $user->can('index', Directory::class);
+
+        // This is a hack to allow local environment development
+        } else if (env('APP_ENV') == "local"){
+          $user = User::whereEmail('afred@scienceatlantic.ca')->first();
+          return $user->can('index', Directory::class);
         }
-        
+
         return false;
     }
 

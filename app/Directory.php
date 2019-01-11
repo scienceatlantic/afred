@@ -36,11 +36,11 @@ class Directory extends Model
     public function users()
     {
         return $this->belongsToMany('App\User')->withTimestamps();
-    }    
+    }
 
     /**
      * Find a directory by its name
-     * 
+     *
      * @param {string} $name
      */
     public static function findDirectory($name)
@@ -50,7 +50,7 @@ class Directory extends Model
 
     /**
      * The "target" WP Admin Base URL.
-     * 
+     *
      * Have a look at the GitHub documentation for more information.
      */
     public function getTargetWpAdminBaseUrlAttribute()

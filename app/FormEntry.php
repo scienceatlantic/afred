@@ -621,11 +621,13 @@ class FormEntry extends Model
                 $formField = $entryField->formField;
                 $fields[$formField->object_key] = $entryField->value;
 
-                // Add additional '<object_key>_no_html' attribute for richtext
-                // fields
+                // Add additional '<object_key>_no_html' and '<object_key>_preview'
+                // attribute for richtextfields
                 if ($formField->type->name === 'richtext') {
                     $key = $formField->object_key . '_no_html';
                     $fields[$key] = strip_tags($entryField->value);
+                    $key = $formField->object_key . '_preview';
+                    $fields[$key] = strip_tags($entryField->value) > 50 ? substr(strip_tags($entryField->value),0,50)."..." : strip_tags($entryField->value);
                 }
             }
 

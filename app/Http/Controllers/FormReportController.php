@@ -45,6 +45,6 @@ class FormReportController extends Controller
             $formReport,
             $request->user(),
             $request->fileType ?: 'csv'
-        ));        
+        ));
     }
 }

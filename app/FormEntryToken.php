@@ -80,7 +80,7 @@ class FormEntryToken extends Model
             TokenStatus::findStatus('Locked')->id
         );
     }
-    
+
     public function scopeClosed($query)
     {
         return $query->where(
@@ -119,7 +119,7 @@ class FormEntryToken extends Model
         return $this->form_entry_token_status_id
             === TokenStatus::findStatus('Closed')->id;
     }
-    
+
     public function getIsUnclosedAttribute()
     {
         return $this->form_entry_token_status_id
@@ -134,7 +134,7 @@ class FormEntryToken extends Model
         }
 
         $formEntry = $this->beforeUpdateFormEntry()->first();
-        
+
         return $formEntry->form->directory->wp_base_url
             .'/?p='
             . $formEntry->form->wp_post_id
