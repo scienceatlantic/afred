@@ -8,7 +8,7 @@ use App\FormSection;
 use App\Listing;
 
 class Algolia
-{   
+{
     /**
      * Adds a listing to Algolia.
      */
@@ -33,7 +33,7 @@ class Algolia
 
         $listing->is_in_algolia = true;
         $listing->update();
-        
+
         return $listing;
     }
 
@@ -45,7 +45,7 @@ class Algolia
         $publishedEntrySectionId
     ) {
         $client = self::getClient();
-        
+
         return $client
             ->initIndex($targetFormSection->search_index)
             ->deleteObject($publishedEntrySectionId);

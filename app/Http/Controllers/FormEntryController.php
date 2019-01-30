@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use DB;
+use Log;
 use App\Directory;
 use App\FormEntry;
 use App\FormEntryStatus as Status;
@@ -32,6 +33,15 @@ class FormEntryController extends Controller
         $directoryId,
         $formId
     ) {
+        Log::debug("====================");
+        Log::debug("GETTING FORM ENTRIES");
+        Log::debug($directoryId);
+        Log::debug($formId);
+        Log::debug($request->status);
+        Log::debug($request->resourceId);
+        Log::debug($request->keyword);
+        Log::debug($request->searchFlag);
+        Log::debug(print_r($request->query, true));
         $formEntries = Directory
             ::findOrFail($directoryId)
             ->forms()
@@ -43,29 +53,62 @@ class FormEntryController extends Controller
             $formEntries->where('resource_id', $request->resourceId);
         }
 
-        if ($request->status) {
-            // Abort if status not found.
-            if (!($status = Status::findStatus($request->status))) {
-                abort(400);
-            }
+        if (!$request->searchFlag) {
 
-            $formEntries = $formEntries
-                ->where('form_entry_status_id', $status->id);
+          if ($request->status) {
+              if ($request->status == "ANY"){
+                  //We don't currently need to do anything special here.
 
-            // If requesting for rejected form entries, don't include edits.
-            if ($status->name === 'Rejected') {
+              } else if (!($status = Status::findStatus($request->status))) {
+                  // Abort if status not found.
+                  abort(400);
+              } else {
+
                 $formEntries = $formEntries
-                    ->where('is_edit', false);
-            }
+                    ->where('form_entry_status_id', $status->id);
+
+                // If requesting for rejected form entries, don't include edits.
+                if ($status->name === 'Rejected') {
+                    $formEntries = $formEntries
+                        ->where('is_edit', false);
+                }
+
+              }
+          }
+
+          if ($request->keyword) {
+            $formEntries->where('order_by_title', 'like', '%' . $request->keyword . '%');
+          }
+
+          if ($request->orderByDesc) {
+              $formEntries->orderBy($request->orderByDesc, 'desc');
+          } else {
+              $formEntries->orderBy('order_by_title', 'asc');
+          }
+
+          return $this->pageOrGet($formEntries);
+
+        } else if ($request->searchFlag == "new_submissions") {
+
+          $formEntries = $formEntries
+              ->where('is_edit', false)
+              ->where('form_entry_status_id', 1)
+              ->orderBy('updated_at', 'desc');
+              
+          return $formEntries->paginate(5);
+
+        } else if ($request->searchFlag == "recent_edits") {
+
+          $formEntries = $formEntries
+              ->where('is_edit', true)
+              ->where('form_entry_status_id', 4)
+              ->orderBy('updated_at', 'desc');
+
+          return $formEntries->paginate(5);
+
         }
 
-        if ($request->orderByDesc) {
-            $formEntries->orderBy($request->orderByDesc, 'desc');
-        } else {
-            $formEntries->orderBy('order_by_title', 'asc');
-        }
 
-        return $this->pageOrGet($formEntries);
     }
 
     /**
@@ -129,7 +172,7 @@ class FormEntryController extends Controller
                             $request,
                             $form->formEntries()->findOrFail($formEntryId)
                         );
-                        break;                
+                        break;
                     case 'delete':
                     case 'hide':
                     case 'unhide':

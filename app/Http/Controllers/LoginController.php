@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use Log;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,6 +13,7 @@ class LoginController extends Controller
 {
     public function login(Request $request)
     {
+
         // User is allowed to login via email or wp_username.
         if (!$user = User::findByEmail($request->email)) {
             $user = User::findByWpUsername($request->email);
@@ -38,7 +40,7 @@ class LoginController extends Controller
     {
         if (Auth::check()) {
             return Auth::user();
-        }
+        } 
         return ['error' => 'Not authenticated'];
     }
 

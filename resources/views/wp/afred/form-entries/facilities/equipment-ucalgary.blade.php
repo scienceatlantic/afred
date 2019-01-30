@@ -84,7 +84,7 @@
         ->first()
   ?>
   @isset($facilityListing)
-    <p>
+    <p class="no-print">
       <button class="btn btn-secondary" onclick="location.href = '{{ $facilityListing->wp_post_url }}';">
         See all equipment for this facility
       </button>

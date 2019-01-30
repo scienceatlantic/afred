@@ -37,16 +37,16 @@ class SearchSection extends Model
 
     /**
      * Dynamic attribute containing associative of search blade templates.
-     * 
+     *
      * This is the template that will be used to present the search
      * results/hits.
-     * 
-     * It will return an array that is keyed by the root form section's 
+     *
+     * It will return an array that is keyed by the root form section's
      * object key and optionally the target directory's resource folder if the
      * target directory and root form section's directory are not the same.
-     * 
+     *
      * Example:
-     * 
+     *
      * "equipment"           => "<div>...</div>",
      * "equipment-ucalgary"  => "<div>...</div>",
      * "facilities"          => "<div>...</div>",
@@ -57,7 +57,6 @@ class SearchSection extends Model
         $templates = [];
 
         $section = $this->fresh();
-
         $form = $section
             ->formSection
             ->form
@@ -73,7 +72,7 @@ class SearchSection extends Model
         $bladePath = "wp/{$dir}/search-sections/$form/";
 
         $files = array_diff(scandir($path), ['.', '..']);
-        
+
         foreach($files as $file) {
             $key = str_replace('.blade.php', '', $file);
             $templates[$key] = View::make($bladePath . $key)->render();
@@ -84,7 +83,7 @@ class SearchSection extends Model
 
     /**
      * Helper method to retrieve the base (home) WordPress URL.
-     * 
+     *
      * Note: This is being used by the plugin.
      */
     public function getWpBaseUrlAttribute()
@@ -94,7 +93,7 @@ class SearchSection extends Model
 
     /**
      * Helper method to retrieve the form section's search index.
-     * 
+     *
      * Note: This is being used by the plugin.
      */
     public function getSearchIndexAttribute()
@@ -104,7 +103,7 @@ class SearchSection extends Model
 
     /**
      * Helper method to retrieve the form section's object key.
-     * 
+     *
      * Note: this is being used by the plugin.
      */
     public function getFormSectionObjectKeyAttribute()

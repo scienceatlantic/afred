@@ -77,14 +77,14 @@
   </div>
 
   {{-- View entire facility button --}}
-  <?php 
+  <?php
     $facilityListing = $formEntry
         ->listings()
         ->where('wp_slug', 'like', 'facility_%')
         ->first()
   ?>
   @isset($facilityListing)
-    <p>
+    <p class="no-print">
       <button class="btn btn-secondary" onclick="location.href = '{{ $facilityListing->wp_post_url }}';">
         See all equipment for this facility
       </button>
@@ -124,7 +124,7 @@
               </div>
               <div class="col-md-8">{{ $facility['faculty']['value'] }}</div>
             </div>
-          @endisset        
+          @endisset
 
           @isset($facility['city'])
             <div class="row">
@@ -167,7 +167,7 @@
               </div>
             </div>
           @endisset
-          
+
           @if (count($facility['disciplines']))
             <div class="row">
               <div class="col-md-4">
@@ -242,7 +242,7 @@
                 {{ $contact['telephone'] }}
                 @isset($contact['extension'])
                   <span class="label label-default">Ext: {{ $contact['extension'] }}</span>
-                @endisset          
+                @endisset
               </div>
             </div>
           @endisset
@@ -342,7 +342,7 @@
       @endisset
     </div>
   </div>
-  
+
   <div class="small text-muted">
     <p>
       @isset($formEntry->created_at)

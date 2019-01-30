@@ -17,7 +17,7 @@ class FormReportIndexRequest extends FormRequest
         if ($user = $this->user()) {
             return $user->can('index', FormReport::class);
         }
-        
+
         return false;
     }
 

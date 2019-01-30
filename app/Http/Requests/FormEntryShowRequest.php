@@ -15,7 +15,7 @@ class FormEntryShowRequest extends FormRequest
     public function authorize()
     {
         $formEntry = FormEntry::findOrFail($this->route('entry'));
-
+        
         if ($tokenValue = $this->get('token')) {
             if ($token = $formEntry->tokens()->open()->first()) {
                 return $token->value === $tokenValue;

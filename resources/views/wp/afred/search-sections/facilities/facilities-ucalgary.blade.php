@@ -1,8 +1,12 @@
 @verbatim
-  <div class="card panel-default search_section_facilities_panel ucalgary_facilities_panel">
+  <div class="search_section_facilities_panel ucalgary_facilities_panel">
     <div class="card-header">
-      {{ s.facilities.name }}
-      <span v-if="s.facilities.organization">| {{ s.facilities.organization.value }}</span>
+      <h3>
+        {{ s.facilities.name }}
+      </h3>
+      <h5 v-if="s.facilities.organization">
+        {{ s.facilities.organization.value }}
+      </h5>
     </div>
     <div class="card-body">
 
@@ -12,7 +16,11 @@
         <span v-if="s.facilities.province">{{ s.facilities.province.value }}</span>
       </p>
 
-      <p class="small text-muted">{{ s.facilities.description_no_html }}</p>
+
+      <p class="card-text">{{ s.facilities.description_no_html }}</p>
+
+      <a href="#" class="btn btn-light">Learn More</a>
+
     </div>
   </div>
 @endverbatim
