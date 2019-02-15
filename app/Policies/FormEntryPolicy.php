@@ -42,7 +42,7 @@ class FormEntryPolicy
                 ->directory
                 ->users()
                 ->where('id', $user->id)
-                ->first();            
+                ->first();
         }
 
         return false;
@@ -54,7 +54,7 @@ class FormEntryPolicy
     }
 
     public function destroy(User $user, FormEntry $formEntry)
-    {   
+    {
         if (!$formEntry->can_delete) {
             abort(400);
         }
@@ -67,14 +67,14 @@ class FormEntryPolicy
                 ->directory
                 ->users()
                 ->where('id', $user->id)
-                ->first();            
+                ->first();
         }
 
         return false;
     }
 
     public function hide(User $user, FormEntry $formEntry)
-    {   
+    {
         if (!$formEntry->can_hide) {
             abort(400);
         }
@@ -87,14 +87,14 @@ class FormEntryPolicy
                 ->directory
                 ->users()
                 ->where('id', $user->id)
-                ->first();            
+                ->first();
         }
 
         return false;
     }
 
     public function unhide(User $user, FormEntry $formEntry)
-    {   
+    {
         if (!$formEntry->can_unhide) {
             abort(400);
         }
@@ -107,7 +107,7 @@ class FormEntryPolicy
                 ->directory
                 ->users()
                 ->where('id', $user->id)
-                ->first();            
+                ->first();
         }
 
         return false;
@@ -115,7 +115,8 @@ class FormEntryPolicy
 
     public function openToken(User $user, FormEntry $formEntry)
     {
-        if (!$formEntry->can_edit) {
+        // Administrators can always edit form entries.
+        if (!$formEntry->can_edit && !$user->is_administrator) {
             abort(400);
         }
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Log;
 use App\Directory;
 use App\FormEntry;
 use App\FormEntryToken as Token;
@@ -90,12 +91,34 @@ class FormEntryTokenController extends Controller
         }
 
         $token = Token::openToken($formEntry, $user);
-
         $data = self::format([$formEntry])[0];
         if ($request->user()) {
             $data['wp_edit_url'] = $token->wp_edit_url;
         }
         return $data;
+    }
+
+    public function admin_url(
+        FormEntryTokenOpenRequest $request,
+        $directoryId,
+        $formId,
+        $formEntryId
+    ) {
+        $formEntry = Directory
+            ::findOrFail($directoryId)
+            ->forms()
+            ->findOrFail($formId)
+            ->formEntries()
+            ->findOrFail($formEntryId);
+
+        // Get user either via "email" in request or logged-in user.
+        if ($request->has('email')) {
+            $user = User::findbyEmail($request->email);
+        } else {
+            $user = $request->user();
+        }
+
+        return Token::getAdminWpEditUrlAttribute($formEntry, $user);
     }
 
     public function close(
@@ -115,7 +138,7 @@ class FormEntryTokenController extends Controller
             ->findOrFail($formEntryTokenId);
 
         $token = Token::closeToken($token);
-        
+
         return Token::with(self::$withRelationships)->find($token->id);
     }
 
@@ -133,7 +156,7 @@ class FormEntryTokenController extends Controller
                 'has_unclosed_token' => $formEntry->has_unclosed_token
             ]);
         }
-        
+
         return $data;
     }
 }

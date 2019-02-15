@@ -43,8 +43,13 @@ class EmailFormEntryToken implements ShouldQueue
             ->editors()
             ->active()
             ->get();
-        
+
         $others = $administrators->concat($editors);
+
+        if(env('MAIL_HOST', false) == 'smtp.mailtrap.io'){
+            sleep(5); //use usleep(500000) for half a second or less
+            $others = [];
+        }
 
         Mail::to($event->token->user->email)
             ->bcc($others)

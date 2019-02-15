@@ -80,34 +80,53 @@ class FormEntryController extends Controller
             $formEntries->where('order_by_title', 'like', '%' . $request->keyword . '%');
           }
 
-          if ($request->orderByDesc) {
-              $formEntries->orderBy($request->orderByDesc, 'desc');
+          if ($request->orderByField) {
+              $formEntries->orderBy($request->orderByField, 'asc');
           } else {
               $formEntries->orderBy('order_by_title', 'asc');
           }
 
-          return $this->pageOrGet($formEntries);
+          $formEntries->groupBy('resource_id');
 
-        } else if ($request->searchFlag == "new_submissions") {
+          return [ 'result' => $this->pageOrGet($formEntries), 'metrics' => $this->getCurrentSearchMetrics($formEntries)];
+
+        } else if ($request->searchFlag == "pending_edits") {
 
           $formEntries = $formEntries
-              ->where('is_edit', false)
               ->where('form_entry_status_id', 1)
               ->orderBy('updated_at', 'desc');
-              
-          return $formEntries->paginate(5);
 
-        } else if ($request->searchFlag == "recent_edits") {
-
-          $formEntries = $formEntries
-              ->where('is_edit', true)
-              ->where('form_entry_status_id', 4)
-              ->orderBy('updated_at', 'desc');
-
-          return $formEntries->paginate(5);
+          return [ 'result' => $formEntries->paginate(5), 'metrics' => $this->getCurrentSearchMetrics($formEntries)];
 
         }
 
+
+    }
+
+    /**
+    * Returns relevant metrics for current searches
+    */
+    public function getCurrentSearchMetrics($formEntryResults)
+    {
+
+      $metrics = [];
+      $count = 0;
+      $status_names = [];
+      $results = $formEntryResults->paginate(1000);
+      foreach($results as $formEntry){
+        $count++;
+        // Log::debug(dump($formEntry));
+        if(!array_key_exists($formEntry->form_entry_status_id, $status_names)) {
+          $status = Status::findStatusById($formEntry->form_entry_status_id);
+          $status_names[$status->id] = strtolower($status->name);
+        };
+        if(!array_key_exists($status_names[$formEntry->form_entry_status_id], $metrics)) {
+          $metrics[$status_names[$formEntry->form_entry_status_id]] = 0;
+        };
+        $metrics[$status_names[$formEntry->form_entry_status_id]] += 1;
+      }
+      $metrics['count'] = $count;
+      return $metrics;
 
     }
 

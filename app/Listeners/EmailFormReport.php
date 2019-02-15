@@ -32,6 +32,10 @@ class EmailFormReport implements ShouldQueue
             ->formReport
             ->generate($event->fileType);
 
+        if(env('MAIL_HOST', false) == 'smtp.mailtrap.io'){
+            sleep(5); //use usleep(500000) for half a second or less
+        }
+
         Mail::to($event->user)
             ->send(new FormReportMail(
                 $event->formReport,

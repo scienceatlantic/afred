@@ -40,7 +40,7 @@
                 <label class="afredwp-pull-right-md control-label">Website</label>
               </div>
               <div class="col-md-8">
-                <a href="{{ add_protocol($facility['website']) }}" target="_blank">
+                <a href="{{ add_protocol($facility['website']) }}" class="hidden_url" target="_blank">
                   {{ $facility['website'] }}
                 </a>
               </div>
@@ -57,7 +57,7 @@
               </div>
             </div>
           @endisset
-          
+
           @if (count($facility['disciplines']))
             <div class="row">
               <div class="col-md-4">
@@ -117,74 +117,9 @@
                 <label class="afredwp-pull-right-md control-label">Email</label>
               </div>
               <div class="col-md-8">
-                <a href="mailto:{{ $contact['email'] }}"></a>
-                {{ $contact['email'] }}
-              </div>
-            </div>
-          @endisset
-
-          @isset($contact['telephone'])
-            <div class="row">
-              <div class="col-md-4">
-                <label class="afredwp-pull-right-md control-label">Telephone</label>
-              </div>
-              <div class="col-md-8">
-                {{ $contact['telephone'] }}
-                @isset($contact['extension'])
-                  <span class="label label-default">Ext: {{ $contact['extension'] }}</span>
-                @endisset          
-              </div>
-            </div>
-          @endisset
-
-          @isset($contact['position'])
-            <div class="row">
-              <div class="col-md-4">
-                <label class="afredwp-pull-right-md control-label">Position</label>
-              </div>
-              <div class="col-md-8">{{ $contact['position'] }}</div>
-            </div>
-          @endisset
-
-          @isset($contact['website'])
-            <div class="row">
-              <div class="col-md-4">
-                <label class="afredwp-pull-right-md control-label">Website</label>
-              </div>
-              <div class="col-md-8">
-                <a href="{{ add_protocol($contact['website']) }}" target="_blank">
-                  {{ $contact['website'] }}
+                <a href="mailto:{{ $contact['email'] }}" class="hidden_url">
+                  {{ $contact['email'] }}
                 </a>
-              </div>
-            </div>
-          @endisset
-
-          @if ($index !== count($formEntry->data['sections']['primary_contacts']) - 1)
-            <hr>
-          @endif
-        @endforeach
-      @endisset
-
-      @isset($formEntry->data['sections']['contacts'])
-        @foreach ($formEntry->data['sections']['contacts'] as $index => $contact)
-          @isset($contact['first_name'])
-            <div class="row">
-              <div class="col-md-4">
-                <label class="afredwp-pull-right-md control-label">Name</label>
-              </div>
-              <div class="col-md-8">
-                {{ $contact['first_name'] }} {{ $contact['last_name'] }}
-              </div>
-            </div>
-          @endisset
-
-          @isset($contact['email'])
-            <div class="row">
-              <div class="col-md-4">
-                <label class="afredwp-pull-right-md control-label">Email</label>
-              </div>
-              <div class="col-md-8">
-                <a href="mailto:{{ $contact['email'] }}">{{ $contact['email'] }}</a>
               </div>
             </div>
           @endisset
@@ -218,7 +153,73 @@
                 <label class="afredwp-pull-right-md control-label">Website</label>
               </div>
               <div class="col-md-8">
-                <a href="{{ add_protocol($contact['website']) }}" target="_blank">
+                <a href="{{ add_protocol($contact['website']) }}" class="hidden_url" target="_blank">
+                  {{ $contact['website'] }}
+                </a>
+              </div>
+            </div>
+          @endisset
+
+          @if ($index !== count($formEntry->data['sections']['primary_contacts']) - 1)
+            <hr>
+          @endif
+        @endforeach
+      @endisset
+
+      @isset($formEntry->data['sections']['contacts'])
+        @foreach ($formEntry->data['sections']['contacts'] as $index => $contact)
+          @isset($contact['first_name'])
+            <div class="row">
+              <div class="col-md-4">
+                <label class="afredwp-pull-right-md control-label">Name</label>
+              </div>
+              <div class="col-md-8">
+                {{ $contact['first_name'] }} {{ $contact['last_name'] }}
+              </div>
+            </div>
+          @endisset
+
+          @isset($contact['email'])
+            <div class="row">
+              <div class="col-md-4">
+                <label class="afredwp-pull-right-md control-label">Email</label>
+              </div>
+              <div class="col-md-8">
+                <a href="mailto:{{ $contact['email'] }}" class="hidden_url">{{ $contact['email'] }}</a>
+              </div>
+            </div>
+          @endisset
+
+          @isset($contact['telephone'])
+            <div class="row">
+              <div class="col-md-4">
+                <label class="afredwp-pull-right-md control-label">Telephone</label>
+              </div>
+              <div class="col-md-8">
+                {{ $contact['telephone'] }}
+                @isset($contact['extension'])
+                  <span class="label label-default">Ext: {{ $contact['extension'] }}</span>
+                @endisset
+              </div>
+            </div>
+          @endisset
+
+          @isset($contact['position'])
+            <div class="row">
+              <div class="col-md-4">
+                <label class="afredwp-pull-right-md control-label">Position</label>
+              </div>
+              <div class="col-md-8">{{ $contact['position'] }}</div>
+            </div>
+          @endisset
+
+          @isset($contact['website'])
+            <div class="row">
+              <div class="col-md-4">
+                <label class="afredwp-pull-right-md control-label">Website</label>
+              </div>
+              <div class="col-md-8">
+                <a href="{{ add_protocol($contact['website']) }}" class="hidden_url" target="_blank">
                   {{ $contact['website'] }}
                 </a>
               </div>
@@ -232,7 +233,7 @@
       @endisset
     </div>
   </div>
-  
+
   <div class="card panel-default">
     <div class="card-block">
       <p class="h4">Equipment</p>
@@ -313,7 +314,7 @@
       @endisset
     </div>
   </div>
-  
+
   <div class="small text-muted">
     <p>
       @isset($formEntry->created_at)

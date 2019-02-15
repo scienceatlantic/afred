@@ -77,6 +77,12 @@ Route::post(
     'FormEntryTokenController@open'
 )->name('directories.forms.entries.tokens.open');
 
+// directories/{id}/forms/{id}/entries/{id}/tokens/open
+Route::post(
+    'directories/{directory}/forms/{form}/entries/{entry}/tokens/admin_url',
+    'FormEntryTokenController@admin_url'
+)->name('directories.forms.entries.tokens.admin_url');
+
 // directories/{id}/forms/{id}/entries/{id}/tokens/{id}/close
 Route::put(
     'directories/{directory}/forms/{form}/entries/{entry}/tokens/{token}/close',

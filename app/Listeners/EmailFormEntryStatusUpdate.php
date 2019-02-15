@@ -73,6 +73,9 @@ class EmailFormEntryStatusUpdate implements ShouldQueue
             = $reviewers->contains('id', $event->formEntry->author->id);
 
         if (!$isReviewerAlsoAuthor) {
+            if(env('MAIL_HOST', false) == 'smtp.mailtrap.io'){
+                sleep(5); //use usleep(500000) for half a second or less
+            }
             $mail = Mail::to($event->formEntry->author);
 
             // Copy ILO if applicable.
@@ -82,11 +85,18 @@ class EmailFormEntryStatusUpdate implements ShouldQueue
                 $mail->cc($event->formEntry->ilo);
             }
 
+            if(env('MAIL_HOST', false) == 'smtp.mailtrap.io'){
+                sleep(5); //use usleep(500000) for half a second or less
+            }
+
             $mail->send(new FormEntryStatusUpdateMail($event->formEntry));
         }
 
         foreach($reviewers as $reviewer) {
             $msg = new FormEntryStatusUpdateMail($event->formEntry, $reviewer);
+            if(env('MAIL_HOST', false) == 'smtp.mailtrap.io'){
+                sleep(5); //use usleep(500000) for half a second or less
+            }
             Mail::to($reviewer)->send($msg);
         }
     }

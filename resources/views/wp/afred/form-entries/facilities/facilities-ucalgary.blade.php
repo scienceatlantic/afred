@@ -59,7 +59,7 @@
                 <label class="afredwp-pull-right-md control-label">Website</label>
               </div>
               <div class="col-md-8">
-                <a href="{{ add_protocol($facility['website']) }}" target="_blank">
+                <a href="{{ add_protocol($facility['website']) }}" class="hidden_url" target="_blank">
                   {{ $facility['website'] }}
                 </a>
               </div>
@@ -136,8 +136,9 @@
                 <label class="afredwp-pull-right-md control-label">Email</label>
               </div>
               <div class="col-md-8">
-                <a href="mailto:{{ $contact['email'] }}"></a>
-                {{ $contact['email'] }}
+                <a href="mailto:{{ $contact['email'] }}" class="hidden_url">
+                  {{ $contact['email'] }}
+                </a>
               </div>
             </div>
           @endisset
@@ -171,7 +172,7 @@
                 <label class="afredwp-pull-right-md control-label">Website</label>
               </div>
               <div class="col-md-8">
-                <a href="{{ add_protocol($contact['website']) }}" target="_blank">
+                <a href="{{ add_protocol($contact['website']) }}" class="hidden_url" target="_blank">
                   {{ $contact['website'] }}
                 </a>
               </div>
@@ -203,7 +204,7 @@
                 <label class="afredwp-pull-right-md control-label">Email</label>
               </div>
               <div class="col-md-8">
-                <a href="mailto:{{ $contact['email'] }}">{{ $contact['email'] }}</a>
+                <a href="mailto:{{ $contact['email'] }}" class="hidden_url">{{ $contact['email'] }}</a>
               </div>
             </div>
           @endisset
@@ -237,7 +238,7 @@
                 <label class="afredwp-pull-right-md control-label">Website</label>
               </div>
               <div class="col-md-8">
-                <a href="{{ add_protocol($contact['website']) }}" target="_blank">
+                <a href="{{ add_protocol($contact['website']) }}" class="hidden_url" target="_blank">
                   {{ $contact['website'] }}
                 </a>
               </div>

@@ -18,7 +18,7 @@
 
       <p class="card-text">{{ s.equipment.purpose_no_html }}</p>
 
-      <a href="#" class="btn btn-light">Learn More</a>
+      <a :href="r.wp_post_url" class="btn btn-light">Learn More</a>
 
     </div>
   </div>

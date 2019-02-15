@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Log;
 use Illuminate\Database\Eloquent\Model;
 
 class FormEntryStatus extends Model
@@ -13,14 +14,24 @@ class FormEntryStatus extends Model
     {
         return $this->hasMany('App\FormEntry');
     }
-    
+
     /**
      * Find a particular form entry status by using the status's name
-     * 
+     *
      * @return {FormEntryStatus|null}
      */
     public static function findStatus($status)
     {
         return self::where('name', $status)->first();
+    }
+
+    /**
+     * Find a particular form entry status by using the status's name
+     *
+     * @return {FormEntryStatus|null}
+     */
+    public static function findStatusById($status_id)
+    {
+        return self::where('id', $status_id)->first();
     }
 }

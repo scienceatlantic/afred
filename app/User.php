@@ -62,6 +62,17 @@ class User extends Authenticatable
     }
 
     /**
+     * Unique hash that allows for admin editing without tokens.
+     */
+    public function adminToken()
+    {
+        \Log::debug("============== ADMIN REQUEST BUILD TOKEN $this->wp_username");
+        $token = bcrypt("$this->wp_username -- $this->wp_user_id");
+        \Log::debug($token);
+        return $token;
+    }
+
+    /**
      * Is active scope.
      *
      * I.e. an inactive user won't be able to login and will not receive any

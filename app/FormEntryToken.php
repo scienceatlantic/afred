@@ -143,12 +143,25 @@ class FormEntryToken extends Model
             . '&afredwp-token='
             . $this->value;
     }
+    public static function getAdminWpEditUrlAttribute(
+        FormEntry $beforeUpdateFormEntry,
+        User $user
+    ) {
+        Log::debug("============== ADMIN REQUEST $user->wp_username");
+        return $beforeUpdateFormEntry->form->directory->wp_base_url
+            .'/?p='
+            . $beforeUpdateFormEntry->form->wp_post_id
+            . '&afredwp-form-entry-id='
+            . $beforeUpdateFormEntry->id
+            . '&afredwp-admin-token='
+            . urlencode($user->adminToken());
+    }
 
     public static function openToken(
         FormEntry $beforeUpdateFormEntry,
         User $user
     ) {
-        if ($beforeUpdateFormEntry->tokens()->unclosed()->count()) {
+        if ($beforeUpdateFormEntry->tokens()->unclosed()->count() && !$user->is_administrator) {
             $msg = 'Attempting to open a new token where there\'s an open or '
                  . 'locked token already attached to this form entry';
             Log::error($msg, [
@@ -157,6 +170,12 @@ class FormEntryToken extends Model
             ]);
             abort(500);
         }
+        // } else if($beforeUpdateFormEntry->tokens()->unclosed()->count() && $user->is_administrator) {
+        //
+        //   $token = FormEntryToken::where('user_id', $user->id)->where('resource_id', $beforeUpdateFormEntry->resource_id)->get();
+        //   $token->wp_edit_url = FormEntryToken::getAdminWpEditUrlAttribute($beforeUpdateFormEntry);
+        //   return $token;
+        // }
 
         $openStatus = TokenStatus::findStatus('Open');
 
