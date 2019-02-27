@@ -147,7 +147,6 @@ class FormEntryToken extends Model
         FormEntry $beforeUpdateFormEntry,
         User $user
     ) {
-        Log::debug("============== ADMIN REQUEST $user->wp_username");
         return $beforeUpdateFormEntry->form->directory->wp_base_url
             .'/?p='
             . $beforeUpdateFormEntry->form->wp_post_id

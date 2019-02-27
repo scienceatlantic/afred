@@ -26,4 +26,5 @@ class DirectoryController extends Controller
         // Editors have access to some directories
         return $this->pageOrGet($user->directories());
     }
+
 }
