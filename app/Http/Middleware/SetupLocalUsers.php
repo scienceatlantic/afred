@@ -14,7 +14,7 @@ class SetupLocalUsers
     {
 
         // Perform action
-        if (env('APP_ENV') == "local"){
+        if (env('APP_ENV') != "production"){
 
           // \Log::debug(print_r($request->route(), true));
           // \Log::debug(print_r(get_object_vars($request), true));
