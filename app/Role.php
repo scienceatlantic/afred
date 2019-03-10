@@ -16,7 +16,7 @@ class Role extends Model
 
     /**
      * Find a role by the role's name.
-     * 
+     *
      * @param {string} $name
      */
     public static function findRole($name)

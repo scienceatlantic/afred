@@ -33,15 +33,6 @@ class FormEntryController extends Controller
         $directoryId,
         $formId
     ) {
-        Log::debug("====================");
-        Log::debug("GETTING FORM ENTRIES");
-        Log::debug($directoryId);
-        Log::debug($formId);
-        Log::debug($request->status);
-        Log::debug($request->resourceId);
-        Log::debug($request->keyword);
-        Log::debug($request->searchFlag);
-        Log::debug(print_r($request->query, true));
         $formEntries = Directory
             ::findOrFail($directoryId)
             ->forms()
@@ -115,7 +106,6 @@ class FormEntryController extends Controller
       $results = $formEntryResults->paginate(1000);
       foreach($results as $formEntry){
         $count++;
-        // Log::debug(dump($formEntry));
         if(!array_key_exists($formEntry->form_entry_status_id, $status_names)) {
           $status = Status::findStatusById($formEntry->form_entry_status_id);
           $status_names[$status->id] = strtolower($status->name);

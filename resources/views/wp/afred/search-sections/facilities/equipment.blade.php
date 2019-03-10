@@ -16,7 +16,7 @@
         <span v-if="s.facilities[0].province">{{ s.facilities[0].province.value }}</span>
       </p>
 
-      <p class="card-text">{{ s.equipment.purpose_no_html }}</p>
+      <p class="card-text">{{ makePreview(s.equipment.purpose_no_html) }}</p>
 
       <a :href="r.wp_post_url" class="btn btn-light">Learn More</a>
 

@@ -117,9 +117,16 @@ Route::post(
     'UserController@isEmailUnique'
 );
 
+
+// users/{id}/listings
+Route::get(
+    'users/{id}/listings',
+    'UserController@listings'
+)->name('users.listings');
+
 // users/{id}
 Route::resource('users', 'UserController', [
-    'only' => ['store', 'update', 'destroy']
+    'only' => ['store', 'update', 'destroy' ]
 ]);
 
 // login

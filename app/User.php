@@ -66,9 +66,7 @@ class User extends Authenticatable
      */
     public function adminToken()
     {
-        \Log::debug("============== ADMIN REQUEST BUILD TOKEN $this->wp_username");
         $token = bcrypt("$this->wp_username -- $this->wp_user_id");
-        \Log::debug($token);
         return $token;
     }
 
@@ -146,6 +144,26 @@ class User extends Authenticatable
     public static function findByWpUsername($wpUsername)
     {
         return self::where('wp_username', $wpUsername)->first();
+    }
+
+    /**
+     * Find user by their WordPress id
+     *
+     * @param {string} $id
+     */
+    public static function findByWpId($id)
+    {
+        return self::where('wp_user_id', $id)->first();
+    }
+
+    /**
+     * Find user by their email address or fail (HTTP 404) if user is not found.
+     *
+     * @param {string} $email
+     */
+    public static function findByWpIdOrFail($id)
+    {
+        return self::findByWpId($id) ?: abort(404);
     }
 
     /**

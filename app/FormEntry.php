@@ -627,7 +627,7 @@ class FormEntry extends Model
                     $key = $formField->object_key . '_no_html';
                     $fields[$key] = strip_tags($entryField->value);
                     $key = $formField->object_key . '_preview';
-                    $fields[$key] = strip_tags($entryField->value) > 50 ? substr(strip_tags($entryField->value),0,50)."..." : strip_tags($entryField->value);
+                    $fields[$key] = strip_tags($entryField->value) > 200 ? substr(strip_tags($entryField->value),0,200)."..." : strip_tags($entryField->value);
                 }
             }
 

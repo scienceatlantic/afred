@@ -15,10 +15,6 @@ class SetupLocalUsers
 
         // Perform action
         if (env('APP_ENV') != "production"){
-
-          // \Log::debug(print_r($request->route(), true));
-          // \Log::debug(print_r(get_object_vars($request), true));
-
           // This is a hack to allow local environment development
           if(!$request->user()) {
               $credentials = [
