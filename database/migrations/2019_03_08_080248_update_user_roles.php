@@ -15,6 +15,13 @@ class UpdateUserRoles extends Migration
      */
     public function up()
     {
+      \DB::table('roles')->insert(
+        array(
+          'name' => 'database_user',
+          'level' => 5
+        )
+      );
+
       $db_role = Role
           ::where('name', "database_user")
           ->first();
