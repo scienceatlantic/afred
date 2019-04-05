@@ -222,6 +222,36 @@ class FormEntry extends Model
     }
 
     /**
+     * Returns the currently published form entry record.
+     */
+    public function rejectOutstanding()
+    {
+        $entries = self
+            ::where('resource_id', $this->resource_id)->get();
+
+        foreach ($entries as $formEntry) {
+          $submittedStatusId = Status::findStatus('Submitted')->id;
+          if($formEntry->form_entry_status_id == $submittedStatusId){
+            $formEntry->form_entry_status_id = Status::findStatus('Rejected')->id;
+            $formEntry->save();
+
+            $formEntry->emptyCache();
+
+            foreach($formEntry->listings as $listing) {
+                event(new ListingDeleted(
+                    $listing->targetDirectory,
+                    $listing->formSection,
+                    $formEntry,
+                    $listing->wp_post_id,
+                    $listing->published_entry_section_id
+                ));
+            }
+            $formEntry->listings()->delete();
+          }
+        }
+    }
+
+    /**
      * Dynamic property that returns an ILO if found.
      *
      * @return {Ilo|null}
@@ -679,14 +709,12 @@ class FormEntry extends Model
         $formEntry->form_id = $rootForm->id;
         $formEntry->form_entry_status_id = Status::findStatus('Submitted')->id;
         $formEntry->is_edit = $isEdit;
+        if($isEdit) {
+          $open_token = $oldFormEntry->tokens()->open()->first();
+        }
         // If this is an edit, the author is the user that opened the token.
-        if ($formEntry->is_edit) {
-            $formEntry->author_user_id = $oldFormEntry
-                ->tokens()
-                ->open()
-                ->first()
-                ->user
-                ->id;
+        if ($formEntry->is_edit && $open_token) {
+            $formEntry->author_user_id = $open_token->user->id;
         }
         // If the request was submitted by a logged-in user, then set that user
         // as the author.
@@ -829,9 +857,10 @@ class FormEntry extends Model
 
         // If this is an edit, lock the edit token (so that it can be used to
         // submit more edits).
-        if ($formEntry->is_edit) {
+        $open_token = $formEntry->tokens()->open()->first();
+        if ($formEntry->is_edit && $open_token) {
             Token::lockToken(
-                $formEntry->tokens()->open()->first(),
+                $open_token,
                 $formEntry
             );
         }
@@ -852,22 +881,23 @@ class FormEntry extends Model
         // Determine if publishing an edited form entry. If it is an edit, get
         // the currently published form entry. If we can't find the currently
         // published form entry, abort.
-        if ($formEntry->is_edit && !$oldFormEntry = $formEntry->getPublished()) {
-            $msg = 'Trying to publish an edited form entry but currently '
-                 . 'published form entry was not found';
-            Log::error($msg, [
-                '$formEntry' => $formEntry->toArray()
-            ]);
-            abort(500);
-        }
+        $formEntry->rejectOutstanding();
+        // if ($formEntry->is_edit && !$oldFormEntry = $formEntry->getPublished()) {
+        //     $msg = 'Trying to publish an edited form entry but currently '
+        //          . 'published form entry was not found';
+        //     Log::error($msg, [
+        //         '$formEntry' => $formEntry->toArray()
+        //     ]);
+        //     abort(500);
+        // }
 
         // Update status of currently published form entry (if this is an edit)
         // to "Revision".
-        if ($formEntry->is_edit) {
-            $revisionStatus = Status::findStatus('Revision');
-            $oldFormEntry->form_entry_status_id = $revisionStatus->id;
-            $oldFormEntry->update();
-        }
+        // if ($formEntry->is_edit) {
+        //     $revisionStatus = Status::findStatus('Revision');
+        //     $oldFormEntry->form_entry_status_id = $revisionStatus->id;
+        //     $oldFormEntry->update();
+        // }
 
         // Update status of form entry from "Submitted" to "Published".
         $formEntry->form_entry_status_id = Status::findStatus('Published')->id;
@@ -966,18 +996,18 @@ class FormEntry extends Model
 
         // Delete any old WordPress resources or Algolia objects from the old
         // form entry (that were not carried over to the new form entry).
-        if ($formEntry->is_edit) {
-            foreach($oldFormEntry->listings as $listing) {
-                event(new ListingDeleted(
-                    $listing->targetDirectory,
-                    $listing->formSection,
-                    $oldFormEntry,
-                    $listing->wp_post_id,
-                    $listing->published_entry_section_id
-                ));
-            }
-            $oldFormEntry->listings()->delete();
-        }
+        // if ($formEntry->is_edit) {
+        //     foreach($oldFormEntry->listings as $listing) {
+        //         event(new ListingDeleted(
+        //             $listing->targetDirectory,
+        //             $listing->formSection,
+        //             $oldFormEntry,
+        //             $listing->wp_post_id,
+        //             $listing->published_entry_section_id
+        //         ));
+        //     }
+        //     $oldFormEntry->listings()->delete();
+        // }
 
         // Set "reviewed_at" timestamp.
         $formEntry->reviewed_at = now();
@@ -985,14 +1015,14 @@ class FormEntry extends Model
 
         // If this is an edit, close the edit token (signifying that the update
         // process is complete).
-        if ($formEntry->is_edit) {
+        if ($formEntry->is_edit && $formEntry->tokens()->locked()->first()) {
             Token::closeToken($formEntry->tokens()->locked()->first());
         }
 
         $formEntry->emptyCache();
-        if ($formEntry->is_edit) {
-            $oldFormEntry->emptyCache();
-        }
+        // if ($formEntry->is_edit) {
+        //     $oldFormEntry->emptyCache();
+        // }
 
         // Create events for new listings.
         foreach($formEntry->listings as $listing) {

@@ -16,9 +16,10 @@ class FormEntryActionRequest extends FormRequest
     public function authorize()
     {
         $action = $this->get('action');
-        
+
         switch ($action) {
             case 'submit':
+
                 // Determine if submission is an edit. New (i.e. non-edits) do
                 // not need any additional validation.
                 $isEdit = (bool) $this->route('entry');
@@ -30,6 +31,11 @@ class FormEntryActionRequest extends FormRequest
                 // entry that has an open tokena and also verify the value of
                 // token itself.
                 $formEntry = FormEntry::findOrFail($this->route('entry'));
+
+                $user = $this->user();
+                if ($user && ($user->is_administrator || $user->id == $formEntry->author_user_id)) {
+                  return true;
+                }
 
                 if (!$token = $formEntry->tokens()->open()->first()) {
                     $msg = 'Attempting to update a form entry that doesn\'t '
@@ -64,7 +70,7 @@ class FormEntryActionRequest extends FormRequest
                 return $user->can(
                     $action === 'delete' ? 'destroy' : $action,
                     FormEntry::findOrFail($this->route('entry'))
-                );                
+                );
         }
     }
 
