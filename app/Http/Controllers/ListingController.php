@@ -31,9 +31,10 @@ class ListingController extends Controller
             ->listings()
             ->with('entrySection.formEntry')
             ->findOrFail($listingId);
-        
+
         $data['formEntry'] = $listing->entrySection->formEntry;
         $data['listing'] = $listing;
+        $data['ilo'] = $data['formEntry']->ilo;
 
         if (View::exists($listing->template)) {
             try {

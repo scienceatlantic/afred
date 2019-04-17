@@ -200,6 +200,73 @@
           @endif
         @endforeach
       @endisset
+
+      @isset($ilo)
+        <div class="card panel-default">
+          <div class="card-header">
+            <h3>Industry Liaison Officer</h3>
+          </div>
+          <div class="card-body">
+            @isset($ilo['first_name'])
+              <div class="row">
+                <div class="col-md-4">
+                  <label class="afredwp-pull-right-md control-label">Name</label>
+                </div>
+                <div class="col-md-8">
+                  {{ $ilo['first_name'] }} {{ $ilo['last_name'] }}
+                </div>
+              </div>
+            @endisset
+
+            @isset($ilo['email'])
+              <div class="row">
+                <div class="col-md-4">
+                  <label class="afredwp-pull-right-md control-label">Email</label>
+                </div>
+                <div class="col-md-8">
+                  <a href="mailto:{{ $ilo['email'] }}" class="hidden_url">{{ $ilo['email'] }}</a>
+                </div>
+              </div>
+            @endisset
+
+            @isset($ilo['telephone'])
+              <div class="row">
+                <div class="col-md-4">
+                  <label class="afredwp-pull-right-md control-label">Telephone</label>
+                </div>
+                <div class="col-md-8">
+                  {{ $ilo['telephone'] }}
+                  @isset($ilo['extension'])
+                    <span class="label label-default">Ext: {{ $ilo['extension'] }}</span>
+                  @endisset
+                </div>
+              </div>
+            @endisset
+
+            @isset($ilo['position'])
+              <div class="row">
+                <div class="col-md-4">
+                  <label class="afredwp-pull-right-md control-label">Position</label>
+                </div>
+                <div class="col-md-8">{{ $ilo['position'] }}</div>
+              </div>
+            @endisset
+
+            @isset($ilo['website'])
+              <div class="row">
+                <div class="col-md-4">
+                  <label class="afredwp-pull-right-md control-label">Website</label>
+                </div>
+                <div class="col-md-8">
+                  <a href="{{ add_protocol($ilo['website']) }}" class="hidden_url" target="_blank">
+                    {{ $ilo['website'] }}
+                  </a>
+                </div>
+              </div>
+            @endisset
+          </div>
+        </div>
+      @endisset
     </div>
   </div>
 
@@ -208,7 +275,6 @@
       <h3>Contacts</h3>
     </div>
     <div class="card-body">
-
       @isset($formEntry->data['sections']['primary_contacts'])
         @foreach ($formEntry->data['sections']['primary_contacts'] as $index => $contact)
           @isset($contact['first_name'])
