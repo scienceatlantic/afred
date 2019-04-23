@@ -324,7 +324,7 @@
 
   <div class="card panel-default">
     <div class="card-header">
-      <h3>Equipment</h3>
+      <h3>Equipment <span class="pull-right">{{ count($formEntry->data['sections']['equipment']) }} piece(s)</span></h3>
     </div>
     <div class="card-body">
 
