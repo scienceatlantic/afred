@@ -1,9 +1,9 @@
-<div class="afredwp" style="max-width: 800px;">
+<div class="afredwp printable" style="">
   <div class="card panel-default">
-    <div class="card-block">
-      <p class="h4">Equipment</p>
-
-      <hr><br>
+    <div class="card-header">
+      <h3>Equipment</h3>
+    </div>
+    <div class="card-body">
 
       @isset($formEntry->data['sections']['equipment'])
         @foreach ($formEntry->data['sections']['equipment'] as $index => $equip)
@@ -92,10 +92,10 @@
   @endisset
 
   <div class="card panel-default">
-    <div class="card-block">
-      <p class="h4">Research Facility</p>
-
-      <hr><br>
+    <div class="card-header">
+      <h3>Research Facility</h3>
+    </div>
+    <div class="card-body">
 
       @isset($formEntry->data['sections']['facilities'])
         @foreach ($formEntry->data['sections']['facilities'] as $facility)
@@ -108,12 +108,12 @@
             </div>
           @endisset
 
-          @isset($facility['faculty'])
+          @isset($facility['organization'])
             <div class="row">
               <div class="col-md-4">
-                <label class="afredwp-pull-right-md control-label">Faculty/Department</label>
+                <label class="afredwp-pull-right-md control-label">Organization</label>
               </div>
-              <div class="col-md-8">{{ $facility['faculty']['value'] }}</div>
+              <div class="col-md-8">{{ $facility['organization']['value'] }}</div>
             </div>
           @endisset
 
@@ -123,6 +123,25 @@
                 <label class="afredwp-pull-right-md control-label">City</label>
               </div>
               <div class="col-md-8">{{ $facility['city'] }}</div>
+            </div>
+          @endisset
+
+          @isset($facility['province'])
+            <div class="row">
+              <div class="col-md-4">
+                <label class="afredwp-pull-right-md control-label">Province</label>
+              </div>
+              <div class="col-md-8">
+                @if (count($facility['province']) > 1)
+                  <ul>
+                    @foreach ($facility['province'] as $province)
+                      <li>{{ $province['value'] }}</li>
+                    @endforeach
+                  <ul>
+                @elseif (isset($facility['province'][0]['value']))
+                  {{ $facility['province'][0]['value'] }}
+                @endif
+              </div>
             </div>
           @endisset
 
@@ -181,15 +200,81 @@
           @endif
         @endforeach
       @endisset
+
+      @isset($ilo)
+        <div class="card panel-default">
+          <div class="card-header">
+            <h3>Industry Liaison Officer</h3>
+          </div>
+          <div class="card-body">
+            @isset($ilo['first_name'])
+              <div class="row">
+                <div class="col-md-4">
+                  <label class="afredwp-pull-right-md control-label">Name</label>
+                </div>
+                <div class="col-md-8">
+                  {{ $ilo['first_name'] }} {{ $ilo['last_name'] }}
+                </div>
+              </div>
+            @endisset
+
+            @isset($ilo['email'])
+              <div class="row">
+                <div class="col-md-4">
+                  <label class="afredwp-pull-right-md control-label">Email</label>
+                </div>
+                <div class="col-md-8">
+                  <a href="mailto:{{ $ilo['email'] }}" class="hidden_url">{{ $ilo['email'] }}</a>
+                </div>
+              </div>
+            @endisset
+
+            @isset($ilo['telephone'])
+              <div class="row">
+                <div class="col-md-4">
+                  <label class="afredwp-pull-right-md control-label">Telephone</label>
+                </div>
+                <div class="col-md-8">
+                  {{ $ilo['telephone'] }}
+                  @isset($ilo['extension'])
+                    <span class="label label-default">Ext: {{ $ilo['extension'] }}</span>
+                  @endisset
+                </div>
+              </div>
+            @endisset
+
+            @isset($ilo['position'])
+              <div class="row">
+                <div class="col-md-4">
+                  <label class="afredwp-pull-right-md control-label">Position</label>
+                </div>
+                <div class="col-md-8">{{ $ilo['position'] }}</div>
+              </div>
+            @endisset
+
+            @isset($ilo['website'])
+              <div class="row">
+                <div class="col-md-4">
+                  <label class="afredwp-pull-right-md control-label">Website</label>
+                </div>
+                <div class="col-md-8">
+                  <a href="{{ add_protocol($ilo['website']) }}" class="hidden_url" target="_blank">
+                    {{ $ilo['website'] }}
+                  </a>
+                </div>
+              </div>
+            @endisset
+          </div>
+        </div>
+      @endisset
     </div>
   </div>
 
   <div class="card panel-default">
-    <div class="card-block">
-      <p class="h4">Contacts</p>
-
-      <hr><br>
-
+    <div class="card-header">
+      <h3>Contacts</h3>
+    </div>
+    <div class="card-body">
       @isset($formEntry->data['sections']['primary_contacts'])
         @foreach ($formEntry->data['sections']['primary_contacts'] as $index => $contact)
           @isset($contact['first_name'])
