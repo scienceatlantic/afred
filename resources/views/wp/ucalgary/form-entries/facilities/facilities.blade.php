@@ -16,12 +16,12 @@
             </div>
           @endisset
 
-          @isset($facility['organization'])
+          @isset($facility['faculty'])
             <div class="row">
               <div class="col-md-4">
-                <label class="afredwp-pull-right-md control-label">Organization</label>
+                <label class="afredwp-pull-right-md control-label">Faculty / Department</label>
               </div>
-              <div class="col-md-8">{{ $facility['organization']['value'] }}</div>
+              <div class="col-md-8">{{ $facility['faculty']['value'] }}</div>
             </div>
           @endisset
 
