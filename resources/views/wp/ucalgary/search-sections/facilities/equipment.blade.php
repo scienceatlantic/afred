@@ -12,8 +12,6 @@
 
       <p class="small" v-if="s.facilities[0].organization || s.facilities[0].province">
         <span v-if="s.facilities[0].organization">{{ s.facilities[0].organization.value }}</span>
-        <span v-if="s.facilities[0].organization && s.facilities[0].province">,</span>
-        <span v-if="s.facilities[0].province">{{ s.facilities[0].province.value }}</span>
       </p>
 
       <p class="card-text">{{ makePreview(s.equipment.purpose_no_html) }}</p>
